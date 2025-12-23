@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Writing Master Class - 课程大厅</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --text-color: #2d3436;
+            --card-bg: #ffffff;
+            /* 对应你三个课程的主题色 */
+            --social-blue: #4A90E2;   /* Lesson 1 Color */
+            --holiday-orange: #FF9F43; /* Lesson 2 Color */
+            --story-purple: #6c5ce7;   /* Lesson 3 Color */
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* 网格布局 */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        /* 卡片样式 */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        /* 课程标签 (Form 2, Workshop, etc.) */
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            width: fit-content;
+        }
+
+        .card h2 {
+            margin: 10px 0;
+            font-size: 1.5rem;
+        }
+
+        .card p {
+            color: #636e72;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            flex-grow: 1; /* 让按钮始终在底部 */
+        }
+
+        /* 按钮样式 */
+        .start-btn {
+            margin-top: auto;
+            padding: 12px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: bold;
+            color: white;
+            transition: opacity 0.2s;
+        }
+        
+        .card:hover .start-btn {
+            opacity: 0.9;
+        }
+
+        /* --------------------------
+           针对不同课程的特定配色
+           -------------------------- */
+        
+        /* Lesson 1: Social Media (Blue) */
+        .card-social { border-top: 6px solid var(--social-blue); }
+        .card-social .badge { background-color: #e3f2fd; color: var(--social-blue); }
+        .card-social h2 { color: var(--social-blue); }
+        .card-social .start-btn { background-color: var(--social-blue); }
+
+        /* Lesson 2: Dream Holiday (Orange) */
+        .card-holiday { border-top: 6px solid var(--holiday-orange); }
+        .card-holiday .badge { background-color: #fff3e0; color: var(--holiday-orange); }
+        .card-holiday h2 { color: var(--holiday-orange); }
+        .card-holiday .start-btn { background-color: var(--holiday-orange); }
+
+        /* Lesson 3: Storyteller (Purple) */
+        .card-story { border-top: 6px solid var(--story-purple); }
+        .card-story .badge { background-color: #ede7f6; color: var(--story-purple); }
+        .card-story h2 { color: var(--story-purple); }
+        .card-story .start-btn { background-color: var(--story-purple); }
+
+        /* 待定课程 (灰色) */
+        .card-future {
+            border: 2px dashed #bdc3c7;
+            background: #fdfdfd;
+            cursor: default;
+        }
+        .card-future:hover { transform: none; box-shadow: none; }
+        .card-future h2 { color: #95a5a6; }
+
+        footer {
+            margin-top: 60px;
+            color: #b2bec3;
+            font-size: 0.9rem;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>📚 English Writing Master Class</h1>
+        <p class="subtitle">Welcome back! Choose a module below to start your interactive learning journey.</p>
+    </header>
+
+    <div class="course-grid">
+
+        <a href="lesson1.html" class="card card-social">
+            <span class="badge">Form 2 • Argumentative</span>
+            <h2>📱 Social Media Master Class</h2>
+            <p>Learn vocabulary for technology, debate the pros & cons of social media, and master the <b>P.E.E.L.</b> paragraph structure.</p>
+            <div class="start-btn">Start Lesson ➡️</div>
+        </a>
+
+        <a href="lesson 2.html" class="card card-holiday">
+            <span class="badge">Workshop • Descriptive</span>
+            <h2>✈️ My Dream Holiday</h2>
+            <p>Use the <b>5 Senses</b> to describe your perfect trip. Upgrade your adjectives and build a full essay blueprint.</p>
+            <div class="start-btn">Start Lesson ➡️</div>
+        </a>
+
+        <a href="lesson3.html" class="card card-story">
+            <span class="badge">Master Class • Narrative</span>
+            <h2>📖 The Storyteller's Toolkit</h2>
+            <p>Master the <b>Past Continuous</b> tense, learn "Show, Don't Tell", and build a mystery story with the Story Rollercoaster.</p>
+            <div class="start-btn">Start Lesson ➡️</div>
+        </a>
+
+        <div class="card card-future">
+            <span class="badge" style="background:#eee; color:#999">Coming Soon</span>
+            <h2>🔒 More Lessons...</h2>
+            <p>New interactive modules are being developed. Stay tuned!</p>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2024 Interactive English • Designed for UTM Physics Students' Side Hustle
+    </footer>
+
+</body>
+</html>
