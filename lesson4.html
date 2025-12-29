@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 4: The Advice Expert (Fixed)</title>
+    <style>
+        :root {
+            --primary: #2ecc71;      /* Mint Green */
+            --secondary: #3498db;    /* Blue */
+            --accent: #f1c40f;       /* Yellow */
+            --dark: #2c3e50;
+            --bg: #ecf0f1;
+            --paper: #fefefe;
+            --wrong: #e74c3c;
+            --text-hint: #d35400;    /* Dark Orange for high contrast */
+        }
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg);
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: var(--paper);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-top: 10px solid var(--primary);
+        }
+        h1 { text-align: center; color: var(--primary); font-size: 2.2em; margin-bottom: 5px; }
+        h2 { color: var(--secondary); border-bottom: 2px dashed #ccc; padding-bottom: 10px; margin-top: 40px; }
+        p.subtitle { text-align: center; color: #7f8c8d; font-style: italic; margin-bottom: 30px; }
+
+        /* Navigation */
+        .nav-bar { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+        .nav-btn {
+            background: #dfe6e9; color: var(--dark); border: none; padding: 10px 20px;
+            font-weight: bold; cursor: pointer; border-radius: 20px; transition: 0.3s;
+        }
+        .nav-btn.active { background: var(--primary); color: white; transform: scale(1.05); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3); }
+        .section { display: none; animation: fadeIn 0.5s; }
+        .section.active { display: block; }
+
+        /* Controls */
+        .level-indicator { text-align: right; font-weight: bold; color: var(--secondary); margin-bottom: 5px; font-size: 0.9em; }
+        .progress-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: 0.5s; }
+        .controls { display: flex; justify-content: space-between; margin-top: 20px; align-items: center; }
+        .btn-small { background: #95a5a6; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .btn-small:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* PART 1: MODAL VERBS */
+        .grammar-quiz { background: #f1f8e9; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 5px solid var(--primary); }
+        .grammar-options { display: flex; gap: 10px; margin-top: 10px; }
+        .g-btn { flex: 1; padding: 10px; border: 1px solid #ccc; background: white; cursor: pointer; border-radius: 5px; font-weight: bold; transition: 0.2s; }
+        .g-btn:hover { background: #e8f5e9; }
+        .g-btn.selected { background: var(--secondary); color: white; border-color: var(--secondary); }
+        
+        /* PART 2: EMPATHY MATCH */
+        .tone-box { display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px; margin-bottom: 10px; border: 1px solid #eee; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .tone-bad { color: #e74c3c; font-weight: bold; width: 45%; }
+        .tone-arrow { font-size: 1.5em; color: #95a5a6; }
+        .tone-good { width: 45%; }
+        .tone-select { width: 100%; padding: 8px; border: 2px solid #bdc3c7; border-radius: 5px; font-size: 0.95em; }
+        .tone-cn { display: block; font-size: 0.8em; color: #7f8c8d; margin-top: 3px; font-weight: normal; }
+
+        /* PART 3: EMAIL PUZZLE */
+        .email-frame { background: #fffbe7; padding: 30px; border: 1px solid #ccc; box-shadow: 3px 3px 10px rgba(0,0,0,0.05); position: relative; }
+        .email-frame::before { content: "📧 New Message"; position: absolute; top: -15px; left: 20px; background: var(--secondary); color: white; padding: 5px 15px; font-size: 0.8em; border-radius: 5px; font-weight: bold; }
+        .puzzle-slot { border: 2px dashed #bdc3c7; background: #f9f9f9; padding: 10px; margin: 10px 0; min-height: 40px; border-radius: 5px; display: flex; align-items: center; flex-wrap: wrap; }
+        .puzzle-slot select { width: 100%; border: none; background: transparent; font-family: inherit; font-size: 1em; cursor: pointer; outline: none; font-weight: bold; color: #2c3e50; }
+        .puzzle-cn-hint { display: none; width: 100%; color: #888; font-size: 0.9em; margin-top: 5px; font-style: italic; border-top: 1px dotted #ccc; padding-top: 5px; }
+        .toggle-btn { background: #f39c12; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 0.8em; margin-bottom: 10px; }
+
+        /* PART 4: GENERATOR */
+        .problem-cards { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
+        .p-card { 
+            min-width: 150px; background: white; border: 2px solid #ddd; border-radius: 10px; padding: 15px; 
+            text-align: center; cursor: pointer; transition: 0.3s;
+        }
+        .p-card:hover { border-color: var(--primary); transform: translateY(-5px); }
+        .p-card.active { border-color: var(--primary); background: #e8f5e9; box-shadow: 0 5px 15px rgba(46, 204, 113, 0.2); }
+        
+        .scaffold-box { display: none; margin-top: 20px; background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 5px solid var(--accent); }
+        .input-row { margin-bottom: 15px; }
+        .label-cn { font-size: 0.85em; color: #7f8c8d; display: block; margin-top: 2px; }
+        .input-field { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px; }
+        .helper-text { font-size: 0.9em; color: #2980b9; margin-bottom: 5px; font-weight: bold; }
+        
+        /* FIX: High Contrast Hint Box */
+        .hint-box { background: #fff3cd; padding: 8px; border: 1px solid #ffeeba; margin-bottom: 5px; border-radius: 5px; display:flex; align-items: center; gap: 5px; }
+        .hint-text-style { color: var(--text-hint); font-weight: bold; font-size: 1.1em; }
+
+        #final-letter { background: #fff; padding: 30px; border: 1px solid #ddd; margin-top: 20px; display: none; white-space: pre-wrap; font-family: 'Courier New', monospace; position: relative; }
+        #final-letter::after { content: "✉️ SENT"; position: absolute; bottom: 20px; right: 20px; font-size: 2em; opacity: 0.2; transform: rotate(-20deg); color: red; border: 5px solid red; padding: 5px 10px; border-radius: 10px; }
+
+        /* Common */
+        .btn-check { background: var(--primary); color: white; border: none; padding: 12px 30px; border-radius: 30px; cursor: pointer; font-size: 1.1em; font-weight:bold; width: 100%; margin-top: 10px; }
+        .feedback { text-align: center; font-weight: bold; margin-top: 10px; min-height: 25px; }
+        .correct { color: #27ae60; } .wrong { color: #c0392b; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>✉️ The Advice Expert</h1>
+    <p class="subtitle">Informal Letter & Email Writing</p>
+
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="showSection(1)">1. Grammar (25 Qs)</button>
+        <button class="nav-btn" onclick="showSection(2)">2. Tone (Empathy)</button>
+        <button class="nav-btn" onclick="showSection(3)">3. Email Puzzle</button>
+        <button class="nav-btn" onclick="showSection(4)">4. Advice Generator</button>
+    </div>
+
+    <div id="section-1" class="section active">
+        <h2>💊 Part 1: Grammar Doctor</h2>
+        <p><b>Rule:</b> Modal verbs (Should, Can, Must, Could) + <b>Original Verb (原形)</b>.</p>
+        <div class="level-indicator">Set <span id="g-level">1</span> / 5</div>
+        <div class="progress-bar"><div class="progress-fill" id="g-progress"></div></div>
+        <div id="grammar-container"></div>
+        <div class="controls">
+            <button class="btn-small" id="g-prev-btn" onclick="changeGrammarSet(-1)" disabled>⬅️ Previous</button>
+            <button class="btn-check" id="g-check-btn" onclick="checkGrammar()">Check Answers</button>
+            <button class="btn-small" id="g-next-btn" onclick="changeGrammarSet(1)" style="visibility:hidden">Next ➡️</button>
+        </div>
+        <div id="g-feedback" class="feedback"></div>
+    </div>
+
+    <div id="section-2" class="section">
+        <h2>❤️ Part 2: The Empathy Meter</h2>
+        <p>Change "Rude Commands" into "Polite Advice".</p>
+        <div class="level-indicator">Level <span id="t-level">1</span> / 3</div>
+        <div id="tone-container"></div>
+        <div class="controls">
+            <button class="btn-small" id="t-prev-btn" onclick="changeToneSet(-1)" disabled>⬅️</button>
+            <button class="btn-check" id="t-check-btn" onclick="checkTone()">Check Tone</button>
+            <button class="btn-small" id="t-next-btn" onclick="changeToneSet(1)" style="visibility:hidden">Next ➡️</button>
+        </div>
+        <div id="t-feedback" class="feedback"></div>
+    </div>
+
+    <div id="section-3" class="section">
+        <h2>🧩 Part 3: Email Puzzle</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <p style="margin:0;">Put the reply in the correct order.</p>
+            <button class="toggle-btn" onclick="toggleTranslation()">👁️ Show/Hide Chinese</button>
+        </div>
+        <br>
+        <div class="level-indicator">Scenario <span id="p-level">1</span> / 3</div>
+        <div id="puzzle-wrapper"></div>
+        <div class="controls">
+            <button class="btn-small" id="p-prev-btn" onclick="changePuzzleSet(-1)" disabled>⬅️ Previous</button>
+            <button class="btn-check" id="p-check-btn" onclick="checkPuzzle()">Check Order</button>
+            <button class="btn-small" id="p-next-btn" onclick="changePuzzleSet(1)" style="visibility:hidden">Next Scenario ➡️</button>
+        </div>
+        <div id="p-feedback" class="feedback"></div>
+    </div>
+
+    <div id="section-4" class="section">
+        <h2>📝 Part 4: Dr. Advice Generator</h2>
+        <p>Choose a problem card, then fill in the blanks to write your letter.</p>
+
+        <div class="problem-cards">
+            <div class="p-card" onclick="selectProblem(0, this)"><div style="font-size:2em">💸</div><b>No Money</b></div>
+            <div class="p-card" onclick="selectProblem(1, this)"><div style="font-size:2em">😴</div><b>Sleepy</b></div>
+            <div class="p-card" onclick="selectProblem(2, this)"><div style="font-size:2em">🤬</div><b>Bullying</b></div>
+            <div class="p-card" onclick="selectProblem(3, this)"><div style="font-size:2em">🎮</div><b>Game Addict</b></div>
+        </div>
+
+        <div id="scaffold" class="scaffold-box">
+            <h3 style="color:var(--secondary)">Writing Blueprint</h3>
+            
+            <div class="input-row">
+                <div class="helper-text">1. Opening (Sympathy)</div>
+                <input type="text" id="inp-sympathy" class="input-field" value="I am sorry to hear about your problem.">
+                <span class="label-cn">我对你的问题感到很难过。</span>
+            </div>
+
+            <div class="input-row">
+                <div class="helper-text">2. Advice 1 (Use "Should")</div>
+                <div class="hint-box">
+                    <span>💡 Suggested:</span>
+                    <span id="hint-1" class="hint-text-style">...</span>
+                </div>
+                <input type="text" id="inp-adv1" class="input-field" placeholder="I think you should...">
+            </div>
+
+            <div class="input-row">
+                <div class="helper-text">3. Advice 2 (Use "Why don't you")</div>
+                <div class="hint-box">
+                    <span>💡 Suggested:</span>
+                    <span id="hint-2" class="hint-text-style">...</span>
+                </div>
+                <input type="text" id="inp-adv2" class="input-field" placeholder="Why don't you...">
+            </div>
+
+            <div class="input-row">
+                <div class="helper-text">4. Closing (Encouragement)</div>
+                <input type="text" id="inp-close" class="input-field" value="Don't give up. I know you can do it!">
+            </div>
+
+            <button class="btn-check" onclick="generateLetter()">🚀 Write My Letter</button>
+        </div>
+
+        <div id="final-letter"></div>
+    </div>
+
+</div>
+
+<script>
+    // --- NAV ---
+    function showSection(num) {
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        document.getElementById(`section-${num}`).classList.add('active');
+        document.querySelectorAll('.nav-btn')[num-1].classList.add('active');
+    }
+
+    // --- PART 1 DATA ---
+    const grammarSets=[
+        {title:"Set 1: Should",qs:[{q:"You should ______ harder.",opts:["study","to study","studying"],a:"study"},{q:"He should ______ more water.",opts:["drink","drinks","drinking"],a:"drink"},{q:"We should ______ early.",opts:["sleep","sleeping","to sleep"],a:"sleep"},{q:"You should ______ your parents.",opts:["helped","help","helping"],a:"help"},{q:"They should ______ kindness.",opts:["show","to show","showing"],a:"show"}]},
+        {title:"Set 2: Could",qs:[{q:"You could ______ to music.",opts:["listening","listen","to listen"],a:"listen"},{q:"She could ______ a diary.",opts:["write","writes","wrote"],a:"write"},{q:"You could ______ for a walk.",opts:["go","going","goes"],a:"go"},{q:"We could ______ a movie.",opts:["watch","watching","watched"],a:"watch"},{q:"You could ______ some money.",opts:["saved","save","saving"],a:"save"}]},
+        {title:"Set 3: Must",qs:[{q:"You must ______ the rules.",opts:["follow","follows","following"],a:"follow"},{q:"He must ______ home now.",opts:["go","to go","going"],a:"go"},{q:"We must ______ hard.",opts:["work","working","worked"],a:"work"},{q:"You must ______ careful.",opts:["be","is","are"],a:"be"},{q:"Drivers must ______.",opts:["stopped","stop","stopping"],a:"stop"}]},
+        {title:"Set 4: Why don't you",qs:[{q:"Why don't you ______ a doctor?",opts:["see","seeing","saw"],a:"see"},{q:"Why don't you ______ a break?",opts:["take","taking","takes"],a:"take"},{q:"Why don't you ______ her?",opts:["call","calling","calls"],a:"call"},{q:"Why don't you ______ sorry?",opts:["say","said","saying"],a:"say"},{q:"Why don't you ______ it?",opts:["try","trying","tries"],a:"try"}]},
+        {title:"Set 5: Challenge",qs:[{q:"You really should ______.",opts:["relax","relaxing","to relax"],a:"relax"},{q:"You must not ______ up.",opts:["give","giving","gave"],a:"give"},{q:"Why don't you ______?",opts:["exercised","exercise","exercising"],a:"exercise"},{q:"You could ______ a hobby.",opts:["start","starting","starts"],a:"start"},{q:"He should ______ less.",opts:["worry","worries","worried"],a:"worry"}]}
+    ];
+    let gIndex=0;
+    function renderGrammarSet(){let set=grammarSets[gIndex];let html=`<h3>${set.title}</h3>`;set.qs.forEach((item,idx)=>{html+=`<div class="grammar-quiz"><div style="font-size:1.1em">${idx+1}. ${item.q.replace('______','__________')}</div><div class="grammar-options">${item.opts.map(opt=>`<button class="g-btn" onclick="selectGrammar(this,${idx},'${opt}')">${opt}</button>`).join('')}</div><input type="hidden" id="g-ans-${idx}" value=""></div>`});document.getElementById('grammar-container').innerHTML=html;document.getElementById('g-level').innerText=gIndex+1;document.getElementById('g-progress').style.width=`${((gIndex)/4)*100}%`;document.getElementById('g-prev-btn').disabled=(gIndex===0);document.getElementById('g-check-btn').style.display='block';document.getElementById('g-next-btn').style.visibility='hidden';document.getElementById('g-feedback').innerHTML=""}
+    function changeGrammarSet(d){gIndex+=d;renderGrammarSet()}
+    function selectGrammar(btn,idx,val){let p=btn.parentElement;p.querySelectorAll('.g-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');document.getElementById(`g-ans-${idx}`).value=val}
+    function checkGrammar(){let set=grammarSets[gIndex],c=0;set.qs.forEach((item,idx)=>{let u=document.getElementById(`g-ans-${idx}`).value,p=document.getElementById(`g-ans-${idx}`).parentElement;if(u===item.a){c++;p.style.borderColor="#2ecc71";p.style.backgroundColor="#e8f5e9"}else{p.style.borderColor="#e74c3c";p.style.backgroundColor="#fadbd8"}});let fb=document.getElementById('g-feedback');if(c===5){fb.innerHTML="<span class='correct'>🎉 Perfect! Next Set?</span>";document.getElementById('g-check-btn').style.display='none';document.getElementById('g-next-btn').style.visibility='visible'}else{fb.innerHTML="<span class='wrong'>⚠️ Check the red boxes.</span>"}}
+
+    // --- PART 2 DATA ---
+    const toneSets=[{title:"Level 1: Chinese Logic (中文逻辑)",qs:[{bad:"我不喜欢。",opts:["这个不太适合我 (I don't think it suits me)","很难看 (It's ugly)"],a:"这个不太适合我 (I don't think it suits me)"},{bad:"你一定要做。",opts:["你要做 (Do it)","我觉得你可以试看 (I think you could try)"],a:"我觉得你可以试看 (I think you could try)"},{bad:"你很懒惰。",opts:["你最近好像很累 (You seem tired)","你没用 (Useless)"],a:"你最近好像很累 (You seem tired)"}]},{title:"Level 2: English (Health)",qs:[{bad:"Stop eating junk food!",opts:["You are fat.","Why don't you try eating more fruits? (不如试着多吃水果?)"],a:"Why don't you try eating more fruits? (不如试着多吃水果?)"},{bad:"Go exercise now!",opts:["I think you should go for a walk. (我觉得你应该去散步)","Run now!"],a:"I think you should go for a walk. (我觉得你应该去散步)"},{bad:"You look terrible.",opts:["You look a bit tired. (你看起来有点累)","You are ugly."],a:"You look a bit tired. (你看起来有点累)"}]},{title:"Level 3: English (Social)",qs:[{bad:"Go away!",opts:["Get lost!","I need some space right now. (我现在需要一点空间)"],a:"I need some space right now. (我现在需要一点空间)"},{bad:"Your idea is stupid.",opts:["I have a different idea. (我有不一样的想法)","That is dumb."],a:"I have a different idea. (我有不一样的想法)"},{bad:"Buy me this.",opts:["I would really appreciate if you could buy this. (如果你能买这个我会很感激)","Give me money."],a:"I would really appreciate if you could buy this. (如果你能买这个我会很感激)"}]}];
+    let tIndex=0;
+    function renderToneSet(){let set=toneSets[tIndex];let html=`<h3>${set.title}</h3>`;set.qs.forEach((item,idx)=>{html+=`<div class="tone-box"><div class="tone-bad">❌ ${item.bad}</div><div class="tone-arrow">➡️</div><div class="tone-good"><select class="tone-select" id="t-ans-${idx}"><option value="">Make it polite...</option>${item.opts.sort(()=>Math.random()-0.5).map(o=>`<option value="${o}">${o}</option>`).join('')}</select></div></div>`});document.getElementById('tone-container').innerHTML=html;document.getElementById('t-level').innerText=tIndex+1;document.getElementById('t-prev-btn').disabled=(tIndex===0);document.getElementById('t-check-btn').style.display='block';document.getElementById('t-next-btn').style.visibility='hidden';document.getElementById('t-feedback').innerHTML=""}
+    function changeToneSet(d){tIndex+=d;renderToneSet()}
+    function checkTone(){let set=toneSets[tIndex],c=0;set.qs.forEach((item,idx)=>{let u=document.getElementById(`t-ans-${idx}`).value,s=document.getElementById(`t-ans-${idx}`);if(u===item.a){c++;s.style.borderColor="#2ecc71";s.style.backgroundColor="#e8f5e9"}else{s.style.borderColor="#e74c3c";s.style.backgroundColor="#fadbd8"}});let fb=document.getElementById('t-feedback');if(c===3){fb.innerHTML="<span class='correct'>❤️ Very polite! Next?</span>";document.getElementById('t-check-btn').style.display='none';document.getElementById('t-next-btn').style.visibility='visible'}else{fb.innerHTML="<span class='wrong'>⚠️ Be nice! Try again.</span>"}}
+
+    // --- PART 3 DATA ---
+    const puzzleSets=[{title:"Scenario 1: Exam Stress",items:[{label:"1. Greeting",opts:[{t:"Hi Sarah,",c:"(嗨 Sarah)"},{t:"Dear Sir,",c:"(尊敬的先生)"}],a:"Hi Sarah,"},{label:"2. Sympathy",opts:[{t:"I am sorry to hear you are stressed.",c:"(听说你压力大我很难过)"},{t:"Stop crying.",c:"(别哭了)"}],a:"I am sorry to hear you are stressed."},{label:"3. Advice 1",opts:[{t:"Why don't you make a timetable?",c:"(不如做个时间表?)"},{t:"You must give up.",c:"(你必须放弃)"}],a:"Why don't you make a timetable?"},{label:"4. Advice 2",opts:[{t:"Also, you could listen to music.",c:"(而且，你可以听听歌)"},{t:"You are lazy.",c:"(你很懒)"}],a:"Also, you could listen to music."},{label:"5. Closing",opts:[{t:"Good luck!",c:"(祝好运)"},{t:"See you never.",c:"(再也不见)"}],a:"Good luck!"}]},{title:"Scenario 2: Fight with Friend",items:[{label:"1. Greeting",opts:[{t:"Hello John,",c:"(你好 John)"},{t:"To whom it may concern,",c:"(致有关人士)"}],a:"Hello John,"},{label:"2. Sympathy",opts:[{t:"I know you are sad about the fight.",c:"(我知道你因为吵架很难过)"},{t:"You are wrong.",c:"(你错了)"}],a:"I know you are sad about the fight."},{label:"3. Advice 1",opts:[{t:"I think you should apologize.",c:"(我觉得你应该道歉)"},{t:"You must fight him again.",c:"(你必须再打他)"}],a:"I think you should apologize."},{label:"4. Advice 2",opts:[{t:"Why don't you buy him a drink?",c:"(不如请他喝饮料?)"},{t:"Ignore him.",c:"(别理他)"}],a:"Why don't you buy him a drink?"},{label:"5. Closing",opts:[{t:"Hope you make up soon.",c:"(希望你们快点和好)"},{t:"Bad luck.",c:"(倒霉)"}],a:"Hope you make up soon."}]},{title:"Scenario 3: Lost Library Book",items:[{label:"1. Greeting",opts:[{t:"Hi Ali,",c:"(嗨 Ali)"},{t:"Hey you,",c:"(喂你)"}],a:"Hi Ali,"},{label:"2. Sympathy",opts:[{t:"Don't worry too much.",c:"(别太担心)"},{t:"You are in big trouble.",c:"(你麻烦大了)"}],a:"Don't worry too much."},{label:"3. Advice 1",opts:[{t:"You should tell the librarian.",c:"(你应该告诉图书管理员)"},{t:"Run away.",c:"(逃跑)"}],a:"You should tell the librarian."},{label:"4. Advice 2",opts:[{t:"You could offer to pay for it.",c:"(你可以提出赔偿)"},{t:"Steal another book.",c:"(偷另一本书)"}],a:"You could offer to pay for it."},{label:"5. Closing",opts:[{t:"Let me know how it goes.",c:"(告诉我结果怎样)"},{t:"Whatever.",c:"(随便啦)"}],a:"Let me know how it goes."}]}];
+    let pIndex=0;
+    function renderPuzzle(){let set=puzzleSets[pIndex];let html=`<h3>${set.title}</h3><div class="email-frame">`;set.items.forEach((item,idx)=>{html+=`<div class="puzzle-slot"><span style="color:#999; margin-right:10px; min-width:100px;">${item.label}:</span><div style="flex-grow:1;"><select id="puz-${idx}"><option value="">Choose...</option>${item.opts.sort(()=>Math.random()-0.5).map(o=>`<option value="${o.t}" data-cn="${o.c}">${o.t}</option>`).join('')}</select><div class="puzzle-cn-hint" id="hint-${idx}"></div></div></div>`});html+=`</div>`;document.getElementById('puzzle-wrapper').innerHTML=html;document.getElementById('p-level').innerText=pIndex+1;document.getElementById('p-prev-btn').disabled=(pIndex===0);document.getElementById('p-check-btn').style.display='block';document.getElementById('p-next-btn').style.visibility='hidden';document.getElementById('p-feedback').innerHTML="";set.items.forEach((_,idx)=>{document.getElementById(`puz-${idx}`).addEventListener('change',function(){let selected=this.options[this.selectedIndex];let hint=selected.getAttribute('data-cn');document.getElementById(`hint-${idx}`).innerText=hint||""})})}
+    function toggleTranslation(){let hints=document.querySelectorAll('.puzzle-cn-hint');hints.forEach(h=>{h.style.display=(h.style.display==='block')?'none':'block'})}
+    function changePuzzleSet(d){pIndex+=d;renderPuzzle()}
+    function checkPuzzle(){let set=puzzleSets[pIndex],c=0;set.items.forEach((item,idx)=>{let val=document.getElementById(`puz-${idx}`).value,p=document.getElementById(`puz-${idx}`).parentElement.parentElement;if(val===item.a){c++;p.style.border="2px solid #2ecc71";p.style.backgroundColor="#e8f5e9"}else{p.style.border="2px dashed #e74c3c";p.style.backgroundColor="#fadbd8"}});let fb=document.getElementById('p-feedback');if(c===5){fb.innerHTML="<span class='correct'>📧 Email looks great! Sent!</span>";document.getElementById('p-check-btn').style.display='none';document.getElementById('p-next-btn').style.visibility='visible'}else{fb.innerHTML="<span class='wrong'>❌ Check logic!</span>"}}
+
+    // --- PART 4 DATA ---
+    const probs = [
+        { title: "No Money", h1: "save RM5 every day / stop buying bubble tea", h2: "do some chores to earn pocket money" },
+        { title: "Sleepy", h1: "sleep earlier at night / stop playing games late", h2: "set an alarm clock" },
+        { title: "Bullying", h1: "tell a teacher or your parents immediately", h2: "walk with your friends together" },
+        { title: "Game Addict", h1: "limit your screen time to 1 hour", h2: "find a new hobby like sports" }
+    ];
+    let selProb = -1;
+    function selectProblem(idx,el){
+        selProb=idx;
+        document.querySelectorAll('.p-card').forEach(c=>c.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('scaffold').style.display='block';
+        document.getElementById('final-letter').style.display='none';
+        document.getElementById('hint-1').innerText=probs[idx].h1;
+        document.getElementById('hint-2').innerText=probs[idx].h2;
+        document.getElementById('inp-adv1').value="";
+        document.getElementById('inp-adv2').value="";
+    }
+    function generateLetter(){
+        if(selProb===-1)return;
+        let sym=document.getElementById('inp-sympathy').value;
+        let a1=document.getElementById('inp-adv1').value||"NO ADVICE";
+        let a2=document.getElementById('inp-adv2').value||"NO ADVICE";
+        let cl=document.getElementById('inp-close').value;
+        let l=`Hi Friend,\n\n${sym} I know it is difficult for you.\n\nHere is my advice. First, ${a1}. This will help you solve the problem.\n\nAlso, ${a2}. It is a good idea.\n\n${cl}\n\nYour friend,\n[Your Name]`;
+        let out=document.getElementById('final-letter');
+        out.innerText=l;out.style.display='block';out.scrollIntoView({behavior:"smooth"});
+    }
+
+    // Init
+    renderGrammarSet();
+    renderToneSet();
+    renderPuzzle();
+</script>
+
+</body>
+</html>
