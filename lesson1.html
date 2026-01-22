@@ -1,439 +1,833 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form 2 English: Social Media</title>
+    <title>Social Media Masterclass | English Mastery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --primary: #4A90E2;      
-            --secondary: #50E3C2;    
-            --warning: #FFC107;      
-            --danger: #FF6B6B;       
-            --dark: #2C3E50;
-            --light: #F4F7F6;
+            /* Core Theme */
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --input-bg: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+
+            /* Lesson Specific Accent (Cyan - Tech/Social) */
+            --accent-primary: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.4);
+            --gradient-main: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+
+            --correct-color: #34d399;
+            --wrong-color: #f87171;
+
+            --font-main: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
         }
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #E0EAFC; 
-            color: var(--dark);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
         }
-        h1 { text-align: center; color: var(--primary); margin-bottom: 5px; }
-        h3 { text-align: center; color: #666; font-weight: normal; margin-top: 0; }
-        
-        /* Section Styling */
-        .section-box {
-            border: 2px solid #eee;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            background: #fff;
-        }
-        .section-header {
-            background: var(--primary);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px 8px 0 0;
-            margin: -20px -20px 20px -20px;
-            font-weight: bold;
-            font-size: 1.1em;
+
+        /* --- Header --- */
+        header {
+            padding: 30px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        /* --- VOCAB STYLES --- */
-        .vocab-set { display: none; } 
-        .vocab-set.active { display: block; animation: fadeIn 0.5s; }
-        
-        .vocab-row {
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
+            gap: 10px;
         }
-        .vocab-word { font-weight: bold; font-size: 1.1em; color: var(--dark); width: 40%; }
-        .vocab-select { width: 55%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
-        
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        .progress-indicator { font-size: 0.9em; color: #888; align-self: center; }
 
-        /* Buttons */
-        .btn {
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+        .logo span {
+            color: var(--accent-primary);
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* --- Layout --- */
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-align: center;
+            background: linear-gradient(to right, #fff, #a5f3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Navigation Tabs --- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border-radius: 50px;
             cursor: pointer;
-            font-weight: bold;
-            transition: 0.2s;
+            font-family: var(--font-main);
+            font-weight: 600;
+            transition: all 0.3s;
         }
-        .btn-check { background: var(--secondary); color: #005f4e; width: 100%; margin-top: 10px; }
-        .btn-nav { background: var(--primary); color: white; }
-        .btn-nav:disabled { background: #ccc; cursor: not-allowed; }
-        
-        /* Game Styles */
-        .game-area { 
-            text-align: center; 
-            padding: 30px; 
-            background: var(--light); 
-            border-radius: 10px; 
-            font-size: 1.3em; 
-            font-weight: bold; 
-            margin: 15px 0; 
-            min-height: 80px;
+
+        .tab-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-main);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* --- Content Sections --- */
+        .lesson-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .lesson-section.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--accent-primary);
+            font-family: var(--font-serif);
+        }
+
+        /* --- PROGRESS --- */
+        .progress-cont {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* --- PART 1: VOCAB --- */
+        .vocab-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .vocab-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+
+        .vocab-row:hover {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .vocab-word {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+
+        .vocab-select {
+            width: 100%;
+            padding: 10px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+
+        .vocab-select.correct {
+            border-color: var(--correct-color);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .vocab-select.wrong {
+            border-color: var(--wrong-color);
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        /* --- PART 2: GAME --- */
+        .game-area {
+            background: black;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            border: 2px solid var(--border-color);
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-grid-bg {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: radial-gradient(var(--border-color) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            animation: moveGrid 20s linear infinite;
+        }
+
+        @keyframes moveGrid {
+            from {
+                transform: translate(0, 0);
+            }
+
+            to {
+                transform: translate(-50px, -50px);
+            }
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border: 2px solid var(--accent-primary);
+            padding: 30px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 0 30px var(--accent-glow);
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .game-btn {
+            border: none;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            color: white;
+        }
+
+        .btn-good {
+            background: var(--correct-color);
+            box-shadow: 0 5px 0 #059669;
+        }
+
+        .btn-good:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        .btn-bad {
+            background: var(--wrong-color);
+            box-shadow: 0 5px 0 #dc2626;
+        }
+
+        .btn-bad:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        /* --- PART 3: PEEL --- */
+        .peel-container {
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .peel-header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .peel-sentences {
+            padding: 20px;
+            background: #fff;
+            color: #1e293b;
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+        }
+
+        .peel-drop-zone {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            display: grid;
+            gap: 15px;
+        }
+
+        .peel-row {
+            display: grid;
+            grid-template-columns: 50px 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .peel-label {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-direction: column;
-        }
-        .game-level-badge {
-            font-size: 0.7em;
-            background: #333;
+            font-weight: 900;
             color: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-size: 1.2rem;
         }
-        
-        /* PEEL Styles */
-        .peel-container { animation: fadeIn 0.5s; }
-        .peel-box { background:#f9f9f9; padding:15px; border-radius:8px; margin-bottom:20px; font-size:0.95em; line-height: 1.6; }
-        .peel-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-        .peel-label { width: 40px; font-weight: bold; color: white; text-align: center; padding: 8px; border-radius: 5px; }
-        .p-bg { background: #FF6B6B; } .e-bg { background: #4ECDC4; } .ex-bg { background: #FFE66D; color: #555; } .l-bg { background: #1A535C; }
-        
-        /* Feedback */
-        .feedback-msg { text-align: center; margin-top: 10px; font-weight: bold; min-height: 24px; }
-        .correct { color: #27ae60; }
-        .wrong { color: #c0392b; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .bg-P {
+            background: #f43f5e;
+        }
+
+        .bg-E {
+            background: #3b82f6;
+        }
+
+        .bg-Ex {
+            background: #f59e0b;
+        }
+
+        .bg-L {
+            background: #10b981;
+        }
+
+        /* --- Common Buttons --- */
+        .btn-primary {
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .btn-primary:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .nav-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .feedback-text {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+            font-size: 1.1rem;
+            min-height: 27px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .vocab-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>📱 Social Media Master Class</h1>
-    <h3>Form 2 English • Vocabulary & Writing</h3>
+    <header>
+        <a href="index.html" class="logo">
+            <span>📱</span> English Mastery
+        </a>
+        <a href="index.html" class="back-link">
+            &larr; Back to Home
+        </a>
+    </header>
 
-    <div class="section-box">
-        <div class="section-header">
-            <span>Part 1: Vocabulary</span>
-            <span id="page-indicator" style="font-size:0.8em; opacity:0.9">Set 1 / 6</span>
-        </div>
-        <div id="vocab-container"></div>
-        <button class="btn btn-check" onclick="checkCurrentVocab()">✅ Check Answers</button>
-        <div id="vocab-feedback" class="feedback-msg"></div>
-        <div class="nav-buttons">
-            <button class="btn btn-nav" id="prev-btn" onclick="changePage(-1)" disabled>⬅️</button>
-            <div class="progress-indicator" id="progress-text">Progress: 0%</div>
-            <button class="btn btn-nav" id="next-btn" onclick="changePage(1)">➡️</button>
-        </div>
-    </div>
+    <main>
+        <h1>Social Media Masterclass</h1>
+        <p class="subtitle">Vocabulary, Debate Logic & P.E.E.L. Writing Structure</p>
 
-    <div class="section-box">
-        <div class="section-header">
-            <span>Part 2: Logic Game</span>
-            <span>Reflex</span>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showSection(1)">1. Vocabulary</button>
+            <button class="tab-btn" onclick="showSection(2)">2. Logic Game</button>
+            <button class="tab-btn" onclick="showSection(3)">3. P.E.E.L. Builder</button>
         </div>
-        <div class="game-area" id="game-display">
-            <div>Press Start to Play!</div>
-        </div>
-        <div style="text-align:center;">
-            <button class="btn btn-nav" id="start-game-btn" onclick="startGame()">▶️ Start Game</button>
-            <div id="game-controls" style="display:none;">
-                <button class="btn" style="background:#27ae60; color:white; margin:5px; min-width: 100px;" onclick="answerGame('Good')">👍 Good</button>
-                <button class="btn" style="background:#c0392b; color:white; margin:5px; min-width: 100px;" onclick="answerGame('Bad')">👎 Bad</button>
+
+        <!-- PART 1: VOCABULARY -->
+        <div id="section-1" class="lesson-section active">
+            <div class="card">
+                <h2>Tech Vocabulary</h2>
+                <div
+                    style="display:flex; justify-content:space-between; color:var(--text-secondary); margin-bottom:10px;">
+                    <span id="v-title">Set 1: Basic Actions</span>
+                    <span>Progress: <span id="v-progress-text">0%</span></span>
+                </div>
+                <div class="progress-cont">
+                    <div class="progress-fill" id="v-progress-fill"></div>
+                </div>
+
+                <div id="vocab-container" class="vocab-grid"></div>
+
+                <div class="nav-actions">
+                    <button class="tab-btn" id="v-prev" onclick="changeVocabSet(-1)" disabled>&larr; Prev</button>
+                    <button class="btn-primary" onclick="checkVocab()">Check Answers</button>
+                    <button class="tab-btn" id="v-next" onclick="changeVocabSet(1)" disabled>Next &rarr;</button>
+                </div>
+                <div id="v-feedback" class="feedback-text"></div>
             </div>
-            <div id="game-feedback" class="feedback-msg"></div>
         </div>
-    </div>
 
-    <div class="section-box">
-        <div class="section-header">
-            <span>Part 3: Build a Paragraph</span>
-            <span id="peel-level-indicator">Level 1 / 5</span>
-        </div>
-        
-        <div id="peel-content-area">
+        <!-- PART 2: GAME -->
+        <div id="section-2" class="lesson-section">
+            <div class="card">
+                <h2>Logic Reflex Game</h2>
+                <p style="color:var(--text-secondary); text-align:center; margin-bottom:30px;">Is this a <b>GOOD</b>
+                    point (Pro) or a <b>BAD</b> point (Con)?</p>
+
+                <div class="game-area">
+                    <div class="game-grid-bg"></div>
+                    <div id="game-card-content" class="game-card">
+                        <div style="margin-bottom:20px;">PRESS START</div>
+                        <button class="btn-primary" onclick="startGame()">▶️ START GAME</button>
+                    </div>
+                </div>
+
+                <div class="game-controls" id="game-btns" style="display:none; opacity:0; transition:opacity 0.5s">
+                    <button class="game-btn btn-bad" onclick="answerGame('Bad')">👎 BAD</button>
+                    <button class="game-btn btn-good" onclick="answerGame('Good')">👍 GOOD</button>
+                </div>
+
+                <div id="g-feedback" class="feedback-text" style="color:var(--accent-primary);"></div>
             </div>
-
-        <button class="btn btn-check" onclick="checkPeel()">Check Structure</button>
-        <div id="peel-feedback" class="feedback-msg"></div>
-        
-        <div class="nav-buttons" style="justify-content: center; gap: 20px;">
-             <button class="btn btn-nav" id="peel-next-btn" onclick="nextPeelLevel()" style="display:none;">Next Level ➡️</button>
         </div>
-    </div>
 
-</div>
+        <!-- PART 3: PEEL -->
+        <div id="section-3" class="lesson-section">
+            <div class="card">
+                <h2>P.E.E.L. Paragraph Builder</h2>
+                <p style="color:var(--text-secondary); margin-bottom:20px;">Match sentences A, B, C, D to the correct
+                    structure: Point, Explanation, Example, Link.</p>
 
-<script>
-    // ==========================================
-    // PART 1: VOCABULARY DATA
-    // ==========================================
-    const vocabData = [
-        { title: "Set 1: Basic Actions (动作)", words: [{w:"Connect",a:"Talk to friends online"},{w:"Upload",a:"Post a photo/video"},{w:"Share",a:"Send to others"},{w:"Create",a:"Make something new"},{w:"Search",a:"Look for information"}], options: ["Talk to friends online", "Post a photo/video", "Send to others", "Make something new", "Look for information"] },
-        { title: "Set 2: Good Things (Pros)", words: [{w:"Beneficial",a:"Good / Helpful"},{w:"Convenient",a:"Easy to use"},{w:"Useful",a:"Helps you do things"},{w:"Effective",a:"Works well"},{w:"Global",a:"Whole world"}], options: ["Good / Helpful", "Easy to use", "Helps you do things", "Works well", "Whole world"] },
-        { title: "Set 3: Bad Things (Cons)", words: [{w:"Harmful",a:"Bad / Dangerous"},{w:"Fake",a:"Not real"},{w:"Addictive",a:"Hard to stop using"},{w:"Dangerous",a:"Not safe"},{w:"Rude",a:"Not polite"}], options: ["Bad / Dangerous", "Not real", "Hard to stop using", "Not safe", "Not polite"] },
-        { title: "Set 4: Tech Nouns (名词)", words: [{w:"Device",a:"Phone / Computer"},{w:"Platform",a:"App or Website"},{w:"Content",a:"Videos / Photos / Text"},{w:"Privacy",a:"Keeping secrets safe"},{w:"Cyberbullying",a:"Online bullying"}], options: ["Phone / Computer", "App or Website", "Videos / Photos / Text", "Keeping secrets safe", "Online bullying"] },
-        { title: "Set 5: Effects (影响)", words: [{w:"Distraction",a:"Stops you focusing"},{w:"Stress",a:"Feeling worried"},{w:"Solution",a:"Answer to problem"},{w:"Advantage",a:"Good point"},{w:"Disadvantage",a:"Bad point"}], options: ["Stops you focusing", "Feeling worried", "Answer to problem", "Good point", "Bad point"] },
-        { title: "Set 6: Connectors (连接词)", words: [{w:"However",a:"But"},{w:"Furthermore",a:"Also / And"},{w:"Therefore",a:"So"},{w:"For example",a:"Like..."},{w:"In conclusion",a:"To end the essay"}], options: ["But", "Also / And", "So", "Like...", "To end the essay"] }
-    ];
+                <div class="peel-container">
+                    <div class="peel-header">
+                        <h3 id="peel-title" style="color:white; margin:0;">Level 1</h3>
+                        <div style="color:var(--text-secondary); font-size:0.9rem;">Topic: <span
+                                id="peel-topic">...</span></div>
+                    </div>
 
-    let vocabPage = 0;
+                    <div class="peel-sentences" id="peel-text-box">
+                        <!-- Sentences go here -->
+                    </div>
 
-    function initVocab() {
-        const container = document.getElementById('vocab-container');
-        container.innerHTML = '';
-        vocabData.forEach((set, index) => {
-            let setDiv = document.createElement('div');
-            setDiv.className = `vocab-set ${index === 0 ? 'active' : ''}`;
-            setDiv.id = `set-${index}`;
-            let shuffledOptions = [...set.options].sort(() => Math.random() - 0.5);
-            let html = `<h4 style="margin-top:0; color:#4A90E2">${set.title}</h4>`;
+                    <div class="peel-drop-zone">
+                        <div class="peel-row">
+                            <div class="peel-label bg-P">P</div>
+                            <select class="vocab-select" id="sel-p">
+                                <option value="">Select Point...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="peel-row">
+                            <div class="peel-label bg-E">E</div>
+                            <select class="vocab-select" id="sel-e">
+                                <option value="">Select Explanation...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="peel-row">
+                            <div class="peel-label bg-Ex">Ex</div>
+                            <select class="vocab-select" id="sel-ex">
+                                <option value="">Select Example...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                        <div class="peel-row">
+                            <div class="peel-label bg-L">L</div>
+                            <select class="vocab-select" id="sel-l">
+                                <option value="">Select Link...</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-actions">
+                    <button class="btn-primary" onclick="checkPeel()">Check Structure</button>
+                    <button class="tab-btn" id="peel-next" onclick="nextPeel()" style="display:none">Next Level
+                        &rarr;</button>
+                </div>
+                <div id="peel-feedback" class="feedback-text"></div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NAV ---
+        function showSection(num) {
+            document.querySelectorAll('.lesson-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`section-${num}`).classList.add('active');
+            document.querySelectorAll('.tab-btn')[num - 1].classList.add('active');
+        }
+
+        // --- PART 1: VOCAB DATA ---
+        const vocabData = [
+            { title: "Set 1: Basic Actions (动作)", words: [{ w: "Connect", a: "Talk to friends online" }, { w: "Upload", a: "Post a photo/video" }, { w: "Share", a: "Send to others" }, { w: "Create", a: "Make something new" }, { w: "Search", a: "Look for information" }], options: ["Talk to friends online", "Post a photo/video", "Send to others", "Make something new", "Look for information"] },
+            { title: "Set 2: Good Things (Pros)", words: [{ w: "Beneficial", a: "Good / Helpful" }, { w: "Convenient", a: "Easy to use" }, { w: "Useful", a: "Helps you do things" }, { w: "Effective", a: "Works well" }, { w: "Global", a: "Whole world" }], options: ["Good / Helpful", "Easy to use", "Helps you do things", "Works well", "Whole world"] },
+            { title: "Set 3: Bad Things (Cons)", words: [{ w: "Harmful", a: "Bad / Dangerous" }, { w: "Fake", a: "Not real" }, { w: "Addictive", a: "Hard to stop using" }, { w: "Dangerous", a: "Not safe" }, { w: "Rude", a: "Not polite" }], options: ["Bad / Dangerous", "Not real", "Hard to stop using", "Not safe", "Not polite"] },
+            { title: "Set 4: Tech Nouns (名词)", words: [{ w: "Device", a: "Phone / Computer" }, { w: "Platform", a: "App or Website" }, { w: "Content", a: "Videos / Photos / Text" }, { w: "Privacy", a: "Keeping secrets safe" }, { w: "Cyberbullying", a: "Online bullying" }], options: ["Phone / Computer", "App or Website", "Videos / Photos / Text", "Keeping secrets safe", "Online bullying"] },
+            { title: "Set 5: Connectors (连接词)", words: [{ w: "However", a: "But" }, { w: "Furthermore", a: "Also / And" }, { w: "Therefore", a: "So" }, { w: "For example", a: "Like..." }, { w: "In conclusion", a: "To end the essay" }], options: ["But", "Also / And", "So", "Like...", "To end the essay"] }
+        ];
+
+        let vIndex = 0;
+
+        function renderVocab() {
+            let set = vocabData[vIndex];
+            document.getElementById('v-title').innerText = set.title;
+            document.getElementById('v-progress-text').innerText = Math.round((vIndex / vocabData.length) * 100) + "%";
+            document.getElementById('v-progress-fill').style.width = Math.round((vIndex / vocabData.length) * 100) + "%";
+
+            let html = "";
+            let shuffled = [...set.options].sort(() => Math.random() - 0.5);
+
             set.words.forEach((item, i) => {
-                let optionsHtml = `<option value="">Choose...</option>`;
-                shuffledOptions.forEach(opt => { optionsHtml += `<option value="${opt}">${opt}</option>`; });
-                html += `<div class="vocab-row"><div class="vocab-word">${item.w}</div><select class="vocab-select" id="ans-${index}-${i}" data-correct="${item.a}">${optionsHtml}</select></div>`;
+                let opts = `<option value="">Select...</option>` + shuffled.map(o => `<option value="${o}">${o}</option>`).join('');
+                html += `
+                <div class="vocab-row">
+                    <div class="vocab-word">${item.w}</div>
+                    <select class="vocab-select" id="v-ans-${i}" data-ans="${item.a}">${opts}</select>
+                </div>`;
             });
-            setDiv.innerHTML = html;
-            container.appendChild(setDiv);
-        });
-    }
+            document.getElementById('vocab-container').innerHTML = html;
 
-    function changePage(dir) {
-        document.getElementById(`set-${vocabPage}`).classList.remove('active');
-        vocabPage += dir;
-        if(vocabPage < 0) vocabPage = 0;
-        if(vocabPage >= vocabData.length) vocabPage = vocabData.length - 1;
-        document.getElementById(`set-${vocabPage}`).classList.add('active');
-        document.getElementById('prev-btn').disabled = (vocabPage === 0);
-        document.getElementById('next-btn').disabled = (vocabPage === vocabData.length - 1);
-        document.getElementById('page-indicator').innerText = `Set ${vocabPage + 1} / 6`;
-        document.getElementById('progress-text').innerText = `Progress: ${Math.round(((vocabPage)/5)*100)}%`;
-        document.getElementById('vocab-feedback').innerHTML = "";
-    }
-
-    function checkCurrentVocab() {
-        let currentSet = vocabData[vocabPage];
-        let allCorrect = true;
-        currentSet.words.forEach((item, i) => {
-            let select = document.getElementById(`ans-${vocabPage}-${i}`);
-            if(select.value === item.a) {
-                select.style.border = "2px solid #27ae60";
-                select.style.backgroundColor = "#eafaf1";
-            } else {
-                select.style.border = "2px solid #c0392b";
-                select.style.backgroundColor = "#fadbd8";
-                allCorrect = false;
-            }
-        });
-        let fb = document.getElementById('vocab-feedback');
-        if(allCorrect) {
-            fb.innerHTML = `<span class="correct">🎉 Perfect!</span>`;
-            if(vocabPage < 5) document.getElementById('next-btn').style.animation = "pulse 1s infinite";
-        } else {
-            fb.innerHTML = `<span class="wrong">⚠️ Try again!</span>`;
+            document.getElementById('v-prev').disabled = (vIndex === 0);
+            document.getElementById('v-next').disabled = true;
+            document.getElementById('v-feedback').innerText = "";
         }
-    }
 
-    // ==========================================
-    // PART 2: GAME DATA
-    // ==========================================
-    const gameQ = [
-        {t: "跟远方的朋友保持联系", a: "Good", level: "Level 1: Chinese"},
-        {t: "容易看到假新闻 (Fake News)", a: "Bad", level: "Level 1: Chinese"},
-        {t: "沉迷手机，不想做功课", a: "Bad", level: "Level 1: Chinese"},
-        {t: "学习新技能 (比如看视频学做饭)", a: "Good", level: "Level 1: Chinese"},
-        {t: "网络霸凌 (被人骂)", a: "Bad", level: "Level 1: Chinese"},
-        {t: "Connect with friends easily", a: "Good", level: "Level 2: English"},
-        {t: "Spread of Fake News", a: "Bad", level: "Level 2: English"},
-        {t: "Addiction / Wasting time", a: "Bad", level: "Level 2: English"},
-        {t: "Learn new skills (Educational)", a: "Good", level: "Level 2: English"},
-        {t: "Cyberbullying", a: "Bad", level: "Level 2: English"}
-    ];
-    let gIndex = 0;
-    function startGame() {
-        document.getElementById('start-game-btn').style.display = 'none';
-        document.getElementById('game-controls').style.display = 'block';
-        gIndex = 0;
-        nextGameQ();
-    }
-    function nextGameQ() {
-        if(gIndex < gameQ.length) {
+        function checkVocab() {
+            let set = vocabData[vIndex];
+            let allCorrect = true;
+
+            set.words.forEach((item, i) => {
+                let el = document.getElementById(`v-ans-${i}`);
+                if (el.value === item.a) {
+                    el.classList.add('correct');
+                    el.classList.remove('wrong');
+                } else {
+                    el.classList.add('wrong');
+                    el.classList.remove('correct');
+                    allCorrect = false;
+                }
+            });
+
+            let fb = document.getElementById('v-feedback');
+            if (allCorrect) {
+                fb.innerHTML = "<span style='color:#34d399'>🎉 Awesome! You got it right.</span>";
+                if (vIndex < vocabData.length - 1) {
+                    document.getElementById('v-next').disabled = false;
+                } else {
+                    fb.innerHTML = "<span style='color:#34d399'>🏆 All Sets Completed!</span>";
+                }
+            } else {
+                fb.innerHTML = "<span style='color:#f87171'>⚠️ Try again!</span>";
+            }
+        }
+
+        function changeVocabSet(d) { vIndex += d; renderVocab(); }
+
+        // --- PART 2: GAME ---
+        const gameQ = [
+            { t: "跟远方的朋友保持联系", a: "Good", level: "L1: Chinese" },
+            { t: "容易看到假新闻 (Fake News)", a: "Bad", level: "L1: Chinese" },
+            { t: "沉迷手机，不想做功课", a: "Bad", level: "L1: Chinese" },
+            { t: "学习新技能 (比如看视频学做饭)", a: "Good", level: "L1: Chinese" },
+            { t: "网络霸凌 (被人骂)", a: "Bad", level: "L1: Chinese" },
+            { t: "Connect with friends easily", a: "Good", level: "L2: English" },
+            { t: "Spread of Fake News", a: "Bad", level: "L2: English" },
+            { t: "Addiction / Wasting time", a: "Bad", level: "L2: English" },
+            { t: "Learn new skills (Educational)", a: "Good", level: "L2: English" },
+            { t: "Cyberbullying (Hurting people)", a: "Bad", level: "L2: English" }
+        ];
+        let gIndex = 0;
+
+        function startGame() {
+            gIndex = 0;
+            document.getElementById('game-btns').style.display = 'flex';
+            setTimeout(() => document.getElementById('game-btns').style.opacity = '1', 50);
+            nextGameCard();
+        }
+
+        function nextGameCard() {
+            if (gIndex >= gameQ.length) {
+                document.getElementById('game-card-content').innerHTML = `
+                    <div style='font-size:3rem'>🏆</div>
+                    <div>GAME CLEARED!</div>
+                `;
+                document.getElementById('game-btns').style.display = 'none';
+                return;
+            }
             let q = gameQ[gIndex];
-            document.getElementById('game-display').innerHTML = `<div class="game-level-badge">${q.level}</div><div>${q.t}</div>`;
-            document.getElementById('game-feedback').innerHTML = "";
-        } else {
-            document.getElementById('game-display').innerText = "🏆 Game Over! Logic & Vocab Cleared!";
-            document.getElementById('game-controls').style.display = 'none';
-            document.getElementById('start-game-btn').innerText = "Play Again";
-            document.getElementById('start-game-btn').style.display = 'inline-block';
+            document.getElementById('game-card-content').innerHTML = `
+                <div style="font-size:0.9rem; color:#94a3b8; margin-bottom:10px;">${q.level}</div>
+                <div>${q.t}</div>
+            `;
+            // Reset anim
+            let c = document.getElementById('game-card-content');
+            c.style.animation = 'none';
+            c.offsetHeight; /* trigger reflow */
+            c.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
         }
-    }
-    function answerGame(ans) {
-        if(gameQ[gIndex].a === ans) {
-            document.getElementById('game-feedback').innerHTML = "<span class='correct'>✅ Correct!</span>";
-        } else {
-            document.getElementById('game-feedback').innerHTML = "<span class='wrong'>❌ Oops!</span>";
-        }
-        gIndex++;
-        setTimeout(nextGameQ, 800);
-    }
 
-    // ==========================================
-    // PART 3: PEEL DATA (5 LEVELS)
-    // ==========================================
-    const peelSets = [
-        {
-            level: "Level 1: Chinese Logic (Good)",
-            desc: "Topic: Keeping in Touch (保持联系)",
-            // Correct logic: P(C) -> E(D) -> Ex(A) -> L(B)
-            sentences: {
-                A: "例如：我们可以用WhatsApp打视频电话给在国外的亲戚。 (Example)",
-                B: "因此，我们的关系会变得更亲密。 (Link)",
-                C: "首先，社交媒体可以帮助我们保持联系。 (Point)",
-                D: "这是因为无论朋友住得多远，我们都可以随时发信息给他们。 (Explanation)"
-            },
-            ans: { P: "C", E: "D", Ex: "A", L: "B" }
-        },
-        {
-            level: "Level 2: Chinese Logic (Bad)",
-            desc: "Topic: Cyberbullying (网络霸凌)",
-            // Correct logic: P(B) -> E(C) -> Ex(D) -> L(A)
-            sentences: {
-                A: "结果，受害者会感到非常伤心甚至患上忧郁症。 (Link)",
-                B: "此外，网络霸凌 (Cyberbullying) 是一个严重的问题。 (Point)",
-                C: "这是因为有些人会在网上写很难听的话来伤害别人。 (Explanation)",
-                D: "例如，他们会在Facebook的照片下面留恶毒的评论。 (Example)"
-            },
-            ans: { P: "B", E: "C", Ex: "D", L: "A" }
-        },
-        {
-            level: "Level 3: English (Simple)",
-            desc: "Topic: Learning New Skills",
-            // Correct logic: P(D) -> E(B) -> Ex(A) -> L(C)
-            sentences: {
-                A: "For instance, students can watch YouTube videos to learn how to cook.",
-                B: "This is because there are many free tutorials online.",
-                C: "Therefore, it is a very useful educational tool.",
-                D: "Firstly, social media is a great place to learn new skills."
-            },
-            ans: { P: "D", E: "B", Ex: "A", L: "C" }
-        },
-        {
-            level: "Level 4: English (Intermediate)",
-            desc: "Topic: Health & Sleep",
-            // Correct logic: P(A) -> E(D) -> Ex(C) -> L(B)
-            sentences: {
-                A: "However, using phones at night is harmful to our health.",
-                B: "As a result, they feel very tired in class the next day.",
-                C: "For example, many students scroll through TikTok until 2 AM.",
-                D: "The blue light from the screen makes it hard to fall asleep."
-            },
-            ans: { P: "A", E: "D", Ex: "C", L: "B" }
-        },
-        {
-            level: "Level 5: English (Challenge)",
-            desc: "Topic: Fake News",
-            // Correct logic: P(C) -> E(A) -> Ex(D) -> L(B)
-            sentences: {
-                A: "People often share stories without checking if they are true.",
-                B: "Consequently, this causes panic and confusion in society.",
-                C: "Moreover, fake news spreads very fast on social media.",
-                D: "For example, believing rumours about a new virus or celebrity."
-            },
-            ans: { P: "C", E: "A", Ex: "D", L: "B" }
-        }
-    ];
-
-    let currentPeelIndex = 0;
-
-    function renderPeel() {
-        let data = peelSets[currentPeelIndex];
-        
-        // Update Header
-        document.getElementById('peel-level-indicator').innerText = `${data.level}`;
-        
-        // Generate HTML
-        let html = `
-            <div class="game-level-badge" style="background:${currentPeelIndex < 2 ? '#E67E22':'#2980B9'}">${data.level}</div>
-            <p style="margin-top:0"><b>${data.desc}</b><br>Match sentences A, B, C, D to P.E.E.L.</p>
-            <div class="peel-box">
-                <strong>(A)</strong> ${data.sentences.A}<br>
-                <strong>(B)</strong> ${data.sentences.B}<br>
-                <strong>(C)</strong> ${data.sentences.C}<br>
-                <strong>(D)</strong> ${data.sentences.D}
-            </div>
-            
-            <div class="peel-row"><div class="peel-label p-bg">P</div>
-                <select id="p-select" class="vocab-select"><option value="">Point...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-            </div>
-            <div class="peel-row"><div class="peel-label e-bg">E</div>
-                <select id="e-select" class="vocab-select"><option value="">Explanation...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-            </div>
-            <div class="peel-row"><div class="peel-label ex-bg">E</div>
-                <select id="ex-select" class="vocab-select"><option value="">Example...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-            </div>
-            <div class="peel-row"><div class="peel-label l-bg">L</div>
-                <select id="l-select" class="vocab-select"><option value="">Link...</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
-            </div>
-        `;
-        document.getElementById('peel-content-area').innerHTML = html;
-        document.getElementById('peel-feedback').innerHTML = "";
-        document.getElementById('peel-next-btn').style.display = "none";
-    }
-
-    function checkPeel() {
-        let data = peelSets[currentPeelIndex];
-        let p = document.getElementById('p-select').value;
-        let e = document.getElementById('e-select').value;
-        let ex = document.getElementById('ex-select').value;
-        let l = document.getElementById('l-select').value;
-
-        if(p === data.ans.P && e === data.ans.E && ex === data.ans.Ex && l === data.ans.L) {
-            document.getElementById('peel-feedback').innerHTML = "<span class='correct'>🌟 Correct! Well done.</span>";
-            if(currentPeelIndex < peelSets.length - 1) {
-                document.getElementById('peel-next-btn').style.display = "inline-block";
+        function answerGame(ans) {
+            let q = gameQ[gIndex];
+            let fb = document.getElementById('g-feedback');
+            if (q.a === ans) {
+                fb.innerText = "✅ CORRECT!";
+                gIndex++;
+                setTimeout(() => {
+                    fb.innerText = "";
+                    nextGameCard();
+                }, 500);
             } else {
-                document.getElementById('peel-feedback').innerHTML = "<span class='correct'>🏆 AMAZING! You finished all 5 levels!</span>";
+                fb.innerText = "❌ WRONG!";
             }
-        } else {
-            // Hint Logic
-            let msg = "Not quite. ";
-            if(p !== data.ans.P) msg += "Check your <b>Point</b> again. ";
-            else if(l !== data.ans.L) msg += "Check your <b>Link</b> (conclusion).";
-            document.getElementById('peel-feedback').innerHTML = `<span class='wrong'>${msg}</span>`;
         }
-    }
 
-    function nextPeelLevel() {
-        currentPeelIndex++;
+        // --- PART 3: PEEL ---
+        const peelSets = [
+            {
+                level: "Level 1: Chinese Logic (Good)",
+                desc: "Topic: Keeping in Touch (保持联系)",
+                // P(C) -> E(D) -> Ex(A) -> L(B)
+                sentences: {
+                    A: "A: 例如：我们可以用WhatsApp打视频电话给在国外的亲戚。 (Example)",
+                    B: "B: 因此，我们的关系会变得更亲密。 (Link)",
+                    C: "C: 首先，社交媒体可以帮助我们保持联系。 (Point)",
+                    D: "D: 这是因为无论朋友住得多远，我们都可以随时发信息给他们。 (Explanation)"
+                },
+                ans: { P: "C", E: "D", Ex: "A", L: "B" }
+            },
+            {
+                level: "Level 2: English (Simple)",
+                desc: "Topic: Learning New Skills",
+                // P(D) -> E(B) -> Ex(A) -> L(C)
+                sentences: {
+                    A: "A: For instance, students can watch YouTube videos to learn how to cook.",
+                    B: "B: This is because there are many free tutorials online.",
+                    C: "C: Therefore, it is a very useful educational tool.",
+                    D: "D: Firstly, social media is a great place to learn new skills."
+                },
+                ans: { P: "D", E: "B", Ex: "A", L: "C" }
+            },
+            {
+                level: "Level 3: English (Challenge)",
+                desc: "Topic: Fake News",
+                // P(C) -> E(A) -> Ex(D) -> L(B)
+                sentences: {
+                    A: "A: People often share stories without checking if they are true.",
+                    B: "B: Consequently, this causes panic and confusion in society.",
+                    C: "C: Moreover, fake news spreads very fast on social media.",
+                    D: "D: For example, believing rumours about a new virus or celebrity."
+                },
+                ans: { P: "C", E: "A", Ex: "D", L: "B" }
+            }
+        ];
+        let pIndex = 0;
+
+        function renderPeel() {
+            let s = peelSets[pIndex];
+            document.getElementById('peel-title').innerText = s.level;
+            document.getElementById('peel-topic').innerText = s.desc;
+
+            document.getElementById('peel-text-box').innerHTML = `
+                <div>${s.sentences.A}</div><br>
+                <div>${s.sentences.B}</div><br>
+                <div>${s.sentences.C}</div><br>
+                <div>${s.sentences.D}</div>
+            `;
+
+            // Reset selects
+            ['p', 'e', 'ex', 'l'].forEach(k => document.getElementById(`sel-${k}`).value = "");
+            document.getElementById('peel-next').style.display = 'none';
+            document.getElementById('peel-feedback').innerText = "";
+        }
+
+        function checkPeel() {
+            let s = peelSets[pIndex];
+            let p = document.getElementById('sel-p').value;
+            let e = document.getElementById('sel-e').value;
+            let ex = document.getElementById('sel-ex').value;
+            let l = document.getElementById('sel-l').value;
+
+            if (p === s.ans.P && e === s.ans.E && ex === s.ans.Ex && l === s.ans.L) {
+                document.getElementById('peel-feedback').innerHTML = "<span style='color:#34d399'>🌟 Perfect Structure!</span>";
+                if (pIndex < peelSets.length - 1) {
+                    document.getElementById('peel-next').style.display = 'inline-block';
+                } else {
+                    document.getElementById('peel-feedback').innerHTML = "<span style='color:#34d399'>🏆 MASTER WRITER!</span>";
+                }
+            } else {
+                document.getElementById('peel-feedback').innerHTML = "<span style='color:#f87171'>❌ Incorrect sequence. Try logical ordering.</span>";
+            }
+        }
+
+        function nextPeel() { pIndex++; renderPeel(); }
+
+        // Init
+        renderVocab();
         renderPeel();
-    }
 
-    // --- START ---
-    initVocab();
-    renderPeel(); // Start Peel part
-</script>
-
+    </script>
 </body>
+
 </html>

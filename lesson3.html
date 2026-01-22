@@ -1,309 +1,865 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lesson 3: The Storyteller's Toolkit (Final v2)</title>
+    <title>Storyteller's Toolkit | English Mastery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --primary: #6c5ce7;      /* Purple */
-            --secondary: #00cec9;    /* Teal */
-            --accent: #fdcb6e;       /* Gold */
-            --dark: #2d3436;
-            --bg: #a29bfe;           /* Light Purple */
-            --wrong: #ff7675;
-            --correct: #55efc4;
+            /* Core Theme */
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --input-bg: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.1);
+
+            /* Lesson Specific Accent (Purple/Magic) */
+            --accent-primary: #a855f7;
+            --accent-glow: rgba(168, 85, 247, 0.4);
+            --gradient-main: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%);
+
+            --correct-color: #34d399;
+            --wrong-color: #f87171;
+
+            --font-main: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
         }
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background-color: var(--bg);
-            color: var(--dark);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 20px;
+            padding: 0;
         }
-        .container {
-            max-width: 850px;
-            margin: 0 auto;
-            background: white;
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* --- Header --- */
+        header {
+            padding: 30px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo span {
+            color: var(--accent-primary);
+        }
+
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-link:hover {
+            color: var(--accent-primary);
+        }
+
+        /* --- Layout --- */
+        main {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-align: center;
+            background: linear-gradient(to right, #fff, #e9d5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Navigation Tabs --- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-main);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        /* --- Content Sections --- */
+        .lesson-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .lesson-section.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
             padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-bg-icon {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 10rem;
+            opacity: 0.05;
+            transform: rotate(20deg);
+        }
+
+        .card h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--accent-primary);
+            font-family: var(--font-serif);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- Common UI --- */
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-main);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .btn-action {
+            background: var(--gradient-main);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px var(--accent-glow);
+        }
+
+        .btn-nav {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+        .feedback-msg {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 15px;
+            color: var(--accent-primary);
+            min-height: 24px;
+        }
+
+        /* --- PART 1: Grammar --- */
+        .g-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .g-input {
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            width: 120px;
+            text-align: center;
+        }
+
+        .g-input.correct {
+            border-color: var(--correct-color);
+            background: rgba(52, 211, 153, 0.1);
+        }
+
+        .g-input.wrong {
+            border-color: var(--wrong-color);
+            background: rgba(248, 113, 113, 0.1);
+        }
+
+        /* --- PART 2: Flip Cards --- */
+        .flip-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            height: 180px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .flip-card.flipped .flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-front,
+        .flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
             border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            border: 5px solid var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            flex-direction: column;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-        h1 { text-align: center; color: var(--primary); font-size: 2.5em; margin-bottom: 5px; font-family: 'Impact', fantasy; letter-spacing: 2px; }
-        h2 { color: var(--dark); border-left: 5px solid var(--accent); padding-left: 15px; margin-top: 40px; }
-        p.subtitle { text-align: center; color: #666; font-style: italic; margin-bottom: 30px; }
 
-        /* Navigation */
-        .nav-bar { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
-        .nav-btn {
-            background: var(--dark); color: var(--accent); border: none; padding: 10px 20px;
-            font-family: 'Courier New', monospace; font-weight: bold; cursor: pointer; border-radius: 5px; transition: 0.3s;
+        .flip-front {
+            background: var(--input-bg);
+            color: var(--text-primary);
         }
-        .nav-btn.active { background: var(--primary); color: white; transform: scale(1.1); }
-        .section { display: none; animation: fadeIn 0.6s; }
-        .section.active { display: block; }
 
-        /* Controls */
-        .level-indicator { text-align: right; font-weight: bold; color: var(--primary); margin-bottom: 10px; }
-        .progress-bar { height: 8px; background: #eee; border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
-        .progress-fill { height: 100%; background: var(--secondary); width: 0%; transition: 0.5s; }
-        .controls { display: flex; justify-content: space-between; margin-top: 20px; align-items: center; }
-        .btn-nav-small { background: #636e72; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
-        .btn-nav-small:disabled { opacity: 0.5; cursor: not-allowed; }
-        .check-btn { background: var(--secondary); color: white; border: none; padding: 12px 30px; border-radius: 30px; cursor: pointer; font-size: 1.1em; font-weight:bold; box-shadow: 0 4px 0 #00b894; transition: 0.2s; }
-        .check-btn:active { transform: translateY(4px); box-shadow: none; }
-        .feedback { text-align: center; font-weight: bold; margin-top: 10px; min-height: 25px; }
-        .correct-txt { color: #00b894; } .wrong-txt { color: #d63031; }
+        .flip-front h3 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
 
-        /* Part 1 Styles */
-        .grammar-set { display: none; } .grammar-set.active { display: block; animation: slideIn 0.4s; }
-        .grammar-box { background: #dfe6e9; padding: 20px; border-radius: 10px; margin-bottom: 15px; border-left: 5px solid var(--secondary); font-size: 1.1em; }
-        .grammar-input { padding: 5px; font-size: 1em; width: 130px; border: 2px solid #b2bec3; border-radius: 5px; font-family: 'Courier New', monospace; }
-        .grammar-input.correct { border-color: var(--correct); background-color: #e3fdf5; } .grammar-input.wrong { border-color: var(--wrong); background-color: #ffeaa7; }
+        .flip-back {
+            background: var(--gradient-main);
+            color: white;
+            transform: rotateY(180deg);
+        }
 
-        /* Part 2 Styles */
-        .card-container { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
-        .flip-card { background-color: transparent; width: 240px; height: 160px; perspective: 1000px; cursor: pointer; }
-        .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 10px; }
-        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
-        .flip-front, .flip-back { position: absolute; width: 100%; height: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; padding: 15px; box-sizing: border-box; border-radius: 10px; font-weight: bold; flex-direction: column; }
-        .flip-front { background-color: var(--primary); color: white; font-size: 1.2em; }
-        .flip-back { background-color: var(--dark); color: var(--accent); transform: rotateY(180deg); font-size: 1em; line-height: 1.4; border: 2px solid var(--accent); }
-        .cn-trans { font-size: 0.85em; color: #dfe6e9; margin-top: 8px; font-weight: normal; }
+        .flip-back p {
+            font-size: 1rem;
+            line-height: 1.4;
+        }
 
-        /* Part 3 Styles */
-        .plot-container { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 10px; }
-        .plot-row { display: flex; gap: 15px; align-items: flex-start; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
-        .plot-row:last-child { border-bottom: none; }
-        .plot-select { padding: 8px; border-radius: 5px; border: 2px solid #ccc; font-weight: bold; min-width: 140px; }
-        .plot-text-group { display: flex; flex-direction: column; }
-        .plot-en { font-weight: bold; color: #2d3436; font-size: 1.05em; }
-        .plot-cn { color: #888; font-size: 0.9em; margin-top: 4px; }
+        .cn-sub {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
 
-        /* Part 4 Styles */
-        .mystery-box { text-align: center; background: var(--dark); color: var(--accent); padding: 30px; border-radius: 15px; margin-top: 20px; }
-        .slot-machine { display: flex; justify-content: space-around; font-size: 1.2em; font-weight: bold; margin: 20px 0; background: white; color: black; padding: 15px; border-radius: 10px; }
-        .spin-btn { background: var(--accent); color: var(--dark); border: none; padding: 15px 40px; font-size: 1.2em; font-weight: bold; border-radius: 50px; cursor: pointer; }
-        .spin-btn:hover { background: #e1b12c; }
-        #guide-area { background: #f9f9f9; border: 2px dashed var(--primary); padding: 20px; margin-top: 20px; border-radius: 10px; display: none; }
-        .guide-step { margin-bottom: 15px; }
-        .guide-label { display: block; font-weight: bold; color: var(--primary); margin-bottom: 5px; }
-        .guide-input { width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 1em; }
-        .guide-fixed { background: #eee; padding: 5px 10px; border-radius: 5px; color: #555; font-weight: bold; display: inline-block; margin-bottom: 5px; }
-        #final-story-output { background: #fef9e7; padding: 20px; border-radius: 10px; border-left: 5px solid var(--accent); margin-top: 20px; display: none; font-family: 'Courier New', monospace; white-space: pre-wrap; line-height: 1.6; }
+        /* --- PART 3: Plot --- */
+        .plot-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .plot-row {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .plot-select {
+            background: var(--input-bg);
+            color: white;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            min-width: 120px;
+        }
+
+        /* --- PART 4: Slot Machine --- */
+        .slot-machine {
+            background: var(--input-bg);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 2px solid var(--accent-primary);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
+        }
+
+        .slot-display {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .slot-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            min-width: 150px;
+            color: var(--accent-primary);
+        }
+
+        .guide-box {
+            display: none;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            border-radius: 15px;
+            animation: fadeIn 0.5s;
+        }
+
+        .guide-step {
+            margin-bottom: 20px;
+        }
+
+        .guide-label {
+            display: block;
+            color: var(--accent-primary);
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .guide-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 8px;
+        }
+
+        .fixed-text {
+            color: var(--text-secondary);
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .final-story {
+            background: white;
+            color: #1e293b;
+            padding: 40px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            margin-top: 30px;
+            display: none;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            transform: rotate(1deg);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .slot-display {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>📖 The Storyteller's Toolkit</h1>
-    <p class="subtitle">Narrative Writing Master Class</p>
+    <header>
+        <a href="index.html" class="logo">
+            <span>📖</span> English Mastery
+        </a>
+        <a href="index.html" class="back-link">
+            &larr; Back to Home
+        </a>
+    </header>
 
-    <div class="nav-bar">
-        <button class="nav-btn active" onclick="showSection(1)">1. Grammar</button>
-        <button class="nav-btn" onclick="showSection(2)">2. Show Don't Tell</button>
-        <button class="nav-btn" onclick="showSection(3)">3. Plot</button>
-        <button class="nav-btn" onclick="showSection(4)">4. Story Builder</button>
-    </div>
+    <main>
+        <h1>The Storyteller's Toolkit</h1>
+        <p class="subtitle">Narrative Writing: Plot, Description & Suspense</p>
 
-    <div id="section-1" class="section active">
-        <h2>⏳ 1. The Time Machine</h2>
-        <div class="level-indicator">Set <span id="g-level-num">1</span> / 8</div>
-        <div class="progress-bar"><div class="progress-fill" id="g-progress-fill"></div></div>
-        <div id="grammar-container"></div>
-        <div class="controls">
-            <button class="btn-nav-small" id="g-prev-btn" onclick="changeGrammarSet(-1)" disabled>⬅️ Previous</button>
-            <button class="check-btn" id="g-check-btn" onclick="checkGrammarSet()">✅ Check Answers</button>
-            <button class="btn-nav-small" id="g-next-btn" onclick="changeGrammarSet(1)" style="visibility:hidden">Next ➡️</button>
-        </div>
-        <div id="grammar-feedback" class="feedback"></div>
-    </div>
-
-    <div id="section-2" class="section">
-        <h2>🎭 2. Show, Don't Tell</h2>
-        <div class="card-container">
-            <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-front">😡 ANGRY</div><div class="flip-back"><div>"He clenched his fists and his face turned red."</div><div class="cn-trans">他握紧拳头，脸涨得通红。</div></div></div></div>
-            <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-front">😱 SCARED</div><div class="flip-back"><div>"Her hands were shaking and her heart beat fast."</div><div class="cn-trans">她的手在发抖，心跳加速。</div></div></div></div>
-            <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-front">😴 TIRED</div><div class="flip-back"><div>"He could barely keep his eyes open."</div><div class="cn-trans">他几乎睁不开眼睛。</div></div></div></div>
-            <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-front">😲 SHOCKED</div><div class="flip-back"><div>"His jaw dropped and his eyes widened."</div><div class="cn-trans">他惊得目瞪口呆。</div></div></div></div>
-            <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-front">😢 SAD</div><div class="flip-back"><div>"Tears rolled down her cheeks."</div><div class="cn-trans">泪水顺着她的脸颊流了下来。</div></div></div></div>
-            <div class="flip-card" onclick="this.classList.toggle('flipped')"><div class="flip-card-inner"><div class="flip-front">😁 HAPPY</div><div class="flip-back"><div>"A bright smile lit up her face."</div><div class="cn-trans">灿烂的笑容点亮了她的脸庞。</div></div></div></div>
-        </div>
-    </div>
-
-    <div id="section-3" class="section">
-        <h2>🎢 3. The Story Rollercoaster</h2>
-        <div class="level-indicator">Story <span id="p-level-num">1</span> / 8</div>
-        <div class="progress-bar"><div class="progress-fill" id="p-progress-fill"></div></div>
-        <div id="plot-container" class="plot-container"></div>
-        <div class="controls">
-            <button class="btn-nav-small" id="p-prev-btn" onclick="changePlotSet(-1)" disabled>⬅️ Previous</button>
-            <button class="check-btn" id="p-check-btn" onclick="checkPlotSet()">✅ Check Order</button>
-            <button class="btn-nav-small" id="p-next-btn" onclick="changePlotSet(1)" style="visibility:hidden">Next Story ➡️</button>
-        </div>
-        <div id="plot-feedback" class="feedback"></div>
-    </div>
-
-    <div id="section-4" class="section">
-        <h2>🎲 4. The Guided Story Builder</h2>
-        <p style="text-align:center">Step 1: Spin to get your elements. <br>Step 2: Fill in the blanks to build your story.</p>
-        
-        <div class="mystery-box">
-            <div class="slot-machine"><div id="slot-who">❓ Character</div><div>+</div><div id="slot-where">❓ Setting</div><div>+</div><div id="slot-what">❓ Problem</div></div>
-            <button class="spin-btn" onclick="spinWheel()">🎰 SPIN!</button>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showSection(1)">1. Grammar Time</button>
+            <button class="tab-btn" onclick="showSection(2)">2. Show Don't Tell</button>
+            <button class="tab-btn" onclick="showSection(3)">3. Plot Order</button>
+            <button class="tab-btn" onclick="showSection(4)">4. Story Generator</button>
         </div>
 
-        <div id="guide-area">
-            <h3>📝 Fill in the blanks (填空):</h3>
-            
-            <div class="guide-step">
-                <span class="guide-label">1. Introduction (Time & Weather)</span>
-                <span class="guide-fixed">Last Saturday,</span>
-                <input type="text" id="g-weather" class="guide-input" placeholder="e.g. it was a sunny/rainy day (天气如何?)...">
-            </div>
+        <!-- SECTION 1: GRAMMAR -->
+        <div id="section-1" class="lesson-section active">
+            <div class="card">
+                <div class="card-bg-icon">⏳</div>
+                <h2>The Time Machine</h2>
+                <p style="color:var(--text-secondary); margin-bottom:20px;">Use the <b>Past Continuous</b> (was/were +
+                    ing) and <b>Simple Past</b>.</p>
 
-            <div class="guide-step">
-                <span class="guide-label">2. Character & Setting (Generated)</span>
-                <span class="guide-fixed" id="g-char-set-text">...</span>
-            </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.9rem; color:var(--text-secondary)">
+                    <span>Level <span id="g-level">1</span>/8</span>
+                    <span><span id="g-score">0</span>%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="g-progress"></div>
+                </div>
 
-            <div class="guide-step">
-                <span class="guide-label">3. Action (What were they doing?)</span>
-                <span class="guide-fixed">They were busy...</span>
-                <input type="text" id="g-action" class="guide-input" placeholder="e.g. taking photos / walking around (正在做什么?)...">
-            </div>
+                <div id="grammar-container"></div>
 
-            <div class="guide-step">
-                <span class="guide-label">4. The Problem (Generated)</span>
-                <span class="guide-fixed">Suddenly,</span>
-                <span class="guide-fixed" id="g-prob-text">...</span>
+                <div class="controls">
+                    <button class="btn-nav" id="g-prev" onclick="changeGrammar(-1)" disabled>&larr; Prev</button>
+                    <button class="btn-action" id="g-check" onclick="checkGrammar()">Check Answers</button>
+                    <button class="btn-action" id="g-next" onclick="changeGrammar(1)" style="display:none">Next
+                        &rarr;</button>
+                </div>
+                <div id="g-feedback" class="feedback-msg"></div>
             </div>
-
-            <div class="guide-step">
-                <span class="guide-label">5. Reaction (Emotion)</span>
-                <span class="guide-fixed">They felt...</span>
-                <input type="text" id="g-feeling" class="guide-input" placeholder="e.g. terrified / shocked / worried (感觉如何?)...">
-            </div>
-
-            <div class="guide-step">
-                <span class="guide-label">6. Resolution (Ending)</span>
-                <span class="guide-fixed">In the end,</span>
-                <input type="text" id="g-ending" class="guide-input" placeholder="e.g. they ran home / someone helped them (结局?)...">
-            </div>
-
-            <button class="check-btn" style="width:100%" onclick="generateFullStory()">🚀 Create My Story</button>
         </div>
 
-        <div id="final-story-output"></div>
-    </div>
+        <!-- SECTION 2: SHOW DONT TELL -->
+        <div id="section-2" class="lesson-section">
+            <div class="card">
+                <h2>Show, Don't Tell</h2>
+                <p style="color:var(--text-secondary); margin-bottom:30px;">Tap the cards to see how to describe
+                    emotions without naming them.</p>
 
-</div>
+                <div class="flip-grid">
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-inner">
+                            <div class="flip-front">
+                                <div style="font-size:3rem">😡</div>
+                                <h3>ANGRY</h3>
+                            </div>
+                            <div class="flip-back">
+                                <p>"He clenched his fists and his face turned red."</p>
+                                <div class="cn-sub">他握紧拳头，脸涨得通红。</div>
+                            </div>
+                        </div>
+                    </div>
 
-<script>
-    // --- NAV ---
-    function showSection(num) {
-        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-        document.getElementById(`section-${num}`).classList.add('active');
-        document.querySelectorAll('.nav-btn')[num-1].classList.add('active');
-    }
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-inner">
+                            <div class="flip-front">
+                                <div style="font-size:3rem">😱</div>
+                                <h3>SCARED</h3>
+                            </div>
+                            <div class="flip-back">
+                                <p>"Her hands were shaking and her heart beat fast."</p>
+                                <div class="cn-sub">她的手在发抖，心跳加速。</div>
+                            </div>
+                        </div>
+                    </div>
 
-    // --- PART 1: GRAMMAR ---
-    const grammarSets=[{title:"Set 1: Basic",qs:[{t:"I (study) when the lights (go) out.",a1:"was studying",a2:"went",p1:"study",p2:"go"},{t:"She (cook) when she (burn) her hand.",a1:"was cooking",a2:"burnt",p1:"cook",p2:"burn"},{t:"We (sleep) when we (hear) a noise.",a1:"were sleeping",a2:"heard",p1:"sleep",p2:"hear"}]},{title:"Set 2: 'While'",qs:[{t:"While I (walk) home, I (see) a cat.",a1:"was walking",a2:"saw",p1:"walk",p2:"see"},{t:"While they (play), it (start) to rain.",a1:"were playing",a2:"started",p1:"play",p2:"start"},{t:"He (fall) asleep while he (read).",a1:"fell",a2:"was reading",p1:"fall",p2:"read"}]},{title:"Set 3: Background",qs:[{t:"The sun (shine) and birds (sing).",a1:"was shining",a2:"were singing",p1:"shine",p2:"sing"},{t:"People (laugh) and music (play).",a1:"were laughing",a2:"was playing",p1:"laugh",p2:"play"},{t:"It (rain) heavily when we (leave).",a1:"was raining",a2:"left",p1:"rain",p2:"leave"}]},{title:"Set 4: Negative",qs:[{t:"I (not / listen) so I (miss) the bus.",a1:"was not listening",a2:"missed",p1:"not / listen",p2:"miss"},{t:"He (not / watch) so he (crash).",a1:"was not watching",a2:"crashed",p1:"not / watch",p2:"crash"},{t:"They (not / sleep) when Dad (come).",a1:"were not sleeping",a2:"came",p1:"not / sleep",p2:"come"}]},{title:"Set 5: Questions",qs:[{t:"What (you / do) when I (call)?",a1:"were you doing",a2:"called",p1:"you / do",p2:"call"},{t:"Where (he / go) when you (see) him?",a1:"was he going",a2:"saw",p1:"he / go",p2:"see"},{t:"(It / rain) when you (wake) up?",a1:"Was it raining",a2:"woke",p1:"It / rain",p2:"wake"}]},{title:"Set 6: Two Actions",qs:[{t:"I (study) while he (play) games.",a1:"was studying",a2:"was playing",p1:"study",p2:"play"},{t:"Mom (cook) while Dad (clean).",a1:"was cooking",a2:"was cleaning",p1:"cook",p2:"clean"},{t:"We (talk) while we (eat).",a1:"were talking",a2:"were eating",p1:"talk",p2:"eat"}]},{title:"Set 7: Accident",qs:[{t:"The driver (drive) too fast.",a1:"was driving",a2:"",p1:"drive",p2:"BLOCK"},{t:"Suddenly, a dog (run) across road.",a1:"ran",a2:"",p1:"run",p2:"BLOCK"},{t:"He (try) to stop but it (be) too late.",a1:"tried",a2:"was",p1:"try",p2:"be"}]},{title:"Set 8: Mystery",qs:[{t:"We (walk) in the forest.",a1:"were walking",a2:"",p1:"walk",p2:"BLOCK"},{t:"Suddenly, we (hear) a scream.",a1:"heard",a2:"",p1:"hear",p2:"BLOCK"},{t:"My friend (start) to cry.",a1:"started",a2:"",p1:"start",p2:"BLOCK"}]}];
-    let gIndex=0;
-    function renderGrammar(){const c=document.getElementById('grammar-container');c.innerHTML='';grammarSets.forEach((s,i)=>{let d=document.createElement('div');d.className=`grammar-set ${i===0?'active':''}`;d.id=`g-set-${i}`;let h=`<h3>${s.title}</h3>`;s.qs.forEach((q,j)=>{let l=`<div class="grammar-box"><p>${j+1}. `;let s1=q.t.split('('+q.p1+')');l+=s1[0]+`<input type="text" class="grammar-input" id="g-in-${i}-${j}-1" placeholder="${q.p1}">`;if(q.p2!=="BLOCK"){let s2=s1[1].split('('+q.p2+')');l+=s2[0]+`<input type="text" class="grammar-input" id="g-in-${i}-${j}-2" placeholder="${q.p2}">`+s2[1]}else{l+=s1[1]}l+=`</p></div>`;h+=l});d.innerHTML=h;c.appendChild(d)})}
-    function changeGrammarSet(d){document.getElementById(`g-set-${gIndex}`).classList.remove('active');gIndex+=d;if(gIndex<0)gIndex=0;if(gIndex>=grammarSets.length)gIndex=grammarSets.length-1;document.getElementById(`g-set-${gIndex}`).classList.add('active');document.getElementById('g-level-num').innerText=gIndex+1;document.getElementById('g-progress-fill').style.width=`${((gIndex)/7)*100}%`;document.getElementById('g-prev-btn').disabled=(gIndex===0);document.getElementById('g-next-btn').style.visibility='hidden';document.getElementById('g-check-btn').style.display='block';document.getElementById('grammar-feedback').innerHTML=""}
-    function checkGrammarSet(){let s=grammarSets[gIndex],all=true;s.qs.forEach((q,j)=>{let i1=document.getElementById(`g-in-${gIndex}-${j}-1`),v1=i1.value.trim().toLowerCase();if(v1===q.a1.toLowerCase()||(q.a1==="burnt"&&v1==="burned")){i1.classList.add('correct');i1.classList.remove('wrong')}else{i1.classList.add('wrong');i1.classList.remove('correct');all=false}if(q.p2!=="BLOCK"){let i2=document.getElementById(`g-in-${gIndex}-${j}-2`),v2=i2.value.trim().toLowerCase();if(v2===q.a2.toLowerCase()){i2.classList.add('correct');i2.classList.remove('wrong')}else{i2.classList.add('wrong');i2.classList.remove('correct');all=false}}});let fb=document.getElementById('grammar-feedback');if(all){fb.innerHTML="<span class='correct-txt'>🎉 Perfect! Next Level!</span>";document.getElementById('g-check-btn').style.display='none';document.getElementById('g-next-btn').style.visibility='visible';if(gIndex<7)setTimeout(()=>changeGrammarSet(1),1500);else fb.innerHTML="<span class='correct-txt'>🏆 COMPLETE!</span>"}else{fb.innerHTML="<span class='wrong-txt'>⚠️ Check yellow boxes!</span>"}}
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-inner">
+                            <div class="flip-front">
+                                <div style="font-size:3rem">😴</div>
+                                <h3>TIRED</h3>
+                            </div>
+                            <div class="flip-back">
+                                <p>"He could barely keep his eyes open."</p>
+                                <div class="cn-sub">他几乎睁不开眼睛。</div>
+                            </div>
+                        </div>
+                    </div>
 
-    // --- PART 3: PLOT ---
-    const plotData=[
-        {title:"Story 1: The Broken Car (车坏了)",parts:[{id:1,en:"Sunny day, we were driving to hometown.",cn:"晴天，我们开车回老家。",type:"1"},{id:2,en:"Suddenly, the car broke down and smoke came out.",cn:"突然，车坏了，冒烟了。",type:"2"},{id:3,en:"We were stuck in the dark forest and felt scared.",cn:"我们被困在黑森林里，很害怕。",type:"3"},{id:4,en:"Finally, a truck driver helped us fix it.",cn:"最后，卡车司机帮我们修好了。",type:"4"}]},
-        {title:"Story 2: The Lost Wallet (丢失的钱包)",parts:[{id:1,en:"I was walking to school happily.",cn:"我开心地走去学校。",type:"1"},{id:2,en:"I reached into my pocket and realized my wallet was gone.",cn:"我摸口袋，发现钱包不见了。",type:"2"},{id:3,en:"I searched everywhere frantically and wanted to cry.",cn:"我疯狂地到处找，急得想哭。",type:"3"},{id:4,en:"A kind stranger found it and gave it back to me.",cn:"一个好心的陌生人捡到并还给了我。",type:"4"}]},
-        {title:"Story 3: Cooking Surprise (烹饪惊喜)",parts:[{id:1,en:"I wanted to bake a cake for my mother.",cn:"我想给妈妈烤个蛋糕。",type:"1"},{id:2,en:"By mistake, I used salt instead of sugar.",cn:"我不小心把盐当成了糖。",type:"2"},{id:3,en:"Mom took a big bite and spit it out immediately.",cn:"妈妈吃了一大口，马上吐了出来。",type:"3"},{id:4,en:"We laughed and ordered a pizza instead.",cn:"我们大笑，改点了披萨。",type:"4"}]},
-        {title:"Story 4: The Scary Shadow (可怕的影子)",parts:[{id:1,en:"I was home alone watching TV at night.",cn:"晚上我独自在家看电视。",type:"1"},{id:2,en:"Suddenly, I heard a scratching noise at the door.",cn:"突然，我听到门口有抓挠声。",type:"2"},{id:3,en:"My heart beat fast as I opened the door slowly.",cn:"我慢慢开门，心跳得很快。",type:"3"},{id:4,en:"It was just a cute stray cat looking for food.",cn:"原来只是一只找吃的流浪猫。",type:"4"}]},
-        {title:"Story 5: Exam Day (考试日)",parts:[{id:1,en:"I woke up late for my history exam.",cn:"我历史考试起晚了。",type:"1"},{id:2,en:"Then, the bus broke down on the way to school.",cn:"然后，巴士在去学校的路上坏了。",type:"2"},{id:3,en:"I ran all the way to school, sweating heavily.",cn:"我一路跑到学校，满头大汗。",type:"3"},{id:4,en:"Luckily, the teacher let me take the exam.",cn:"幸好，老师让我参加了考试。",type:"4"}]},
-        {title:"Story 6: The Flood (洪水)",parts:[{id:1,en:"It had been raining heavily for three days.",cn:"雨已经下了三天了。",type:"1"},{id:2,en:"Water started coming into our living room.",cn:"水开始流进我们的客厅。",type:"2"},{id:3,en:"We climbed onto the roof, waiting for help.",cn:"我们爬上屋顶等待救援。",type:"3"},{id:4,en:"Finally, a rescue boat came to save us.",cn:"终于，救援船来救我们了。",type:"4"}]},
-        {title:"Story 7: The Bully (霸凌)",parts:[{id:1,en:"Ali was a new student and he was very shy.",cn:"Ali是新来的学生，很害羞。",type:"1"},{id:2,en:"A big boy took his lunch money in the canteen.",cn:"食堂里一个大个子抢了他的午餐钱。",type:"2"},{id:3,en:"I stood up bravely and told the teacher.",cn:"我勇敢地站出来告诉了老师。",type:"3"},{id:4,en:"The bully apologized and we became friends.",cn:"那个男生道歉了，我们成了朋友。",type:"4"}]},
-        {title:"Story 8: The Hike (徒步)",parts:[{id:1,en:"We went hiking in the jungle last Sunday.",cn:"上周日我们去丛林徒步。",type:"1"},{id:2,en:"We lost our map and compass.",cn:"我们要丢了地图和指南针。",type:"2"},{id:3,en:"The sun went down and we heard wild animals.",cn:"太阳下山了，我们听到了野兽的声音。",type:"3"},{id:4,en:"We saw a light and found the ranger station.",cn:"我们看到了灯光，找到了护林站。",type:"4"}]}
-    ];
-    let pIndex=0; let currentPlotOrder=[];
-    function renderPlotSet(){const c=document.getElementById('plot-container');let s=plotData[pIndex];let sp=[...s.parts].sort(()=>Math.random()-0.5);currentPlotOrder=sp;let h=`<h3>${s.title}</h3>`;sp.forEach((p,i)=>{h+=`<div class="plot-row"><select class="plot-select" id="p-sel-${i}"><option value="0">Choose...</option><option value="1">1. Intro</option><option value="2">2. Problem</option><option value="3">3. Climax</option><option value="4">4. Resolution</option></select><div class="plot-text-group"><span class="plot-en">${p.en}</span><span class="plot-cn">${p.cn}</span></div></div>`});c.innerHTML=h;document.getElementById('p-level-num').innerText=pIndex+1;document.getElementById('p-progress-fill').style.width=`${((pIndex)/7)*100}%`}
-    function changePlotSet(d){pIndex+=d;if(pIndex<0)pIndex=0;if(pIndex>=plotData.length)pIndex=plotData.length-1;renderPlotSet();document.getElementById('p-prev-btn').disabled=(pIndex===0);document.getElementById('p-next-btn').style.visibility='hidden';document.getElementById('p-check-btn').style.display='block';document.getElementById('plot-feedback').innerHTML=""}
-    function checkPlotSet(){let all=true;currentPlotOrder.forEach((p,i)=>{let s=document.getElementById(`p-sel-${i}`);if(s.value===p.type){s.style.borderColor="#00b894";s.style.backgroundColor="#e3fdf5"}else{s.style.borderColor="#d63031";s.style.backgroundColor="#ffeaa7";all=false}});let fb=document.getElementById('plot-feedback');if(all){fb.innerHTML="<span class='correct-txt'>📚 Great!</span>";document.getElementById('p-check-btn').style.display='none';document.getElementById('p-next-btn').style.visibility='visible';if(pIndex<7)setTimeout(()=>changePlotSet(1),1500);else fb.innerHTML="<span class='correct-txt'>🏆 MASTER STORYTELLER!</span>"}else{fb.innerHTML="<span class='wrong-txt'>Hint: Check the Chinese!</span>"}}
+                    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                        <div class="flip-inner">
+                            <div class="flip-front">
+                                <div style="font-size:3rem">😲</div>
+                                <h3>SHOCKED</h3>
+                            </div>
+                            <div class="flip-back">
+                                <p>"His jaw dropped and his eyes widened."</p>
+                                <div class="cn-sub">他惊得目瞪口呆。</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    // --- PART 4: GUIDED SPIN ---
-    const whos = ["A clumsy student (一个笨手笨脚的学生)", "A brave detective (勇敢的侦探)", "A lonely robot (孤独的机器人)", "A group of friends (一群朋友)"];
-    const wheres = ["at an old school (在旧学校)", "in a dark forest (在黑森林)", "at a busy shopping mall (在繁忙的商场)", "on a deserted island (在荒岛)"];
-    const whats = ["found a mysterious bag (发现神秘包包)", "lost their phone (丢了手机)", "saw a ghost (看到鬼)", "missed the last bus (错过末班车)"];
-    
-    // Store current elements
-    let curWho="", curWhere="", curWhat="";
+        <!-- SECTION 3: PLOT -->
+        <div id="section-3" class="lesson-section">
+            <div class="card">
+                <h2>The Story Rollercoaster</h2>
+                <p style="color:var(--text-secondary); margin-bottom:20px;">Put the story parts in the correct order
+                    (1-4).</p>
 
-    function spinWheel() {
-        let btn = document.querySelector('.spin-btn');
-        btn.disabled = true; btn.innerText = "Spinning...";
-        document.getElementById('guide-area').style.display = 'none';
-        document.getElementById('final-story-output').style.display = 'none';
+                <h3 id="plot-title" style="color:white; margin-bottom:20px;">Story 1</h3>
+                <div id="plot-container" class="plot-container"></div>
 
-        let duration = 0;
-        let interval = setInterval(() => {
-            curWho = whos[Math.floor(Math.random() * whos.length)];
-            curWhere = wheres[Math.floor(Math.random() * wheres.length)];
-            curWhat = whats[Math.floor(Math.random() * whats.length)];
-            
-            document.getElementById('slot-who').innerText = curWho;
-            document.getElementById('slot-where').innerText = curWhere;
-            document.getElementById('slot-what').innerText = curWhat;
-            duration++;
-            if(duration > 15) {
-                clearInterval(interval);
-                btn.disabled = false; btn.innerText = "🎰 SPIN AGAIN";
-                showGuide();
+                <div class="controls">
+                    <button class="btn-nav" id="p-prev" onclick="changePlot(-1)" disabled>&larr; Prev</button>
+                    <button class="btn-action" id="p-check" onclick="checkPlot()">Check Order</button>
+                    <button class="btn-action" id="p-next" onclick="changePlot(1)" style="display:none">Next Story
+                        &rarr;</button>
+                </div>
+                <div id="p-feedback" class="feedback-msg"></div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: GENERATOR -->
+        <div id="section-4" class="lesson-section">
+            <div class="card">
+                <h2>Random Story Generator</h2>
+                <p style="color:var(--text-secondary); text-align:center;">Spin the wheel to get your story elements!
+                </p>
+
+                <div class="slot-machine">
+                    <div class="slot-display">
+                        <div class="slot-item" id="slot-who">❓ Who</div>
+                        <div class="slot-item" id="slot-where">❓ Where</div>
+                        <div class="slot-item" id="slot-what">❓ What</div>
+                    </div>
+                    <button class="btn-action" onclick="spinWheel()">🎰 SPIN!</button>
+                </div>
+
+                <div id="guide" class="guide-box">
+                    <h3 style="color:white; margin-bottom:20px;">Write Your Story</h3>
+
+                    <div class="guide-step">
+                        <label class="guide-label">1. Introduction</label>
+                        <span class="fixed-text">Last Saturday...</span>
+                        <input type="text" id="inp-weather" class="guide-input"
+                            placeholder="e.g. it was a dark and stormy night...">
+                    </div>
+
+                    <div class="guide-step">
+                        <label class="guide-label">2. Character (Generated)</label>
+                        <span class="fixed-text" id="gen-char-text">...</span>
+                    </div>
+
+                    <div class="guide-step">
+                        <label class="guide-label">3. The Problem (Generated)</label>
+                        <span class="fixed-text">Suddenly,</span>
+                        <span class="fixed-text" id="gen-prob-text">...</span>
+                    </div>
+
+                    <div class="guide-step">
+                        <label class="guide-label">4. Reaction</label>
+                        <span class="fixed-text">They felt...</span>
+                        <input type="text" id="inp-feeling" class="guide-input"
+                            placeholder="e.g. terrified / excited...">
+                    </div>
+
+                    <button class="btn-action" style="width:100%" onclick="generateStory()">🚀 Create Story</button>
+
+                    <div id="final-story" class="final-story"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- NAV ---
+        function showSection(num) {
+            document.querySelectorAll('.lesson-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`section-${num}`).classList.add('active');
+            document.querySelectorAll('.tab-btn')[num - 1].classList.add('active');
+        }
+
+        // --- PART 1: GRAMMAR ---
+        const gramSets = [
+            { title: "Set 1", qs: [{ t: "I (study) when lights (go) out.", a1: "was studying", a2: "went", p1: "study", p2: "go" }] },
+            { title: "Set 2", qs: [{ t: "While I (walk), I (see) a cat.", a1: "was walking", a2: "saw", p1: "walk", p2: "see" }] },
+            { title: "Set 3", qs: [{ t: "It (rain) when we (leave).", a1: "was raining", a2: "left", p1: "rain", p2: "leave" }] },
+            { title: "Set 4", qs: [{ t: "He (sleep) when phone (ring).", a1: "was sleeping", a2: "rang", p1: "sleep", p2: "ring" }] },
+            { title: "Set 5", qs: [{ t: "They (play) while mom (cook).", a1: "were playing", a2: "was cooking", p1: "play", p2: "cook" }] },
+            { title: "Set 6", qs: [{ t: "I (not / look) so I (crash).", a1: "was not looking", a2: "crashed", p1: "not / look", p2: "crash" }] },
+            { title: "Set 7", qs: [{ t: "What (you / do) when I (call)?", a1: "were you doing", a2: "called", p1: "you / do", p2: "call" }] },
+            { title: "Set 8", qs: [{ t: "We (hear) a scream.", a1: "heard", a2: "", p1: "hear", p2: "BLOCK" }] }
+        ];
+        let gIndex = 0;
+
+        function renderGrammar() {
+            let s = gramSets[gIndex];
+            let q = s.qs[0];
+            let parts = q.t.split(/\(.*?\)|\(BLOCK\)/); // simplified split for display
+            // Let's do a simpler render logic specifically for this structure
+            // expected: "Part 1 " + input + " Part 2 " + input + " Part 3"
+
+            let html = `<div class="g-item"><div>${s.title}:</div><div style="margin-top:10px; font-size:1.2rem; line-height:2;">`;
+
+            // Reconstruct sentence with inputs
+            let t = q.t;
+            // First input
+            let i1 = t.indexOf(q.p1);
+            let pre1 = t.substring(0, t.indexOf('('));
+            let rem1 = t.substring(t.indexOf(')') + 1);
+
+            html += pre1 + `<input id="g-i1" class="g-input" placeholder="${q.p1}">`;
+
+            if (q.p2 !== "BLOCK") {
+                let pre2 = rem1.substring(0, rem1.indexOf('('));
+                let rem2 = rem1.substring(rem1.indexOf(')') + 1);
+                html += pre2 + `<input id="g-i2" class="g-input" placeholder="${q.p2}">` + rem2;
+            } else {
+                html += rem1;
             }
-        }, 100);
-    }
+            html += `</div></div>`;
 
-    function showGuide() {
-        document.getElementById('guide-area').style.display = 'block';
-        // Clean strings for sentence insertion (remove chinese brackets)
-        let cleanWho = curWho.split(' (')[0];
-        let cleanWhere = curWhere.split(' (')[0];
-        let cleanWhat = curWhat.split(' (')[0];
+            document.getElementById('grammar-container').innerHTML = html;
+            document.getElementById('g-level').innerText = gIndex + 1;
+            document.getElementById('g-progress').style.width = ((gIndex) / 8) * 100 + "%";
 
-        // Fill fixed parts
-        document.getElementById('g-char-set-text').innerText = `${cleanWho} was ${cleanWhere}.`;
-        document.getElementById('g-prob-text').innerText = `${cleanWhat}!`;
-    }
+            document.getElementById('g-prev').disabled = (gIndex === 0);
+            document.getElementById('g-next').style.display = 'none';
+            document.getElementById('g-check').style.display = 'inline-block';
+            document.getElementById('g-feedback').innerText = "";
+        }
 
-    function generateFullStory() {
-        let weather = document.getElementById('g-weather').value || "the weather was fine";
-        let action = document.getElementById('g-action').value || "doing something interesting";
-        let feeling = document.getElementById('g-feeling').value || "scared";
-        let ending = document.getElementById('g-ending').value || "they went home";
-        
-        let cleanWho = curWho.split(' (')[0];
-        let cleanWhere = curWhere.split(' (')[0];
-        let cleanWhat = curWhat.split(' (')[0];
+        function checkGrammar() {
+            let s = gramSets[gIndex].qs[0];
+            let i1 = document.getElementById('g-i1');
+            let v1 = i1.value.toLowerCase().trim();
+            let correct = true;
 
-        let story = `MY SHORT STORY\n\n`;
-        story += `Last Saturday, ${weather}. ${cleanWho} was ${cleanWhere}.\n\n`;
-        story += `They were busy ${action}. It was a normal day.\n\n`;
-        story += `Suddenly, ${cleanWhat}! They felt ${feeling}.\n\n`;
-        story += `In the end, ${ending}. What an unforgettable day!`;
+            if (v1 === s.a1.toLowerCase()) {
+                i1.classList.add('correct');
+            } else {
+                i1.classList.add('wrong');
+                correct = false;
+            }
 
-        let out = document.getElementById('final-story-output');
-        out.innerText = story;
-        out.style.display = 'block';
-    }
+            if (s.p2 !== "BLOCK") {
+                let i2 = document.getElementById('g-i2');
+                let v2 = i2.value.toLowerCase().trim();
+                if (v2 === s.a2.toLowerCase()) {
+                    i2.classList.add('correct');
+                } else {
+                    i2.classList.add('wrong');
+                    correct = false;
+                }
+            }
 
-    // Init
-    renderGrammar();
-    renderPlotSet();
-</script>
+            let fb = document.getElementById('g-feedback');
+            if (correct) {
+                fb.innerText = "✨ Correct!";
+                if (gIndex < 7) document.getElementById('g-next').style.display = 'inline-block';
+                document.getElementById('g-check').style.display = 'none';
+            } else {
+                fb.innerText = "Try again!";
+            }
+        }
+        function changeGrammar(d) { gIndex += d; renderGrammar(); }
 
+        // --- PART 3: PLOT ---
+        const plotData = [
+            { title: "Story 1: The Broken Car (车坏了)", parts: [{ id: 1, en: "Sunny day, we were driving to hometown.", cn: "晴天，我们开车回老家。", type: "1" }, { id: 2, en: "Suddenly, the car broke down and smoke came out.", cn: "突然，车坏了，冒烟了。", type: "2" }, { id: 3, en: "We were stuck in the dark forest and felt scared.", cn: "我们被困在黑森林里，很害怕。", type: "3" }, { id: 4, en: "Finally, a truck driver helped us fix it.", cn: "最后，卡车司机帮我们修好了。", type: "4" }] },
+            { title: "Story 2: The Lost Wallet (丢失的钱包)", parts: [{ id: 1, en: "I was walking to school happily.", cn: "我开心地走去学校。", type: "1" }, { id: 2, en: "I reached into my pocket and realized my wallet was gone.", cn: "我摸口袋，发现钱包不见了。", type: "2" }, { id: 3, en: "I searched everywhere frantically and wanted to cry.", cn: "我疯狂地到处找，急得想哭。", type: "3" }, { id: 4, en: "A kind stranger found it and gave it back to me.", cn: "一个好心的陌生人捡到并还给了我。", type: "4" }] }
+        ];
+        let pIndex = 0;
+        let pOrder = [];
+
+        function renderPlot() {
+            let d = plotData[pIndex];
+            document.getElementById('plot-title').innerText = d.title;
+            let html = "";
+            let shuffled = [...d.parts].sort(() => Math.random() - 0.5);
+            pOrder = shuffled; // track display order
+
+            shuffled.forEach((p, i) => {
+                html += `
+                <div class="plot-row">
+                    <select class="plot-select" id="p-sel-${i}">
+                        <option value="0">-</option>
+                        <option value="1">1. Intro</option>
+                        <option value="2">2. Problem</option>
+                        <option value="3">3. Climax</option>
+                        <option value="4">4. End</option>
+                    </select>
+                    <div>
+                        <div style="font-weight:bold">${p.en}</div>
+                        <div style="font-size:0.9rem; color:var(--text-secondary)">${p.cn}</div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('plot-container').innerHTML = html;
+            document.getElementById('p-prev').disabled = (pIndex === 0);
+            document.getElementById('p-next').style.display = 'none';
+            document.getElementById('p-check').style.display = 'inline-block';
+            document.getElementById('p-feedback').innerText = "";
+        }
+
+        function checkPlot() {
+            let correct = true;
+            pOrder.forEach((p, i) => {
+                let val = document.getElementById(`p-sel-${i}`).value;
+                if (val === p.type) {
+                    document.getElementById(`p-sel-${i}`).style.borderColor = "#34d399";
+                } else {
+                    document.getElementById(`p-sel-${i}`).style.borderColor = "#f87171";
+                    correct = false;
+                }
+            });
+            let fb = document.getElementById('p-feedback');
+            if (correct) {
+                fb.innerText = "📚 Story Logic Correct!";
+                if (pIndex < plotData.length - 1) document.getElementById('p-next').style.display = 'inline-block';
+                document.getElementById('p-check').style.display = 'none';
+            } else {
+                fb.innerText = "Check the order again.";
+            }
+        }
+        function changePlot(d) { pIndex += d; renderPlot(); }
+
+        // --- PART 4: GENERATOR ---
+        const whos = ["A clumsy student", "A brave detective", "A lonely robot", "A group of friends"];
+        const wheres = ["at an old school", "in a dark forest", "at a busy mall", "on an island"];
+        const whats = ["found a mysterious bag", "lost their phone", "saw a ghost", "missed the bus"];
+
+        let curWho = "", curWhere = "", curWhat = "";
+
+        function spinWheel() {
+            let dur = 0;
+            let int = setInterval(() => {
+                curWho = whos[Math.floor(Math.random() * whos.length)];
+                curWhere = wheres[Math.floor(Math.random() * wheres.length)];
+                curWhat = whats[Math.floor(Math.random() * whats.length)];
+
+                document.getElementById('slot-who').innerText = curWho;
+                document.getElementById('slot-where').innerText = curWhere;
+                document.getElementById('slot-what').innerText = curWhat;
+
+                dur++;
+                if (dur > 10) {
+                    clearInterval(int);
+                    showGuide();
+                }
+            }, 100);
+        }
+
+        function showGuide() {
+            document.getElementById('guide').style.display = 'block';
+            document.getElementById('gen-char-text').innerText = `${curWho} was ${curWhere}.`;
+            document.getElementById('gen-prob-text').innerText = `${curWhat}!`;
+            document.getElementById('guide').scrollIntoView({ behavior: "smooth" });
+        }
+
+        function generateStory() {
+            let w = document.getElementById('inp-weather').value || "the weather was mysterious";
+            let f = document.getElementById('inp-feeling').value || "shocked";
+
+            let story = `MY STORY\n\n`;
+            story += `Last Saturday, ${w}. ${curWho} was ${curWhere}.\n\n`;
+            story += `Suddenly, ${curWhat}! They felt ${f}.\n\n`;
+            story += `In the end, it was an adventure they would never forget.`;
+
+            let div = document.getElementById('final-story');
+            div.innerText = story;
+            div.style.display = 'block';
+            div.scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Init
+        renderGrammar();
+        renderPlot();
+
+    </script>
 </body>
+
 </html>

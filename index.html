@@ -1,215 +1,470 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Writing Master Class - 课程大厅</title>
+    <title>English Mastery | Your Journey to Fluency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --bg-color: #f4f7f6;
-            --text-color: #2d3436;
-            --card-bg: #ffffff;
-            /* 对应四个课程的主题色 */
-            --social-blue: #4A90E2;   /* Lesson 1 Color */
-            --holiday-orange: #FF9F43; /* Lesson 2 Color */
-            --story-purple: #6c5ce7;   /* Lesson 3 Color */
-            --advice-green: #2ecc71;   /* Lesson 4 Color (New!) */
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-beginner: #2ecc71;
+            /* Green */
+            --accent-intermediate: #3498db;
+            /* Blue */
+            --accent-fluent: #9b59b6;
+            /* Purple */
+            --accent-expert: #f1c40f;
+            /* Gold */
+            --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --font-main: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            font-family: var(--font-main);
             background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
+        /* Hero Section */
         header {
+            background: var(--gradient-hero);
+            padding: 80px 20px 100px;
             text-align: center;
-            margin-bottom: 50px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            position: relative;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.8s ease-out;
         }
 
-        p.subtitle {
-            font-size: 1.1rem;
-            color: #7f8c8d;
+        header p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
             max-width: 600px;
             margin: 0 auto;
-            line-height: 1.6;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
         }
 
-        /* 网格布局 */
-        .course-grid {
+        .level-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: -60px auto 0;
+            padding: 0 20px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Section Headings */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 60px 0 30px;
+            font-size: 1.8rem;
+            color: var(--text-primary);
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: var(--card-bg);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Grid Layout */
+        .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            width: 100%;
-            max-width: 1100px;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
         }
 
-        /* 卡片样式 */
+        /* Card Styles */
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 30px;
             text-decoration: none;
-            color: var(--text-color);
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-            border: 2px solid transparent;
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
         }
 
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* 课程标签 */
-        .badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: bold;
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color, #ccc);
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-color, #ccc);
             margin-bottom: 15px;
-            width: fit-content;
+            font-weight: 700;
         }
 
-        .card h2 {
-            margin: 10px 0;
+        .card h3 {
             font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: var(--font-serif);
+            line-height: 1.2;
         }
 
         .card p {
-            color: #636e72;
+            color: var(--text-secondary);
             font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            flex-grow: 1; /* 让按钮始终在底部 */
+            margin-bottom: 25px;
+            flex-grow: 1;
         }
 
-        /* 按钮样式 */
-        .start-btn {
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-top: auto;
-            padding: 12px;
-            text-align: center;
-            border-radius: 8px;
-            font-weight: bold;
-            color: white;
-            transition: opacity 0.2s;
-        }
-        
-        .card:hover .start-btn {
-            opacity: 0.9;
         }
 
-        /* --------------------------
-           针对不同课程的特定配色
-           -------------------------- */
-        
-        /* Lesson 1: Social Media (Blue) */
-        .card-social { border-top: 6px solid var(--social-blue); }
-        .card-social .badge { background-color: #e3f2fd; color: var(--social-blue); }
-        .card-social h2 { color: var(--social-blue); }
-        .card-social .start-btn { background-color: var(--social-blue); }
-
-        /* Lesson 2: Dream Holiday (Orange) */
-        .card-holiday { border-top: 6px solid var(--holiday-orange); }
-        .card-holiday .badge { background-color: #fff3e0; color: var(--holiday-orange); }
-        .card-holiday h2 { color: var(--holiday-orange); }
-        .card-holiday .start-btn { background-color: var(--holiday-orange); }
-
-        /* Lesson 3: Storyteller (Purple) */
-        .card-story { border-top: 6px solid var(--story-purple); }
-        .card-story .badge { background-color: #ede7f6; color: var(--story-purple); }
-        .card-story h2 { color: var(--story-purple); }
-        .card-story .start-btn { background-color: var(--story-purple); }
-
-        /* Lesson 4: Advice Expert (Green) - NEW! */
-        .card-advice { border-top: 6px solid var(--advice-green); }
-        .card-advice .badge { background-color: #e8f5e9; color: var(--advice-green); }
-        .card-advice h2 { color: var(--advice-green); }
-        .card-advice .start-btn { background-color: var(--advice-green); }
-
-        /* 待定课程 (灰色) */
-        .card-future {
-            border: 2px dashed #bdc3c7;
-            background: #fdfdfd;
-            cursor: default;
+        .start-link {
+            font-weight: 600;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.2s;
         }
-        .card-future:hover { transform: none; box-shadow: none; }
-        .card-future h2 { color: #95a5a6; }
+
+        .card:hover .start-link {
+            gap: 10px;
+        }
+
+        .duration {
+            font-size: 0.85rem;
+            color: #64748b;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Level Specific Colors & Logic */
+        .beginner-section .section-icon {
+            color: var(--accent-beginner);
+            border: 2px solid var(--accent-beginner);
+        }
+
+        .beginner-card {
+            --accent-color: var(--accent-beginner);
+        }
+
+        .intermediate-section .section-icon {
+            color: var(--accent-intermediate);
+            border: 2px solid var(--accent-intermediate);
+        }
+
+        .intermediate-card {
+            --accent-color: var(--accent-intermediate);
+        }
+
+        .fluent-section .section-icon {
+            color: var(--accent-fluent);
+            border: 2px solid var(--accent-fluent);
+        }
+
+        .fluent-card {
+            --accent-color: var(--accent-fluent);
+        }
+
+        .expert-section .section-icon {
+            color: var(--accent-expert);
+            border: 2px solid var(--accent-expert);
+        }
+
+        .expert-card {
+            --accent-color: var(--accent-expert);
+        }
+
+        /* UEC Senior Prep Styles */
+        .uec-section .section-icon {
+            color: #d97706;
+            /* Gold */
+            border: 2px solid #d97706;
+            background: rgba(217, 119, 6, 0.1);
+        }
+
+        .uec-card {
+            --accent-color: #d97706;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(217, 119, 6, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .uec-card:hover {
+            border-color: #d97706;
+            box-shadow: 0 20px 40px rgba(217, 119, 6, 0.15);
+        }
+
+
+        /* Locked Card */
+        .card-locked {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 10px, #253346 10px, #253346 20px);
+        }
+
+        .card-locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        .card-locked h3 {
+            color: #64748b;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         footer {
-            margin-top: 60px;
-            color: #b2bec3;
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
             font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 50px;
         }
-
     </style>
 </head>
+
 <body>
 
     <header>
-        <h1>📚 English Writing Master Class</h1>
-        <p class="subtitle">Welcome back! Choose a module below to start your interactive learning journey.</p>
+        <div class="level-badge">Interactive Learning Platform</div>
+        <h1>Your Path to English Fluency</h1>
+        <p>Select your proficiency level and start mastering writing, speaking, and grammar today.</p>
     </header>
 
-    <div class="course-grid">
+    <main>
 
-        <a href="lesson1.html" class="card card-social">
-            <span class="badge">Form 2 • Argumentative</span>
-            <h2>📱 Social Media Master Class</h2>
-            <p>Learn vocabulary for technology, debate the pros & cons of social media, and master the <b>P.E.E.L.</b> paragraph structure.</p>
-            <div class="start-btn">Start Lesson ➡️</div>
-        </a>
+        <!-- UEC EXAM PREP LEVEL -->
+        <h2 class="section-title uec-section">
+            <div class="section-icon">🎓</div>
+            UEC Senior Prep (2017 Format)
+        </h2>
+        <div class="grid" style="margin-bottom: 50px;">
+            <!-- UEC Reading -->
+            <a href="uec_reading.html" class="card uec-card">
+                <div class="card-tag">UEC Paper 2 • Section A</div>
+                <h3>Reading Comprehension</h3>
+                <p>Master Critical Reading, Vocabulary, and Comprehension. Features bilingual support (EN/CN) and
+                    interactive questions.</p>
+                <div class="card-footer">
+                    <div class="duration" style="color:#d97706">⏱️ 30 Mins</div>
+                    <div class="start-link" style="color:#d97706">Start Exam <span>&rarr;</span></div>
+                </div>
+            </a>
 
-        <a href="lesson2.html" class="card card-holiday">
-            <span class="badge">Workshop • Descriptive</span>
-            <h2>✈️ My Dream Holiday</h2>
-            <p>Use the <b>5 Senses</b> to describe your perfect trip. Upgrade your adjectives and build a full essay blueprint.</p>
-            <div class="start-btn">Start Lesson ➡️</div>
-        </a>
+            <!-- UEC Grammar -->
+            <a href="uec_grammar.html" class="card uec-card">
+                <div class="card-tag">UEC Paper 2 • Section B</div>
+                <h3>Grammar & Usage</h3>
+                <p>Master Error Identification (10%) and Word Forms (10%). Includes detailed tips and instant feedback.
+                </p>
+                <div class="card-footer">
+                    <div class="duration" style="color:#d97706">⏱️ 30 Mins</div>
+                    <div class="start-link" style="color:#d97706">Start Exam <span>&rarr;</span></div>
+                </div>
+            </a>
 
-        <a href="lesson3.html" class="card card-story">
-            <span class="badge">Master Class • Narrative</span>
-            <h2>📖 The Storyteller's Toolkit</h2>
-            <p>Master the <b>Past Continuous</b> tense, learn "Show, Don't Tell", and build a mystery story with the Story Rollercoaster.</p>
-            <div class="start-btn">Start Lesson ➡️</div>
-        </a>
+            <div class="card card-locked uec-card" style="opacity:0.6; filter:grayscale(1);">
+                <div class="card-tag">Section B</div>
+                <h3>Summary Writing</h3>
+                <p>Learn to condense texts to 150 words. (Coming Soon)</p>
+                <div class="card-footer">
+                    <div class="duration">🔒 Locked</div>
+                </div>
+            </div>
 
-        <a href="lesson4.html" class="card card-advice">
-            <span class="badge">Form 1-3 • Informal Letter</span>
-            <h2>✉️ The Advice Expert</h2>
-            <p>Become Dr. Advice! Learn to use <b>Modal Verbs</b> (should/could), master <b>Empathy</b> tone, and structure an advice email.</p>
-            <div class="start-btn">Start Lesson ➡️</div>
-        </a>
-
-        <div class="card card-future">
-            <span class="badge" style="background:#eee; color:#999">Coming Soon</span>
-            <h2>🔒 More Lessons...</h2>
-            <p>New interactive modules are being developed. Stay tuned!</p>
+            <div class="card card-locked uec-card" style="opacity:0.6; filter:grayscale(1);">
+                <div class="card-tag">Section A</div>
+                <h3>Argumentative Essay</h3>
+                <p>Structure your points and rebuttals. (Coming Soon)</p>
+                <div class="card-footer">
+                    <div class="duration">🔒 Locked</div>
+                </div>
+            </div>
         </div>
 
-    </div>
+        <!-- BEGINNER LEVEL -->
+        <h2 class="section-title beginner-section">
+            <div class="section-icon">🌱</div>
+            Beginner Module
+        </h2>
+        <div class="grid">
+            <!-- Lesson 2: My Dream Holiday (Descriptive) -->
+            <a href="lesson2.html" class="card beginner-card">
+                <div class="card-tag">Descriptive Writing</div>
+                <h3>My Dream Holiday</h3>
+                <p>Start your journey by learning to describe places using the 5 Senses. Build your vocabulary with the
+                    Adjective Elevator.</p>
+                <div class="card-footer">
+                    <div class="duration">⏱️ 1.5 Hours</div>
+                    <div class="start-link">Start Class <span>&rarr;</span></div>
+                </div>
+            </a>
+
+            <!-- Lesson 4: Advice Expert (Informal Letter) -->
+            <a href="lesson4.html" class="card beginner-card">
+                <div class="card-tag">Informal Letter</div>
+                <h3>The Advice Expert</h3>
+                <p>Learn the basics of communication. Master modal verbs (should/could) and write a friendly advice
+                    email.</p>
+                <div class="card-footer">
+                    <div class="duration">⏱️ 1 Hour</div>
+                    <div class="start-link">Start Class <span>&rarr;</span></div>
+                </div>
+            </a>
+
+            <!-- Lesson 1: Social Media (Argumentative) - Moved from Intermediate -->
+            <a href="lesson1.html" class="card beginner-card">
+                <div class="card-tag">Argumentative Essay</div>
+                <h3>Social Media Masterclass</h3>
+                <p>Debate the pros & cons of technology. Learn to structure strong arguments using the P.E.E.L. method.
+                </p>
+                <div class="card-footer">
+                    <div class="duration">⏱️ 2 Hours</div>
+                    <div class="start-link">Start Class <span>&rarr;</span></div>
+                </div>
+            </a>
+
+            <!-- Lesson 3: Storyteller (Narrative) - Moved from Fluent -->
+            <a href="lesson3.html" class="card beginner-card">
+                <div class="card-tag">Narrative Writing</div>
+                <h3>The Storyteller's Toolkit</h3>
+                <p>Unlock creativity. Master "Show, Don't Tell", control pacing with Past Continuous tense, and build
+                    suspense.</p>
+                <div class="card-footer">
+                    <div class="duration">⏱️ 2.5 Hours</div>
+                    <div class="start-link">Start Class <span>&rarr;</span></div>
+                </div>
+            </a>
+        </div>
+
+
+        <!-- OTHER LEVELS (Coming Soon) -->
+        <h2 class="section-title intermediate-section" style="opacity: 0.5;">
+            <div class="section-icon">🚀</div>
+            Intermediate
+        </h2>
+        <div class="grid">
+            <div class="card card-locked intermediate-card">
+                <div class="card-tag">Advanced Modules</div>
+                <h3>Next Level Content</h3>
+                <p>Complete the beginner modules to unlock these advanced lessons.</p>
+                <div class="card-footer">
+                    <div class="duration">🔒 Locked</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
 
     <footer>
-        &copy; 2024 Interactive English • Designed for UTM Physics Students' Side Hustle
+        <p>&copy; 2026 English Mastery Platform. Designed for Excellence.</p>
     </footer>
 
 </body>
+
 </html>
