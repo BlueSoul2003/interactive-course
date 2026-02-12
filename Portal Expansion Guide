@@ -1,0 +1,60 @@
+🚀 Global Syllabus Portal: Expansion GuideThis guide explains how to scale your landing page using the existing HTML/JS architecture. The system uses a "Folder-like" nested structure managed by simple onclick JavaScript functions.Scenario 1: Adding a Completely New Syllabus (e.g., "A-Level")To add a new syllabus, you need to add a Tab Button (Layer 1) and its corresponding Content Wrapper (Layer 2).Step 1: Add the Tab ButtonFind the <div class="tabs-container"> in your HTML. Add a new button. Assign a unique ID for the syllabus (e.g., alevel).<button class="tab-btn" onclick="switchSyllabus(event, 'alevel')">🇬🇧 A-Level</button>
+Step 2: Create the Syllabus ContainerScroll down past the existing syllabuses. Before the closing </main> tag, add this exact block structure. Replace alevel with your chosen ID.<!-- ==========================================
+     A-LEVEL SYLLABUS CONTENT
+=========================================== -->
+<div id="alevel" class="syllabus-content">
+    
+    <!-- LAYER 2: A-Level Subjects -->
+    <div id="alevel-subjects" class="view-layer active">
+        <h2 class="section-title">
+            <div class="section-icon">🇬🇧</div>
+            A-Level Subjects
+        </h2>
+        
+        <div class="grid">
+            <!-- Paste Subject Cards Here (See Scenario 2) -->
+        </div>
+    </div>
+    
+    <!-- LAYER 3: Module Folders will go here (See Scenario 3) -->
+
+</div>
+Scenario 2: Adding a New Subject to an Existing SyllabusLet's say you want to add "Computer Science" to the SPM syllabus. You must decide: will this link directly to a single page, or will it act as a "Folder" holding multiple modules?Option A: Direct Link (No Folder)Find the <div id="spm-subjects"> block. Inside its <div class="grid">, paste this standard anchor tag (<a>):<a href="spm_computerscience.html" class="card sub-science">
+    <div class="card-tag">SPM Elective</div>
+    <h3>Computer Science</h3>
+    <p>Master algorithms, Python programming, and database logic.</p>
+    <div class="card-footer"><div class="start-link">Explore Module <span>&rarr;</span></div></div>
+</a>
+Option B: Make it a Folder (Requires Scenario 3)If Computer Science will hold multiple lessons, use a <div> instead of an <a>, and add the onclick trigger.<div class="card sub-science" style="cursor: pointer;" onclick="showLessons('spm', 'spm-cs')">
+    <div class="card-tag">SPM Elective</div>
+    <h3>Computer Science</h3>
+    <p>Master algorithms, Python programming, and database logic.</p>
+    <div class="card-footer"><div class="start-link">View Modules <span>&rarr;</span></div></div>
+</div>
+(Note: If you use Option B, you MUST complete Scenario 3 below to create the actual folder).Scenario 3: Adding New Modules / Creating FoldersCase A: Adding a new module to an EXISTING folderIf you just want to add lesson5.html to SPM English, simply find <div id="spm-english"> and paste the new card inside its grid:<a href="lesson5.html" class="card sub-english">
+    <div class="card-tag">Module 5 • Formal Letter</div>
+    <h3>Professional Writing</h3>
+    <p>Master the format and tone of formal communication.</p>
+    <div class="card-footer"><div class="start-link">Start Lesson <span>&rarr;</span></div></div>
+</a>
+Case B: Creating a BRAND NEW folder for a subjectLet's say you chose "Option B" in Scenario 2 to make SPM Computer Science a folder (onclick="showLessons('spm', 'spm-cs')").You must create the Layer 3 container for it. Paste this directly below the spm-subjects </div> closure, but still inside the main <div id="spm"> container.<!-- LAYER 3: SPM Computer Science Lessons -->
+<div id="spm-cs" class="view-layer">
+    <!-- Back Button: Make sure parameter matches the Syllabus ID -->
+    <button class="back-btn" onclick="showSubjects('spm')">&larr; Back to SPM Subjects</button>
+    
+    <h2 class="section-title" style="margin-top: 10px;">
+        <div class="section-icon" style="color: var(--sub-science); border-color: var(--sub-science);">💻</div>
+        SPM Computer Science Modules
+    </h2>
+    
+    <div class="grid">
+        <!-- Paste individual module cards here -->
+        <a href="cs_module1.html" class="card sub-science">
+            <div class="card-tag">Module 1</div>
+            <h3>Logic Gates</h3>
+            <p>Understand AND, OR, NOT logic from first principles.</p>
+            <div class="card-footer"><div class="start-link">Start Lesson <span>&rarr;</span></div></div>
+        </a>
+    </div>
+</div>
+🎨 Quick Reference: Color ClassesWhen creating new cards, change the sub-xxxxx class to auto-theme the card's accent colors:sub-english (Blue)sub-bm (Purple)sub-math (Pink)sub-science (Emerald Green)sub-chinese (Red)sub-sejarah (Amber/Orange)sub-chemistry (Cyan)sub-physics (Indigo)sub-biology (Lime Green)Pro-Tip: If a module is locked or under construction, add card-locked to the classes and style="opacity:0.6; filter:grayscale(1);" to gray it out visually.
