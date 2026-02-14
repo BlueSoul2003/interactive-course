@@ -1,0 +1,250 @@
+\documentclass[11pt, a4paper]{article}
+
+% --- PACKAGES ---
+\usepackage[a4paper, margin=2cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{fontspec} 
+\usepackage[english]{babel}
+\usepackage{xcolor} 
+\usepackage{multicol}
+\usepackage{tcolorbox} % For tips/notes
+
+% --- FONT SETTINGS ---
+\setmainfont{Noto Sans}
+
+% --- CUSTOM COMMANDS ---
+\newcommand{\blankline}[1]{\underline{\hspace{#1}}}
+\newcommand{\answer}[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand{\solution}[1]{\\[5pt] \textcolor{blue}{\small \textbf{Steps:} #1}}
+
+\begin{document}
+
+\pagestyle{empty}
+
+\begin{center}
+    \LARGE \textbf{Guided Solution Sheet} \\
+    \large Y4 Math Chapter 2: Whole Number (Part 2)
+\end{center}
+
+\vspace{0.5cm}
+
+% --- NEW SECTION: QUESTIONS 1-10 ---
+\noindent\textbf{\large\color[rgb]{0, 0.5, 0.5} Round the following numbers to the nearest ten.}
+\\ \textit{\small \textcolor{gray}{Tip: Look at the digit in the ones place. If it is 5, 6, 7, 8, or 9, round up (add 1 to tens place, ones become 0). If it is 0, 1, 2, 3, or 4, round down (tens place stays same, ones become 0).}}
+
+\begin{multicols}{2}
+\begin{enumerate}[label=\arabic*., start=1, leftmargin=1cm]
+    \item $771 \approx$ \answer{770}
+    \item $848 \approx$ \answer{850}
+    \item $661 \approx$ \answer{660}
+    \item $296 \approx$ \answer{300}
+    \item $1,087 \approx$ \answer{1,090}
+    \item $1,782 \approx$ \answer{1,780}
+    \item $39,917 \approx$ \answer{39,920}
+    \item $46,547 \approx$ \answer{46,550}
+    \item $11,201 \approx$ \answer{11,200}
+    \item $59,999 \approx$ \answer{60,000}
+\end{enumerate}
+\end{multicols}
+
+\vspace{0.5cm}
+
+% --- NEW SECTION: QUESTIONS 11-20 ---
+\noindent\textbf{\large\color[rgb]{0, 0.5, 0.5} Round the following numbers to the nearest hundred.}
+\\ \textit{\small \textcolor{gray}{Tip: Look at the digit in the tens place. If it is 5 or more, round up. If it is 4 or less, round down.}}
+
+\begin{multicols}{2}
+\begin{enumerate}[label=\arabic*., start=11, leftmargin=1cm]
+    \item $536 \approx$ \answer{500}
+    \item $881 \approx$ \answer{900}
+    \item $3,084 \approx$ \answer{3,100}
+    \item $1,117 \approx$ \answer{1,100}
+    \item $6,944 \approx$ \answer{6,900}
+    \item $89,544 \approx$ \answer{89,500}
+    \item $23,891 \approx$ \answer{23,900}
+    \item $12,057 \approx$ \answer{12,100}
+    \item $61,272 \approx$ \answer{61,300}
+    \item $74,808 \approx$ \answer{74,800}
+\end{enumerate}
+\end{multicols}
+
+\vspace{0.5cm}
+
+% --- SECTION 1 (Previously 21-26) ---
+\noindent\textbf{\large\color[rgb]{0, 0.5, 0.5} Round the following numbers to the nearest ten and estimate their values.}
+\\ \textit{\small \textcolor{gray}{Example: $23 + 48 \approx 20 + 50 = 70$}}
+
+\begin{enumerate}[label=\arabic*., start=21, leftmargin=1cm]
+    \item $36 + 12 \approx$ $40 + 10 =$ \answer{50}
+    \item $672 + 48 \approx$ $670 + 50 =$ \answer{720}
+    \item $66 + 725 \approx$ $70 + 730 =$ \answer{800}
+    \item $932 - 19 \approx$ $930 - 20 =$ \answer{910}
+    \item $419 - 38 \approx$ $420 - 40 =$ \answer{380}
+    \item $519 - 21 \approx$ $520 - 20 =$ \answer{500}
+\end{enumerate}
+
+\vspace{1cm}
+
+% --- SECTION 2 (Previously 27-34) ---
+\noindent\textbf{\large\color[rgb]{0, 0.5, 0.5} Estimate the value.}
+\\ \textit{\small \textcolor{gray}{Tip: Use compatible numbers for division. Round to the nearest leading digit for others.}}
+
+\begin{enumerate}[label=\arabic*., start=27, leftmargin=1cm]
+    \item $48 \times 8 \approx$ $50 \times 8 =$ \answer{400}
+    \item $25 \times 7 \approx$ $30 \times 7 =$ \answer{210} \quad (\textit{Acceptable: $25 \times 7 = 175$ if exact calculation is easy, but estimation suggests rounding 25 to 30})
+    \item $301 - 9 \approx$ $300 - 10 =$ \answer{290}
+    \item $697 - 88 \approx$ $700 - 90 =$ \answer{610}
+    \item $118 \div 4 \approx$ $120 \div 4 =$ \answer{30} \quad (\textit{Use compatible number 120})
+    \item $324 \div 5 \approx$ $325 \div 5 =$ \answer{65} \quad (\textit{Use compatible number 325})
+    \item $463 + 93 + 551 \approx$ $500 + 100 + 600 =$ \answer{1,200} \quad (\textit{Rounding to nearest hundred})
+    \item $876 + 121 + 43 \approx$ $900 + 100 + 40 =$ \answer{1,040} \quad (\textit{Rounding to leading digits})
+\end{enumerate}
+
+\vspace{1cm}
+
+% --- SECTION 3 (Previously 35-36) ---
+\noindent\textbf{\large\color[rgb]{0, 0.5, 0.5} Fill in each blank with the correct answer.}
+\begin{enumerate}[label=\arabic*., start=35, leftmargin=1cm]
+    \item $12 = $ \answer{1} $\times$ \answer{12} \\
+          $12 = $ \answer{2} $\times$ \answer{6} \\
+          $12 = $ \answer{3} $\times$ \answer{4} \\[5pt]
+          The factors of 12 are \answer{1}, \answer{2}, \answer{3}, \answer{4}, \answer{6}, and \answer{12}.
+
+    \item $42 = $ \answer{1} $\times$ \answer{42} \\
+          $42 = $ \answer{2} $\times$ \answer{21} \\
+          $42 = $ \answer{3} $\times$ \answer{14} \\
+          $42 = $ \answer{6} $\times$ \answer{7} \\[5pt]
+          The factors of 42 are \answer{1}, \answer{2}, \answer{3}, \answer{6}, \answer{7}, \answer{14}, \answer{21}, and \answer{42}.
+\end{enumerate}
+
+\newpage
+
+\begin{enumerate}[label=\arabic*., start=37, leftmargin=1cm]
+    \item $36 = $ \answer{1} $\times$ \answer{36} \\
+          $36 = $ \answer{2} $\times$ \answer{18} \\
+          $36 = $ \answer{3} $\times$ \answer{12} \\
+          $36 = $ \answer{4} $\times$ \answer{9} \\
+          $36 = $ \answer{6} $\times$ \answer{6} \\[5pt]
+          The factors of 36 are \answer{1}, \answer{2}, \answer{3}, \answer{4}, \answer{6}, \answer{9}, \answer{12}, \answer{18}, and \answer{36}.
+
+    \item \begin{enumerate}[label=(\alph*)]
+        \item The factors of 8 are \answer{1, 2, 4, 8}.
+        \item The factors of 16 are \answer{1, 2, 4, 8, 16}.
+        \item The common factors of 8 and 16 are \answer{1, 2, 4, 8}.
+    \end{enumerate}
+
+    \item \begin{enumerate}[label=(\alph*)]
+        \item The factors of 14 are \answer{1, 2, 7, 14}.
+        \item The factors of 28 are \answer{1, 2, 4, 7, 14, 28}.
+        \item The common factors of 14 and 28 are \answer{1, 2, 7, 14}.
+    \end{enumerate}
+
+    \item \begin{enumerate}[label=(\alph*)]
+        \item The factors of 9 are \answer{1, 3, 9}.
+        \item The factors of 18 are \answer{1, 2, 3, 6, 9, 18}.
+        \item The common factors of 9 and 18 are \answer{1, 3, 9}.
+    \end{enumerate}
+
+    \item The first four multiples of 5 are \answer{5}, \answer{10}, \answer{15}, and \answer{20}.
+    \item The first three multiples of 9 are \answer{9}, \answer{18}, and \answer{27}.
+    \item The third multiple of 6 is \answer{18} ($3 \times 6$).
+    \item The seventh multiple of 5 is \answer{35} ($7 \times 5$).
+
+    \item \begin{enumerate}[label=(\alph*)]
+        \item The first six multiples of 2 are \answer{2}, \answer{4}, \answer{6}, \answer{8}, \answer{10}, and \answer{12}.
+        \item The first six multiples of 3 are \answer{3}, \answer{6}, \answer{9}, \answer{12}, \answer{15}, and \answer{18}.
+        \item The two common multiples of 2 and 3 are \answer{6} and \answer{12}.
+    \end{enumerate}
+
+    \item \begin{enumerate}[label=(\alph*)]
+        \item The first six multiples of 4 are \answer{4}, \answer{8}, \answer{12}, \answer{16}, \answer{20}, and \answer{24}.
+        \item The first six multiples of 8 are \answer{8}, \answer{16}, \answer{24}, \answer{32}, \answer{40}, and \answer{48}.
+        \item The three common multiples of 4 and 8 are \answer{8}, \answer{16}, and \answer{24}.
+    \end{enumerate}
+\end{enumerate}
+
+\newpage
+
+% --- SECTION 4 ---
+\noindent\textbf{\large\color[rgb]{0, 0.5, 0.5} Write your answers on the lines. (Includes Working)}
+\begin{enumerate}[label=\arabic*., start=47, leftmargin=1cm]
+    \item A train traveled 13,769 km from City A to City B. Then, it traveled another 25,325 km to City C. What was the estimated distance traveled by the train from City A to City C? Round each number to the nearest hundred and estimate the value.
+    \begin{flushright}\answer{39,100 km}\end{flushright}
+    \solution{
+        1. Round distance A to B: $13,769 \approx 13,800$ (nearest hundred). \\
+        2. Round distance B to C: $25,325 \approx 25,300$ (nearest hundred). \\
+        3. Add the rounded numbers: $13,800 + 25,300 = 39,100$.
+    }
+
+    \item A number, when added to 7,982, is 25,000. Round this number to the nearest ten.
+    \begin{flushright}\answer{17,020}\end{flushright}
+    \solution{
+        1. Find the number by subtracting: $25,000 - 7,982 = 17,018$. \\
+        2. Round 17,018 to nearest ten. Ones digit is 8 ($>5$), so round up. \\
+        3. $17,018 \approx 17,020$.
+    }
+
+    \item There were 1,345 books left in a bookstore. If the shopkeeper had sold 7,609 books in the past month, how many books were in the bookstore at first? Round the answer to the nearest ten.
+    \begin{flushright}\answer{8,950}\end{flushright}
+    \solution{
+        1. Total books at first = Books left + Books sold. \\
+        2. $1,345 + 7,609 = 8,954$. \\
+        3. Round 8,954 to nearest ten. Ones digit is 4 ($<5$), so round down. \\
+        4. $8,954 \approx 8,950$.
+    }
+
+    \item In a school, there are 1,124 students in the morning session. There are 259 more students in the afternoon session than in the morning session. How many students are in the school when rounded to the nearest hundred?
+    \begin{flushright}\answer{2,500}\end{flushright}
+    \solution{
+        1. Students in afternoon = Morning + 259 = $1,124 + 259 = 1,383$. \\
+        2. Total students = Morning + Afternoon = $1,124 + 1,383 = 2,507$. \\
+        3. Round 2,507 to nearest hundred. Tens digit is 0 ($<5$), so round down. \\
+        4. $2,507 \approx 2,500$.
+    }
+
+    \item What is the smallest two-digit number that has only 4 factors?
+    \begin{flushright}\answer{10}\end{flushright}
+    \solution{
+        1. List two-digit numbers starting from 10. \\
+        2. Factors of 10: 1, 2, 5, 10 (Total 4 factors). \\
+        3. Since 10 is the very first two-digit number and satisfies the condition, it is the smallest.
+    }
+
+    \item 8 is a factor of number X. It is between 50 and 60. What is number X?
+    \begin{flushright}\answer{56}\end{flushright}
+    \solution{
+        1. List multiples of 8: 8, 16, 24, 32, 40, 48, 56, 64... \\
+        2. Find the multiple between 50 and 60. \\
+        3. 56 is the only number that fits.
+    }
+
+    \item Number Y is a multiple of 8. It is between 20 and 30. It is also a factor of 48. What is number Y?
+    \begin{flushright}\answer{24}\end{flushright}
+    \solution{
+        1. List multiples of 8 between 20 and 30: 24 is the only one (24 is between 20 and 30). \\
+        2. Check if 24 is a factor of 48: $48 \div 24 = 2$. Yes. \\
+        3. Therefore, Y is 24.
+    }
+
+    \item If 32 is the fourth multiple of a number, what is the number?
+    \begin{flushright}\answer{8}\end{flushright}
+    \solution{
+        1. "Fourth multiple" means Number $\times 4$. \\
+        2. Number $\times 4 = 32$. \\
+        3. Number = $32 \div 4 = 8$.
+    }
+
+    \item The two common multiples of 2 one-digit numbers are 14 and 28. If 1 is not the answer, what are the 2 one-digit numbers?
+    \begin{flushright}\answer{2 and 7}\end{flushright}
+    \solution{
+        1. Factors of 14 are 1, 2, 7, 14. One-digit factors are 1, 2, 7. \\
+        2. We need two numbers whose value is not 1. So try 2 and 7. \\
+        3. Multiples of 2: 2, 4, 6... 14... 28... \\
+        4. Multiples of 7: 7, 14, 21, 28... \\
+        5. Common multiples are 14, 28. This matches.
+    }
+\end{enumerate}
+
+\end{document}

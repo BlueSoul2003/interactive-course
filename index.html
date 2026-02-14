@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastery Academy | Global Syllabus Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+
+            /* Subject Accents */
+            --sub-english: #3b82f6;
+            /* Blue */
+            --sub-bm: #8b5cf6;
+            /* Violet */
+            --sub-math: #ec4899;
+            /* Pink */
+            --sub-science: #10b981;
+            /* Emerald */
+            --sub-chinese: #ef4444;
+            /* Red */
+            --sub-sejarah: #d97706;
+            /* Amber */
+            --sub-chemistry: #06b6d4;
+            /* Cyan */
+            --sub-physics: #6366f1;
+            /* Indigo */
+            --sub-biology: #84cc16;
+            /* Lime */
+
+            --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #764ba2 100%);
+            --font-main: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        header {
+            background: var(--gradient-hero);
+            padding: 80px 20px 100px;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            position: relative;
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: -60px auto 0;
+            padding: 0 20px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+        }
+
+        .tab-btn {
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--gradient-hero);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        /* Syllabus Content Wrapper */
+        .syllabus-content {
+            display: none;
+            animation: fadeSlideUp 0.5s ease-out forwards;
+        }
+
+        .syllabus-content.active {
+            display: block;
+        }
+
+        /* Section Headings */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0 40px;
+            font-size: 2rem;
+            color: var(--text-primary);
+            font-family: var(--font-serif);
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--card-bg);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color, #ccc);
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-color, #ccc);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: var(--font-serif);
+            line-height: 1.2;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .start-link {
+            font-weight: 600;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.2s;
+        }
+
+        .card:hover .start-link {
+            gap: 10px;
+        }
+
+        /* View Layers for Nested Navigation */
+        .view-layer {
+            display: none;
+            animation: fadeSlideUp 0.4s ease-out forwards;
+        }
+
+        .view-layer.active {
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Locked Card */
+        .card-locked {
+            opacity: 0.6;
+            filter: grayscale(1);
+            cursor: not-allowed;
+            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 10px, #253346 10px, #253346 20px);
+        }
+
+        .card-locked:hover {
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Subject Specific Classes */
+        .sub-english {
+            --accent-color: var(--sub-english);
+        }
+
+        .sub-bm {
+            --accent-color: var(--sub-bm);
+        }
+
+        .sub-math {
+            --accent-color: var(--sub-math);
+        }
+
+        .sub-science {
+            --accent-color: var(--sub-science);
+        }
+
+        .sub-chinese {
+            --accent-color: var(--sub-chinese);
+        }
+
+        .sub-sejarah {
+            --accent-color: var(--sub-sejarah);
+        }
+
+        .sub-chemistry {
+            --accent-color: var(--sub-chemistry);
+        }
+
+        .sub-physics {
+            --accent-color: var(--sub-physics);
+        }
+
+        .sub-biology {
+            --accent-color: var(--sub-biology);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-container {
+                flex-direction: column;
+                padding: 0 20px;
+            }
+
+            .tab-btn {
+                justify-content: center;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="level-badge">Global Syllabus Portal</div>
+        <h1>Your Path to Academic Excellence</h1>
+        <p>Select your syllabus pathway and master your subjects through First Principles learning.</p>
+    </header>
+
+    <main>
+
+        <!-- Syllabus Selection Tabs -->
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="switchSyllabus(event, 'spm')">🇲🇾 SPM</button>
+            <button class="tab-btn" onclick="switchSyllabus(event, 'uec')">🎓 UEC</button>
+            <button class="tab-btn" onclick="switchSyllabus(event, 'igcse')">🌍 IGCSE</button>
+            <button class="tab-btn" onclick="switchSyllabus(event, 'sg')">🇸🇬 Singapore</button>
+        </div>
+
+        <!-- ==========================================
+             SPM SYLLABUS CONTENT
+        =========================================== -->
+        <div id="spm" class="syllabus-content active">
+
+            <!-- LAYER 2: SPM Subjects -->
+            <div id="spm-subjects" class="view-layer active">
+                <h2 class="section-title">
+                    <div class="section-icon">🇲🇾</div>
+                    SPM Core & STEM
+                </h2>
+                <div class="grid">
+                    <!-- English Subject Card (Acts as a Folder) -->
+                    <div class="card sub-english" style="cursor: pointer;" onclick="showLessons('spm', 'spm-english')">
+                        <div class="card-tag">SPM Core</div>
+                        <h3>English</h3>
+                        <p>Master CEFR-aligned writing, speaking, and comprehension. Prepare for paper 1119.</p>
+                        <div class="card-footer">
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Bahasa Melayu Subject Card (Acts as a Folder) -->
+                    <div class="card sub-bm" style="cursor: pointer;" onclick="showLessons('spm', 'spm-bm')">
+                        <div class="card-tag">SPM Core</div>
+                        <h3>Bahasa Melayu</h3>
+                        <p>Kuasai tatabahasa, pemahaman komsas, dan penulisan karangan berformat tinggi.</p>
+                        <div class="card-footer">
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Other SPM Subjects -->
+                    <a href="#spm_math" class="card sub-math">
+                        <div class="card-tag">SPM Core</div>
+                        <h3>Mathematics</h3>
+                        <p>Build strong analytical foundations in algebra, geometry, and modern statistics.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#spm_science" class="card sub-science">
+                        <div class="card-tag">SPM Core</div>
+                        <h3>Science</h3>
+                        <p>Understand the physical and biological world through interactive daily-life applications.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#spm_chinese" class="card sub-chinese">
+                        <div class="card-tag">SPM Elective</div>
+                        <h3>Chinese (华文)</h3>
+                        <p>提高现代文阅读理解、作文写作技巧与古文分析能力。</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#spm_sejarah" class="card sub-sejarah">
+                        <div class="card-tag">SPM Core</div>
+                        <h3>Sejarah</h3>
+                        <p>Understand historical contexts and events with logic and timeline-based learning.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#spm_chemistry" class="card sub-chemistry">
+                        <div class="card-tag">SPM STEM</div>
+                        <h3>Chemistry</h3>
+                        <p>Explore atomic structures, chemical bonding, and reactions with interactive labs.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#spm_physics" class="card sub-physics">
+                        <div class="card-tag">SPM STEM</div>
+                        <h3>Physics</h3>
+                        <p>Learn kinematics, electromagnetism, and electronics through first principles and real-world
+                            logic.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#spm_biology" class="card sub-biology">
+                        <div class="card-tag">SPM STEM</div>
+                        <h3>Biology</h3>
+                        <p>Study cellular biology, genetics, and human anatomy systems in detail.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LAYER 3: SPM English Lessons -->
+            <div id="spm-english" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('spm')">&larr; Back to SPM Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-english); border-color: var(--sub-english);">📘
+                    </div>
+                    SPM English Modules
+                </h2>
+                <div class="grid">
+                    <a href="interactive-course-main/lesson1.html" class="card sub-english">
+                        <div class="card-tag">Module 1 • Argumentative</div>
+                        <h3>Social Media Masterclass</h3>
+                        <p>Debate the pros & cons of technology. Learn to structure strong arguments using the P.E.E.L.
+                            method.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="interactive-course-main/lesson2.html" class="card sub-english">
+                        <div class="card-tag">Module 2 • Descriptive</div>
+                        <h3>My Dream Holiday</h3>
+                        <p>Start your journey by learning to describe places using the 5 Senses and the Adjective
+                            Elevator.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="interactive-course-main/lesson3.html" class="card sub-english">
+                        <div class="card-tag">Module 3 • Narrative</div>
+                        <h3>The Storyteller's Toolkit</h3>
+                        <p>Unlock creativity. Master "Show, Don't Tell", control pacing, and build suspense for Paper 1.
+                        </p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="interactive-course-main/lesson4.html" class="card sub-english">
+                        <div class="card-tag">Module 4 • Informal Letter</div>
+                        <h3>The Advice Expert</h3>
+                        <p>Learn the basics of communication. Master modal verbs (should/could) and write a friendly
+                            advice email.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LAYER 3: SPM Bahasa Melayu Lessons -->
+            <div id="spm-bm" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('spm')">&larr; Back to SPM Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-bm); border-color: var(--sub-bm);">📝</div>
+                    SPM Bahasa Melayu Modules
+                </h2>
+                <div class="grid">
+                    <a href="interactive-course-main/spm_bm_peribahasa1.html" class="card sub-bm">
+                        <div class="card-tag">Module 1 • Peribahasa</div>
+                        <h3>Peribahasa Mastery</h3>
+                        <p>Learn 20 core proverbs categorized by physical and social logic (Effort, Caution, Unity,
+                            Roots).</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="interactive-course-main/spm_bm_kata_terbitan1.html" class="card sub-bm">
+                        <div class="card-tag">Module 2 • Kata Terbitan</div>
+                        <h3>Morfologi Mastery</h3>
+                        <p>Belajar kata terbitan dengan nota dan 30 latihan.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Lesson <span>→</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==========================================
+             UEC SYLLABUS CONTENT
+        =========================================== -->
+        <div id="uec" class="syllabus-content">
+
+            <!-- LAYER 2: UEC Subjects -->
+            <div id="uec-subjects" class="view-layer active">
+                <h2 class="section-title">
+                    <div class="section-icon">🎓</div>
+                    UEC Senior Level
+                </h2>
+                <div class="grid">
+                    <!-- English Subject Card (Acts as a Folder) -->
+                    <div class="card sub-english" style="cursor: pointer;" onclick="showLessons('uec', 'uec-english')">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>English</h3>
+                        <p>Master advanced reading comprehension, summary writing, and argumentative essays.</p>
+                        <div class="card-footer">
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
+                        </div>
+                    </div>
+
+                    <!-- Other UEC Subjects -->
+                    <a href="#uec_bm" class="card sub-bm">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>Bahasa Malaysia</h3>
+                        <p>Persediaan peperiksaan UEC merangkumi pemahaman, tatabahasa dan penulisan esei.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_math" class="card sub-math">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>Advanced Mathematics</h3>
+                        <p>Conquer Advanced Math (I & II) including calculus, matrices, and complex numbers.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_science" class="card sub-science">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>General Science</h3>
+                        <p>Integrated science concepts focusing on practical problem-solving and theory.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_chinese" class="card sub-chinese">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>Chinese (华文)</h3>
+                        <p>深入探讨文学名著、高阶文言文及批判性议论文写作。</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_sejarah" class="card sub-sejarah">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>History (历史)</h3>
+                        <p>Comprehensive coverage of Malaysian, Asian, and World History perspectives.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_chemistry" class="card sub-chemistry">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>Chemistry</h3>
+                        <p>Advanced physical, inorganic, and organic chemistry principles for UEC exams.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_physics" class="card sub-physics">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>Physics</h3>
+                        <p>Deep dive into mechanics, thermodynamics, and quantum fundamentals.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#uec_biology" class="card sub-biology">
+                        <div class="card-tag">UEC Senior</div>
+                        <h3>Biology</h3>
+                        <p>Advanced study of physiology, ecology, and biochemistry for science stream.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LAYER 3: UEC English Lessons -->
+            <div id="uec-english" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('uec')">&larr; Back to UEC Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-english); border-color: var(--sub-english);">📘
+                    </div>
+                    UEC English Modules
+                </h2>
+                <div class="grid">
+                    <a href="interactive-course-main/uec_reading.html" class="card sub-english">
+                        <div class="card-tag">Paper 2 • Section A</div>
+                        <h3>Reading Comprehension</h3>
+                        <p>Master Critical Reading, Vocabulary, and Comprehension. Features bilingual support (EN/CN).
+                        </p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Exam <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="interactive-course-main/uec_grammar.html" class="card sub-english">
+                        <div class="card-tag">Paper 2 • Section B</div>
+                        <h3>Grammar & Usage</h3>
+                        <p>Master Error Identification (10%) and Word Forms (10%). Includes detailed tips and instant
+                            feedback.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Exam <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="interactive-course-main/uec_summary.html" class="card sub-english">
+                        <div class="card-tag">Paper 2 • Section B</div>
+                        <h3>Summary Writing</h3>
+                        <p>Guided workshop. Learn to find points efficiently, cut waste, and connect ideas for maximum
+                            marks.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Workshop <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==========================================
+             IGCSE SYLLABUS CONTENT
+        =========================================== -->
+        <div id="igcse" class="syllabus-content">
+            <div id="igcse-subjects" class="view-layer active">
+                <h2 class="section-title">
+                    <div class="section-icon">🌍</div>
+                    IGCSE (Cambridge)
+                </h2>
+                <div class="grid">
+                    <div class="card sub-english" style="cursor: pointer;"
+                        onclick="showLessons('igcse', 'igcse-english')">
+                        <div class="card-tag">IGCSE Core</div>
+                        <h3>English (First/Second Lang)</h3>
+                        <p>Develop critical reading, writing, and communication skills for Cambridge exams.</p>
+                        <div class="card-footer">
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
+                        </div>
+                    </div>
+                    <!-- Other IGCSE Subjects -->
+                    <a href="#igcse_bm" class="card sub-bm">
+                        <div class="card-tag">IGCSE Language</div>
+                        <h3>Malay (Foreign Lang)</h3>
+                        <p>Focus on everyday communication, vocabulary building, and structured writing.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_math" class="card sub-math">
+                        <div class="card-tag">IGCSE Core</div>
+                        <h3>Mathematics (0580)</h3>
+                        <p>Master pure mathematics, statistics, and probability with guided past-paper analysis.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_science" class="card sub-science">
+                        <div class="card-tag">IGCSE Core</div>
+                        <h3>Co-ordinated Sciences</h3>
+                        <p>A balanced, double-award science approach integrating biology, chemistry, and physics.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_chinese" class="card sub-chinese">
+                        <div class="card-tag">IGCSE Language</div>
+                        <h3>Chinese (First/Second Lang)</h3>
+                        <p>Prepare for paper 1, 2, and 4 with targeted reading, writing, and listening practice.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_sejarah" class="card sub-sejarah">
+                        <div class="card-tag">IGCSE Humanities</div>
+                        <h3>History (0470)</h3>
+                        <p>Analyze 20th-century international relations and depth studies with source analysis.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_chemistry" class="card sub-chemistry">
+                        <div class="card-tag">IGCSE Sciences</div>
+                        <h3>Chemistry (0620)</h3>
+                        <p>Understand matter, stoichiometry, and organic chemistry through practical theory.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_physics" class="card sub-physics">
+                        <div class="card-tag">IGCSE Sciences</div>
+                        <h3>Physics (0625)</h3>
+                        <p>Master formulas, forces, waves, and electricity through logical deduction.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#igcse_biology" class="card sub-biology">
+                        <div class="card-tag">IGCSE Sciences</div>
+                        <h3>Biology (0610)</h3>
+                        <p>Study living organisms, human physiology, and ecosystems comprehensively.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Placeholder for IGCSE English Lessons -->
+            <div id="igcse-english" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('igcse')">&larr; Back to IGCSE Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-english); border-color: var(--sub-english);">📘
+                    </div>
+                    IGCSE English Modules
+                </h2>
+                <div class="grid">
+                    <div class="card card-locked sub-english">
+                        <div class="card-tag">Module 1</div>
+                        <h3>First Language English</h3>
+                        <p>Directed writing and composition structures. (Coming Soon)</p>
+                        <div class="card-footer">
+                            <div class="duration">🔒 Locked</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             SINGAPORE SYLLABUS CONTENT
+        =========================================== -->
+        <div id="sg" class="syllabus-content">
+            <div id="sg-subjects" class="view-layer active">
+                <h2 class="section-title">
+                    <div class="section-icon">🇸🇬</div>
+                    Singapore (O/A-Level)
+                </h2>
+                <div class="grid">
+                    <div class="card sub-english" style="cursor: pointer;" onclick="showLessons('sg', 'sg-english')">
+                        <div class="card-tag">O-Level Core</div>
+                        <h3>English Language</h3>
+                        <p>Rigorous training in essay writing, visual text comprehension, and oral communication.</p>
+                        <div class="card-footer">
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
+                        </div>
+                    </div>
+                    <!-- Other SG Subjects -->
+                    <a href="#sg_bm" class="card sub-bm">
+                        <div class="card-tag">O-Level Mother Tongue</div>
+                        <h3>Malay Language</h3>
+                        <p>Master formal language, karangan, and situational writing components.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <div class="card sub-math" style="cursor: pointer;" onclick="showLessons('sg', 'sg-math')">
+                        <div class="card-tag">Core Subject</div>
+                        <h3>Mathematics</h3>
+                        <p>Comprehensive math curriculum covering Primary to Secondary levels.</p>
+                        <div class="card-footer">
+                            <div class="start-link">View Years <span>&rarr;</span></div>
+                        </div>
+                    </div>
+                    <a href="#sg_science" class="card sub-science">
+                        <div class="card-tag">O-Level Core</div>
+                        <h3>Combined Science</h3>
+                        <p>Integrated approach to Physics, Chemistry, or Biology focusing on practical applications.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#sg_chinese" class="card sub-chinese">
+                        <div class="card-tag">O-Level Mother Tongue</div>
+                        <h3>Chinese Language</h3>
+                        <p>Advanced focus on comprehension, essay writing, and oral exam preparation.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#sg_sejarah" class="card sub-sejarah">
+                        <div class="card-tag">O-Level Humanities</div>
+                        <h3>History / Social Studies</h3>
+                        <p>Source-based case studies (SBCS) and structured essay questions (SEQ) mastery.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#sg_chemistry" class="card sub-chemistry">
+                        <div class="card-tag">O-Level Pure Science</div>
+                        <h3>Pure Chemistry</h3>
+                        <p>In-depth conceptual understanding of chemical bonding, moles, and electrolysis.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#sg_physics" class="card sub-physics">
+                        <div class="card-tag">O-Level Pure Science</div>
+                        <h3>Pure Physics</h3>
+                        <p>Rigorous study of Newtonian mechanics, thermal physics, and electromagnetism.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="#sg_biology" class="card sub-biology">
+                        <div class="card-tag">O-Level Pure Science</div>
+                        <h3>Pure Biology</h3>
+                        <p>Detailed exploration of human anatomy, plant physiology, and molecular genetics.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Placeholder for SG English Lessons -->
+            <div id="sg-english" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('sg')">&larr; Back to SG Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-english); border-color: var(--sub-english);">📘
+                    </div>
+                    Singapore English Modules
+                </h2>
+                <div class="grid">
+                    <div class="card card-locked sub-english">
+                        <div class="card-tag">O-Level</div>
+                        <h3>Visual Text Comprehension</h3>
+                        <p>Techniques for analyzing tone, audience, and purpose. (Coming Soon)</p>
+                        <div class="card-footer">
+                            <div class="duration">🔒 Locked</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- LAYER 3: Mathematics Years -->
+        <div id="sg-math" class="view-layer">
+            <button class="back-btn" onclick="showSubjects('sg')">&larr; Back to SG Subjects</button>
+            <h2 class="section-title" style="margin-top: 10px;">
+                <div class="section-icon" style="color: var(--sub-math); border-color: var(--sub-math);">🧮</div>
+                Mathematics Curriculum
+            </h2>
+            <div class="grid">
+                <a href="interactive-course-main/SG_Math_Year4.html" class="card sub-math">
+                    <div class="card-tag">Primary School</div>
+                    <h3>Year 4</h3>
+                    <p>Whole Numbers, Fractions, Decimals, and Geometry basics.</p>
+                    <div class="card-footer">
+                        <div class="start-link">View Modules <span>&rarr;</span></div>
+                    </div>
+                </a>
+                <!-- Placeholder for Year 5, Year 6, Secondary, etc. -->
+            </div>
+        </div>
+
+        <!-- LAYER 4: Year 4 Math Lessons -->
+        <div id="sg-year4" class="view-layer">
+            <button class="back-btn" onclick="showLessons('sg', 'sg-math')">&larr; Back to Mathematics</button>
+            <h2 class="section-title" style="margin-top: 10px;">
+                <div class="section-icon" style="color: var(--sub-math); border-color: var(--sub-math);">4️⃣</div>
+                Year 4 Math Modules
+            </h2>
+            <div class="grid">
+                <a href="interactive-course-main/SG_Y4_MATH_Chapter2.html" class="card sub-math">
+                    <div class="card-tag">Chapter 2</div>
+                    <h3>Whole Numbers (Part 2)</h3>
+                    <p>Rounding, Estimation, Factors, Multiples, and Word Problems.</p>
+                    <div class="card-footer">
+                        <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Mastery Academy. Designed for First Principles Excellence.</p>
+    </footer>
+
+    <!-- Script to handle Tab Switching and Layer Navigation -->
+    <script>
+        // Layer 1 Navigation: Switching between Syllabuses (SPM, UEC, IGCSE, SG)
+        function switchSyllabus(event, syllabusId) {
+            // Remove 'active' class from all tab buttons
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+
+            // Add 'active' class to the clicked button
+            event.currentTarget.classList.add('active');
+
+            // Hide all syllabus content sections
+            const contents = document.querySelectorAll('.syllabus-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show the targeted syllabus content
+            const activeContent = document.getElementById(syllabusId);
+            activeContent.classList.add('active');
+
+            // Reset the internal layer to show the subjects (Layer 2) whenever a tab is clicked
+            showSubjects(syllabusId);
+        }
+
+        // Layer 2 to Layer 3 Navigation: Go from Subjects to specific Lessons
+        function showLessons(syllabusId, lessonContainerId) {
+            const syllabusContainer = document.getElementById(syllabusId);
+
+            // Hide all layers inside this syllabus
+            const layers = syllabusContainer.querySelectorAll('.view-layer');
+            layers.forEach(layer => layer.classList.remove('active'));
+
+            // Show specific lesson layer
+            const targetLessonLayer = document.getElementById(lessonContainerId);
+            if (targetLessonLayer) {
+                targetLessonLayer.classList.add('active');
+            }
+        }
+
+        // Layer 3 to Layer 2 Navigation: Go "Back" to Subjects list
+        function showSubjects(syllabusId) {
+            const syllabusContainer = document.getElementById(syllabusId);
+
+            // Hide all layers inside this syllabus
+            const layers = syllabusContainer.querySelectorAll('.view-layer');
+            layers.forEach(layer => layer.classList.remove('active'));
+
+            // Show the main subjects layer for this syllabus
+            const targetSubjectLayer = document.getElementById(syllabusId + '-subjects');
+            if (targetSubjectLayer) {
+                targetSubjectLayer.classList.add('active');
+            }
+        }
+    </script>
+</body>
+
+</html>
