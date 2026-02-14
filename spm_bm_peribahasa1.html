@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peribahasa Explorer</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        .slide-up { animation: slideUp 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen p-4 md:p-8">
+
+    <div id="app" class="max-w-5xl mx-auto">
+        <!-- Content will be injected here by JavaScript -->
+    </div>
+
+    <script>
+        // --- DATA HUB ---
+        const pillars = [
+            {
+                title: "Effort & Persistence (Usaha)",
+                logic: "Persistence & Energy Conversion",
+                proverbs: [
+                    { text: "Di mana ada kemahuan, di sana ada jalan.", cn: "有志者，事竟成", en: "Where there is a will, there is a way.", tip: "Willpower creates paths." },
+                    { text: "Sedikit-sedikit, lama-lama jadi bukit.", cn: "积少成多", en: "Small steps lead to great results.", tip: "Accumulation logic." },
+                    { text: "Genggam bara api biar sampai jadi arang.", cn: "坚持到底，不半途而废", en: "Hold the coal until it turns to charcoal.", tip: "Commitment to difficult tasks." },
+                    { text: "Alang-alang menyeluk pekasam, biar sampai ke pangkal lengan.", cn: "一不做，二不休", en: "If you're going to do it, do it thoroughly.", tip: "Full immersion/commitment." },
+                    { text: "Berakit-rakit ke hulu, berenang-renang ke tepian.", cn: "先苦后甜", en: "Rafting upstream first, then swimming to the shore.", tip: "Hardship before ease." }
+                ]
+            },
+            {
+                title: "Caution & Wisdom (Kebijaksanaan)",
+                logic: "Risk Mitigation & Logic",
+                proverbs: [
+                    { text: "Sediakan payung sebelum hujan.", cn: "未雨绸缪", en: "Prepare for a rainy day.", tip: "Proactive protection." },
+                    { text: "Sesal dahulu pendapatan, sesal kemudian tidak berguna.", cn: "三思而后行", en: "Regret beforehand is wisdom; later is useless.", tip: "Timing of reflection." },
+                    { text: "Malu bertanya sesat jalan.", cn: "不耻下问", en: "Being shy to ask leads to getting lost.", tip: "Value of inquiry." },
+                    { text: "Ikut hati mati, ikut rasa binasa.", cn: "不可感情用事", en: "Following whims leads to ruin.", tip: "Emotional regulation." },
+                    { text: "Biar lambat asalkan selamat.", cn: "安全第一", en: "Better slow as long as safe.", tip: "Quality/Safety over speed." }
+                ]
+            },
+            {
+                title: "Unity & Social (Perpaduan)",
+                logic: "Systems & Synergy",
+                proverbs: [
+                    { text: "Bagai aur dengan tebing.", cn: "唇齿相依", en: "Like bamboo and the river bank.", tip: "Mutualistic relationship." },
+                    { text: "Berat sama dipikul, ringan sama dijinjing.", cn: "有福同享，有难同当", en: "Sharing the load equally.", tip: "Distributed effort." },
+                    { text: "Bersatu teguh, bercerai roboh.", cn: "团结就是力量", en: "United we stand, divided we fall.", tip: "Structural integrity of groups." },
+                    { text: "Bulat air kerana pembetung, bulat manusia kerana muafakat.", cn: "众志成城", en: "Unity through consensus.", tip: "Power of agreement." },
+                    { text: "Bagai isi dengan kuku.", cn: "形影不离", en: "Like flesh and fingernail.", tip: "Inseparable bonds." }
+                ]
+            },
+            {
+                title: "Roots & Influence (Jati Diri)",
+                logic: "Origins & Plasticity",
+                proverbs: [
+                    { text: "Melentur buluh biarlah dari rebungnya.", cn: "从小教起", en: "Bend bamboo while it's a shoot.", tip: "Early education impact." },
+                    { text: "Kacang lupakan kulit.", cn: "忘恩负义", en: "The bean that forgets its pod.", tip: "Ignoring origins." },
+                    { text: "Bagaimana acuan, begitulah kuihnya.", cn: "有其父必有其子", en: "As is the mold, so is the cake.", tip: "Influence of environment/parents." },
+                    { text: "Seperti katak di bawah tempurung.", cn: "井底之蛙", en: "Like a frog under a coconut shell.", tip: "Limited perspective." },
+                    { text: "Belakang parang pun kalau diasah nescaya tajam.", cn: "勤能补拙", en: "Even the back of a knife becomes sharp if whetted.", tip: "Potential in everyone." }
+                ]
+            }
+        ];
+
+        const rawQuizData = [
+            { en: "Ali starts a business with zero knowledge but learns daily. He finally succeeds.", cn: "阿里在毫无基础的情况下创业，每天学习，最终取得了成功。", a: "Di mana ada kemahuan, di sana ada jalan." },
+            { en: "Saving 50 cents a day until you can buy a bicycle.", cn: "每天存50仙，直到能买得起一辆自行车。", a: "Sedikit-sedikit, lama-lama jadi bukit." },
+            { en: "Preparing extra batteries for a long hiking trip.", cn: "为长途徒步旅行准备额外的电池。", a: "Sediakan payung sebelum hujan." },
+            { en: "An employee who stops visiting his poor parents after getting a promotion.", cn: "升职后就不再探望贫穷父母的员工。", a: "Kacang lupakan kulit." },
+            { en: "The company's success depends on the cooperation between bosses and staff.", cn: "公司的成功取决于老板和员工之间的合作。", a: "Bagai aur dengan tebing." },
+            { en: "Teaching a 3-year-old child to say 'Thank You'.", cn: "从小教3岁的孩子说“谢谢”。", a: "Melentur buluh biarlah dari rebungnya." },
+            { en: "A student who is slow at math but practices 4 hours a day to pass.", cn: "数学进度慢，但每天练习4小时以求及格的学生。", a: "Belakang parang pun kalau diasah nescaya tajam." },
+            { en: "Someone who thinks their small village is the whole world.", cn: "认为自己的小村庄就是全世界的人。", a: "Seperti katak di bawah tempurung." },
+            { en: "The son behaves exactly like his hardworking father.", cn: "儿子的行为和勤奋的父亲一模一样。", a: "Bagaimana acuan, begitulah kuihnya." },
+            { en: "A difficult task becomes easy when 10 people work on it together.", cn: "当10个人一起分担时，困难的任务也变得容易。", a: "Berat sama dipikul, ringan sama dijinjing." },
+            { en: "Studying hard for 5 years before enjoying a high-paying job.", cn: "努力学习5年，然后才享受高薪工作。", a: "Berakit-rakit ke hulu, berenang-renang ke tepian." },
+            { en: "Don't rush your exam answers; focus on not making mistakes.", cn: "不要急于回答考试问题；专心避免犯错。", a: "Biar lambat asalkan selamat." },
+            { en: "If you don't know the way, don't be afraid to ask people.", cn: "如果不认识路，不要害怕问人。", a: "Malu bertanya sesat jalan." },
+            { en: "A project is tough, but the team refuses to give up until it's perfect.", cn: "项目很艰难，但团队拒绝放弃，坚持到底。", a: "Genggam bara api biar sampai jadi arang." },
+            { en: "Two best friends who are always together and help each other.", cn: "总是形影不离、互相帮助的两个好朋友。", a: "Bagai isi dengan kuku." },
+            { en: "Think carefully before quitting your job without a backup plan.", cn: "在没有备用计划的情况下辞职前要三思而后行。", a: "Sesal dahulu pendapatan, sesal kemudian tidak berguna." },
+            { en: "The villagers made a decision only after everyone agreed.", cn: "村民们只有在所有人都达成共识后才做出决定。", a: "Bulat air kerana pembetung, bulat manusia kerana muafakat." },
+            { en: "The country remains strong because citizens of all races cooperate.", cn: "国家保持强大，因为各族公民相互合作。", a: "Bersatu teguh, bercerai roboh." },
+            { en: "If you want to master a craft, you must commit to it fully.", cn: "如果你想精通一门手艺，你必须全身心投入，一不做二不休。", a: "Alang-alang menyeluk pekasam, biar sampai ke pangkal lengan." },
+            { en: "Don't let your anger make your decisions for you.", cn: "别让愤怒等情绪替你做决定。", a: "Ikut hati mati, ikut rasa binasa." },
+            { en: "A person who collects stamps for 20 years and now has a rare collection.", cn: "集邮20年，现在拥有珍贵收藏的人。", a: "Sedikit-sedikit, lama-lama jadi bukit." },
+            { en: "Checking your car's tires before a long drive to Johor.", cn: "在长途驱车去柔佛之前检查汽车轮胎。", a: "Sediakan payung sebelum hujan." },
+            { en: "A wealthy businessman who ignores the teacher who taught him.", cn: "无视曾经教过他的老师的富商。", a: "Kacang lupakan kulit." },
+            { en: "A toddler learning to read through daily play.", cn: "通过日常游戏从小学习阅读的幼儿。", a: "Melentur buluh biarlah dari rebungnya." },
+            { en: "An athlete training in the rain for the Olympics.", cn: "为了奥运会在雨中风雨无阻地训练的运动员。", a: "Di mana ada kemahuan, di sana ada jalan." },
+            { en: "The teamwork between a pilot and the co-pilot.", cn: "机长和副机长之间互相依赖的团队合作。", a: "Bagai aur dengan tebing." },
+            { en: "Winning a group competition through shared strategy.", cn: "通过共享策略和团结赢得团体比赛。", a: "Bersatu teguh, bercerai roboh." },
+            { en: "Even a dull student can top the class with consistent effort.", cn: "即使是迟钝的学生，通过不断努力也能名列前茅。", a: "Belakang parang pun kalau diasah nescaya tajam." },
+            { en: "Avoiding a shortcut because it looks dangerous.", cn: "避免走捷径，因为它看起来很危险。安全第一。", a: "Biar lambat asalkan selamat." },
+            { en: "Spending all savings on a whim and regretting it later.", cn: "一时冲动花光所有积蓄，事后后悔莫及。", a: "Sesal dahulu pendapatan, sesal kemudian tidak berguna." }
+        ];
+
+        // Prepare choices for quiz
+        const allProverbs = pillars.flatMap(p => p.proverbs.map(pv => pv.text));
+        const quizData = rawQuizData.map(item => {
+            const wrongOptions = allProverbs.filter(p => p !== item.a).sort(() => 0.5 - Math.random()).slice(0, 3);
+            return { ...item, choices: [item.a, ...wrongOptions].sort(() => 0.5 - Math.random()) };
+        });
+
+        // --- STATE MANAGEMENT ---
+        let state = {
+            view: 'menu', // 'menu', 'study', 'quiz', 'result'
+            quizLang: 'en', // 'en' or 'cn'
+            currentQ: 0,
+            score: 0,
+            answers: new Array(30).fill(null),
+            feedback: null
+        };
+
+        // --- RENDER LOGIC ---
+        function render() {
+            const app = document.getElementById('app');
+            app.innerHTML = `
+                <header class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 slide-up">
+                    <div class="text-left">
+                        <h1 class="text-3xl font-black text-indigo-900 tracking-tight flex items-center gap-3">
+                            <i class="fa-solid fa-microchip text-indigo-600"></i> PERIBAHASA 2.0
+                        </h1>
+                        <p class="text-slate-500 font-medium mt-1">First Principles & Efficiency Training</p>
+                    </div>
+                    <div class="flex gap-2 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200">
+                        <button onclick="setView('menu')" class="px-6 py-2 rounded-xl font-bold transition-all ${state.view === 'menu' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}">Menu</button>
+                        <button onclick="setView('study')" class="px-6 py-2 rounded-xl font-bold transition-all ${state.view === 'study' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}">Study</button>
+                        <button onclick="setView('quiz')" class="px-6 py-2 rounded-xl font-bold transition-all ${state.view === 'quiz' || state.view === 'result' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-500 hover:bg-slate-50'}">Quiz</button>
+                    </div>
+                </header>
+
+                <main>
+                    ${state.view === 'menu' ? renderMenu() : ''}
+                    ${state.view === 'study' ? renderStudy() : ''}
+                    ${state.view === 'quiz' ? renderQuiz() : ''}
+                    ${state.view === 'result' ? renderResult() : ''}
+                </main>
+            `;
+        }
+
+        function renderMenu() {
+            return `
+                <div class="grid md:grid-cols-2 gap-8 py-10 fade-in slide-up">
+                    <div class="bg-white border border-slate-200 rounded-3xl p-10 flex flex-col justify-between shadow-sm hover:shadow-md transition-shadow">
+                        <div>
+                            <div class="w-14 h-14 bg-indigo-100 rounded-2xl flex items-center justify-center mb-6 text-indigo-600 text-2xl">
+                                <i class="fa-solid fa-book-open"></i>
+                            </div>
+                            <h2 class="text-3xl font-black mb-4 text-slate-800 tracking-tight">Logic Pillars</h2>
+                            <p class="text-slate-500 leading-relaxed mb-6 text-lg">
+                                Master 20 high-yield proverbs grouped by underlying physical and social laws (Effort, Risk, Systems).
+                            </p>
+                        </div>
+                        <button onclick="setView('study')" class="bg-indigo-600 text-white py-4 rounded-2xl font-black hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 mt-4">
+                            Access Knowledge Base
+                        </button>
+                    </div>
+                    
+                    <div class="bg-slate-900 rounded-3xl p-10 text-white flex flex-col justify-between shadow-xl">
+                        <div>
+                            <div class="w-14 h-14 bg-slate-800 rounded-2xl flex items-center justify-center mb-6 text-indigo-400 text-2xl">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                            </div>
+                            <h2 class="text-3xl font-black mb-4 tracking-tight">Efficiency Quiz</h2>
+                            <p class="text-slate-400 leading-relaxed mb-6 text-lg">
+                                30 Scenarios. Available in <span class="text-white font-bold">English</span> and <span class="text-white font-bold">Chinese</span>. Force your brain to map concepts directly to formal Malay.
+                            </p>
+                        </div>
+                        <button onclick="setView('quiz')" class="bg-white text-slate-900 py-4 rounded-2xl font-black hover:bg-slate-100 transition-all mt-4">
+                            Initiate Quiz Protocol
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderStudy() {
+            let html = '<div class="grid md:grid-cols-2 gap-6 fade-in">';
+            pillars.forEach(pillar => {
+                html += `
+                    <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+                        <div class="flex items-center gap-4 mb-6">
+                            <div class="p-3 bg-indigo-50 text-indigo-600 rounded-xl text-xl">
+                                <i class="fa-solid fa-lightbulb"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-black text-xl text-slate-800 uppercase tracking-tight">${pillar.title}</h3>
+                                <p class="text-xs font-bold text-indigo-500 tracking-wider uppercase mt-1">${pillar.logic}</p>
+                            </div>
+                        </div>
+                        <div class="space-y-6">
+                `;
+                pillar.proverbs.forEach(pv => {
+                    html += `
+                        <div class="group border-t border-slate-50 pt-6 first:border-0 first:pt-0">
+                            <p class="text-lg font-bold text-slate-800 mb-2 leading-tight">"${pv.text}"</p>
+                            <div class="flex flex-col gap-1 mb-3">
+                                <p class="text-indigo-600 font-bold">${pv.cn}</p>
+                                <p class="text-slate-400 text-sm italic font-medium">${pv.en}</p>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl text-xs text-slate-500 font-semibold border border-slate-100">
+                                <span class="text-indigo-500 font-black"><i class="fa-solid fa-gear mr-1"></i> MECHANISM:</span> ${pv.tip}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function renderQuiz() {
+            const q = quizData[state.currentQ];
+            const isAnswered = state.answers[state.currentQ] !== null;
+            const progress = ((state.currentQ + 1) / quizData.length) * 100;
+            
+            // Toggle buttons text based on current language
+            const langBtnEnClass = state.quizLang === 'en' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-400 hover:text-indigo-600';
+            const langBtnCnClass = state.quizLang === 'cn' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-400 hover:text-indigo-600';
+
+            let html = `
+                <div class="max-w-3xl mx-auto fade-in">
+                    <!-- Top Bar -->
+                    <div class="flex justify-between items-center mb-6">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white px-4 py-1.5 rounded-full border text-sm font-black text-slate-500 shadow-sm">
+                                Q ${state.currentQ + 1} / ${quizData.length}
+                            </div>
+                            
+                            <!-- Language Toggle -->
+                            <div class="flex bg-white rounded-full border shadow-sm overflow-hidden p-0.5">
+                                <button onclick="setQuizLang('en')" class="px-4 py-1 text-xs font-bold rounded-full transition-colors ${langBtnEnClass}">English</button>
+                                <button onclick="setQuizLang('cn')" class="px-4 py-1 text-xs font-bold rounded-full transition-colors ${langBtnCnClass}">中文</button>
+                            </div>
+                        </div>
+                        <div class="text-emerald-600 font-black bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100 shadow-sm">
+                            ${state.score} PTS
+                        </div>
+                    </div>
+
+                    <!-- Quiz Card -->
+                    <div class="bg-white rounded-[2.5rem] shadow-xl border border-slate-100 overflow-hidden relative">
+                        <!-- Progress Bar -->
+                        <div class="h-1.5 bg-slate-100 w-full">
+                            <div class="h-full bg-indigo-600 transition-all duration-500" style="width: ${progress}%"></div>
+                        </div>
+
+                        <div class="p-8 md:p-12 text-center">
+                            <div class="mb-10 min-h-[120px] flex flex-col justify-center items-center">
+                                <p class="text-xs uppercase tracking-widest text-indigo-400 font-bold mb-4">Select the correct Peribahasa</p>
+                                <h3 class="text-2xl md:text-3xl font-black text-slate-800 leading-snug">
+                                    "${state.quizLang === 'en' ? q.en : q.cn}"
+                                </h3>
+                            </div>
+
+                            <div class="grid gap-4 max-w-lg mx-auto mb-10">
+            `;
+
+            // Render Choices
+            q.choices.forEach((choice, idx) => {
+                const isCorrect = choice === q.a;
+                const isSelected = isAnswered && state.answers[state.currentQ].choice === choice;
+                
+                let btnClass = 'bg-white border-slate-200 hover:border-indigo-600 hover:bg-indigo-50 text-slate-700 shadow-sm';
+                let iconHtml = `<span class="mr-3 text-slate-300 font-black">${String.fromCharCode(65 + idx)}.</span>`;
+
+                if (isAnswered) {
+                    if (isCorrect) {
+                        btnClass = 'bg-emerald-50 border-emerald-500 text-emerald-800';
+                        iconHtml = `<i class="fa-solid fa-check-circle text-emerald-500 mr-3"></i>`;
+                    } else if (isSelected) {
+                        btnClass = 'bg-rose-50 border-rose-500 text-rose-800';
+                        iconHtml = `<i class="fa-solid fa-times-circle text-rose-500 mr-3"></i>`;
+                    } else {
+                        btnClass = 'bg-white border-slate-100 text-slate-300 opacity-60';
+                    }
+                }
+
+                html += `
+                    <button 
+                        ${isAnswered ? 'disabled' : ''} 
+                        onclick="handleAnswer('${choice.replace(/'/g, "\\'")}')"
+                        class="p-5 rounded-2xl border-2 font-bold text-left transition-all relative flex items-center ${btnClass} active:scale-[0.98]"
+                    >
+                        ${iconHtml}
+                        <span class="leading-tight">${choice}</span>
+                    </button>
+                `;
+            });
+
+            html += `
+                            </div>
+
+                            <!-- Controls & Feedback -->
+                            <div class="flex justify-between items-center border-t border-slate-50 pt-8 mt-4 h-12">
+                                <button onclick="prevQuestion()" class="flex items-center gap-2 font-bold text-slate-400 hover:text-indigo-600 transition-all ${state.currentQ === 0 ? 'invisible' : ''}">
+                                    <i class="fa-solid fa-chevron-left"></i> Prev
+                                </button>
+                                
+                                <div id="feedback-area" class="font-black text-sm uppercase tracking-wider">
+                                    ${state.feedback ? 
+                                        (state.feedback.correct ? 
+                                            `<span class="text-emerald-600 fade-in"><i class="fa-solid fa-check mr-1"></i> Excellent</span>` : 
+                                            `<span class="text-rose-600 fade-in"><i class="fa-solid fa-xmark mr-1"></i> System Update</span>`
+                                        ) : ''}
+                                </div>
+
+                                <button onclick="nextQuestion()" class="flex items-center gap-2 font-bold text-indigo-600 hover:text-indigo-800 transition-all">
+                                    Next <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Strategy Note -->
+                    <div class="mt-8 p-6 bg-slate-900 rounded-[2rem] text-white flex items-start shadow-xl border border-slate-800">
+                        <div class="p-3 bg-slate-800 rounded-xl mr-5 shrink-0 text-indigo-400">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-black text-indigo-300 mb-1 uppercase tracking-wider text-sm">Mental Sandbox</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed font-medium">
+                                Do not translate word-for-word. Identify the core logic in the scenario (e.g., preparation, effort, unity) and select the corresponding physical metaphor (umbrella, hill, riverbank).
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return html;
+        }
+
+        function renderResult() {
+            const percentage = Math.round((state.score / quizData.length) * 100);
+            return `
+                <div class="max-w-2xl mx-auto bg-white rounded-[3rem] p-12 text-center shadow-xl border border-slate-100 fade-in slide-up">
+                    <div class="w-24 h-24 bg-indigo-100 rounded-3xl flex items-center justify-center mx-auto mb-8 transform -rotate-6 text-indigo-600 text-4xl shadow-inner">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="text-4xl font-black text-slate-900 mb-2 tracking-tight">Efficiency Mastered</h2>
+                    <p class="text-slate-400 font-medium mb-10">All ${quizData.length} scenarios processed successfully.</p>
+                    
+                    <div class="grid grid-cols-2 gap-6 mb-12">
+                        <div class="bg-slate-50 p-8 rounded-[2rem] border border-slate-100">
+                            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-1">Final Score</p>
+                            <p class="text-5xl font-black text-indigo-600">${state.score}</p>
+                        </div>
+                        <div class="bg-indigo-600 p-8 rounded-[2rem] text-white shadow-lg shadow-indigo-200">
+                            <p class="text-xs font-black text-indigo-200 uppercase tracking-widest mb-1">Success Rate</p>
+                            <p class="text-5xl font-black">${percentage}%</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button onclick="restartQuiz()" class="bg-slate-900 text-white px-10 py-4 rounded-2xl font-black hover:bg-black transition-all flex items-center justify-center shadow-lg active:scale-95">
+                            <i class="fa-solid fa-rotate-right mr-3"></i> Reboot Simulation
+                        </button>
+                        <button onclick="reviewAnswers()" class="bg-white border-2 border-slate-200 text-slate-700 px-10 py-4 rounded-2xl font-black hover:bg-slate-50 transition-all">
+                            Review Analytics
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- ACTIONS ---
+        function setView(viewName) {
+            state.view = viewName;
+            if (viewName === 'quiz' && state.currentQ >= quizData.length) {
+                state.view = 'result';
+            }
+            render();
+        }
+
+        function setQuizLang(lang) {
+            state.quizLang = lang;
+            render();
+        }
+
+        function handleAnswer(choice) {
+            if (state.answers[state.currentQ] !== null) return;
+            
+            const isCorrect = choice === quizData[state.currentQ].a;
+            state.answers[state.currentQ] = { choice, isCorrect };
+            
+            if (isCorrect) state.score++;
+            
+            state.feedback = { correct: isCorrect };
+            render();
+
+            setTimeout(() => {
+                nextQuestion();
+            }, 1200);
+        }
+
+        function nextQuestion() {
+            state.feedback = null;
+            if (state.currentQ < quizData.length - 1) {
+                state.currentQ++;
+                render();
+            } else {
+                setView('result');
+            }
+        }
+
+        function prevQuestion() {
+            state.feedback = null;
+            if (state.currentQ > 0) {
+                state.currentQ--;
+                render();
+            }
+        }
+
+        function restartQuiz() {
+            state.currentQ = 0;
+            state.score = 0;
+            state.answers = new Array(quizData.length).fill(null);
+            state.feedback = null;
+            
+            // Optional: reshuffle choices on restart
+            quizData.forEach(item => {
+                item.choices.sort(() => 0.5 - Math.random());
+            });
+
+            setView('quiz');
+        }
+
+        function reviewAnswers() {
+            state.currentQ = 0;
+            state.feedback = null;
+            setView('quiz');
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            render();
+        };
+
+    </script>
+</body>
+
+</html>

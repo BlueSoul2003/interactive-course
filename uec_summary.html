@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UEC Summary Writing • Senior English</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Shared Styles with other UEC modules */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-gold: #d97706;
+            /* UEC Gold */
+            --accent-gold-dim: rgba(217, 119, 6, 0.1);
+            --correct-color: #10b981;
+            --wrong-color: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --font-serif: 'Merriweather', serif;
+            --font-sans: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            font-family: var(--font-sans);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(to right, #0f172a, #1e293b);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--accent-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-title span {
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* Bilingual Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #334155;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--accent-gold);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        .cn-text {
+            display: none;
+            /* Hidden by default */
+            color: #94a3b8;
+            font-size: 0.9em;
+            margin-top: 5px;
+            border-left: 2px solid var(--accent-gold);
+            padding-left: 8px;
+        }
+
+        body.show-cn .cn-text {
+            display: block;
+        }
+
+        body.show-cn .cn-inline {
+            display: inline;
+        }
+
+        .cn-inline {
+            display: none;
+            margin-left: 5px;
+            color: #94a3b8;
+            font-size: 0.9em;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .intro-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .stage-title {
+            font-family: var(--font-serif);
+            color: var(--accent-gold);
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Stage 1: Treasure Hunting */
+        .split-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .passage-text {
+            background: #0f172a;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-gold);
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .exercise-area h3 {
+            margin-top: 0;
+            color: var(--text-primary);
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #0f172a;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            color: white;
+            font-family: var(--font-sans);
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+
+        button {
+            background-color: var(--accent-gold);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background-color: #b45309;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 6px;
+            border: 1px solid #10b981;
+            color: #10b981;
+            display: none;
+        }
+
+        .feedback.error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+            color: #ef4444;
+        }
+
+        /* Stage 2: Cutting */
+        .cutting-ex {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .reveal-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background-color: #334155;
+            border-radius: 6px;
+            display: none;
+            /* hidden initially */
+        }
+
+        /* Stage 3: Assembly */
+        .assembly-box {
+            background-color: #fff;
+            color: #000;
+            padding: 2rem;
+            border-radius: 8px;
+            font-family: 'Georgia', serif;
+            font-size: 1.1rem;
+            line-height: 2;
+        }
+
+        select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #eee;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        select.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+
+        select.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+        }
+
+        .model-answer {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid var(--accent-gold);
+            padding: 2rem;
+            border-radius: 12px;
+            margin-top: 3rem;
+            position: relative;
+        }
+
+        .model-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: var(--accent-gold);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 3rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            color: var(--accent-gold);
+        }
+
+        @media (max-width: 768px) {
+            .split-box {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-title">
+            <h1>
+                <span>UEC Prep</span>
+                Summary Writing Workshop
+            </h1>
+        </div>
+        <div class="toggle-container">
+            <span>English</span>
+            <label class="switch">
+                <input type="checkbox" id="lang-toggle">
+                <span class="slider"></span>
+            </label>
+            <span>Chinese</span>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- Intro -->
+        <div class="intro-card">
+            <h2>📝 Mission: Procrastination <span class="cn-inline">(拖延症)</span></h2>
+            <p>Your task: Write a summary of not more than <strong>150 words</strong> based on the 2017 Past Year Paper.
+            </p>
+            <div class="cn-text">你的任务：阅读原文，基于2017年历届考题，写一篇不超过150字的摘要。</div>
+            <ul>
+                <li>1. Reasons why people procrastinate <span class="cn-inline">(原因)</span></li>
+                <li>2. Its ill effects <span class="cn-inline">(坏处)</span></li>
+                <li>3. How to overcome procrastination <span class="cn-inline">(克服方法)</span></li>
+            </ul>
+        </div>
+
+        <!-- Stage 1 -->
+        <!-- Stage 1 -->
+        <div class="stage-title">🕹️ Stage 1: Treasure Hunting <span class="cn-inline">(实战寻宝)</span></div>
+
+        <!-- Mission 1: Reasons -->
+        <div class="split-box">
+            <div class="passage-text">
+                <h3>Mission 1: Find the REASONS <span class="cn-inline">(找出原因)</span></h3>
+                <p>"There are many reasons for procrastinating. The first is that we may dread taking on a
+                    <strong>difficult or boring job</strong>. When a task is perceived as long or difficult, many will
+                    procrastinate simply because there is <strong>no immediate gratification</strong>. For example, it
+                    will take months to lose those ten pounds or it will take tons of energy to clear the room. Putting
+                    off a diet programme one more day will not make much difference. Sleeping in a messy room for
+                    another day won't make a difference, and the list goes on. Besides that, <strong>fear of
+                        failure</strong> is also another reason why we procrastinate. This fear often comes into play at
+                    school where performance is evaluated and can affect our future success. A student may put off
+                    studying for a test until the last minute. Lack of time spent for studying is a more desirable
+                    explanation for failure than lacking the intelligence to learn the material."
+                </p>
+                <div class="cn-text" style="color:#94a3b8; font-size: 0.9rem; margin-top:1rem;">
+                    <p>你的任务： 阅读下面这段完整原文，找出 3个 导致拖延的根本原因。(注意：小心那些 For example 后面的废话，那些都是干扰项！)</p>
+                </div>
+            </div>
+            <div class="exercise-area">
+                <h3>List 3 Reasons <span class="cn-inline">(找出3个原因)</span></h3>
+                <div class="input-group">
+                    <label>1. Reason (Job related)</label>
+                    <input type="text" id="m1-r1" placeholder="e.g. dread...">
+                </div>
+                <div class="input-group">
+                    <label>2. Reason (Reward related)</label>
+                    <input type="text" id="m1-r2" placeholder="e.g. no immediate...">
+                </div>
+                <div class="input-group">
+                    <label>3. Reason (Emotion related)</label>
+                    <input type="text" id="m1-r3" placeholder="e.g. fear of...">
+                </div>
+                <button onclick="checkMission1()">Check Answers</button>
+                <div id="fb-m1" class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Mission 2: Effects -->
+        <div class="split-box">
+            <div class="passage-text">
+                <h3>Mission 2: Find the EFFECTS <span class="cn-inline">(找出坏处)</span></h3>
+                <p>"Procrastination causes <strong>stress, anxiety and a feeling of failure</strong>. Students who fear
+                    failure ultimately become anxious, and stressful, and tend to fail when they do not prepare for
+                    tests or start projects on time. Employees who begin tasks at the last minute <strong>rarely perform
+                        as well</strong> as their non-procrastinating colleagues. Putting off a diet programme
+                    ultimately adds to the number of pounds you need to lose to be healthy, thus, making the <strong>job
+                        that much harder to accomplish</strong>."</p>
+                <div class="cn-text" style="color:#94a3b8; font-size: 0.9rem; margin-top:1rem;">
+                    <p>你的任务： 这段话讲了拖延症的后果。请找出 3个 负面影响。</p>
+                </div>
+            </div>
+            <div class="exercise-area">
+                <h3>How does it affect us? <span class="cn-inline">(它有什么影响？)</span></h3>
+                <p>1. It causes <input type="text" id="m2-e1" style="width:100px; display:inline-block;"
+                        placeholder="...">, <input type="text" id="m2-e2" style="width:100px; display:inline-block;"
+                        placeholder="..."> and a <input type="text" id="m2-e3"
+                        style="width:150px; display:inline-block;" placeholder="...">.</p>
+                <p>2. People rarely <input type="text" id="m2-e4" style="width:150px; display:inline-block;"
+                        placeholder="..."> as well as others.</p>
+                <p>3. It makes the job <input type="text" id="m2-e5" style="width:150px; display:inline-block;"
+                        placeholder="..."> to accomplish.</p>
+                <button onclick="checkMission2()">Check Answers</button>
+                <div id="fb-m2" class="feedback"></div>
+            </div>
+        </div>
+
+        <!-- Mission 3: Ways to Overcome -->
+        <div class="split-box">
+            <div class="passage-text">
+                <h3>Mission 3: WAYS TO OVERCOME <span class="cn-inline">(解决方法)</span></h3>
+                <p>"To overcome procrastination, first, <strong>figure out why</strong> you are procrastinating. Is it
+                    fear of failure or lack of confidence? Write down all the reasons why putting off your project will
+                    bring you one step closer to failure. Does it make sense to put it off any longer? NO. Next,
+                    <strong>break down the task</strong> into smaller jobs. If it is a thirty-page paper due in two
+                    weeks, write down a goal of finishing three pages a night. After you have finished your nightly
+                    quota, <strong>give yourself a reward</strong> of some sort. Watch your favourite television
+                    programme or have a hearty meal. Those of us who procrastinate on a day-to-day basis <strong>need a
+                        realistic 'to-do' list</strong>. Keep the list with you and stick to the order. Cross things off
+                    as they are accomplished. <strong>Tell your friends and family</strong> about your goals. If you
+                    have someone asking you how your diet is coming along, it is more difficult to cheat. If you have a
+                    major project to do, ask a friend to help keep you on the task by monitoring you frequently."
+                </p>
+                <div class="cn-text" style="color:#94a3b8; font-size: 0.9rem; margin-top:1rem;">
+                    <p>你的任务： 这部分最长，涵盖了两段话。请找出 4个 具体的建议。</p>
+                </div>
+            </div>
+            <div class="exercise-area">
+                <h3>Find 4 Key Actions <span class="cn-inline">(找出4个关键动作)</span></h3>
+                <div class="input-group">
+                    <label>1. Action</label>
+                    <input type="text" id="m3-a1" placeholder="...">
+                </div>
+                <div class="input-group">
+                    <label>2. Action</label>
+                    <input type="text" id="m3-a2" placeholder="...">
+                </div>
+                <div class="input-group">
+                    <label>3. Action</label>
+                    <input type="text" id="m3-a3" placeholder="...">
+                </div>
+                <div class="input-group">
+                    <label>4. Action</label>
+                    <input type="text" id="m3-a4" placeholder="...">
+                </div>
+                <button onclick="checkMission3()">Check Answers</button>
+                <div id="fb-m3" class="feedback"></div>
+
+                <div style="margin-top: 2rem; background: #334155; padding: 1rem; border-radius: 6px;">
+                    <h4 style="margin-top:0; color:var(--accent-gold)">💡 Teacher's Tip: Filtering <span
+                            class="cn-inline">(实战点评)</span></h4>
+                    <p style="font-size: 0.9rem;">Did you skip the "thirty-page paper" sentence? <br>
+                        <span style="color:#ef4444">Novices</span> copy it. <span style="color:#10b981">Experts</span>
+                        skip it because it's just an EXAMPLE.
+                    </p>
+                    <div class="cn-text">你有没有跳过关于 "30页论文" 的那句话？新手会抄它，高手（你）会跳过它，因为它只是个例子。</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage 2 -->
+        <div class="stage-title">✂️ Stage 2: The Art of Cutting <span class="cn-inline">(瘦身技巧)</span></div>
+
+        <div class="cutting-ex">
+            <p><strong>Original:</strong> "The first is that we may dread taking on a difficult or boring job." (13
+                words)</p>
+            <div class="cn-text">原文：“首先是因为我们可能害怕接手困难或无聊的工作。”</div>
+            <p style="color:var(--accent-gold)">Task: Shorten to 5 words.</p>
+            <textarea id="cut1" rows="2" placeholder="People avoid..."></textarea>
+            <button onclick="document.getElementById('reveal-cut1').style.display = 'block'">Show Teacher's
+                Demo</button>
+            <div id="reveal-cut1" class="reveal-box">
+                <strong>💡 Teacher's Demo:</strong> People avoid <u>difficult or boring jobs</u>. (5 words)
+            </div>
+        </div>
+
+        <div class="cutting-ex">
+            <p><strong>Original:</strong> "Next, break down the task into smaller jobs. If it is a thirty-page paper due
+                in two weeks, write down a goal of finishing three pages a night." (28 words)</p>
+            <div class="cn-text">原文：“接下来，把任务拆解成小工作。如果是一篇两周后要交的30页论文……”（例子全删！）</div>
+            <p style="color:var(--accent-gold)">Task: Remove the example. Keep the main action.</p>
+            <textarea id="cut2" rows="2" placeholder="We should..."></textarea>
+            <button onclick="document.getElementById('reveal-cut2').style.display = 'block'">Show Teacher's
+                Demo</button>
+            <div id="reveal-cut2" class="reveal-box">
+                <strong>💡 Teacher's Demo:</strong> We should <u>break tasks into smaller jobs</u>. (6 words)
+            </div>
+        </div>
+
+        <!-- Stage 3 -->
+        <div class="stage-title">🔗 Stage 3: The Assembly Line <span class="cn-inline">(组装成文)</span></div>
+
+        <div class="assembly-box">
+            <p>
+                <span style="color:#666">[Reasons]</span> <br>
+                <select id="c1">
+                    <option value="">(Select Connector)</option>
+                    <option value="Firstly">Firstly</option>
+                    <option value="However">However</option>
+                </select>,
+                people procrastinate because they dread difficult jobs and lack immediate gratification.
+                <select id="c2">
+                    <option value="">(Select Connector)</option>
+                    <option value="Moreover">Moreover</option>
+                    <option value="But">But</option>
+                </select>,
+                the fear of failure also stops them.
+            </p>
+            <p>
+                <span style="color:#666">[Effects]</span> <br>
+                <select id="c3">
+                    <option value="">(Select Connector)</option>
+                    <option value="Consequently">Consequently</option>
+                    <option value="Because">Because</option>
+                </select>,
+                procrastination causes stress, anxiety, and poor performance, making tasks harder.
+            </p>
+            <p>
+                <span style="color:#666">[Ways to Overcome]</span> <br>
+                <select id="c4">
+                    <option value="">(Select Connector)</option>
+                    <option value="To overcome this">To overcome this</option>
+                    <option value="So">So</option>
+                </select>,
+                we should figure out the reasons and break tasks into smaller parts.
+                <select id="c5">
+                    <option value="">(Select Connector)</option>
+                    <option value="Finally">Finally</option>
+                    <option value="Or">Or</option>
+                </select>,
+                we can ask friends to monitor our progress.
+            </p>
+            <button onclick="checkConnectors()">Check Connectors</button>
+        </div>
+
+        <!-- Model Answer -->
+        <div class="model-answer">
+            <div class="model-badge">Model Answer</div>
+            <h3>🏆 Final Summary (approx. 85 words)</h3>
+            <p>
+                Firstly, people procrastinate because they <strong>dread difficult or boring jobs</strong> and lack
+                <strong>immediate gratification</strong>. Moreover, <strong>fear of failure</strong> is another cause.
+            </p>
+            <p>
+                Consequently, it leads to <strong>stress, anxiety, and a feeling of failure</strong>. It also results in
+                <strong>poor performance</strong> and makes tasks <strong>harder to accomplish</strong>.
+            </p>
+            <p>
+                To overcome this, we should <strong>figure out the reasons</strong> and <strong>break tasks into smaller
+                    jobs</strong>. We can also create a <strong>realistic to-do list</strong> and give ourselves
+                <strong>rewards</strong>. Finally, we should ask friends to <strong>monitor our progress</strong>.
+            </p>
+            <div class="cn-text"
+                style="color:#94a3b8; margin-top:1rem; border-top:1px solid #334155; padding-top:1rem;">
+                首先，人们拖延是因为害怕困难或无聊的工作，且缺乏即时满足感。此外，害怕失败也是原因之一。因此，这导致压力、焦虑和失败感，还会导致表现不佳，通过使任务更难完成。为了克服这一点，我们应该找出原因并将任务分解为小工作。我们还可以制定现实的待办清单并给自己奖励。最后，我们应该请朋友监督我们的进度。
+            </div>
+        </div>
+
+        <div class="intro-card" style="margin-top: 2rem;">
+            <h3>💡 Teacher's Tips <span class="cn-inline">(老师的叮嘱)</span></h3>
+            <ul style="list-style-type: none; padding: 0;">
+                <li style="margin-bottom: 10px;">🚫 <strong>Strictly No Examples:</strong> Do not include specific
+                    examples like "diet" or "30-page paper". <span class="cn-inline">（绝对不要写例子！）</span></li>
+                <li style="margin-bottom: 10px;">✍️ <strong>Use Own Words (Optional):</strong> If you can paraphrase
+                    "monitor" to "check", great. If not, copying keywords is safer. <span
+                        class="cn-inline">（能改写最好，不能改写就抄关键词，比较安全。）</span></li>
+                <li style="margin-bottom: 10px;">🔗 <strong>Connectors are Key:</strong> Words like <em>Firstly,
+                        Moreover, Consequently</em> act as glue. <span class="cn-inline">（连接词是关键！）</span></li>
+            </ul>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <script>
+        // Toggle Logic
+        const toggle = document.getElementById('lang-toggle');
+        const body = document.body;
+
+        // Check saved state
+        if (localStorage.getItem('showCn') === 'true') {
+            toggle.checked = true;
+            body.classList.add('show-cn');
+        }
+
+        toggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                body.classList.add('show-cn');
+                localStorage.setItem('showCn', 'true');
+            } else {
+                body.classList.remove('show-cn');
+                localStorage.setItem('showCn', 'false');
+            }
+        });
+
+        // Mission 1 Check
+        function checkMission1() {
+            const r1 = document.getElementById('m1-r1').value.toLowerCase();
+            const r2 = document.getElementById('m1-r2').value.toLowerCase();
+            const r3 = document.getElementById('m1-r3').value.toLowerCase();
+            const fb = document.getElementById('fb-m1');
+
+            let correctCount = 0;
+            if (r1.includes('boring') || r1.includes('difficult') || r1.includes('dread')) correctCount++;
+            if (r2.includes('gratification') || r2.includes('immediate')) correctCount++;
+            if (r3.includes('failure') || r3.includes('fear')) correctCount++;
+
+            if (correctCount >= 3) {
+                fb.innerHTML = "🎉 Excellent! You found all 3 reasons. Did you avoid the 'diet' examples? <div class='cn-text' style='color:#10b981'>太棒了！你找到了所有3个原因。你避开了“节食”的例子吗？</div>";
+                fb.classList.remove('error');
+                fb.style.display = 'block';
+            } else {
+                fb.innerHTML = `You found ${correctCount}/3. Hint: 1. Dread difficult job. 2. No immediate gratification. 3. Fear of failure. <div class='cn-text' style='color:#ef4444'>你找到了 ${correctCount}/3 个。提示：1. 害怕困难工作 2. 无即时满足 3. 害怕失败</div>`;
+                fb.classList.add('error');
+                fb.style.display = 'block';
+            }
+        }
+
+        // Mission 2 Check
+        function checkMission2() {
+            // e1, e2, e3 in mission 2 text prompt are actually 3 blanks in first sentence
+            // Our HTML has 5 inputs total now based on user prompt structure
+            const e1 = document.getElementById('m2-e1').value.toLowerCase(); // stress/anxiety
+            const e2 = document.getElementById('m2-e2').value.toLowerCase(); // stress/anxiety
+            const e3 = document.getElementById('m2-e3').value.toLowerCase(); // feeling of failure
+            const e4 = document.getElementById('m2-e4').value.toLowerCase(); // perform
+            const e5 = document.getElementById('m2-e5').value.toLowerCase(); // harder
+
+            const fb = document.getElementById('fb-m2');
+            let allOk = true;
+
+            if (!e1.includes('stress') && !e1.includes('anxiety')) allOk = false;
+            if (!e2.includes('stress') && !e2.includes('anxiety')) allOk = false;
+            if (!e3.includes('failure') && !e3.includes('feeling')) allOk = false;
+            if (!e4.includes('perform')) allOk = false;
+            if (!e5.includes('harder') && !e5.includes('hard')) allOk = false;
+
+            if (allOk) {
+                fb.innerHTML = "✅ Correct! <div class='cn-text' style='color:#10b981'>全对！</div>";
+                fb.classList.remove('error');
+            } else {
+                fb.innerHTML = "❌ Check your answers. 1. stress/anxiety/failure. 2. perform. 3. harder. <div class='cn-text' style='color:#ef4444'>检查答案。1. 压力/焦虑/失败感 2. 表现 3. 更难</div>";
+                fb.classList.add('error');
+            }
+            fb.style.display = 'block';
+        }
+
+        // Mission 3 Check
+        function checkMission3() {
+            const inputs = [
+                document.getElementById('m3-a1').value.toLowerCase(),
+                document.getElementById('m3-a2').value.toLowerCase(),
+                document.getElementById('m3-a3').value.toLowerCase(),
+                document.getElementById('m3-a4').value.toLowerCase()
+            ];
+            const fb = document.getElementById('fb-m3');
+
+            // Keywords we are looking for in ANY order
+            const keywords = [
+                ['figure', 'reason', 'why'],
+                ['break', 'small', 'down'],
+                ['reward', 'treat'],
+                ['list', 'to-do'],
+                ['friend', 'family', 'monitor', 'tell']
+            ];
+
+            let foundCount = 0;
+            // Simple logic: check if input matches ANY of the keyword groups
+            inputs.forEach(val => {
+                if (keywords.some(group => group.some(k => val.includes(k)))) {
+                    foundCount++;
+                }
+            });
+
+            if (foundCount >= 3) { // Lenient check
+                fb.innerHTML = "🎉 Good job! You found the key actions. Remember to FILTER out the examples! <div class='cn-text' style='color:#10b981'>做得好！你找到了关键动作。记得过滤掉例子！</div>";
+                fb.classList.remove('error');
+            } else {
+                fb.innerHTML = "❌ Try to find at least 3-4 key actions. Look for verbs: Figure out, Break down, Reward, List, Tell/Ask. <div class='cn-text' style='color:#ef4444'>尝试找出至少3-4个关键动作。寻找动词：Figure out, Break down, Reward, List, Tell/Ask.</div>";
+                fb.classList.add('error');
+            }
+            fb.style.display = 'block';
+        }
+
+        // Stage 3 Check (Connectors)
+        function checkConnectors() {
+            const answers = {
+                c1: "Firstly",
+                c2: "Moreover",
+                c3: "Consequently",
+                c4: "To overcome this",
+                c5: "Finally"
+            };
+
+            for (let id in answers) {
+                let el = document.getElementById(id);
+                if (el.value === answers[id]) {
+                    el.className = 'correct';
+                } else {
+                    el.className = 'wrong';
+                }
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
