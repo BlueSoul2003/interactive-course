@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Y4 Math: Review 1 | Focus Mode</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;600&family=Nunito:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --surface-color: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-teal: #14b8a6;
+            --accent-teal-dark: #0f766e;
+            --correct-color: #10b981;
+            --wrong-color: #ef4444;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --font-main: 'Nunito', sans-serif;
+            --font-heading: 'Fredoka', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Header & Progress --- */
+        header {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 101;
+            display: flex;
+        }
+
+        .level-progress-segment {
+            flex-grow: 1;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            margin-right: 2px;
+            position: relative;
+        }
+
+        .level-progress-fill {
+            height: 100%;
+            background: var(--accent-teal);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .level-progress-segment.completed .level-progress-fill {
+            width: 100%;
+        }
+
+        /* --- Main Layout --- */
+        main {
+            max-width: 800px;
+            /* Reduced width for focus */
+            margin: 0 auto;
+            padding: 40px 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* --- Sections & Cards --- */
+        .game-container {
+            width: 100%;
+            position: relative;
+        }
+
+        .section-view {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+            width: 100%;
+        }
+
+        .section-view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chapter-title {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent-teal);
+        }
+
+        .start-card {
+            background: var(--surface-color);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Question Card */
+        .question-card {
+            background: var(--surface-color);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            /* Center align for focus */
+            position: relative;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .section-header-small {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .q-progress {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 0.9rem;
+            color: var(--accent-teal);
+            font-weight: bold;
+        }
+
+        .q-content {
+            font-size: 1.8rem;
+            /* Bigger for focus */
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        .q-prompt {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--border-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            width: 300px;
+            text-align: center;
+            transition: all 0.3s;
+            margin: 10px;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-teal);
+            background: rgba(20, 184, 166, 0.1);
+            transform: scale(1.05);
+        }
+
+        /* MCQ Options */
+        .mcq-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .mcq-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid var(--border-color);
+            padding: 15px;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-heading);
+            text-align: left;
+        }
+
+        .mcq-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .mcq-btn.selected {
+            border-color: var(--accent-teal);
+            background: rgba(20, 184, 166, 0.2);
+        }
+
+        .mcq-btn.correct-visual {
+            border-color: var(--correct-color);
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .mcq-btn.wrong-visual {
+            border-color: var(--wrong-color);
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        /* Controls */
+        .controls-area {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            width: 100%;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: var(--font-heading);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent-teal);
+            color: var(--bg-color);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(20, 184, 166, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Feedback effects */
+        .feedback-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 20px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .feedback-overlay.wrong {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        /* Analysis Screen */
+        .analysis-card {
+            background: var(--surface-color);
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            border: 1px solid var(--border-color);
+        }
+
+        .score-big {
+            font-size: 4rem;
+            font-family: var(--font-heading);
+            color: var(--accent-teal);
+            margin: 20px 0;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .stat-val {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* Confetti Canvas */
+        #confetti {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="progress-container" id="progress-container">
+        <!-- Segments injected by JS -->
+    </div>
+
+    <header>
+        <a href="../index.html" class="logo">
+            <span>📐</span> Singapore Math
+        </a>
+        <div style="display:flex; gap:10px; align-items:center;">
+            <div id="header-status" style="margin-right:10px;">Review Mode 🎯</div>
+            <button class="nav-btn" onclick="prevLevel()">&lt;</button>
+            <button class="nav-btn" onclick="nextLevel()">&gt;</button>
+        </div>
+    </header>
+
+    <main>
+
+        <div class="game-container">
+
+            <!-- VIEW: START -->
+            <div id="view-start" class="section-view active">
+                <div class="start-card">
+                    <div style="font-size:5rem; margin-bottom:20px">📝</div>
+                    <h1 class="chapter-title">Review 1</h1>
+                    <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 40px;">
+                        Whole Numbers: Rounding, Estimation, Factors & Multiples
+                    </p>
+                    <button class="btn btn-primary" onclick="startGame()"
+                        style="margin: 0 auto; font-size:1.2rem; padding: 15px 40px;">
+                        Start Review
+                    </button>
+                    <p style="margin-top:20px; font-size:0.9rem; color: #64748b;">
+                        20 Questions • Mixed Practice
+                    </p>
+                </div>
+            </div>
+
+            <!-- VIEW: QUESTION -->
+            <div id="view-question" class="section-view">
+                <div class="question-card" id="q-card">
+                    <div class="section-header-small" id="q-section-title">Values</div>
+                    <div class="q-progress" id="q-progress">1 / 10</div>
+
+                    <div class="feedback-overlay" id="fb-overlay"></div>
+
+                    <div class="q-content" id="q-render-area">
+                        <!-- Injected Content -->
+                    </div>
+
+                    <div class="controls-area">
+                        <button class="btn btn-secondary" onclick="prevQuestion()" id="btn-prev">⬅ Prev</button>
+                        <button class="btn btn-primary" onclick="checkCurrent()" id="btn-check">Check Answer</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()" id="btn-next"
+                            style="display:none;">Next ➡</button>
+                    </div>
+
+                    <div id="q-feedback-text"
+                        style="height:20px; margin-top:15px; font-weight:bold; color:var(--text-secondary);"></div>
+                </div>
+            </div>
+
+            <!-- VIEW: ANALYSIS -->
+            <div id="view-analysis" class="section-view">
+                <div class="analysis-card">
+                    <div style="text-align:center;">
+                        <h2>Performance Analysis</h2>
+                        <div class="score-big" id="final-score">0%</div>
+                        <p id="final-msg">Great effort!</p>
+                    </div>
+
+                    <div class="stat-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">Questions Attempted</div>
+                            <div class="stat-val" id="stat-attempted">0 / 20</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Accuracy</div>
+                            <div class="stat-val" id="stat-accuracy">0%</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Strongest Topic</div>
+                            <div class="stat-val" id="stat-strong" style="color:var(--correct-color)">-</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Needs Practice</div>
+                            <div class="stat-val" id="stat-weak" style="color:var(--wrong-color)">-</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:40px; text-align:center;">
+                        <a href="../index.html" class="btn btn-secondary" style="display:inline-flex;">Back to
+                            Dashboard</a>
+                        <button class="btn btn-primary" onclick="location.reload()"
+                            style="display:inline-flex; margin-left:10px;">Try Again</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <canvas id="confetti"></canvas>
+
+    <script>
+        // --- DATASETS ---
+        const levels = [
+            {
+                title: "Part A: Multiple Choice",
+                questions: [
+                    {
+                        q: "Which of the following shows the correct numeral for <b>seventy-two thousand, eight hundred, forty-five</b>?",
+                        options: ["72,845", "72,854", "78,245", "78,254"],
+                        a: "72,845",
+                        prompt: "Select the correct numeral:",
+                        steps: ["Read nicely: 'Seventy-two thousand' = 72,000", "'Eight hundred, forty-five' = 845", "Total: 72,845"]
+                    },
+                    {
+                        q: "The digit <b>8</b> in 28,095 stands for ________.",
+                        options: ["8 ten thousands", "8 thousands", "8 hundreds", "8 tens"],
+                        a: "8 thousands",
+                        prompt: "Indentify the place value:",
+                        steps: ["28,095 -> The 8 is in the thousands place.", "Value = 8,000 or 8 thousands."]
+                    },
+                    {
+                        q: "Which of the following is <b>not</b> a common multiple of 8 and 6?",
+                        options: ["18", "24", "72", "144"],
+                        a: "18",
+                        prompt: "Find the odd one out:",
+                        steps: ["Multiples of 6: 6, 12, 18, 24...", "Multiples of 8: 8, 16, 24...", "18 is a multiple of 6, but NOT a multiple of 8."]
+                    },
+                    {
+                        q: "Round each number to the nearest ten and estimate the value of: <br><b>1,987 + 5,248</b>",
+                        options: ["7,220", "7,230", "7,240", "7,250"],
+                        a: "7,240",
+                        prompt: "Estimate the sum:",
+                        steps: ["1,987 rounds to 1,990 (nearest ten).", "5,248 rounds to 5,250 (nearest ten).", "1,990 + 5,250 = 7,240"]
+                    },
+                    {
+                        q: "Which of the following is a common factor of 28 and 36?",
+                        options: ["3", "4", "6", "8"],
+                        a: "4",
+                        prompt: "Find the common factor:",
+                        steps: ["Factors of 28: 1, 2, 4, 7...", "Factors of 36: 1, 2, 3, 4...", "4 is found in both lists."]
+                    },
+                    {
+                        q: "9,050, ____, 7,030, 6,020, 5,010. What is the missing number?",
+                        options: ["8,020", "8,030", "8,040", "8,050"],
+                        a: "8,040",
+                        prompt: "Complete the pattern:",
+                        steps: ["The pattern decreases by 1,010 each step.", "7,030 + 1,010 = 8,040"]
+                    },
+                    {
+                        q: "Which of the following has the greatest value?",
+                        options: ["2,000 less than 10,000", "2,000 less than 8,000", "2,000 more than 1,000", "2,000 more than 800"],
+                        a: "2,000 less than 10,000",
+                        prompt: "Compare values:",
+                        steps: ["(1) 10,000 - 2,000 = 8,000", "(2) 8,000 - 2,000 = 6,000", "(3) 1,000 + 2,000 = 3,000", "(4) 800 + 2,000 = 2,800", "8,000 is the greatest."]
+                    },
+                    {
+                        q: "Which of the following shows the first four multiples of 7?",
+                        options: ["7, 14, 20, 27", "7, 14, 21, 28", "7, 14, 28, 35", "7, 14, 28, 42"],
+                        a: "7, 14, 21, 28",
+                        prompt: "Check your times table:",
+                        steps: ["7 x 1 = 7", "7 x 2 = 14", "7 x 3 = 21", "7 x 4 = 28"]
+                    },
+                    {
+                        q: "49,753 = _____ + 9 thousands + 7 hundreds + 5 tens + 3 ones",
+                        options: ["400 ten thousands", "40 ten thousands", "4 ten thousands", "4 thousands"],
+                        a: "4 ten thousands",
+                        prompt: "Find the missing part:",
+                        steps: ["The digit 4 is in the ten thousands place.", "Its value is 40,000, which is '4 ten thousands'."]
+                    },
+                    {
+                        q: "Estimate the value of <b>404 × 9</b>.",
+                        options: ["3,600", "3,636", "3,645", "4,000"],
+                        a: "3,600",
+                        prompt: "Round and multiply:",
+                        steps: ["404 is approximately 400.", "400 x 9 = 3,600"]
+                    }
+                ]
+            },
+            {
+                title: "Part B: Structured Questions",
+                questions: [
+                    {
+                        q: "Write <b>49,005</b> in words.",
+                        a: "forty-nine thousand and five",
+                        type: "text",
+                        steps: ["Break it down: 49,000 -> Forty-nine thousand", "005 -> five", "Combine: Forty-nine thousand and five"]
+                    },
+                    {
+                        q: "In 94,857, the digit 4 is in the ________ place.",
+                        a: "thousands",
+                        type: "text",
+                        steps: ["Look at the position of 4.", "It's the 4th digit from the right.", "Ones, Tens, Hundreds, Thousands."]
+                    },
+                    {
+                        q: "Arrange these numbers in ascending order: <br><b>15,050, 15,005, 15,500</b> <br>(Separate with commas)",
+                        a: "15,005, 15,050, 15,500",
+                        type: "list",
+                        steps: ["Compare smallest to largest.", "15,005 is smallest.", "15,050 is next.", "15,500 is largest."]
+                    },
+                    {
+                        q: "Round each number to the nearest ten and estimate: <br><b>559 + 19 + 942</b>",
+                        a: "1520",
+                        type: "text",
+                        steps: ["559 -> 560", "19 -> 20", "942 -> 940", "560 + 20 + 940 = 1,520"]
+                    },
+                    {
+                        q: "The seventh multiple of 9 is ________.",
+                        a: "63",
+                        type: "text",
+                        steps: ["Multiply 7 by 9.", "7 x 9 = 63"]
+                    },
+                    {
+                        q: "Round <b>89,091</b> to the nearest hundred.",
+                        a: "89100",
+                        type: "text",
+                        steps: ["Look at the tens digit: 9.", "Since 9 > 5, round the hundreds up.", "0 becomes 1.", "Result: 89,100"]
+                    },
+                    {
+                        q: "50 thousands + 90 tens + 7 ones = ________",
+                        a: "50907",
+                        type: "text",
+                        steps: ["50 thousands = 50,000", "90 tens = 900", "7 ones = 7", "Sum: 50,907"]
+                    },
+                    {
+                        q: "List all the factors of <b>45</b>. (Separate with commas)",
+                        a: "1, 3, 5, 9, 15, 45",
+                        type: "list",
+                        steps: ["1 x 45", "3 x 15", "5 x 9"]
+                    },
+                    {
+                        q: "Add 18,360 and 2,598. The digit ________ is in the thousands place.",
+                        a: "0",
+                        type: "text",
+                        steps: ["18,360 + 2,598 = 20,958", "The thousands digit (4th from right) is 0."]
+                    },
+                    {
+                        q: "List the first two common multiples of 4 and 6.",
+                        a: "12, 24",
+                        type: "list",
+                        steps: ["Multiples of 4: 4, 8, 12, 16, 20, 24...", "Multiples of 6: 6, 12, 18, 24...", "Common: 12, 24"]
+                    }
+                ]
+            }
+        ];
+
+        // State
+        let state = {
+            lvl: 0,
+            q: 0,
+            answers: {}, // Key: "lvl-q" -> true/false
+            selectedOption: null
+        };
+
+        // --- AUDIO ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.1);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(); osc.stop(now + 0.5);
+            } else if (type === 'wrong') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(150, now);
+                osc.frequency.linearRampToValueAtTime(100, now + 0.15);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(); osc.stop(now + 0.3);
+            } else if (type === 'finish') {
+                // Fanfare
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                gain.gain.setValueAtTime(0.2, now);
+                osc.start(now); osc.stop(now + 0.1);
+
+                const o2 = audioCtx.createOscillator();
+                const g2 = audioCtx.createGain();
+                o2.connect(g2); g2.connect(audioCtx.destination);
+                o2.frequency.value = 500; g2.gain.value = 0.2;
+                o2.start(now + 0.1); o2.stop(now + 0.2);
+
+                const o3 = audioCtx.createOscillator();
+                const g3 = audioCtx.createGain();
+                o3.connect(g3); g3.connect(audioCtx.destination);
+                o3.frequency.value = 800; g3.gain.value = 0.2;
+                o3.start(now + 0.2); o3.stop(now + 0.8);
+            }
+        }
+
+        // --- INIT ---
+        function init() {
+            // Build Progress Bar Segments
+            const pBar = document.getElementById('progress-container');
+            pBar.innerHTML = '';
+            levels.forEach((l, i) => {
+                const seg = document.createElement('div');
+                seg.className = 'level-progress-segment';
+                seg.id = `prog-seg-${i}`;
+                seg.innerHTML = `<div class="level-progress-fill"></div>`;
+                pBar.appendChild(seg);
+            });
+        }
+
+        function startGame() {
+            document.getElementById('view-start').classList.remove('active');
+            document.getElementById('view-question').classList.add('active');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const levelData = levels[state.lvl];
+            const qData = levelData.questions[state.q];
+            state.selectedOption = null; // Reset selection
+
+            document.getElementById('q-section-title').textContent = `${levelData.title} • Q${state.q + 1}`;
+            document.getElementById('q-progress').textContent = `${state.q + 1} / ${levelData.questions.length}`;
+
+            // Render Content
+            const prompt = qData.prompt ? `<div class="q-prompt">${qData.prompt}</div>` : '';
+
+            let contentHTML = '';
+
+            if (qData.options) {
+                // MCQ Mode
+                let buttonsHTML = '<div class="mcq-container">';
+                qData.options.forEach((opt) => {
+                    buttonsHTML += `<div class="mcq-btn" onclick="selectOption(this, '${opt.replace(/'/g, "\\'")}')">${opt}</div>`;
+                });
+                buttonsHTML += '</div>';
+                contentHTML = `${prompt}<div>${qData.q}</div>${buttonsHTML}`;
+            } else {
+                // Text Input Mode
+                const inputHTML = `<input type="text" id="user-input" autocomplete="off" onkeypress="handleEnter(event)">`;
+                contentHTML = `${prompt}<div>${qData.q}</div>${inputHTML}`;
+            }
+
+            document.getElementById('q-render-area').innerHTML = contentHTML;
+
+            // State resets
+            if (!qData.options) {
+                document.getElementById('user-input').value = '';
+                document.getElementById('user-input').focus();
+            }
+
+            // Buttons
+            document.getElementById('btn-check').style.display = 'inline-flex';
+            document.getElementById('btn-next').style.display = 'none';
+            document.getElementById('btn-prev').disabled = (state.lvl === 0 && state.q === 0);
+
+            document.getElementById('fb-overlay').style.opacity = 0;
+            document.getElementById('fb-overlay').className = 'feedback-overlay';
+            document.getElementById('q-feedback-text').textContent = '';
+
+            // Update Progress Bars
+            updateProgressUI();
+        }
+
+        function selectOption(btn, val) {
+            // Unselect others
+            document.querySelectorAll('.mcq-btn').forEach(b => b.classList.remove('selected'));
+            // Select click
+            btn.classList.add('selected');
+            state.selectedOption = val;
+        }
+
+        function updateProgressUI() {
+            levels.forEach((l, i) => {
+                const fill = document.querySelector(`#prog-seg-${i} .level-progress-fill`);
+                if (i < state.lvl) fill.style.width = '100%';
+                else if (i === state.lvl) {
+                    const pct = ((state.q) / l.questions.length) * 100;
+                    fill.style.width = pct + '%';
+                } else {
+                    fill.style.width = '0%';
+                }
+            });
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') {
+                if (document.getElementById('btn-check').style.display !== 'none') {
+                    checkCurrent();
+                } else {
+                    nextQuestion();
+                }
+            }
+        }
+
+        function clean(str) {
+            if (!str) return '';
+            return str.toString().toLowerCase().replace(/,/g, '').replace(/ /g, '').replace(/-/g, '').replace(/\band\b/g, '');
+        }
+
+        function checkCurrent() {
+            const levelData = levels[state.lvl];
+            const qData = levelData.questions[state.q];
+
+            let val = '';
+
+            if (qData.options) {
+                if (!state.selectedOption) {
+                    // Shake if nothing selected
+                    document.getElementById('q-card').classList.add('shake');
+                    setTimeout(() => document.getElementById('q-card').classList.remove('shake'), 500);
+                    return;
+                }
+                val = clean(state.selectedOption);
+            } else {
+                const input = document.getElementById('user-input');
+                val = clean(input.value);
+            }
+
+            // Validate
+            let isCorrect = false;
+            const correctRaw = qData.a;
+
+            if (qData.type === 'list') {
+                const arrA = clean(correctRaw).split(',').sort().join(',');
+                const arrB = clean(val).split(/[.,;]+/).filter(x => x).sort().join(',');
+                // Fallback for visual list match if format differs
+                // Check if user input contains all parts
+                if (clean(qData.a) === clean(val)) isCorrect = true;
+                // Try simpler logic for now: exact clean match since I standardized list inputs in data
+                if (arrA === arrB) isCorrect = true;
+            } else {
+                // Standard match
+                // Handling words like "Forty-nine" vs "forty nine" handled by clean() removing dash/space
+                if (val === clean(correctRaw)) isCorrect = true;
+            }
+
+            // Save Result
+            const key = `${state.lvl}-${state.q}`;
+            state.answers[key] = isCorrect;
+
+            // UI Feedback
+            if (isCorrect) {
+                document.getElementById('fb-overlay').className = 'feedback-overlay'; // default green
+                document.getElementById('fb-overlay').style.backgroundColor = 'rgba(16, 185, 129, 0.2)';
+                document.getElementById('fb-overlay').style.opacity = 1;
+                document.getElementById('q-feedback-text').textContent = "Correct! Well done.";
+                document.getElementById('q-feedback-text').style.color = "var(--correct-color)";
+                playSound('correct');
+                startConfetti(20);
+
+                if (qData.options) {
+                    // Highlight correct button
+                    document.querySelectorAll('.mcq-btn').forEach(b => {
+                        if (b.classList.contains('selected')) b.classList.add('correct-visual');
+                    });
+                    // Disable all
+                    document.querySelectorAll('.mcq-btn').forEach(b => b.style.pointerEvents = 'none');
+                } else {
+                    document.getElementById('user-input').disabled = true;
+                }
+
+                document.getElementById('btn-check').style.display = 'none';
+                document.getElementById('btn-next').style.display = 'inline-flex';
+                document.getElementById('btn-next').focus();
+
+            } else {
+                document.getElementById('fb-overlay').className = 'feedback-overlay wrong';
+                document.getElementById('fb-overlay').style.opacity = 1;
+                document.getElementById('q-feedback-text').textContent = "Don't give up! Try again.";
+                document.getElementById('q-feedback-text').style.color = "var(--wrong-color)";
+                playSound('wrong');
+                document.getElementById('q-card').classList.add('shake');
+                setTimeout(() => document.getElementById('q-card').classList.remove('shake'), 500);
+
+                if (qData.options) {
+                    document.querySelectorAll('.mcq-btn').forEach(b => {
+                        if (b.classList.contains('selected')) b.classList.add('wrong-visual');
+                    });
+                }
+
+                // GUIDED MODE TRIGGER
+                if (qData.steps && qData.steps.length > 0) {
+                    startGuidedMode(qData.steps);
+                }
+            }
+        }
+
+        // --- GUIDED MODE ---
+        let guidedStep = 0;
+        let currentSteps = [];
+
+        function startGuidedMode(steps) {
+            currentSteps = steps;
+            guidedStep = 0;
+
+            const area = document.getElementById('q-render-area');
+            if (document.getElementById('guided-box')) return;
+
+            // Overlay content but keep it visible underneath
+            const existingContent = area.innerHTML;
+
+            // NOTE: For MCQ, we don't want to re-render buttons as checked/unchecked, so we use current DOM
+            // We just wrap it. But replacing innerHTML destroys event listeners if not careful.
+            // Better to append the guided box absolutely positioned over the card.
+
+            // Simpler approach: Create the box and append to q-card (parent), not render area
+            const wrapper = document.createElement('div');
+            wrapper.id = 'guided-box';
+            wrapper.className = 'guided-box';
+            wrapper.onclick = nextGuidedStep;
+            wrapper.innerHTML = `
+                <div style="font-size:1rem; color:var(--accent-teal); margin-bottom:10px;">💡 Guided Solution (Tap to Reveal)</div>
+                <div id="guided-steps-container" style="text-align:left;"></div>
+                <div id="tap-hint" style="margin-top:20px; font-size:0.9rem; animation: pulse 1.5s infinite;">Tap to see next step 👇</div>
+             `;
+
+            document.getElementById('q-card').appendChild(wrapper);
+
+            // Add global styles if needed (already added in style tag, but dynamic check is safe)
+            if (!document.getElementById('guided-style')) {
+                const style = document.createElement('style');
+                style.id = 'guided-style';
+                style.innerHTML = `
+                     .guided-box {
+                         background: rgba(0,0,0,0.85);
+                         border: 2px solid var(--accent-teal);
+                         border-radius: 12px;
+                         padding: 20px;
+                         position: absolute;
+                         top: 0; left: 0; right: 0; bottom: 0;
+                         z-index: 50;
+                         cursor: pointer;
+                         backdrop-filter: blur(5px);
+                         display: flex;
+                         flex-direction: column;
+                         justify-content: center;
+                     }
+                     .step-item {
+                         margin-bottom: 10px;
+                         padding: 10px;
+                         background: rgba(255,255,255,0.1);
+                         border-radius: 8px;
+                         animation: slideIn 0.3s ease-out;
+                     }
+                     @keyframes slideIn {
+                         from { opacity:0; transform:translateX(-20px); }
+                         to { opacity:1; transform:translateX(0); }
+                     }
+                     @keyframes pulse {
+                         0% { opacity: 0.5; }
+                         50% { opacity: 1; }
+                         100% { opacity: 0.5; }
+                     }
+                 `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function nextGuidedStep() {
+            // Stop propagation if clicking the Retry button
+            if (event.target.tagName === 'BUTTON') return;
+
+            if (guidedStep < currentSteps.length) {
+                const container = document.getElementById('guided-steps-container');
+                const div = document.createElement('div');
+                div.className = 'step-item';
+                div.textContent = currentSteps[guidedStep];
+                container.appendChild(div);
+                guidedStep++;
+
+                if (guidedStep >= currentSteps.length) {
+                    document.getElementById('tap-hint').textContent = "Now try again!";
+                    document.getElementById('tap-hint').style.color = "var(--correct-color)";
+
+                    // Allow retry
+                    setTimeout(() => {
+                        const hint = document.getElementById('tap-hint');
+                        hint.innerHTML = `<button class="btn btn-primary" onclick="closeGuided(event)" style="z-index:100;">Got it! Retry</button>`;
+                        // Remove onclick from wrapper to prevent conflict
+                    }, 500);
+                }
+            }
+        }
+
+        function closeGuided(e) {
+            if (e) e.stopPropagation();
+            const box = document.getElementById('guided-box');
+            if (box) box.remove();
+
+            // Reset for retry? Use keeps current selection but maybe changes color back to neutral if needed?
+            // Actually, keep wrong visual is fine, user changes selection.
+            if (state.selectedOption) {
+                document.querySelectorAll('.mcq-btn').forEach(b => {
+                    b.classList.remove('wrong-visual');
+                    b.classList.remove('selected');
+                });
+                state.selectedOption = null;
+            }
+            if (document.getElementById('user-input')) {
+                document.getElementById('user-input').value = '';
+                document.getElementById('user-input').focus();
+            }
+        }
+
+        function nextQuestion() {
+            const levelData = levels[state.lvl];
+
+            if (state.q < levelData.questions.length - 1) {
+                state.q++;
+                renderQuestion();
+            } else {
+                // End of Level
+                if (state.lvl < levels.length - 1) {
+                    state.lvl++;
+                    state.q = 0;
+                    playSound('finish');
+                    renderQuestion();
+                } else {
+                    // End of Game
+                    finishGame();
+                }
+            }
+        }
+
+        function prevQuestion() {
+            if (state.q > 0) {
+                state.q--;
+                renderQuestion();
+            } else if (state.lvl > 0) {
+                state.lvl--;
+                state.q = levels[state.lvl].questions.length - 1;
+                renderQuestion();
+            }
+        }
+
+        function nextLevel() {
+            if (state.lvl < levels.length - 1) {
+                state.lvl++;
+                state.q = 0;
+                renderQuestion();
+                playSound('correct');
+            }
+        }
+
+        function prevLevel() {
+            if (state.lvl > 0) {
+                state.lvl--;
+                state.q = 0;
+                renderQuestion();
+            }
+        }
+
+        function finishGame() {
+            document.getElementById('view-question').classList.remove('active');
+            document.getElementById('view-analysis').classList.add('active');
+            playSound('finish');
+            startConfetti(200);
+            calculateStats();
+        }
+
+        function calculateStats() {
+            let totalQ = 0;
+            let totalCorrect = 0;
+            let sectionScores = [];
+
+            levels.forEach((l, lvlIdx) => {
+                let secCorrect = 0;
+                l.questions.forEach((q, qIdx) => {
+                    totalQ++;
+                    if (state.answers[`${lvlIdx}-${qIdx}`]) {
+                        totalCorrect++;
+                        secCorrect++;
+                    }
+                });
+                sectionScores.push({ name: l.title, score: secCorrect, total: l.questions.length, pct: secCorrect / l.questions.length });
+            });
+
+            // UI Updates
+            const acc = Math.round((totalCorrect / totalQ) * 100);
+            document.getElementById('final-score').textContent = `${acc}%`;
+            document.getElementById('stat-attempted').textContent = `${totalCorrect} / ${totalQ} Correct`;
+            document.getElementById('stat-accuracy').textContent = `${acc}%`;
+
+            if (acc >= 80) document.getElementById('final-msg').textContent = "Outstanding! You're a Math Wizard! 🧙‍♂️";
+            else if (acc >= 50) document.getElementById('final-msg').textContent = "Good job! Keep practicing! 💪";
+            else document.getElementById('final-msg').textContent = "Don't give up! You'll get it next time. 🌱";
+
+            // Find Strong/Weak
+            sectionScores.sort((a, b) => b.pct - a.pct);
+            document.getElementById('stat-strong').textContent = sectionScores[0].name;
+            document.getElementById('stat-weak').textContent = sectionScores[sectionScores.length - 1].name;
+        }
+
+        // --- FX ---
+        function startConfetti(count = 100) {
+            const canvas = document.getElementById('confetti');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const pieces = [];
+            for (let i = 0; i < count; i++) {
+                pieces.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    vx: Math.random() * 4 - 2,
+                    vy: Math.random() * 4 + 4,
+                    color: `hsl(${Math.random() * 360}, 70%, 50%)`
+                });
+            }
+
+            let frame = 0;
+            function draw() {
+                if (frame > 200) { // Stop after some time
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    return;
+                }
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                pieces.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if (p.y > canvas.height) p.y = -10;
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(p.x, p.y, 8, 8);
+                });
+                frame++;
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
