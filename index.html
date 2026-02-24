@@ -405,13 +405,184 @@
             }
         }
 
+        /* ── Footer ──────────────────────────────────────────────── */
         footer {
-            text-align: center;
-            padding: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            margin-top: 60px;
+            background: #080f1d;
+            padding: 48px 40px 28px;
             color: var(--text-secondary);
             font-size: 0.9rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a,
+        .footer-col button.footer-link {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+            text-align: left;
+        }
+
+        .footer-col a:hover,
+        .footer-col button.footer-link:hover {
+            color: #f1f5f9;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 50px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        /* ── PDF Modal ───────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            width: 90%;
+            max-width: 560px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeInDown 0.25s ease;
+        }
+
+        .modal-box h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #f1f5f9;
+        }
+
+        .modal-box .modal-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #f1f5f9;
+        }
+
+        .pdf-group-header {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #475569;
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .pdf-group-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .pdf-subject-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin: 12px 0 6px 4px;
+            font-weight: 600;
+        }
+
+        .pdf-download-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .pdf-download-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.4);
+            color: #a5b4fc;
+        }
+
+        .pdf-download-btn .icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .pdf-empty {
+            text-align: center;
+            padding: 32px;
+            color: #475569;
+            font-size: 0.875rem;
         }
     </style>
 </head>
@@ -604,6 +775,16 @@
                         <p>Belajar kata terbitan with notes and 30 questions.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="content/SPM_Syllabus/Form5/BM/KOMSAS/Novel_Silir_Daksina/interactive_synopsis.html"
+                        class="card sub-bm">
+                        <div class="card-tag">Module 3 - KOMSAS</div>
+                        <h3>Novel Silir Daksina (Interactive)</h3>
+                        <p>Baca dan fahami sinopsis novel Silir Daksina mengikut bab demi bab dengan visual interaktif.
+                        </p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Reading <span>&rarr;</span></div>
                         </div>
                     </a>
                 </div>
@@ -1018,12 +1199,115 @@
     </main>
 
     <footer>
-        <p>&copy; 2026 Mastery Academy. Designed for First Principles Excellence.</p>
+        <div class="footer-inner">
+            <!-- Resources -->
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <button class="footer-link" onclick="openPdfModal()">📄 Download PDF Notes</button>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <a href="mailto:admin@masteryacademy.edu">✉️ admin@masteryacademy.edu</a>
+                <a href="#">💬 WhatsApp Support</a>
+                <a href="#">📣 Telegram Community</a>
+            </div>
+
+            <!-- About -->
+            <div class="footer-col">
+                <h4>Mastery Academy</h4>
+                <p style="font-size:0.875rem; line-height:1.7; color:#64748b;">
+                    A first-principles learning platform built for SPM, UEC, IGCSE, and Singapore syllabus students.
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Mastery Academy &mdash; Designed for First Principles Excellence.
+        </div>
     </footer>
+
+    <!-- ── PDF Download Modal ──────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="pdf-modal" onclick="closePdfModal(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closePdfModalDirect()">&times;</button>
+            <h2>📥 Download PDF Notes</h2>
+            <p class="modal-subtitle">Click any file below to download course materials.</p>
+            <div id="pdf-list"></div>
+        </div>
+    </div>
 
     <!-- Script to handle Tab Switching and Layer Navigation -->
     <script>
-        // Layer 1 Navigation: Switching between Syllabuses (SPM, UEC, IGCSE, SG)
+        // ── PDF Resources Data ────────────────────────────────────────────────────
+        // To add a new PDF: add an entry to this array and drop the file in the
+        // corresponding subfolder under resources/pdf/. See DEVELOPER_GUIDE.md.
+        const pdfResources = [
+            // ── SPM ──────────────────────────────────────────────────────────────
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Peribahasa Notes", file: "resources/pdf/SPM/BM/Peribahasa_Notes.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Kata Terbitan Notes", file: "resources/pdf/SPM/BM/Kata_Terbitan_Notes.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Nota KOMSAS - Silir Daksina", file: "resources/pdf/SPM/BM/Nota_Komsas_Silir_Daksina.pdf" },
+            // ── UEC ──────────────────────────────────────────────────────────────
+            { syllabus: "UEC", subject: "English", label: "Reading Comprehension Guide", file: "resources/pdf/UEC/English/Reading_Guide.pdf" },
+            { syllabus: "UEC", subject: "English", label: "Summary Writing Workshop", file: "resources/pdf/UEC/English/Summary_Writing.pdf" },
+            // ── IGCSE ────────────────────────────────────────────────────────────
+            // { syllabus: "IGCSE", subject: "English", label: "IGCSE English Notes", file: "resources/pdf/IGCSE/English/Notes.pdf" },
+            // ── Singapore ────────────────────────────────────────────────────────
+            { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Whole Numbers Review", file: "resources/pdf/Singapore/Math/Whole_Numbers_Review.pdf" },
+        ];
+
+        // ── PDF Modal Logic ───────────────────────────────────────────────────────
+        function openPdfModal() {
+            const modal = document.getElementById('pdf-modal');
+            const list = document.getElementById('pdf-list');
+
+            // Group resources by syllabus → subject
+            const grouped = {};
+            pdfResources.forEach(r => {
+                if (!grouped[r.syllabus]) grouped[r.syllabus] = {};
+                if (!grouped[r.syllabus][r.subject]) grouped[r.syllabus][r.subject] = [];
+                grouped[r.syllabus][r.subject].push(r);
+            });
+
+            if (pdfResources.length === 0) {
+                list.innerHTML = '<p class="pdf-empty">No PDF files have been added yet.</p>';
+            } else {
+                let html = '';
+                Object.keys(grouped).forEach(syllabus => {
+                    html += `<div class="pdf-group-header">${syllabus}</div>`;
+                    Object.keys(grouped[syllabus]).forEach(subject => {
+                        html += `<div class="pdf-subject-label">${subject}</div>`;
+                        grouped[syllabus][subject].forEach(item => {
+                            html += `<a class="pdf-download-btn" href="${item.file}" download target="_blank">
+                                        <span class="icon">⬇️</span>
+                                        <span>${item.label}</span>
+                                     </a>`;
+                        });
+                    });
+                });
+                list.innerHTML = html;
+            }
+
+            modal.classList.add('open');
+        }
+
+        function closePdfModal(event) {
+            // Only close if clicking the overlay background, not the modal box itself
+            if (event.target === document.getElementById('pdf-modal')) {
+                document.getElementById('pdf-modal').classList.remove('open');
+            }
+        }
+
+        function closePdfModalDirect() {
+            document.getElementById('pdf-modal').classList.remove('open');
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closePdfModalDirect();
+        });
+
+        // ── Existing Navigation Logic ─────────────────────────────────────────────
         function switchSyllabus(event, syllabusId) {
             // Remove 'active' class from all tab buttons
             const tabBtns = document.querySelectorAll('.tab-btn');

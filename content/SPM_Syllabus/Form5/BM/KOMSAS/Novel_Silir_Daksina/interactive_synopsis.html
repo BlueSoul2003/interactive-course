@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Silir Daksina - Sinopsis Interaktif</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .story-text {
+            font-family: 'Merriweather', serif;
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        .sentence-block {
+            display: block;
+            padding: 10px 14px;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            transition: background 0.25s ease, opacity 0.25s ease;
+            cursor: pointer;
+        }
+
+        .sentence-block.dimmed {
+            opacity: 0.35;
+        }
+
+        .sentence-block.active {
+            background-color: #dbeafe;
+            box-shadow: 0 0 0 3px #bfdbfe;
+        }
+
+        .sentence-block.done {
+            opacity: 1;
+        }
+
+        .original-text {
+            color: #1e293b;
+            font-weight: 500;
+        }
+
+        .sentence-block.active .original-text {
+            color: #1d4ed8;
+        }
+
+        .sentence-block.dimmed .original-text {
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .trans-en {
+            margin-top: 6px;
+            font-size: 0.875rem;
+            font-style: italic;
+            color: #64748b;
+            padding-left: 12px;
+            border-left: 3px solid #93c5fd;
+            line-height: 1.6;
+        }
+
+        .trans-zh {
+            margin-top: 6px;
+            font-size: 0.875rem;
+            color: #64748b;
+            padding-left: 12px;
+            border-left: 3px solid #6ee7b7;
+            line-height: 1.6;
+        }
+
+        .trans-loading {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            animation: pulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: 0.4
+            }
+        }
+
+        .btn-lang {
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .btn-lang.active {
+            background: #1d4ed8 !important;
+            color: #fff !important;
+        }
+
+        .image-container img {
+            transition: opacity 0.4s ease;
+        }
+
+        /* chapter select style */
+        #chapter-select {
+            max-width: 250px;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav
+        class="w-full px-4 py-3 flex items-center justify-between border-b border-gray-200 bg-white shadow-sm sticky top-0 z-50 gap-3 flex-wrap">
+        <a href="../../../../../../index.html"
+            class="text-blue-600 font-semibold hover:text-blue-800 transition-colors text-sm flex-shrink-0">
+            &larr; Kembali
+        </a>
+
+        <!-- Chapter switcher -->
+        <select id="chapter-select"
+            class="text-sm border border-gray-300 rounded-lg px-3 py-1.5 bg-gray-50 outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer">
+        </select>
+
+        <!-- Translation buttons + title -->
+        <div class="flex items-center gap-2 flex-shrink-0">
+            <span class="text-xs text-gray-400 hidden sm:block mr-1">Terjemah:</span>
+            <button id="btn-en"
+                class="btn-lang px-3 py-1.5 text-xs font-bold border border-gray-300 rounded-l-lg bg-white text-gray-600 hover:bg-gray-100">EN</button>
+            <button id="btn-zh"
+                class="btn-lang px-3 py-1.5 text-xs font-bold border border-gray-300 border-l-0 rounded-r-lg bg-white text-gray-600 hover:bg-gray-100">中文</button>
+            <span class="text-sm font-bold text-slate-700 ml-3 hidden md:block">Silir Daksina</span>
+        </div>
+    </nav>
+
+    <!-- Hint bar -->
+    <div class="bg-blue-50 border-b border-blue-100 text-center text-xs text-blue-500 py-1.5 px-4">
+        Tekan sebarang kekunci / klik teks untuk maju • ← ArrowLeft / ArrowUp untuk undur
+    </div>
+
+    <!-- Main -->
+    <main class="flex-grow flex flex-col lg:flex-row max-w-7xl mx-auto w-full p-4 lg:p-8 gap-8 items-start">
+
+        <!-- Image panel -->
+        <div class="w-full lg:w-5/12 flex justify-center lg:sticky lg:top-28">
+            <div
+                class="image-container relative rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gray-100 aspect-[4/3] w-full max-w-md">
+                <img id="chapter-image" src="" alt="Ilustrasi Bab" class="absolute inset-0 w-full h-full object-cover">
+                <!-- Loading spinner -->
+                <div id="img-spinner" class="absolute inset-0 flex items-center justify-center bg-gray-100">
+                    <svg class="animate-spin h-10 w-10 text-slate-300" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                        </circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Text panel -->
+        <div class="w-full lg:w-7/12 flex flex-col pb-32" id="text-area">
+            <h1 id="chapter-title"
+                class="text-2xl lg:text-3xl font-bold mb-6 text-slate-800 border-b-2 border-slate-100 pb-4"></h1>
+            <div id="content-container" class="story-text text-slate-700"></div>
+        </div>
+    </main>
+
+    <!-- Bottom progress bar -->
+    <footer
+        class="fixed bottom-0 w-full bg-white border-t border-gray-200 px-4 py-3 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.08)] z-50"
+        id="progress-bar-container">
+        <div class="max-w-4xl mx-auto flex items-center gap-4">
+            <span class="text-xs font-semibold text-slate-500 w-16 text-right flex-shrink-0" id="progress-text"></span>
+            <div class="flex-grow h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div id="progress-fill" class="h-full bg-blue-600 transition-all duration-300 w-0"></div>
+            </div>
+            <button id="next-chapter-btn"
+                class="hidden flex-shrink-0 px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow-sm">
+                Bab Seterusnya &rarr;
+            </button>
+        </div>
+    </footer>
+
+    <script src="chapters.js"></script>
+    <script>
+        // ─── State ────────────────────────────────────────────────────────────────
+        let curChap = 0;
+        let curSent = 0;
+        const langOn = { en: false, zh: false };
+
+        // Translation caches keyed by chapterIndex
+        const transCache = {};   // transCache[chapIdx] = { en: [...], zh: [...] }
+        // Pending fetch flags per chapter+lang
+        const fetching = {};
+
+        // ─── DOM refs ─────────────────────────────────────────────────────────────
+        const titleEl = document.getElementById('chapter-title');
+        const contentEl = document.getElementById('content-container');
+        const imageEl = document.getElementById('chapter-image');
+        const imgSpinner = document.getElementById('img-spinner');
+        const progressFill = document.getElementById('progress-fill');
+        const progressText = document.getElementById('progress-text');
+        const nextBtn = document.getElementById('next-chapter-btn');
+        const selectEl = document.getElementById('chapter-select');
+
+        // ─── Populate chapter dropdown ─────────────────────────────────────────────
+        synopsisData.forEach((chap, i) => {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = chap.title;
+            selectEl.appendChild(opt);
+        });
+        selectEl.addEventListener('change', e => {
+            curChap = parseInt(e.target.value);
+            curSent = 0;
+            renderChapter();
+        });
+
+        // ─── Lang buttons ──────────────────────────────────────────────────────────
+        ['en', 'zh'].forEach(lang => {
+            const btn = document.getElementById('btn-' + lang);
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                langOn[lang] = !langOn[lang];
+                btn.classList.toggle('active', langOn[lang]);
+                // If turning on, kick off translations if not cached
+                if (langOn[lang]) fetchTranslations(curChap, lang);
+                refreshTranslationDisplay();
+            });
+        });
+
+        // ─── Translation via MyMemory API ─────────────────────────────────────────
+        const MY_MEMORY_LANGS = { en: 'en-GB', zh: 'zh-CN' };
+
+        async function translateSentence(text, targetLang) {
+            const langCode = MY_MEMORY_LANGS[targetLang] || targetLang;
+            const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ms|${langCode}`;
+            try {
+                const res = await fetch(url);
+                const json = await res.json();
+                return json.responseData?.translatedText || text;
+            } catch {
+                return text;
+            }
+        }
+
+        async function fetchTranslations(chapIdx, lang) {
+            const key = `${chapIdx}_${lang}`;
+            if (fetching[key]) return;     // already in flight
+            if (transCache[chapIdx]?.[lang]) return; // already cached
+
+            fetching[key] = true;
+            const sentences = synopsisData[chapIdx].sentences;
+
+            // Check if it's already baked into the data file
+            const dataKey = lang === 'en' ? 'en_sentences' : 'zh_sentences';
+            if (synopsisData[chapIdx][dataKey] && synopsisData[chapIdx][dataKey].length === sentences.length) {
+                if (!transCache[chapIdx]) transCache[chapIdx] = {};
+                transCache[chapIdx][lang] = synopsisData[chapIdx][dataKey];
+                fetching[key] = false;
+                if (curChap === chapIdx) refreshTranslationDisplay();
+                return;
+            }
+
+            // Fetch one by one, updating UI as each arrives
+            if (!transCache[chapIdx]) transCache[chapIdx] = {};
+            if (!transCache[chapIdx][lang]) transCache[chapIdx][lang] = new Array(sentences.length).fill(null);
+
+            for (let i = 0; i < sentences.length; i++) {
+                let textToTranslate = sentences[i];
+                // Strip markdown markers for translation
+                const headingMatch = textToTranslate.match(/^#{2,3}\s+(.+)/);
+                if (headingMatch) textToTranslate = headingMatch[2];
+
+                const translated = await translateSentence(textToTranslate, lang);
+                transCache[chapIdx][lang][i] = translated;
+                // Live update the current chapter's DOM if still viewing it
+                if (curChap === chapIdx && langOn[lang]) {
+                    updateTranslationEl(i, lang, translated);
+                }
+            }
+            fetching[key] = false;
+        }
+
+        function updateTranslationEl(sentIdx, lang, text) {
+            const block = document.getElementById('s-' + sentIdx);
+            if (!block) return;
+            const cls = lang === 'en' ? 'trans-en' : 'trans-zh';
+            let el = block.querySelector('.' + cls);
+            if (!el) {
+                el = document.createElement('div');
+                el.className = cls;
+                // Heading translation style tweak
+                if (block.dataset.isHeading === 'true') {
+                    el.style.borderLeft = 'none';
+                    el.style.paddingLeft = '0';
+                    el.style.marginTop = '2px';
+                    el.style.opacity = '0.7';
+                    el.style.fontSize = '0.75rem';
+                }
+                block.appendChild(el);
+            }
+            el.textContent = text;
+        }
+
+        function refreshTranslationDisplay() {
+            const chap = synopsisData[curChap];
+            const total = chap.sentences.length;
+
+            for (let i = 0; i < total; i++) {
+                const block = document.getElementById('s-' + i);
+                if (!block) continue;
+
+                // Remove old translation divs
+                block.querySelectorAll('.trans-en, .trans-zh, .trans-loading').forEach(el => el.remove());
+
+                ['en', 'zh'].forEach(lang => {
+                    if (!langOn[lang]) return;
+                    const cls = lang === 'en' ? 'trans-en' : 'trans-zh';
+                    const div = document.createElement('div');
+                    const cached = transCache[curChap]?.[lang]?.[i];
+                    if (cached) {
+                        div.className = cls;
+                        // Heading translation style tweak
+                        if (block.dataset.isHeading === 'true') {
+                            div.style.borderLeft = 'none';
+                            div.style.paddingLeft = '0';
+                            div.style.marginTop = '2px';
+                            div.style.opacity = '0.7';
+                            div.style.fontSize = '0.75rem';
+                        }
+                        div.textContent = cached;
+                    } else {
+                        div.className = 'trans-loading';
+                        if (block.dataset.isHeading === 'true') div.style.fontSize = '0.7rem';
+                        div.textContent = lang === 'en' ? 'Translating…' : '翻译中…';
+                    }
+                    block.appendChild(div);
+                });
+            }
+        }
+
+        // ─── Render chapter ───────────────────────────────────────────────────────
+        function renderChapter() {
+            const chap = synopsisData[curChap];
+            titleEl.textContent = chap.title;
+
+            // Image with loading spinner
+            imgSpinner.style.display = 'flex';
+            imageEl.style.opacity = '0';
+            imageEl.src = 'images/' + chap.image + '.png';
+            imageEl.onload = () => {
+                imgSpinner.style.display = 'none';
+                imageEl.style.opacity = '1';
+            };
+            imageEl.onerror = () => { imgSpinner.style.display = 'none'; imageEl.style.opacity = '1'; };
+
+            // Sync dropdown
+            selectEl.value = curChap;
+
+            // Build sentence blocks — treat '### Heading' lines as subheadings
+            contentEl.innerHTML = '';
+            chap.sentences.forEach((s, i) => {
+                // Detect markdown subheadings (### or ## prefix)
+                const headingMatch = s.match(/^(#{2,3})\s+(.+)/);
+                if (headingMatch) {
+                    const heading = document.createElement('h3');
+                    heading.className = 'text-base font-bold text-slate-500 uppercase tracking-wide mt-8 mb-2 pb-1 border-b border-slate-200';
+                    heading.textContent = headingMatch[2]; // strip the ### prefix
+                    heading.id = 's-' + i; // still needs an id for the indexing
+                    heading.dataset.isHeading = 'true';
+                    contentEl.appendChild(heading);
+                    return;
+                }
+
+                const block = document.createElement('div');
+                block.className = 'sentence-block dimmed';
+                block.id = 's-' + i;
+
+                const orig = document.createElement('div');
+                orig.className = 'original-text';
+                orig.textContent = s;
+                block.appendChild(orig);
+
+                contentEl.appendChild(block);
+            });
+
+            curSent = 0;
+            // Skip initial headings
+            while (curSent < chap.sentences.length && chap.sentences[curSent]?.match(/^#{2,3}\s/)) curSent++;
+            updateHighlights();
+            nextBtn.classList.add('hidden');
+
+            // If translations are toggled, re-attach them and kick off missing fetches
+            ['en', 'zh'].forEach(lang => {
+                if (langOn[lang]) fetchTranslations(curChap, lang);
+            });
+            refreshTranslationDisplay();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ─── Highlight update ─────────────────────────────────────────────────────
+        function isHeading(idx) {
+            return !!(synopsisData[curChap].sentences[idx]?.match(/^#{2,3}\s/));
+        }
+
+        function updateHighlights() {
+            const sentences = synopsisData[curChap].sentences;
+            const total = sentences.length;
+
+            for (let i = 0; i < total; i++) {
+                const el = document.getElementById('s-' + i);
+                if (!el) continue;
+                // Headings are always plain — skip class manipulation
+                if (isHeading(i)) continue;
+
+                el.classList.remove('dimmed', 'active', 'done');
+                if (i < curSent) el.classList.add('done');
+                else if (i === curSent) {
+                    el.classList.add('active');
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < 80 || rect.bottom > window.innerHeight - 80) {
+                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    el.classList.add('dimmed');
+                }
+            }
+
+            // Progress: count only non-heading sentences
+            const realSentences = sentences.filter(s => !s.match(/^#{2,3}\s/));
+            const realDone = realSentences.slice(0, curSent + 1).filter(s => !s.match(/^#{2,3}\s/)).length;
+            const pct = (realDone / realSentences.length) * 100;
+            progressFill.style.width = Math.min(pct, 100) + '%';
+            progressText.textContent = `${realDone} / ${realSentences.length}`;
+
+            // Check if we're at the last non-heading sentence
+            let lastSentIdx = total - 1;
+            while (lastSentIdx >= 0 && isHeading(lastSentIdx)) lastSentIdx--;
+
+            if (curSent >= lastSentIdx) {
+                nextBtn.classList.remove('hidden');
+                if (curChap < synopsisData.length - 1) {
+                    nextBtn.textContent = 'Bab Seterusnya →';
+                    nextBtn.disabled = false;
+                    nextBtn.className = 'flex-shrink-0 px-4 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition shadow-sm';
+                } else {
+                    nextBtn.textContent = '✓ Selesai & Kembali';
+                    nextBtn.disabled = false;
+                    nextBtn.className = 'flex-shrink-0 px-4 py-1.5 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition shadow-sm';
+                }
+            } else {
+                nextBtn.classList.add('hidden');
+            }
+        }
+
+        // ─── Navigation ───────────────────────────────────────────────────────────
+        function advance() {
+            const sentences = synopsisData[curChap].sentences;
+            const total = sentences.length;
+
+            // Find last real sentence index
+            let lastSentIdx = total - 1;
+            while (lastSentIdx >= 0 && isHeading(lastSentIdx)) lastSentIdx--;
+
+            if (curSent < lastSentIdx) {
+                curSent++;
+                // Skip over headings
+                while (curSent < total && isHeading(curSent)) curSent++;
+                updateHighlights();
+            } else if (curChap < synopsisData.length - 1) {
+                curChap++;
+                curSent = 0;
+                renderChapter();
+            }
+        }
+        function goBack() {
+            if (curSent > 0) {
+                curSent--;
+                // Skip back over headings
+                while (curSent > 0 && isHeading(curSent)) curSent--;
+                updateHighlights();
+            }
+        }
+
+        // Keydown — ignore when focus is on interactive elements
+        document.addEventListener('keydown', e => {
+            const tag = e.target.tagName;
+            if (tag === 'SELECT' || tag === 'BUTTON' || tag === 'INPUT') return;
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goBack();
+            else advance();
+        });
+
+        // Click on text panel
+        document.getElementById('text-area').addEventListener('click', e => {
+            // Don't advance if clicking a lang button or select inside here (none, but safe)
+            advance();
+        });
+
+        // Next chapter button
+        nextBtn.addEventListener('click', e => {
+            e.stopPropagation();
+            if (curChap < synopsisData.length - 1) {
+                curChap++;
+                curSent = 0;
+                renderChapter();
+            } else {
+                window.location.href = "../../../../../../index.html";
+            }
+        });
+
+        // ─── Init ─────────────────────────────────────────────────────────────────
+        renderChapter();
+    </script>
+</body>
+
+</html>
