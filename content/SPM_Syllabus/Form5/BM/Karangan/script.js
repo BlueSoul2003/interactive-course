@@ -421,8 +421,8 @@ function renderDashboard() {
     };
 
     letters.forEach(l => {
-        fcContainer.innerHTML += `
-            <div class="flip-card">
+        const cardHtml = `
+            <div class="flip-card" onclick="this.classList.toggle('flipped'); playSound('click');">
                 <div class="flip-card-inner">
                     <div class="flip-card-front">
                         <div class="letter">${l}</div>
@@ -434,6 +434,7 @@ function renderDashboard() {
                 </div>
             </div>
         `;
+        fcContainer.innerHTML += cardHtml;
     });
 
     // Interaksi 2: Tabs (Variations)
