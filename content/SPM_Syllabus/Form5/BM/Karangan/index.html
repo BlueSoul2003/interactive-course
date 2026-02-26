@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Karangan SPM 1 (Edisi Lengkap)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <!-- Will create style.css separately to save tokens -->
+</head>
+
+<body>
+
+    <div class="bg-gradient"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <div class="container glass-panel">
+        <!-- Header & Navigation -->
+        <header class="header-flex">
+            <div>
+                <div class="badge">SPM Core</div>
+                <h1>Modul Kuasa Karangan: Aplikasi Formula IMBAKUP</h1>
+                <p class="subtitle">Formula IMBAKUP membolehkan kita menghuraikan apa-apa sahaja isi dengan matang dan
+                    panjang lebar.</p>
+            </div>
+
+        </header>
+
+        <!-- Theme Selection Grid -->
+        <div class="theme-grid" id="themeGrid">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Selector Dashboard -->
+        <div class="selector-box glass-panel-inner section-card">
+            <div class="select-group">
+                <label>Pilih Sub-topik (Set):</label>
+                <div class="custom-select-wrapper">
+                    <select id="setSelect" onchange="renderDashboard()"></select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Progress Tabs -->
+        <div class="progress-tabs">
+            <button class="prog-btn active" onclick="goToStep(1)">1. Hafal</button>
+            <button class="prog-btn" onclick="goToStep(2)">2. Variasi</button>
+            <button class="prog-btn" onclick="goToStep(3)">3. Uji Logik</button>
+            <button class="prog-btn" onclick="goToStep(4)">4. Bina</button>
+            <button class="prog-btn" onclick="goToStep(5)">5. Vocab</button>
+            <button class="prog-btn" onclick="goToStep(6)">6. Rangka</button>
+        </div>
+
+        <!-- Interaction 1: Dynamic Flip Cards -->
+        <section id="step1" class="step-section section-card glass-panel-inner active" style="animation-delay: 0.1s;">
+            <h2 class="section-label">
+                <span class="step-num">1</span>
+                <span class="title-text" data-ms="Hafal Formula IMBAKUP (Sentuh Kad)"
+                    data-en="Memorize IMBAKUP Formula (Hover Cards)" data-zh="熟记 IMBAKUP 公式 (悬停卡片)">Hafal Formula
+                    IMBAKUP (Sentuh Kad)</span>
+            </h2>
+            <div class="card-grid" id="flip-cards-container">
+                <!-- Cards rendered by JS -->
+            </div>
+            <div class="step-nav-bar">
+                <div></div> <!-- Spacer for left side to keep Next on right -->
+                <button class="action-btn primary-glow" onclick="navStep(1)" data-ms="Seterusnya" data-en="Next"
+                    data-zh="下一步">Seterusnya ➔</button>
+            </div>
+        </section>
+
+        <!-- Interaction 2: Paragraph Variations (Tabs) -->
+        <section id="step2" class="step-section section-card glass-panel-inner" style="animation-delay: 0.2s;">
+            <h2 class="section-label">
+                <span class="step-num">2</span>
+                <span class="title-text" data-ms="Variasi Templat Karangan (Pilih Tab)"
+                    data-en="Essay Template Variations (Select Tab)" data-zh="作文模板变化 (选择标签页)">Variasi Templat Karangan
+                    (Pilih Tab)</span>
+            </h2>
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="openTab(event, 'tab1')" data-ms="Gaya Analitikal"
+                        data-en="Analytical Style" data-zh="分析型风格">Gaya Analitikal</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab2')" data-ms="Gaya Dinamik"
+                        data-en="Dynamic Style" data-zh="动态型风格">Gaya Dinamik</button>
+                    <button class="tab-btn" onclick="openTab(event, 'tab3')" data-ms="Gaya Kritis"
+                        data-en="Critical Style" data-zh="批判型风格">Gaya Kritis</button>
+                </div>
+                <div class="tab-content-wrapper">
+                    <div id="tab1" class="tab-content active"></div>
+                    <div id="tab2" class="tab-content"></div>
+                    <div id="tab3" class="tab-content"></div>
+                </div>
+            </div>
+            <div class="step-nav-bar">
+                <button class="action-btn outline-btn" onclick="navStep(-1)" data-ms="Kembali" data-en="Back"
+                    data-zh="返回">⬅ Kembali</button>
+                <button class="action-btn primary-glow" onclick="navStep(1)" data-ms="Seterusnya" data-en="Next"
+                    data-zh="下一步">Seterusnya ➔</button>
+            </div>
+        </section>
+
+        <!-- Interaction 3: Logic Drill Quiz -->
+        <section id="step3" class="step-section section-card glass-panel-inner quiz-container"
+            style="animation-delay: 0.3s;">
+            <h2 class="section-label">
+                <span class="step-num">3</span>
+                <span class="title-text" data-ms="Uji Logik Asas: Isi Tempat Kosong"
+                    data-en="Test Basic Logic: Fill in the Blanks" data-zh="测试基本逻辑：填空题">Uji Logik Asas: Isi Tempat
+                    Kosong</span>
+            </h2>
+            <div class="quiz-content">
+                <p>
+                    <strong data-ms="Fokus utama ialah" data-en="The main focus is" data-zh="主要焦点是">Fokus utama
+                        ialah</strong>
+                    <span id="quiz-I" class="highlight-inline">...</span><br><br>
+                    <strong data-ms="Hal ini amat penting kerana" data-en="This is very important because"
+                        data-zh="这非常重要因为">Hal ini amat penting kerana</strong>
+                    <select id="quiz-M-select" class="inline-select">
+                        <!-- Options rendered by JS -->
+                    </select>.
+                </p>
+                <div class="quiz-action-bar">
+                    <button class="action-btn primary-glow" onclick="checkQuiz()" data-ms="Semak Jawapan"
+                        data-en="Check Answer" data-zh="检查答案">Semak Jawapan</button>
+                    <div id="quiz-feedback" class="feedback"></div>
+                </div>
+            </div>
+            <div class="step-nav-bar">
+                <button class="action-btn outline-btn" onclick="navStep(-1)" data-ms="Kembali" data-en="Back"
+                    data-zh="返回">⬅ Kembali</button>
+                <button class="action-btn primary-glow" onclick="navStep(1)" data-ms="Seterusnya" data-en="Next"
+                    data-zh="下一步">Seterusnya ➔</button>
+            </div>
+        </section>
+
+        <!-- Interaction 4: Paragraph Builder -->
+        <section id="step4" class="step-section section-card glass-panel-inner" style="animation-delay: 0.4s;">
+            <h2 class="section-label">
+                <span class="step-num">4</span>
+                <span class="title-text" data-ms="Bina Perenggan (Klik mengikut urutan I-M-Ba-K-U-P)"
+                    data-en="Build Paragraph (Click in order I-M-Ba-K-U-P)" data-zh="构建段落 (按 I-M-Ba-K-U-P 顺序点击)">Bina
+                    Perenggan (Klik mengikut urutan I-M-Ba-K-U-P)</span>
+            </h2>
+            <div class="builder-layout">
+                <div class="builder-btn-group" id="builder-buttons">
+                    <!-- Buttons rendered by JS -->
+                </div>
+                <div class="builder-result-area">
+                    <div id="builder-result" class="result-box"></div>
+                    <div class="builder-action-bar">
+                        <button class="action-btn outline-btn" onclick="resetBuilder()" data-ms="Mula Semula"
+                            data-en="Restart" data-zh="重新开始">Mula Semula</button>
+                        <span id="builder-msg" class="success-msg"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="step-nav-bar">
+                <button class="action-btn outline-btn" onclick="navStep(-1)" data-ms="Kembali" data-en="Back"
+                    data-zh="返回">⬅ Kembali</button>
+                <button class="action-btn primary-glow" onclick="navStep(1)" data-ms="Seterusnya" data-en="Next"
+                    data-zh="下一步">Seterusnya ➔</button>
+            </div>
+        </section>
+
+        <!-- Interaction 5: Vocab List -->
+        <section id="step5" class="step-section section-card glass-panel-inner" style="animation-delay: 0.5s;">
+            <h2 class="section-label">
+                <span class="step-num">5</span>
+                <span class="title-text">Koleksi Ungkapan Menarik</span>
+            </h2>
+            <div class="vocab-grid" id="vocab-container">
+                <!-- Vocab rendered by JS -->
+            </div>
+            <div class="step-nav-bar">
+                <button class="action-btn outline-btn" onclick="navStep(-1)" data-ms="Kembali" data-en="Back"
+                    data-zh="返回">⬅ Kembali</button>
+                <button class="action-btn primary-glow" onclick="navStep(1)" data-ms="Seterusnya" data-en="Next"
+                    data-zh="下一步">Seterusnya ➔</button>
+            </div>
+        </section>
+
+        <!-- Interaction 6: Universal Framework -->
+        <section id="step6" class="step-section section-card framework-container" style="animation-delay: 0.6s;">
+            <div class="section-header">
+                <div class="section-icon">📝</div>
+                <h2>Rangka Karangan Universal "Plug & Play"</h2>
+            </div>
+
+            <p>Konsep ini membolehkan anda menjawab apa-apa sahaja soalan dengan memadankan Tema/Tugasan ke dalam
+                struktur rasmi ini.</p>
+
+            <div class="spm-question-container fw-card"
+                style="margin-top: 25px; border-left-color: var(--accent); background: rgba(243, 156, 18, 0.1);">
+                <h4 style="color: var(--accent); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                    <span class="icon" style="font-size: 1.3rem;">📜</span>
+                    <span class="lang-text ms-text">Soalan Peperiksaan Format SPM</span>
+                    <span class="lang-text en-text">SPM Format Exam Question</span>
+                    <span class="lang-text zh-text">SPM 格式考试题目</span>
+                </h4>
+                <div id="spm-question-text"
+                    style="font-size: 1.1rem; line-height: 1.6; font-weight: 500; font-family: 'Segoe UI', serif; color: #fff;">
+                    <!-- Populated by Javascript -->
+                </div>
+            </div>
+
+            <div class="two-column-layout">
+                <!-- Left Column: Framework -->
+                <div class="layout-col rangka-col">
+                    <h3 class="col-title">
+                        <span class="lang-text ms-text">Rangka Karangan</span>
+                        <span class="lang-text en-text">Essay Framework</span>
+                        <span class="lang-text zh-text">作文大纲</span>
+                    </h3>
+
+                    <div class="fw-card">
+                        <h4>1. Pendahuluan</h4>
+                        <div class="template-box" contenteditable="true">
+                            <span class="lang-text ms-text">Dalam meniti arus pemodenan yang dilingkari dengan kemajuan
+                                sains dan teknologi ini, isu <b>[TEMA]</b> sering meniti dari bibir ke bibir masyarakat
+                                secara meluas. Hari demi hari, isu ini hangat diperdebatkan di dada-dada akhbar mahupun
+                                di media sosial. Hal ini dikatakan demikian kerana isu ini memberikan impak yang sangat
+                                besar kepada kesejahteraan masyarakat dan pembangunan negara. Oleh itu, semua pihak
+                                tidak wajar memandang enteng dan bersikap lepas tangan bak kata pepatah, enau dalam
+                                belukar melepaskan pucuk masing-masing. Persoalannya, apakah <b>[KEHENDAK SOALAN]</b>
+                                yang dominan dalam mendepani hal ini? Biarlah kita mengupas persoalan ini satu persatu
+                                ke akar umbi.</span>
+                            <span class="lang-text en-text">In this era of modernization encircled by the progress of
+                                science and technology, the issue of [THEME] is often on the lips of society... The
+                                question is, what are the dominant [QUESTION REQUIREMENTS] in facing this matter? Let us
+                                peel back this question one by one to its roots.</span>
+                            <span class="lang-text zh-text">在这个被科学与科技进步所环绕的现代化时代，关于 [主题] 的课题经常在全国人民的口中被广泛讨论...
+                                问题是，在面对这个问题时，什么是占主导地位的 [题目要求] 呢？让我们从根本上一一剖析这个问题。</span>
+                        </div>
+                    </div>
+
+                    <div class="fw-card">
+                        <h4>2. Perenggan Isi 1</h4>
+                        <div class="template-box" contenteditable="true">
+                            <span class="lang-text ms-text">Sebagai pembuka tirai perbincangan, <b>[KEHENDAK]</b> yang
+                                paling afdal ialah <b>[I]</b>. Secara rasionalnya, hal ini dicetuskan sedemikian kerana
+                                <b>[M]</b>. Dalam konteks ini, manifestasi tindakan yang praktikal diaplikasikan adalah
+                                dengan <b>[Ba]</b>. Rentetan daripada tindakan proaktif tersebut, impak yang jelas dapat
+                                dilihat apabila <b>[K]</b>. Senario ini sememangnya bertepatan dengan peribahasa Melayu
+                                yang berbunyi, <b>[U]</b>. Tegasnya, <b>[P]</b>.</span>
+                            <span class="lang-text en-text">As the curtain raiser for this discussion, the most
+                                appropriate [REQUIREMENT] is [I]. Rationally, this matter is very important because [M].
+                                In this context, a pragmatic implementation is by [Ba]. In the sequence of such
+                                proactive action, without a doubt [K]. It is true what the Malay proverb says, [U].
+                                Firmly speaking, [P].</span>
+                            <span class="lang-text zh-text">作为讨论的开端，最核心的 [题目要求] 是 [I]。 从理性的角度来看，这非常重要因为 [M]。
+                                在这方面，可以实际执行的行动体现是 [Ba]。 随着这些积极行动的展开，毫无疑问 [K]。 这种情况恰好印证了马来谚语，[U]。 明确地说，[P]。</span>
+                        </div>
+                    </div>
+
+                    <div class="fw-card">
+                        <h4>3. Perenggan Isi 2</h4>
+                        <div class="template-box" contenteditable="true">
+                            <span class="lang-text ms-text">Meninjau dari skop yang berbeza, kita juga tidak boleh
+                                menafikan hakikat bahawa <b>[I]</b>. Tindakan atau senario ini tidak seharusnya
+                                dipandang sepi memandangkan <b>[M]</b>. Oleh sebab itu, contoh manifestasi yang ketara
+                                dapat dilihat apabila <b>[Ba]</b>. Kesan paling menonjol hasil daripada situasi tersebut
+                                ialah <b>[K]</b>. Senario ini amat bertepatan dengan tamsilan <b>[U]</b>. Secara
+                                komprehensifnya, terang lagi bersuluh bahawa <b>[P]</b>.</span>
+                            <span class="lang-text en-text">Reviewing from a different scope, we also cannot deny the
+                                fact that [I]. This action or scenario should not be ignored considering [M]. Because of
+                                that, a clear manifestation example can be seen when [Ba]. The most distinct impact
+                                resulting from that situation is [K]. This situation is highly appropriate with the
+                                metaphor, [U]. Comprehensively, it is as bright as a torch that [P].</span>
+                            <span class="lang-text zh-text">从不同的范围来审视，我们也不能否认 [I] 这个事实。 这种行动或情况不应该被忽视，因为 [M]。
+                                因此，一个明显的体现例子可以在 [Ba] 时看到。 该情况所产生的最显著影响是 [K]。 这种情况非常符合隐喻，[U]。 总而言之，非常明显的是 [P]。</span>
+                        </div>
+                    </div>
+
+                    <div class="fw-card">
+                        <h4>4. Perenggan Isi 3</h4>
+                        <div class="template-box" contenteditable="true">
+                            <span class="lang-text ms-text">Lanjutan daripada wacana tersebut, suatu gagasan yang tidak
+                                kurang pentingnya adalah dengan memastikan <b>[I]</b>. Jika ditelusuri hingga ke akar
+                                umbi, rasional di sebalik hal ini tercetus kerana <b>[M]</b>. Dalam mendepani cabaran
+                                ini, anjakan paradigma yang perlu dilakukan adalah seperti <b>[Ba]</b>. Rentetan
+                                daripada komitmen jitu tersebut, natijah positif yang akan terhasil ialah <b>[K]</b>.
+                                Hal ini persis mutiara kata yang sering meniti di bibir umat manusia iaitu <b>[U]</b>.
+                                Sebagai deduksi, jelaslah bahawa <b>[P]</b>.</span>
+                            <span class="lang-text en-text">As an extension of the said discourse, a notion that is no
+                                less important is by ensuring [I]. If traced to the roots, the rationale behind this is
+                                triggered because [M]. In facing this challenge, the paradigm shift that needs to be
+                                done is like [Ba]. In the sequence of such firm commitment, the positive result that
+                                will be produced is [K]. This is exactly like the pearl of wisdom often on the lips of
+                                many, namely [U]. As a deduction, it is clear that [P].</span>
+                            <span class="lang-text zh-text">延续该讨论，同样重要的主张是确保 [I]。 如果追溯到根本，这背后的理据是因为 [M]。
+                                在应对这项挑战时，需要进行的范式转移包括 [Ba]。 随着这份坚定的承诺，将产生的积极结果是 [K]。 这正如人们口中常说的至理名言，即 [U]。 推论出，显然
+                                [P]。</span>
+                        </div>
+                    </div>
+
+                    <div class="fw-card">
+                        <h4>5. Perenggan Penutup</h4>
+                        <div class="template-box" contenteditable="true">
+                            <span class="lang-text ms-text">Sebagai menggulung segala yang telah dibincangkan, jelaslah
+                                bahawa isu <b>[TEMA]</b> menuntut komitmen jitu dan iltizam yang tinggi daripada semua
+                                pihak. Isu ini tidak seharusnya dibiarkan menjadi barah yang memusnahkan peradaban
+                                bangsa. Oleh itu, kita seyogianya menggembleng tenaga dan bersinergi bagai aur dengan
+                                tebing bagi memastikan titik noktah penyelesaian dapat dicapai, dan bukannya sekadar
+                                melepaskan batuk di tangga. Semoga aspirasi negara tercinta untuk melahirkan masyarakat
+                                madani yang sejahtera serta negara yang cemerlang, gemilang, dan terbilang akan menjadi
+                                realiti yang membanggakan di pentas antarabangsa.</span>
+                            <span class="lang-text en-text">As a wrap-up to all that has been discussed, it is clear
+                                that the issue of [THEME] demands firm commitment from all parties. This issue should
+                                not be left to become a cancer... Therefore, we must pool our energy and synergize like
+                                the bamboo and the riverbank... Hopefully, our beloved nation's aspiration to birth a
+                                prosperous society will become a proud reality on the international stage.</span>
+                            <span class="lang-text zh-text">作为对所有已讨论内容的总结，显然 [主题]
+                                课题需要各方的高度承诺与决心。这个问题不应该被放任成为摧毁民族文明的毒瘤。因此，我们必须汇聚力量，像竹子与河岸般相互扶持...
+                                希望我们深爱的祖国要孕育繁荣社会，以及打造辉煌、卓越、显赫国家的愿景，能够成为在国际舞台上令人骄傲的现实。</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Content (IMBAKUP Points) -->
+                <div class="layout-col content-col">
+                    <h3 class="col-title">
+                        <span class="lang-text ms-text">Isi Karangan (Salin & Tampal)</span>
+                        <span class="lang-text en-text">Essay Points (Copy & Paste)</span>
+                        <span class="lang-text zh-text">作文论点 (复制与粘贴)</span>
+                    </h3>
+                    <div id="essay-content-container">
+                        <!-- Populated randomly/sequentially by Javascript -->
+                    </div>
+                </div>
+            </div>
+            <div class="step-nav-bar">
+                <button class="action-btn outline-btn" onclick="navStep(-1)" data-ms="Kembali" data-en="Back"
+                    data-zh="返回">⬅ Kembali</button>
+                <button class="action-btn primary-glow" onclick="navStep(1)" data-ms="Selesai" data-en="Finish"
+                    data-zh="完成">Selesai ✓</button>
+            </div>
+        </section>
+    </div>
+
+    <div class="lang-toggles">
+        <button class="translate-btn" id="btn-en" onclick="toggleLang('en')">English</button>
+        <button class="translate-btn" id="btn-zh" onclick="toggleLang('zh')">中文</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
