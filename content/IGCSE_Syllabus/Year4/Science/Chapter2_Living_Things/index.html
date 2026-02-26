@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 2: Living Things in Their Environment | IGCSE Science Y4</title>
+    <meta name="description"
+        content="Explore habitats, adaptations, and environmental impact in this interactive IGCSE Science module for Year 4.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0b1120;
+            --surface: #141e33;
+            --surface2: #1a2740;
+            --border: rgba(100, 160, 255, 0.12);
+            --accent: #38bdf8;
+            --accent2: #818cf8;
+            --accent3: #34d399;
+            --accent-warn: #f59e0b;
+            --text: #f0f6ff;
+            --text-muted: #7fa0c4;
+            --correct: #34d399;
+            --wrong: #f87171;
+            --font: 'Inter', sans-serif;
+            --font-head: 'Outfit', sans-serif;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── HEADER ── */
+        header {
+            background: linear-gradient(135deg, #0f3460 0%, #1a1a4e 100%);
+            padding: 14px 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+        }
+
+        .logo {
+            font-family: var(--font-head);
+            font-size: 1.2rem;
+            color: var(--accent);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-badge {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, #0f3460 0%, #142040 60%, #0b1120 100%);
+            padding: 48px 32px 36px;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-emoji {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .hero h1 {
+            font-family: var(--font-head);
+            font-size: clamp(1.6rem, 4vw, 2.4rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* ── TABS ── */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 24px 32px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-btn {
+            font-family: var(--font-head);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: var(--surface2);
+            color: var(--text-muted);
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+
+        .tab-btn.active {
+            background: var(--surface);
+            color: var(--accent);
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: var(--text);
+            background: var(--surface);
+        }
+
+        /* ── MAIN CONTENT AREA ── */
+        .tab-panel {
+            display: none;
+            padding: 32px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── PPT VIEWER ── */
+        .ppt-section {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .ppt-upload-area {
+            border: 2px dashed var(--accent);
+            border-radius: 16px;
+            padding: 60px 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(56, 189, 248, 0.03);
+        }
+
+        .ppt-upload-area:hover,
+        .ppt-upload-area.dragover {
+            background: rgba(56, 189, 248, 0.08);
+            border-color: #7dd3fc;
+            transform: scale(1.01);
+        }
+
+        .ppt-upload-area .upload-icon {
+            font-size: 3.5rem;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .ppt-upload-area h3 {
+            font-family: var(--font-head);
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .ppt-upload-area p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #0b1120;
+            border-radius: 10px;
+            padding: 12px 28px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-btn-label:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(56, 189, 248, 0.35);
+        }
+
+        #ppt-file-input {
+            display: none;
+        }
+
+        .ppt-viewer-container {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ppt-viewer-container.visible {
+            display: flex;
+        }
+
+        .ppt-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 12px 20px;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .ppt-nav-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ppt-nav-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .ppt-nav-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .ppt-nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .ppt-slide-info {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .ppt-embed {
+            width: 100%;
+            height: 600px;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: #1a1a2e;
+            overflow: hidden;
+        }
+
+        .ppt-embed iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .ppt-note {
+            background: rgba(56, 189, 248, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: 10px;
+            padding: 14px 18px;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .ppt-reset-btn {
+            background: rgba(248, 113, 113, 0.15);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            color: #f87171;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .ppt-reset-btn:hover {
+            background: rgba(248, 113, 113, 0.25);
+        }
+
+        /* Slide canvas area */
+        .slide-canvas-wrap {
+            position: relative;
+        }
+
+        #slide-canvas {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            background: #fff;
+            display: block;
+        }
+
+        .slide-placeholder {
+            background: linear-gradient(135deg, #1a2740, #0f2040);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            padding: 40px;
+            text-align: center;
+        }
+
+        /* ── EXERCISE ── */
+        .exercise-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .exercise-header h2 {
+            font-family: var(--font-head);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--accent2);
+            margin-bottom: 8px;
+        }
+
+        .exercise-header p {
+            color: var(--text-muted);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .stat-chip {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            min-width: 90px;
+        }
+
+        .stat-val {
+            font-family: var(--font-head);
+            font-size: 1.4rem;
+            font-weight: 800;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-val.correct {
+            color: var(--correct);
+        }
+
+        .stat-val.wrong {
+            color: var(--wrong);
+        }
+
+        .stat-val.total {
+            color: var(--accent);
+        }
+
+        /* Section headings */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 28px 0 18px;
+        }
+
+        .section-divider h3 {
+            font-family: var(--font-head);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--accent2);
+            white-space: nowrap;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* Question cards */
+        .q-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .q-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px 24px;
+            transition: border-color 0.2s;
+        }
+
+        .q-card:hover {
+            border-color: rgba(100, 160, 255, 0.25);
+        }
+
+        .q-card.answered-correct {
+            border-color: var(--correct);
+            background: rgba(52, 211, 153, 0.04);
+        }
+
+        .q-card.answered-wrong {
+            border-color: var(--wrong);
+            background: rgba(248, 113, 113, 0.04);
+        }
+
+        .q-number {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--accent2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .q-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        /* MCQ options */
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option-btn {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 16px;
+            text-align: left;
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 0.92rem;
+            color: var(--text);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateX(3px);
+        }
+
+        .option-btn .opt-letter {
+            font-weight: 700;
+            color: var(--accent2);
+            min-width: 22px;
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+        }
+
+        .option-btn.correct {
+            border-color: var(--correct);
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--correct);
+        }
+
+        .option-btn.wrong {
+            border-color: var(--wrong);
+            background: rgba(248, 113, 113, 0.12);
+            color: var(--wrong);
+        }
+
+        /* TF buttons */
+        .tf-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .tf-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+
+        .tf-btn:hover:not(:disabled) {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .tf-btn:disabled {
+            cursor: default;
+        }
+
+        .tf-btn.correct {
+            border-color: var(--correct);
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--correct);
+        }
+
+        .tf-btn.wrong {
+            border-color: var(--wrong);
+            background: rgba(248, 113, 113, 0.12);
+            color: var(--wrong);
+        }
+
+        /* Fill blank */
+        .fill-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .fill-input {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            width: 220px;
+            transition: all 0.2s;
+            font-family: var(--font);
+        }
+
+        .fill-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .fill-input:disabled {
+            cursor: default;
+        }
+
+        .fill-input.correct {
+            border-color: var(--correct);
+            background: rgba(52, 211, 153, 0.08);
+        }
+
+        .fill-input.wrong {
+            border-color: var(--wrong);
+            background: rgba(248, 113, 113, 0.08);
+        }
+
+        .check-btn {
+            background: var(--accent2);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .check-btn:hover:not(:disabled) {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(129, 140, 248, 0.4);
+        }
+
+        .check-btn:disabled {
+            opacity: 0.5;
+            cursor: default;
+        }
+
+        /* Short answer */
+        .short-textarea {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--text);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 0.92rem;
+            min-height: 80px;
+            resize: vertical;
+            font-family: var(--font);
+            transition: border-color 0.2s;
+        }
+
+        .short-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .reveal-btn {
+            margin-top: 10px;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-warn);
+            border-radius: 8px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: all 0.2s;
+        }
+
+        .reveal-btn:hover {
+            background: rgba(245, 158, 11, 0.25);
+        }
+
+        .answer-reveal {
+            display: none;
+            margin-top: 12px;
+            background: rgba(52, 211, 153, 0.08);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 0.9rem;
+            color: var(--correct);
+            line-height: 1.6;
+        }
+
+        .answer-reveal.shown {
+            display: block;
+        }
+
+        /* Feedback badge */
+        .q-feedback {
+            margin-top: 10px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .q-feedback.correct {
+            color: var(--correct);
+        }
+
+        .q-feedback.wrong {
+            color: var(--wrong);
+        }
+
+        /* finish banner */
+        .finish-banner {
+            display: none;
+            text-align: center;
+            background: linear-gradient(135deg, #1a2740, #0f2040);
+            border: 1px solid var(--accent2);
+            border-radius: 18px;
+            padding: 40px;
+            margin-top: 32px;
+        }
+
+        .finish-banner.visible {
+            display: block;
+        }
+
+        .finish-score {
+            font-family: var(--font-head);
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 12px 0;
+        }
+
+        .retry-btn {
+            background: var(--accent2);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 32px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 20px;
+            transition: all 0.2s;
+        }
+
+        .retry-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        footer-bar {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="../../../../../index.html" class="logo">🔬 IGCSE Science</a>
+        <span class="header-badge">Year 4 · Chapter 2</span>
+    </header>
+
+    <div class="hero">
+        <span class="hero-emoji">🌿</span>
+        <h1>Topic 2: <span>Living Things in Their Environment</span></h1>
+        <p>Habitats, adaptations, identification keys, pollution &amp; conservation</p>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tab-nav">
+        <button class="tab-btn active" id="tab-ppt-btn" onclick="switchTab('ppt')">📑 Presentation Slides</button>
+        <button class="tab-btn" id="tab-ex-btn" onclick="switchTab('exercise')">✏️ Exercise (40 Questions)</button>
+    </div>
+
+    <!-- ══════════ TAB: PPT VIEWER ══════════ -->
+    <div class="tab-panel active" id="tab-ppt">
+        <div class="ppt-section">
+            <!-- Toolbar -->
+            <div
+                style="display:flex; align-items:center; justify-content:space-between; background:var(--surface2); border-radius:12px; padding:12px 20px; border:1px solid var(--border);">
+                <span style="font-size:0.9rem; color:var(--text-muted);">📄 <strong style="color:var(--text);">Eco
+                        Explorer Field Guide</strong></span>
+                <a href="slides.pdf" target="_blank"
+                    style="background:var(--accent); color:#0b1120; border-radius:8px; padding:8px 18px; font-weight:700; font-size:0.85rem; text-decoration:none;">⬇
+                    Open / Download</a>
+            </div>
+            <!-- Native browser PDF embed -->
+            <iframe src="slides.pdf"
+                style="width:100%; height:780px; border-radius:14px; border:1px solid var(--border); background:#fff; display:block;"></iframe>
+        </div>
+    </div>
+
+    <!-- ══════════ TAB: EXERCISE ══════════ -->
+    <div class="tab-panel" id="tab-exercise">
+        <div class="exercise-header">
+            <h2>✏️ Exercise: 40 Questions</h2>
+            <p>Test your understanding of habitats, adaptations, identification, pollution &amp; conservation.</p>
+        </div>
+
+        <!-- ── DOWNLOADS SECTION ── -->
+        <div style="display:flex; gap:16px; justify-content:center; margin-bottom:32px; flex-wrap:wrap;">
+            <a href="Worksheet.pdf" target="_blank" class="option-btn"
+                style="min-width:240px; justify-content:center; text-decoration:none;">
+                <span class="opt-letter">📥</span> Download PDF Worksheet
+            </a>
+            <a href="Answer_Key.pdf" target="_blank" class="option-btn"
+                style="min-width:240px; justify-content:center; text-decoration:none;">
+                <span class="opt-letter">🔑</span> Download Answer Key
+            </a>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-chip"><span class="stat-val total" id="s-total">40</span><span
+                    class="stat-label">Total</span></div>
+            <div class="stat-chip"><span class="stat-val correct" id="s-correct">0</span><span
+                    class="stat-label">Correct</span></div>
+            <div class="stat-chip"><span class="stat-val wrong" id="s-wrong">0</span><span
+                    class="stat-label">Wrong</span></div>
+            <div class="stat-chip"><span class="stat-val" id="s-pct" style="color:var(--accent2)">0%</span><span
+                    class="stat-label">Score</span></div>
+        </div>
+
+        <!-- ── SECTION 1: MCQ ── -->
+        <div class="section-divider">
+            <h3>Part 1 — Multiple Choice (10 Questions)</h3>
+        </div>
+        <div class="q-list" id="mcq-list"></div>
+
+        <!-- ── SECTION 2: TRUE / FALSE ── -->
+        <div class="section-divider">
+            <h3>Part 2 — True or False (10 Questions)</h3>
+        </div>
+        <div class="q-list" id="tf-list"></div>
+
+        <!-- ── SECTION 3: FILL BLANK ── -->
+        <div class="section-divider">
+            <h3>Part 3 — Fill in the Blanks (10 Questions)</h3>
+        </div>
+        <div class="q-list" id="fill-list"></div>
+
+        <!-- ── SECTION 4: SHORT ANSWER ── -->
+        <div class="section-divider">
+            <h3>Part 4 — Short Answer (10 Questions)</h3>
+        </div>
+        <div class="q-list" id="short-list"></div>
+
+        <div class="finish-banner" id="finish-banner">
+            <div style="font-size:3rem;">🎉</div>
+            <h2 style="font-family:var(--font-head); font-size:1.6rem; margin-top:12px;">Exercise Complete!</h2>
+            <div class="finish-score" id="finish-score">0 / 30</div>
+            <p style="color:var(--text-muted);">Auto-graded questions (MCQ + T/F + Fill in the Blank)</p>
+            <button class="retry-btn" onclick="retryExercise()">🔄 Retry</button>
+        </div>
+    </div>
+
+    <!-- ══════════ SCRIPTS ══════════ -->
+    <script>
+        // ── TAB SWITCH ────────────────────────────────────────
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('tab-' + tab + '-btn').classList.add('active');
+        }
+
+        // ── (PDF.js removed - using native iframe embed) ──────
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('ppt-upload-area').classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) processFile(file);
+        }
+        function handleFileSelect(input) { if (input.files[0]) processFile(input.files[0]); }
+
+        function processFile(file) {
+            if (file.type === 'application/pdf') {
+                const url = URL.createObjectURL(file);
+                loadPdf(url);
+            } else {
+                alert('Please upload a PDF file for in-browser viewing. To view a PPTX, convert it to PDF first or use the embed URL option.');
+            }
+        }
+
+        function loadPdf(url) {
+            pdfjsLib.getDocument(url).promise.then(doc => {
+                pdfDoc = doc; pdfPage = 1;
+                showViewer(true);
+                renderPdfPage();
+            }).catch(() => alert('Could not load PDF. Please try another file.'));
+        }
+
+        function renderPdfPage() {
+            pdfDoc.getPage(pdfPage).then(page => {
+                const vp = page.getViewport({ scale: 1.5 });
+                const canvas = document.getElementById('slide-canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = vp.width; canvas.height = vp.height;
+                page.render({ canvasContext: ctx, viewport: vp });
+                document.getElementById('pdf-slide-info').textContent = `Page ${pdfPage} / ${pdfDoc.numPages}`;
+                document.getElementById('pdf-prev').disabled = pdfPage <= 1;
+                document.getElementById('pdf-next').disabled = pdfPage >= pdfDoc.numPages;
+            });
+        }
+        function pdfPrev() { if (pdfPage > 1) { pdfPage--; renderPdfPage(); } }
+        function pdfNext() { if (pdfDoc && pdfPage < pdfDoc.numPages) { pdfPage++; renderPdfPage(); } }
+
+        function loadEmbedUrl() {
+            const url = document.getElementById('embed-url-input').value.trim();
+            if (!url) return;
+            document.getElementById('embed-iframe').src = url;
+            showViewer(false);
+        }
+        function showViewer(isPdf) {
+            document.getElementById('ppt-upload-area').style.display = 'none';
+            document.getElementById('ppt-viewer-container').classList.add('visible');
+            document.getElementById('canvas-wrap').style.display = isPdf ? 'block' : 'none';
+            document.getElementById('embed-frame-wrap').style.display = isPdf ? 'none' : 'block';
+            document.getElementById('pdf-nav-group').style.display = isPdf ? 'flex' : 'none';
+            document.getElementById('embed-nav-group').style.display = isPdf ? 'none' : 'flex';
+        }
+        function resetViewer() {
+            pdfDoc = null; pdfPage = 1;
+            document.getElementById('ppt-upload-area').style.display = '';
+            document.getElementById('ppt-viewer-container').classList.remove('visible');
+            document.getElementById('embed-iframe').src = '';
+        }
+
+        // ── AUTO-LOAD BUNDLED PDF ─────────────────────────────
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPdf('slides.pdf');
+        });
+
+        // ── QUESTION DATA ─────────────────────────────────────
+        const mcqData = [
+            { q: "What is the term for an environment in which a plant or animal naturally lives?", opts: ["Ecosystem", "Habitat", "City", "Continent"], ans: 1 },
+            { q: "Animals and plants have special structural or behavioural characteristics to help them survive. What are these called?", opts: ["Adaptations", "Keys", "Habitats", "Pollutions"], ans: 0 },
+            { q: "In what type of habitat do giraffes naturally live?", opts: ["Arctic", "Ponds", "Tropical grasslands (savannahs)", "Rainforests"], ans: 2 },
+            { q: "What color is a polar bear's skin underneath its white fur?", opts: ["White", "Black", "Pink", "Brown"], ans: 1 },
+            { q: "How does a water boatman use its long, hairy hind legs?", opts: ["For flying", "For jumping", "To act like oars in the water", "To catch prey"], ans: 2 },
+            { q: "How do young frogs (tadpoles) breathe underwater?", opts: ["Lungs", "Skin", "Blowholes", "Gills"], ans: 3 },
+            { q: "What type of questions does an identification key usually use?", opts: ["Multiple choice", "Essay", "\"Yes\" or \"No\"", "Fill in the blank"], ans: 2 },
+            { q: "What is the negative impact of water becoming murky due to pollution?", opts: ["Fish grow larger", "Sunlight is blocked from aquatic plants", "Animals drink more", "Plants grow faster"], ans: 1 },
+            { q: "Using a cloth bag for groceries instead of throwing away plastic bags is an example of:", opts: ["Reducing", "Reusing", "Recycling", "Reacting"], ans: 1 },
+            { q: "Breaking down old materials and processing them to make brand-new items is known as:", opts: ["Reducing", "Reusing", "Recycling", "Refusing"], ans: 2 },
+        ];
+
+        const tfData = [
+            { q: "Different habitats contain the exact same plants and animals.", ans: false },
+            { q: "A giraffe's lips and mouth are covered in soft skin to sense their food better.", ans: false },
+            { q: "Polar bears have a thick layer of blubber underneath their skin to reduce heat loss.", ans: true },
+            { q: "All animals in cold climates survive by migrating; none hibernate.", ans: false },
+            { q: "Ducks have oily feathers that keep them warm, dry, and buoyant.", ans: true },
+            { q: "Water lilies have small, curved leaves so they can sink to the bottom of the pond.", ans: false },
+            { q: "We can use simple tests and observations to sort, group, and classify living things found around our school.", ans: true },
+            { q: "An identification key for an owl might ask if it has a hooked beak or if it hunts at night.", ans: true },
+            { q: "Pollution is the introduction of helpful substances into the environment.", ans: false },
+            { q: "Turning off electrical appliances when you are not using them is a way to \"Reduce\".", ans: true },
+        ];
+
+        const fillData = [
+            { q: "Animals and plants have special structural or behavioural characteristics called __________ to help them survive.", ans: "adaptations" },
+            { q: "Giraffes use their long, thick __________ to pull leaves into their mouths from acacia trees.", ans: "tongue" },
+            { q: "Beneath their white fur, polar bears have __________ skin to help them absorb heat from the Sun.", ans: "black" },
+            { q: "Frogs have __________ feet to help them move easily in the water.", ans: "webbed" },
+            { q: "The water boatman insect carries a bubble of __________ under its body so it can breathe underwater.", ans: "air" },
+            { q: "Scientists use identification __________ to sort and identify living things based on their physical features.", ans: "keys" },
+            { q: "The discharge of industrial chemicals or oil spills into rivers and lakes is known as __________ pollution.", ans: "water" },
+            { q: "When we __________ materials like glass or paper, we process them to make brand-new items.", ans: "recycle" },
+            { q: "Turning old plastic bottles into crafts is an example of how to __________ materials.", ans: "reuse" },
+            { q: "We practice the principle of \"__________\" when we use less water and only use exactly what we need.", ans: "reduce" },
+        ];
+
+        const shortData = [
+            { q: "What is a habitat?", ans: "An environment in which a plant or animal naturally lives." },
+            { q: "How is a giraffe's neck an adaptation for its survival?", ans: "Its long neck and height enable it to reach high branches of acacia trees, where it gets most of its food." },
+            { q: "Name two adaptations that help a polar bear stay warm in the freezing Arctic.", ans: "They have a very thick layer of fur to trap heat and a thick layer of blubber (fat) underneath their skin to reduce heat loss." },
+            { q: "Besides having thick fur and blubber, mention two other ways some animals adapt to cold climates.", ans: "Other animals adapt by hibernating through the winter or migrating to warmer places." },
+            { q: "How are a duck's feathers adapted to its pond habitat?", ans: "A duck has oily feathers that keep it warm, dry, and buoyant in the water." },
+            { q: "Describe the leaves of a water lily and explain their purpose.", ans: "Their leaves are large, flat, and waterproof, which allows them to float on the surface of the pond and gather sunlight." },
+            { q: "Explain how an identification key works.", ans: "A key is made up of a series of questions about an organism's physical features that can be answered with a simple \"yes\" or \"no\" to help identify it." },
+            { q: "What effect does murky, polluted water have on aquatic plants?", ans: "The murky water blocks sunlight from reaching the aquatic plants, which stops them from making food." },
+            { q: "What is the difference between \"reduce\" and \"reuse\"?", ans: "\"Reduce\" means to use less of something so it isn't wasted, whereas \"reuse\" means taking an old item and using it again instead of throwing it in the bin." },
+            { q: "Why is it important to recycle materials like glass bottles, paper, and aluminium drink cans?", ans: "Recycling these materials means we don't have to cut down more trees or mine for new minerals to make new items." },
+        ];
+
+        // ── SCORE TRACKING ────────────────────────────────────
+        let score = { correct: 0, wrong: 0, answered: 0 };
+        function updateStats() {
+            document.getElementById('s-correct').textContent = score.correct;
+            document.getElementById('s-wrong').textContent = score.wrong;
+            const auto = score.correct + score.wrong;
+            document.getElementById('s-pct').textContent = auto > 0 ? Math.round(score.correct / auto * 100) + '%' : '0%';
+            if (auto >= 30) showFinish();
+        }
+
+        // ── BUILD MCQ ─────────────────────────────────────────
+        function buildMcq() {
+            const container = document.getElementById('mcq-list');
+            mcqData.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'q-card'; card.id = `mcq-${idx}`;
+                const letters = ['A', 'B', 'C', 'D'];
+                const opts = item.opts.map((o, i) => `
+            <button class="option-btn" id="mcq-${idx}-opt-${i}" onclick="checkMcq(${idx},${i})">
+                <span class="opt-letter">${letters[i]}</span>${o}
+            </button>`).join('');
+                card.innerHTML = `
+            <div class="q-number">Question ${idx + 1}</div>
+            <div class="q-text">${item.q}</div>
+            <div class="options-grid">${opts}</div>
+            <div class="q-feedback" id="mcq-fb-${idx}"></div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function checkMcq(idx, chosen) {
+            const card = document.getElementById(`mcq-${idx}`);
+            if (card.classList.contains('answered-correct') || card.classList.contains('answered-wrong')) return;
+            const correct = mcqData[idx].ans;
+            for (let i = 0; i < 4; i++) {
+                const btn = document.getElementById(`mcq-${idx}-opt-${i}`);
+                btn.disabled = true;
+                if (i === correct) btn.classList.add('correct');
+                if (i === chosen && i !== correct) btn.classList.add('wrong');
+            }
+            const fb = document.getElementById(`mcq-fb-${idx}`);
+            if (chosen === correct) {
+                card.classList.add('answered-correct'); score.correct++;
+                fb.className = 'q-feedback correct'; fb.textContent = '✓ Correct!';
+            } else {
+                card.classList.add('answered-wrong'); score.wrong++;
+                fb.className = 'q-feedback wrong'; fb.textContent = `✗ Incorrect. The answer is ${['A', 'B', 'C', 'D'][correct]}.`;
+            }
+            score.answered++; updateStats();
+        }
+
+        // ── BUILD TF ──────────────────────────────────────────
+        function buildTf() {
+            const container = document.getElementById('tf-list');
+            tfData.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'q-card'; card.id = `tf-${idx}`;
+                card.innerHTML = `
+            <div class="q-number">Question ${idx + 11}</div>
+            <div class="q-text">${item.q}</div>
+            <div class="tf-row">
+                <button class="tf-btn" id="tf-${idx}-T" onclick="checkTf(${idx}, true)">✔ True</button>
+                <button class="tf-btn" id="tf-${idx}-F" onclick="checkTf(${idx}, false)">✘ False</button>
+            </div>
+            <div class="q-feedback" id="tf-fb-${idx}"></div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function checkTf(idx, chosen) {
+            const card = document.getElementById(`tf-${idx}`);
+            if (card.classList.contains('answered-correct') || card.classList.contains('answered-wrong')) return;
+            const correct = tfData[idx].ans;
+            const tBtn = document.getElementById(`tf-${idx}-T`); tBtn.disabled = true;
+            const fBtn = document.getElementById(`tf-${idx}-F`); fBtn.disabled = true;
+            if (correct) tBtn.classList.add('correct'); else fBtn.classList.add('correct');
+            if (chosen !== correct) { (chosen ? tBtn : fBtn).classList.add('wrong'); }
+            const fb = document.getElementById(`tf-fb-${idx}`);
+            if (chosen === correct) {
+                card.classList.add('answered-correct'); score.correct++;
+                fb.className = 'q-feedback correct'; fb.textContent = '✓ Correct!';
+            } else {
+                card.classList.add('answered-wrong'); score.wrong++;
+                fb.className = 'q-feedback wrong'; fb.textContent = `✗ Incorrect. The answer is ${correct ? 'True' : 'False'}.`;
+            }
+            score.answered++; updateStats();
+        }
+
+        // ── BUILD FILL ────────────────────────────────────────
+        function buildFill() {
+            const container = document.getElementById('fill-list');
+            fillData.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'q-card'; card.id = `fill-${idx}`;
+                card.innerHTML = `
+            <div class="q-number">Question ${idx + 21}</div>
+            <div class="q-text">${item.q}</div>
+            <div class="fill-row">
+                <input class="fill-input" type="text" id="fill-inp-${idx}" placeholder="Type your answer…"
+                    onkeydown="if(event.key==='Enter') checkFill(${idx})">
+                <button class="check-btn" id="fill-btn-${idx}" onclick="checkFill(${idx})">Check</button>
+            </div>
+            <div class="q-feedback" id="fill-fb-${idx}"></div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function checkFill(idx) {
+            const card = document.getElementById(`fill-${idx}`);
+            if (card.classList.contains('answered-correct') || card.classList.contains('answered-wrong')) return;
+            const inp = document.getElementById(`fill-inp-${idx}`);
+            const btn = document.getElementById(`fill-btn-${idx}`);
+            const given = inp.value.trim().toLowerCase();
+            const correct = fillData[idx].ans.toLowerCase();
+            inp.disabled = true; btn.disabled = true;
+            const fb = document.getElementById(`fill-fb-${idx}`);
+            if (given === correct) {
+                card.classList.add('answered-correct'); score.correct++;
+                inp.classList.add('correct');
+                fb.className = 'q-feedback correct'; fb.textContent = '✓ Correct!';
+            } else {
+                card.classList.add('answered-wrong'); score.wrong++;
+                inp.classList.add('wrong');
+                fb.className = 'q-feedback wrong'; fb.textContent = `✗ Incorrect. The answer is: "${fillData[idx].ans}"`;
+            }
+            score.answered++; updateStats();
+        }
+
+        // ── BUILD SHORT ANSWER ────────────────────────────────
+        function buildShort() {
+            const container = document.getElementById('short-list');
+            shortData.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'q-card'; card.id = `short-${idx}`;
+                card.innerHTML = `
+            <div class="q-number">Question ${idx + 31}</div>
+            <div class="q-text">${item.q}</div>
+            <textarea class="short-textarea" id="short-ta-${idx}" placeholder="Write your answer here…"></textarea>
+            <button class="reveal-btn" onclick="revealShort(${idx})">💡 Reveal Model Answer</button>
+            <div class="answer-reveal" id="short-ans-${idx}"><strong>Model Answer:</strong> ${item.ans}</div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function revealShort(idx) {
+            document.getElementById(`short-ans-${idx}`).classList.add('shown');
+        }
+
+        // ── FINISH ────────────────────────────────────────────
+        function showFinish() {
+            const banner = document.getElementById('finish-banner');
+            if (!banner.classList.contains('visible')) {
+                document.getElementById('finish-score').textContent = `${score.correct} / 30`;
+                banner.classList.add('visible');
+            }
+        }
+        function retryExercise() { location.reload(); }
+
+        // ── INIT ─────────────────────────────────────────────
+        buildMcq(); buildTf(); buildFill(); buildShort();
+    </script>
+</body>
+
+</html>

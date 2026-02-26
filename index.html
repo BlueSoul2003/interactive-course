@@ -971,15 +971,16 @@
                             <div class="start-link">Explore Module <span>&rarr;</span></div>
                         </div>
                     </a>
-                    <a href="#igcse_science" class="card sub-science">
+                    <div class="card sub-science" style="cursor: pointer;"
+                        onclick="showLessons('igcse', 'igcse-science')">
                         <div class="card-tag">IGCSE Core</div>
-                        <h3>Co-ordinated Sciences</h3>
-                        <p>A balanced, double-award science approach integrating biology, chemistry, and physics.
-                        </p>
+                        <h3>Science</h3>
+                        <p>A balanced approach integrating biology, chemistry, and physics. Explore habitats,
+                            adaptations, and the environment.</p>
                         <div class="card-footer">
-                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
                         </div>
-                    </a>
+                    </div>
                     <a href="#igcse_chinese" class="card sub-chinese">
                         <div class="card-tag">IGCSE Language</div>
                         <h3>Chinese (First/Second Lang)</h3>
@@ -1041,6 +1042,28 @@
                             <div class="duration">🔒 Locked</div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- IGCSE Science Lessons -->
+            <div id="igcse-science" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('igcse')">&larr; Back to IGCSE Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-science); border-color: var(--sub-science);">🔬
+                    </div>
+                    IGCSE Science Modules
+                </h2>
+                <div class="grid">
+                    <a href="content/IGCSE_Syllabus/Year4/Science/Chapter2_Living_Things/index.html"
+                        class="card sub-science">
+                        <div class="card-tag">Year 4 · Chapter 2</div>
+                        <h3>Topic 2: Living Things in Their Environment</h3>
+                        <p>Explore habitats, adaptations, identification keys, pollution &amp; conservation through
+                            slides and 40 interactive questions.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
@@ -1259,7 +1282,8 @@
             { syllabus: "UEC", subject: "English", label: "Reading Comprehension Guide", file: "resources/pdf/UEC/English/Reading_Guide.pdf" },
             { syllabus: "UEC", subject: "English", label: "Summary Writing Workshop", file: "resources/pdf/UEC/English/Summary_Writing.pdf" },
             // ── IGCSE ────────────────────────────────────────────────────────────
-            // { syllabus: "IGCSE", subject: "English", label: "IGCSE English Notes", file: "resources/pdf/IGCSE/English/Notes.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Answer_Key.pdf" },
             // ── Singapore ────────────────────────────────────────────────────────
             { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Whole Numbers Review", file: "resources/pdf/Singapore/Math/Whole_Numbers_Review.pdf" },
         ];
