@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1177,4 +1177,25 @@
     </script>
 </body>
 
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SG_Math_Review1"
+            data-module-name="Singapore Math Y4 Review 1"
+            data-module-url="content/Singapore_Syllabus/Year4/Math/Review1/index.html"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data) {
+                const p = saved.progress_data;
+                if (p.questionIndex !== undefined && typeof currentQuestion !== 'undefined') {
+                    currentQuestion = p.questionIndex;
+                }
+            }
+            if (window.ProgressTracker) ProgressTracker.save({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) });
+        });
+        if (typeof nextQuestion === 'function') {
+            const _oNQ2 = nextQuestion;
+            nextQuestion = function() { _oNQ2(); if (window.ProgressTracker) ProgressTracker.save({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) }); };
+        }
+    </script>
 </html>

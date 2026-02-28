@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +10,42 @@
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .fade-in { animation: fadeIn 0.4s ease-in-out; }
-        .slide-up { animation: slideUp 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
+
 <body class="bg-slate-50 text-slate-900 min-h-screen p-4 md:p-8">
 
     <div id="app" class="max-w-5xl mx-auto">
@@ -224,7 +254,7 @@
             const q = quizData[state.currentQ];
             const isAnswered = state.answers[state.currentQ] !== null;
             const progress = ((state.currentQ + 1) / quizData.length) * 100;
-            
+
             // Toggle buttons text based on current language
             const langBtnEnClass = state.quizLang === 'en' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-400 hover:text-indigo-600';
             const langBtnCnClass = state.quizLang === 'cn' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-400 hover:text-indigo-600';
@@ -271,7 +301,7 @@
             q.choices.forEach((choice, idx) => {
                 const isCorrect = choice === q.a;
                 const isSelected = isAnswered && state.answers[state.currentQ].choice === choice;
-                
+
                 let btnClass = 'bg-white border-slate-200 hover:border-indigo-600 hover:bg-indigo-50 text-slate-700 shadow-sm';
                 let iconHtml = `<span class="mr-3 text-slate-300 font-black">${String.fromCharCode(65 + idx)}.</span>`;
 
@@ -309,11 +339,11 @@
                                 </button>
                                 
                                 <div id="feedback-area" class="font-black text-sm uppercase tracking-wider">
-                                    ${state.feedback ? 
-                                        (state.feedback.correct ? 
-                                            `<span class="text-emerald-600 fade-in"><i class="fa-solid fa-check mr-1"></i> Excellent</span>` : 
-                                            `<span class="text-rose-600 fade-in"><i class="fa-solid fa-xmark mr-1"></i> System Update</span>`
-                                        ) : ''}
+                                    ${state.feedback ?
+                    (state.feedback.correct ?
+                        `<span class="text-emerald-600 fade-in"><i class="fa-solid fa-check mr-1"></i> Excellent</span>` :
+                        `<span class="text-rose-600 fade-in"><i class="fa-solid fa-xmark mr-1"></i> System Update</span>`
+                    ) : ''}
                                 </div>
 
                                 <button onclick="nextQuestion()" class="flex items-center gap-2 font-bold text-indigo-600 hover:text-indigo-800 transition-all">
@@ -389,12 +419,12 @@
 
         function handleAnswer(choice) {
             if (state.answers[state.currentQ] !== null) return;
-            
+
             const isCorrect = choice === quizData[state.currentQ].a;
             state.answers[state.currentQ] = { choice, isCorrect };
-            
+
             if (isCorrect) state.score++;
-            
+
             state.feedback = { correct: isCorrect };
             render();
 
@@ -426,7 +456,7 @@
             state.score = 0;
             state.answers = new Array(quizData.length).fill(null);
             state.feedback = null;
-            
+
             // Optional: reshuffle choices on restart
             quizData.forEach(item => {
                 item.choices.sort(() => 0.5 - Math.random());
@@ -442,11 +472,37 @@
         }
 
         // --- INIT ---
-        window.onload = () => {
+        window.onload = async () => {
+            if (window.ProgressTracker) {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data) {
+                    const p = saved.progress_data;
+                    state.view = p.view || 'menu';
+                    state.currentQ = p.currentQ || 0;
+                    state.score = p.score || 0;
+                    state.answers = p.answers || new Array(quizData.length).fill(null);
+                    state.quizLang = p.quizLang || 'en';
+                }
+            }
             render();
         };
 
+        // --- PROGRESS HOOKS ---
+        const _origSetView = setView;
+        setView = function (viewName) {
+            _origSetView(viewName);
+            if (window.ProgressTracker) ProgressTracker.save({ view: state.view, currentQ: state.currentQ, score: state.score, answers: state.answers, quizLang: state.quizLang });
+        };
+        const _origHandleAnswer = handleAnswer;
+        handleAnswer = function (choice) {
+            _origHandleAnswer(choice);
+            if (window.ProgressTracker) ProgressTracker.save({ view: state.view, currentQ: state.currentQ, score: state.score, answers: state.answers, quizLang: state.quizLang });
+        };
+
     </script>
+    <script src="../../../../../js/progress-tracker.js" data-module-id="SPM_Peribahasa"
+        data-module-name="SPM Peribahasa (BM)"
+        data-module-url="content/SPM_Syllabus/Form5/BM/Peribahasa/index.html"></script>
 </body>
 
 </html>

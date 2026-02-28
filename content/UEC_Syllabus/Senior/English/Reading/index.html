@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -829,4 +829,25 @@
     </script>
 </body>
 
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="UEC_Reading"
+            data-module-name="UEC Senior English Reading"
+            data-module-url="content/UEC_Syllabus/Senior/English/Reading/index.html"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data && saved.progress_data.part === 2 && typeof renderPart2 === 'function') {
+                renderPart2();
+            }
+        });
+        if (typeof renderPart1 === 'function') {
+            const _o1 = renderPart1;
+            renderPart1 = function() { _o1(); if (window.ProgressTracker) ProgressTracker.save({ part: 1 }); };
+        }
+        if (typeof renderPart2 === 'function') {
+            const _o2 = renderPart2;
+            renderPart2 = function() { _o2(); if (window.ProgressTracker) ProgressTracker.save({ part: 2 }); };
+        }
+    </script>
 </html>

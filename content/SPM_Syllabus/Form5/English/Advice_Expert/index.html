@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -786,9 +786,9 @@
 
         // --- PART 2: TONE ---
         const toneSets = [
-            { title: "Level 1: Chinese Logic", qs: [{ bad: "我不喜欢�?, opts: ["这个不太适合�?(I don't think it suits me)", "很难�?(It's ugly)"], a: "这个不太适合�?(I don't think it suits me)" }, { bad: "你一定要做�?, opts: ["你要�?(Do it)", "我觉得你可以试看 (I think you could try)"], a: "我觉得你可以试看 (I think you could try)" }, { bad: "你很懒惰�?, opts: ["你最近好像很�?(You seem tired)", "你没�?(Useless)"], a: "你最近好像很�?(You seem tired)" }] },
-            { title: "Level 2: Health Advice", qs: [{ bad: "Stop eating junk food!", opts: ["You are fat.", "Why don't you try eating more fruits? (不如试着多吃水果?)"], a: "Why don't you try eating more fruits? (不如试着多吃水果?)" }, { bad: "Go exercise now!", opts: ["I think you should go for a walk. (我觉得你应该去散�?", "Run now!"], a: "I think you should go for a walk. (我觉得你应该去散�?" }, { bad: "You look terrible.", opts: ["You look a bit tired. (你看起来有点�?", "You are ugly."], a: "You look a bit tired. (你看起来有点�?" }] },
-            { title: "Level 3: Social & Politeness", qs: [{ bad: "Go away!", opts: ["Get lost!", "I need some space right now. (我现在需要一点空�?"], a: "I need some space right now. (我现在需要一点空�?" }, { bad: "Your idea is stupid.", opts: ["I have a different idea. (我有不一样的想法)", "That is dumb."], a: "I have a different idea. (我有不一样的想法)" }, { bad: "Buy me this.", opts: ["I would really appreciate if you could buy this. (如果你能买这个我会很感激)", "Give me money."], a: "I would really appreciate if you could buy this. (如果你能买这个我会很感激)" }] }
+            { title: "Level 1: Chinese Logic", qs: [{ bad: "我不喜欢�?, opts: ["这个不太适合�?(I don't think it suits me)", "很难�?(It's ugly)"], a: "这个不太适合�?(I don't think it suits me)" }, { bad: "你一定要做�?, opts: ["你要�?(Do it)", "我觉得你可以试看 (I think you could try)"], a: "我觉得你可以试看 (I think you could try)" }, { bad: "你很懒惰�?, opts: ["你最近好像很�?(You seem tired)", "你没�?(Useless)"], a: "你最近好像很�?(You seem tired)" }] },
+            { title: "Level 2: Health Advice", qs: [{ bad: "Stop eating junk food!", opts: ["You are fat.", "Why don't you try eating more fruits? (不如试着多吃水果?)"], a: "Why don't you try eating more fruits? (不如试着多吃水果?)" }, { bad: "Go exercise now!", opts: ["I think you should go for a walk. (我觉得你应该去散�?", "Run now!"], a: "I think you should go for a walk. (我觉得你应该去散�?" }, { bad: "You look terrible.", opts: ["You look a bit tired. (你看起来有点�?", "You are ugly."], a: "You look a bit tired. (你看起来有点�?" }] },
+            { title: "Level 3: Social & Politeness", qs: [{ bad: "Go away!", opts: ["Get lost!", "I need some space right now. (我现在需要一点空�?"], a: "I need some space right now. (我现在需要一点空�?" }, { bad: "Your idea is stupid.", opts: ["I have a different idea. (我有不一样的想法)", "That is dumb."], a: "I have a different idea. (我有不一样的想法)" }, { bad: "Buy me this.", opts: ["I would really appreciate if you could buy this. (如果你能买这个我会很感激)", "Give me money."], a: "I would really appreciate if you could buy this. (如果你能买这个我会很感激)" }] }
         ];
         let tIndex = 0;
 
@@ -842,7 +842,7 @@
         }
 
         // --- PART 3: PUZZLE ---
-        const puzzleSets = [{ title: "Scenario 1: Exam Stress", items: [{ label: "1. Greeting", opts: [{ t: "Hi Sarah,", c: "(�?Sarah)" }, { t: "Dear Sir,", c: "(尊敬的先�?" }], a: "Hi Sarah," }, { label: "2. Sympathy", opts: [{ t: "I am sorry to hear you are stressed.", c: "(听说你压力大我很难过)" }, { t: "Stop crying.", c: "(别哭�?" }], a: "I am sorry to hear you are stressed." }, { label: "3. Advice 1", opts: [{ t: "Why don't you make a timetable?", c: "(不如做个时间�?)" }, { t: "You must give up.", c: "(你必须放�?" }], a: "Why don't you make a timetable?" }, { label: "4. Advice 2", opts: [{ t: "Also, you could listen to music.", c: "(而且，你可以听听�?" }, { t: "You are lazy.", c: "(你很�?" }], a: "Also, you could listen to music." }, { label: "5. Closing", opts: [{ t: "Good luck!", c: "(祝好�?" }, { t: "See you never.", c: "(再也不见)" }], a: "Good luck!" }] }, { title: "Scenario 2: Fight with Friend", items: [{ label: "1. Greeting", opts: [{ t: "Hello John,", c: "(你好 John)" }, { t: "To whom it may concern,", c: "(致有关人�?" }], a: "Hello John," }, { label: "2. Sympathy", opts: [{ t: "I know you are sad about the fight.", c: "(我知道你因为吵架很难�?" }, { t: "You are wrong.", c: "(你错�?" }], a: "I know you are sad about the fight." }, { label: "3. Advice 1", opts: [{ t: "I think you should apologize.", c: "(我觉得你应该道歉)" }, { t: "You must fight him again.", c: "(你必须再打他)" }], a: "I think you should apologize." }, { label: "4. Advice 2", opts: [{ t: "Why don't you buy him a drink?", c: "(不如请他喝饮�?)" }, { t: "Ignore him.", c: "(别理�?" }], a: "Why don't you buy him a drink?" }, { label: "5. Closing", opts: [{ t: "Hope you make up soon.", c: "(希望你们快点和好)" }, { t: "Bad luck.", c: "(倒霉)" }], a: "Hope you make up soon." }] }, { title: "Scenario 3: Lost Library Book", items: [{ label: "1. Greeting", opts: [{ t: "Hi Ali,", c: "(�?Ali)" }, { t: "Hey you,", c: "(喂你)" }], a: "Hi Ali," }, { label: "2. Sympathy", opts: [{ t: "Don't worry too much.", c: "(别太担心)" }, { t: "You are in big trouble.", c: "(你麻烦大�?" }], a: "Don't worry too much." }, { label: "3. Advice 1", opts: [{ t: "You should tell the librarian.", c: "(你应该告诉图书管理员)" }, { t: "Run away.", c: "(逃跑)" }], a: "You should tell the librarian." }, { label: "4. Advice 2", opts: [{ t: "You could offer to pay for it.", c: "(你可以提出赔�?" }, { t: "Steal another book.", c: "(偷另一本书)" }], a: "You could offer to pay for it." }, { label: "5. Closing", opts: [{ t: "Let me know how it goes.", c: "(告诉我结果怎样)" }, { t: "Whatever.", c: "(随便�?" }], a: "Let me know how it goes." }] }];
+        const puzzleSets = [{ title: "Scenario 1: Exam Stress", items: [{ label: "1. Greeting", opts: [{ t: "Hi Sarah,", c: "(�?Sarah)" }, { t: "Dear Sir,", c: "(尊敬的先�?" }], a: "Hi Sarah," }, { label: "2. Sympathy", opts: [{ t: "I am sorry to hear you are stressed.", c: "(听说你压力大我很难过)" }, { t: "Stop crying.", c: "(别哭�?" }], a: "I am sorry to hear you are stressed." }, { label: "3. Advice 1", opts: [{ t: "Why don't you make a timetable?", c: "(不如做个时间�?)" }, { t: "You must give up.", c: "(你必须放�?" }], a: "Why don't you make a timetable?" }, { label: "4. Advice 2", opts: [{ t: "Also, you could listen to music.", c: "(而且，你可以听听�?" }, { t: "You are lazy.", c: "(你很�?" }], a: "Also, you could listen to music." }, { label: "5. Closing", opts: [{ t: "Good luck!", c: "(祝好�?" }, { t: "See you never.", c: "(再也不见)" }], a: "Good luck!" }] }, { title: "Scenario 2: Fight with Friend", items: [{ label: "1. Greeting", opts: [{ t: "Hello John,", c: "(你好 John)" }, { t: "To whom it may concern,", c: "(致有关人�?" }], a: "Hello John," }, { label: "2. Sympathy", opts: [{ t: "I know you are sad about the fight.", c: "(我知道你因为吵架很难�?" }, { t: "You are wrong.", c: "(你错�?" }], a: "I know you are sad about the fight." }, { label: "3. Advice 1", opts: [{ t: "I think you should apologize.", c: "(我觉得你应该道歉)" }, { t: "You must fight him again.", c: "(你必须再打他)" }], a: "I think you should apologize." }, { label: "4. Advice 2", opts: [{ t: "Why don't you buy him a drink?", c: "(不如请他喝饮�?)" }, { t: "Ignore him.", c: "(别理�?" }], a: "Why don't you buy him a drink?" }, { label: "5. Closing", opts: [{ t: "Hope you make up soon.", c: "(希望你们快点和好)" }, { t: "Bad luck.", c: "(倒霉)" }], a: "Hope you make up soon." }] }, { title: "Scenario 3: Lost Library Book", items: [{ label: "1. Greeting", opts: [{ t: "Hi Ali,", c: "(�?Ali)" }, { t: "Hey you,", c: "(喂你)" }], a: "Hi Ali," }, { label: "2. Sympathy", opts: [{ t: "Don't worry too much.", c: "(别太担心)" }, { t: "You are in big trouble.", c: "(你麻烦大�?" }], a: "Don't worry too much." }, { label: "3. Advice 1", opts: [{ t: "You should tell the librarian.", c: "(你应该告诉图书管理员)" }, { t: "Run away.", c: "(逃跑)" }], a: "You should tell the librarian." }, { label: "4. Advice 2", opts: [{ t: "You could offer to pay for it.", c: "(你可以提出赔�?" }, { t: "Steal another book.", c: "(偷另一本书)" }], a: "You could offer to pay for it." }, { label: "5. Closing", opts: [{ t: "Let me know how it goes.", c: "(告诉我结果怎样)" }, { t: "Whatever.", c: "(随便�?" }], a: "Let me know how it goes." }] }];
         let pIndex = 0;
         let showHints = false;
 
@@ -891,7 +891,7 @@
                 document.getElementById('p-check-btn').style.display = 'none';
                 if (pIndex < 2) document.getElementById('p-next-btn').style.display = 'inline-block';
             } else {
-                fb.innerHTML = "<span style='color:#f87171'>�?Some parts are out of order.</span>";
+                fb.innerHTML = "<span style='color:#f87171'>�?Some parts are out of order.</span>";
             }
         }
 
@@ -942,4 +942,21 @@
     </script>
 </body>
 
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SPM_Advice_Expert"
+            data-module-name="SPM Advice Expert (English)"
+            data-module-url="content/SPM_Syllabus/Form5/English/Advice_Expert/index.html"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data && saved.progress_data.section && typeof showSection === 'function') {
+                showSection(saved.progress_data.section);
+            }
+        });
+        if (typeof showSection === 'function') {
+            const _oSS = showSection;
+            showSection = function(n) { _oSS(n); if (window.ProgressTracker) ProgressTracker.save({ section: n }); };
+        }
+    </script>
 </html>

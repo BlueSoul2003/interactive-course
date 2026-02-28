@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -742,4 +742,16 @@
 
 </body>
 
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="UEC_Summary"
+            data-module-name="UEC Senior English Summary Writing"
+            data-module-url="content/UEC_Syllabus/Senior/English/Summary/index.html"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            // Summary module - just record that student was here
+            if (window.ProgressTracker) ProgressTracker.save({ visited: true });
+        });
+    </script>
 </html>

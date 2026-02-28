@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+Ôªø<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -544,7 +544,7 @@
                             <span>Smell</span>
                         </button>
                         <button class="sense-btn" onclick="checkSense('Touch')">
-                            <span style="font-size:2rem">‚ú?/span>
+                            <span style="font-size:2rem">ÔøΩ?/span>
                             <span>Touch</span>
                         </button>
                         <button class="sense-btn" onclick="checkSense('Taste')">
@@ -669,7 +669,7 @@
                 levelText.innerText = "Intermediate";
                 display.style.color = "#f8fafc";
             } else {
-                display.innerText = "‚ú?" + currentWordSet.best + " ‚ú?;
+                display.innerText = "ÔøΩ?" + currentWordSet.best + " ÔøΩ?;
                 levelText.innerText = "SPM Advanced Level";
                 display.style.color = "#f59e0b";
             }
@@ -697,7 +697,7 @@
 
         function checkSense(ans) {
             if (sensesQ[senseIndex].a === ans) {
-                document.getElementById('sense-feedback').innerHTML = "<span class='correct'>‚ú?Correct!</span>";
+                document.getElementById('sense-feedback').innerHTML = "<span class='correct'>ÔøΩ?Correct!</span>";
                 senseIndex++;
                 setTimeout(nextSenseQ, 1000);
             } else {
@@ -707,7 +707,7 @@
                 if (sensesQ[senseIndex].a === "Smell") hint = "(Think about nose)";
                 if (sensesQ[senseIndex].a === "Sight") hint = "(Think about eyes)";
                 if (sensesQ[senseIndex].a === "Taste") hint = "(Think about food)";
-                document.getElementById('sense-feedback').innerHTML = `<span class='wrong'>‚ù?Try again! ${hint}</span>`;
+                document.getElementById('sense-feedback').innerHTML = `<span class='wrong'>ÔøΩ?Try again! ${hint}</span>`;
             }
         }
 
@@ -782,4 +782,21 @@
     </script>
 </body>
 
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SPM_My_Dream_Holiday"
+            data-module-name="SPM My Dream Holiday (English)"
+            data-module-url="content/SPM_Syllabus/Form5/English/My_Dream_Holiday/index.html"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data && saved.progress_data.section && typeof showSection === 'function') {
+                showSection(saved.progress_data.section);
+            }
+        });
+        if (typeof showSection === 'function') {
+            const _oSS2 = showSection;
+            showSection = function(n) { _oSS2(n); if (window.ProgressTracker) ProgressTracker.save({ section: n }); };
+        }
+    </script>
 </html>

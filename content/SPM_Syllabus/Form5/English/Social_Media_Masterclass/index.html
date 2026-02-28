@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -827,6 +827,35 @@
         renderVocab();
         renderPeel();
 
+    </script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SPM_Social_Media"
+            data-module-name="SPM Social Media Masterclass (English)"
+            data-module-url="content/SPM_Syllabus/Form5/English/Social_Media_Masterclass/index.html"></script>
+    <script>
+        // -- PROGRESS HOOKS
+        function _saveSMMProgress() {
+            const active = document.querySelector('.lesson-section.active');
+            const sectionNum = active ? active.id.replace('section-', '') : '1';
+            if (window.ProgressTracker) ProgressTracker.save({ section: sectionNum, vocabIndex: vIndex, peelIndex: pIndex });
+        }
+        const _origShowSection = showSection;
+        showSection = function(num) { _origShowSection(num); _saveSMMProgress(); };
+        const _origNextPeel = nextPeel;
+        nextPeel = function() { _origNextPeel(); _saveSMMProgress(); };
+        const _origChangeVocabSet = changeVocabSet;
+        changeVocabSet = function(d) { _origChangeVocabSet(d); _saveSMMProgress(); };
+        // -- RESTORE ON LOAD
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data) {
+                const p = saved.progress_data;
+                if (p.vocabIndex) { vIndex = p.vocabIndex; renderVocab(); }
+                if (p.peelIndex) { pIndex = p.peelIndex; renderPeel(); }
+                if (p.section) showSection(parseInt(p.section));
+            }
+        });
     </script>
 </body>
 

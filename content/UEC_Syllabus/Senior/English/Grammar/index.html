@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -783,4 +783,27 @@
     </script>
 </body>
 
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="UEC_Grammar"
+            data-module-name="UEC Senior English Grammar"
+            data-module-url="content/UEC_Syllabus/Senior/English/Grammar/index.html"></script>
+    <script>
+        window.addEventListener('load', async () => {
+            if (!window.ProgressTracker) return;
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data && saved.progress_data.part) {
+                const pt = saved.progress_data.part;
+                if (pt === 2 && typeof renderErrors === 'function') renderErrors();
+            }
+        });
+        // Hook tab switching - Grammar uses buttons to call renderPart1/renderErrors
+        const _origRenderPart1 = (typeof renderPart1 !== 'undefined') ? renderPart1 : null;
+        const _origRenderErrors = (typeof renderErrors !== 'undefined') ? renderErrors : null;
+        if (_origRenderPart1) {
+            renderPart1 = function() { _origRenderPart1(); if (window.ProgressTracker) ProgressTracker.save({ part: 1 }); };
+        }
+        if (_origRenderErrors) {
+            renderErrors = function() { _origRenderErrors(); if (window.ProgressTracker) ProgressTracker.save({ part: 2 }); };
+        }
+    </script>
 </html>
