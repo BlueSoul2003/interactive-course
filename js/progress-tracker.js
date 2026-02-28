@@ -23,8 +23,8 @@
 //
 // ==============================================================
 
-const SUPABASE_URL = 'YOUR_SUPABASE_PROJECT_URL';   // e.g. https://xyzabc.supabase.co
-const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';       // starts with "eyJ..."
+const SUPABASE_URL = 'https://qfcpgqhrvegfdgvhqptw.supabase.co';   // e.g. https://xyzabc.supabase.co
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmY3BncWhydmVnZmRndmhxcHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNzY5NDQsImV4cCI6MjA4Nzg1Mjk0NH0.GJF3EUqqCNKkSXyWOcqlaX23KG2S_NxHA30_MsoSBrg';       // starts with "eyJ..."
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
 
