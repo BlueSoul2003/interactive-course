@@ -590,6 +590,14 @@
 <body>
 
     <header>
+        <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+            <button id="studentDashboardBtn" class="tab-btn"
+                style="padding: 8px 20px; font-size: 0.95rem; margin:0; background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.3); color: white; display:flex; align-items:center; gap: 8px;"
+                onclick="openStudentModal()">
+                <span style="font-size: 1.2rem;">👤</span>
+                <span id="activeStudentLabel">Student: None</span>
+            </button>
+        </div>
         <div class="level-badge">Global Syllabus Portal</div>
         <h1>Your Path to Academic Excellence</h1>
         <p>Select your syllabus pathway and master your subjects through First Principles learning.</p>
@@ -1395,6 +1403,191 @@
                 targetSubjectLayer.classList.add('active');
             }
         }
+    </script>
+
+    <!-- ==========================================
+         STUDENT DASHBOARD MODAL
+    =========================================== -->
+    <div id="studentModalOverlay" class="modal-overlay">
+        <div class="modal-box" style="animation-duration: 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <button class="modal-close" onclick="closeStudentModal()">&times;</button>
+            <h2 style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px;">Student
+                Dashboard</h2>
+            <div class="modal-subtitle" style="margin-bottom: 25px;">Manage student profiles and resume progress across
+                modules</div>
+
+            <div
+                style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <label
+                    style="display:block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary);">Select
+                    Existing Student</label>
+                <div style="display: flex; gap: 10px;">
+                    <select id="studentSelect"
+                        style="flex-grow: 1; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <option value="">-- Choose Profile --</option>
+                    </select>
+                    <button class="tab-btn" onclick="selectExistingStudent()"
+                        style="margin: 0; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: var(--text-primary); color: var(--bg-color);">Select</button>
+                </div>
+            </div>
+
+            <div
+                style="text-align: center; color: var(--text-secondary); margin-bottom: 20px; font-size: 0.9rem; font-weight: 600;">
+                OR CREATE NEW</div>
+
+            <div
+                style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <label
+                    style="display:block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary);">New
+                    Student Profile</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="newStudentName" placeholder="Enter student's name..."
+                        style="flex-grow: 1; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                    <button id="createStudentBtn" onclick="createNewStudent()"
+                        style="margin: 0; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: var(--sub-english); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Create</button>
+                </div>
+            </div>
+
+            <!-- Active Student Progress Area -->
+            <div id="activeStudentInfo"
+                style="display: none; margin-top: 30px; padding-top: 25px; border-top: 1px dashed rgba(255,255,255,0.15);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.25rem; color: #f1f5f9; font-family: var(--font-serif);">Progress: <span
+                            id="progressStudentName" style="color: var(--sub-science);"></span></h3>
+                    <button onclick="logoutStudent()"
+                        style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; font-weight: 600; transition: all 0.2s;">Logout</button>
+                </div>
+
+                <div id="progressList"
+                    style="display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto; padding-right: 5px;">
+                    <!-- Filled via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/progress-tracker.js"></script>
+    <script>
+        // ── Student Dashboard Logic (Supabase-powered) ────────────────────────
+
+        async function updateStudentUI() {
+            const active = ProgressTracker.getActiveStudent();
+            const labelBtn = document.getElementById('activeStudentLabel');
+
+            if (active) {
+                labelBtn.innerText = `👤 ${active}`;
+                document.getElementById('activeStudentInfo').style.display = 'block';
+                document.getElementById('progressStudentName').innerText = active;
+                await loadProgressList(active);
+            } else {
+                labelBtn.innerText = 'Student: None';
+                document.getElementById('activeStudentInfo').style.display = 'none';
+            }
+
+            // Populate dropdown
+            const students = await ProgressTracker.getStudents();
+            const select = document.getElementById('studentSelect');
+            select.innerHTML = '<option value="">-- Choose Profile --</option>';
+            students.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                if (s === active) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        async function loadProgressList(student) {
+            const container = document.getElementById('progressList');
+            container.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; padding: 20px 0;">Loading...</p>';
+
+            const rows = await ProgressTracker.getAllProgressForStudent(student);
+
+            container.innerHTML = '';
+
+            if (!rows || rows.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; padding: 20px 0;">No progress saved yet. Start a module to track progress.</p>';
+                return;
+            }
+
+            rows.forEach(row => {
+                const el = document.createElement('div');
+                el.style.cssText = 'background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; gap: 12px;';
+
+                const d = new Date(row.last_updated);
+                const timeStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                el.innerHTML = `
+                    <div style="min-width: 0;">
+                        <div style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row.module_name || row.module_id}</div>
+                        <div style="font-size: 0.82rem; color: var(--text-secondary);">Last studied: ${timeStr}</div>
+                    </div>
+                    <a href="${row.module_url}" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 8px 16px; text-decoration: none; font-size: 0.85rem; font-weight: 600; white-space: nowrap; flex-shrink: 0;">Resume &rarr;</a>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        async function openStudentModal() {
+            document.getElementById('studentModalOverlay').classList.add('open');
+            await updateStudentUI();
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModalOverlay').classList.remove('open');
+        }
+
+        async function createNewStudent() {
+            const nameInput = document.getElementById('newStudentName');
+            const btn = document.getElementById('createStudentBtn');
+            const name = nameInput.value.trim();
+            if (!name) return;
+
+            btn.innerText = 'Saving...';
+            btn.disabled = true;
+
+            await ProgressTracker.createStudent(name);
+            ProgressTracker.setActiveStudent(name);
+            nameInput.value = '';
+            await updateStudentUI();
+
+            btn.innerText = 'Created! ✓';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+                btn.innerText = 'Create';
+                btn.style.background = 'var(--sub-english)';
+                btn.disabled = false;
+            }, 1800);
+        }
+
+        async function selectExistingStudent() {
+            const name = document.getElementById('studentSelect').value;
+            if (name) {
+                ProgressTracker.setActiveStudent(name);
+                await updateStudentUI();
+            }
+        }
+
+        function logoutStudent() {
+            ProgressTracker.clearActiveStudent();
+            const labelBtn = document.getElementById('activeStudentLabel');
+            lbl.innerText = 'Student: None';
+            document.getElementById('activeStudentInfo').style.display = 'none';
+        }
+
+        // Initialize badge on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            const active = ProgressTracker.getActiveStudent();
+            if (active) {
+                document.getElementById('activeStudentLabel').innerText = `👤 ${active}`;
+            }
+        });
+
+        // Update badge whenever active student changes
+        document.addEventListener('activeStudentChanged', (e) => {
+            const lbl = document.getElementById('activeStudentLabel');
+            lbl.innerText = e.detail.name ? `👤 ${e.detail.name}` : 'Student: None';
+        });
     </script>
 </body>
 

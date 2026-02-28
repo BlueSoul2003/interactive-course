@@ -360,9 +360,44 @@ function toggleLang(lang) {
     }
 }
 
-function initApp() {
+function saveCurrentProgress() {
+    if (window.ProgressTracker && ProgressTracker.getActiveStudent()) {
+        ProgressTracker.save({
+            currentTheme: currentThemeIdx,
+            currentSet: parseInt(currentSetIdx),
+            currentStep: currentStep
+        });
+    }
+}
+
+async function initApp() {
+    // Show active student badge
+    if (window.ProgressTracker) {
+        const student = ProgressTracker.getActiveStudent();
+        if (student) {
+            const badge = document.getElementById('activeStudentBadge');
+            if (badge) {
+                badge.style.display = 'inline-block';
+                document.getElementById('activeStudentName').innerText = student;
+            }
+
+            // Restore saved progress from Supabase
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data) {
+                const p = saved.progress_data;
+                currentThemeIdx = p.currentTheme ?? 0;
+                currentSetIdx = p.currentSet ?? 0;
+                currentStep = p.currentStep ?? 1;
+            }
+        }
+    }
+
     setupThemeGrid();
     updateSets();
+
+    if (currentStep > 1) {
+        goToStep(currentStep);
+    }
 }
 
 function setupThemeGrid() {
@@ -375,8 +410,12 @@ function setupThemeGrid() {
         btn.onclick = () => {
             playSound('click');
             currentThemeIdx = index;
+            currentSetIdx = 0;
+            currentStep = 1;
             setupThemeGrid();
             updateSets();
+            goToStep(1);
+            saveCurrentProgress();
         };
         grid.appendChild(btn);
     });
@@ -392,11 +431,13 @@ function updateSets() {
         opt.innerHTML = formatTitle(s.title);
         setSel.appendChild(opt);
     });
-    setSel.value = 0;
+    setSel.value = currentSetIdx;
 
     // Add event listener to the select to play sound on change
     setSel.onchange = () => {
         playSound('click');
+        currentSetIdx = document.getElementById("setSelect").value;
+        saveCurrentProgress();
         renderDashboard();
     };
 
@@ -671,6 +712,7 @@ function goToStep(stepNum) {
     playSound('click');
     currentStep = stepNum;
     updateStepVisibility();
+    saveCurrentProgress();
 }
 
 function navStep(direction) {
@@ -683,6 +725,7 @@ function navStep(direction) {
     if (newStep >= 1 && newStep <= totalSteps) {
         currentStep = newStep;
         updateStepVisibility();
+        saveCurrentProgress();
     }
 }
 

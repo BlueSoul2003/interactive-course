@@ -770,9 +770,13 @@
 
 <body>
 
-    <header>
+    <header style="position: relative;">
         <a href="../../../../../index.html" class="logo">🔬 IGCSE Science</a>
         <span class="header-badge">Year 4 · Chapter 2</span>
+        <div id="activeStudentBadge"
+            style="position: absolute; top: 12px; right: 20px; background: rgba(56, 189, 248, 0.15); border: 1px solid var(--accent); color: var(--accent); padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; display: none;">
+            👤 <span id="activeStudentName"></span>
+        </div>
     </header>
 
     <div class="hero">
@@ -869,6 +873,9 @@
     </div>
 
     <!-- ══════════ SCRIPTS ══════════ -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="IGCSE_Science_Y4C2"
+        data-module-name="IGCSE Science Y4 · Ch. 2: Living Things"
+        data-module-url="content/IGCSE_Syllabus/Year4/Science/Chapter2_Living_Things/index.html"></script>
     <script>
         // ── TAB SWITCH ────────────────────────────────────────
         function switchTab(tab) {
@@ -1158,6 +1165,108 @@
 
         // ── INIT ─────────────────────────────────────────────
         buildMcq(); buildTf(); buildFill(); buildShort();
+
+        // ── UNIVERSAL PROGRESS TRACKING ───────────────────────────
+        // Uses ProgressTracker.save() / .load() from js/progress-tracker.js
+        // The script tag data-* attributes above identify this module.
+
+        let _tracking = { tab: 'ppt', mcq: {}, tf: {}, fill: {}, short: {} };
+
+        function _saveProgress() {
+            if (window.ProgressTracker && ProgressTracker.getActiveStudent()) {
+                ProgressTracker.save(_tracking);
+            }
+        }
+
+        async function _loadProgress() {
+            if (!window.ProgressTracker) return;
+
+            // Show active student badge
+            const student = ProgressTracker.getActiveStudent();
+            if (student) {
+                const badge = document.getElementById('activeStudentBadge');
+                if (badge) { badge.style.display = 'block'; }
+                const nameEl = document.getElementById('activeStudentName');
+                if (nameEl) nameEl.innerText = student;
+            }
+
+            const saved = await ProgressTracker.load();
+            if (!saved || !saved.progress_data) return;
+
+            const p = saved.progress_data;
+            _tracking = { tab: p.tab || 'ppt', mcq: p.mcq || {}, tf: p.tf || {}, fill: p.fill || {}, short: p.short || {} };
+
+            // Restore tab
+            switchTab(_tracking.tab);
+
+            // Restore MCQ answers
+            for (const [idx, val] of Object.entries(_tracking.mcq)) {
+                checkMcq(parseInt(idx), val);
+            }
+
+            // Restore T/F answers
+            for (const [idx, val] of Object.entries(_tracking.tf)) {
+                checkTf(parseInt(idx), val === true || val === 'true');
+            }
+
+            // Restore Fill-in-blank answers
+            for (const [idx, val] of Object.entries(_tracking.fill)) {
+                const inp = document.getElementById(`fill-inp-${idx}`);
+                if (inp) { inp.value = val; checkFill(parseInt(idx)); }
+            }
+
+            // Restore short answers (text only, no re-checking)
+            for (const [idx, val] of Object.entries(_tracking.short)) {
+                const ta = document.getElementById(`short-ta-${idx}`);
+                if (ta) ta.value = val;
+            }
+        }
+
+        // Hook: save on tab switch
+        const _origSwitchTab = switchTab;
+        switchTab = function (tab) {
+            _origSwitchTab(tab);
+            _tracking.tab = tab;
+            _saveProgress();
+        };
+
+        // Hook: save on MCQ answer
+        const _origCheckMcq = checkMcq;
+        checkMcq = function (idx, chosen) {
+            _origCheckMcq(idx, chosen);
+            _tracking.mcq[idx] = chosen;
+            _saveProgress();
+        };
+
+        // Hook: save on T/F answer
+        const _origCheckTf = checkTf;
+        checkTf = function (idx, chosen) {
+            _origCheckTf(idx, chosen);
+            _tracking.tf[idx] = chosen;
+            _saveProgress();
+        };
+
+        // Hook: save on Fill answer
+        const _origCheckFill = checkFill;
+        checkFill = function (idx) {
+            _origCheckFill(idx);
+            const inp = document.getElementById(`fill-inp-${idx}`);
+            if (inp) _tracking.fill[idx] = inp.value.trim();
+            _saveProgress();
+        };
+
+        // Hook: save short answer on input
+        document.addEventListener('input', (e) => {
+            if (e.target.classList.contains('short-textarea')) {
+                const parts = e.target.id.split('-');
+                if (parts.length === 3) _tracking.short[parts[2]] = e.target.value;
+                _saveProgress();
+            }
+        });
+
+        // Load progress on page ready
+        _loadProgress();
+
     </script>
 </body>
 

@@ -21,14 +21,17 @@
 
     <div class="container glass-panel">
         <!-- Header & Navigation -->
-        <header class="header-flex">
+        <header class="header-flex" style="position: relative;">
             <div>
                 <div class="badge">SPM Core</div>
                 <h1>Modul Kuasa Karangan: Aplikasi Formula IMBAKUP</h1>
                 <p class="subtitle">Formula IMBAKUP membolehkan kita menghuraikan apa-apa sahaja isi dengan matang dan
                     panjang lebar.</p>
             </div>
-
+            <div id="activeStudentBadge"
+                style="position: absolute; top: 0; right: 0; background: rgba(243, 156, 18, 0.2); border: 1px solid var(--accent); color: var(--accent); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.9rem; display: none;">
+                👤 Active: <span id="activeStudentName"></span>
+            </div>
         </header>
 
         <!-- Theme Selection Grid -->
@@ -348,6 +351,9 @@
         <button class="translate-btn" id="btn-zh" onclick="toggleLang('zh')">中文</button>
     </div>
 
+    <script src="../../../../../js/progress-tracker.js" data-module-id="SPM_Karangan"
+        data-module-name="SPM Karangan (BM)"
+        data-module-url="content/SPM_Syllabus/Form5/BM/Karangan/index.html"></script>
     <script src="script.js"></script>
 </body>
 
