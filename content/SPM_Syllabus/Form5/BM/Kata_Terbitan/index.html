@@ -808,5 +808,23 @@
             document.getElementById('progress-fill').style.width = '100%';
         }
     </script>
+<!--  Home Button  -->
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+  letter-spacing: 0.5px;
+}
+.home-btn-fixed:hover {
+  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+  color: #fff;
+}
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed"> Home</a>
 </body>
 </html>
