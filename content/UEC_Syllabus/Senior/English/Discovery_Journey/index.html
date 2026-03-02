@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Discovery Journey: UEC English</title>
+    <style>
+        /* --- 宇宙深邃风背景 (Aesthetic Dark Theme) --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 70px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #4facfe;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- 翻译按钮 --- */
+        .translate-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4facfe;
+            color: white;
+            border: 2px solid #fff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .translate-btn:hover {
+            background: #fff;
+            color: #4facfe;
+        }
+
+        /* --- 双语对照逻辑 --- */
+        .lang-cn {
+            display: none;
+        }
+
+        body.show-cn .lang-cn {
+            display: block;
+            color: #ffd54f;
+            font-size: 0.9em;
+            margin-top: 5px;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        body.show-cn .btn .lang-cn,
+        body.show-cn .translate-btn .lang-cn {
+            display: inline;
+            margin-left: 5px;
+            font-style: normal;
+        }
+
+        body.show-cn .btn .lang-cn::before {
+            content: "(";
+        }
+
+        body.show-cn .btn .lang-cn::after {
+            content: ")";
+        }
+
+        /* --- 卡片与容器 --- */
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .btn {
+            background: linear-gradient(to right, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            display: block;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* --- Quiz Options (Personality Test) --- */
+        .quiz-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4facfe;
+        }
+
+        .quiz-question {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .quiz-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            transition: 0.2s;
+            color: #fff;
+        }
+
+        .quiz-btn:hover {
+            background: rgba(79, 172, 254, 0.2);
+            border-color: #4facfe;
+        }
+
+        .quiz-btn.selected {
+            background: #4facfe;
+            color: white;
+            border-color: #fff;
+        }
+
+        .quiz-btn.selected .lang-cn {
+            color: #fff;
+        }
+
+        /* 进度提示 */
+        .quiz-progress {
+            text-align: center;
+            color: #ffd54f;
+            font-weight: bold;
+            margin: 15px 0;
+            font-size: 1.2em;
+        }
+
+        /* 结果展示 */
+        #personality-result {
+            display: none;
+            text-align: center;
+            animation: slideUp 0.8s ease;
+        }
+
+        .mbti-type {
+            font-size: 3em;
+            color: #00f2fe;
+            margin: 10px 0;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        .mbti-desc {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        /* --- 翻牌子 (Flip Cards) 样式 --- */
+        .flip-grid {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .flip-card {
+            background-color: transparent;
+            width: 30%;
+            min-width: 200px;
+            height: 160px;
+            perspective: 1000px;
+        }
+
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .flip-card-front {
+            background: rgba(0, 242, 254, 0.1);
+            border: 2px solid #4facfe;
+            color: #fff;
+        }
+
+        .flip-card-front .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .flip-card-front h4 {
+            margin: 0;
+            color: #4facfe;
+        }
+
+        .flip-card-back {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: #0f2027;
+            transform: rotateY(180deg);
+            font-weight: bold;
+        }
+
+        .flip-card-back .lang-cn {
+            color: #fff;
+            font-weight: normal;
+            margin-top: 8px;
+        }
+
+        /* --- Dilemma Options --- */
+        .dilemma-btn {
+            background: #333;
+            border: 2px solid transparent;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+        }
+
+        .dilemma-btn:hover {
+            border-color: #ff5e62;
+            background: rgba(255, 94, 98, 0.1);
+        }
+
+        .dilemma-result {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-left: 4px solid #ffd54f;
+            background: rgba(255, 213, 79, 0.1);
+        }
+
+        .dilemma-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
+        }
+
+        /* --- 新增：Vocabulary Vault 样式 --- */
+        .tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            color: #fff;
+            border: 1px solid #4facfe;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .tab-btn:hover {
+            background: rgba(79, 172, 254, 0.2);
+        }
+
+        .tab-btn.active {
+            background: #4facfe;
+            color: white;
+            border-color: #fff;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+
+        .mini-flip-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .mini-flip-card {
+            width: 30%;
+            min-width: 120px;
+            height: 100px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .mini-flip-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .mini-flip-card:hover .mini-flip-inner {
+            transform: rotateY(180deg);
+        }
+
+        .mini-flip-front,
+        .mini-flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            text-align: center;
+            border: 1px solid #4facfe;
+        }
+
+        .mini-flip-front {
+            background: rgba(0, 242, 254, 0.1);
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .mini-flip-back {
+            background: #4facfe;
+            color: #0f2027;
+            transform: rotateY(180deg);
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        .fill-blank-row {
+            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ffb74d;
+        }
+
+        .vocab-select {
+            padding: 5px;
+            border-radius: 5px;
+            border: none;
+            background: #fff;
+            color: #333;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        /* --- 通用 Input 样式 --- */
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-family: inherit;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .progress-bar-top {
+            height: 8px;
+            background: #0f3460;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .progress-fill-top {
+            height: 100%;
+            background: #4facfe;
+            width: 20%;
+            border-radius: 4px;
+            transition: width 0.5s;
+        }
+
+        /* 改为20%起始 */
+
+        .stage {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .output-box {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 1.1em;
+            color: #00f2fe;
+            white-space: pre-wrap;
+            border-left: 5px solid #00f2fe;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 翻译按钮 -->
+    <button class="translate-btn" onclick="toggleLanguage()">
+        <span class="lang-en">🇨🇳 Translation</span>
+        <span class="lang-cn">Hide (隐藏)</span>
+    </button>
+
+    <h1>
+        <span class="lang-en">✨ Welcome Back!</span>
+        <span class="lang-cn">欢迎回来！</span>
+    </h1>
+    <!-- 进度条分为5步 -->
+    <div class="progress-bar-top">
+        <div class="progress-fill-top" id="mainProgress"></div>
+    </div>
+
+    <!-- STAGE 1: ICE BREAKER -->
+    <div id="stage1" class="stage active container">
+        <h2>
+            <span class="lang-en">Part 1: Rose, Bud, Thorn 🌹</span>
+            <span class="lang-cn">第一环节：玫瑰、花苞与刺</span>
+        </h2>
+        <p style="text-align:center;">
+            <span class="lang-en">Let's do a quick check-in about your long break!</span>
+            <span class="lang-cn">让我们来快速回顾一下你的长假吧！</span>
+        </p>
+
+        <label>
+            🌹 <span class="lang-en"><b>Rose (Highlight):</b> The best thing that happened.</span>
+            <span class="lang-cn">玫瑰 (高光时刻)：发生的最开心/最好的事情。</span>
+        </label>
+        <input type="text" id="roseInput" placeholder="e.g., I watched an amazing movie...">
+
+        <label>
+            🥀 <span class="lang-en"><b>Thorn (Challenge):</b> Something annoying or stressful.</span>
+            <span class="lang-cn">刺 (挑战)：一件烦人的或者有压力的事情。</span>
+        </label>
+        <input type="text" id="thornInput" placeholder="e.g., I had a lot of homework...">
+
+        <label>
+            🌷 <span class="lang-en"><b>Bud (Expectation):</b> Something you look forward to.</span>
+            <span class="lang-cn">花苞 (期待)：新学期/新月份你期待的一件事。</span>
+        </label>
+        <input type="text" id="budInput" placeholder="e.g., Meeting my friends again...">
+
+        <button class="btn" onclick="nextStage(1, 2)">
+            <span class="lang-en">Next: Psychology Test 🧠</span>
+            <span class="lang-cn">下一关：心理测试</span>
+        </button>
+    </div>
+
+    <!-- STAGE 2: PSYCHOLOGY (MBTI 20 Questions) -->
+    <div id="stage2" class="stage container">
+        <h2>
+            <span class="lang-en">Part 2: The Real You 🔍</span>
+            <span class="lang-cn">第二环节：真实的你 (心理学测试)</span>
+        </h2>
+        <p style="text-align:center;">
+            <span class="lang-en">Answer these 20 scenario questions honestly. Let's find out your personality
+                type!</span>
+            <span class="lang-cn">诚实回答这20个情景问题。让我们找出你的隐藏人格！</span>
+        </p>
+
+        <!-- Quiz Container generated by JS -->
+        <div id="quiz-container"></div>
+
+        <div class="quiz-progress" id="quiz-progress-text">0 / 20 Answered</div>
+
+        <button class="btn" id="revealBtn" onclick="revealPersonality()" disabled>
+            <span class="lang-en">Reveal My Personality 🧬</span>
+            <span class="lang-cn">揭晓我的人格 🧬</span>
+        </button>
+
+        <!-- Personality Result Container -->
+        <div id="personality-result">
+            <h3>
+                <span class="lang-en">You are:</span>
+                <span class="lang-cn">你是：</span>
+            </h3>
+            <div class="mbti-type" id="mbti-code">XXXX</div>
+            <div class="mbti-desc" id="mbti-description"></div>
+
+            <!-- 翻牌子区域 -->
+            <p style="color:#ffd54f; font-size:0.9em; margin-bottom:10px;">✨ Hover/Tap to reveal more! (悬浮/点击翻牌)</p>
+            <div class="flip-grid">
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon">⚔️</div>
+                            <h4><span class="lang-en">Superpower</span><span class="lang-cn">你的超能力</span></h4>
+                        </div>
+                        <div class="flip-card-back" id="card-strength"></div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon">🛡️</div>
+                            <h4><span class="lang-en">Weakness</span><span class="lang-cn">隐藏弱点</span></h4>
+                        </div>
+                        <div class="flip-card-back" id="card-weakness"></div>
+                    </div>
+                </div>
+                <div class="flip-card">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <div class="icon">🔮</div>
+                            <h4><span class="lang-en">Your Vibe</span><span class="lang-cn">你的气场</span></h4>
+                        </div>
+                        <div class="flip-card-back" id="card-vibe"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="nextStage(2, 3)">
+                <span class="lang-en">Next: Philosophy ⚖️</span>
+                <span class="lang-cn">下一关：哲学思辨</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- STAGE 3: PHILOSOPHY -->
+    <div id="stage3" class="stage container">
+        <h2>
+            <span class="lang-en">Part 3: The Moral Dilemma ⚖️</span>
+            <span class="lang-cn">第三环节：日常伦理困境</span>
+        </h2>
+
+        <!-- 动态替换的 Dilemma 区域 -->
+        <div id="dilemma-dynamic-container"></div>
+
+        <!-- 底部控制按钮 -->
+        <div class="dilemma-controls">
+            <button class="btn" onclick="nextDilemma()" style="margin: 0; background: #555;">
+                <span class="lang-en">🔄 Next Scenario</span>
+                <span class="lang-cn">换一个情景</span>
+            </button>
+            <button class="btn" onclick="nextStage(3, 4)" style="margin: 0;">
+                <span class="lang-en">Next: Vocabulary Vault 🗝️</span>
+                <span class="lang-cn">下一关：词汇金库</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- STAGE 4: VOCABULARY VAULT (新增) -->
+    <div id="stage4" class="stage container">
+        <h2>
+            <span class="lang-en">Part 4: The Vocabulary Vault 🗝️</span>
+            <span class="lang-cn">第四环节：词汇金库</span>
+        </h2>
+        <p style="text-align:center;">
+            <span class="lang-en">Let's review the 15 low-frequency power words you learned today.</span>
+            <span class="lang-cn">让我们复习今天学到的15个低频高级词汇。掌握它们！</span>
+        </p>
+
+        <!-- 标签页控制 -->
+        <div class="tab-container">
+            <button class="tab-btn active" onclick="switchVocabTab('v-tab1', this)">
+                <span class="lang-en">1. Memory Cards</span><span class="lang-cn">记忆翻牌</span>
+            </button>
+            <button class="tab-btn" onclick="switchVocabTab('v-tab2', this)">
+                <span class="lang-en">2. Sentence Builder</span><span class="lang-cn">句子修复</span>
+            </button>
+            <button class="tab-btn" onclick="switchVocabTab('v-tab3', this)">
+                <span class="lang-en">3. Scenario Detective</span><span class="lang-cn">情景神探</span>
+            </button>
+        </div>
+
+        <!-- 模式 1: Flashcards -->
+        <div id="v-tab1" class="tab-content" style="display:block;">
+            <p style="color:#ffd54f; font-size:0.9em; text-align:center; margin-bottom:15px;">Hover/Tap to see the
+                meaning! (悬浮/点击查看含义)</p>
+            <div class="mini-flip-grid" id="flashcards-container">
+                <!-- JS 渲染 15 张小卡片 -->
+            </div>
+        </div>
+
+        <!-- 模式 2: Fill in the Blanks -->
+        <div id="v-tab2" class="tab-content">
+            <p style="color:#ffd54f; font-size:0.9em; text-align:center; margin-bottom:15px;">Choose the correct word to
+                complete the sentence.</p>
+
+            <div class="fill-blank-row">
+                <span class="lang-en">1. I didn't plan this trip at all, it was completely</span>
+                <span class="lang-cn">1. 我根本没计划这次旅行，完全是...</span>
+                <select class="vocab-select" id="fb1" onchange="checkBlank('fb1', 'Spontaneous')">
+                    <option value="">-- Choose --</option>
+                </select> .
+            </div>
+
+            <div class="fill-blank-row">
+                <span class="lang-en">2. If you help your friend cheat, you are guilty of</span>
+                <span class="lang-cn">2. 如果你帮朋友作弊，你就犯了...罪。</span>
+                <select class="vocab-select" id="fb2" onchange="checkBlank('fb2', 'Complicity')">
+                    <option value="">-- Choose --</option>
+                </select> .
+            </div>
+
+            <div class="fill-blank-row">
+                <span class="lang-en">3. Don't try to</span>
+                <span class="lang-cn">3. 别试图为你贪婪找借口...</span>
+                <select class="vocab-select" id="fb3" onchange="checkBlank('fb3', 'Rationalize')">
+                    <option value="">-- Choose --</option>
+                </select>
+                <span class="lang-en">your greed by blaming others.</span>
+                <span class="lang-cn"></span>
+            </div>
+
+            <div class="fill-blank-row">
+                <span class="lang-en">4. A good leader must be</span>
+                <span class="lang-cn">4. 优秀的领导者必须具备...（能理解他人感受）</span>
+                <select class="vocab-select" id="fb4" onchange="checkBlank('fb4', 'Empathetic')">
+                    <option value="">-- Choose --</option>
+                </select>
+                <span class="lang-en">and understand how others feel.</span>
+                <span class="lang-cn"></span>
+            </div>
+
+            <div class="fill-blank-row">
+                <span class="lang-en">5. Instead of taking risks blindly, he is very</span>
+                <span class="lang-cn">5. 他不盲目冒险，而是非常...</span>
+                <select class="vocab-select" id="fb5" onchange="checkBlank('fb5', 'Cautious')">
+                    <option value="">-- Choose --</option>
+                </select> .
+            </div>
+        </div>
+
+        <!-- 模式 3: Scenario Detective -->
+        <div id="v-tab3" class="tab-content">
+            <p style="color:#ffd54f; font-size:0.9em; text-align:center; margin-bottom:15px;">Which word describes this
+                situation best? (First Principles Thinking)</p>
+
+            <div class="quiz-item" style="border-left-color: #ff5e62;">
+                <div class="quiz-question">
+                    <span class="lang-en">1. You wait until 11:59 PM to submit your homework.</span>
+                    <span class="lang-cn">1. 你等到晚上 11:59 才提交作业。</span>
+                </div>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkScenario(this, false)">A. Observant</button>
+                    <button class="quiz-btn" onclick="checkScenario(this, true)">B. Procrastinate</button>
+                </div>
+            </div>
+
+            <div class="quiz-item" style="border-left-color: #ff5e62;">
+                <div class="quiz-question">
+                    <span class="lang-en">2. You tell your friend her new haircut is ugly, making her cry.</span>
+                    <span class="lang-cn">2. 你告诉朋友她的新发型很难看，把她弄哭了。</span>
+                </div>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkScenario(this, true)">A. Brutally (Honest)</button>
+                    <button class="quiz-btn" onclick="checkScenario(this, false)">B. Altruistic</button>
+                </div>
+            </div>
+
+            <div class="quiz-item" style="border-left-color: #ff5e62;">
+                <div class="quiz-question">
+                    <span class="lang-en">3. You do the right thing (like returning a lost wallet) even when no one is
+                        watching.</span>
+                    <span class="lang-cn">3. 即使没人在看，你也会做正确的事（比如归还丢失的钱包）。</span>
+                </div>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkScenario(this, true)">A. Virtue</button>
+                    <button class="quiz-btn" onclick="checkScenario(this, false)">B. Dilemma</button>
+                </div>
+            </div>
+
+            <div class="quiz-item" style="border-left-color: #ff5e62;">
+                <div class="quiz-question">
+                    <span class="lang-en">4. You notice that your teacher is wearing mismatched socks today.</span>
+                    <span class="lang-cn">4. 你注意到老师今天穿了两只不一样的袜子。</span>
+                </div>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkScenario(this, false)">A. Analytical</button>
+                    <button class="quiz-btn" onclick="checkScenario(this, true)">B. Observant</button>
+                </div>
+            </div>
+
+            <div class="quiz-item" style="border-left-color: #ff5e62;">
+                <div class="quiz-question">
+                    <span class="lang-en">5. Making a classmate do all the group work while you play games.</span>
+                    <span class="lang-cn">5. 让同学做所有的小组作业，而你却在打游戏。</span>
+                </div>
+                <div class="quiz-options">
+                    <button class="quiz-btn" onclick="checkScenario(this, true)">A. Exploit</button>
+                    <button class="quiz-btn" onclick="checkScenario(this, false)">B. Rational</button>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" onclick="nextStage(4, 5)">
+            <span class="lang-en">Next: Goal Setting 🎯</span>
+            <span class="lang-cn">下一关：设定目标</span>
+        </button>
+    </div>
+
+    <!-- STAGE 5: GOALS -->
+    <div id="stage5" class="stage container">
+        <h2>
+            <span class="lang-en">Part 5: Minimalist March 🚀</span>
+            <span class="lang-cn">第五环节：极简新目标</span>
+        </h2>
+        <p style="text-align:center;">
+            <span class="lang-en">Let's set just TWO simple goals for this month. No pressure!</span>
+            <span class="lang-cn">这个月我们只设定两个简单的目标。没有压力！</span>
+        </p>
+
+        <label>
+            🌱 <span class="lang-en"><b>One Life Goal:</b> (e.g., Sleep before 11 PM)</span>
+            <span class="lang-cn">一个生活目标：(例如：11点前睡觉)</span>
+        </label>
+        <input type="text" id="lifeGoal" placeholder="My life goal is...">
+
+        <label>
+            📖 <span class="lang-en"><b>One English Goal:</b> (e.g., Use 3 new words this week)</span>
+            <span class="lang-cn">一个英语目标：(例如：这周用3个新单词)</span>
+        </label>
+        <input type="text" id="engGoal" placeholder="My English goal is...">
+
+        <button class="btn" onclick="generateSummary()">
+            <span class="lang-en">Generate My Commitment 📜</span>
+            <span class="lang-cn">生成我的承诺宣言</span>
+        </button>
+
+        <div id="finalOutput" class="output-box" style="display:none;"></div>
+    </div>
+
+    <script>
+        /* --- 语言切换 --- */
+        function toggleLanguage() {
+            document.body.classList.toggle('show-cn');
+        }
+
+        /* --- 页面流转 --- */
+        let currentStageNum = 1;
+        function nextStage(current, next) {
+            document.getElementById('stage' + current).classList.remove('active');
+            document.getElementById('stage' + next).classList.add('active');
+            currentStageNum = next;
+            // 进度条计算：共5关，每关占20%
+            document.getElementById('mainProgress').style.width = (next * 20) + '%';
+            _saveProgress();
+        }
+
+        /* --- 心理测试题库 (20题) --- */
+        const quizData = [
+            {
+                qEn: "1. After a long, tiring week at school, I usually want to...", qCn: "1. 经过学校漫长劳累的一周后，我通常想...",
+                optA: { en: "Hang out with friends (Recharge with people)", cn: "和朋友出去玩 (通过社交充电)", val: "E" },
+                optB: { en: "Stay home, read or watch movies (Recharge alone)", cn: "呆在家里看书或看电影 (独处充电)", val: "I" }
+            },
+            {
+                qEn: "2. In a big group chat, I am usually the person who...", qCn: "2. 在一个大型群聊中，我通常是那个...",
+                optA: { en: "Sends lots of messages and memes", cn: "发送很多消息和表情包的人", val: "E" },
+                optB: { en: "Reads quietly and only replies when necessary", cn: "安静地阅读，只在必要时回复", val: "I" }
+            },
+            {
+                qEn: "3. When attending a party where I don't know many people, I feel...", qCn: "3. 参加一个我不认识很多人的聚会时，我感觉...",
+                optA: { en: "Excited to make new friends", cn: "很兴奋能交到新朋友", val: "E" },
+                optB: { en: "Nervous and look for someone I know", cn: "有点紧张，会寻找我认识的人", val: "I" }
+            },
+            {
+                qEn: "4. I prefer to celebrate my birthday with...", qCn: "4. 我更喜欢这样庆祝生日...",
+                optA: { en: "A big party with lots of friends", cn: "和很多朋友开个大派对", val: "E" },
+                optB: { en: "A quiet dinner with 1 or 2 best friends", cn: "和一两个最好的朋友安静地吃顿饭", val: "I" }
+            },
+            {
+                qEn: "5. When thinking about a problem, I tend to...", qCn: "5. 思考问题时，我倾向于...",
+                optA: { en: "Talk it out loud with someone", cn: "和别人大声讨论出来", val: "E" },
+                optB: { en: "Process it silently in my head first", cn: "先在脑海中默默消化", val: "I" }
+            },
+            {
+                qEn: "6. When I learn something new, I prefer to...", qCn: "6. 学习新东西时，我更喜欢...",
+                optA: { en: "Follow clear, step-by-step instructions", cn: "遵循清晰的、循序渐进的步骤", val: "S" },
+                optB: { en: "Understand the main idea and figure it out myself", cn: "理解核心思想，然后自己摸索", val: "N" }
+            },
+            {
+                qEn: "7. I am usually more interested in...", qCn: "7. 我通常更感兴趣的是...",
+                optA: { en: "Facts, details, and what is happening NOW", cn: "事实、细节以及现在正在发生的事", val: "S" },
+                optB: { en: "Ideas, theories, and what MIGHT happen in the FUTURE", cn: "想法、理论以及未来可能发生的事", val: "N" }
+            },
+            {
+                qEn: "8. When I describe a movie to a friend, I talk about...", qCn: "8. 当我向朋友描述一部电影时，我会谈论...",
+                optA: { en: "The specific plot and what the characters did", cn: "具体的剧情和角色做了什么", val: "S" },
+                optB: { en: "The hidden meaning and the message behind it", cn: "隐藏的含义和背后的信息", val: "N" }
+            },
+            {
+                qEn: "9. People often describe me as a...", qCn: "9. 人们经常形容我是一个...",
+                optA: { en: "Practical and realistic person", cn: "务实且现实的人", val: "S" },
+                optB: { en: "Creative and imaginative person", cn: "富有创意和想象力的人", val: "N" }
+            },
+            {
+                qEn: "10. When making a decision, I trust...", qCn: "10. 做决定时，我更相信...",
+                optA: { en: "My past experiences and common sense", cn: "我过去的经验和常识", val: "S" },
+                optB: { en: "My gut feeling and instincts", cn: "我的直觉和本能", val: "N" }
+            },
+            {
+                qEn: "11. When a friend comes to me crying about a problem, I first...", qCn: "11. 当朋友哭着来找我诉说问题时，我首先会...",
+                optA: { en: "Analyze the situation and offer logical solutions", cn: "分析情况并提供符合逻辑的解决方案", val: "T" },
+                optB: { en: "Offer a hug and emotional support", cn: "提供拥抱和情感上的安慰", val: "F" }
+            },
+            {
+                qEn: "12. I believe it is more important to be...", qCn: "12. 我认为更重要的是成为一个...",
+                optA: { en: "Truthful and fair (even if it hurts)", cn: "诚实且公平的人 (即使这会伤人)", val: "T" },
+                optB: { en: "Kind and harmonious (keep the peace)", cn: "善良且维持和谐的人", val: "F" }
+            },
+            {
+                qEn: "13. In a debate, I usually follow...", qCn: "13. 在辩论/争吵中，我通常听从...",
+                optA: { en: "My brain (Logic and reason)", cn: "我的大脑 (逻辑和理性)", val: "T" },
+                optB: { en: "My heart (Emotions and empathy)", cn: "我的心 (情感和共情能力)", val: "F" }
+            },
+            {
+                qEn: "14. A compliment that makes me happiest is...", qCn: "14. 让我最高兴的赞美是...",
+                optA: { en: "'You are so smart and competent.'", cn: "“你真聪明、真有能力。”", val: "T" },
+                optB: { en: "'You are so warm and caring.'", cn: "“你真温暖、真体贴。”", val: "F" }
+            },
+            {
+                qEn: "15. I get annoyed when people are...", qCn: "15. 当人们表现出以下情况时，我会感到烦躁...",
+                optA: { en: "Illogical and irrational", cn: "不讲逻辑且不理智", val: "T" },
+                optB: { en: "Selfish and insensitive to others", cn: "自私且不顾及他人感受", val: "F" }
+            },
+            {
+                qEn: "16. When packing for a trip, I usually...", qCn: "16. 为旅行收拾行李时，我通常...",
+                optA: { en: "Make a checklist and pack days in advance", cn: "列个清单，提前几天打包好", val: "J" },
+                optB: { en: "Throw things in my bag at the last minute", cn: "在最后一刻把东西塞进包里", val: "P" }
+            },
+            {
+                qEn: "17. My bedroom and study desk are usually...", qCn: "17. 我的卧室和书桌通常是...",
+                optA: { en: "Organized and tidy", cn: "井井有条、整洁的", val: "J" },
+                optB: { en: "A bit messy, but I know where things are", cn: "有点乱，但我知道东西在哪", val: "P" }
+            },
+            {
+                qEn: "18. When I get school homework, I prefer to...", qCn: "18. 收到学校作业时，我更喜欢...",
+                optA: { en: "Finish it ASAP so I can relax", cn: "尽快完成，这样我就能放松了", val: "J" },
+                optB: { en: "Procrastinate and do it right before the deadline", cn: "拖延一下，在截止日期前才做", val: "P" }
+            },
+            {
+                qEn: "19. During the weekend, I like to...", qCn: "19. 周末时，我喜欢...",
+                optA: { en: "Have a clear plan of what I will do", cn: "对我要做的事情有清晰的计划", val: "J" },
+                optB: { en: "Go with the flow and see what happens", cn: "顺其自然，看情况而定", val: "P" }
+            },
+            {
+                qEn: "20. In my daily life, I feel more comfortable with...", qCn: "20. 在日常生活中，我更喜欢...",
+                optA: { en: "Rules, routines, and structure", cn: "规则、日常惯例和秩序", val: "J" },
+                optB: { en: "Flexibility, surprises, and freedom", cn: "灵活性、惊喜和自由", val: "P" }
+            }
+        ];
+
+        let userAnswers = new Array(20).fill(null);
+
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            let html = '';
+            quizData.forEach((q, index) => {
+                html += `
+        <div class="quiz-item">
+          <div class="quiz-question">
+            <span class="lang-en">${q.qEn}</span><span class="lang-cn">${q.qCn}</span>
+          </div>
+          <div class="quiz-options">
+            <div class="quiz-btn ${userAnswers[index] === q.optA.val ? 'selected' : ''}" onclick="selectAnswer(${index}, '${q.optA.val}', this)">
+              <span class="lang-en">A. ${q.optA.en}</span><span class="lang-cn">A. ${q.optA.cn}</span>
+            </div>
+            <div class="quiz-btn ${userAnswers[index] === q.optB.val ? 'selected' : ''}" onclick="selectAnswer(${index}, '${q.optB.val}', this)">
+              <span class="lang-en">B. ${q.optB.en}</span><span class="lang-cn">B. ${q.optB.cn}</span>
+            </div>
+          </div>
+        </div>
+      `;
+            });
+            container.innerHTML = html;
+            let answered = userAnswers.filter(a => a !== null).length;
+            document.getElementById('quiz-progress-text').innerText = `${answered} / 20 Answered`;
+            if (answered === 20) document.getElementById('revealBtn').disabled = false;
+        }
+
+        function selectAnswer(index, val, el) {
+            userAnswers[index] = val;
+            let siblings = el.parentElement.children;
+            for (let i = 0; i < siblings.length; i++) siblings[i].classList.remove('selected');
+            el.classList.add('selected');
+
+            let answered = userAnswers.filter(a => a !== null).length;
+            document.getElementById('quiz-progress-text').innerText = `${answered} / 20 Answered`;
+
+            if (answered === 20) {
+                const btn = document.getElementById('revealBtn');
+                btn.disabled = false;
+            }
+            _saveProgress();
+        }
+
+        let finalMBTI = "";
+
+        function revealPersonality() {
+            let counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            userAnswers.forEach(ans => { if (ans) counts[ans]++; });
+
+            let trait1 = counts.E > counts.I ? 'E' : 'I';
+            let trait2 = counts.S > counts.N ? 'S' : 'N';
+            let trait3 = counts.T > counts.F ? 'T' : 'F';
+            let trait4 = counts.J > counts.P ? 'J' : 'P';
+
+            finalMBTI = trait1 + trait2 + trait3 + trait4;
+
+            const mbtiDict = {
+                "INTJ": { en: "The Architect: Logical, strategic, values First Principles.", cn: "建筑师：讲究逻辑、有战略眼光，重视第一性原理。", sEn: "Master Strategist", sCn: "战略大师", wEn: "Overly Critical", wCn: "过于挑剔", vEn: "Chess player in the dark", vCn: "黑暗中的棋手" },
+                "INTP": { en: "The Logician: Innovative, curious, thirsty for knowledge.", cn: "逻辑学家：富有创新精神、好奇心强、求知若渴。", sEn: "Out-of-box Thinker", sCn: "打破常规的思考者", wEn: "Overthinking", wCn: "想得太多", vEn: "Mad scientist", vCn: "疯狂科学家" },
+                "ENTJ": { en: "The Commander: Bold, imaginative, strong-willed leader.", cn: "指挥官：大胆、富有想象力且意志坚强的领导者。", sEn: "Natural Leader", sCn: "天生的领袖", wEn: "Impatient", wCn: "缺乏耐心", vEn: "CEO in the making", vCn: "未来的霸道总裁" },
+                "ENTP": { en: "The Debater: Smart, curious, loves intellectual challenge.", cn: "辩论家：聪明、好奇，热衷于智力挑战。", sEn: "Quick Witted", sCn: "反应机敏", wEn: "Argumentative", wCn: "喜欢争辩", vEn: "Devil's advocate", vCn: "恶魔的代言人" },
+                "INFJ": { en: "The Advocate: Quiet, mystical, inspiring idealist.", cn: "提倡者：安静、神秘，极具启发性的理想主义者。", sEn: "Deep Empathy", sCn: "极致的共情", wEn: "Perfectionist", wCn: "过度完美主义", vEn: "Wise old soul", vCn: "充满智慧的老灵魂" },
+                "INFP": { en: "The Mediator: Poetic, kind, altruistic.", cn: "调停者：富有诗意、善良且无私。", sEn: "Rich Imagination", sCn: "丰富的想象力", wEn: "Too Idealistic", wCn: "过于理想化", vEn: "Wandering poet", vCn: "流浪的诗人" },
+                "ENFJ": { en: "The Protagonist: Charismatic and inspiring leader.", cn: "主人公：充满魅力、鼓舞人心的领导者。", sEn: "Charismatic", sCn: "极具个人魅力", wEn: "Takes things personally", wCn: "容易把问题揽上身", vEn: "The main character", vCn: "主角光环" },
+                "ENFP": { en: "The Campaigner: Enthusiastic, creative, free spirit.", cn: "竞选者：热情、有创意、崇尚自由的灵魂。", sEn: "Highly Enthusiastic", sCn: "永远充满热情", wEn: "Easily Distracted", wCn: "容易分心", vEn: "Burst of confetti", vCn: "随时撒花的乐天派" },
+                "ISTJ": { en: "The Logistician: Practical, fact-minded, reliable.", cn: "物流师：务实、注重事实，极其可靠。", sEn: "Extremely Reliable", sCn: "极其靠谱", wEn: "Stubborn", wCn: "有点固执", vEn: "Human encyclopedia", vCn: "行走的百科全书" },
+                "ISFJ": { en: "The Defender: Very dedicated and warm protector.", cn: "守卫者：非常敬业和温暖的保护者。", sEn: "Loyal & Warm", sCn: "忠诚且温暖", wEn: "Overworks", wCn: "常常过度劳累", vEn: "The group mom", vCn: "团队里的妈妈" },
+                "ESTJ": { en: "The Executive: Excellent administrator.", cn: "总经理：出色的管理者，擅长高效管理。", sEn: "Highly Organized", sCn: "极度自律", wEn: "Inflexible", wCn: "缺乏灵活性", vEn: "The rule maker", vCn: "规则的制定者" },
+                "ESFJ": { en: "The Consul: Extraordinarily caring, social, popular.", cn: "执政官：极度体贴、善于社交且受欢迎。", sEn: "Social Butterfly", sCn: "社交小达人", wEn: "Needs validation", wCn: "需要别人的认可", vEn: "The popular kid", vCn: "交际花" },
+                "ISTP": { en: "The Virtuoso: Bold and practical experimenter.", cn: "鉴赏家：大胆务实的实验者。", sEn: "Crisis Solver", sCn: "危机解决专家", wEn: "Gets bored easily", wCn: "很容易感到无聊", vEn: "The cool mechanic", vCn: "酷酷的极客" },
+                "ISFP": { en: "The Adventurer: Flexible and charming artist.", cn: "探险家：灵活迷人的艺术家。", sEn: "Creative Artist", sCn: "充满艺术细胞", wEn: "Unpredictable", wCn: "让人捉摸不透", vEn: "Painting in wind", vCn: "风中作画的艺术家" },
+                "ESTP": { en: "The Entrepreneur: Smart, energetic, enjoys edge.", cn: "企业家：聪明、精力充沛，喜欢追求刺激。", sEn: "Action Oriented", sCn: "极强的行动力", wEn: "Impatient", wCn: "容易冲动", vEn: "The daredevil", vCn: "无所畏惧的冒险家" },
+                "ESFP": { en: "The Entertainer: Spontaneous, energetic, party life.", cn: "表演者：随性、充满活力，派对的灵魂人物。", sEn: "Natural Performer", sCn: "天生的表演者", wEn: "Poor long-term planner", wCn: "缺乏长远规划", vEn: "Walking disco ball", vCn: "行走的迪斯科球" }
+            };
+
+            let desc = mbtiDict[finalMBTI];
+            document.getElementById('mbti-code').innerText = finalMBTI;
+            document.getElementById('mbti-description').innerHTML = `<span class="lang-en">${desc.en}</span><span class="lang-cn">${desc.cn}</span>`;
+            document.getElementById('card-strength').innerHTML = `<span class="lang-en">${desc.sEn}</span><span class="lang-cn">${desc.sCn}</span>`;
+            document.getElementById('card-weakness').innerHTML = `<span class="lang-en">${desc.wEn}</span><span class="lang-cn">${desc.wCn}</span>`;
+            document.getElementById('card-vibe').innerHTML = `<span class="lang-en">${desc.vEn}</span><span class="lang-cn">${desc.vCn}</span>`;
+
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('quiz-progress-text').style.display = 'none';
+            document.getElementById('revealBtn').style.display = 'none';
+            document.getElementById('personality-result').style.display = 'block';
+            _saveProgress();
+        }
+
+        /* --- 哲学困境数据库 --- */
+        const dilemmas = [
+            { titleEn: "Scenario 1: The Ugly Dress", titleCn: "情景 1：丑陋的裙子", sceneEn: "Your best friend bought a very expensive dress. She loves it, but you think it looks TERRIBLE on her. She asks you, 'How do I look?'", sceneCn: "你最好的朋友买了一件昂贵的裙子。她超爱，但你觉得她穿起来难看极了。她兴奋地问你：‘我看起来怎么样？’", optAEn: "Tell a White Lie. 'You look stunning!'", optACn: "说善意的谎言。'你看起来美极了！'", optBEn: "Be Brutally Honest. 'Honestly, it doesn't suit you.'", optBCn: "残忍但诚实。'老实说，这不适合你。'", resAEn: "The Philosopher's Question: Are you protecting her feelings, or are you just protecting YOURSELF from an awkward conversation?", resACn: "第一性原理拷问：如果你撒谎，你真的是在保护她，还是仅仅在保护“你自己”免受尴尬？", resBEn: "The Philosopher's Question: If you ruin her mood completely, is 'The Truth' always more important than happiness?", resBCn: "第一性原理拷问：如果你彻底毁掉了她的好心情，“真相”真的永远比“快乐”更重要吗？" },
+            { titleEn: "Scenario 2: The Cheating Friend", titleCn: "情景 2：作弊的好友", sceneEn: "During a major exam, you catch your best friend secretly looking at notes.", sceneCn: "在一次重要考试中，你发现你最好的朋友偷偷看小抄。", optAEn: "Report them to the teacher. (Justice)", optACn: "向老师举报。 (维护正义)", optBEn: "Stay silent. (Loyalty)", optBCn: "保持沉默。 (维护忠诚)", resAEn: "The Philosopher's Question: Are cold, rigid rules more important than human connection and your friend's future?", resACn: "第一性原理拷问：冰冷死板的规则，真的比人际关系和你朋友的未来更重要吗？", resBEn: "The Philosopher's Question: If you stay silent, aren't you being unfair to everyone else who studied hard? Is blind loyalty just complicity?", resBCn: "第一性原理拷问：如果你沉默，对其他努力学习的人公平吗？盲目的忠诚是不是等同于同谋？" },
+            { titleEn: "Scenario 3: The Group Project Slacker", titleCn: "情景 3：划水的小组员", sceneEn: "One member does absolutely NOTHING. The deadline is tomorrow. If you don't do their part, the whole group fails.", sceneCn: "有一个组员完全在划水。明天就是截止日期，如果你不帮他做完，全组都会不及格。", optAEn: "Do their work for them to get an A.", optACn: "为了拿A，帮他把工作做了。", optBEn: "Let the project fail to teach them a lesson.", optBCn: "让作业不及格，给我一个教训。", resAEn: "The Philosopher's Question: You saved your grade, but you rewarded laziness. Are you training them to exploit others in the future?", resACn: "第一性原理拷问：你保住了分数，但你奖励了懒惰。你是不是在培养他以后继续利用剥削别人？", resBEn: "The Philosopher's Question: Is proving a point about 'fairness' worth destroying your own hard-earned grades?", resBCn: "第一性原理拷问：为了证明所谓的“公平”，毁掉你自己辛辛苦苦挣来的分数，真的值得吗？" },
+            { titleEn: "Scenario 4: The Found RM100", titleCn: "情景 4：捡到的 100 块", sceneEn: "You find RM100 on the floor. You know if you give it to the office, someone there might quietly pocket it.", sceneCn: "你在地上捡到了 RM100。你知道如果交给办公室，里面的人可能也会偷偷私吞。", optAEn: "Keep the money for yourself.", optACn: "自己把钱留下。", optBEn: "Hand it to the office anyway.", optBCn: "无论如何，交到办公室。", resAEn: "The Philosopher's Question: Because others might be corrupt, does that justify you becoming a thief too? Are you rationalizing greed?", resACn: "第一性原理拷问：因为别人可能腐败，这就能成为你占为己有的理由吗？你是不是在为贪婪找借口？", resBEn: "The Philosopher's Question: If the money gets stolen by the office anyway, what did your 'good deed' actually achieve?", resBCn: "第一性原理拷问：如果钱最后还是被办公室的人私吞了，你的“善举”到底实现了什么价值？" }
+        ];
+
+        let currentDilemma = 0;
+        function renderDilemma() {
+            let d = dilemmas[currentDilemma];
+            let html = `
+      <p style="text-align:center; color:#4facfe; font-weight:bold;"><span class="lang-en">${d.titleEn}</span><span class="lang-cn">${d.titleCn}</span></p>
+      <p><span class="lang-en"><b>Scenario:</b> ${d.sceneEn}</span><span class="lang-cn"><b>情景：</b> ${d.sceneCn}</span></p>
+      <div class="dilemma-btn" onclick="chooseDilemma('A')"><span class="lang-en"><b>Option A:</b> ${d.optAEn}</span><span class="lang-cn"><b>选项 A:</b> ${d.optACn}</span></div>
+      <div class="dilemma-result" id="resultA"><span class="lang-en"><b>🔥 ${d.resAEn}</b></span><span class="lang-cn"><b>🔥 ${d.resACn}</b></span></div>
+      <div class="dilemma-btn" onclick="chooseDilemma('B')"><span class="lang-en"><b>Option B:</b> ${d.optBEn}</span><span class="lang-cn"><b>选项 B:</b> ${d.optBCn}</span></div>
+      <div class="dilemma-result" id="resultB"><span class="lang-en"><b>🔥 ${d.resBEn}</b></span><span class="lang-cn"><b>🔥 ${d.resBCn}</b></span></div>
+    `;
+            document.getElementById('dilemma-dynamic-container').innerHTML = html;
+        }
+        function nextDilemma() { currentDilemma = (currentDilemma + 1) % dilemmas.length; renderDilemma(); _saveProgress(); }
+        function chooseDilemma(choice) {
+            document.getElementById('resultA').style.display = 'none';
+            document.getElementById('resultB').style.display = 'none';
+            if (choice === 'A') document.getElementById('resultA').style.display = 'block';
+            else document.getElementById('resultB').style.display = 'block';
+            _saveProgress();
+        }
+
+        /* --- 词汇金库数据 (15词) --- */
+        const vocabList = [
+            { word: "Analytical", cn: "分析型的", hint: "Using logic to solve problems" },
+            { word: "Spontaneous", cn: "随性的", hint: "Doing things without planning" },
+            { word: "Observant", cn: "敏锐的/善于观察的", hint: "Quick to notice things" },
+            { word: "Cautious", cn: "谨慎的", hint: "Avoiding unnecessary risks" },
+            { word: "Empathetic", cn: "有同理心的", hint: "Understanding others' feelings" },
+            { word: "Rational", cn: "理性的", hint: "Based on reason, not emotion" },
+            { word: "Altruistic", cn: "无私的", hint: "Caring about others before yourself" },
+            { word: "Dilemma", cn: "进退两难的困境", hint: "A difficult choice between two bad options" },
+            { word: "Stunning", cn: "惊艳的/极美的", hint: "Extremely impressive or attractive" },
+            { word: "Brutally", cn: "残忍地/毫不留情地", hint: "In a harsh or unforgiving way" },
+            { word: "Complicity", cn: "同谋/帮凶", hint: "Involvement in doing something wrong" },
+            { word: "Exploit", cn: "利用/剥削", hint: "To use someone unfairly for advantage" },
+            { word: "Rationalize", cn: "找借口/合理化", hint: "To invent excuses for bad behavior" },
+            { word: "Virtue", cn: "美德", hint: "A good moral quality" },
+            { word: "Procrastinate", cn: "拖延", hint: "To delay doing something until the last minute" }
+        ];
+
+        function renderVocab() {
+            // 渲染 Flashcards
+            let fcHtml = '';
+            vocabList.forEach(v => {
+                fcHtml += `
+        <div class="mini-flip-card">
+          <div class="mini-flip-inner">
+            <div class="mini-flip-front">${v.word}</div>
+            <div class="mini-flip-back">${v.cn}<br><span style="font-size:0.8em;font-weight:normal;margin-top:5px;">${v.hint}</span></div>
+          </div>
+        </div>
+      `;
+            });
+            document.getElementById('flashcards-container').innerHTML = fcHtml;
+
+            // 填充 Select 选项 (句子修复)
+            const selects = ['fb1', 'fb2', 'fb3', 'fb4', 'fb5'];
+            let optionsHtml = '<option value="">-- Choose --</option>';
+            // 为了增加难度，把选项打乱或者直接列出全部15个
+            let sortedVocab = [...vocabList].sort((a, b) => a.word.localeCompare(b.word));
+            sortedVocab.forEach(v => { optionsHtml += `<option value="${v.word}">${v.word}</option>`; });
+            selects.forEach(id => { document.getElementById(id).innerHTML = optionsHtml; });
+        }
+
+        function switchVocabTab(tabId, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).style.display = 'block';
+            btn.classList.add('active');
+        }
+
+        function checkBlank(id, correctWord) {
+            let el = document.getElementById(id);
+            if (el.value === correctWord) {
+                el.style.backgroundColor = '#a5d6a7'; // 绿色
+                el.style.color = '#000';
+            } else if (el.value !== "") {
+                el.style.backgroundColor = '#ef9a9a'; // 红色
+                el.style.color = '#000';
+            } else {
+                el.style.backgroundColor = '#fff';
+            }
+            _saveProgress();
+        }
+
+        function checkScenario(btn, isCorrect) {
+            let siblings = btn.parentElement.querySelectorAll('.quiz-btn');
+            siblings.forEach(b => {
+                b.style.backgroundColor = '';
+                b.style.borderColor = 'transparent';
+            });
+            if (isCorrect) {
+                btn.style.backgroundColor = '#4caf50'; // 绿
+                btn.style.borderColor = '#fff';
+            } else {
+                btn.style.backgroundColor = '#f44336'; // 红
+            }
+            _saveProgress();
+        }
+
+        /* --- 最终宣誓总结 --- */
+        function generateSummary() {
+            let life = document.getElementById('lifeGoal').value || "Stay happy";
+            let eng = document.getElementById('engGoal').value || "Learn something new";
+            let text = `[ MISSION ACCEPTED ]\n\n`;
+            text += `👤 MBTI Personality: ${finalMBTI || "Not Tested"}\n`;
+            text += `\n🌱 Life Goal: ${life}\n📖 English Goal: ${eng}\n\nLet's make this month amazing! 🚀`;
+            let outBox = document.getElementById('finalOutput');
+            outBox.innerText = text; outBox.style.display = 'block';
+            outBox.scrollIntoView({ behavior: "smooth" });
+            _saveProgress();
+        }
+
+        // --- PROGRESS TRACKING ---
+        function _saveProgress() {
+            if (window.ProgressTracker) {
+                ProgressTracker.save({
+                    stage: currentStageNum,
+                    userAnswers: userAnswers,
+                    finalMBTI: finalMBTI,
+                    currentDilemma: currentDilemma,
+                    rose: document.getElementById('roseInput').value,
+                    thorn: document.getElementById('thornInput').value,
+                    bud: document.getElementById('budInput').value,
+                    lifeGoal: document.getElementById('lifeGoal').value,
+                    engGoal: document.getElementById('engGoal').value
+                });
+            }
+        }
+
+        window.onload = async function () {
+            renderQuiz();
+            renderDilemma();
+            renderVocab();
+
+            if (window.ProgressTracker) {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data) {
+                    const p = saved.progress_data;
+                    if (p.stage) nextStage(1, p.stage);
+                    if (p.userAnswers) {
+                        userAnswers = p.userAnswers;
+                        renderQuiz();
+                    }
+                    if (p.finalMBTI) {
+                        finalMBTI = p.finalMBTI;
+                        revealPersonality();
+                    }
+                    if (p.currentDilemma) {
+                        currentDilemma = p.currentDilemma;
+                        renderDilemma();
+                    }
+                    if (p.rose) document.getElementById('roseInput').value = p.rose;
+                    if (p.thorn) document.getElementById('thornInput').value = p.thorn;
+                    if (p.bud) document.getElementById('budInput').value = p.bud;
+                    if (p.lifeGoal) document.getElementById('lifeGoal').value = p.lifeGoal;
+                    if (p.engGoal) document.getElementById('engGoal').value = p.engGoal;
+                }
+            }
+        };
+    </script>
+
+    <script src="../../../../../js/progress-tracker.js" data-module-id="UEC_Discovery_Journey"
+        data-module-name="UEC English: The Discovery Journey"
+        data-module-url="content/UEC_Syllabus/Senior/English/Discovery_Journey/index.html"></script>
+
+</body>
+
+</html>
