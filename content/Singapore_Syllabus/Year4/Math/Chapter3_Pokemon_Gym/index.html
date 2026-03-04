@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Math Gym - Dynamic Ultimate Edition</title>
+    <style>
+        :root {
+            --bg-color: #2c3e50; --hp-green: #2ecc71; --hp-red: #e74c3c;
+            --text-dark: #2c3e50; --primary-blue: #3498db; --focus-yellow: #fff9c4;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif; background-color: var(--bg-color);
+            margin: 0; min-height: 100vh; display: flex; flex-direction: column;
+            user-select: none; overflow-x: hidden; overflow-y: auto; color: white;
+        }
+
+        /* --- 主界面 UI --- */
+        #teacher-panel {
+            background: #1a252f; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 100;
+        }
+        select, button { padding: 8px 15px; border-radius: 5px; border: none; cursor: pointer; font-weight: bold; font-size: 1rem;}
+        .btn-blue { background: #3498db; color: white; }
+        .btn-warning { background: #f39c12; color: white; box-shadow: 0 4px 0 #d68910; }
+        .btn-warning:active { transform: translateY(4px); box-shadow: none; }
+
+        #battle-stage { 
+            flex: 1; display: grid; grid-template-columns: 0.6fr auto 1.4fr; 
+            gap: 60px; align-items: center; width: 100%; padding: 30px 0;
+        }
+
+        .side-panel { display: flex; justify-content: flex-start; align-items: center; width: 100%; }
+        .center-panel { display: flex; flex-direction: column; align-items: center; max-width: 800px; }
+
+        #pokemon-container { height: 180px; margin-bottom: 20px; }
+        #pokemon-sprite { height: 180px; image-rendering: pixelated; }
+        
+        #hp-ui { width: 300px; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 10px; border: 2px solid #7f8c8d; margin-bottom: 15px; }
+        .hp-bar-bg { width: 100%; height: 20px; background: #333; border-radius: 10px; border: 2px solid white; }
+        #hp-bar-fill { height: 100%; background: var(--hp-green); transition: width 0.5s ease-out; }
+
+        #equation-container {
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px;
+            background: rgba(0,0,0,0.3); padding: 25px 35px; border-radius: 20px;
+            border: 2px solid #34495e; margin-bottom: 20px; min-width: 400px; width: 100%;
+        }
+        
+        /* 经典单行题目模式 */
+        #normal-q-container { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; }
+        #question-box { font-size: 3.5rem; font-weight: bold; color: #f1c40f; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); margin: 0; transition: all 0.3s; }
+        
+        /* 复合题 Boss 模式 */
+        #boss-q-container { display: none; flex-direction: column; align-items: flex-start; width: 100%; }
+        #boss-title { font-size: 2.5rem; color: #e74c3c; font-weight: bold; margin-bottom: 15px; text-shadow: 2px 2px #000; }
+        #boss-phases-wrapper { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        
+        /* 修改：适应长文字的换行排版 */
+        .boss-line { font-size: 1.6rem; color: #bdc3c7; display: flex; align-items: flex-start; flex-wrap: wrap; gap: 10px; line-height: 1.4; text-align: left;}
+        .boss-line.active { color: white; font-weight: bold; }
+        .boss-line.answered { color: #2ecc71; text-decoration: line-through; opacity: 0.7; }
+        .boss-check { color: #2ecc71; font-weight: bold; font-size: 2rem; text-decoration: none !important; display: inline-block;}
+
+        /* 共用的游走输入框 */
+        #display-screen { 
+            background: #fff; color: var(--text-dark); font-size: 3.5rem; text-align: center; 
+            font-weight: bold; padding: 0 15px; border-radius: 10px; border: 4px solid #bdc3c7; 
+            width: 180px; height: 70px; outline: none; transition: 0.2s; font-family: inherit; flex-shrink: 0;
+        }
+        #display-screen:focus { border-color: #f1c40f; box-shadow: 0 0 20px rgba(241, 196, 15, 0.6); }
+
+        .main-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 220px; }
+        .main-key { background: white; border: 2px solid #bdc3c7; border-radius: 8px; font-size: 1.5rem; font-weight: bold; color: var(--text-dark); padding: 10px 0; cursor: pointer; box-shadow: 0 4px 0 #bdc3c7; transition: 0.1s;}
+        .main-key:active { transform: translateY(4px); box-shadow: 0 0 0 #bdc3c7; }
+        .btn-attack { grid-column: span 3; background: #e74c3c; color: white; border-color: #c0392b; box-shadow: 0 4px 0 #c0392b; margin-top: 5px; font-size: 1.1rem; padding: 10px 0;}
+        .btn-attack:active { box-shadow: 0 0 0 #c0392b; }
+
+        .shake { animation: shake 0.5s; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25%, 75% { transform: translateX(-15px); } 50% { transform: translateX(15px); } }
+        .hit { animation: hitFlash 0.3s; }
+        @keyframes hitFlash { 50% { filter: brightness(2) invert(1); transform: scale(0.9); } }
+
+        /* --- 动态战术板 Modal UI --- */
+        #tactical-modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(44, 62, 80, 0.98); z-index: 1000;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+        .close-btn { position: absolute; top: 20px; right: 30px; font-size: 1.5rem; background: none; border: 2px solid white; border-radius: 10px; padding: 10px 20px; color: white; cursor: pointer; }
+        .close-btn:hover { background: rgba(255,255,255,0.2); }
+        
+        .tac-container { display: flex; gap: 40px; align-items: flex-start; }
+        #tactical-board { background: white; padding: 30px 40px; border-radius: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.8); min-width: 300px; display: flex; justify-content: center;}
+        
+        .math-grid { display: grid; gap: 10px; font-size: 2.5rem; font-weight: bold; color: var(--text-dark); justify-content: center;}
+        .static-cell { display: flex; justify-content: center; align-items: center; height: 50px; width: 50px; }
+        .input-cell { width: 50px; height: 50px; font-size: 2.5rem; text-align: center; font-weight: bold; border: 3px solid #bdc3c7; border-radius: 8px; color: var(--primary-blue); cursor: pointer; caret-color: transparent; background: white;}
+        .input-cell:focus { outline: none; border-color: #f1c40f; background: var(--focus-yellow); box-shadow: 0 0 10px #f1c40f; transform: scale(1.05);}
+        .math-line { height: 5px; background-color: var(--text-dark); margin: 5px 0; }
+        
+        #control-panel { background: #1a252f; padding: 25px; border-radius: 15px; border: 4px solid #34495e; display: flex; flex-direction: column; align-items: center; }
+        .mental-notice { color: #f39c12; font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; max-width: 400px;}
+    </style>
+</head>
+<body>
+
+    <!-- 老师控制区 -->
+    <div id="teacher-panel">
+        <div>
+            <select id="level-select" onchange="loadLevel()">
+                <option value="1">Lv 1: Basic Multiplication (Q1-Q10)</option>
+                <option value="2">Lv 2: 2-Digit Multiplication (Q11-Q20)</option>
+                <option value="3">Lv 3: Precision Division (Q21-Q26)</option>
+                <option value="4">Lv 4: Tens Multipliers (Q27-Q32)</option>
+                <option value="5">Lv 5: Remainder Challenge (Q33-Q37)</option>
+                <option value="6">Lv 6: Estimation (Q38-Q43)</option>
+                <option value="7">Lv 7: Multi-Phase Boss (Q44-Q49)</option>
+                <option value="8">Lv 8: Word Problems (Q50-Q64)</option>
+            </select>
+        </div>
+        <div>
+            <button class="btn-warning" onclick="openTacticalBoard()">🛠️ OPEN TACTICAL BOARD</button>
+        </div>
+        <div style="color: #f1c40f; font-weight: bold; font-size: 1.2rem;">
+            Progress: <span id="progress-text">0/0</span>
+        </div>
+    </div>
+
+    <!-- 主战斗场景 -->
+    <div id="battle-stage">
+        <div class="side-panel"></div>
+
+        <div class="center-panel">
+            <div id="hp-ui">
+                <div style="display: flex; justify-content: space-between; font-weight: bold;"><span>Wild Pokémon</span><span id="hp-text">100%</span></div>
+                <div class="hp-bar-bg"><div id="hp-bar-fill"></div></div>
+            </div>
+            <div id="pokemon-container"><img id="pokemon-sprite" src=""></div>
+            
+            <div id="equation-container">
+                <!-- 正常模式布局 -->
+                <div id="normal-q-container">
+                    <div id="question-box">Loading...</div>
+                    <input type="text" id="display-screen" placeholder="?" autocomplete="off">
+                </div>
+                
+                <!-- 复合题 Boss 模式布局 -->
+                <div id="boss-q-container">
+                    <div id="boss-title">Boss Battle</div>
+                    <div id="boss-phases-wrapper"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 右侧键盘 -->
+        <div class="side-panel">
+            <div class="main-keypad">
+                <button class="main-key" onclick="mainInput('1')">1</button><button class="main-key" onclick="mainInput('2')">2</button><button class="main-key" onclick="mainInput('3')">3</button>
+                <button class="main-key" onclick="mainInput('4')">4</button><button class="main-key" onclick="mainInput('5')">5</button><button class="main-key" onclick="mainInput('6')">6</button>
+                <button class="main-key" onclick="mainInput('7')">7</button><button class="main-key" onclick="mainInput('8')">8</button><button class="main-key" onclick="mainInput('9')">9</button>
+                <button class="main-key" style="background:#e67e22; color:white;" onclick="mainClear()">CLR</button><button class="main-key" onclick="mainInput('0')">0</button><button class="main-key" style="background:#95a5a6; color:white;" onclick="mainInput('R')">R</button>
+                <button class="main-key" style="background:#8e44ad; color:white;" onclick="mainInput('Y')">Y (Yes)</button>
+                <button class="main-key" style="background:#8e44ad; color:white; grid-column: span 2;" onclick="mainInput('N')">N (No)</button>
+                
+                <button class="main-key btn-attack" onclick="mainAttack()">⚡ DIRECT ATTACK<br><small>(Press Enter)</small></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 战术板 Modal -->
+    <div id="tactical-modal">
+        <button class="close-btn" onclick="closeTacticalBoard()">✖ CLOSE</button>
+        <h1 style="color: #f1c40f; margin-bottom: 30px; letter-spacing: 2px;">/// TACTICAL OVERRIDE ///</h1>
+        <div class="tac-container">
+            <div id="tactical-board"><div id="dynamic-grid-container"></div></div>
+            <div id="control-panel">
+                <div style="color: #bdc3c7; margin-bottom: 15px; font-weight: bold; letter-spacing: 1px;">WEAPON CONTROL</div>
+                <div class="main-keypad">
+                    <button class="main-key" onclick="tacInput('1')">1</button><button class="main-key" onclick="tacInput('2')">2</button><button class="main-key" onclick="tacInput('3')">3</button>
+                    <button class="main-key" onclick="tacInput('4')">4</button><button class="main-key" onclick="tacInput('5')">5</button><button class="main-key" onclick="tacInput('6')">6</button>
+                    <button class="main-key" onclick="tacInput('7')">7</button><button class="main-key" onclick="tacInput('8')">8</button><button class="main-key" onclick="tacInput('9')">9</button>
+                    <button class="main-key" style="background:#e67e22; color:white;" onclick="tacClear()">DEL</button><button class="main-key" onclick="tacInput('0')">0</button><button class="main-key" style="background:#3498db; color:white;" onclick="tacBack()">🔙</button>
+                    <button class="main-key" style="grid-column: span 3; background:#95a5a6; color:white; font-size:1.1rem; padding: 10px 0;" onclick="tacInput('R')">R (Remainder)</button>
+                    <button class="main-key btn-attack" style="margin-top: 5px;" onclick="verifyTacticalBoard()">✔️ CONFIRM WORK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const allQuestions = [
+            // Level 1-6
+            { q: "412 × 4", a: "1648", level: 1 }, { q: "547 × 2", a: "1094", level: 1 }, { q: "610 × 5", a: "3050", level: 1 }, { q: "935 × 3", a: "2805", level: 1 }, { q: "109 × 7", a: "763", level: 1 }, { q: "5317 × 6", a: "31902", level: 1 }, { q: "2011 × 8", a: "16088", level: 1 }, { q: "6028 × 9", a: "54252", level: 1 }, { q: "1526 × 5", a: "7630", level: 1 }, { q: "8437 × 8", a: "67496", level: 1 },
+            { q: "46 × 18", a: "828", level: 2 }, { q: "35 × 20", a: "700", level: 2 }, { q: "67 × 36", a: "2412", level: 2 }, { q: "91 × 27", a: "2457", level: 2 }, { q: "89 × 16", a: "1424", level: 2 }, { q: "126 × 50", a: "6300", level: 2 }, { q: "625 × 73", a: "45625", level: 2 }, { q: "619 × 24", a: "14856", level: 2 }, { q: "281 × 53", a: "14893", level: 2 }, { q: "380 × 36", a: "13680", level: 2 },
+            { q: "1355 ÷ 5", a: "271", level: 3 }, { q: "4827 ÷ 3", a: "1609", level: 3 }, { q: "9804 ÷ 2", a: "4902", level: 3 }, { q: "6088 ÷ 8", a: "761", level: 3 }, { q: "1458 ÷ 6", a: "243", level: 3 }, { q: "1131 ÷ 3", a: "377", level: 3 },
+            { q: "18 × 20", a: "360", level: 4 }, { q: "69 × 40", a: "2760", level: 4 }, { q: "98 × 30", a: "2940", level: 4 }, { q: "53 × 60", a: "3180", level: 4 }, { q: "77 × 90", a: "6930", level: 4 }, { q: "42 × 80", a: "3360", level: 4 },
+            { q: "4569 ÷ 8", a: "571R1", level: 5 }, { q: "1348 ÷ 5", a: "269R3", level: 5 }, { q: "4240 ÷ 7", a: "605R5", level: 5 }, { q: "3134 ÷ 4", a: "783R2", level: 5 }, { q: "9381 ÷ 9", a: "1042R3", level: 5 },
+            { q: "Estimate: 59 × 17 ≈", a: "1200", level: 6 }, { q: "Estimate: 623 × 55 ≈", a: "36000", level: 6 }, { q: "Estimate: 917 × 31 ≈", a: "27000", level: 6 }, { q: "Estimate: 237 ÷ 5 ≈", a: "50", level: 6 }, { q: "Estimate: 4927 ÷ 7 ≈", a: "700", level: 6 }, { q: "Estimate: 8080 ÷ 9 ≈", a: "900", level: 6 },
+            
+            // Level 7: Multi-Phase Boss
+            { isBoss: true, bossNum: 44, phase: 0, q: "(a) Multiply 84 by 52", tacQ: "84 × 52", a: "4368", level: 7 },
+            { isBoss: true, bossNum: 44, phase: 1, q: "(b) Estimate the value of 84 × 52", tacQ: "Estimate 84 × 52 ≈", a: "4000", level: 7 },
+            { isBoss: true, bossNum: 44, phase: 2, q: "(c) State if your actual answer is reasonable (Y/N)", tacQ: "Mental", a: "Y", level: 7 },
+            
+            { isBoss: true, bossNum: 45, phase: 0, q: "(a) Multiply 409 by 93", tacQ: "409 × 93", a: "38037", level: 7 },
+            { isBoss: true, bossNum: 45, phase: 1, q: "(b) Estimate the value of 409 × 93", tacQ: "Estimate 409 × 93 ≈", a: "36000", level: 7 },
+            { isBoss: true, bossNum: 45, phase: 2, q: "(c) State if reasonable (Y/N)", tacQ: "Mental", a: "Y", level: 7 },
+            
+            { isBoss: true, bossNum: 46, phase: 0, q: "(a) Multiply 976 by 38", tacQ: "976 × 38", a: "37088", level: 7 },
+            { isBoss: true, bossNum: 46, phase: 1, q: "(b) Estimate the value of 976 × 38", tacQ: "Estimate 976 × 38 ≈", a: "40000", level: 7 },
+            { isBoss: true, bossNum: 46, phase: 2, q: "(c) State if reasonable (Y/N)", tacQ: "Mental", a: "Y", level: 7 },
+            
+            { isBoss: true, bossNum: 47, phase: 0, q: "(a) Divide 43 by 8", tacQ: "43 ÷ 8", a: "5R3", level: 7 },
+            { isBoss: true, bossNum: 47, phase: 1, q: "(b) Estimate the value of 43 ÷ 8", tacQ: "Estimate 43 ÷ 8 ≈", a: "5", level: 7 },
+            { isBoss: true, bossNum: 47, phase: 2, q: "(c) State if reasonable (Y/N)", tacQ: "Mental", a: "Y", level: 7 },
+
+            { isBoss: true, bossNum: 48, phase: 0, q: "(a) Divide 538 by 6", tacQ: "538 ÷ 6", a: "89R4", level: 7 },
+            { isBoss: true, bossNum: 48, phase: 1, q: "(b) Estimate the value of 538 ÷ 6", tacQ: "Estimate 538 ÷ 6 ≈", a: "90", level: 7 },
+            { isBoss: true, bossNum: 48, phase: 2, q: "(c) State if reasonable (Y/N)", tacQ: "Mental", a: "Y", level: 7 },
+
+            { isBoss: true, bossNum: 49, phase: 0, q: "(a) Divide 8,765 by 4", tacQ: "8765 ÷ 4", a: "2191R1", level: 7 },
+            { isBoss: true, bossNum: 49, phase: 1, q: "(b) Estimate the value of 8,765 ÷ 4", tacQ: "Estimate 8765 ÷ 4 ≈", a: "2200", level: 7 },
+            { isBoss: true, bossNum: 49, phase: 2, q: "(c) State if reasonable (Y/N)", tacQ: "Mental", a: "Y", level: 7 },
+
+            // Level 8: Word Problems (Added tacSteps based on teacher script)
+            { type: 'word', q: "50. There are 255 balloons in a package. How many balloons are there in a dozen packages?", a: "3060", level: 8, tacSteps: [ { text: 'Step 1: Decode "dozen" =', ans: '12' }, { text: 'Step 2: Total balloons (255 × 12) =', ans: '3060' } ] },
+            { type: 'word', q: "51. A factory makes 2,275 watches in a week. How many watches does it make in 3 days?", a: "975", level: 8, tacSteps: [ { text: 'Step 1: Watches per day (2275 ÷ 7) =', ans: '325' }, { text: 'Step 2: Watches in 3 days =', ans: '975' } ] },
+            { type: 'word', q: "52. A shirt costs $253 and a tie costs $78. David bought 4 shirts and 3 ties. How much did he spend altogether?", a: "1246", level: 8, tacSteps: [ { text: 'Step 1: Cost of 4 shirts (253 × 4) =', ans: '1012' }, { text: 'Step 2: Cost of 3 ties (78 × 3) =', ans: '234' }, { text: 'Step 3: Total altogether =', ans: '1246' } ] },
+            { type: 'word', q: "53. A purse costs 4 times as much as a dress. If the purse costs $276, how much does Anna spend on the purse and 3 dresses?", a: "483", level: 8, tacSteps: [ { text: 'Step 1: Cost of 1 dress (276 ÷ 4) =', ans: '69' }, { text: 'Step 2: Cost of 3 dresses (69 × 3) =', ans: '207' }, { text: 'Step 3: Total (Purse + Dresses) =', ans: '483' } ] },
+            { type: 'word', q: "54. Jason had some marbles. He gave 35 marbles to each of his 4 brothers and still had 219 marbles left. How many marbles did Jason have to begin with?", a: "359", level: 8, tacSteps: [ { text: 'Step 1: Marbles given away (35 × 4) =', ans: '140' }, { text: 'Step 2: Total at start (Add back) =', ans: '359' } ] },
+            { type: 'word', q: "55. 114 men and 686 women went to a concert. Each ticket cost $17. How much money was collected in all?", a: "13600", level: 8, tacSteps: [ { text: 'Step 1: Total People (114 + 686) =', ans: '800' }, { text: 'Step 2: Total Cash (800 × 17) =', ans: '13600' } ] },
+            { type: 'word', q: "56. A baker bakes 840 loaves of bread in a day. How many loaves of bread will he bake in 6 weeks?", a: "35280", level: 8, tacSteps: [ { text: 'Step 1: Convert 6 weeks to days =', ans: '42' }, { text: 'Step 2: Total Bread (840 × 42) =', ans: '35280' } ] },
+            { type: 'word', q: "57. Cecilia has 896 stickers. She gives 50 stickers to seven of her friends. She sorts the remaining stickers equally into three albums. How many stickers are there in each album?", a: "182", level: 8, tacSteps: [ { text: 'Step 1: Stickers given away (50 × 7) =', ans: '350' }, { text: 'Step 2: Stickers remaining (896 - 350) =', ans: '546' }, { text: 'Step 3: Stickers per album (546 ÷ 3) =', ans: '182' } ] },
+            
+            // 58 is a Multi-Phase Word Problem Boss
+            { type: 'word', isBoss: true, bossNum: 58, phase: 0, q: "58. There were 400 pieces of candy in a package. The principal of a school bought 25 packages for 2,000 children on Halloween.\n(a) How many pieces of candy did the principal buy altogether?", a: "10000", level: 8, tacSteps: [ { text: 'Phase (a): Total candies (25 × 400) =', ans: '10000' } ] },
+            { type: 'word', isBoss: true, bossNum: 58, phase: 1, q: "(b) If each child was given 7 pieces, how many more packages were needed?", a: "10", level: 8, tacSteps: [ { text: 'Step 1: Candies needed (2000 × 7) =', ans: '14000' }, { text: 'Step 2: Shortage (14000 - 10000) =', ans: '4000' }, { text: 'Step 3: Extra pkgs needed (4000 ÷ 400) =', ans: '10' } ] },
+
+            { type: 'word', q: "59. Kimi is 16 years old and her mother is 44 years old this year. How many years ago was Kimi’s mother five times as old as Kimi?", a: "9", level: 8, tacSteps: [ { text: 'Step 1: Age difference (44 - 16) =', ans: '28' }, { text: 'Step 2: Difference in units (5u - 1u) =', ans: '4' }, { text: 'Step 3: Kimi\'s age back then (28 ÷ 4) =', ans: '7' }, { text: 'Step 4: Years ago (16 - 7) =', ans: '9' } ] },
+            { type: 'word', q: "60. A stereo costs $328. A television set costs four times as much as the stereo. Mr. Simon buys the stereo and the television set and pays for them in eight monthly installments. How much must he pay for them each month?", a: "205", level: 8, tacSteps: [ { text: 'Step 1: Total Units (1 + 4) =', ans: '5' }, { text: 'Step 2: Total Cost (328 × 5) =', ans: '1640' }, { text: 'Step 3: Monthly Pay (1640 ÷ 8) =', ans: '205' } ] },
+            { type: 'word', q: "61. Michael had $3,600. After spending $320, he still had twice as much as Cynthia. Find the total amount of money they had in the beginning.", a: "5240", level: 8, tacSteps: [ { text: 'Step 1: Michael left (3600 - 320) =', ans: '3280' }, { text: 'Step 2: Cynthia\'s money (3280 ÷ 2) =', ans: '1640' }, { text: 'Step 3: Total at start (3600 + 1640) =', ans: '5240' } ] },
+            { type: 'word', q: "62. Luis bought a book and four identical pens for $12. Carlos bought the same book and two similar pens. Carlos paid $4 less than Luis. What was the cost of the book?", a: "4", level: 8, tacSteps: [ { text: 'Step 1: Carlos spent (12 - 4) =', ans: '8' }, { text: 'Step 2: Cost of 1 pen ($4 ÷ 2 pens) =', ans: '2' }, { text: 'Step 3: Cost of book (Carlos $8 - $4) =', ans: '4' } ] },
+            { type: 'word', q: "63. 250 adults and some children went to the zoo. The admission ticket for each adult was $12 and the admission ticket for each child was $9. If $6,915 was collected for all the tickets, how many children went to the zoo?", a: "435", level: 8, tacSteps: [ { text: 'Step 1: Adult money (250 × 12) =', ans: '3000' }, { text: 'Step 2: Children\'s pile (6915 - 3000) =', ans: '3915' }, { text: 'Step 3: Number of children (3915 ÷ 9) =', ans: '435' } ] },
+            { type: 'word', q: "64. Mr. Ortiz received a bonus. He gave $2,000 to his wife and distributed an amount of money equally among his six children. He was left with $1,350, which was $400 more than the amount of money he gave to each child. How much was his bonus?", a: "9050", level: 8, tacSteps: [ { text: 'Step 1: 1 Child gets (1350 - 400) =', ans: '950' }, { text: 'Step 2: 6 Children get (950 × 6) =', ans: '5700' }, { text: 'Step 3: Total Bonus (2000 + 5700 + 1350) =', ans: '9050' } ] }
+        ];
+        
+        const pokeIds = [1, 4, 6, 9, 25, 65, 94, 130, 143, 149, 150];
+        let currentQuestions = [], currentIndex = 0, currentHp = 100;
+        let tacFocus = null, currentTacPath = [];
+
+        const displayScreen = document.getElementById('display-screen');
+        displayScreen.addEventListener('keypress', function(e) { if (e.key === 'Enter') mainAttack(); });
+        displayScreen.addEventListener('input', function(e) { this.value = this.value.replace(/[^0-9rRyYnN]/g, '').toUpperCase(); });
+
+        window.onload = () => loadLevel();
+
+        function loadLevel() {
+            const level = parseInt(document.getElementById('level-select').value);
+            currentQuestions = allQuestions.filter(q => q.level === level);
+            currentIndex = 0; currentHp = 100;
+            document.getElementById('pokemon-sprite').src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/showdown/${pokeIds[Math.floor(Math.random() * pokeIds.length)]}.gif`;
+            updateUI();
+        }
+
+        function updateUI() {
+            if (currentIndex >= currentQuestions.length) { alert("🎉 LEVEL CLEARED!"); return; }
+            
+            let curQ = currentQuestions[currentIndex];
+            displayScreen.value = ''; 
+            
+            if (curQ.isBoss) {
+                document.getElementById('normal-q-container').style.display = 'none';
+                let bossContainer = document.getElementById('boss-q-container');
+                bossContainer.style.display = 'flex';
+                
+                document.getElementById('boss-title').innerText = "Boss Question " + curQ.bossNum;
+                let wrapper = document.getElementById('boss-phases-wrapper');
+                wrapper.innerHTML = ''; 
+
+                let bossPhases = currentQuestions.filter(q => q.bossNum === curQ.bossNum);
+                
+                bossPhases.forEach((bq, idx) => {
+                    let line = document.createElement('div');
+                    line.className = 'boss-line';
+                    
+                    let textSpan = document.createElement('span');
+                    textSpan.innerText = bq.q;
+                    line.appendChild(textSpan);
+
+                    if (idx < curQ.phase) {
+                        line.classList.add('answered');
+                        let ansSpan = document.createElement('span');
+                        ansSpan.innerText = " = " + bq.a;
+                        let check = document.createElement('span');
+                        check.className = 'boss-check'; check.innerHTML = '&nbsp;✔️';
+                        line.appendChild(ansSpan); line.appendChild(check);
+                    } 
+                    else if (idx === curQ.phase) {
+                        line.classList.add('active');
+                        let eq = document.createElement('span'); eq.innerText = " = ";
+                        displayScreen.style.height = '50px'; displayScreen.style.fontSize = '2.5rem'; displayScreen.style.width = '140px';
+                        line.appendChild(eq);
+                        line.appendChild(displayScreen);
+                    } 
+                    else {
+                        line.style.opacity = '0.4'; 
+                    }
+                    wrapper.appendChild(line);
+                });
+            } else {
+                document.getElementById('boss-q-container').style.display = 'none';
+                let normalContainer = document.getElementById('normal-q-container');
+                normalContainer.style.display = 'flex';
+
+                let qText = curQ.q;
+                if (!qText.includes('=') && !qText.includes('≈') && !curQ.type) qText += " =";
+                
+                let qBox = document.getElementById('question-box');
+                qBox.innerText = qText;
+                
+                // 自动排版引擎 (Auto-Layout Engine for long text)
+                if (qText.length > 100) {
+                    qBox.style.fontSize = '1.6rem'; qBox.style.textAlign = 'left'; qBox.style.lineHeight = '1.5';
+                } else if (qText.length > 50) {
+                    qBox.style.fontSize = '2rem'; qBox.style.textAlign = 'left'; qBox.style.lineHeight = '1.4';
+                } else if (qText.length > 12) {
+                    qBox.style.fontSize = '2.2rem'; qBox.style.textAlign = 'center'; qBox.style.lineHeight = '1.2';
+                } else {
+                    qBox.style.fontSize = '3.5rem'; qBox.style.textAlign = 'center'; qBox.style.lineHeight = '1.2';
+                }
+                
+                displayScreen.style.height = '70px'; displayScreen.style.fontSize = '3.5rem'; displayScreen.style.width = '180px';
+                normalContainer.appendChild(displayScreen);
+            }
+
+            displayScreen.focus();    
+            document.getElementById('progress-text').innerText = `${currentIndex + 1} / ${currentQuestions.length}`;
+            currentHp = 100 - (currentIndex * (100 / currentQuestions.length));
+            document.getElementById('hp-bar-fill').style.width = `${currentHp}%`;
+            document.getElementById('hp-text').innerText = `${Math.ceil(currentHp)}%`;
+            if(currentHp > 50) document.getElementById('hp-bar-fill').style.background = "#2ecc71";
+            else if(currentHp > 20) document.getElementById('hp-bar-fill').style.background = "#f1c40f";
+            else document.getElementById('hp-bar-fill').style.background = "#e74c3c";
+        }
+
+        function mainInput(val) { displayScreen.value += val; displayScreen.focus(); }
+        function mainClear() { displayScreen.value = ''; displayScreen.focus(); }
+
+        function mainAttack() {
+            const userAnswer = displayScreen.value.trim().replace(/\s/g, '').toUpperCase();
+            const correctAnswer = currentQuestions[currentIndex].a.toUpperCase();
+
+            if (userAnswer === correctAnswer) {
+                document.getElementById('pokemon-sprite').classList.add('hit');
+                setTimeout(() => document.getElementById('pokemon-sprite').classList.remove('hit'), 300);
+                currentIndex++;
+                setTimeout(() => {
+                    if(currentIndex === currentQuestions.length) { document.getElementById('hp-bar-fill').style.width = '0%'; document.getElementById('hp-text').innerText = '0%'; setTimeout(()=>alert("Gym Cleared!"), 500); }
+                    else updateUI();
+                }, 400);
+            } else {
+                displayScreen.style.color = 'red'; displayScreen.classList.add('shake');
+                setTimeout(() => { displayScreen.style.color = 'var(--text-dark)'; displayScreen.classList.remove('shake'); mainClear(); }, 500);
+            }
+        }
+
+        // --- 战术板动态引擎 ---
+        function openTacticalBoard() {
+            let curQ = currentQuestions[currentIndex];
+            let qText = curQ.tacQ || curQ.q;
+            qText = qText.replace('=', '').trim(); 
+            
+            let container = document.getElementById('dynamic-grid-container');
+            container.innerHTML = ''; currentTacPath = [];
+
+            // 专门处理应用题 Word Problems：启用解码引导面板
+            if (curQ.type === 'word' && curQ.tacSteps) {
+                renderWordProblem(curQ.tacSteps, container);
+            }
+            else if (curQ.level === 4) {
+                let match = qText.match(/(\d+)\s*×\s*(\d+)/);
+                if(match) renderTensMultiplier(match[1], match[2], container);
+            }
+            else if (qText.includes('Estimate') || qText.includes('≈') || qText.includes('Mental')) {
+                if(qText.includes('Mental')) {
+                    container.innerHTML = `<div class="mental-notice"><div style="font-size: 4rem; margin-bottom: 20px;">🧠</div>COMMANDER!<br>Use your logic.<br>Is the answer reasonable?</div><div style="text-align:center; margin-top: 30px;"><input type="text" id="ans-mental" class="input-cell" style="width: 200px; text-align:center;" placeholder="Y or N"></div>`;
+                } else {
+                    let match = qText.match(/(\d+)\s*([×÷])\s*(\d+)/);
+                    if(match) renderEstimation(match[1], match[2], match[3], container);
+                }
+                currentTacPath = ['ans-mental'];
+            }
+            else if (qText.includes('×')) {
+                let match = qText.match(/(\d+)\s*×\s*(\d+)/);
+                if(match) {
+                    let n1 = match[1], n2 = match[2];
+                    if(n2.length === 1) renderMultNx1(n1, n2, container);
+                    else renderMultNx2(n1, n2, container);
+                }
+            }
+            else if (qText.includes('÷')) {
+                let match = qText.match(/(\d+)\s*÷\s*(\d+)/);
+                if(match) renderDivision(match[1], match[2], container);
+            }
+
+            document.getElementById('tactical-modal').style.display = 'flex';
+            setTimeout(() => { if(document.getElementById(currentTacPath[0])) document.getElementById(currentTacPath[0]).focus(); }, 100);
+            attachCellListeners();
+        }
+
+        function closeTacticalBoard() { document.getElementById('tactical-modal').style.display = 'none'; displayScreen.focus(); }
+
+        function renderMultNx1(n1, n2, container) {
+            let cols = n1.length + 1;
+            let html = `<div class="math-grid" style="grid-template-columns: repeat(${cols}, 50px);"><div></div>`;
+            for(let i=0; i<n1.length; i++) html += `<input type="text" id="c-${i}" class="input-cell" style="height:30px; font-size:1.5rem; color:#e74c3c; border: 2px dashed #95a5a6;">`;
+            html += `<div></div>`;
+            for(let i=0; i<n1.length; i++) html += `<div class="static-cell">${n1[i]}</div>`;
+            html += `<div class="static-cell">×</div>`;
+            for(let i=0; i<n1.length-1; i++) html += `<div></div>`;
+            html += `<div class="static-cell">${n2}</div><div class="math-line" style="grid-column: 1 / span ${cols};"></div>`;
+            for(let i=0; i<cols; i++) html += `<input type="text" id="ans-${i}" class="input-cell final-ans">`;
+            html += `</div>`;
+            container.innerHTML = html;
+            for(let i=cols-1; i>=0; i--) currentTacPath.push(`ans-${i}`);
+        }
+
+        function renderMultNx2(n1, n2, container) {
+            let cols = n1.length + 2; 
+            let html = `<div class="math-grid" style="grid-template-columns: repeat(${cols}, 50px);">`;
+            for(let i=0; i<2; i++) html += `<div></div>`;
+            for(let i=0; i<n1.length; i++) html += `<div class="static-cell">${n1[i]}</div>`;
+            html += `<div></div><div class="static-cell">×</div>`;
+            for(let i=0; i<n1.length-2; i++) html += `<div></div>`;
+            html += `<div class="static-cell">${n2[0]}</div><div class="static-cell">${n2[1]}</div><div class="math-line" style="grid-column: 1 / span ${cols};"></div><div></div>`;
+            for(let i=0; i<cols-1; i++) { html += `<input type="text" id="p1-${i}" class="input-cell">`; currentTacPath.push(`p1-${i}`); }
+            for(let i=0; i<cols-1; i++) { html += `<input type="text" id="p2-${i}" class="input-cell">`; currentTacPath.push(`p2-${i}`); }
+            html += `<div class="static-cell" style="color:gray;">0</div><div class="math-line" style="grid-column: 1 / span ${cols};"></div>`;
+            for(let i=0; i<cols; i++) { html += `<input type="text" id="ans-${i}" class="input-cell final-ans">`; currentTacPath.push(`ans-${i}`); }
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderTensMultiplier(n1, n2, container) {
+            let html = `
+            <div style="font-size: 2.5rem; color: var(--text-dark); display: flex; flex-direction: column; gap: 20px; align-items: flex-start; background: #fdfdfd; padding: 40px; border-radius: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); font-weight: bold;">
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 220px; text-align: right; color: #34495e;">${n1} × ${n2} = </div>
+                    <input type="text" id="t-1" class="input-cell multi-digit" style="width: 80px;">
+                    <div style="color: #7f8c8d;">×</div>
+                    <input type="text" id="t-2" class="input-cell multi-digit" style="width: 80px;">
+                    <div style="color: #34495e;">tens</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 220px; text-align: right; color: #34495e;">= </div>
+                    <input type="text" id="t-3" class="input-cell multi-digit" style="width: 120px;">
+                    <div style="color: #34495e;">tens</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 220px; text-align: right; color: #34495e;">= </div>
+                    <input type="text" id="t-4" class="input-cell final-ans multi-digit" style="width: 160px; border-color: #2ecc71; background: #e8f8f5;">
+                </div>
+            </div>`;
+            container.innerHTML = html;
+            currentTacPath = ['t-1', 't-2', 't-3', 't-4'];
+        }
+
+        function renderEstimation(n1, op, n2, container) {
+            let html = `
+            <div style="font-size: 2.5rem; color: var(--text-dark); display: flex; flex-direction: column; gap: 25px; align-items: center; background: #fdfdfd; padding: 40px; border-radius: 10px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); font-weight: bold;">
+                <div style="color: #f39c12; font-size: 1.5rem; margin-bottom: -10px;">Round off first (先做四舍五入)</div>
+                <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
+                    <div style="text-align: right; color: #34495e;">${n1} ${op} ${n2} &approx; </div>
+                    <input type="text" id="e-1" class="input-cell multi-digit" style="width: 120px;">
+                    <div style="color: #7f8c8d;">${op}</div>
+                    <input type="text" id="e-2" class="input-cell multi-digit" style="width: 120px;">
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <div style="width: 100%; text-align: right; color: #34495e;">= </div>
+                    <input type="text" id="e-3" class="input-cell final-ans multi-digit" style="width: 180px; border-color: #2ecc71; background: #e8f8f5;">
+                </div>
+            </div>`;
+            container.innerHTML = html;
+            currentTacPath = ['e-1', 'e-2', 'e-3'];
+        }
+
+        // 新增：应用题解码步骤面板渲染器
+        function renderWordProblem(steps, container) {
+            let html = `<div style="display: flex; flex-direction: column; gap: 15px; background: #fdfdfd; padding: 30px; border-radius: 10px; width: 100%; min-width: 500px; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">`;
+            html += `<div style="color: #f39c12; font-size: 1.5rem; margin-bottom: 5px; font-weight: bold; border-bottom: 2px solid #bdc3c7; padding-bottom: 10px;">MISSION DECODE:</div>`;
+            
+            steps.forEach((step, index) => {
+                let isLast = index === steps.length - 1;
+                let inputId = `wp-step-${index}`;
+                currentTacPath.push(inputId);
+
+                html += `
+                <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; font-size: 1.6rem; color: var(--text-dark);">
+                    <div style="flex: 1; text-align: left; font-weight: bold;">${step.text}</div>
+                    <input type="text" id="${inputId}" class="input-cell multi-digit ${isLast ? 'final-ans' : ''}" style="width: 120px; font-size: 1.8rem; ${isLast ? 'border-color: #2ecc71; background: #e8f8f5;' : ''}">
+                </div>`;
+            });
+            html += `</div>`;
+            container.innerHTML = html;
+        }
+
+        function renderDivision(divd, divs, container) {
+            let cols = divd.length + 2;
+            let html = `<div style="max-height: 55vh; overflow-y: auto; padding: 10px 20px; overflow-x: hidden; border-radius: 10px; background: #fdfdfd; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">`;
+            html += `<div class="math-grid" style="grid-template-columns: 40px 30px repeat(${divd.length}, 45px); gap: 6px; justify-content: center; align-items: center;">`;
+
+            html += `<div></div><div></div>`;
+            for(let i=0; i<divd.length; i++) html += `<input type="text" id="q-${i}" class="input-cell final-ans" style="border-color: #2ecc71; height: 45px; width: 45px; font-size: 2rem; background: #e8f8f5;">`;
+
+            html += `<div></div><div></div><div style="grid-column: 3 / span ${divd.length}; border-top: 4px solid var(--text-dark); margin-top: 2px;"></div>`;
+            html += `<div class="static-cell" style="color: #f39c12; justify-content: flex-end; font-size: 2.5rem; font-weight: 900;">${divs}</div><div class="static-cell" style="font-size: 3rem; justify-content: flex-start; margin-left: -5px;">)</div>`;
+            for(let i=0; i<divd.length; i++) html += `<div class="static-cell" style="font-size: 2.5rem;">${divd[i]}</div>`;
+
+            for(let step=0; step<divd.length; step++) {
+                html += `<div></div><div class="static-cell" style="color: #e74c3c; font-size: 2.5rem; justify-content: flex-end; font-weight: 900;">-</div>`;
+                for(let c=0; c<divd.length; c++) html += `<input type="text" id="w-s-${step}-${c}" class="input-cell" style="border: 2px solid #bdc3c7; height: 40px; width: 45px; font-size: 1.8rem; background: #f8f9fa; color: #c0392b;">`;
+                html += `<div></div><div></div><div style="grid-column: 3 / span ${divd.length}; border-top: 3px solid var(--text-dark); margin: 2px 0;"></div><div></div><div></div>`;
+                for(let c=0; c<divd.length; c++) html += `<input type="text" id="w-r-${step}-${c}" class="input-cell" style="border: 2px dashed #bdc3c7; height: 40px; width: 45px; font-size: 1.8rem; background: transparent; color: var(--primary-blue);">`;
+            }
+
+            html += `</div></div><div style="margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 15px;"><span style="color: #e74c3c; font-weight: bold; font-size: 1.5rem;">Final Remainder (R):</span><input type="text" id="ans-r" class="input-cell final-ans multi-digit" style="width: 70px; height: 50px; font-size: 2rem; border-color: #e74c3c; background: #fdedec;"></div>`;
+            container.innerHTML = html;
+
+            for(let step=0; step<divd.length; step++) {
+                currentTacPath.push(`q-${step}`); 
+                for(let c=0; c<divd.length; c++) currentTacPath.push(`w-s-${step}-${c}`); 
+                for(let c=0; c<divd.length; c++) currentTacPath.push(`w-r-${step}-${c}`); 
+            }
+            currentTacPath.push('ans-r');
+        }
+
+        function attachCellListeners() {
+            document.querySelectorAll('.input-cell').forEach(cell => {
+                cell.addEventListener('focus', function() { tacFocus = this; });
+                cell.addEventListener('input', function() {
+                    this.value = this.value.replace(/[^0-9rRyYnN]/gi, '').toUpperCase(); 
+                    if(this.value !== '' && !this.classList.contains('multi-digit')) tacNext(); 
+                });
+                cell.addEventListener('keypress', function(e) { if(e.key === 'Enter') tacNext(); });
+            });
+        }
+
+        function tacInput(num) { 
+            if (tacFocus) { 
+                if (tacFocus.classList.contains('multi-digit')) tacFocus.value += num; 
+                else { tacFocus.value = num; tacNext(); }
+            } 
+        }
+
+        function tacClear() { if (tacFocus) { tacFocus.value = ''; tacBack(); } }
+        function tacNext() { if (tacFocus) { let idx = currentTacPath.indexOf(tacFocus.id); if (idx !== -1 && idx < currentTacPath.length - 1) document.getElementById(currentTacPath[idx + 1]).focus(); } }
+        function tacBack() { if (tacFocus) { let idx = currentTacPath.indexOf(tacFocus.id); if (idx > 0) document.getElementById(currentTacPath[idx - 1]).focus(); } }
+
+        function verifyTacticalBoard() {
+            const correctAnswer = currentQuestions[currentIndex].a.toUpperCase();
+            let finalAns = "";
+
+            if (document.getElementById('e-3')) {
+                finalAns = document.getElementById('e-3').value.toUpperCase();
+                if (!document.getElementById('e-1').value || !document.getElementById('e-2').value || !finalAns) {
+                    alert("❌ Please show your rounding steps first!"); return; 
+                }
+            } 
+            else if (document.getElementById('wp-step-0')) {
+                // 核心修改：应用题步骤拦截与校验
+                let curQ = currentQuestions[currentIndex];
+                let allCorrect = true;
+                for(let i=0; i<curQ.tacSteps.length; i++) {
+                    let userVal = document.getElementById(`wp-step-${i}`).value;
+                    if (userVal !== curQ.tacSteps[i].ans) {
+                        allCorrect = false;
+                        break;
+                    }
+                }
+                if (!allCorrect) {
+                    alert("❌ Mission Decode Failed! Check your steps. (某个步骤填错啦，请检查你的分析)");
+                    return; 
+                }
+                finalAns = curQ.a.toUpperCase(); 
+            }
+            else if (document.getElementById('t-4')) {
+                finalAns = document.getElementById('t-4').value.toUpperCase();
+                let match = (currentQuestions[currentIndex].tacQ || currentQuestions[currentIndex].q).match(/(\d+)\s*×\s*(\d+)/);
+                if (match) {
+                    let n1 = match[1], expectedTens = (parseInt(match[2])/10).toString();
+                    let t1 = document.getElementById('t-1').value, t2 = document.getElementById('t-2').value, t3 = document.getElementById('t-3').value;
+                    if (!((t1 === n1 && t2 === expectedTens) || (t1 === expectedTens && t2 === n1)) || t3 !== (parseInt(n1) * parseInt(expectedTens)).toString()) {
+                        alert("❌ Steps are incorrect! Make sure you break it down into 'tens' properly."); return; 
+                    }
+                }
+            }
+            else if(document.getElementById('ans-mental')) { finalAns = document.getElementById('ans-mental').value.toUpperCase(); }
+            else if (document.getElementById('q-0')) {
+                let qStr = ""; document.querySelectorAll('input[id^="q-"]').forEach(el => qStr += el.value);
+                qStr = parseInt(qStr).toString(); 
+                let rStr = document.getElementById('ans-r').value.toUpperCase();
+                finalAns = rStr && rStr !== '0' ? `${qStr}R${rStr}` : qStr;
+            } else {
+                let inputs = document.querySelectorAll('.final-ans');
+                for(let i=0; i<inputs.length; i++) finalAns += inputs[i].value;
+                finalAns = parseInt(finalAns).toString();
+            }
+
+            if (finalAns === correctAnswer) {
+                alert("🎯 TACTICAL SUCCESS! Launching attack...");
+                closeTacticalBoard();
+                displayScreen.value = correctAnswer;
+                setTimeout(mainAttack, 400); 
+            } else { alert("❌ Calculation error. Check your steps!"); }
+        }
+    </script>
+</body>
+</html>
