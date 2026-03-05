@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ms">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPM BM Rumusan: 极简通关训练 | Mastery Academy</title>
+    <meta name="description"
+        content="Master SPM Bahasa Melayu Rumusan in 8 levels — keyword radar, formula templates, sentence highlighting, and puzzle assembly.">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React + ReactDOM + Babel CDN (for in-browser JSX) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+
+        .animate-bounce {
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .6
+            }
+        }
+
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // ── Icons (inline SVG replacements for lucide-react) ──────────────────────
+        const Trophy = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>🏆</span>;
+        const Target = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>🎯</span>;
+        const BookOpen = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>📖</span>;
+        const AlertCircle = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>⚠️</span>;
+        const Puzzle = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>🧩</span>;
+        const Eye = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>👁️</span>;
+        const EyeOff = ({ className }) => <span className={className} style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>🙈</span>;
+        const ArrowRight = ({ className }) => <span className={className}>→</span>;
+        const ChevronLeft = ({ className }) => <span className={className}>‹</span>;
+        const ChevronRight = ({ className }) => <span className={className}>›</span>;
+        const CheckCircle2 = ({ className }) => <span className={className}>✅</span>;
+        const XCircle = ({ className }) => <span className={className}>❌</span>;
+
+        // ── Data Store ───────────────────────────────────────────────────────────────
+        const keywords = [
+            { id: 1, malay: "Punca / Faktor", chinese: "原因 (为什么发生)", type: "punca" },
+            { id: 2, malay: "Kesan / Akibat", chinese: "后果 (有什么坏处)", type: "kesan" },
+            { id: 3, malay: "Langkah / Cara", chinese: "方法 (怎么解决)", type: "langkah" },
+            { id: 4, malay: "Kebaikan / Faedah", chinese: "好处 (有什么益处)", type: "kebaikan" },
+            { id: 5, malay: "Cabaran / Masalah", chinese: "挑战 (遇到什么困难)", type: "cabaran" }
+        ];
+
+        const allLatihan = [
+            {
+                levelNum: 3,
+                title: "第三关：新手村实战 (车祸)",
+                fokus: "找 Punca (原因) 和 Kesan (后果)",
+                targetCount: 4,
+                sentences: [
+                    { id: "s1", text: "Kemalangan jalan raya sering berlaku di negara kita. ", chinese: "车祸经常在我国发生。", isTarget: false },
+                    { id: "s2", text: "Terdapat banyak punca kemalangan ini. ", chinese: "这有很多原因。", isTarget: false },
+                    { id: "s3", text: "Antaranya, pemandu memandu dengan laju. ", chinese: "其中，司机驾驶速度过快。", isTarget: true, type: "Punca" },
+                    { id: "s4", text: "Selain itu, keadaan jalan raya yang rosak juga menyebabkan kemalangan. ", chinese: "此外，破损的路况也会导致车祸。", isTarget: true, type: "Punca" },
+                    { id: "s5", text: "Kesan kemalangan jalan raya sangat buruk. ", chinese: "车祸的后果非常严重。", isTarget: false },
+                    { id: "s6", text: "Kemalangan boleh menyebabkan kecederaan parah. ", chinese: "车祸会导致重伤。", isTarget: true, type: "Kesan" },
+                    { id: "s7", text: "Selain itu, ia meragut nyawa manusia. ", chinese: "此外，它会夺走人命。", isTarget: true, type: "Kesan" }
+                ]
+            },
+            {
+                levelNum: 4,
+                title: "第四关：中级挑战 (运动)",
+                fokus: "找 Faedah (好处) 和 Langkah (方法)",
+                targetCount: 5,
+                sentences: [
+                    { id: "s2_1", text: "Bersukan merupakan amalan yang sangat baik untuk semua orang. ", chinese: "运动对每个人来说都是很好的习惯。", isTarget: false },
+                    { id: "s2_2", text: "Terdapat banyak faedah bersukan kepada kita. ", chinese: "运动对我们有很多好处。", isTarget: false },
+                    { id: "s2_3", text: "Antaranya, aktiviti bersukan dapat menyihatkan tubuh badan. ", chinese: "其中，运动可以使身体健康。", isTarget: true, type: "Faedah" },
+                    { id: "s2_4", text: "Selain itu, senaman yang kerap mampu mengurangkan stres pelajar selepas penat belajar di sekolah. ", chinese: "此外，经常锻炼能减轻学生在学校学习后的压力。", isTarget: true, type: "Faedah" },
+                    { id: "s2_5", text: "Seterusnya, kita dapat mengisi masa lapang dengan aktiviti yang berfaedah. ", chinese: "接着，我们可以用有益的活动来填补空闲时间。", isTarget: true, type: "Faedah" },
+                    { id: "s2_6", text: "Walau bagaimanapun, remaja kini kurang bersukan kerana leka dengan telefon pintar. ", chinese: "然而，现在的青少年因为沉迷于智能手机而较少运动。", isTarget: false },
+                    { id: "s2_7", text: "Oleh itu, terdapat beberapa langkah untuk menggalakkan amalan ini. ", chinese: "因此，有一些鼓励这种习惯的方法。", isTarget: false },
+                    { id: "s2_8", text: "Ibu bapa perlulah membeli peralatan sukan untuk anak-anak. ", chinese: "父母必须为孩子们购买运动器材。", isTarget: true, type: "Langkah" },
+                    { id: "s2_9", text: "Di samping itu, pihak sekolah haruslah menganjurkan lebih banyak pertandingan sukan pada setiap tahun. ", chinese: "除此之外，校方应该每年举办更多的体育比赛。", isTarget: true, type: "Langkah" }
+                ]
+            },
+            {
+                levelNum: 5,
+                title: "第五关：Boss 战 (河流污染)",
+                fokus: "找 Punca (原因) 和 Kesan (后果)",
+                targetCount: 6,
+                sentences: [
+                    { id: "s3_1", text: "Pencemaran sungai di negara kita semakin hari semakin membimbangkan. ", chinese: "我国河流污染的问题日益令人担忧。", isTarget: false },
+                    { id: "s3_2", text: "Masalah ini berlaku kerana sikap segelintir masyarakat yang tidak bertanggungjawab... ", chinese: "这个问题的发生是因为一小部分人不负责任的态度...", isTarget: false },
+                    { id: "s3_3", text: "Terdapat beberapa punca pencemaran sungai terus berlaku. ", chinese: "河流污染持续发生有几个原因。", isTarget: false },
+                    { id: "s3_4", text: "Antaranya, kilang-kilang membuang sisa toksik ke dalam sungai tanpa dirawat. ", chinese: "其中，工厂将未处理的有毒废料排入河中。", isTarget: true, type: "Punca" },
+                    { id: "s3_5", text: "Selain itu, orang ramai sering membuang sampah sarap ke dalam longkang dan sungai. ", chinese: "此外，公众经常将垃圾丢入沟渠和河流中。", isTarget: true, type: "Punca" },
+                    { id: "s3_6", text: "Seterusnya, aktiviti pembalakan haram di hutan juga menyebabkan air sungai menjadi keruh. ", chinese: "接着，森林里的非法伐木活动也导致河水变得浑浊。", isTarget: true, type: "Punca" },
+                    { id: "s3_7", text: "Jika masalah pencemaran ini dibiarkan, banyak kesan buruk akan berlaku kepada alam sekitar. ", chinese: "如果这种污染问题被置之不理，将会对环境造成许多不良后果。", isTarget: false },
+                    { id: "s3_8", text: "Pencemaran sungai yang teruk akan memusnahkan habitat hidupan akuatik seperti ikan dan udang. ", chinese: "严重的河流污染将破坏鱼虾等水生生物的栖息地。", isTarget: true, type: "Kesan" },
+                    { id: "s3_9", text: "Di samping itu, nelayan akan kehilangan sumber pendapatan kerana kekurangan hasil tangkapan. ", chinese: "除此之外，由于捕捞量减少，该地区的渔民将失去收入来源。", isTarget: true, type: "Kesan" },
+                    { id: "s3_10", text: "Akhir sekali, kesihatan manusia juga akan terjejas kerana meminum air yang tercemar. ", chinese: "最后，人类的健康也会因为饮用被污染的水而受到影响。", isTarget: true, type: "Kesan" },
+                    { id: "s3_11", text: "Semua pihak mesti sedar bahawa sungai adalah anugerah Tuhan yang sangat bernilai. ", chinese: "各方必须意识到河流是上帝极其宝贵的恩赐。", isTarget: false }
+                ]
+            }
+        ];
+
+        const allAssemblies = [
+            {
+                levelNum: 6,
+                title: "第六关：拼图大挑战 (车祸)",
+                chips: [
+                    { id: 'c1', text: 'punca-punca kemalangan jalan raya', type: 'fokus1' },
+                    { id: 'c2', text: 'kesan-kesannya', type: 'fokus2' },
+                    { id: 'c3', text: 'pemandu memandu dengan laju', type: 'isi_punca' },
+                    { id: 'c4', text: 'keadaan jalan raya yang rosak', type: 'isi_punca' },
+                    { id: 'c5', text: 'menyebabkan kecederaan parah', type: 'isi_kesan' },
+                    { id: 'c6', text: 'meragut nyawa manusia', type: 'isi_kesan' },
+                    { id: 'c7', text: 'bekerjasama menangani isu ini', type: 'kesimpulan_aksi' },
+                    { id: 'c8', text: 'kesejahteraan hidup terjamin', type: 'kesimpulan_hasil' }
+                ].sort(() => Math.random() - 0.5),
+                slotConfig: {
+                    f1: { type: 'fokus1', label: '[ 焦点1:原因 ]' },
+                    f2: { type: 'fokus2', label: '[ 焦点2:后果 ]' },
+                    i1: { type: 'isi_punca', label: '[ 原因 1 ]' },
+                    i2: { type: 'isi_punca', label: '[ 原因 2 ]' },
+                    i3: { type: 'isi_kesan', label: '[ 后果 1 ]' },
+                    i4: { type: 'isi_kesan', label: '[ 后果 2 ]' },
+                    k1: { type: 'kesimpulan_aksi', label: '[ 结尾:动作 ]' },
+                    k2: { type: 'kesimpulan_hasil', label: '[ 结尾:结果 ]' }
+                },
+                template: [
+                    ["Rumusan membincangkan ", "f1", " dan ", "f2", " di Malaysia."],
+                    ["Punca kemalangan jalan raya ialah ", "i1", ". Selain itu, ", "i2", "."],
+                    ["Kesan kemalangan jalan raya ialah ", "i3", ". Selain itu, ia ", "i4", "."],
+                    ["Kesimpulannya, semua pihak perlulah ", "k1", " agar ", "k2", "."]
+                ]
+            },
+            {
+                levelNum: 7,
+                title: "第七关：进阶拼图 (运动的好处)",
+                chips: [
+                    { id: 'd1', text: 'faedah-faedah bersukan', type: 'fokus1' },
+                    { id: 'd2', text: 'langkah menggalakkannya', type: 'fokus2' },
+                    { id: 'd3', text: 'dapat menyihatkan tubuh badan', type: 'isi_faedah' },
+                    { id: 'd4', text: 'mampu mengurangkan stres pelajar', type: 'isi_faedah' },
+                    { id: 'd5', text: 'membeli peralatan sukan untuk anak-anak', type: 'isi_langkah' },
+                    { id: 'd6', text: 'menganjurkan lebih banyak pertandingan', type: 'isi_langkah' },
+                    { id: 'd7', text: 'memupuk amalan bersukan ini', type: 'kesimpulan_aksi' },
+                    { id: 'd8', text: 'masyarakat yang sihat dapat dilahirkan', type: 'kesimpulan_hasil' }
+                ].sort(() => Math.random() - 0.5),
+                slotConfig: {
+                    f1: { type: 'fokus1', label: '[ 焦点1:好处 ]' },
+                    f2: { type: 'fokus2', label: '[ 焦点2:方法 ]' },
+                    i1: { type: 'isi_faedah', label: '[ 好处 1 ]' },
+                    i2: { type: 'isi_faedah', label: '[ 好处 2 ]' },
+                    i3: { type: 'isi_langkah', label: '[ 方法 1 ]' },
+                    i4: { type: 'isi_langkah', label: '[ 方法 2 ]' },
+                    k1: { type: 'kesimpulan_aksi', label: '[ 结尾:动作 ]' },
+                    k2: { type: 'kesimpulan_hasil', label: '[ 结尾:结果 ]' }
+                },
+                template: [
+                    ["Rumusan membincangkan ", "f1", " dan ", "f2", " di Malaysia."],
+                    ["Faedah bersukan ialah ", "i1", ". Selain itu, ia ", "i2", "."],
+                    ["Langkah menggalakkan amalan bersukan ialah ibu bapa perlulah ", "i3", ". Di samping itu, pihak sekolah haruslah ", "i4", "."],
+                    ["Kesimpulannya, semua pihak perlulah bekerjasama ", "k1", " agar ", "k2", "."]
+                ]
+            },
+            {
+                levelNum: 8,
+                title: "第八关：Boss 组装战 (河流污染)",
+                chips: [
+                    { id: 'e1', text: 'punca-punca pencemaran sungai', type: 'fokus1' },
+                    { id: 'e2', text: 'kesan-kesan buruknya', type: 'fokus2' },
+                    { id: 'e3', text: 'kilang-kilang membuang sisa toksik', type: 'isi_punca' },
+                    { id: 'e4', text: 'orang ramai sering membuang sampah', type: 'isi_punca' },
+                    { id: 'e5', text: 'memusnahkan habitat hidupan akuatik', type: 'isi_kesan' },
+                    { id: 'e6', text: 'nelayan kehilangan sumber pendapatan', type: 'isi_kesan' },
+                    { id: 'e7', text: 'menyelesaikan masalah pencemaran ini', type: 'kesimpulan_aksi' },
+                    { id: 'e8', text: 'alam sekitar sentiasa terpelihara', type: 'kesimpulan_hasil' }
+                ].sort(() => Math.random() - 0.5),
+                slotConfig: {
+                    f1: { type: 'fokus1', label: '[ 焦点1:原因 ]' },
+                    f2: { type: 'fokus2', label: '[ 焦点2:后果 ]' },
+                    i1: { type: 'isi_punca', label: '[ 原因 1 ]' },
+                    i2: { type: 'isi_punca', label: '[ 原因 2 ]' },
+                    i3: { type: 'isi_kesan', label: '[ 后果 1 ]' },
+                    i4: { type: 'isi_kesan', label: '[ 后果 2 ]' },
+                    k1: { type: 'kesimpulan_aksi', label: '[ 结尾:动作 ]' },
+                    k2: { type: 'kesimpulan_hasil', label: '[ 结尾:结果 ]' }
+                },
+                template: [
+                    ["Rumusan membincangkan ", "f1", " dan ", "f2", " di Malaysia."],
+                    ["Punca pencemaran sungai ialah ", "i1", ". Selain itu, ", "i2", "."],
+                    ["Kesan buruknya ialah pencemaran akan ", "i3", ". Di samping itu, ", "i4", "."],
+                    ["Kesimpulannya, semua pihak perlulah bekerjasama ", "k1", " agar ", "k2", "."]
+                ]
+            }
+        ];
+
+        // ── Main App Component ───────────────────────────────────────────────────────
+        function App() {
+            const [currentLevel, setCurrentLevel] = useState(0);
+            const [score, setScore] = useState(0);
+
+            // Level 1 State
+            const [selectedMalay, setSelectedMalay] = useState(null);
+            const [selectedChinese, setSelectedChinese] = useState(null);
+            const [matchedPairs, setMatchedPairs] = useState([]);
+
+            // Level 2 State
+            const [formulaAnswers, setFormulaAnswers] = useState({ p1: "", p2: "", p3: "" });
+
+            // Highlighting State (Level 3-5)
+            const [foundSentences, setFoundSentences] = useState([]);
+            const [showTranslation, setShowTranslation] = useState(false);
+
+            // Assembly State (Level 6-8)
+            const [slots, setSlots] = useState({});
+            const [activeSlot, setActiveSlot] = useState(null);
+            const [assemblyErrors, setAssemblyErrors] = useState([]);
+
+            // ── Handlers ──
+            useEffect(() => {
+                if (selectedMalay && selectedChinese) {
+                    const isMatch = keywords.find(k => k.id === selectedMalay.id && k.chinese === selectedChinese.chinese);
+                    if (isMatch) {
+                        setMatchedPairs(prev => prev.includes(isMatch.id) ? prev : [...prev, isMatch.id]);
+                        setScore(s => s + 10);
+                    }
+                    const timer = setTimeout(() => {
+                        setSelectedMalay(null);
+                        setSelectedChinese(null);
+                    }, 500);
+                    return () => clearTimeout(timer);
+                }
+            }, [selectedMalay, selectedChinese]);
+
+            const handleNextHighlightLevel = (nextLvl) => {
+                setFoundSentences([]);
+                setShowTranslation(false);
+                setCurrentLevel(nextLvl);
+            };
+
+            const handleSentenceClick = (sentence) => {
+                if (sentence.isTarget && !foundSentences.includes(sentence.id)) {
+                    setFoundSentences([...foundSentences, sentence.id]);
+                    setScore(s => s + 20);
+                }
+            };
+
+            const handleSlotClick = (slotId) => {
+                if (slots[slotId]) {
+                    setSlots({ ...slots, [slotId]: null });
+                    setAssemblyErrors(assemblyErrors.filter(errId => errId !== slotId));
+                }
+                setActiveSlot(slotId);
+            };
+
+            const handleChipClick = (chip) => {
+                if (activeSlot) {
+                    setSlots({ ...slots, [activeSlot]: chip });
+                    setActiveSlot(null);
+                }
+            };
+
+            const checkAssembly = (assemblyData, nextLevelNum) => {
+                const errors = [];
+                Object.keys(assemblyData.slotConfig).forEach(slotId => {
+                    const chip = slots[slotId];
+                    if (!chip || chip.type !== assemblyData.slotConfig[slotId].type) {
+                        errors.push(slotId);
+                    }
+                });
+                setAssemblyErrors(errors);
+                if (errors.length === 0) {
+                    setScore(s => s + 100);
+                    setSlots({});
+                    setActiveSlot(null);
+                    setCurrentLevel(nextLevelNum);
+                }
+            };
+
+            // ── Render Functions ──
+            const renderWelcome = () => (
+                <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-2xl mx-auto mt-10">
+                    <div className="text-6xl mb-6">🏆</div>
+                    <h1 className="text-4xl font-bold text-gray-800 mb-4">SPM Rumusan 极简通关</h1>
+                    <p className="text-lg text-gray-600 mb-8">不需要看懂整篇文章，我们只做"文字搬运工"！准备好挑战了吗？</p>
+                    <div className="bg-blue-50 p-6 rounded-xl mb-8 text-left">
+                        <h3 className="font-bold text-blue-800 mb-2 flex items-center gap-2">
+                            <span>⚠️</span> 游戏规则：
+                        </h3>
+                        <ul className="list-disc pl-6 text-blue-900 space-y-2">
+                            <li>字数绝对不能超过 <strong>120个字</strong>。</li>
+                            <li>全篇分成 <strong>4段</strong>，有固定模板。</li>
+                            <li>剩下的内容，全靠在文章里寻找重点并抄下来。</li>
+                        </ul>
+                    </div>
+                    <button onClick={() => setCurrentLevel(1)} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-xl transition-all transform hover:scale-105">
+                        开始第一关 🚀
+                    </button>
+                </div>
+            );
+
+            const renderLevel1 = () => (
+                <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-2xl shadow-xl">
+                    <div className="flex justify-between items-center mb-8 border-b pb-4">
+                        <h2 className="text-2xl font-bold flex items-center gap-2">
+                            <span>🎯</span> 第一关：寻宝雷达连连看
+                        </h2>
+                        <span className="font-bold text-xl text-green-600">得分: {score}</span>
+                    </div>
+                    <p className="text-gray-600 mb-6 text-lg">考场上看到左边的词，就等于看到分数！请找出它们对应的中文意思。</p>
+                    <div className="grid grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                            {keywords.map((k) => (
+                                <button key={`m-${k.id}`} disabled={matchedPairs.includes(k.id)} onClick={() => setSelectedMalay(k)}
+                                    className={`w-full p-4 rounded-xl text-lg font-semibold transition-all border-2
+                            ${matchedPairs.includes(k.id) ? 'bg-green-100 border-green-500 text-green-700 opacity-50 cursor-not-allowed'
+                                            : selectedMalay?.id === k.id ? 'bg-blue-100 border-blue-500 text-blue-800'
+                                                : 'bg-gray-50 border-gray-200 hover:border-blue-300'}`}>
+                                    {k.malay}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="space-y-4">
+                            {[...keywords].reverse().map((k) => (
+                                <button key={`c-${k.id}`} disabled={matchedPairs.includes(k.id)} onClick={() => setSelectedChinese(k)}
+                                    className={`w-full p-4 rounded-xl text-lg font-semibold transition-all border-2
+                            ${matchedPairs.includes(k.id) ? 'bg-green-100 border-green-500 text-green-700 opacity-50 cursor-not-allowed'
+                                            : selectedChinese?.id === k.id ? 'bg-purple-100 border-purple-500 text-purple-800'
+                                                : 'bg-gray-50 border-gray-200 hover:border-purple-300'}`}>
+                                    {k.chinese}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    {matchedPairs.length === 5 && (
+                        <div className="mt-8 text-center animate-bounce">
+                            <button onClick={() => setCurrentLevel(2)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-xl flex items-center mx-auto gap-2">
+                                进入下一关 →
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+
+            const renderLevel2 = () => (
+                <div className="max-w-3xl mx-auto mt-10 bg-white p-8 rounded-2xl shadow-xl">
+                    <div className="flex justify-between items-center mb-8 border-b pb-4">
+                        <h2 className="text-2xl font-bold flex items-center gap-2">
+                            <span>📖</span> 第二关：无脑套用万能公式
+                        </h2>
+                        <span className="font-bold text-xl text-green-600">得分: {score}</span>
+                    </div>
+                    <p className="text-gray-600 mb-6 text-lg">开头和结尾不用自己想，根据逻辑选择最合理的词填满模板。</p>
+                    <div className="space-y-8">
+                        <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-blue-500">
+                            <h3 className="font-bold text-gray-700 mb-3">开头 (Pendahuluan) - 拿 2 分</h3>
+                            <p className="text-lg leading-loose">
+                                Rumusan <select className="mx-2 p-2 border rounded border-blue-400 bg-white font-semibold text-blue-700 outline-none"
+                                    onChange={(e) => setFormulaAnswers({ ...formulaAnswers, p1: e.target.value })}>
+                                    <option value="">-- 选择动词 --</option>
+                                    <option value="membaca">membaca (阅读)</option>
+                                    <option value="membincangkan">membincangkan (讨论)</option>
+                                    <option value="menulis">menulis (书写)</option>
+                                </select> [ Fokus 1 ] dan [ Fokus 2 ] di Malaysia.
+                            </p>
+                            {formulaAnswers.p1 === "membincangkan" && <span className="text-green-600 font-bold flex mt-2 items-center gap-1"><span>✅</span> 正确！</span>}
+                        </div>
+                        <div className="bg-gray-50 p-6 rounded-xl border-l-4 border-purple-500">
+                            <h3 className="font-bold text-gray-700 mb-3">结尾 (Kesimpulan) - 闭眼拿 2 分</h3>
+                            <p className="text-lg leading-loose">
+                                Kesimpulannya, semua pihak perlulah <select className="mx-2 p-2 border rounded border-purple-400 bg-white font-semibold text-purple-700 outline-none"
+                                    onChange={(e) => setFormulaAnswers({ ...formulaAnswers, p2: e.target.value })}>
+                                    <option value="">-- 选择行动 --</option>
+                                    <option value="tidur awal">tidur awal (早睡)</option>
+                                    <option value="bekerjasama">bekerjasama (合作)</option>
+                                    <option value="bergaduh">bergaduh (吵架)</option>
+                                </select> menangani isu ini agar kesejahteraan hidup <select className="mx-2 p-2 border rounded border-purple-400 bg-white font-semibold text-purple-700 outline-none"
+                                    onChange={(e) => setFormulaAnswers({ ...formulaAnswers, p3: e.target.value })}>
+                                    <option value="">-- 选择结果 --</option>
+                                    <option value="terjamin">terjamin (得到保障)</option>
+                                    <option value="musnah">musnah (毁灭)</option>
+                                </select>.
+                            </p>
+                            {formulaAnswers.p2 === "bekerjasama" && formulaAnswers.p3 === "terjamin" && <span className="text-green-600 font-bold flex mt-2 items-center gap-1"><span>✅</span> 万能结尾已解锁！</span>}
+                        </div>
+                    </div>
+                    {formulaAnswers.p1 === "membincangkan" && formulaAnswers.p2 === "bekerjasama" && formulaAnswers.p3 === "terjamin" && (
+                        <div className="mt-8 text-center animate-bounce">
+                            <button onClick={() => setCurrentLevel(3)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-xl flex items-center mx-auto gap-2">
+                                进入文章找茬实战 →
+                            </button>
+                        </div>
+                    )}
+                </div>
+            );
+
+            const renderHighlighting = (latihanData, nextLevelNum) => (
+                <div className="max-w-4xl mx-auto mt-10 bg-white p-8 rounded-2xl shadow-xl">
+                    <div className="flex justify-between items-center mb-6 border-b pb-4">
+                        <h2 className="text-2xl font-bold flex items-center gap-2">
+                            <span>🎯</span> {latihanData.title}
+                        </h2>
+                        <span className="font-bold text-xl text-green-600">得分: {score}</span>
+                    </div>
+                    <div className="bg-yellow-50 p-4 rounded-lg mb-6 border border-yellow-200 flex justify-between items-center">
+                        <div className="flex-1">
+                            <p className="font-bold text-yellow-800">任务：{latihanData.fokus}</p>
+                            <p className="text-yellow-700 text-sm mt-1">操作：仔细阅读下方短文，认准 <span className="font-bold bg-yellow-200 px-1 rounded">Selain itu, Antaranya</span> 这种连接词。点击"重点答案"的句子。找对 {latihanData.targetCount} 句即可通关！</p>
+                        </div>
+                        <button onClick={() => setShowTranslation(!showTranslation)}
+                            className="ml-4 flex flex-col items-center justify-center py-2 px-4 bg-white rounded-lg shadow-sm border-2 border-yellow-400 text-yellow-700 hover:bg-yellow-100 transition-colors transform hover:scale-105">
+                            <span className="text-xl mb-1">{showTranslation ? '🙈' : '👁️'}</span>
+                            <span className="text-xs font-bold tracking-wide">{showTranslation ? '隐藏翻译' : '开启翻译'}</span>
+                        </button>
+                    </div>
+                    <div className="bg-white border-2 border-gray-200 p-6 rounded-xl text-lg leading-loose shadow-inner">
+                        {latihanData.sentences.map((sentence) => {
+                            const isFound = foundSentences.includes(sentence.id);
+                            return (
+                                <span key={sentence.id} onClick={() => handleSentenceClick(sentence)}
+                                    className={`cursor-pointer transition-colors duration-300 rounded px-1 inline-block
+                            ${isFound ? 'bg-green-200 font-bold text-green-900' : 'hover:bg-gray-100'}`}>
+                                    {sentence.text}
+                                    {isFound && <span className="inline-block mx-1 text-xs bg-green-500 text-white px-2 py-0.5 rounded-full align-middle shadow-sm">{sentence.type}</span>}
+                                    {showTranslation && <span className="text-gray-500 text-sm font-normal block leading-tight mt-1 mb-3 italic border-l-2 border-yellow-400 pl-2 ml-1">{sentence.chinese}</span>}
+                                </span>
+                            );
+                        })}
+                    </div>
+                    <div className="mt-6 flex items-center justify-between">
+                        <div className="text-gray-600 font-bold">
+                            已找到重点: <span className="text-2xl text-blue-600">{foundSentences.length} / {latihanData.targetCount}</span>
+                        </div>
+                        {foundSentences.length >= latihanData.targetCount && (
+                            <button onClick={() => handleNextHighlightLevel(nextLevelNum)} className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-xl flex items-center gap-2 animate-pulse">
+                                目标达成！下一关 →
+                            </button>
+                        )}
+                    </div>
+                </div>
+            );
+
+            const renderAssembly = (assemblyData, nextLevelNum) => {
+                const usedChipIds = Object.values(slots).filter(Boolean).map(c => c.id);
+                const availableChips = assemblyData.chips.filter(c => !usedChipIds.includes(c.id));
+                const isReadyToCheck = Object.keys(assemblyData.slotConfig).every(key => slots[key]);
+
+                const SlotButton = ({ slotId }) => {
+                    const chip = slots[slotId];
+                    const isError = assemblyErrors.includes(slotId);
+                    return (
+                        <button onClick={() => handleSlotClick(slotId)}
+                            className={`px-3 py-1 mx-1 my-1 rounded-lg font-semibold transition-all border-2 text-sm
+                    ${activeSlot === slotId ? 'border-blue-500 bg-blue-100 ring-2 ring-blue-200'
+                                    : chip ? (isError ? 'bg-red-100 border-red-500 text-red-800' : 'bg-green-100 border-green-500 text-green-800')
+                                        : 'border-dashed border-gray-400 text-gray-400 hover:bg-gray-50'}`}>
+                            {chip ? chip.text : assemblyData.slotConfig[slotId].label}
+                        </button>
+                    );
+                };
+
+                return (
+                    <div className="max-w-5xl mx-auto mt-6 bg-white p-6 rounded-2xl shadow-xl">
+                        <div className="flex justify-between items-center mb-6 border-b pb-4">
+                            <h2 className="text-2xl font-bold flex items-center gap-2">
+                                <span>🧩</span> {assemblyData.title}
+                            </h2>
+                            <span className="font-bold text-xl text-green-600">得分: {score}</span>
+                        </div>
+                        <p className="text-gray-700 mb-6 font-medium bg-blue-50 p-4 rounded-lg">
+                            这就是概述的"作弊代码"！<br />
+                            操作：先点击作文里<span className="text-gray-400 font-bold mx-1">虚线框的插槽</span>，然后点击上方对应的<span className="bg-yellow-200 px-2 rounded font-bold mx-1">积木</span>把它装进去。填满后点击提交！
+                        </p>
+                        <div className="bg-gray-100 p-4 rounded-xl border border-gray-300 mb-8 min-h-24">
+                            <h3 className="font-bold text-gray-500 mb-3 text-sm">🧩 积木区 (可用句子)：</h3>
+                            <div className="flex flex-wrap gap-2">
+                                {availableChips.map(chip => (
+                                    <button key={chip.id} onClick={() => handleChipClick(chip)} disabled={!activeSlot}
+                                        className={`px-4 py-2 rounded-lg font-semibold shadow-sm border
+                                ${activeSlot ? 'bg-yellow-100 border-yellow-400 hover:bg-yellow-200 text-yellow-800 cursor-pointer transform hover:-translate-y-1 transition-transform'
+                                                : 'bg-gray-200 border-gray-300 text-gray-500 cursor-not-allowed opacity-60'}`}>
+                                        {chip.text}
+                                    </button>
+                                ))}
+                                {availableChips.length === 0 && <span className="text-green-600 font-bold m-2 flex items-center gap-1"><span>✅</span> 所有积木已安放！</span>}
+                            </div>
+                        </div>
+                        <div className="bg-white border-2 border-gray-200 p-6 rounded-xl text-lg leading-loose shadow-sm font-serif">
+                            {assemblyData.template.map((paragraph, pIndex) => (
+                                <p key={`p-${pIndex}`} className="mb-4">
+                                    {paragraph.map((item, iIndex) => {
+                                        if (assemblyData.slotConfig[item]) {
+                                            return <SlotButton key={`s-${pIndex}-${iIndex}`} slotId={item} />;
+                                        }
+                                        return <React.Fragment key={`t-${pIndex}-${iIndex}`}>{item}</React.Fragment>;
+                                    })}
+                                </p>
+                            ))}
+                        </div>
+                        <div className="mt-8 text-center">
+                            {isReadyToCheck ? (
+                                <button onClick={() => checkAssembly(assemblyData, nextLevelNum)} className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-10 rounded-full text-xl shadow-lg transform hover:scale-105 transition-all">
+                                    Semak Jawapan (检查答案)
+                                </button>
+                            ) : (
+                                <p className="text-gray-400">请把所有插槽填满...</p>
+                            )}
+                            {assemblyErrors.length > 0 && (
+                                <p className="text-red-500 mt-4 font-bold flex justify-center items-center gap-1">
+                                    <span>❌</span> 有 {assemblyErrors.length} 块积木放错了位置，请点击红色积木卸下来重新放置！
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                );
+            };
+
+            const renderSuccess = () => (
+                <div className="text-center p-8 bg-white rounded-2xl shadow-xl max-w-2xl mx-auto mt-10">
+                    <div className="text-8xl mb-6">🏆</div>
+                    <h1 className="text-5xl font-bold text-gray-800 mb-4">You Did It!</h1>
+                    <p className="text-2xl text-gray-600 mb-2">你的总得分: <span className="font-bold text-blue-600">{score}</span></p>
+                    <div className="bg-green-50 p-6 rounded-xl mt-6 mb-8 text-left border border-green-200 text-green-800 text-lg">
+                        <p>你已经完美掌握了 Rumusan 的核心密码：</p>
+                        <ol className="list-decimal pl-6 mt-2 space-y-1">
+                            <li><strong>识别焦点</strong> (Punca/Kesan/Langkah...)</li>
+                            <li><strong>套用开头/结尾公式</strong></li>
+                            <li><strong>像雷达一样扫描重点句子</strong> (找 Antaranya, Selain itu...)</li>
+                            <li><strong>像拼图一样把句子拼进段落里！</strong></li>
+                        </ol>
+                    </div>
+                    <button onClick={() => window.location.reload()} className="bg-gray-800 hover:bg-gray-900 text-white font-bold py-3 px-8 rounded-full text-xl transition-all shadow-lg">
+                        重新开始挑战
+                    </button>
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen bg-gray-100 pt-10 pb-28 px-4 font-sans text-gray-800">
+                    {currentLevel === 0 && renderWelcome()}
+                    {currentLevel === 1 && renderLevel1()}
+                    {currentLevel === 2 && renderLevel2()}
+                    {currentLevel === 3 && renderHighlighting(allLatihan[0], 4)}
+                    {currentLevel === 4 && renderHighlighting(allLatihan[1], 5)}
+                    {currentLevel === 5 && renderHighlighting(allLatihan[2], 6)}
+                    {currentLevel === 6 && renderAssembly(allAssemblies[0], 7)}
+                    {currentLevel === 7 && renderAssembly(allAssemblies[1], 8)}
+                    {currentLevel === 8 && renderAssembly(allAssemblies[2], 9)}
+                    {currentLevel === 9 && renderSuccess()}
+
+                    {/* Global Nav Bar */}
+                    <div className="fixed bottom-0 left-0 right-0 bg-white shadow border-t border-gray-200 p-4 z-50">
+                        <div className="max-w-5xl mx-auto w-full flex justify-between items-center px-2">
+                            <button onClick={() => setCurrentLevel(Math.max(0, currentLevel - 1))}
+                                disabled={currentLevel === 0}
+                                className={`flex items-center px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm
+                        ${currentLevel === 0 ? 'text-gray-400 cursor-not-allowed bg-gray-100' : 'text-blue-700 bg-blue-100 hover:bg-blue-200'}`}>
+                                ‹ 上一页
+                            </button>
+                            <span className="text-gray-500 font-bold bg-gray-100 px-4 py-2 rounded-lg text-sm">
+                                {currentLevel === 0 ? '🌟 首页' : currentLevel === 9 ? '🎉 通关' : `第 ${currentLevel} / 8 关`}
+                            </span>
+                            <button onClick={() => setCurrentLevel(Math.min(9, currentLevel + 1))}
+                                disabled={currentLevel === 9}
+                                className={`flex items-center px-4 py-2.5 rounded-xl font-bold transition-all shadow-sm
+                        ${currentLevel === 9 ? 'text-gray-400 cursor-not-allowed bg-gray-100' : 'text-blue-700 bg-blue-100 hover:bg-blue-200'}`}>
+                                下一页 ›
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+
+    <!-- Home Button -->
+    <style>
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 70px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+    <script src="../../../../../js/progress-tracker.js" data-module-id="SPM_BM_Rumusan"
+        data-module-name="SPM Bahasa Melayu – Rumusan 极简通关"
+        data-module-url="content/SPM_Syllabus/Form5/BM/Rumusan/index.html"></script>
+    <script>
+        window.addEventListener('load', () => {
+            if (!window.ProgressTracker) return;
+            ProgressTracker.load().then(() => {
+                ProgressTracker.save({ visited: true });
+            });
+        });
+    </script>
+</body>
+
+</html>
