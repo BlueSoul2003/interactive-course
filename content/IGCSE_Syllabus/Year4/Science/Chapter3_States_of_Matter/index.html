@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topic 3: States of Matter | IGCSE Science Y4</title>
+    <meta name="description"
+        content="Master solids, liquids, gases, changes of state, and chemical reactions through interactive slides and 50 quiz questions.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], head: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        brand: { 50: '#eef7ff', 100: '#d9edff', 200: '#bce0ff', 300: '#8eceff', 400: '#59b2ff', 500: '#3b8fff', 600: '#1e6df5', 700: '#1758e1', 800: '#1948b6', 900: '#1a3f8f' },
+                        surface: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .font-head {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Animated gradient hero */
+        .hero-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 40%, #164e63 70%, #0f172a 100%);
+            background-size: 300% 300%;
+            animation: heroShift 12s ease infinite;
+        }
+
+        @keyframes heroShift {
+            0% {
+                background-position: 0% 50%
+            }
+
+            50% {
+                background-position: 100% 50%
+            }
+
+            100% {
+                background-position: 0% 50%
+            }
+        }
+
+        /* Particle dot animation for hero */
+        .particle-field {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .particle-field span {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(56, 189, 248, 0.35);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle-field span:nth-child(2) {
+            width: 6px;
+            height: 6px;
+            left: 20%;
+            top: 30%;
+            animation-delay: -1s;
+            animation-duration: 8s;
+            background: rgba(129, 140, 248, 0.3);
+        }
+
+        .particle-field span:nth-child(3) {
+            left: 50%;
+            top: 60%;
+            animation-delay: -2s;
+            animation-duration: 7s;
+            background: rgba(52, 211, 153, 0.3);
+        }
+
+        .particle-field span:nth-child(4) {
+            left: 70%;
+            top: 20%;
+            animation-delay: -3s;
+            animation-duration: 9s;
+        }
+
+        .particle-field span:nth-child(5) {
+            left: 85%;
+            top: 70%;
+            animation-delay: -0.5s;
+            animation-duration: 6s;
+            background: rgba(245, 158, 11, 0.3);
+        }
+
+        .particle-field span:nth-child(6) {
+            left: 35%;
+            top: 80%;
+            animation-delay: -4s;
+        }
+
+        .particle-field span:nth-child(7) {
+            left: 60%;
+            top: 15%;
+            animation-delay: -2.5s;
+            background: rgba(129, 140, 248, 0.25);
+        }
+
+        .particle-field span:nth-child(8) {
+            left: 10%;
+            top: 55%;
+            animation-delay: -1.5s;
+            background: rgba(52, 211, 153, 0.25);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.6
+            }
+
+            50% {
+                transform: translateY(-30px) scale(1.3);
+                opacity: 1
+            }
+        }
+
+        /* Fade-in for quiz items */
+        .fade-in {
+            animation: fadeIn 0.35s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        /* Section type badges */
+        .type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 4px 12px;
+            border-radius: 999px;
+        }
+
+        /* Question card hover lift */
+        .q-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .q-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* MCQ option interactive states */
+        .opt-label {
+            transition: all 0.15s;
+        }
+
+        .opt-label:has(input:checked) {
+            background: #eef7ff;
+            border-color: #3b8fff;
+            box-shadow: inset 0 0 0 2px #3b8fff;
+        }
+
+        /* Score pop */
+        .score-pop {
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        /* Progress bar */
+        .progress-fill {
+            transition: width 0.5s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* PDF download cards */
+        .dl-card {
+            transition: all 0.2s;
+        }
+
+        .dl-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.12);
+        }
+    </style>
+</head>
+
+<body class="bg-surface-50 text-slate-800 min-h-screen">
+
+    <!-- ═══════════════════ STICKY HEADER ═══════════════════ -->
+    <div class="fixed top-0 w-full bg-white/95 backdrop-blur-md shadow-sm z-50 border-b border-slate-200/60">
+        <div class="max-w-5xl mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="text-2xl">🔬</span>
+                <div>
+                    <div class="font-head font-bold text-brand-700 text-sm leading-tight">IGCSE Science · Year 4</div>
+                    <div class="text-xs text-slate-400 font-medium">Topic 3: States of Matter</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <!-- Progress ring -->
+                <div class="hidden sm:flex items-center gap-2">
+                    <div class="w-32 h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div id="progress-bar"
+                            class="h-full bg-gradient-to-r from-brand-500 to-emerald-400 rounded-full progress-fill"
+                            style="width:0%"></div>
+                    </div>
+                    <span id="progress-pct" class="text-xs font-bold text-slate-400">0%</span>
+                </div>
+                <div id="score-badge"
+                    class="score-pop bg-brand-50 px-4 py-1.5 rounded-full font-bold text-brand-800 border border-brand-200 text-sm">
+                    ⭐ <span id="score-display">0</span> / 100
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════ HERO ═══════════════════ -->
+    <section class="hero-gradient relative pt-28 pb-16 px-6 text-center text-white overflow-hidden">
+        <div class="particle-field">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <div
+                class="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide text-cyan-300 mb-6 border border-white/10">
+                🧊 CHAPTER 3 · INTERACTIVE MODULE
+            </div>
+            <h1 class="font-head text-4xl sm:text-5xl font-extrabold mb-4 leading-tight">
+                The Magic of <span
+                    class="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-transparent">Matter</span>
+            </h1>
+            <p class="text-lg text-slate-300 max-w-xl mx-auto mb-8">Explore solids, liquids, gases, changes of state,
+                elements, compounds & chemical reactions — then prove your mastery with 50 interactive questions!</p>
+            <div class="flex flex-wrap justify-center gap-3">
+                <a href="#slides-section"
+                    class="inline-flex items-center gap-2 bg-white text-slate-800 font-bold px-6 py-3 rounded-xl hover:bg-slate-100 transition shadow-lg shadow-black/20">
+                    📑 View Slides
+                </a>
+                <a href="#quiz-section"
+                    class="inline-flex items-center gap-2 bg-brand-600 text-white font-bold px-6 py-3 rounded-xl hover:bg-brand-700 transition shadow-lg shadow-brand-900/30">
+                    🧠 Start Quiz
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════ RESOURCES BAR ═══════════════════ -->
+    <div class="bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-6 py-4 flex flex-wrap gap-3 justify-center">
+            <a href="slides.pdf" target="_blank"
+                class="dl-card inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-brand-300 hover:text-brand-700">
+                📄 Slides PDF
+            </a>
+            <a href="Worksheet.pdf" target="_blank"
+                class="dl-card inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-emerald-300 hover:text-emerald-700">
+                📝 Worksheet
+            </a>
+            <a href="Answer_Key.pdf" target="_blank"
+                class="dl-card inline-flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 hover:border-amber-300 hover:text-amber-700">
+                🔑 Answer Key
+            </a>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-6 pt-10 pb-20">
+
+        <!-- ═══════════════════ PDF VIEWER ═══════════════════ -->
+        <section id="slides-section" class="mb-16">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-brand-100 rounded-xl flex items-center justify-center text-xl">📑</div>
+                <div>
+                    <h2 class="font-head text-2xl font-bold text-slate-800">Presentation Slides</h2>
+                    <p class="text-sm text-slate-400">Read through the slides before attempting the quiz</p>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+                <div class="bg-gradient-to-r from-slate-800 to-slate-700 px-6 py-3 flex items-center justify-between">
+                    <div class="flex items-center gap-2 text-white/80 text-sm font-medium">
+                        <span class="w-3 h-3 rounded-full bg-red-400"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-400"></span>
+                        <span class="ml-2 text-slate-400">The_Magic_of_Matter.pdf</span>
+                    </div>
+                    <a href="slides.pdf" target="_blank"
+                        class="text-xs text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-1">
+                        Open fullscreen ↗
+                    </a>
+                </div>
+                <div class="bg-slate-100 p-4">
+                    <iframe src="slides.pdf" class="w-full rounded-lg border border-slate-300" style="height:650px"
+                        title="Presentation Slides"></iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════════ QUIZ ═══════════════════ -->
+        <section id="quiz-section">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-emerald-100 rounded-xl flex items-center justify-center text-xl">🧠</div>
+                <div>
+                    <h2 class="font-head text-2xl font-bold text-slate-800">Interactive Knowledge Check</h2>
+                    <p class="text-sm text-slate-400">50 questions · 5 question types · 100 points possible</p>
+                </div>
+            </div>
+
+            <div id="quiz-container" class="space-y-10">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ═══════════════════ HOME BUTTON ═══════════════════ -->
+    <style>
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+    <!-- ═══════════════════ PROGRESS TRACKER ═══════════════════ -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="IGCSE_Y4_Sci_Ch3"
+        data-module-name="IGCSE Y4 Science – States of Matter"
+        data-module-url="content/IGCSE_Syllabus/Year4/Science/Chapter3_States_of_Matter/index.html"></script>
+    <script>
+        window.addEventListener('load', () => {
+            if (!window.ProgressTracker) return;
+            ProgressTracker.load().then(() => {
+                ProgressTracker.save({ visited: true });
+            });
+        });
+    </script>
+
+    <!-- ═══════════════════ QUIZ ENGINE ═══════════════════ -->
+    <script>
+        const quizData = [
+            // ── MCQ (1-10) ──
+            { id: 1, type: 'mcq', q: "What is the scientific word for what everything is made of?", options: ["Element", "Particle", "Matter", "Compound"], ans: "Matter" },
+            { id: 2, type: 'mcq', q: "Which state of matter has particles that are packed very close together and arranged in order?", options: ["Solid", "Liquid", "Gas", "Slime"], ans: "Solid" },
+            { id: 3, type: 'mcq', q: "What process occurs when a liquid is heated and turns into a gas?", options: ["Melting", "Condensation", "Freezing", "Evaporation"], ans: "Evaporation" },
+            { id: 4, type: 'mcq', q: "What is a substance in its simplest form, such as gold, called?", options: ["Mixture", "Compound", "Element", "Material"], ans: "Element" },
+            { id: 5, type: 'mcq', q: "Which of the following describes a reversible, physical change?", options: ["Digesting food", "Melting ice", "Making plastic from milk", "Making a baking soda volcano"], ans: "Melting ice" },
+            { id: 6, type: 'mcq', q: "Why can powders sometimes be confused for liquids?", options: ["They can be compressed", "They evaporate", "They can be poured into a container", "Their particles are completely random"], ans: "They can be poured into a container" },
+            { id: 7, type: 'mcq', q: "What happens to particles in a solid?", options: ["They move around freely", "They have large spaces between them", "They are always vibrating", "They can be easily squashed"], ans: "They are always vibrating" },
+            { id: 8, type: 'mcq', q: "What is formed when two or more elements are combined, such as hydrogen and oxygen making water?", options: ["A compound", "An atom", "A gas", "A particle"], ans: "A compound" },
+            { id: 9, type: 'mcq', q: "What is the reverse process of melting?", options: ["Evaporation", "Condensation", "Solidifying or freezing", "Heating"], ans: "Solidifying or freezing" },
+            { id: 10, type: 'mcq', q: "What is created when plaster of Paris powder is mixed with water to make a hard cast for a broken bone?", options: ["A physical change", "A chemical reaction", "An evaporation process", "A reversible change"], ans: "A chemical reaction" },
+
+            // ── TRUE / FALSE (11-20) ──
+            { id: 11, type: 'tf', q: "The particles in a solid do not move or vibrate at all.", ans: "False", expl: "They are always moving and vibrating, but cannot move around from place to place." },
+            { id: 12, type: 'tf', q: "A chemical reaction occurs when particles are rearranged to make a new product.", ans: "True", expl: "" },
+            { id: 13, type: 'tf', q: "The particles in a gas have very small spaces between them.", ans: "False", expl: "They have large spaces between them." },
+            { id: 14, type: 'tf', q: "Condensation happens when the temperature is lowered and a gas turns back into a liquid.", ans: "True", expl: "" },
+            { id: 15, type: 'tf', q: "Digestion of food in our bodies is an example of a chemical reaction.", ans: "True", expl: "" },
+            { id: 16, type: 'tf', q: "Powders are crushed solids that have changed their state into liquids.", ans: "False", expl: "They are crushed solids and have not changed their state." },
+            { id: 17, type: 'tf', q: "Changes of state between solids, liquids, and gases are irreversible.", ans: "False", expl: "They are physical changes and are reversible." },
+            { id: 18, type: 'tf', q: "A single grain of sugar keeps its shape because it is a solid.", ans: "True", expl: "" },
+            { id: 19, type: 'tf', q: "Some solids need more heat than others to make them melt.", ans: "True", expl: "" },
+            { id: 20, type: 'tf', q: "Plastic is a useful product made from oil through a chemical reaction that cannot be reversed.", ans: "True", expl: "" },
+
+            // ── FILL IN THE BLANKS (21-30) ──
+            { id: 21, type: 'fill', q: "The smallest parts of a substance that are unique to that substance are called ________.", ans: "particles" },
+            { id: 22, type: 'fill', q: "Scientists use a ________ model to help explain the differences between solids, liquids, and gases.", ans: "particle" },
+            { id: 23, type: 'fill', q: "When temperature is increased, a solid will change into a liquid in a process called ________.", ans: "melting" },
+            { id: 24, type: 'fill', q: "Chemical changes are different from physical changes because they cannot be reversed; we say the changes are ________.", ans: "irreversible" },
+            { id: 25, type: 'fill', q: "A change of state from a liquid to a solid is called solidifying or ________.", ans: "freezing" },
+            { id: 26, type: 'fill', q: "Water is a combination of hydrogen and oxygen, which means it is an example of a ________.", ans: "compound" },
+            { id: 27, type: 'fill', q: "The particles in a ________ fill the shape of the container they are in and can move around each other.", ans: "liquid" },
+            { id: 28, type: 'fill', q: "To reverse evaporation, the temperature needs to be lowered to cause ________.", ans: "condensation" },
+            { id: 29, type: 'fill', q: "Five different types of ________ enquiry include research, fair testing, observing over time, identifying and classifying, and pattern seeking.", ans: "scientific" },
+            { id: 30, type: 'fill', q: "In a solid, the particles are packed closely together and are arranged in a ________ way.", ans: "regular" },
+
+            // ── MATCH THE TERM (31-40) ──
+            { id: 31, type: 'match', q: "The process that is the exact reverse of freezing.", ans: "Melting" },
+            { id: 32, type: 'match', q: "A type of matter where particles are arranged in a random way, cannot be squashed, and touch at least one other particle.", ans: "Liquid" },
+            { id: 33, type: 'match', q: "Substances that are made of only one type of element in its simplest form, like gold.", ans: "Elements" },
+            { id: 34, type: 'match', q: "A material, also known as gypsum, which forms a hard cast through a chemical reaction when mixed with water.", ans: "Plaster of Paris" },
+            { id: 35, type: 'match', q: "The state of matter where particles are the most spread out with large spaces between them.", ans: "Gas" },
+            { id: 36, type: 'match', q: "An action where you squeeze something to make it smaller or take up less space (which liquids and solids generally cannot do).", ans: "Compress" },
+            { id: 37, type: 'match', q: "A type of reaction that creates a new product and cannot be reversed back to its original state.", ans: "Chemical reaction / Chemical change" },
+            { id: 38, type: 'match', q: "The state of crushed solids, like sugar or sand, that can be poured into a container but still remain solids.", ans: "Powder" },
+            { id: 39, type: 'match', q: "The physical process where a gas is cooled and returns to its liquid state.", ans: "Condensation" },
+            { id: 40, type: 'match', q: "The overarching term for what metals, plastics, ceramics, glass, and fabrics are classified as.", ans: "Materials" },
+
+            // ── SHORT ANSWER (41-50) ──
+            { id: 41, type: 'short', q: "According to the text, what is the difference between an element and a compound?", ans: "An element is a substance in its simplest form, while a compound is made from two or more elements joined together." },
+            { id: 42, type: 'short', q: "How are the particles in a liquid different from the particles in a solid?", ans: "The particles in a liquid are not as close together, are arranged in a random way, and can move around each other, while particles in a solid are packed closely together in order and cannot move from place to place." },
+            { id: 43, type: 'short', q: "Give an example from the text that proves different solids melt at different rates or temperatures.", ans: "If you melt butter in a metal pan, the butter will melt (turn to liquid), but the metal pan will not melt because it requires much more heat." },
+            { id: 44, type: 'short', q: "What must happen to the temperature of a liquid for it to turn into a gas, and what is this process called?", ans: "The temperature must be increased (heated), and the process is called evaporation." },
+            { id: 45, type: 'short', q: "Why is a change of state (like ice melting) considered a physical change rather than a chemical change?", ans: "Because it is a reversible change and the matter is not changed chemically into a new product." },
+            { id: 46, type: 'short', q: "What happens to the particles of substances when they go through a chemical reaction?", ans: "The particles are rearranged to make a completely new product." },
+            { id: 47, type: 'short', q: "Why might a powder, like sugar, be easily confused with a liquid?", ans: "Because powders can be poured into a container and appear to take its shape, similar to liquids." },
+            { id: 48, type: 'short', q: "Give two examples of chemical reactions mentioned in the text.", ans: "Digesting food in our bodies, making a baking soda volcano, making plastic from milk, making a bath fizzer, or mixing plaster of Paris with water." },
+            { id: 49, type: 'short', q: "What is the main characteristic of an \"irreversible\" change?", ans: "The substances cannot be changed back to their original form because a new product has been made." },
+            { id: 50, type: 'short', q: "Based on the scientific enquiry investigating 'play slime', what questions were scientists trying to answer to classify its state of matter?", ans: "They asked if it can be compressed, if its shape changes according to the container it is in, and if it always takes up the same amount of space." }
+        ];
+
+        const matchOptions = [
+            "Melting", "Liquid", "Elements", "Plaster of Paris", "Gas",
+            "Compress", "Chemical reaction / Chemical change", "Powder",
+            "Condensation", "Materials"
+        ].sort();
+
+        let currentScore = 0;
+        const answeredQuestions = new Set();
+        const totalGraded = 40; // Q1-40 are graded
+
+        function updateProgress() {
+            const pct = Math.round((answeredQuestions.size / totalGraded) * 100);
+            const bar = document.getElementById('progress-bar');
+            const txt = document.getElementById('progress-pct');
+            if (bar) bar.style.width = pct + '%';
+            if (txt) txt.textContent = pct + '%';
+        }
+
+        function updateScore(id, isCorrect) {
+            if (id > 40) return;
+            if (isCorrect && !answeredQuestions.has(id)) {
+                answeredQuestions.add(id);
+                currentScore += 2.5;
+                const disp = document.getElementById('score-display');
+                disp.textContent = currentScore;
+
+                const badge = document.getElementById('score-badge');
+                badge.classList.add('scale-110');
+                badge.style.background = '#dcfce7'; badge.style.borderColor = '#86efac'; badge.style.color = '#166534';
+                setTimeout(() => {
+                    badge.classList.remove('scale-110');
+                    badge.style.background = ''; badge.style.borderColor = ''; badge.style.color = '';
+                }, 400);
+
+                updateProgress();
+            }
+        }
+
+        // ── Section colors & icons ──
+        const sectionMeta = {
+            mcq: { color: 'brand', icon: '🔵', bg: 'bg-brand-50', border: 'border-brand-200', text: 'text-brand-700', btnBg: 'bg-brand-600 hover:bg-brand-700' },
+            tf: { color: 'violet', icon: '🟣', bg: 'bg-violet-50', border: 'border-violet-200', text: 'text-violet-700', btnBg: 'bg-violet-600 hover:bg-violet-700' },
+            fill: { color: 'amber', icon: '🟡', bg: 'bg-amber-50', border: 'border-amber-200', text: 'text-amber-700', btnBg: 'bg-amber-600 hover:bg-amber-700' },
+            match: { color: 'teal', icon: '🟢', bg: 'bg-teal-50', border: 'border-teal-200', text: 'text-teal-700', btnBg: 'bg-teal-600 hover:bg-teal-700' },
+            short: { color: 'slate', icon: '⚪', bg: 'bg-slate-50', border: 'border-slate-200', text: 'text-slate-600', btnBg: 'bg-slate-700 hover:bg-slate-800' },
+        };
+
+        function buildQuiz() {
+            const container = document.getElementById('quiz-container');
+            let html = '';
+
+            const sections = [
+                { start: 0, end: 10, type: 'mcq', title: "Multiple Choice", desc: "Select the single best answer.", count: '10 questions · 25 pts' },
+                { start: 10, end: 20, type: 'tf', title: "True or False", desc: "Decide if the statement is correct.", count: '10 questions · 25 pts' },
+                { start: 20, end: 30, type: 'fill', title: "Fill in the Blank", desc: "Type the exact keyword.", count: '10 questions · 25 pts' },
+                { start: 30, end: 40, type: 'match', title: "Match the Term", desc: "Select the correct term from the dropdown.", count: '10 questions · 25 pts' },
+                { start: 40, end: 50, type: 'short', title: "Short Answer", desc: "Write freely and reveal the model answer.", count: '10 questions · self-check' }
+            ];
+
+            sections.forEach((section, sIdx) => {
+                const m = sectionMeta[section.type];
+                html += `
+                <div class="mt-12 first:mt-0">
+                    <div class="flex flex-wrap items-center gap-3 mb-5">
+                        <span class="type-badge ${m.bg} ${m.border} ${m.text} border">${m.icon} Type ${sIdx + 1}</span>
+                        <h3 class="font-head text-xl font-bold text-slate-800">${section.title}</h3>
+                        <span class="text-xs text-slate-400 font-medium ml-auto">${section.count}</span>
+                    </div>
+                    <p class="text-slate-500 text-sm mb-4">${section.desc}</p>
+                    <div class="space-y-4">`;
+
+                for (let i = section.start; i < section.end; i++) {
+                    const q = quizData[i];
+                    html += `
+                    <div class="q-card bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-200" id="qblock-${q.id}">
+                        <div class="flex gap-3 sm:gap-4">
+                            <div class="flex-shrink-0 w-8 h-8 ${m.bg} ${m.text} rounded-full flex items-center justify-center font-bold text-sm border ${m.border}">${q.id}</div>
+                            <div class="flex-grow min-w-0">
+                                <p class="text-base sm:text-lg font-medium text-slate-800 mb-4 leading-relaxed">${q.q}</p>`;
+
+                    if (q.type === 'mcq') {
+                        html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mb-4">`;
+                        const letters = ['A', 'B', 'C', 'D'];
+                        q.options.forEach((opt, idx) => {
+                            html += `
+                            <label class="opt-label flex items-center p-3 border border-slate-200 rounded-xl cursor-pointer hover:bg-brand-50 hover:border-brand-300 group">
+                                <input type="radio" name="q${q.id}" value="${opt}" class="w-4 h-4 text-brand-600 border-slate-300 focus:ring-brand-400 focus:ring-2">
+                                <span class="ml-3 text-slate-700 group-hover:text-brand-900 text-sm sm:text-base"><strong class="mr-1 text-slate-400">${letters[idx]}.</strong> ${opt}</span>
+                            </label>`;
+                        });
+                        html += `</div>
+                        <button onclick="checkMCQ(${q.id}, '${q.ans.replace(/'/g, "\\'")}')" class="px-5 py-2.5 ${m.btnBg} text-white font-semibold rounded-xl transition-colors shadow-sm text-sm">Submit Answer</button>`;
+
+                    } else if (q.type === 'tf') {
+                        html += `
+                        <div class="flex gap-3 mb-4">
+                            <label class="opt-label flex-1 flex items-center justify-center p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-emerald-50 hover:border-emerald-300 transition-colors">
+                                <input type="radio" name="q${q.id}" value="True" class="w-4 h-4 text-emerald-600 focus:ring-emerald-400">
+                                <span class="ml-2 font-semibold text-slate-700">✓ True</span>
+                            </label>
+                            <label class="opt-label flex-1 flex items-center justify-center p-3.5 border border-slate-200 rounded-xl cursor-pointer hover:bg-red-50 hover:border-red-300 transition-colors">
+                                <input type="radio" name="q${q.id}" value="False" class="w-4 h-4 text-red-600 focus:ring-red-400">
+                                <span class="ml-2 font-semibold text-slate-700">✗ False</span>
+                            </label>
+                        </div>
+                        <button onclick="checkTF(${q.id}, '${q.ans}', \`${(q.expl || '').replace(/`/g, "\\`")}\`)" class="px-5 py-2.5 ${m.btnBg} text-white font-semibold rounded-xl transition-colors shadow-sm text-sm">Submit Answer</button>`;
+
+                    } else if (q.type === 'fill') {
+                        html += `
+                        <div class="mb-4">
+                            <input type="text" id="input-${q.id}" placeholder="Type your answer…" class="w-full sm:w-1/2 px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-amber-400 outline-none transition-all text-sm">
+                        </div>
+                        <button onclick="checkFill(${q.id}, '${q.ans.replace(/'/g, "\\'")}')" class="px-5 py-2.5 ${m.btnBg} text-white font-semibold rounded-xl transition-colors shadow-sm text-sm">Submit Answer</button>`;
+
+                    } else if (q.type === 'match') {
+                        html += `
+                        <div class="mb-4">
+                            <select id="select-${q.id}" class="w-full sm:w-2/3 px-4 py-2.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-teal-400 outline-none bg-white cursor-pointer text-sm">
+                                <option value="" disabled selected>Select the matching term…</option>`;
+                        matchOptions.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
+                        html += `</select></div>
+                        <button onclick="checkMatch(${q.id}, '${q.ans.replace(/'/g, "\\'")}')" class="px-5 py-2.5 ${m.btnBg} text-white font-semibold rounded-xl transition-colors shadow-sm text-sm">Submit Answer</button>`;
+
+                    } else if (q.type === 'short') {
+                        html += `
+                        <div class="mb-4">
+                            <textarea id="textarea-${q.id}" rows="3" placeholder="Draft your answer here…" class="w-full px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-slate-400 focus:border-slate-400 outline-none transition-all text-sm resize-y"></textarea>
+                        </div>
+                        <button onclick="revealAnswer(${q.id})" class="px-5 py-2.5 ${m.btnBg} text-white font-semibold rounded-xl transition-colors shadow-sm text-sm inline-flex items-center gap-1">👁 Reveal Answer</button>
+                        <div id="ans-box-${q.id}" class="hidden mt-4 p-4 bg-emerald-50 border border-emerald-200 rounded-xl fade-in">
+                            <h4 class="font-bold text-emerald-800 mb-1 text-sm">Model Answer:</h4>
+                            <p class="text-emerald-900 text-sm leading-relaxed">${q.ans}</p>
+                        </div>`;
+                    }
+
+                    html += `
+                                <div id="feedback-${q.id}" class="hidden mt-4 p-3 rounded-xl fade-in text-sm font-medium"></div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+                html += `</div></div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // ── Feedback renderer ──
+        function renderFeedback(id, isCorrect, extraHtml = "") {
+            const fb = document.getElementById(`feedback-${id}`);
+            fb.className = 'mt-4 p-3 rounded-xl fade-in text-sm font-medium border';
+            if (isCorrect) {
+                fb.classList.add('bg-green-50', 'text-green-700', 'border-green-200');
+                fb.innerHTML = `<div class="flex items-center gap-2">✅ Correct! Well done.</div>${extraHtml}`;
+                updateScore(id, true);
+                const block = document.getElementById(`qblock-${id}`);
+                block.querySelectorAll('input, select').forEach(i => i.disabled = true);
+                const btn = block.querySelector('button');
+                if (btn) { btn.disabled = true; btn.classList.add('opacity-40', 'cursor-not-allowed'); }
+                block.classList.add('border-green-200', 'bg-green-50/30');
+            } else {
+                fb.classList.add('bg-red-50', 'text-red-700', 'border-red-200');
+                fb.innerHTML = `<div class="flex items-center gap-2">❌ Not quite — try again!</div>${extraHtml}`;
+            }
+        }
+
+        function checkMCQ(id, ans) {
+            const sel = document.querySelector(`input[name="q${id}"]:checked`);
+            if (!sel) return alert("Please select an option first.");
+            renderFeedback(id, sel.value === ans);
+        }
+        function checkTF(id, ans, expl) {
+            const sel = document.querySelector(`input[name="q${id}"]:checked`);
+            if (!sel) return alert("Please select True or False.");
+            const ok = sel.value === ans;
+            let extra = (expl && expl.trim()) ? `<div class="mt-2 pt-2 border-t ${ok ? 'border-green-200 text-green-800' : 'border-red-200 text-red-800'}"><strong>Explanation:</strong> ${expl}</div>` : '';
+            renderFeedback(id, ok, extra);
+        }
+        function checkFill(id, ans) {
+            const val = document.getElementById(`input-${id}`).value.trim().toLowerCase();
+            if (!val) return alert("Please type an answer.");
+            const ok = val === ans.toLowerCase();
+            let extra = ok ? '' : `<div class="mt-2 text-red-800">The correct word is: <strong>${ans}</strong></div>`;
+            renderFeedback(id, ok, extra);
+            if (!ok) document.getElementById(`input-${id}`).value = '';
+        }
+        function checkMatch(id, ans) {
+            const val = document.getElementById(`select-${id}`).value;
+            if (!val) return alert("Please select a term from the dropdown.");
+            const ok = val === ans;
+            let extra = ok ? '' : `<div class="mt-2 text-red-800">The correct term is: <strong>${ans}</strong></div>`;
+            renderFeedback(id, ok, extra);
+        }
+        function revealAnswer(id) {
+            const box = document.getElementById(`ans-box-${id}`);
+            const btn = document.querySelector(`#qblock-${id} button`);
+            if (box.classList.contains('hidden')) { box.classList.remove('hidden'); btn.innerHTML = '🙈 Hide Answer'; }
+            else { box.classList.add('hidden'); btn.innerHTML = '👁 Reveal Answer'; }
+        }
+
+        document.addEventListener('DOMContentLoaded', buildQuiz);
+    </script>
+</body>
+
+</html>
