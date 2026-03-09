@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KSSM Form 2 Math: Intensive Revision | Mastery Academy</title>
+    <meta name="description"
+        content="KSSM Form 2 Mathematics interactive revision covering Chapter 1 (Patterns & Sequences) and Chapter 2 (Factorisation & Algebraic Fractions) with step-by-step KBAT questions.">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- KaTeX for math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            overscroll-behavior-y: contain;
+        }
+
+        .katex {
+            font-size: 1.15em;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .tap-area {
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .step-item {
+            border-left: 3px solid #60a5fa;
+            padding-left: 12px;
+            margin-bottom: 12px;
+            color: #374151;
+        }
+
+        /* ── Home Button ─────────────────────────────────────────────── */
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex flex-col items-center justify-center p-2 md:p-4">
+
+    <!-- Start / Notes Screen -->
+    <div id="start-screen" class="w-full max-w-4xl bg-white rounded-2xl shadow-xl overflow-hidden fade-in">
+        <div class="bg-blue-600 p-6 text-white flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold">KSSM Form 2 Math: Intensive Revision</h1>
+                <p class="mt-2 text-blue-100 text-sm md:text-base">Chapter 1 &amp; 2 (Incl. KBAT) | First Principles
+                    Tutoring</p>
+            </div>
+            <div class="hidden md:block bg-blue-800 text-xs px-3 py-1 rounded-full border border-blue-400">
+                Interactive Edition v2.0
+            </div>
+        </div>
+        <div class="p-6 md:p-8">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">1. Quick Notes: The "First Principles" Approach</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <h3 class="font-bold text-blue-800 mb-2">Chapter 1: Patterns and Sequences</h3>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                        <li><strong>Pattern:</strong> A rule numbers follow (e.g., $+2, \times3$).</li>
+                        <li><strong>Fibonacci:</strong> Next number is the sum of previous two ($1, 1, 2, 3, 5\dots$).
+                        </li>
+                        <li><strong>$T_n$ (Machine):</strong> Rule is $+3$ $\rightarrow$ involves $3n$.</li>
+                    </ul>
+                </div>
+                <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                    <h3 class="font-bold text-indigo-800 mb-2">Chapter 2: Factorisation &amp; Fractions</h3>
+                    <ul class="list-disc pl-5 text-gray-700 space-y-1 text-sm">
+                        <li><strong>Expansion:</strong> Finding Area given sides. Single, Double (FOIL), Perfect Square.
+                        </li>
+                        <li><strong>Factorisation:</strong> Reverse expansion. Finding sides given Area.</li>
+                        <li><strong>Fractions:</strong> MUST find a common denominator to add/subtract.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Hardcopy Download Section -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <h3 class="font-bold text-gray-700 mb-3 flex items-center gap-2">
+                    📄 Download Hardcopy Worksheets
+                </h3>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="../../../../../hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Student.pdf"
+                        target="_blank"
+                        class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+                        📥 Student Version (PDF)
+                    </a>
+                    <a href="../../../../../hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Answers.pdf"
+                        target="_blank"
+                        class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition">
+                        🔑 Teacher Answer Key (PDF)
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-center">
+                <button onclick="startQuiz()"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95 w-full md:w-auto">
+                    Start Interactive Quiz (60 Questions)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden w-full max-w-4xl flex flex-col h-[92vh] md:h-[90vh]">
+        <!-- Header & Progress -->
+        <div
+            class="bg-white rounded-t-2xl shadow-sm p-4 flex justify-between items-center z-10 select-none border-b border-gray-100">
+            <div>
+                <span id="q-category"
+                    class="text-xs font-bold uppercase tracking-wider text-blue-600 bg-blue-100 px-2 py-1 rounded">Category</span>
+                <span id="q-number" class="ml-2 text-sm md:text-base text-gray-500 font-medium">Question 1/60</span>
+            </div>
+            <button onclick="backToHome()"
+                class="text-sm text-gray-400 hover:text-gray-700 py-1 px-2 border border-transparent hover:border-gray-200 rounded">Exit</button>
+        </div>
+        <div class="w-full bg-gray-200 h-1">
+            <div id="progress-bar" class="bg-blue-500 h-1 transition-all duration-300" style="width: 0%"></div>
+        </div>
+
+        <!-- Question Area -->
+        <div id="interactive-area"
+            class="tap-area flex-grow bg-white p-6 md:p-10 flex flex-col relative overflow-y-auto" onclick="nextStep()">
+            <div class="absolute top-4 right-4 text-xs text-gray-300 md:hidden flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                </svg>
+                Swipe
+            </div>
+            <div class="mb-6 flex-shrink-0 pt-4">
+                <h2 id="question-text" class="text-xl md:text-2xl font-medium text-gray-800 leading-relaxed"></h2>
+            </div>
+            <div id="steps-container" class="flex-grow flex flex-col justify-start"></div>
+            <div id="final-answer-box"
+                class="mt-4 p-4 bg-green-50 rounded-xl border border-green-200 hidden opacity-0 transition-opacity duration-300 flex-shrink-0">
+                <p
+                    class="text-xs md:text-sm text-green-700 font-bold mb-1 uppercase tracking-wider flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                            clip-rule="evenodd"></path>
+                    </svg>
+                    Final Answer
+                </p>
+                <p id="final-answer-text" class="text-xl md:text-2xl text-gray-800 font-bold"></p>
+            </div>
+        </div>
+
+        <!-- Controls Footer -->
+        <div
+            class="bg-gray-50 rounded-b-2xl shadow-sm p-3 md:p-4 flex flex-wrap md:flex-nowrap justify-between items-center border-t border-gray-200 select-none gap-2">
+            <div class="w-full md:w-auto flex justify-between md:justify-start gap-2 order-2 md:order-1">
+                <button onclick="prevQuestion(); event.stopPropagation();" id="btn-prev"
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50 transition active:scale-95 text-sm md:text-base font-medium">&larr;
+                    Prev</button>
+                <button onclick="nextQuestion(); event.stopPropagation();" id="btn-next"
+                    class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition shadow-sm active:scale-95 text-sm md:text-base font-medium">Next
+                    &rarr;</button>
+            </div>
+            <div class="w-full md:w-auto flex justify-center gap-2 order-1 md:order-2">
+                <button onclick="showAllDirectly(); event.stopPropagation();"
+                    class="px-4 py-2 rounded-lg bg-yellow-100 text-yellow-800 border border-yellow-200 hover:bg-yellow-200 transition active:scale-95 text-sm md:text-base font-medium flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    Direct Ans
+                </button>
+                <button onclick="nextStep(); event.stopPropagation();" id="btn-step"
+                    class="px-6 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition active:scale-95 text-sm md:text-base flex-grow md:flex-grow-0 text-center shadow-md">
+                    Next Step (Space)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            // Chapter 1
+            {
+                cat: "Ch 1: Next Terms", q: "Determine the next two terms: $3, 7, 11, 15, \\dots, \\dots$",
+                steps: ["Find the difference: $7 - 3 = 4$, $11 - 7 = 4$.", "The pattern is adding $4$ ($+4$).", "Next terms: $15 + 4 = 19$, and $19 + 4 = 23$."], final: "$19, 23$"
+            },
+            {
+                cat: "Ch 1: Next Terms", q: "Determine the next two terms: $100, 90, 80, 70, \\dots, \\dots$",
+                steps: ["Find the difference: $90 - 100 = -10$.", "The pattern is subtracting $10$ ($-10$).", "Next terms: $70 - 10 = 60$, and $60 - 10 = 50$."], final: "$60, 50$"
+            },
+            {
+                cat: "Ch 1: Next Terms", q: "Determine the next two terms: $2, 4, 8, 16, \\dots, \\dots$",
+                steps: ["Check ratio: $4 \\div 2 = 2$, $8 \\div 4 = 2$.", "The pattern is multiplying by $2$ ($\\times 2$).", "Next terms: $16 \\times 2 = 32$, and $32 \\times 2 = 64$."], final: "$32, 64$"
+            },
+            {
+                cat: "Ch 1: Next Terms", q: "Determine the next two terms: $144, 72, 36, 18, \\dots, \\dots$",
+                steps: ["Check ratio: $72 \\div 144 = 0.5$ (or $\\div 2$).", "The pattern is dividing by $2$.", "Next terms: $18 \\div 2 = 9$, and $9 \\div 2 = 4.5$."], final: "$9, 4.5$"
+            },
+            {
+                cat: "Ch 1: Next Terms", q: "Determine the next two terms: $1, 4, 9, 16, 25, \\dots, \\dots$",
+                steps: ["Recognise these numbers: $1^2, 2^2, 3^2, 4^2, 5^2$.", "The pattern is perfect squares ($n^2$).", "Next terms: $6^2 = 36$, and $7^2 = 49$."], final: "$36, 49$"
+            },
+            {
+                cat: "Ch 1: Fibonacci", q: "Find the next two Fibonacci numbers: $2, 2, 4, 6, 10, \\dots, \\dots$",
+                steps: ["Fibonacci rule: Add the previous two numbers.", "$4 + 6 = 10$.", "Next: $6 + 10 = 16$.", "Next: $10 + 16 = 26$."], final: "$16, 26$"
+            },
+            {
+                cat: "Ch 1: Fibonacci", q: "Complete the sequence: $0, 1, 1, \\dots, 3, 5, \\dots$",
+                steps: ["Fibonacci rule applies here.", "Missing term 1: $1 + 1 = 2$.", "Verify next: $1 + 2 = 3$ (Correct).", "Missing term 2: $3 + 5 = 8$."], final: "$2, 8$"
+            },
+            {
+                cat: "Ch 1: Pascal", q: "The 3rd row of Pascal's Triangle is $1, 2, 1$. What is the 4th row?",
+                steps: ["Pascal rule: Start and end with 1.", "Middle numbers are the sum of the two numbers above them.", "$1$, $(1+2)$, $(2+1)$, $1$."], final: "$1, 3, 3, 1$"
+            },
+            {
+                cat: "Ch 1: Pascal", q: "What is the sum of the numbers in the 4th row of Pascal's Triangle? ($1, 3, 3, 1$)",
+                steps: ["Row 4 numbers: $1, 3, 3, 1$.", "Sum = $1 + 3 + 3 + 1 = 8$.", "Alternative formula: Sum $= 2^{n-1} = 2^{4-1} = 2^3 = 8$."], final: "$8$"
+            },
+            {
+                cat: "Ch 1: Pascal", q: "Find the missing number in Pascal's Triangle row: $1, 4, \\dots, 4, 1$.",
+                steps: ["This is the 5th row.", "Row 4 is $1, 3, 3, 1$.", "The missing middle number is the sum of the two $3$s above it: $3 + 3 = 6$."], final: "$6$"
+            },
+            { cat: "Ch 1: Describe", q: "Describe the pattern in words: $4, 9, 14, 19, \\dots$", steps: ["Difference is constant: $+5$."], final: "Add 5 to the previous number." },
+            { cat: "Ch 1: Describe", q: "Describe the pattern in words: $50, 45, 40, 35, \\dots$", steps: ["Difference is constant: $-5$."], final: "Subtract 5 from the previous number." },
+            { cat: "Ch 1: Describe", q: "Describe the pattern in words: $3, -6, 12, -24, \\dots$", steps: ["Ratio is constant: $\\times -2$."], final: "Multiply the previous number by -2." },
+            { cat: "Ch 1: Describe", q: "Describe the pattern in words: $0.1, 0.01, 0.001, \\dots$", steps: ["Value is decreasing by a factor of 10."], final: "Divide the previous number by 10." },
+            { cat: "Ch 1: Describe", q: "Describe the pattern in words: $\\frac{1}{2}, \\frac{1}{4}, \\frac{1}{6}, \\frac{1}{8}, \\dots$", steps: ["Look at the denominator: $2, 4, 6, 8$."], final: "Add 2 to the denominator of the previous fraction." },
+            { cat: "Ch 1: N-th Term", q: "Find the $n$-th term ($T_n$) algebraic expression: $4, 8, 12, 16, \\dots$", steps: ["Pattern is $+4$ every step.", "Therefore, formula involves $4n$.", "Check $n=1$: $4(1) = 4$. Correct."], final: "$T_n = 4n$" },
+            { cat: "Ch 1: N-th Term", q: "Find the $n$-th term ($T_n$): $1, 3, 5, 7, \\dots$", steps: ["Pattern is $+2$ every step $\\implies$ involves $2n$.", "Check $n=1$: $2(1) = 2$. We need $1$.", "Adjustment: $2 - 1 = 1$."], final: "$T_n = 2n - 1$" },
+            { cat: "Ch 1: N-th Term", q: "Find the $n$-th term ($T_n$): $5, 10, 15, 20, \\dots$", steps: ["Pattern is $+5$ every step $\\implies$ involves $5n$."], final: "$T_n = 5n$" },
+            { cat: "Ch 1: N-th Term", q: "Find the $n$-th term ($T_n$): $1^2, 2^2, 3^2, 4^2, \\dots$", steps: ["These are perfect squares corresponding to their position $n$."], final: "$T_n = n^2$" },
+            { cat: "Ch 1: N-th Term", q: "Find the $n$-th term ($T_n$): $10, 20, 30, 40, \\dots$", steps: ["Pattern is $+10$ every step $\\implies$ involves $10n$."], final: "$T_n = 10n$" },
+            { cat: "Ch 1: Evaluate", q: "Given $T_n = 3n - 1$, find the 5th term ($T_5$).", steps: ["Substitute $n = 5$ into the machine (formula).", "$T_5 = 3(5) - 1$", "$T_5 = 15 - 1$"], final: "$14$" },
+            { cat: "Ch 1: Evaluate", q: "Given $T_n = n^2 + 2$, find $T_4$.", steps: ["Substitute $n = 4$.", "$T_4 = 4^2 + 2$", "$T_4 = 16 + 2$"], final: "$18$" },
+            { cat: "Ch 1: Evaluate", q: "For $5, 10, 15, 20 \\dots$, find the 20th term.", steps: ["First, find the formula: Pattern is $+5$, so $T_n = 5n$.", "Substitute $n = 20$.", "$T_{20} = 5(20)$"], final: "$100$" },
+            { cat: "Ch 1: Evaluate", q: "If $T_n = 4n$, find the value of $n$ when $T_n = 48$.", steps: ["Set the equation: $4n = 48$", "Solve for $n$: $n = \\frac{48}{4}$"], final: "$n = 12$" },
+            { cat: "Ch 1: Evaluate", q: "Matches pattern: $3, 5, 7, 9 \\dots$. Matches needed for the 10th triangle?", steps: ["Pattern is $+2 \\implies$ involves $2n$.", "Adjust for first term: $2(1) + 1 = 3 \\implies T_n = 2n + 1$.", "Find $T_{10} = 2(10) + 1$."], final: "$21$ matches" },
+            // Chapter 2
+            { cat: "Ch 2: Expand", q: "Expand: $4(x + 3)$", steps: ["Multiply $4$ with $x$: $4x$", "Multiply $4$ with $3$: $12$"], final: "$4x + 12$" },
+            { cat: "Ch 2: Expand", q: "Expand: $-3(2y - 5)$", steps: ["Multiply $-3$ with $2y$: $-6y$", "Multiply $-3$ with $-5$: $+15$ (Negative $\\times$ Negative = Positive)"], final: "$-6y + 15$" },
+            { cat: "Ch 2: Expand", q: "Expand: $x(x + 7)$", steps: ["Multiply $x$ with $x$: $x^2$", "Multiply $x$ with $7$: $+7x$"], final: "$x^2 + 7x$" },
+            { cat: "Ch 2: Expand", q: "Expand: $3ab(a - 2b)$", steps: ["$3ab \\times a = 3a^2b$", "$3ab \\times -2b = -6ab^2$"], final: "$3a^2b - 6ab^2$" },
+            { cat: "Ch 2: Expand", q: "Expand: $-2p(4p - 3q + 1)$", steps: ["$-2p \\times 4p = -8p^2$", "$-2p \\times -3q = +6pq$", "$-2p \\times 1 = -2p$"], final: "$-8p^2 + 6pq - 2p$" },
+            { cat: "Ch 2: Expand Double", q: "Expand: $(x + 2)(x + 4)$", steps: ["FOIL Method: First, Outer, Inner, Last", "$x(x) + x(4) + 2(x) + 2(4)$", "$x^2 + 4x + 2x + 8$", "Combine like terms ($4x+2x$)."], final: "$x^2 + 6x + 8$" },
+            { cat: "Ch 2: Expand Double", q: "Expand: $(m - 3)(m + 5)$", steps: ["$m^2 + 5m - 3m - 15$", "Combine like terms ($5m - 3m$)."], final: "$m^2 + 2m - 15$" },
+            { cat: "Ch 2: Expand Double", q: "Expand: $(2y + 1)(y - 4)$", steps: ["$2y(y) + 2y(-4) + 1(y) + 1(-4)$", "$2y^2 - 8y + y - 4$", "Combine $-8y + y$."], final: "$2y^2 - 7y - 4$" },
+            { cat: "Ch 2: Perfect Sq.", q: "Expand: $(x + 5)^2$", steps: ["Formula: $(a+b)^2 = a^2 + 2ab + b^2$", "$x^2 + 2(x)(5) + 5^2$"], final: "$x^2 + 10x + 25$" },
+            { cat: "Ch 2: Perfect Sq.", q: "Expand: $(3k - 2)^2$", steps: ["Formula: $(a-b)^2 = a^2 - 2ab + b^2$", "$(3k)^2 - 2(3k)(2) + 2^2$", "$9k^2 - 12k + 4$"], final: "$9k^2 - 12k + 4$" },
+            { cat: "Ch 2: Factorise", q: "Factorise completely: $6x + 18$", steps: ["Find Highest Common Factor (HCF) of $6$ and $18$, which is $6$.", "Divide both terms by $6$: $6(x + 3)$."], final: "$6(x + 3)$" },
+            { cat: "Ch 2: Factorise", q: "Factorise completely: $15a^2b - 10ab$", steps: ["HCF for numbers $15$ and $10$ is $5$.", "HCF for variables $a^2b$ and $ab$ is $ab$.", "Extract $5ab$: $5ab(3a - 2)$."], final: "$5ab(3a - 2)$" },
+            { cat: "Ch 2: Diff of Sq.", q: "Factorise: $x^2 - 36$", steps: ["Recognise Difference of Squares: $a^2 - b^2 = (a+b)(a-b)$.", "Here, $a = x$ and $b = 6$ (since $6^2 = 36$)."], final: "$(x + 6)(x - 6)$" },
+            { cat: "Ch 2: Diff of Sq.", q: "Factorise: $4y^2 - 25$", steps: ["Write as perfect squares: $(2y)^2 - 5^2$.", "Apply $a^2 - b^2 = (a+b)(a-b)$."], final: "$(2y + 5)(2y - 5)$" },
+            { cat: "Ch 2: Multi-step", q: "Factorise completely: $2m^2 - 18$", steps: ["Step 1: Extract common factor $2 \\implies 2(m^2 - 9)$.", "Step 2: Recognise $m^2 - 9$ is a difference of squares ($3^2$).", "Factorise fully: $2(m+3)(m-3)$."], final: "$2(m + 3)(m - 3)$" },
+            { cat: "Ch 2: Quadratic", q: "Factorise: $x^2 + 7x + 10$", steps: ["Find two numbers that multiply to $10$ and add to $7$.", "Factors of $10$: $1\\times10$, $2\\times5$.", "$2 + 5 = 7$.", "Write into brackets: $(x+2)(x+5)$."], final: "$(x + 2)(x + 5)$" },
+            { cat: "Ch 2: Quadratic", q: "Factorise: $x^2 - 8x + 15$", steps: ["Multiply to $+15$, Add to $-8$.", "Since multiply is positive and add is negative, both numbers must be negative.", "$-3 \\times -5 = 15$, and $-3 + -5 = -8$."], final: "$(x - 3)(x - 5)$" },
+            { cat: "Ch 2: Quadratic", q: "Factorise: $x^2 + 2x - 24$", steps: ["Multiply to $-24$, Add to $+2$.", "Numbers with difference of 2: $6$ and $4$.", "We need $+2$, so $+6$ and $-4$."], final: "$(x + 6)(x - 4)$" },
+            { cat: "Ch 2: Quadratic", q: "Factorise: $2x^2 + 5x + 3$", steps: ["Use Cross-Multiplication method.", "Factors of $2x^2$: $2x, x$. Factors of $3$: $3, 1$.", "$(2x + 3)(x + 1) \\implies 2x(1) + 3(x) = 5x$ (Correct)."], final: "$(2x + 3)(x + 1)$" },
+            { cat: "Ch 2: Quadratic", q: "Factorise: $3x^2 - 10x + 8$", steps: ["Factors of $3x^2$: $3x, x$. Factors of $8$: $4, 2$ (or $8, 1$).", "We need negative sum, so factors are $-4, -2$.", "Try $(3x - 4)(x - 2) \\implies -6x - 4x = -10x$ (Correct)."], final: "$(3x - 4)(x - 2)$" },
+            { cat: "Ch 2: Fractions", q: "Simplify: $\\frac{3x}{7} + \\frac{2x}{7}$", steps: ["Denominators are the same ($7$).", "Add the numerators directly: $3x + 2x = 5x$."], final: "$\\frac{5x}{7}$" },
+            { cat: "Ch 2: Fractions", q: "Simplify: $\\frac{x}{3} - \\frac{x}{4}$", steps: ["Find common denominator for $3$ and $4$, which is $12$.", "Convert first fraction: $\\frac{x \\times 4}{3 \\times 4} = \\frac{4x}{12}$.", "Convert second fraction: $\\frac{x \\times 3}{4 \\times 3} = \\frac{3x}{12}$.", "Subtract: $\\frac{4x - 3x}{12}$."], final: "$\\frac{x}{12}$" },
+            { cat: "Ch 2: Fractions", q: "Simplify: $\\frac{2}{5a} + \\frac{1}{10a}$", steps: ["Common denominator is $10a$.", "Convert first fraction: $\\frac{2 \\times 2}{5a \\times 2} = \\frac{4}{10a}$.", "Add: $\\frac{4}{10a} + \\frac{1}{10a} = \\frac{5}{10a}$.", "Simplify fraction: Divide top and bottom by $5$."], final: "$\\frac{1}{2a}$" },
+            { cat: "Ch 2: Fractions", q: "Simplify: $\\frac{x^2 - 9}{x + 3}$", steps: ["Factorise numerator (Difference of Squares): $(x+3)(x-3)$.", "Equation becomes: $\\frac{(x+3)(x-3)}{x+3}$.", "Cancel the common factor $(x+3)$ from top and bottom."], final: "$x - 3$" },
+            { cat: "Ch 2: Fractions", q: "Simplify: $\\frac{2m}{3n} \\times \\frac{9n^2}{4m^2}$", steps: ["Multiply numerators together and denominators together.", "$\\frac{2m \\times 9n^2}{3n \\times 4m^2} = \\frac{18mn^2}{12m^2n}$", "Simplify numbers: $\\frac{18}{12} = \\frac{3}{2}$.", "Simplify variables: Cancel $m$ and $n$. $\\frac{n^2}{n} = n$, $\\frac{m}{m^2} = \\frac{1}{m}$."], final: "$\\frac{3n}{2m}$" },
+            // KBAT
+            {
+                cat: "KBAT: Real-world", q: "Ali saves RM 3 (Wk 1), RM 7 (Wk 2), RM 11 (Wk 3). Which week will he save RM 47?",
+                steps: ["Identify pattern: $+4$ every week.", "Formulate $T_n$: $T_n = 4n - 1$.", "Set equation to target value: $4n - 1 = 47$.", "Solve for $n$: $4n = 48 \\implies n = 12$."], final: "Week 12"
+            },
+            {
+                cat: "KBAT: Visual", q: "Hexagon matches: 1 shape = 6, 2 shapes = 11, 3 shapes = 16. Find $T_n$ and matches for 20 shapes.",
+                steps: ["Sequence: $6, 11, 16$. Pattern is $+5$.", "Formulate $T_n$: $T_n = 5n + 1$.", "Substitute $n = 20$: $5(20) + 1$."], final: "$T_n = 5n + 1$, 101 matches"
+            },
+            {
+                cat: "KBAT: Pascal", q: "Sum of Pascal row $n$ is $2^{n-1}$. Which row has a sum of 256?",
+                steps: ["Set equation: $2^{n-1} = 256$.", "Express 256 as base 2: $256 = 2^8$.", "Equate indices: $n - 1 = 8 \\implies n = 9$."], final: "9th row"
+            },
+            {
+                cat: "KBAT: Physics", q: "Ball drops from 100cm, bounces half height. Write first 4 bounce heights. Is it arithmetic?",
+                steps: ["Calculate heights: $100 \\times 0.5 = 50$, $50 \\times 0.5 = 25$, $12.5$, $6.25$.", "Check for common difference (arithmetic requirement).", "$25 - 50 = -25$, but $12.5 - 25 = -12.5$. Differences are not equal.", "It involves a common ratio ($\\div 2$), not addition/subtraction."], final: "Heights: $50, 25, 12.5, 6.25$. Not arithmetic."
+            },
+            {
+                cat: "KBAT: Fibonacci", q: "Plant branches: $1, 1, 2, 3, 5\\dots$ In which month will it first exceed 50 branches?",
+                steps: ["List sequence: $1, 1, 2, 3, 5, 8, 13, 21, 34, 55$.", "Count the terms: Month 1 is 1, Month 9 is 34, Month 10 is 55.", "$55$ is the first number $> 50$."], final: "The 10th month"
+            },
+            {
+                cat: "KBAT: Area", q: "Garden $(3x + 2)$ by $(2x - 1)$. Pond is square $x$ by $x$. Find area of grass (expanded).",
+                steps: ["Total Area $= (3x+2)(2x-1)$", "Expand Total: $6x^2 - 3x + 4x - 2 = 6x^2 + x - 2$.", "Pond Area $= x \\times x = x^2$.", "Grass Area = Total Area - Pond Area.", "$(6x^2 + x - 2) - x^2$."], final: "$5x^2 + x - 2$"
+            },
+            {
+                cat: "KBAT: Perimeter", q: "Area = $(2x^2 + 11x + 12)$. Factorise to find sides, then find perimeter.",
+                steps: ["Factorise Area: $(2x + 3)(x + 4)$. These are length and width.", "Perimeter formula: $2(L + W)$.", "Substitute: $2((2x+3) + (x+4))$.", "Simplify inner bracket: $2(3x + 7)$.", "Expand: $6x + 14$."], final: "$6x + 14$"
+            },
+            {
+                cat: "KBAT: Volume", q: "Volume = $(x^3 - 9x)$. Height = $x$. Factorise to find length and width.",
+                steps: ["Base Area = Volume $\\div$ Height.", "$\\frac{x^3 - 9x}{x} = x^2 - 9$.", "Factorise Base Area (Difference of squares).", "$x^2 - 3^2 = (x + 3)(x - 3)$."], final: "Length/Width are $(x + 3)$ and $(x - 3)$."
+            },
+            {
+                cat: "KBAT: Speed", q: "Distance = $(x^2 - 16)$, Time = $(x - 4)$. Find simplified speed. If $x=10$, find speed in m/s.",
+                steps: ["Speed = Distance $\\div$ Time $= \\frac{x^2 - 16}{x - 4}$.", "Factorise numerator: $\\frac{(x-4)(x+4)}{x-4}$.", "Simplify to get algebraic speed: $x + 4$.", "Substitute $x = 10$: $10 + 4$."], final: "Speed = $(x + 4)$. Actual = $14$ m/s."
+            },
+            {
+                cat: "KBAT: Logic", q: "Simplify $\\frac{1}{x-3} - \\frac{6}{x^2-9}$. Why can't $x = 3$ or $-3$?",
+                steps: ["Factorise second denominator: $x^2-9 = (x-3)(x+3)$.", "Find common denominator: $\\frac{1(x+3)}{(x-3)(x+3)} - \\frac{6}{(x-3)(x+3)}$.", "Subtract numerators: $\\frac{x + 3 - 6}{(x-3)(x+3)} = \\frac{x - 3}{(x-3)(x+3)}$.", "Cancel $(x-3)$ to get $\\frac{1}{x+3}$.", "Bonus: If $x=3$, denominator is $0$. Division by $0$ is undefined (Math Error)."], final: "$\\frac{1}{x+3}$. (Denominators become 0 if $x=\\pm3$)"
+            }
+        ];
+
+        let currentIndex = 0;
+        let currentStepIndex = 0;
+
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const qCategory = document.getElementById('q-category');
+        const qNumber = document.getElementById('q-number');
+        const qText = document.getElementById('question-text');
+        const stepsContainer = document.getElementById('steps-container');
+        const finalAnsBox = document.getElementById('final-answer-box');
+        const finalAnsText = document.getElementById('final-answer-text');
+        const progressBar = document.getElementById('progress-bar');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const btnStep = document.getElementById('btn-step');
+        const interactiveArea = document.getElementById('interactive-area');
+
+        function applyKaTeX(element) {
+            renderMathInElement(element, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false },
+                    { left: "\\(", right: "\\)", display: false },
+                    { left: "\\[", right: "\\]", display: true }
+                ],
+                throwOnError: false
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            applyKaTeX(document.getElementById('start-screen'));
+            // Load saved progress
+            if (window.ProgressTracker) {
+                ProgressTracker.load().then(saved => {
+                    if (saved && saved.progress_data && saved.progress_data.questionIndex !== undefined) {
+                        currentIndex = saved.progress_data.questionIndex;
+                    }
+                });
+            }
+        });
+
+        function _saveProgress() {
+            if (window.ProgressTracker) {
+                ProgressTracker.save({ questionIndex: currentIndex, screen: 'quiz' });
+            }
+        }
+
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion(currentIndex);
+        }
+
+        function backToHome() {
+            quizScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        function loadQuestion(index) {
+            currentIndex = index;
+            currentStepIndex = 0;
+            const data = questions[index];
+
+            qCategory.innerText = data.cat;
+            qNumber.innerText = `Q: ${index + 1}/${questions.length}`;
+            qText.innerHTML = data.q;
+            finalAnsText.innerHTML = data.final;
+
+            stepsContainer.innerHTML = '';
+            finalAnsBox.classList.add('hidden');
+            finalAnsBox.classList.remove('opacity-100');
+            finalAnsBox.classList.add('opacity-0');
+            updateStepButtonState();
+
+            applyKaTeX(qText);
+            applyKaTeX(finalAnsText);
+
+            progressBar.style.width = `${((index + 1) / questions.length) * 100}%`;
+            btnPrev.disabled = index === 0;
+            btnNext.disabled = index === questions.length - 1;
+
+            if (data.cat.includes("KBAT")) {
+                qCategory.classList.replace('bg-blue-100', 'bg-red-100');
+                qCategory.classList.replace('text-blue-600', 'text-red-600');
+            } else {
+                qCategory.classList.replace('bg-red-100', 'bg-blue-100');
+                qCategory.classList.replace('text-red-600', 'text-blue-600');
+            }
+
+            _saveProgress();
+        }
+
+        function nextStep() {
+            const data = questions[currentIndex];
+            const totalSteps = data.steps.length;
+            if (currentStepIndex < totalSteps) {
+                const stepEl = document.createElement('div');
+                stepEl.className = "step-item fade-in text-base md:text-lg";
+                stepEl.innerHTML = `<span class="font-bold text-blue-500 mr-2">Step ${currentStepIndex + 1}:</span> ${data.steps[currentStepIndex]}`;
+                stepsContainer.appendChild(stepEl);
+                applyKaTeX(stepEl);
+                currentStepIndex++;
+                interactiveArea.scrollTop = interactiveArea.scrollHeight;
+            } else if (currentStepIndex === totalSteps) {
+                finalAnsBox.classList.remove('hidden');
+                setTimeout(() => {
+                    finalAnsBox.classList.remove('opacity-0');
+                    finalAnsBox.classList.add('opacity-100');
+                    interactiveArea.scrollTop = interactiveArea.scrollHeight;
+                }, 50);
+                currentStepIndex++;
+            } else {
+                currentStepIndex = 0;
+                stepsContainer.innerHTML = '';
+                finalAnsBox.classList.add('hidden');
+                finalAnsBox.classList.remove('opacity-100');
+                finalAnsBox.classList.add('opacity-0');
+            }
+            updateStepButtonState();
+        }
+
+        function showAllDirectly() {
+            const data = questions[currentIndex];
+            if (currentStepIndex > data.steps.length) return;
+            while (currentStepIndex < data.steps.length) {
+                const stepEl = document.createElement('div');
+                stepEl.className = "step-item text-base md:text-lg";
+                stepEl.innerHTML = `<span class="font-bold text-blue-500 mr-2">Step ${currentStepIndex + 1}:</span> ${data.steps[currentStepIndex]}`;
+                stepsContainer.appendChild(stepEl);
+                applyKaTeX(stepEl);
+                currentStepIndex++;
+            }
+            finalAnsBox.classList.remove('hidden');
+            finalAnsBox.classList.remove('opacity-0');
+            finalAnsBox.classList.add('opacity-100');
+            currentStepIndex++;
+            updateStepButtonState();
+            interactiveArea.scrollTop = interactiveArea.scrollHeight;
+        }
+
+        function updateStepButtonState() {
+            const data = questions[currentIndex];
+            if (currentStepIndex <= data.steps.length) {
+                btnStep.innerText = "Next Step (Space)";
+                btnStep.classList.replace('bg-gray-600', 'bg-indigo-600');
+                btnStep.classList.replace('hover:bg-gray-700', 'hover:bg-indigo-700');
+            } else {
+                btnStep.innerText = "Hide Answer";
+                btnStep.classList.replace('bg-indigo-600', 'bg-gray-600');
+                btnStep.classList.replace('hover:bg-indigo-700', 'hover:bg-gray-700');
+            }
+        }
+
+        function nextQuestion() {
+            if (currentIndex < questions.length - 1) animateTransition(() => loadQuestion(currentIndex + 1));
+        }
+        function prevQuestion() {
+            if (currentIndex > 0) animateTransition(() => loadQuestion(currentIndex - 1));
+        }
+        function animateTransition(callback) {
+            interactiveArea.classList.remove('fade-in');
+            void interactiveArea.offsetWidth;
+            interactiveArea.classList.add('fade-in');
+            callback();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (quizScreen.classList.contains('hidden')) return;
+            if (e.key === 'ArrowRight') nextQuestion();
+            else if (e.key === 'ArrowLeft') prevQuestion();
+            else if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); nextStep(); }
+            else if (e.key === 'Enter') { e.preventDefault(); showAllDirectly(); }
+        });
+
+        let touchStartX = 0, touchEndX = 0, touchStartY = 0, touchEndY = 0;
+        const minSwipeDistance = 50;
+        interactiveArea.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, { passive: true });
+        interactiveArea.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            const xDiff = touchEndX - touchStartX;
+            const yDiff = touchEndY - touchStartY;
+            if (Math.abs(xDiff) > Math.abs(yDiff) && Math.abs(xDiff) > minSwipeDistance) {
+                if (xDiff < 0) nextQuestion(); else prevQuestion();
+            }
+        }, { passive: true });
+    </script>
+
+    <!-- Progress Tracking -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="SPM_Math_Form2_KSSM_Revision1"
+        data-module-name="KSSM SPM Form 2 Mathematics – Revision 1"
+        data-module-url="content/SPM_Syllabus/Form2/Math/KSSM_Revision1/index.html"></script>
+
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+</body>
+
+</html>
