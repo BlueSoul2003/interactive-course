@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE Y8 Science – Chapter 1: Respiration & Breathing | Mastery Academy</title>
+    <meta name="description"
+        content="IGCSE Year 8 Science – Chapter 1: Respiration and Breathing. Interactive quiz with 50 questions, PDF presentation slides viewer, and downloadable worksheets.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
+    <style>
+        :root {
+            --accent: #0ea5e9;
+            --accent-dark: #0284c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+        }
+
+        /* ── Tab Bar ─────────────────────────────────────────────────── */
+        .tab-bar {
+            display: flex;
+            background: #1e293b;
+            padding: 0 16px;
+            gap: 4px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-item {
+            padding: 14px 22px;
+            color: #94a3b8;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .tab-item:hover {
+            color: #e2e8f0;
+        }
+
+        .tab-item.active {
+            color: #38bdf8;
+            border-bottom-color: #38bdf8;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── PDF Slide Viewer ──────────────────────────────────────── */
+        #slides-panel {
+            background: #0f172a;
+            min-height: calc(100vh - 52px);
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 20px;
+        }
+
+        #slides-panel.active {
+            display: flex;
+        }
+
+        .pdf-nav-bar {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #1e293b;
+            padding: 12px 24px;
+            border-radius: 50px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .pdf-nav-btn {
+            background: #334155;
+            color: #e2e8f0;
+            border: none;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-nav-btn:hover:not(:disabled) {
+            background: #38bdf8;
+            color: #0f172a;
+            transform: scale(1.1);
+        }
+
+        .pdf-nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .pdf-page-info {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 90px;
+            text-align: center;
+        }
+
+        #pdf-canvas-wrapper {
+            width: 100%;
+            max-width: 960px;
+            position: relative;
+        }
+
+        #pdf-canvas {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+            display: block;
+        }
+
+        #pdf-loading {
+            color: #94a3b8;
+            font-size: 1rem;
+            padding: 60px;
+            text-align: center;
+        }
+
+        /* Keyboard hint */
+        .key-hint {
+            color: #475569;
+            font-size: 0.75rem;
+            margin-top: 16px;
+            text-align: center;
+        }
+
+        .key-chip {
+            background: #1e293b;
+            border: 1px solid #334155;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        /* ── Quiz (React) ─────────────────────────────────────────── */
+        #quiz-panel {
+            min-height: calc(100vh - 52px);
+        }
+
+        #quiz-root {
+            min-height: calc(100vh - 52px);
+        }
+
+        /* ── Worksheets panel ─────────────────────────────────────── */
+        #worksheets-panel {
+            min-height: calc(100vh - 52px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        #worksheets-panel.active {
+            display: flex;
+        }
+
+        .dl-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px 48px;
+            max-width: 540px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+        }
+
+        .dl-card h2 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 0 0 8px;
+        }
+
+        .dl-card p {
+            color: #64748b;
+            margin: 0 0 32px;
+            font-size: 0.95rem;
+        }
+
+        .dl-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+            border: 2px solid transparent;
+        }
+
+        .dl-btn-student {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #bfdbfe;
+        }
+
+        .dl-btn-student:hover {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(29, 78, 216, 0.15);
+        }
+
+        .dl-btn-teacher {
+            background: #f0fdf4;
+            color: #15803d;
+            border-color: #bbf7d0;
+        }
+
+        .dl-btn-teacher:hover {
+            background: #dcfce7;
+            border-color: #86efac;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(21, 128, 61, 0.15);
+        }
+
+        .dl-btn-slides {
+            background: #fdf4ff;
+            color: #7e22ce;
+            border-color: #e9d5ff;
+        }
+
+        .dl-btn-slides:hover {
+            background: #f3e8ff;
+            border-color: #d8b4fe;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(126, 34, 206, 0.15);
+        }
+
+        .dl-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* ── Animations ────────────────────────────────────────────── */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        /* ── Home Button ────────────────────────────────────────────── */
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ════════════ TAB BAR ════════════ -->
+    <div class="tab-bar" id="main-tab-bar">
+        <button class="tab-item active" onclick="switchTab('slides')" id="tab-slides">📽️ Presentation</button>
+        <button class="tab-item" onclick="switchTab('quiz')" id="tab-quiz">🧠 Interactive Quiz</button>
+        <button class="tab-item" onclick="switchTab('worksheets')" id="tab-worksheets">📄 Worksheets</button>
+    </div>
+
+    <!-- ════════════ SLIDES PANEL ════════════ -->
+    <div id="slides-panel" class="active">
+        <div class="pdf-nav-bar">
+            <button class="pdf-nav-btn" id="btn-first" onclick="goToPage(1)" title="First page">⏮</button>
+            <button class="pdf-nav-btn" id="btn-prev" onclick="changePage(-1)" title="Previous (←)">‹</button>
+            <div class="pdf-page-info" id="page-info">Loading…</div>
+            <button class="pdf-nav-btn" id="btn-next" onclick="changePage(1)" title="Next (→)">›</button>
+            <button class="pdf-nav-btn" id="btn-last" onclick="goToPage(totalPages)" title="Last page">⏭</button>
+        </div>
+
+        <div id="pdf-canvas-wrapper">
+            <div id="pdf-loading">⏳ Loading presentation…</div>
+            <canvas id="pdf-canvas" style="display:none;"></canvas>
+        </div>
+
+        <p class="key-hint">
+            Use <span class="key-chip">←</span> <span class="key-chip">→</span> arrow keys or the buttons above to
+            navigate slides
+        </p>
+    </div>
+
+    <!-- ════════════ QUIZ PANEL ════════════ -->
+    <div id="quiz-panel" class="tab-panel">
+        <div id="quiz-root"></div>
+    </div>
+
+    <!-- ════════════ WORKSHEETS PANEL ════════════ -->
+    <div id="worksheets-panel" class="tab-panel">
+        <div class="dl-card">
+            <h2>📂 Course Materials</h2>
+            <p>Download the worksheets and presentation slides for Chapter 1: Respiration &amp; Breathing.</p>
+
+            <a href="../../../../../hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Student.pdf"
+                target="_blank" class="dl-btn dl-btn-student">
+                <span class="dl-icon">📝</span>
+                <div>
+                    <div>Student Worksheet</div>
+                    <div style="font-weight:400;font-size:0.8rem;opacity:0.7">Respiration – Chapter 1</div>
+                </div>
+            </a>
+
+            <a href="../../../../../hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Answers.pdf"
+                target="_blank" class="dl-btn dl-btn-teacher">
+                <span class="dl-icon">🔑</span>
+                <div>
+                    <div>Teacher Answer Key</div>
+                    <div style="font-weight:400;font-size:0.8rem;opacity:0.7">Respiration – Chapter 1</div>
+                </div>
+            </a>
+
+            <a href="../../../../../hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf"
+                target="_blank" class="dl-btn dl-btn-slides">
+                <span class="dl-icon">📊</span>
+                <div>
+                    <div>Presentation Slides (PDF)</div>
+                    <div style="font-weight:400;font-size:0.8rem;opacity:0.7">Breath to Energy – Full Deck</div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- ════════════ TAB SWITCHING LOGIC ════════════ -->
+    <script>
+        function switchTab(name) {
+            // Tab buttons
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+
+            // Panels
+            ['slides-panel', 'quiz-panel', 'worksheets-panel'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.classList.remove('active'); el.style.display = 'none'; }
+            });
+
+            const panel = document.getElementById(name + '-panel');
+            if (panel) {
+                if (name === 'slides') {
+                    panel.style.display = 'flex';
+                    panel.classList.add('active');
+                } else if (name === 'quiz') {
+                    panel.style.display = 'block';
+                    panel.classList.add('active');
+                } else {
+                    panel.style.display = 'flex';
+                    panel.classList.add('active');
+                }
+            }
+
+            // Save tab in progress
+            if (window.ProgressTracker) ProgressTracker.save({ tab: name, questionIndex: window._quizIdx || 0 });
+        }
+    </script>
+
+    <!-- ════════════ PDF SLIDE VIEWER ════════════ -->
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let currentPage = 1;
+        let totalPages = 0;
+        let rendering = false;
+        const PDF_PATH = '../../../../../hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf';
+
+        async function loadPDF() {
+            try {
+                pdfDoc = await pdfjsLib.getDocument(PDF_PATH).promise;
+                totalPages = pdfDoc.numPages;
+                document.getElementById('pdf-loading').style.display = 'none';
+                document.getElementById('pdf-canvas').style.display = 'block';
+                renderPage(1);
+            } catch (e) {
+                document.getElementById('pdf-loading').innerHTML =
+                    '<div style="color:#f87171">⚠️ Could not load PDF. Make sure you are running from a web server.</div>';
+            }
+        }
+
+        async function renderPage(num) {
+            if (rendering) return;
+            rendering = true;
+            currentPage = num;
+
+            const page = await pdfDoc.getPage(num);
+            const canvas = document.getElementById('pdf-canvas');
+            const wrapper = document.getElementById('pdf-canvas-wrapper');
+
+            const scale = wrapper.clientWidth / page.getViewport({ scale: 1 }).width;
+            const viewport = page.getViewport({ scale: Math.min(scale, 2.5) });
+
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+
+            await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+
+            // Update UI
+            document.getElementById('page-info').textContent = `${num} / ${totalPages}`;
+            document.getElementById('btn-prev').disabled = num <= 1;
+            document.getElementById('btn-first').disabled = num <= 1;
+            document.getElementById('btn-next').disabled = num >= totalPages;
+            document.getElementById('btn-last').disabled = num >= totalPages;
+
+            rendering = false;
+        }
+
+        function changePage(delta) {
+            const next = currentPage + delta;
+            if (next >= 1 && next <= totalPages) renderPage(next);
+        }
+
+        function goToPage(num) {
+            if (num >= 1 && num <= totalPages) renderPage(num);
+        }
+
+        // Keyboard navigation — only when slides tab is active
+        document.addEventListener('keydown', e => {
+            const slidesActive = document.getElementById('slides-panel').classList.contains('active');
+            if (!slidesActive) return;
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); changePage(1); }
+            if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); changePage(-1); }
+            if (e.key === 'Home') { e.preventDefault(); goToPage(1); }
+            if (e.key === 'End') { e.preventDefault(); goToPage(totalPages); }
+        });
+
+        // Load on start
+        loadPDF();
+    </script>
+
+    <!-- ════════════ QUIZ (React) ════════════ -->
+    <script type="text/babel">
+        const { useState } = React;
+
+        const CheckCircle2 = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m9 12 2 2 4-4"></path></svg>
+        );
+        const XCircle = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+        );
+
+        const mcqData = [
+            { id: 1, q: "What is the scientific term for the voice box?", options: ["Trachea", "Larynx", "Bronchus", "Alveoli"], ans: "Larynx" },
+            { id: 2, q: "Where exactly does gas exchange occur in the human body?", options: ["In the trachea", "In the diaphragm", "In the air sacs (alveoli)", "In the heart"], ans: "In the air sacs (alveoli)" },
+            { id: 3, q: "What is the main function of the diaphragm and intercostal muscles?", options: ["To pump blood around the body", "To control the physical movement of breathing", "To carry out cellular respiration", "To produce red blood cells"], ans: "To control the physical movement of breathing" },
+            { id: 4, q: "Which process explains how oxygen moves from the lungs into the blood?", options: ["Respiration", "Digestion", "Ventilation", "Diffusion"], ans: "Diffusion" },
+            { id: 5, q: "Where does aerobic respiration take place inside a cell?", options: ["Nucleus", "Cytoplasm", "Mitochondria", "Cell membrane"], ans: "Mitochondria" },
+            { id: 6, q: "What type of chemical reaction is aerobic respiration?", options: ["Endothermic", "Exothermic", "Photosynthetic", "Magnetic"], ans: "Exothermic" },
+            { id: 7, q: "Which component of blood is primarily responsible for transporting dissolved carbon dioxide?", options: ["Red blood cells", "White blood cells", "Plasma", "Haemoglobin"], ans: "Plasma" },
+            { id: 8, q: "What special feature allows red blood cells to carry oxygen efficiently?", options: ["They have a large nucleus", "They contain a red pigment called haemoglobin", "They are made of pale yellow liquid", "They produce antibodies"], ans: "They contain a red pigment called haemoglobin" },
+            { id: 9, q: "Which of the following is NOT a method used by white blood cells to defend the body?", options: ["Producing antibodies", "Digesting pathogens in their cytoplasm", "Transporting nutrients to pathogens", "Protecting against disease-causing microbes"], ans: "Transporting nutrients to pathogens" },
+            { id: 10, q: "What happens to the temperature of a sugar solution when living yeast is added to it?", options: ["It drops because yeast absorbs heat", "It stays the exact same", "It rises because respiration releases heat energy", "It boils instantly"], ans: "It rises because respiration releases heat energy" }
+        ];
+
+        const blankData = [
+            { id: 11, pre: "Air travels down the main tube called the", post: ", also known as the windpipe.", ans: "trachea" },
+            { id: 12, pre: "The main tube splits into two smaller tubes called the", post: ", one for each lung.", ans: "bronchi" },
+            { id: 13, pre: "Mammals have millions of air sacs, creating a massive total", post: "area for rapid gas exchange.", ans: "surface" },
+            { id: 14, pre: "During gas exchange, carbon dioxide diffuses from the", post: "into the air in the lungs.", ans: "blood" },
+            { id: 15, pre: "Breathing is often referred to scientifically as", post: ".", ans: "ventilation" },
+            { id: 16, pre: "Unlike breathing, respiration is a", post: "reaction that happens inside your cells.", ans: "chemical" },
+            { id: 17, pre: "The word equation for aerobic respiration is: Glucose +", post: "→ Carbon Dioxide + Water.", ans: "oxygen" },
+            { id: 18, pre: "Human blood is a transport system ferrying gases and", post: "to where they are needed.", ans: "nutrients" },
+            { id: 19, pre: "Red blood cells do not contain a", post: ", making more room for oxygen transport.", ans: "nucleus" },
+            { id: 20, pre: "Disease-causing microbes are scientifically known as", post: ".", ans: "pathogens" }
+        ];
+
+        const tfData = [
+            { id: 21, q: "Breathing and respiration mean the exact same thing in science.", ans: "False" },
+            { id: 22, q: "Your lungs are protected by your ribcage.", ans: "True" },
+            { id: 23, q: "Oxygen diffuses from the blood into the air in the lungs to be exhaled.", ans: "False" },
+            { id: 24, q: "Aerobic respiration happens in animal cells, but not in plant cells.", ans: "False" },
+            { id: 25, q: "Blowing into a tube connected to a water-filled bottle can measure the volume of a single breath.", ans: "True" },
+            { id: 26, q: "Plasma is a pale yellow liquid.", ans: "True" },
+            { id: 27, q: "White blood cells defend the body by producing a red pigment called haemoglobin.", ans: "False" },
+            { id: 28, q: "A person moving to a high altitude will produce fewer red blood cells due to thinner air.", ans: "False" },
+            { id: 29, q: "The diaphragm is a sheet of muscle located directly below the lungs.", ans: "True" },
+            { id: 30, q: "Aerobic respiration provides a controlled release of energy that bodies need to survive.", ans: "True" }
+        ];
+
+        const sequenceData = [
+            { id: 31, item: "Bronchioles", ans: 4 },
+            { id: 32, item: "Trachea (Windpipe)", ans: 2 },
+            { id: 33, item: "Air Sacs (Alveoli)", ans: 5 },
+            { id: 34, item: "Larynx (Voice box)", ans: 1 },
+            { id: 35, item: "Bronchus", ans: 3 }
+        ];
+
+        const subjectiveData = [
+            {
+                part: 5, title: "Short Answer Questions", questions: [
+                    { id: 36, q: "Briefly define the process of 'gas exchange' as it occurs in the lungs.", ans: "The process of diffusion where oxygen moves from the air in the lungs into the blood, and carbon dioxide moves from the blood into the air in the lungs." },
+                    { id: 37, q: "What is the specific purpose of the mitochondria in a cell?", ans: "Mitochondria are the specific sites inside cells where aerobic respiration occurs to release energy." },
+                    { id: 38, q: "List the three main components of human blood.", ans: "Plasma, Red Blood Cells, and White Blood Cells." },
+                    { id: 39, q: "Explain the two different ways that white blood cells destroy pathogens.", ans: "1) Producing antibodies that attach to and destroy pathogens. 2) Taking pathogens directly into their cytoplasm and digesting them." },
+                    { id: 40, q: "Describe the structural relationship between the trachea, bronchi, and bronchioles.", ans: "The trachea is the main windpipe, which splits into two main branches called bronchi. The bronchi then divide further into many smaller microscopic tubes called bronchioles." }
+                ]
+            },
+            {
+                part: 6, title: "Analogy and Real-World Interpretation", questions: [
+                    { id: 41, q: "In the 'upside-down tree' analogy of the respiratory system, what do the 'leaves' represent, and why is this a fitting comparison based on their function?", ans: "The leaves represent the alveoli (air sacs). Just as leaves perform the main chemical work of the tree (photosynthesis), alveoli are where the primary functional work of the lungs (gas exchange) takes place." },
+                    { id: 42, q: "A student performs an experiment with yeast and a sugar solution. They notice the thermometer's temperature rises over time. From a first-principles perspective, what specific biological process is causing this, and why?", ans: "Aerobic respiration. The yeast respires to break down sugar for energy. Because this is an exothermic reaction, it releases heat into the surroundings, causing the temperature to rise." },
+                    { id: 43, q: "An athlete trains in the mountains where the air is very thin (less oxygen). Explain how their blood adapts to this environment and why this adaptation is strictly necessary for survival.", ans: "The body produces more red blood cells. This increases the blood's total oxygen-carrying capacity, compensating for the lower oxygen concentration in the thinner air and ensuring cells still get the required oxygen." },
+                    { id: 44, q: "If the human cardiovascular system were compared to a city's delivery network, what specific cells would act as the 'delivery trucks' for oxygen, and what is the 'cargo' they carry inside them?", ans: "The delivery trucks are the red blood cells. The specific cargo they carry is oxygen, bound to the red pigment haemoglobin." },
+                    { id: 45, q: "Why is the massive 'surface area' of the alveoli comparable to spreading out a highly crumpled piece of paper? How does this physical layout improve efficiency?", ans: "A crumpled piece of paper packs a large flat surface area into a small volume. Similarly, millions of tiny spherical alveoli pack a massive surface area inside the limited volume of the chest cavity, allowing diffusion to happen much more efficiently and rapidly." }
+                ]
+            },
+            {
+                part: 7, title: "Critical Thinking and Application", questions: [
+                    { id: 46, q: "Contrast the terms 'breathing' and 'respiration'. Why is it scientifically inaccurate for someone to say they are 'respiring heavily' when they are panting after a long sprint?", ans: "Breathing is the physical, mechanical ventilation of the lungs. Respiration is a microscopic chemical reaction inside cells. Panting is a mechanical action, so it is incorrect to call it 'respiring'." },
+                    { id: 47, q: "The human body contains millions of alveoli. Predict the physical consequences to a person's athletic abilities if a respiratory disease caused half of their alveoli to merge into larger, single sacs, thereby drastically reducing the total surface area.", ans: "Their physical abilities would drop significantly. Less surface area means the rate of gas exchange (diffusion) drops. Cells would receive oxygen too slowly, severely limiting the energy produced via respiration for muscle movement." },
+                    { id: 48, q: "Imagine a theoretical single cell was born without any mitochondria. Based on the word equation for aerobic respiration, deduce what specific chemical reaction this cell would be unable to perform, and predict the ultimate fate of that cell.", ans: "The cell would be unable to perform aerobic respiration (combining glucose and oxygen to release energy). Without a mechanism to unlock energy, the cell would be unable to survive, grow, or function, and would quickly die." },
+                    { id: 49, q: "Compare the biological design of a red blood cell to a white blood cell. How does the evolutionary absence of a nucleus in a red blood cell directly relate to its mechanical efficiency in the transport system?", ans: "Red blood cells lack a nucleus, trading genetic capability for maximum internal volume packed entirely with haemoglobin, optimizing oxygen transport. White blood cells retain a nucleus to synthesize complex proteins (antibodies)." },
+                    { id: 50, q: "During intense exercise, a person's breathing rate and heart rate both increase simultaneously. Using your knowledge of respiration and blood, explain why these two systems must work together in this way to sustain physical exertion.", ans: "Exercise requires muscles to release more energy via respiration, demanding more O2 and producing more CO2. The breathing rate increases to bring more O2 into the lungs and expel CO2. Simultaneously, the heart rate increases to pump blood faster, ensuring rapid delivery of O2 to cells and quick removal of waste." }
+                ]
+            }
+        ];
+
+        const allQuestions = [
+            ...mcqData.map(q => ({ ...q, type: 'mcq', part: 'Part 1: Multiple Choice' })),
+            ...blankData.map(q => ({ ...q, type: 'blank', part: 'Part 2: Fill in the Blanks' })),
+            ...tfData.map(q => ({ ...q, type: 'tf', part: 'Part 3: True or False' })),
+            ...sequenceData.map(q => ({ ...q, type: 'sequence', part: 'Part 4: Sequencing the Pathway of Air' })),
+            ...subjectiveData.flatMap(s => s.questions.map(q => ({ ...q, type: 'subjective', part: `Part ${s.part}: ${s.title}` })))
+        ];
+
+        function QuizApp() {
+            const [currentIdx, setCurrentIdx] = useState(0);
+            const [answers, setAnswers] = useState({});
+            const [checkedState, setCheckedState] = useState({});
+            const [selfScores, setSelfScores] = useState({});
+            const [showResults, setShowResults] = useState(false);
+
+            const currentQ = allQuestions[currentIdx];
+            const isChecked = checkedState[currentQ.id];
+            const currentAnswer = answers[currentQ.id] || '';
+
+            // Expose index for progress tracker
+            window._quizIdx = currentIdx;
+
+            const handleInput = val => { if (isChecked) return; setAnswers(p => ({ ...p, [currentQ.id]: val })); };
+            const handleCheck = () => {
+                if (!currentAnswer.toString().trim() && currentQ.type !== 'subjective') return;
+                setCheckedState(p => ({ ...p, [currentQ.id]: true }));
+            };
+            const handleInstantCheck = val => {
+                if (isChecked) return;
+                setAnswers(p => ({ ...p, [currentQ.id]: val }));
+                setCheckedState(p => ({ ...p, [currentQ.id]: true }));
+            };
+            const handleSelfScore = isCorrect => {
+                setSelfScores(p => ({ ...p, [currentQ.id]: isCorrect ? 1 : 0 }));
+                setTimeout(nextQ, 600);
+            };
+            const nextQ = () => {
+                if (currentIdx < allQuestions.length - 1) setCurrentIdx(currentIdx + 1);
+                else setShowResults(true);
+            };
+            const prevQ = () => { if (currentIdx > 0) { setCurrentIdx(currentIdx - 1); setShowResults(false); } };
+
+            const calculateFinalScores = () => {
+                let objScore = 0;
+                allQuestions.forEach(q => {
+                    if (!checkedState[q.id]) return;
+                    if (q.type === 'mcq' || q.type === 'tf') { if (answers[q.id] === q.ans) objScore++; }
+                    else if (q.type === 'blank') { if ((answers[q.id] || '').toLowerCase().trim() === q.ans.toLowerCase()) objScore++; }
+                    else if (q.type === 'sequence') { if (parseInt(answers[q.id]) === q.ans) objScore++; }
+                });
+                const subScore = Object.values(selfScores).reduce((a, b) => a + b, 0);
+                return { obj: objScore, sub: subScore, total: objScore + subScore };
+            };
+
+            const isCorrectObj = (() => {
+                if (!isChecked) return null;
+                if (currentQ.type === 'mcq' || currentQ.type === 'tf') return currentAnswer === currentQ.ans;
+                if (currentQ.type === 'blank') return currentAnswer.toLowerCase().trim() === currentQ.ans.toLowerCase();
+                if (currentQ.type === 'sequence') return parseInt(currentAnswer) === currentQ.ans;
+                return null;
+            })();
+
+            if (showResults) {
+                const scores = calculateFinalScores();
+                return (
+                    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+                        <div className="text-center py-8 fade-in w-full max-w-md">
+                            <h2 className="text-3xl font-bold text-blue-900 mb-6">Evaluation Complete! 🎉</h2>
+                            <div className="bg-blue-50 border border-blue-200 rounded-xl p-8 shadow-sm">
+                                <div className="flex justify-between items-center text-lg mb-4">
+                                    <span className="text-slate-700">Objective Score:</span>
+                                    <span className="font-bold">{scores.obj} / 35</span>
+                                </div>
+                                <div className="flex justify-between items-center text-lg mb-6 text-slate-700">
+                                    <span>Subjective Score:</span>
+                                    <span className="font-bold">{scores.sub} / 15</span>
+                                </div>
+                                <div className="pt-4 border-t border-blue-200 flex justify-between items-center text-2xl font-bold text-blue-900">
+                                    <span>Total Score:</span>
+                                    <span>{scores.total} / 50</span>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => { setCurrentIdx(0); setShowResults(false); setAnswers({}); setCheckedState({}); setSelfScores({}); }}
+                                className="mt-8 px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold transition-colors">
+                                Retake Quiz
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4 md:p-8">
+                    <div className="w-full max-w-3xl flex flex-col" style={{ minHeight: 'calc(100vh - 130px)' }}>
+                        {/* Progress bar */}
+                        <div className="w-full bg-slate-200 h-2 rounded-t-2xl overflow-hidden shadow-sm">
+                            <div className="bg-sky-500 h-full transition-all duration-300 ease-out"
+                                style={{ width: `${((currentIdx + 1) / allQuestions.length) * 100}%` }}></div>
+                        </div>
+
+                        {/* Card */}
+                        <div className="bg-white rounded-b-2xl shadow-lg border border-slate-200 p-6 md:p-10 flex-1 overflow-y-auto">
+                            <div className="fade-in slide-up">
+                                <div className="mb-6 flex justify-between items-end">
+                                    <span className="text-sm font-bold text-sky-600 uppercase tracking-wider">{currentQ.part}</span>
+                                    <span className="text-sm font-medium text-slate-500">Q {currentIdx + 1} of {allQuestions.length}</span>
+                                </div>
+
+                                <h2 className="text-2xl font-bold text-slate-800 mb-8 leading-relaxed">
+                                    {currentQ.type === 'blank' && <span>Fill in the blank: {currentQ.pre} <span className="text-sky-600 border-b-2 border-sky-600 px-4">____</span> {currentQ.post}</span>}
+                                    {currentQ.type === 'sequence' && <span>What is the correct pathway position for <strong>{currentQ.item}</strong>? (1 = First, 5 = Last)</span>}
+                                    {(currentQ.type === 'mcq' || currentQ.type === 'tf' || currentQ.type === 'subjective') && currentQ.q}
+                                </h2>
+
+                                {currentQ.type === 'sequence' && (
+                                    <p className="text-sm text-slate-500 mb-6 bg-slate-100 p-3 rounded-md">Pathway options: Larynx, Trachea, Bronchus, Bronchioles, Air Sacs (Alveoli)</p>
+                                )}
+
+                                <div className="space-y-4 mb-8">
+                                    {currentQ.type === 'mcq' && currentQ.options.map(opt => {
+                                        let cls = 'bg-white hover:bg-slate-50 border-slate-200';
+                                        if (isChecked) {
+                                            if (opt === currentQ.ans) cls = 'bg-green-100 border-green-500 text-green-900';
+                                            else if (opt === currentAnswer) cls = 'bg-red-100 border-red-500 text-red-900';
+                                            else cls = 'bg-slate-50 border-slate-200 opacity-50';
+                                        } else if (currentAnswer === opt) cls = 'bg-sky-50 border-sky-400 text-sky-900';
+                                        return (
+                                            <button key={opt} onClick={() => handleInstantCheck(opt)} disabled={isChecked}
+                                                className={`w-full text-left p-4 border rounded-xl transition-all font-medium text-lg flex justify-between items-center ${cls}`}>
+                                                <span>{opt}</span>
+                                                {isChecked && opt === currentQ.ans && <CheckCircle2 className="w-6 h-6 text-green-600" />}
+                                                {isChecked && opt === currentAnswer && opt !== currentQ.ans && <XCircle className="w-6 h-6 text-red-600" />}
+                                            </button>
+                                        );
+                                    })}
+
+                                    {currentQ.type === 'tf' && ['True', 'False'].map(opt => {
+                                        let cls = 'bg-white hover:bg-slate-50 border-slate-200';
+                                        if (isChecked) {
+                                            if (opt === currentQ.ans) cls = 'bg-green-100 border-green-500 text-green-900';
+                                            else if (opt === currentAnswer) cls = 'bg-red-100 border-red-500 text-red-900';
+                                            else cls = 'bg-slate-50 border-slate-200 opacity-50';
+                                        }
+                                        return (
+                                            <button key={opt} onClick={() => handleInstantCheck(opt)} disabled={isChecked}
+                                                className={`w-full p-4 border rounded-xl transition-all font-bold text-lg text-center ${cls}`}>
+                                                {opt}
+                                            </button>
+                                        );
+                                    })}
+
+                                    {(currentQ.type === 'blank' || currentQ.type === 'sequence') && (
+                                        <div className="flex flex-col sm:flex-row gap-4">
+                                            <input
+                                                type={currentQ.type === 'sequence' ? 'number' : 'text'} min="1" max="5"
+                                                value={currentAnswer} onChange={e => handleInput(e.target.value)} disabled={isChecked}
+                                                onKeyDown={e => e.key === 'Enter' && handleCheck()}
+                                                placeholder={currentQ.type === 'sequence' ? "1–5" : "Type answer…"}
+                                                className={`flex-1 p-4 border-2 rounded-xl text-lg font-bold outline-none transition-colors ${isChecked ? (isCorrectObj ? 'border-green-500 bg-green-50 text-green-700' : 'border-red-500 bg-red-50 text-red-700') : 'border-slate-300 focus:border-sky-500'}`}
+                                            />
+                                            {!isChecked && (
+                                                <button onClick={handleCheck} className="px-8 py-4 bg-sky-600 text-white font-bold rounded-xl hover:bg-sky-700 transition-colors">
+                                                    Check Answer
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {currentQ.type === 'subjective' && (
+                                        <div className="space-y-4">
+                                            <textarea
+                                                value={currentAnswer} onChange={e => handleInput(e.target.value)} disabled={isChecked}
+                                                placeholder="Write out your answer here…"
+                                                className="w-full min-h-[120px] p-4 border-2 border-slate-300 rounded-xl bg-white focus:border-sky-500 outline-none resize-y text-lg"
+                                            />
+                                            {!isChecked && (
+                                                <button onClick={handleCheck} className="px-8 py-3 bg-sky-600 text-white font-bold rounded-xl hover:bg-sky-700 transition-colors">
+                                                    Check Answer
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {isChecked && currentQ.type !== 'subjective' && (
+                                    <div className={`p-4 rounded-xl border flex items-center gap-3 fade-in ${isCorrectObj ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
+                                        {isCorrectObj ? <CheckCircle2 className="w-8 h-8 text-green-600" /> : <XCircle className="w-8 h-8 text-red-600" />}
+                                        <div>
+                                            <p className={`font-bold ${isCorrectObj ? 'text-green-800' : 'text-red-800'}`}>
+                                                {isCorrectObj ? 'Excellent! Correct.' : 'Incorrect.'}
+                                            </p>
+                                            {!isCorrectObj && <p className="text-red-600 text-sm mt-1">Correct answer: <strong>{currentQ.ans}</strong></p>}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {isChecked && currentQ.type === 'subjective' && (
+                                    <div className="p-6 bg-sky-50 rounded-xl border border-sky-200 fade-in">
+                                        <h4 className="text-sm font-bold text-sky-800 uppercase tracking-wider mb-2">Model Answer</h4>
+                                        <p className="text-slate-800 mb-6 text-lg">{currentQ.ans}</p>
+                                        {selfScores[currentQ.id] === undefined ? (
+                                            <div className="pt-4 border-t border-sky-200 flex flex-col sm:flex-row items-center justify-between gap-4">
+                                                <span className="font-semibold text-sky-900">Did your answer capture these key points?</span>
+                                                <div className="flex gap-2 w-full sm:w-auto">
+                                                    <button onClick={() => handleSelfScore(true)} className="flex-1 sm:flex-none px-6 py-2 rounded-lg font-bold bg-white text-green-600 border-2 border-green-500 hover:bg-green-50">Yes (+1pt)</button>
+                                                    <button onClick={() => handleSelfScore(false)} className="flex-1 sm:flex-none px-6 py-2 rounded-lg font-bold bg-white text-red-600 border-2 border-red-500 hover:bg-red-50">No (0pts)</button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="pt-4 border-t border-sky-200">
+                                                <span className="font-bold text-sky-900">Points awarded: {selfScores[currentQ.id]} / 1</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Nav */}
+                        <div className="mt-6 flex justify-between items-center px-2">
+                            <button onClick={prevQ} disabled={currentIdx === 0 && !showResults}
+                                className="px-6 py-3 font-bold text-slate-600 disabled:opacity-30 hover:bg-slate-200 rounded-lg transition-colors">
+                                ← Previous
+                            </button>
+                            <button onClick={nextQ} disabled={showResults}
+                                className="px-8 py-3 bg-slate-800 text-white font-bold rounded-lg hover:bg-slate-900 transition-colors shadow-md disabled:opacity-30">
+                                {currentIdx === allQuestions.length - 1 ? 'Finish' : 'Next →'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('quiz-root')).render(<QuizApp />);
+    </script>
+
+    <!-- Progress Tracker -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="IGCSE_Y8_Science_Ch1_Respiration"
+        data-module-name="IGCSE Y8 Science – Ch.1: Respiration &amp; Breathing"
+        data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter1_Respiration/index.html"></script>
+
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+</body>
+
+</html>
