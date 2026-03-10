@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teen CEO Simulator Pro</title>
+    <style>
+        /* --- 少女CEO創業風 (Chic Startup Aesthetic) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #ff758c;
+            text-align: center;
+        }
+
+        /* --- 雙語翻譯控制器 --- */
+        .translate-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #ff758c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(255, 117, 140, 0.3);
+        }
+
+        .lang-cn {
+            display: none;
+        }
+
+        body.show-cn .lang-cn {
+            display: block;
+            color: #d6336c;
+            font-size: 0.9em;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        body.show-cn span.lang-cn {
+            display: inline;
+            margin-left: 5px;
+        }
+
+        /* --- 模擬手機/螢幕容器 --- */
+        .simulator-screen {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 8px solid #333;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scenario-badge {
+            background: #ffe3e3;
+            color: #d6336c;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            position: absolute;
+            top: 25px;
+            right: 25px;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #ff7eb3 0%, #ff758c 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 117, 140, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f1f3f4;
+            color: #555;
+            border: 1px solid #ccc;
+        }
+
+        /* --- Stage 1: Google Search (Summary) --- */
+        .search-bar {
+            display: flex;
+            background: #f1f3f4;
+            border-radius: 24px;
+            padding: 12px 20px;
+            align-items: center;
+            margin-bottom: 15px;
+            border: 1px solid #dfe1e5;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .suggestion-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-pill {
+            background: #fff0f3;
+            color: #d6336c;
+            border: 1px solid #ff758c;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .suggestion-pill:hover {
+            background: #ff758c;
+            color: #fff;
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff758c;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .search-results-area {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .search-result {
+            background: #fff;
+            padding: 15px;
+            border-left: 4px solid #ff758c;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .search-title {
+            color: #1a0dab;
+            font-size: 1.1em;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .search-url {
+            color: #006621;
+            font-size: 0.85em;
+            margin-bottom: 8px;
+        }
+
+        .quiz-option {
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: 500;
+        }
+
+        .quiz-option.selected {
+            border-color: #ff758c;
+            background: #fff0f3;
+            color: #d6336c;
+        }
+
+        /* --- Stage 2: Instagram (Error ID) --- */
+        .setup-box {
+            background: #fff0f3;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px dashed #ff758c;
+        }
+
+        .ig-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .ig-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff758c;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .ig-post-img {
+            width: 100%;
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #adb5bd;
+            margin-bottom: 10px;
+            border: 1px dashed #ced4da;
+            position: relative;
+        }
+
+        .ig-caption {
+            line-height: 1.6;
+        }
+
+        .error-word {
+            color: #d6336c;
+            font-weight: bold;
+            background: #fff0f3;
+            padding: 2px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px dashed #d6336c;
+        }
+
+        .fix-input-group {
+            display: none;
+            margin-top: 5px;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .fix-input {
+            padding: 8px;
+            border: 1px solid #ff758c;
+            border-radius: 4px;
+            outline: none;
+            width: 150px;
+        }
+
+        .fix-btn {
+            background: #ff758c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* --- Stage 3: Chat Window (Word Forms - Updated with Animations) --- */
+        .chat-container {
+            background: #e5ddd5;
+            padding: 15px;
+            border-radius: 10px;
+            height: 420px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scroll-behavior: smooth;
+        }
+
+        .bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 15px;
+            line-height: 1.4;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform-origin: left bottom;
+            opacity: 0;
+        }
+
+        .bubble.left {
+            background: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .bubble.right {
+            background: #dcf8c6;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            transform-origin: right bottom;
+        }
+
+        .wf-input {
+            width: 110px;
+            border: none;
+            border-bottom: 2px solid #333;
+            background: transparent;
+            outline: none;
+            font-weight: bold;
+            color: #0056b3;
+            text-align: center;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .wf-input:focus {
+            border-bottom-color: #ff758c;
+            color: #d6336c;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 5px 8px;
+            align-items: center;
+        }
+
+        .typing-indicator .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #a0a0a0;
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+        }
+
+        .typing-indicator .dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .typing-indicator .dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes blink {
+
+            0%,
+            80%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+
+            40% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* --- Stage 4: Elevator Pitch (PEEL) --- */
+        .elevator-bg {
+            background: #2c3e50;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            border: 4px solid #f1c40f;
+        }
+
+        .investor-dialogue {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-left: 4px solid #f1c40f;
+            font-style: italic;
+            margin-bottom: 15px;
+            border-radius: 4px;
+        }
+
+        .peel-box {
+            background: #fff;
+            color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .peel-box label {
+            font-weight: bold;
+            color: #ff758c;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .peel-box textarea {
+            width: 100%;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 10px;
+            min-height: 60px;
+            box-sizing: border-box;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .stage {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #ff758c;
+            width: 25%;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .mini-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #ced4da;
+        }
+
+        .nav-btn {
+            background: #f8f9fa;
+            color: #868e96;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #e9ecef;
+            color: #495057;
+            border-color: #ced4da;
+        }
+
+        /* --- Home Button ────────────────────────────────────────────── */
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="translate-btn" onclick="toggleLanguage()">🇨🇳 EN/中</button>
+
+    <h1>
+        <span class="lang-en">💅 Teen CEO Simulator Pro</span>
+        <span class="lang-cn">💅 少女CEO模擬器 Pro</span>
+    </h1>
+    <div class="progress-bar">
+        <div class="progress-fill" id="mainProgress"></div>
+    </div>
+
+    <!-- ================= STAGE 1 ================= -->
+    <div id="stage1" class="stage active simulator-screen">
+        <div class="scenario-badge" id="s1-badge">Scenario 1/5</div>
+        <h2><span class="lang-en">Task 1: Market Research 🔍</span><span class="lang-cn">任務 1：市場調研 (UEC Summary)</span>
+        </h2>
+        <p style="font-size:0.9em; color:#666;">
+            <span class="lang-en">CEO Mission: Extract <b>3 Core Points</b> based on the search results.</span>
+            <span class="lang-cn">CEO 任務：根據搜尋結果，精準提取 <b>3 個核心報告點</b>。</span>
+        </p>
+
+        <div class="search-bar">
+            <span style="margin-right: 10px;">🔍</span>
+            <input type="text" id="s1-search-input" readonly>
+        </div>
+
+        <div class="suggestion-container" id="s1-suggestions"></div>
+        <div class="loader" id="s1-loader"></div>
+
+        <div class="search-results-area" id="s1-results-area">
+            <div id="s1-articles"></div>
+
+            <div
+                style="background: #fff0f3; padding: 15px; border-radius: 10px; margin-top: 20px; border: 2px dashed #ff758c;">
+                <p style="font-weight:bold; color:#d6336c; margin-top:0;">Select 3 Points for Report:</p>
+                <div id="s1-options"></div>
+                <button class="btn" onclick="checkSummary()"><span class="lang-en">Submit Report</span><span
+                        class="lang-cn">提交摘要報告</span></button>
+                <p id="s1-feedback" style="text-align:center; font-weight:bold; margin-bottom:0;"></p>
+            </div>
+        </div>
+
+        <div class="mini-nav">
+            <div></div>
+            <button class="nav-btn" style="background:#ff758c; color:#fff;" onclick="nextScenario(1)">🔄 <span
+                    class="lang-en">Next Scenario</span><span class="lang-cn">下一個情景</span></button>
+            <button class="nav-btn" onclick="goToStage(2)">▶ <span class="lang-en">Next Stage</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 2 ================= -->
+    <div id="stage2" class="stage simulator-screen">
+        <div class="scenario-badge" id="s2-badge">Scenario 1/5</div>
+        <h2><span class="lang-en">Task 2: IG Marketing 📸</span><span class="lang-cn">任務 2：IG 營銷 (UEC Error ID)</span>
+        </h2>
+        <p style="font-size:0.9em; color:#666;">
+            <span class="lang-en">Fix the 3 grammar mistakes (Tense, Plural, Parts of Speech) before posting!</span>
+            <span class="lang-cn">發布前，修復這 3 個語法錯誤（時態、單複數、詞性）！</span>
+        </p>
+
+        <div id="s2-setup" class="setup-box">
+            <p style="margin-top:0; font-weight:bold; color:#d6336c;">
+                <span class="lang-en">Step 1: Claim your IG Handle!</span>
+                <span class="lang-cn">步驟 1：註冊你的品牌 IG 帳號！</span>
+            </p>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <span style="font-weight:bold; font-size:1.2em; color:#ff758c;">@</span>
+                <input type="text" id="ig-handle-input" placeholder="e.g. jb_nail_boss" value="nail_empire_official"
+                    style="margin:0; flex:1;">
+                <button class="btn" onclick="setIGHandle()" style="margin:0; padding:10px 20px;">
+                    <span class="lang-en">Set</span><span class="lang-cn">確認</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="ig-header">
+            <div class="ig-avatar" id="ig-avatar-text">N</div>
+            <div id="ig-header-name">nail_empire_official</div>
+        </div>
+        <div class="ig-post-img"><span style="font-size: 4em;" id="s2-emoji">💅</span></div>
+        <div class="ig-caption" id="s2-caption"></div>
+        <div id="s2-inputs"></div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(1)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#ff758c; color:#fff;" onclick="nextScenario(2)">🔄 <span
+                    class="lang-en">Next Post</span><span class="lang-cn">下一篇貼文</span></button>
+            <button class="nav-btn" onclick="goToStage(3)">▶ <span class="lang-en">Next Stage</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 3 ================= -->
+    <div id="stage3" class="stage simulator-screen">
+        <div class="scenario-badge" id="s3-badge">Scenario 1/5</div>
+        <h2><span class="lang-en">Task 3: Live Customer Chat 💬</span><span class="lang-cn">任務 3：即時客服 (UEC Word
+                Forms)</span></h2>
+        <p style="font-size:0.9em; color:#666;">
+            <span class="lang-en">Type the correct word form instantly. Correct answers unlock the next message!</span>
+            <span class="lang-cn">直接輸入正確的詞性 (名詞/形容詞/副詞)。拼字正確會自動解鎖下一句對話！</span>
+        </p>
+
+        <div class="chat-container" id="s3-chat-box">
+            <!-- Chat bubbles will be injected here dynamically -->
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(2)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <!-- 這個按鈕預設隱藏，只有通關後才顯示 -->
+            <button class="nav-btn" id="s3-next-client-btn" style="background:#ff758c; color:#fff; display:none;"
+                onclick="nextScenario(3)">🔄 <span class="lang-en">Next Client</span><span
+                    class="lang-cn">下一個客戶</span></button>
+            <button class="nav-btn" onclick="goToStage(4)">▶ <span class="lang-en">Next Stage</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 4 ================= -->
+    <div id="stage4" class="stage simulator-screen" style="background: #2c3e50; border-color: #f1c40f;">
+        <div class="scenario-badge" id="s4-badge" style="background: #f1c40f; color:#333;">Scenario 1/5</div>
+        <h2 style="color:#f1c40f;"><span class="lang-en">Task 4: The Elevator Pitch 🏢</span><span class="lang-cn">任務
+                4：電梯路演 (UEC PEEL)</span></h2>
+
+        <div class="elevator-bg">
+            <div class="investor-dialogue" id="s4-dialogue"></div>
+            <div class="peel-box"><label>P - Point</label><textarea id="p-input"
+                    placeholder="Enter your Point..."></textarea></div>
+            <div class="peel-box"><label>E - Explanation</label><textarea id="e-input"
+                    placeholder="Explain your logic..."></textarea></div>
+            <div class="peel-box"><label>E - Example</label><textarea id="ex-input"
+                    placeholder="For instance..."></textarea></div>
+            <div class="peel-box"><label>L - Link</label><textarea id="l-input" placeholder="Therefore..."></textarea>
+            </div>
+
+            <button class="btn" style="background: #f1c40f; color:#333;" onclick="showFinalPitch()">
+                <span class="lang-en">Pitch It! 🎤</span><span class="lang-cn">發表演講！</span>
+            </button>
+
+            <div id="s4-final"
+                style="display:none; background:#fff; color:#333; padding:15px; border-radius:8px; margin-top:15px; font-style:italic; border-left: 5px solid #27ae60;">
+            </div>
+
+            <div class="mini-nav" style="border-top-color: rgba(255,255,255,0.2);">
+                <button class="nav-btn"
+                    style="background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2); color:#f1c40f;"
+                    onclick="goToStage(3)">◀ <span class="lang-en">Prev Stage</span><span
+                        class="lang-cn">上一關</span></button>
+                <button class="nav-btn" style="background:#f1c40f; color:#333; border:none;"
+                    onclick="nextScenario(4)">🔄 <span class="lang-en">Next Target</span><span
+                        class="lang-cn">換個對象</span></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ================= AUDIO SYSTEM (Web Audio API) ================= */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'pop') { // Receiving message sound
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'ding') { // Correct answer sound
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.2);
+            }
+        }
+
+        /* ================= UTILS & STATE ================= */
+        function toggleLanguage() { document.body.classList.toggle('show-cn'); }
+        function goToStage(target) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage' + target).classList.add('active');
+            document.getElementById('mainProgress').style.width = (target * 25) + '%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (audioCtx.state === 'suspended') audioCtx.resume(); // Ensure audio activates on click
+            if (window.ProgressTracker) window.ProgressTracker.save({ stage: target });
+        }
+
+        let currTask1 = 0, currTask2 = 0, currTask3 = 0, currTask4 = 0;
+        let currentIGHandle = "nail_empire_official";
+
+        function setIGHandle() {
+            let handle = document.getElementById('ig-handle-input').value.trim();
+            if (handle === "") handle = "nail_empire_official";
+            handle = handle.replace(/\s+/g, '_').toLowerCase();
+            currentIGHandle = handle;
+            document.getElementById('ig-header-name').innerText = currentIGHandle;
+            let captionName = document.getElementById('ig-caption-name');
+            if (captionName) captionName.innerText = currentIGHandle;
+            document.getElementById('ig-avatar-text').innerText = currentIGHandle.charAt(0).toUpperCase();
+        }
+
+        function nextScenario(taskNum) {
+            if (taskNum === 1) { currTask1 = (currTask1 + 1) % dataT1.length; renderT1(); }
+            if (taskNum === 2) { currTask2 = (currTask2 + 1) % dataT2.length; renderT2(); }
+            if (taskNum === 3) { currTask3 = (currTask3 + 1) % dataT3.length; renderT3(); }
+            if (taskNum === 4) { currTask4 = (currTask4 + 1) % dataT4.length; renderT4(); }
+        }
+
+        /* ================= DATA: TASK 1 (Summary) ================= */
+        const dataT1 = [
+            { queryEn: "Why press-on nails are trending 2024", queryCn: "2024 穿戴甲流行趨勢", articles: [{ title: "The Rise of Press-On Nails", en: "Applying them takes only ten minutes. Girls love changing styles, and they are highly reusable.", cn: "貼穿戴甲只需十分鐘。女孩喜歡換風格，且它高度可重複使用。" }, { title: "Budget Lifestyle", en: "Traditional manicures cost over RM150. Press-on nails provide an affordable alternative for students.", cn: "傳統美甲超過RM150。穿戴甲為學生提供了價格親民的選擇。" }], options: [{ en: "They save a lot of time.", cn: "非常節省時間。", correct: true }, { en: "They use expensive glue.", cn: "使用昂貴的膠水。", correct: false }, { en: "They are more affordable.", cn: "價格更親民。", correct: true }, { en: "They are reusable for different styles.", cn: "可重複使用。", correct: true }, { en: "They require UV lamps.", cn: "需要紫外線燈。", correct: false }] },
+            { queryEn: "Customer complaints about cheap nails", queryCn: "廉價穿戴甲的客戶抱怨", articles: [{ title: "Nail Disaster Forum", en: "I bought RM5 nails online. The plastic is so flimsy it bent in a day. Plus, the glue provided was totally useless and weak.", cn: "我在網上買了 RM5 的指甲。塑料太脆弱一天就彎了。而且附贈的膠水完全沒用、很不黏。" }, { title: "Review Blog", en: "The worst part about cheap sets is the limited sizes. They never fit my natural nail beds properly.", cn: "廉價套裝最糟的是尺寸有限。它們永遠無法完全貼合我原本的甲床。" }], options: [{ en: "The material is too flimsy.", cn: "材質太脆弱易彎折。", correct: true }, { en: "They are too expensive.", cn: "價格太昂貴。", correct: false }, { en: "The glue is weak and useless.", cn: "膠水不黏且沒用。", correct: true }, { en: "They have too many designs.", cn: "款式太多了。", correct: false }, { en: "There are limited sizes available.", cn: "提供的尺寸有限。", correct: true }] },
+            { queryEn: "Target audience for press-on nails", queryCn: "穿戴甲的目標受眾分析", articles: [{ title: "Demographics 101", en: "Our main buyers are busy college students who want fast beauty solutions. Cosplayers also love them for specific character looks.", cn: "主要買家是尋求快速美容方案的忙碌大學生。Coser 也喜歡用它們來搭配特定角色。" }, { title: "Health & Beauty", en: "People with sensitive nail beds avoid salon chemicals and prefer press-ons because they cause less damage.", cn: "甲床敏感的人會避開美甲店的化學品，更傾向於傷害較小的穿戴甲。" }], options: [{ en: "Busy students wanting fast beauty.", cn: "追求快速美容的忙碌學生。", correct: true }, { en: "Older women with lots of free time.", cn: "時間充裕的年長女性。", correct: false }, { en: "Cosplayers needing character looks.", cn: "需要角色裝扮的 Coser。", correct: true }, { en: "People wanting permanent tattoos.", cn: "想要永久刺青的人。", correct: false }, { en: "People with sensitive nail beds.", cn: "甲床敏感的人群。", correct: true }] },
+            { queryEn: "How to make unboxing videos viral", queryCn: "如何讓開箱影片爆紅", articles: [{ title: "Marketing Daily", en: "Viral unboxing starts with an aesthetic and cute packaging box. It creates a premium feel.", cn: "爆紅開箱始於一個有美感又可愛的包裝盒。這能創造高級感。" }, { title: "TikTok Creator Tips", en: "Customers love freebies. Including a free prep kit (alcohol pads, file) makes them happy. Also, clear visual instructions prevent bad reviews.", cn: "客戶喜歡贈品。包含免費的準備工具包會讓他們開心。此外，清晰的圖文說明能防止差評。" }], options: [{ en: "Aesthetic and cute packaging box.", cn: "有美感且可愛的包裝盒。", correct: true }, { en: "Using plain plastic bags.", cn: "使用普通的塑料袋。", correct: false }, { en: "Including a free prep kit.", cn: "包含免費的準備工具包。", correct: true }, { en: "Adding clear visual instructions.", cn: "附上清晰的圖文說明。", correct: true }, { en: "Making the box hard to open.", cn: "讓盒子變得很難打開。", correct: false }] },
+            { queryEn: "Why use TikTok influencers for nails", queryCn: "為何找 TikTok 網紅推廣美甲", articles: [{ title: "Social Media Strategy", en: "Nails are a highly visual product, making them perfect for short videos. Also, influencers set the latest trends rapidly.", cn: "美甲是高度視覺化的產品，非常適合短影音。而且網紅能迅速引領最新潮流。" }, { title: "Conversion Rates", en: "Gen Z has high audience trust in their favorite TikTokers, which leads to better conversion rates than normal ads.", cn: "Z世代對他們喜歡的 TikToker 有極高的受眾信任度，這帶來的轉化率比普通廣告更好。" }], options: [{ en: "Nails are a highly visual product.", cn: "美甲是高度視覺化的產品。", correct: true }, { en: "Influencers can set trends rapidly.", cn: "網紅能迅速引領潮流。", correct: true }, { en: "TikTok videos are very long.", cn: "TikTok 影片非常長。", correct: false }, { en: "High audience trust from followers.", cn: "粉絲對網紅有極高的信任度。", correct: true }, { en: "Influencers don't charge money.", cn: "網紅推廣不收錢。", correct: false }] }
+        ];
+
+        let selectedSummary = 0; let correctSummary = 0;
+        function renderT1() {
+            document.getElementById('s1-badge').innerText = `Scenario ${currTask1 + 1}/5`;
+            let d = dataT1[currTask1];
+            document.getElementById('s1-search-input').value = "";
+            document.getElementById('s1-results-area').style.display = 'none';
+            document.getElementById('s1-suggestions').style.display = 'flex';
+            document.getElementById('s1-feedback').innerText = "";
+            document.getElementById('s1-suggestions').innerHTML = `<div class="suggestion-pill" onclick="simulateSearch('${d.queryEn}')">🔍 <span class="lang-en">${d.queryEn}</span><span class="lang-cn">${d.queryCn}</span></div>`;
+
+            let artHtml = "";
+            d.articles.forEach(a => { artHtml += `<div class="search-result"><div class="search-title">${a.title}</div><p style="font-size:0.9em; color:#555;"><span class="lang-en">${a.en}</span><span class="lang-cn">${a.cn}</span></p></div>`; });
+            document.getElementById('s1-articles').innerHTML = artHtml;
+
+            let optHtml = ""; selectedSummary = 0; correctSummary = 0;
+            d.options.forEach((o, i) => {
+                optHtml += `<div class="quiz-option" id="opt-${i}" onclick="toggleSelect(this, ${o.correct})">
+        <span class="lang-en">${['A', 'B', 'C', 'D', 'E'][i]}. ${o.en}</span><span class="lang-cn">${['A', 'B', 'C', 'D', 'E'][i]}. ${o.cn}</span></div>`;
+            });
+            document.getElementById('s1-options').innerHTML = optHtml;
+        }
+        function simulateSearch(q) {
+            document.getElementById('s1-search-input').value = q;
+            document.getElementById('s1-suggestions').style.display = 'none';
+            document.getElementById('s1-loader').style.display = 'block';
+            setTimeout(() => { document.getElementById('s1-loader').style.display = 'none'; document.getElementById('s1-results-area').style.display = 'block'; }, 800);
+        }
+        function toggleSelect(el, isCorrect) {
+            if (el.classList.contains('selected')) { el.classList.remove('selected'); selectedSummary--; if (isCorrect) correctSummary--; }
+            else { if (selectedSummary >= 3) return; el.classList.add('selected'); selectedSummary++; if (isCorrect) correctSummary++; }
+        }
+        function checkSummary() {
+            let fb = document.getElementById('s1-feedback');
+            if (selectedSummary !== 3) { fb.innerText = "Select exactly 3 points! (請選擇3個)"; fb.style.color = "#d6336c"; return; }
+            if (correctSummary === 3) { fb.innerText = "✅ Excellent! You found the core points."; fb.style.color = "#28a745"; }
+            else { fb.innerText = "❌ Not quite right. Review the articles again!"; fb.style.color = "#d6336c"; }
+        }
+
+        /* ================= DATA: TASK 2 (Error ID) ================= */
+        const dataT2 = [
+            { emoji: "💅", pre1: "These handmade press-on nails ", e1: "is", fix1: "are", post1: " very popular. Yesterday, I ", e2: "receive", fix2: "received", post2: " 20 orders! Every box ", e3: "come", fix3: "comes", post3: " with a free kit." },
+            { emoji: "📦", pre1: "Great news! Our best-selling pink set ", e1: "have", fix1: "has", post1: " been restocked. We have ", e2: "much", fix2: "many", post2: " customers asking for it. Over 100 sets were ", e3: "sell", fix3: "sold", post3: " yesterday!" },
+            { emoji: "💌", pre1: "Behind the scenes! We ", e1: "packing", fix1: "pack", post1: " every order very ", e2: "careful", fix2: "carefully", post2: " to ensure perfection. Your order will be ", e3: "ship", fix3: "shipped", post3: " tomorrow morning." },
+            { emoji: "⭐", pre1: "Customer Review: 'This is the ", e1: "beautifulest", fix1: "most beautiful", post1: " nail set ever!' She ", e2: "write", fix2: "wrote", post2: " this sweet message to us. You can ", e3: "wearing", fix3: "wear", post3: " them anywhere!" },
+            { emoji: "🎁", pre1: "GIVEAWAY TIME! We are picking 3 lucky winners. To ", e1: "won", fix1: "win", post1: ", you must start ", e2: "tag", fix2: "tagging", post2: " your friends below. We will ", e3: "chosen", fix3: "choose", post3: " the winners next Friday!" }
+        ];
+        let errorsFixed = 0;
+        function renderT2() {
+            document.getElementById('s2-badge').innerText = `Scenario ${currTask2 + 1}/5`;
+            let d = dataT2[currTask2]; errorsFixed = 0;
+            document.getElementById('s2-emoji').innerText = d.emoji;
+            document.getElementById('s2-caption').innerHTML = `<b id="ig-caption-name">${currentIGHandle}</b> ${d.pre1} <span class="error-word" onclick="showErrorInput(1)">${d.e1}</span> ${d.post1} <span class="error-word" onclick="showErrorInput(2)">${d.e2}</span> ${d.post2} <span class="error-word" onclick="showErrorInput(3)">${d.e3}</span> ${d.post3}`;
+            document.getElementById('s2-inputs').innerHTML = `
+      <div id="fix-1" class="fix-input-group"><label>Fix "${d.e1}": </label><input type="text" id="input-1" class="fix-input"><button class="fix-btn" onclick="checkError(1, '${d.fix1}')">Fix</button> <span id="res-1"></span></div>
+      <div id="fix-2" class="fix-input-group"><label>Fix "${d.e2}": </label><input type="text" id="input-2" class="fix-input"><button class="fix-btn" onclick="checkError(2, '${d.fix2}')">Fix</button> <span id="res-2"></span></div>
+      <div id="fix-3" class="fix-input-group"><label>Fix "${d.e3}": </label><input type="text" id="input-3" class="fix-input"><button class="fix-btn" onclick="checkError(3, '${d.fix3}')">Fix</button> <span id="res-3"></span></div>
+    `;
+        }
+        function showErrorInput(num) { document.getElementById('fix-' + num).style.display = 'block'; }
+        function checkError(num, correctAns) {
+            let val = document.getElementById('input-' + num).value.toLowerCase().trim();
+            let res = document.getElementById('res-' + num);
+            if (val === correctAns) {
+                res.innerText = "✅ Fixed!"; res.style.color = "#28a745";
+                document.getElementById('fix-' + num).querySelector('.fix-btn').disabled = true;
+            } else { res.innerText = "❌ Try again!"; res.style.color = "#d6336c"; }
+        }
+
+        /* ================= DATA: TASK 3 (LIVE CHAT - Word Forms) ================= */
+        const dataT3 = [
+            {
+                c1: { en: "Are these nails safe to use?", cn: "這些指甲用起來安全嗎？" },
+                r1pre: { en: "Yes, they are completely ", cn: "是的，它們絕對 " }, root1: "safety", fix1: "safe", r1post: { en: " to use.", cn: " 安全。" },
+                c2: { en: "Are they hard to put on?", cn: "貼上去難嗎？" },
+                r2pre: { en: "They can be applied very ", cn: "它們可以被非常 " }, root2: "easy", fix2: "easily", r2post: { en: " in 10 mins.", cn: " 輕鬆地貼上。" },
+                c3: { en: "Will they fall off quickly?", cn: "它們會很快掉下來嗎？" },
+                r3pre: { en: "Our jelly glue guarantees maximum ", cn: "我們特製的果凍膠保證最大的 " }, root3: "durable", fix3: "durability", r3post: { en: ".", cn: " 耐久度。" }
+            },
+            {
+                c1: { en: "How do I know which size fits me?", cn: "我怎麼知道哪個尺寸適合我？" },
+                r1pre: { en: "You need to take an accurate ", cn: "你需要對你的甲床進行準確的 " }, root1: "measure", fix1: "measurement", r1post: { en: " of your nail bed.", cn: " 測量。" },
+                c2: { en: "What if it's slightly too big?", cn: "如果稍微大了一點怎麼辦？" },
+                r2pre: { en: "You can file the edges to fit ", cn: "你可以打磨邊緣讓它 " }, root2: "exact", fix2: "exactly", r2post: { en: ".", cn: " 完美貼合。" },
+                c3: { en: "I'm worried I'll buy the wrong size.", cn: "我擔心我會買錯尺寸。" },
+                r3pre: { en: "Don't worry, we guarantee no ", cn: "別擔心，我們保證不會讓你 " }, root3: "disappoint", fix3: "disappointment", r3post: { en: "!", cn: " 失望！" }
+            },
+            {
+                c1: { en: "My tracking says 'delayed'. Where is it?", cn: "我的物流顯示延遲，在哪裡？" },
+                r1pre: { en: "Please wait ", cn: "請 " }, root1: "patient", fix1: "patiently", r1post: { en: " for courier updates.", cn: " 耐心等待快遞更新。" },
+                c2: { en: "When will it reach my house?", cn: "什麼時候會到我家？" },
+                r2pre: { en: "The estimated ", cn: "預計的 " }, root2: "arrive", fix2: "arrival", r2post: { en: " is this Friday.", cn: " 到達時間是本週五。" },
+                c3: { en: "I needed it for a party tonight!", cn: "我今晚的派對就要用到了！" },
+                r3pre: { en: "We sincerely ", cn: "對於造成的不便我們真誠地 " }, root3: "apology", fix3: "apologize", r3post: { en: " for the inconvenience.", cn: " 道歉。" }
+            },
+            {
+                c1: { en: "Can I send you a picture to copy the design?", cn: "我可以發圖片給你們客製化嗎？" },
+                r1pre: { en: "Yes! We love exploring our ", cn: "可以！我們喜歡在客製化訂單中探索我們的 " }, root1: "creative", fix1: "creativity", r1post: { en: " with custom orders.", cn: " 創造力。" },
+                c2: { en: "Will it look exactly like the picture?", cn: "它看起來會和圖片一模一樣嗎？" },
+                r2pre: { en: "It will look very ", cn: "它看起來會非常 " }, root2: "impress", fix2: "impressive", r2post: { en: " and highly similar.", cn: " 令人驚艷且高度相似。" },
+                c3: { en: "Is custom design more expensive?", cn: "客製化設計會更貴嗎？" },
+                r3pre: { en: "The ", cn: "這個 " }, root3: "actual", fix3: "actual", r3post: { en: " price depends on the complexity.", cn: " 實際價格取決於複雜度。" }
+            },
+            {
+                c1: { en: "I want to buy 50 boxes for my school event.", cn: "我想買50盒用於學校活動。" },
+                r1pre: { en: "Wow! Let's have a detailed ", cn: "哇！讓我們就批發進行詳細的 " }, root1: "discuss", fix1: "discussion", r1post: { en: " about wholesale.", cn: " 討論。" },
+                c2: { en: "Can you give me a good discount?", cn: "你能給我一個好折扣嗎？" },
+                r2pre: { en: "We can offer a very ", cn: "我們可以提供一個非常 " }, root2: "reason", fix2: "reasonable", r2post: { en: " wholesale price.", cn: " 合理的批發價。" },
+                c3: { en: "Will I still make money if I resell them?", cn: "如果我轉售，我還能賺錢嗎？" },
+                r3pre: { en: "Yes, it is a highly ", cn: "是的，對於學生這是一個高度 " }, root3: "profit", fix3: "profitable", r3post: { en: " business for students!", cn: " 盈利的生意！" }
+            }
+        ];
+
+        let t3Step = 1; // 追蹤目前對話進度
+
+        function renderT3() {
+            document.getElementById('s3-badge').innerText = `Scenario ${currTask3 + 1}/5`;
+            document.getElementById('s3-next-client-btn').style.display = 'none'; // 隱藏下一關按鈕
+            let chatBox = document.getElementById('s3-chat-box');
+            chatBox.innerHTML = ''; // 清空聊天室
+            t3Step = 1;
+
+            // 啟動對話 1
+            showTypingAndMessage('left', dataT3[currTask3].c1, () => {
+                showInputBubble(1, dataT3[currTask3].r1pre, dataT3[currTask3].root1, dataT3[currTask3].fix1, dataT3[currTask3].r1post);
+            });
+        }
+
+        // 輔助函數：顯示對方正在打字，然後顯示訊息
+        function showTypingAndMessage(side, msgObj, callback) {
+            let chatBox = document.getElementById('s3-chat-box');
+
+            // 建立打字指示器
+            let typingDiv = document.createElement('div');
+            typingDiv.className = `bubble ${side}`;
+            typingDiv.innerHTML = '<div class="typing-indicator"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+            chatBox.appendChild(typingDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 模擬打字延遲 (1.2秒)
+            setTimeout(() => {
+                chatBox.removeChild(typingDiv);
+                let div = document.createElement('div');
+                div.className = `bubble ${side}`;
+                div.innerHTML = `<span class="lang-en">${msgObj.en}</span><span class="lang-cn">${msgObj.cn}</span>`;
+                chatBox.appendChild(div);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                playSound('pop'); // 播放收到訊息音效
+
+                if (callback) callback();
+            }, 1200);
+        }
+
+        // 輔助函數：顯示輸入框泡泡
+        function showInputBubble(stepNum, preObj, rootWord, fixWord, postObj) {
+            let chatBox = document.getElementById('s3-chat-box');
+            let div = document.createElement('div');
+            div.className = `bubble right`;
+            div.innerHTML = `
+      <span class="lang-en">${preObj.en}</span><span class="lang-cn">${preObj.cn}</span>
+      <input type="text" id="wf${stepNum}" class="wf-input" placeholder="(${rootWord})" oninput="checkLiveWF(${stepNum}, '${fixWord}')">
+      <span class="lang-en">${postObj.en}</span><span class="lang-cn">${postObj.cn}</span>
+    `;
+            chatBox.appendChild(div);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // 自動聚焦
+            setTimeout(() => { document.getElementById(`wf${stepNum}`).focus(); }, 100);
+        }
+
+        // 即時驗證輸入
+        function checkLiveWF(stepNum, correctAns) {
+            let el = document.getElementById('wf' + stepNum);
+            let val = el.value.toLowerCase().trim();
+            let d = dataT3[currTask3];
+
+            if (val === correctAns) {
+                // 答對了！
+                el.style.color = "#28a745"; el.style.borderBottomColor = "#28a745";
+                el.disabled = true; // 鎖定輸入
+                playSound('ding'); // 播放成功音效
+
+                // 觸發下一步
+                if (stepNum === 1 && t3Step === 1) {
+                    t3Step = 2;
+                    showTypingAndMessage('left', d.c2, () => {
+                        showInputBubble(2, d.r2pre, d.root2, d.fix2, d.r2post);
+                    });
+                } else if (stepNum === 2 && t3Step === 2) {
+                    t3Step = 3;
+                    showTypingAndMessage('left', d.c3, () => {
+                        showInputBubble(3, d.r3pre, d.root3, d.fix3, d.r3post);
+                    });
+                } else if (stepNum === 3 && t3Step === 3) {
+                    t3Step = 4; // 結束
+                    showTypingAndMessage('left', { en: "Awesome! Thank you for the great service! 💖", cn: "太棒了！謝謝你這麼棒的服務！💖" }, () => {
+                        document.getElementById('s3-next-client-btn').style.display = 'inline-block';
+                    });
+                }
+            } else {
+                // 還沒答對
+                if (val.length > 0) {
+                    el.style.color = "#d6336c"; el.style.borderBottomColor = "#d6336c";
+                } else {
+                    el.style.color = "#0056b3"; el.style.borderBottomColor = "#333";
+                }
+            }
+        }
+
+
+        /* ================= DATA: TASK 4 (PEEL) ================= */
+        const dataT4 = [
+            { target: "Investor (投資人)", text: "Why should I invest in your Press-on Nail business? Convince me using First Principles." },
+            { target: "Boutique Owner (精品店老闆)", text: "My store shelf is full. Why should I clear space to sell your press-on nails instead of cosmetics?" },
+            { target: "TikTok Influencer (百萬網紅)", text: "I get dozens of sponsorships daily. Why should I collaborate with your small brand?" },
+            { target: "Your Parents (父母)", text: "You are just a Form 2 student. Why should we lend you RM500 as startup capital for this 'toy' business?" },
+            { target: "Skeptical Customer (懷疑的顧客)", text: "I bought cheap press-on nails before and they ruined my date. Why are yours any different?" }
+        ];
+
+        function renderT4() {
+            document.getElementById('s4-badge').innerText = `Scenario ${currTask4 + 1}/5`;
+            let d = dataT4[currTask4];
+            document.getElementById('s4-dialogue').innerHTML = `<strong style="color:#e74c3c;">${d.target}:</strong> "${d.text}"`;
+            document.getElementById('p-input').value = ""; document.getElementById('e-input').value = "";
+            document.getElementById('ex-input').value = ""; document.getElementById('l-input').value = "";
+            document.getElementById('s4-final').style.display = 'none';
+        }
+        function showFinalPitch() {
+            let p = document.getElementById('p-input').value || "[Point]"; let e = document.getElementById('e-input').value || "[Explanation]";
+            let ex = document.getElementById('ex-input').value || "[Example]"; let l = document.getElementById('l-input').value || "[Link]";
+            document.getElementById('s4-final').innerHTML = `<b>Your CEO Pitch:</b><br><br>"${p} ${e} ${ex} ${l}"`;
+            document.getElementById('s4-final').style.display = 'block';
+        }
+
+        /* --- Init --- */
+        window.onload = function () {
+            renderT1(); renderT2(); renderT3(); renderT4();
+            if (window.ProgressTracker) {
+                const state = window.ProgressTracker.load();
+                if (state && state.stage) {
+                    goToStage(state.stage);
+                }
+            }
+        };
+    </script>
+
+    <!-- Progress Tracker -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="UEC_Senior_English_TeenCEO"
+        data-module-name="UEC English: Teen CEO Simulator Pro"
+        data-module-url="content/UEC_Syllabus/Senior/English/Teen_CEO_Simulator/index.html"></script>
+
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+</body>
+
+</html>
