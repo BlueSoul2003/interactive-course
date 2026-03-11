@@ -1,0 +1,1597 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PokéMath: The Data Graphs Campaign</title>
+    <!-- Chart.js for rendering the line and bar graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --poke-red: #E3350D;
+            --poke-blue: #3B4CCA;
+            --poke-yellow: #FFDE00;
+            --bg-light: #F2F2F2;
+            --panel-bg: #FFFFFF;
+            --locked-opacity: 0.35;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            background-color: var(--bg-light);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Navigation Bar */
+        .navbar {
+            background-color: var(--poke-red);
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000;
+            margin-right: 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .tab-btn.active {
+            background-color: var(--poke-yellow);
+            color: black;
+            border-color: black;
+        }
+
+        /* Main Dual-Pane Layout */
+        .workspace {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .left-pane {
+            flex: 1.1;
+            padding: 30px;
+            background-color: var(--panel-bg);
+            border-right: 4px solid #ddd;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .right-pane {
+            flex: 1;
+            padding: 30px;
+            background-color: #FAFAFA;
+            overflow-y: auto;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        /* Typography & Question Blocks */
+        h2 {
+            color: var(--poke-blue);
+            border-bottom: 2px solid var(--poke-blue);
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        .instruction {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .question-block {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 0px #ccc;
+            border: 2px solid #ddd;
+            transition: all 0.3s ease;
+        }
+
+        .question-block.active {
+            border-color: var(--poke-blue);
+            box-shadow: 0 4px 0px var(--poke-blue);
+            transform: translateY(-2px);
+        }
+
+        .question-block.locked {
+            opacity: var(--locked-opacity);
+            pointer-events: none;
+            filter: grayscale(100%);
+        }
+
+        .question-block.completed {
+            border-color: #4CAF50;
+            box-shadow: 0 4px 0px #4CAF50;
+            background-color: #F1F8E9;
+        }
+
+        .q-text {
+            font-size: 1.15rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            color: #111;
+        }
+
+        /* Inputs & Buttons */
+        .input-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        input[type="number"],
+        input[type="text"] {
+            padding: 10px;
+            font-size: 1.1rem;
+            border: 2px solid #aaa;
+            border-radius: 8px;
+            width: 120px;
+            text-align: center;
+            outline: none;
+            font-weight: bold;
+        }
+
+        input:focus {
+            border-color: var(--poke-blue);
+        }
+
+        .submit-btn {
+            background-color: var(--poke-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 3px 0px #a12509;
+        }
+
+        .submit-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0px #a12509;
+        }
+
+        .feedback-icon {
+            font-size: 1.5rem;
+            display: none;
+        }
+
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 1.1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 2px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .data-table th {
+            background-color: var(--poke-blue);
+            color: white;
+        }
+
+        .data-table input {
+            width: 60px;
+            padding: 5px;
+        }
+
+        /* Teacher's Guide UI */
+        .guide-toggle-btn {
+            background-color: #E3F2FD;
+            color: #1565C0;
+            border: 1px solid #1565C0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-left: auto;
+            transition: 0.2s;
+        }
+
+        .guide-toggle-btn:hover {
+            background-color: #BBDEFB;
+        }
+
+        .guide-panel {
+            background-color: #FFF9C4;
+            border: 2px dashed #FBC02D;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+
+        .guide-step {
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+            color: #424242;
+            border-left: 4px solid #FBC02D;
+            padding-left: 10px;
+            animation: fadeIn 0.4s ease-in;
+        }
+
+        .guide-next-btn {
+            background-color: #FFCA28;
+            border: 1px solid #F57F17;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .guide-next-btn:hover {
+            background-color: #FFB300;
+        }
+
+        /* Specific Layouts */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            margin-top: 20px;
+        }
+
+        .tally-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 5px;
+            justify-content: center;
+        }
+
+        /* Inventory UI: Pokemon Party */
+        .party-toggle-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="%23fff" stroke="%23000" stroke-width="5"/><path d="M5 50a45 45 0 0 1 90 0z" fill="%23E3350D" stroke="%23000" stroke-width="5"/><circle cx="50" cy="50" r="15" fill="%23fff" stroke="%23000" stroke-width="5"/><circle cx="50" cy="50" r="8" fill="%23fff" stroke="%23000" stroke-width="2"/></svg>') no-repeat center;
+            background-size: cover;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            border: none;
+            z-index: 55;
+            transition: transform 0.2s;
+        }
+
+        .party-toggle-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .party-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .party-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FFDE00;
+            color: #000;
+            font-weight: bold;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+            font-size: 0.9rem;
+            z-index: 60;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        #party-container {
+            position: fixed;
+            bottom: 25px;
+            right: 95px;
+            /* Slides out left of the toggle button */
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 15px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 3px solid var(--poke-blue);
+            z-index: 50;
+            min-height: 50px;
+            align-items: center;
+
+            /* Hidden State */
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateX(50px) scale(0.9);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #party-container.show {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .party-slot {
+            width: 50px;
+            height: 50px;
+            background: #eee;
+            border-radius: 50%;
+            border: 2px dashed #aaa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .party-slot img {
+            width: 130%;
+            margin-top: -5px;
+            filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Catch Encounter Modal */
+        #catch-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        #wild-poke-img {
+            width: 250px;
+            filter: drop-shadow(0 0 25px rgba(255, 255, 255, 0.6));
+            transition: all 0.4s cubic-bezier(0.5, 0, 1, 1);
+            image-rendering: pixelated;
+            z-index: 102;
+        }
+
+        /* SVG Backgrounds for Balls */
+        .pb-standard {
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="%23fff" stroke="%23000" stroke-width="5"/><path d="M5 50a45 45 0 0 1 90 0z" fill="%23E3350D" stroke="%23000" stroke-width="5"/><circle cx="50" cy="50" r="15" fill="%23fff" stroke="%23000" stroke-width="5"/><circle cx="50" cy="50" r="8" fill="%23fff" stroke="%23000" stroke-width="2"/></svg>') no-repeat center;
+            background-size: cover;
+        }
+
+        .pb-great {
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="%23fff" stroke="%23000" stroke-width="5"/><path d="M5 50a45 45 0 0 1 90 0z" fill="%233B4CCA" stroke="%23000" stroke-width="5"/><path d="M 20 20 Q 30 15 40 25 L 35 30 Q 25 20 15 25 Z" fill="%23E3350D"/><path d="M 80 20 Q 70 15 60 25 L 65 30 Q 75 20 85 25 Z" fill="%23E3350D"/><circle cx="50" cy="50" r="15" fill="%23fff" stroke="%23000" stroke-width="5"/><circle cx="50" cy="50" r="8" fill="%23fff" stroke="%23000" stroke-width="2"/></svg>') no-repeat center;
+            background-size: cover;
+        }
+
+        .pb-ultra {
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="%23fff" stroke="%23000" stroke-width="5"/><path d="M5 50a45 45 0 0 1 90 0z" fill="%23333" stroke="%23000" stroke-width="5"/><path d="M 30 15 Q 50 40 70 15 L 75 25 Q 50 55 25 25 Z" fill="%23FFDE00"/><circle cx="50" cy="50" r="15" fill="%23fff" stroke="%23000" stroke-width="5"/><circle cx="50" cy="50" r="8" fill="%23fff" stroke="%23000" stroke-width="2"/></svg>') no-repeat center;
+            background-size: cover;
+        }
+
+        /* The active thrown ball */
+        #thrown-ball {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            z-index: 105;
+            display: none;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+        }
+
+        /* Roulette UI */
+        .roulette-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            transition: opacity 0.3s;
+        }
+
+        .ball-option {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .roulette-label {
+            margin-top: 15px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #FFDE00;
+            text-shadow: 2px 2px 0 #000;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .shake-anim {
+            animation: shake 0.4s ease-in-out;
+            border-color: red !important;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .blink-text {
+            animation: blinker 0.8s cubic-bezier(0.5, 0, 1, 1) infinite alternate;
+        }
+
+        @keyframes blinker {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            to {
+                opacity: 0.5;
+                transform: scale(1.05);
+            }
+        }
+
+        /* Parabolic Throw Animation */
+        .anim-throw-arc {
+            animation: throwParabola 0.7s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        .anim-absorb {
+            transform: scale(0) translateY(100px) !important;
+            filter: brightness(3) sepia(1) hue-rotate(300deg) !important;
+            opacity: 0;
+        }
+
+        .anim-shake {
+            animation: shakeBall 0.8s ease-in-out infinite;
+        }
+
+        .anim-caught {
+            filter: brightness(0.7);
+        }
+
+        @keyframes throwParabola {
+            0% {
+                transform: translateY(350px) scale(0.5) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            50% {
+                transform: translateY(-50px) scale(1.3) rotate(360deg);
+            }
+
+            100% {
+                transform: translateY(0px) scale(1) rotate(720deg);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shakeBall {
+            0% {
+                transform: rotate(0deg) translateX(0);
+            }
+
+            20% {
+                transform: rotate(-25deg) translateX(-15px);
+            }
+
+            40% {
+                transform: rotate(25deg) translateX(15px);
+            }
+
+            60% {
+                transform: rotate(-10deg) translateX(-5px);
+            }
+
+            80% {
+                transform: rotate(10deg) translateX(5px);
+            }
+
+            100% {
+                transform: rotate(0deg) translateX(0);
+            }
+        }
+
+        /* --- Home Button ────────────────────────────────────────────── */
+        .home-btn-fixed {
+            position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+            transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .home-btn-fixed:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55); color: #fff; }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header & Navigation -->
+    <div class="navbar">
+        <h1>PokéMath</h1>
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('tab-tut')">Tutorial</button>
+            <button class="tab-btn" onclick="switchTab('tab-m1')">Lv 1: Safari</button>
+            <button class="tab-btn" onclick="switchTab('tab-m2')">Lv 2: PokéMart</button>
+            <button class="tab-btn" onclick="switchTab('tab-m3')">Lv 3: Magnet Train</button>
+            <button class="tab-btn" onclick="switchTab('tab-m4')">Lv 4: Team Rocket</button>
+            <button class="tab-btn" onclick="switchTab('tab-m5')">Lv 5: Boss Battle</button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         TUTORIAL: Medals (Qs 1 - 4) 
+    =========================================== -->
+    <div id="tab-tut" class="workspace">
+        <div class="left-pane">
+            <h2>Example: The Pokémon League</h2>
+            <div class="instruction">The line graph shows the number of gold, silver, and bronze medals given out during
+                an international sports meet.</div>
+            <div class="chart-container"><canvas id="chart-tut"></canvas></div>
+        </div>
+        <div class="right-pane">
+            <div class="question-block active" id="qt1">
+                <div class="q-text">1. How many gold medals were given out?</div>
+                <div class="input-group">
+                    <input type="number" id="anst1" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('t1', ['24'], 'qt2')">Submit</button>
+                    <span class="feedback-icon" id="icont1">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qt2">
+                <div class="q-text">2. How many silver and bronze medals were given out?</div>
+                <div class="input-group">
+                    <input type="number" id="anst2" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('t2', ['82'], 'qt3')">Submit</button>
+                    <span class="feedback-icon" id="icont2">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qt3">
+                <div class="q-text">3. How many more bronze than gold medals were given out?</div>
+                <div class="input-group">
+                    <input type="number" id="anst3" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('t3', ['22'], 'qt4')">Submit</button>
+                    <span class="feedback-icon" id="icont3">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qt4">
+                <div class="q-text">4. If there were 58 participants who did not receive any medals, how many
+                    participants were there altogether?</div>
+                <div class="input-group">
+                    <input type="number" id="anst4" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('t4', ['164'], null)">Submit</button>
+                    <span class="feedback-icon" id="icont4">🏆</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MISSION 1: Animals (Qs 1 - 5) 
+    =========================================== -->
+    <div id="tab-m1" class="workspace hidden">
+        <div class="left-pane">
+            <h2>Study the table below and answer questions 1 to 5.</h2>
+            <div class="instruction">The table shows the number of animals Mario saw in a park.</div>
+            <table class="data-table" style="font-size: 1.3rem;">
+                <tr>
+                    <th>Animals</th>
+                    <td>Spider 🐛</td>
+                    <td>Bird 🦅</td>
+                    <td>Cat 🐈</td>
+                    <td>Worm 🪱</td>
+                </tr>
+                <tr>
+                    <th>Number of animals</th>
+                    <td>8</td>
+                    <td id="m1-bird-cell" style="color:var(--poke-red); font-weight:bold;">?</td>
+                    <td>3</td>
+                    <td>8</td>
+                </tr>
+            </table>
+        </div>
+        <div class="right-pane">
+            <div class="question-block active" id="qm1_1">
+                <div class="q-text">1. If there were 30 animals in the park, how many birds were there?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm1_1" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAnsM1Q1()">Submit</button>
+                    <span class="feedback-icon" id="iconm1_1">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm1_2">
+                <div class="q-text">2. Which animal did Mario see the most in the park?</div>
+                <div class="input-group">
+                    <input type="text" id="ansm1_2" placeholder="Animal">
+                    <button class="submit-btn" onclick="checkAns('m1_2', ['bird', 'birds'], 'qm1_3')">Submit</button>
+                    <span class="feedback-icon" id="iconm1_2">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm1_3">
+                <div class="q-text">3. Which animal did Mario see the least in the park?</div>
+                <div class="input-group">
+                    <input type="text" id="ansm1_3" placeholder="Animal">
+                    <button class="submit-btn" onclick="checkAns('m1_3', ['cat', 'cats'], 'qm1_4')">Submit</button>
+                    <span class="feedback-icon" id="iconm1_3">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm1_4">
+                <div class="q-text">4. How many more birds than worms did Mario see?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm1_4" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m1_4', ['3'], 'qm1_5')">Submit</button>
+                    <span class="feedback-icon" id="iconm1_4">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm1_5">
+                <div class="q-text">5. If 3 birds, 5 worms, and 4 spiders left the park, how many animals remained in
+                    the park?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm1_5" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('m1_5', ['18'], null)">Submit</button>
+                    <span class="feedback-icon" id="iconm1_5">🏅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MISSION 2: Mobile Phones (Qs 6 - 11) 
+    =========================================== -->
+    <div id="tab-m2" class="workspace hidden">
+        <div class="left-pane">
+            <h2>Study the data below and answer questions 6 to 11.</h2>
+            <div class="instruction">Mr. Cox recorded the number of mobile phones he sold over five months in the table
+                below.</div>
+
+            <div id="tally-display"
+                style="background: #fff; border: 2px solid #333; border-radius: 8px; padding: 10px; margin-bottom: 20px;">
+            </div>
+
+            <div class="instruction">6. Use numbers to complete the table using the data.</div>
+            <table class="data-table">
+                <tr>
+                    <th>Months</th>
+                    <th>Number of mobile phones sold</th>
+                </tr>
+                <tr>
+                    <td>November</td>
+                    <td><input type="number" id="t-nov" onchange="checkTableM2()"></td>
+                </tr>
+                <tr>
+                    <td>December</td>
+                    <td><input type="number" id="t-dec" onchange="checkTableM2()"></td>
+                </tr>
+                <tr>
+                    <td>January</td>
+                    <td><input type="number" id="t-jan" onchange="checkTableM2()"></td>
+                </tr>
+                <tr>
+                    <td>February</td>
+                    <td><input type="number" id="t-feb" onchange="checkTableM2()"></td>
+                </tr>
+                <tr>
+                    <td>March</td>
+                    <td><input type="number" id="t-mar" onchange="checkTableM2()"></td>
+                </tr>
+            </table>
+            <div id="m2-table-feedback" style="margin-top: 10px; font-weight: bold; color: var(--poke-red);"></div>
+        </div>
+
+        <div class="right-pane">
+            <div class="question-block locked" id="qm2_7">
+                <div class="q-text">7. In which month did Mr. Cox sell the most number of mobile phones?</div>
+                <div class="input-group">
+                    <input type="text" id="ansm2_7" placeholder="Month">
+                    <button class="submit-btn" onclick="checkAns('m2_7', ['january', 'jan'], 'qm2_8')">Submit</button>
+                    <span class="feedback-icon" id="iconm2_7">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm2_8">
+                <div class="q-text">8. How many more mobile phones did Mr. Cox sell in February than in December?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm2_8" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m2_8', ['20'], 'qm2_9')">Submit</button>
+                    <span class="feedback-icon" id="iconm2_8">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm2_9">
+                <div class="q-text">9. How many mobile phones were sold altogether in the two months with the highest
+                    sales?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm2_9" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('m2_9', ['140'], 'qm2_10')">Submit</button>
+                    <span class="feedback-icon" id="iconm2_9">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm2_10">
+                <div class="q-text">10. If the number of mobile phones sold in April was twice as many as those sold in
+                    March, how many mobile phones were sold in April?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm2_10" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('m2_10', ['80'], 'qm2_11')">Submit</button>
+                    <span class="feedback-icon" id="iconm2_10">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm2_11">
+                <div class="q-text">11. If each mobile phone was sold for $102, how much money did Mr. Cox make in
+                    February and March?</div>
+                <div class="input-group">
+                    <span style="font-size: 1.2rem; font-weight: bold;">$</span>
+                    <input type="number" id="ansm2_11" placeholder="Amount">
+                    <button class="submit-btn" onclick="checkAns('m2_11', ['9180'], null)">Submit</button>
+                    <span class="feedback-icon" id="iconm2_11">🏅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MISSION 3: School Bus (Qs 12 - 16) 
+    =========================================== -->
+    <div id="tab-m3" class="workspace hidden">
+        <div class="left-pane">
+            <h2>Study the line graph and answer questions 12 to 16.</h2>
+            <div class="instruction">The line graph shows the number of students taking the school bus over a few years.
+            </div>
+            <div class="chart-container"><canvas id="chart-m3"></canvas></div>
+        </div>
+        <div class="right-pane">
+            <div class="question-block active" id="qm3_12">
+                <div class="q-text">12. How many students took the school bus in 2007?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm3_12" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m3_12', ['150'], 'qm3_13')">Submit</button>
+                    <span class="feedback-icon" id="iconm3_12">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm3_13">
+                <div class="q-text">13. In which year was the number of students taking the school bus the greatest?
+                </div>
+                <div class="input-group">
+                    <input type="number" id="ansm3_13" placeholder="Year">
+                    <button class="submit-btn" onclick="checkAns('m3_13', ['2006'], 'qm3_14')">Submit</button>
+                    <span class="feedback-icon" id="iconm3_13">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm3_14">
+                <div class="q-text">14. What was the increase in the number of students taking the school bus from 2008
+                    to 2009?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm3_14" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m3_14', ['100'], 'qm3_15')">Submit</button>
+                    <span class="feedback-icon" id="iconm3_14">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm3_15">
+                <div class="q-text">15. What was the difference between the year with the greatest number of students
+                    taking the school bus and the year with the lowest number of students taking the school bus?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm3_15" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m3_15', ['125'], 'qm3_16')">Submit</button>
+                    <span class="feedback-icon" id="iconm3_15">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm3_16">
+                <div class="q-text">16. How many students took the school bus from 2006 to 2009?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm3_16" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('m3_16', ['750'], null)">Submit</button>
+                    <span class="feedback-icon" id="iconm3_16">🏅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MISSION 4: Donation Drive (Qs 17 - 22) 
+    =========================================== -->
+    <div id="tab-m4" class="workspace hidden">
+        <div class="left-pane">
+            <h2>Study the bar graph and answer questions 17 to 22.</h2>
+            <div class="instruction">The bar graph shows the amount of money collected by six children in a donation
+                drive.</div>
+            <div class="chart-container" style="height: 250px;"><canvas id="chart-m4"></canvas></div>
+
+            <div class="instruction" style="margin-top: 20px;">17. Using the data from the bar graph, complete the table
+                below.</div>
+            <table class="data-table" style="font-size:1rem;">
+                <tr>
+                    <th>Name</th>
+                    <th>Amount Collected ($)</th>
+                </tr>
+                <tr>
+                    <td>Mandy</td>
+                    <td><input type="number" id="d-man" onchange="checkTableM4()"></td>
+                </tr>
+                <tr>
+                    <td>Kim</td>
+                    <td><input type="number" id="d-kim" onchange="checkTableM4()"></td>
+                </tr>
+                <tr>
+                    <td>Felix</td>
+                    <td><input type="number" id="d-fel" onchange="checkTableM4()"></td>
+                </tr>
+                <tr>
+                    <td>Ratana</td>
+                    <td><input type="number" id="d-rat" onchange="checkTableM4()"></td>
+                </tr>
+                <tr>
+                    <td>Robert</td>
+                    <td><input type="number" id="d-rob" onchange="checkTableM4()"></td>
+                </tr>
+                <tr>
+                    <td>Janice</td>
+                    <td><input type="number" id="d-jan" onchange="checkTableM4()"></td>
+                </tr>
+            </table>
+            <div id="m4-table-feedback" style="margin-top: 5px; font-weight: bold; color: var(--poke-red);"></div>
+        </div>
+        <div class="right-pane">
+            <div class="question-block locked" id="qm4_18">
+                <div class="q-text">18. Who collected more than $200? (Two people)</div>
+                <div class="input-group">
+                    <input type="text" id="ansm4_18a" placeholder="Name 1">
+                    <input type="text" id="ansm4_18b" placeholder="Name 2">
+                    <button class="submit-btn"
+                        onclick="checkAnsDual('m4_18', 'mandy', 'felix', 'qm4_19')">Submit</button>
+                    <span class="feedback-icon" id="iconm4_18">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm4_19">
+                <div class="q-text">19. Which two children collected the same amount of money?</div>
+                <div class="input-group">
+                    <input type="text" id="ansm4_19a" placeholder="Name 1">
+                    <input type="text" id="ansm4_19b" placeholder="Name 2">
+                    <button class="submit-btn"
+                        onclick="checkAnsDual('m4_19', 'kim', 'janice', 'qm4_20')">Submit</button>
+                    <span class="feedback-icon" id="iconm4_19">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm4_20">
+                <div class="q-text">20. Who collected twice as much money as Robert?</div>
+                <div class="input-group">
+                    <input type="text" id="ansm4_20" placeholder="Name">
+                    <button class="submit-btn" onclick="checkAns('m4_20', ['felix'], 'qm4_21')">Submit</button>
+                    <span class="feedback-icon" id="iconm4_20">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm4_21">
+                <div class="q-text">21. How much money was collected altogether?</div>
+                <div class="input-group">
+                    <span style="font-weight:bold;">$</span>
+                    <input type="number" id="ansm4_21" placeholder="Total">
+                    <button class="submit-btn" onclick="checkAns('m4_21', ['1140'], 'qm4_22')">Submit</button>
+                    <span class="feedback-icon" id="iconm4_21">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm4_22">
+                <div class="q-text">22. How much more money did the children have to collect in order to reach $2,000?
+                </div>
+                <div class="input-group">
+                    <span style="font-weight:bold;">$</span>
+                    <input type="number" id="ansm4_22" placeholder="Amount">
+                    <button class="submit-btn" onclick="checkAns('m4_22', ['860'], null)">Submit</button>
+                    <span class="feedback-icon" id="iconm4_22">🏅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         MISSION 5: Science Center (Qs 23 - 27) 
+    =========================================== -->
+    <div id="tab-m5" class="workspace hidden">
+        <div class="left-pane">
+            <h2>Study the line graph below and answer questions 23 to 27.</h2>
+            <div class="instruction">The line graph shows the number of visitors to the science center in a month.</div>
+            <div class="chart-container"><canvas id="chart-m5"></canvas></div>
+        </div>
+        <div class="right-pane">
+            <div class="question-block active" id="qm5_23">
+                <div class="q-text">23. In which week was the number of visitors the least?</div>
+                <div class="input-group">
+                    <input type="text" id="ansm5_23" placeholder="e.g. 1st">
+                    <button class="submit-btn"
+                        onclick="checkAns('m5_23', ['3', '3rd', 'third'], 'qm5_24')">Submit</button>
+                    <span class="feedback-icon" id="iconm5_23">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm5_24">
+                <div class="q-text">24. What was the increase in the number of visitors from the 3rd to the 4th week?
+                </div>
+                <div class="input-group">
+                    <input type="number" id="ansm5_24" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m5_24', ['2250'], 'qm5_25')">Submit</button>
+                    <span class="feedback-icon" id="iconm5_24">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm5_25">
+                <div class="q-text">25. What was the decrease in the number of visitors from the 1st to the 2nd week?
+                </div>
+                <div class="input-group">
+                    <input type="number" id="ansm5_25" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m5_25', ['1750'], 'qm5_26')">Submit</button>
+                    <span class="feedback-icon" id="iconm5_25">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm5_26">
+                <div class="q-text">26. What was the difference in the week with the greatest number of visitors and the
+                    week with the lowest number of visitors?</div>
+                <div class="input-group">
+                    <input type="number" id="ansm5_26" placeholder="Value">
+                    <button class="submit-btn" onclick="checkAns('m5_26', ['3000'], 'qm5_27')">Submit</button>
+                    <span class="feedback-icon" id="iconm5_26">✅</span>
+                </div>
+            </div>
+            <div class="question-block locked" id="qm5_27">
+                <div class="q-text">27. If each admission ticket cost $9, how much did the science center collect during
+                    the four weeks?</div>
+                <div class="input-group">
+                    <span style="font-weight:bold;">$</span>
+                    <input type="number" id="ansm5_27" placeholder="Amount">
+                    <button class="submit-btn" onclick="checkAns('m5_27', ['76500'], null)">Submit</button>
+                    <span class="feedback-icon" id="iconm5_27">🏅</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory UI: Pokemon Party -->
+    <button id="party-toggle" class="party-toggle-btn" onclick="toggleParty()" title="Open Pokémon Party">
+        <div id="party-badge" class="party-badge hidden">0</div>
+    </button>
+    <div id="party-container" title="Your Pokémon Party">
+        <strong style="margin-right: 5px; color: var(--poke-blue);">PARTY:</strong>
+        <!-- Slots injected by JS -->
+    </div>
+
+    <!-- Catch Encounter Modal -->
+    <div id="catch-modal" class="hidden">
+        <h1 id="encounter-title"
+            style="font-size: 3.5rem; margin-bottom: 0; color: var(--poke-yellow); text-shadow: 4px 4px 0 #000; letter-spacing: 2px;">
+            MISSION CLEARED!</h1>
+        <h2 id="wild-poke-text" style="font-size: 2rem; margin-top: 10px; text-shadow: 2px 2px #000;">A wild Pokémon
+            appeared!</h2>
+
+        <!-- The Target -->
+        <div style="position: relative; height: 250px; display: flex; align-items: center; justify-content: center;">
+            <img id="wild-poke-img" src="" alt="Wild Pokemon">
+            <div id="thrown-ball"></div> <!-- The animated ball -->
+        </div>
+
+        <!-- The Roulette Arsenal -->
+        <div id="roulette-container" class="roulette-container">
+            <div id="roulette-ball" class="ball-option pb-standard"></div>
+            <div id="roulette-label" class="roulette-label">Pokéball (40%)</div>
+        </div>
+
+        <p id="throw-instruction" class="blink-text"
+            style="font-size: 1.5rem; font-weight:bold; letter-spacing: 1px; margin-top: 30px; text-shadow: 2px 2px #000; color: #FFDE00; cursor: pointer;">
+            TAP ANYWHERE TO THROW!</p>
+    </div>
+
+    <script>
+        // --- 1. Audio Engine ---
+        let audioCtx;
+        function initAudio() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        function playTone(freq, duration, type, vol) {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function sfxCorrect() {
+            initAudio();
+            playTone(600, 0.1, 'sine', 0.1);
+            setTimeout(() => playTone(800, 0.2, 'sine', 0.1), 100);
+        }
+
+        function sfxWrong() {
+            initAudio();
+            playTone(300, 0.2, 'sawtooth', 0.1);
+            setTimeout(() => playTone(250, 0.25, 'sawtooth', 0.1), 150);
+        }
+
+        function sfxUnlock() {
+            initAudio();
+            playTone(400, 0.1, 'square', 0.05);
+            setTimeout(() => playTone(500, 0.1, 'square', 0.05), 100);
+            setTimeout(() => playTone(600, 0.4, 'square', 0.05), 200);
+        }
+
+        function sfxVictory() {
+            initAudio();
+            setTimeout(() => playTone(523.25, 0.2, 'square', 0.05), 0); // C5
+            setTimeout(() => playTone(659.25, 0.2, 'square', 0.05), 200); // E5
+            setTimeout(() => playTone(783.99, 0.4, 'square', 0.05), 400); // G5
+        }
+
+        function sfxCatch() {
+            initAudio();
+            playTone(880, 0.1, 'sine', 0.05); // High beep
+            setTimeout(() => playTone(1108.73, 0.1, 'sine', 0.05), 150); // C#6
+            setTimeout(() => playTone(1318.51, 0.4, 'sine', 0.05), 300); // E6
+        }
+
+        function sfxPoof() {
+            initAudio();
+            playTone(200, 0.3, 'noise', 0.2); // Escape sound
+            setTimeout(() => playTone(150, 0.4, 'noise', 0.1), 100);
+        }
+
+        document.body.addEventListener('click', initAudio, { once: true });
+
+        // --- 2. Tally Generator (SVG) ---
+        function generateTallies(count) {
+            let svgBundle = `<svg width="25" height="25" viewBox="0 0 30 30" style="margin-right:2px;">
+                <line x1="6" y1="4" x2="6" y2="26" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="4" x2="12" y2="26" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="18" y1="4" x2="18" y2="26" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="24" y1="4" x2="24" y2="26" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+                <line x1="2" y1="2" x2="28" y2="28" stroke="#E3350D" stroke-width="2" stroke-linecap="round"/>
+            </svg>`;
+            let html = '<div class="tally-container">';
+            for (let i = 0; i < Math.floor(count / 5); i++) html += svgBundle;
+            return html + '</div>';
+        }
+
+        const tallyData = [
+            { month: 'November', val: 65 }, { month: 'December', val: 30 },
+            { month: 'January', val: 75 }, { month: 'February', val: 50 }, { month: 'March', val: 40 }
+        ];
+        let tallyHTML = '<table style="width:100%; border:none;">';
+        tallyData.forEach(d => {
+            tallyHTML += `<tr><td style="width:80px; font-weight:bold; padding:2px; border:none;">${d.month}</td><td style="border:none;">${generateTallies(d.val)}</td></tr>`;
+        });
+        document.getElementById('tally-display').innerHTML = tallyHTML + '</table>';
+
+        // --- 3. UI Navigation & Rendering Logic ---
+        const chartsRendered = {};
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.workspace').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            let targetBtn = document.querySelector(`button[onclick*="${tabId}"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+
+            if (tabId === 'tab-tut' && !chartsRendered.tut) { renderTutChart(); chartsRendered.tut = true; }
+            if (tabId === 'tab-m3' && !chartsRendered.m3) { renderM3Chart(); chartsRendered.m3 = true; }
+            if (tabId === 'tab-m4' && !chartsRendered.m4) { renderM4Chart(); chartsRendered.m4 = true; }
+            if (tabId === 'tab-m5' && !chartsRendered.m5) { renderM5Chart(); chartsRendered.m5 = true; }
+            if (window.ProgressTracker) window.ProgressTracker.save({ tab: tabId });
+        }
+
+        // --- 4. Teacher's Guide / Calculation Logic ---
+        const guideData = {
+            't1': ["Locate 'Gold' on the x-axis.", "Move up to the dot.", "Read the value on the y-axis: 24."],
+            't2': ["Find the value for Silver: 36.", "Find the value for Bronze: 46.", "Add them together: 36 + 46", "= 82."],
+            't3': ["Find the value for Bronze: 46.", "Find the value for Gold: 24.", "Difference: 46 - 24", "= 22."],
+            't4': ["Total medals = Gold (24) + Silver (36) + Bronze (46) = 106.", "Participants with no medals = 58.", "Total participants = 106 + 58", "= 164."],
+            'm1_1': ["Total animals = 30.", "Animals we know = Spider (8) + Cat (3) + Worm (8) = 19.", "Birds = Total - Known", "30 - 19 = 11."],
+            'm1_2': ["Look at the updated table.", "Spider=8, Bird=11, Cat=3, Worm=8.", "The highest number is 11, which is the Bird."],
+            'm1_3': ["Look at the updated table.", "The lowest number is 3, which is the Cat."],
+            'm1_4': ["Number of birds = 11.", "Number of worms = 8.", "Difference = 11 - 8 = 3."],
+            'm1_5': ["Original total = 30 animals.", "Animals leaving = 3 + 5 + 4 = 12.", "Animals remaining = 30 - 12", "= 18."],
+            'm2_7': ["Look at the completed table.", "Nov=65, Dec=30, Jan=75, Feb=50, Mar=40.", "The highest is 75 in January."],
+            'm2_8': ["February sales = 50.", "December sales = 30.", "Difference = 50 - 30", "= 20."],
+            'm2_9': ["Find the top two months.", "Highest = January (75).", "Second highest = November (65).", "Total = 75 + 65", "= 140."],
+            'm2_10': ["March sales = 40.", "April is twice as many as March.", "April = 40 × 2", "= 80."],
+            'm2_11': ["February sales = 50.", "March sales = 40.", "Total phones = 50 + 40 = 90.", "Money made = 90 phones × $102", "90 × 100 = 9000;  90 × 2 = 180", "9000 + 180 = $9180."],
+            'm3_12': ["Find '2007' on the x-axis.", "Move up to the line.", "Read the y-axis value: 150."],
+            'm3_13': ["Look for the highest point on the graph.", "The peak is at 250.", "Follow it down to the x-axis: 2006."],
+            'm3_14': ["Students in 2008 = 125.", "Students in 2009 = 225.", "Increase = 225 - 125", "= 100."],
+            'm3_15': ["Greatest number = 250 (in 2006).", "Lowest number = 125 (in 2008).", "Difference = 250 - 125", "= 125."],
+            'm3_16': ["Find the value for each year.", "2006: 250, 2007: 150, 2008: 125, 2009: 225", "Total = 250 + 150 + 125 + 225", "= 750."],
+            'm4_18': ["Look for bars that go above the 200 line.", "Mandy = 270 (above 200)", "Felix = 260 (above 200)", "Ratana = 200 (not *more* than 200)."],
+            'm4_19': ["Look for two bars with the exact same height.", "Kim is at 140.", "Janice is also at 140."],
+            'm4_20': ["Robert collected $130.", "Twice Robert's amount = 130 × 2 = 260.", "Look for the person who collected $260.", "Felix collected $260."],
+            'm4_21': ["Add up all the amounts from the table.", "270 + 140 + 260 + 200 + 130 + 140", "Total = 1140."],
+            'm4_22': ["Target amount = $2000.", "Amount collected so far = $1140.", "Amount needed = 2000 - 1140", "= $860."],
+            'm5_23': ["Look for the lowest point on the graph.", "The lowest point is at 500.", "This happened in the 3rd week."],
+            'm5_24': ["Visitors in 3rd week = 500.", "Visitors in 4th week = 2750.", "Increase = 2750 - 500", "= 2250."],
+            'm5_25': ["Visitors in 1st week = 3500.", "Visitors in 2nd week = 1750.", "Decrease = 3500 - 1750", "= 1750."],
+            'm5_26': ["Greatest number (1st week) = 3500.", "Lowest number (3rd week) = 500.", "Difference = 3500 - 500", "= 3000."],
+            'm5_27': ["Find the total number of visitors first.", "3500 + 1750 + 500 + 2750 = 8500 total visitors.", "Ticket cost = $9 per visitor.", "Total collected = 8500 × 9", "= $76,500."]
+        };
+
+        const guideState = {};
+
+        function initTeacherGuides() {
+            for (let qId in guideData) {
+                let block = document.getElementById('q' + qId);
+                if (!block) continue;
+
+                let inputGroup = block.querySelector('.input-group');
+
+                let toggleBtn = document.createElement('button');
+                toggleBtn.className = 'guide-toggle-btn';
+                toggleBtn.innerHTML = '💡 Guide';
+                toggleBtn.onclick = () => toggleGuide(qId);
+                inputGroup.appendChild(toggleBtn);
+
+                let guidePanel = document.createElement('div');
+                guidePanel.className = 'guide-panel hidden';
+                guidePanel.id = 'guide-panel-' + qId;
+
+                let stepsContainer = document.createElement('div');
+                stepsContainer.id = 'guide-steps-' + qId;
+                guidePanel.appendChild(stepsContainer);
+
+                let nextBtn = document.createElement('button');
+                nextBtn.className = 'guide-next-btn';
+                nextBtn.innerHTML = 'Next Step ⬇️';
+                nextBtn.onclick = () => showNextStep(qId);
+                guidePanel.appendChild(nextBtn);
+
+                block.appendChild(guidePanel);
+                guideState[qId] = { stepIndex: 0 };
+            }
+        }
+
+        function toggleGuide(qId) {
+            let panel = document.getElementById('guide-panel-' + qId);
+            panel.classList.toggle('hidden');
+            if (!panel.classList.contains('hidden') && guideState[qId].stepIndex === 0) {
+                showNextStep(qId);
+            }
+        }
+
+        function showNextStep(qId) {
+            let state = guideState[qId];
+            let steps = guideData[qId];
+            if (state.stepIndex < steps.length) {
+                let container = document.getElementById('guide-steps-' + qId);
+                let stepDiv = document.createElement('div');
+                stepDiv.className = 'guide-step';
+                stepDiv.innerHTML = `<strong>Step ${state.stepIndex + 1}:</strong> ${steps[state.stepIndex]}`;
+                container.appendChild(stepDiv);
+                state.stepIndex++;
+                if (state.stepIndex >= steps.length) {
+                    document.querySelector(`#guide-panel-${qId} .guide-next-btn`).style.display = 'none';
+                }
+            }
+        }
+
+        // --- 5. Question Checking Logic ---
+        function cleanString(str) { return String(str).toLowerCase().replace(/[\$,\s]/g, ''); }
+
+        function unlockSuccess(qId, nextBlockId) {
+            sfxCorrect();
+            let inputEls = document.querySelectorAll(`#q${qId} input`);
+            inputEls.forEach(el => {
+                el.disabled = true;
+                el.style.backgroundColor = '#F1F8E9';
+                el.style.borderColor = '#4CAF50';
+            });
+            let block = document.getElementById('q' + qId);
+            block.classList.remove('active');
+            block.classList.add('completed');
+            document.getElementById('icon' + qId).style.display = 'inline';
+
+            let guidePanel = document.getElementById('guide-panel-' + qId);
+            if (guidePanel) guidePanel.classList.add('hidden');
+
+            if (nextBlockId) {
+                let nextBlock = document.getElementById(nextBlockId);
+                nextBlock.classList.remove('locked');
+                nextBlock.classList.add('active');
+                nextBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                setTimeout(sfxUnlock, 300);
+            } else {
+                sfxVictory();
+                setTimeout(triggerCatchEncounter, 1500); // Gamification triggered!
+            }
+        }
+
+        function triggerError(qId) {
+            sfxWrong();
+            let inputs = document.querySelectorAll(`#q${qId} input`);
+            inputs.forEach(el => {
+                el.classList.add('shake-anim');
+                setTimeout(() => el.classList.remove('shake-anim'), 400);
+            });
+        }
+
+        function checkAns(qId, correctValsArray, nextBlockId) {
+            let userVal = cleanString(document.getElementById('ans' + qId).value);
+            let isCorrect = correctValsArray.some(val => cleanString(val) === userVal);
+            if (isCorrect) unlockSuccess(qId, nextBlockId);
+            else triggerError(qId);
+        }
+
+        function checkAnsDual(qId, valA, valB, nextBlockId) {
+            let u1 = cleanString(document.getElementById('ans' + qId + 'a').value);
+            let u2 = cleanString(document.getElementById('ans' + qId + 'b').value);
+            let t1 = cleanString(valA);
+            let t2 = cleanString(valB);
+            if ((u1 === t1 && u2 === t2) || (u1 === t2 && u2 === t1)) unlockSuccess(qId, nextBlockId);
+            else triggerError(qId);
+        }
+
+        function checkAnsM1Q1() {
+            let userVal = cleanString(document.getElementById('ansm1_1').value);
+            if (userVal === '11') {
+                document.getElementById('m1-bird-cell').textContent = '11';
+                document.getElementById('m1-bird-cell').style.color = '#4CAF50';
+                unlockSuccess('m1_1', 'qm1_2');
+            } else triggerError('m1_1');
+        }
+
+        function checkTableM2() {
+            let n = document.getElementById('t-nov').value; let d = document.getElementById('t-dec').value;
+            let j = document.getElementById('t-jan').value; let f = document.getElementById('t-feb').value;
+            let m = document.getElementById('t-mar').value;
+            if (n == 65 && d == 30 && j == 75 && f == 50 && m == 40) {
+                document.getElementById('m2-table-feedback').innerHTML = "✅ Database Synced! Questions unlocked.";
+                document.getElementById('m2-table-feedback').style.color = "#4CAF50";
+                document.getElementById('qm2_7').classList.remove('locked');
+                document.getElementById('qm2_7').classList.add('active');
+                ['nov', 'dec', 'jan', 'feb', 'mar'].forEach(id => {
+                    document.getElementById('t-' + id).disabled = true;
+                    document.getElementById('t-' + id).style.backgroundColor = '#F1F8E9';
+                });
+                sfxUnlock();
+            }
+        }
+
+        function checkTableM4() {
+            let m = document.getElementById('d-man').value; let k = document.getElementById('d-kim').value;
+            let f = document.getElementById('d-fel').value; let r = document.getElementById('d-rat').value;
+            let ro = document.getElementById('d-rob').value; let j = document.getElementById('d-jan').value;
+            if (m == 270 && k == 140 && f == 260 && r == 200 && ro == 130 && j == 140) {
+                document.getElementById('m4-table-feedback').innerHTML = "✅ Database Synced! Questions unlocked.";
+                document.getElementById('m4-table-feedback').style.color = "#4CAF50";
+                document.getElementById('qm4_18').classList.remove('locked');
+                document.getElementById('qm4_18').classList.add('active');
+                ['man', 'kim', 'fel', 'rat', 'rob', 'jan'].forEach(id => {
+                    document.getElementById('d-' + id).disabled = true;
+                    document.getElementById('d-' + id).style.backgroundColor = '#F1F8E9';
+                });
+                sfxUnlock();
+            }
+        }
+
+        // --- 6. Chart Renderers ---
+        function createLineChart(ctxId, labels, data, yMax, step) {
+            new Chart(document.getElementById(ctxId).getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data, borderColor: '#3B4CCA', backgroundColor: 'rgba(59, 76, 202, 0.1)',
+                        pointBackgroundColor: '#E3350D', pointBorderColor: '#000',
+                        pointRadius: 8, pointHoverRadius: 12, pointBorderWidth: 2, borderWidth: 3,
+                        tension: 0, fill: false
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: yMax, ticks: { stepSize: step, font: { weight: 'bold' } } },
+                        x: { ticks: { font: { weight: 'bold' } } }
+                    },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        function renderTutChart() { createLineChart('chart-tut', ['Gold', 'Silver', 'Bronze'], [24, 36, 46], 48, 2); }
+        function renderM3Chart() { createLineChart('chart-m3', ['2006', '2007', '2008', '2009'], [250, 150, 125, 225], 250, 50); }
+        function renderM5Chart() { createLineChart('chart-m5', ['1st Week', '2nd Week', '3rd Week', '4th Week'], [3500, 1750, 500, 2750], 4000, 500); }
+        function renderM4Chart() {
+            new Chart(document.getElementById('chart-m4').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Mandy', 'Kim', 'Felix', 'Ratana', 'Robert', 'Janice'],
+                    datasets: [{ data: [270, 140, 260, 200, 130, 140], backgroundColor: '#4CAF50', borderColor: '#2E7D32', borderWidth: 2 }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true, max: 280, ticks: { stepSize: 20, font: { weight: 'bold' } } }, x: { ticks: { font: { weight: 'bold' } } } },
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // --- Init Function ---
+        window.onload = () => {
+            let initialTab = 'tab-tut';
+            if (window.ProgressTracker) {
+                const state = window.ProgressTracker.load();
+                if (state && state.tab) {
+                    initialTab = state.tab;
+                }
+            }
+            switchTab(initialTab);
+            initTeacherGuides();
+            initPartySlots();
+        };
+
+        // --- 7. Gamification Reward System (Roulette Catch Mechanic) ---
+        const pokeList = [
+            { id: 25, name: 'Pikachu' }, { id: 133, name: 'Eevee' },
+            { id: 4, name: 'Charmander' }, { id: 7, name: 'Squirtle' },
+            { id: 1, name: 'Bulbasaur' }, { id: 94, name: 'Gengar' },
+            { id: 143, name: 'Snorlax' }, { id: 149, name: 'Dragonite' },
+            { id: 151, name: 'Mew' }, { id: 448, name: 'Lucario' }
+        ];
+
+        const ballArsenal = [
+            { cls: 'pb-standard', rate: 0.40, label: 'Pokéball (40%)' },
+            { cls: 'pb-great', rate: 0.70, label: 'Great Ball (70%)' },
+            { cls: 'pb-ultra', rate: 0.95, label: 'Ultra Ball (95%)' }
+        ];
+
+        let currentWildPoke = null;
+        let caughtCount = 0;
+        let isThrowing = false;
+        let rouletteTimer = null;
+        let activeBallIdx = 0;
+
+        function initPartySlots() {
+            let container = document.getElementById('party-container');
+            for (let i = 0; i < 6; i++) {
+                container.innerHTML += `<div class="party-slot" id="slot-${i}"></div>`;
+            }
+        }
+
+        function toggleParty() {
+            let party = document.getElementById('party-container');
+            party.classList.toggle('show');
+            if (audioCtx && audioCtx.state === 'running') playTone(800, 0.05, 'sine', 0.05); // UI Click sound
+        }
+
+        function triggerCatchEncounter() {
+            if (!currentWildPoke) {
+                currentWildPoke = pokeList[Math.floor(Math.random() * pokeList.length)];
+            }
+
+            let modal = document.getElementById('catch-modal');
+            let img = document.getElementById('wild-poke-img');
+            let text = document.getElementById('wild-poke-text');
+            let rContainer = document.getElementById('roulette-container');
+            let thrownBall = document.getElementById('thrown-ball');
+            let instruction = document.getElementById('throw-instruction');
+
+            isThrowing = false;
+            img.className = '';
+            img.style.display = 'block';
+            thrownBall.style.display = 'none';
+            thrownBall.className = '';
+            rContainer.style.opacity = '1';
+            instruction.className = 'blink-text';
+
+            img.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${currentWildPoke.id}.png`;
+            text.innerHTML = `A wild <strong>${currentWildPoke.name}</strong> appeared!`;
+            instruction.innerHTML = "TAP ANYWHERE TO THROW!";
+
+            modal.classList.remove('hidden');
+
+            // Start Roulette Spin
+            if (rouletteTimer) clearInterval(rouletteTimer);
+            rouletteTimer = setInterval(() => {
+                activeBallIdx = (activeBallIdx + 1) % ballArsenal.length;
+                document.getElementById('roulette-ball').className = 'ball-option ' + ballArsenal[activeBallIdx].cls;
+                document.getElementById('roulette-label').innerText = ballArsenal[activeBallIdx].label;
+
+                if (audioCtx && audioCtx.state === 'running') {
+                    playTone(800, 0.02, 'triangle', 0.01);
+                }
+            }, 120);
+
+            modal.onclick = null;
+            setTimeout(() => { modal.onclick = executeThrow; }, 400);
+        }
+
+        function executeThrow() {
+            if (isThrowing) return;
+            isThrowing = true;
+
+            clearInterval(rouletteTimer);
+            let selectedBall = ballArsenal[activeBallIdx];
+
+            let img = document.getElementById('wild-poke-img');
+            let rContainer = document.getElementById('roulette-container');
+            let thrownBall = document.getElementById('thrown-ball');
+            let text = document.getElementById('wild-poke-text');
+            let instruction = document.getElementById('throw-instruction');
+
+            rContainer.style.opacity = '0';
+            instruction.innerHTML = "Throwing " + selectedBall.label.split(' ')[0] + "...";
+            instruction.className = '';
+            sfxUnlock();
+
+            thrownBall.className = '';
+            thrownBall.classList.add(selectedBall.cls);
+            thrownBall.style.display = 'block';
+            thrownBall.classList.add('anim-throw-arc');
+
+            setTimeout(() => {
+                img.classList.add('anim-absorb');
+                text.innerHTML = "Will it catch...?";
+
+                setTimeout(() => {
+                    thrownBall.classList.remove('anim-throw-arc');
+                    thrownBall.classList.add('anim-shake');
+
+                    setTimeout(() => {
+                        let rng = Math.random();
+                        thrownBall.classList.remove('anim-shake');
+
+                        if (rng <= selectedBall.rate) {
+                            // SUCCESS
+                            sfxCatch();
+                            thrownBall.classList.add('anim-caught');
+                            text.innerHTML = `Gotcha! <strong>${currentWildPoke.name}</strong> was caught!`;
+                            instruction.innerHTML = `Added to your party!`;
+                            addPokemonToParty(currentWildPoke);
+                            currentWildPoke = null;
+
+                            setTimeout(() => {
+                                document.getElementById('catch-modal').classList.add('hidden');
+                            }, 2500);
+
+                        } else {
+                            // FAILURE - ESCAPE
+                            sfxPoof();
+                            thrownBall.style.display = 'none';
+                            img.classList.remove('anim-absorb');
+                            text.innerHTML = `Oh no! <strong>${currentWildPoke.name}</strong> broke free!`;
+                            instruction.innerHTML = "Try again!";
+
+                            setTimeout(() => {
+                                triggerCatchEncounter();
+                            }, 2000);
+                        }
+                    }, 1800);
+                }, 600);
+            }, 300);
+        }
+
+        function addPokemonToParty(poke) {
+            if (caughtCount >= 6) return;
+
+            let slot = document.getElementById(`slot-${caughtCount}`);
+            slot.innerHTML = `<img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${poke.id}.png" alt="${poke.name}" title="${poke.name}">`;
+
+            slot.style.borderColor = '#FFDE00';
+            slot.style.background = '#fff';
+            slot.style.transform = 'scale(1.1)';
+            setTimeout(() => slot.style.transform = 'scale(1)', 300);
+
+            caughtCount++;
+
+            // Update Notification Badge
+            let badge = document.getElementById('party-badge');
+            badge.innerText = caughtCount;
+            badge.classList.remove('hidden');
+
+            // Pop out the tray briefly to show the new catch
+            let partyContainer = document.getElementById('party-container');
+            partyContainer.classList.add('show');
+
+            // Jiggle the toggle button
+            let toggleBtn = document.getElementById('party-toggle');
+            toggleBtn.classList.add('shake-anim');
+            setTimeout(() => toggleBtn.classList.remove('shake-anim'), 400);
+        }
+    </script>
+    
+    <!-- Progress Tracker -->
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SG_Y4_Math_Ch4DataGraphs"
+            data-module-name="Singapore Y4 Math: Data Graphs Campaign"
+            data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter4_Data_Graphs/index.html"></script>
+
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+</body>
+
+</html>
