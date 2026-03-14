@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon: Fraction Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background-color: #2d3436;
+            color: white;
+            user-select: none;
+        }
+
+        /* Custom UI Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #2d3436;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #74b9ff;
+            border-radius: 5px;
+        }
+
+        /* Fraction CSS Styling */
+        .math-text {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            margin: 0 4px;
+        }
+
+        .frac-block {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+
+        .frac-num {
+            border-bottom: 2px solid white;
+            padding: 0 4px;
+            line-height: 1.2;
+        }
+
+        .frac-den {
+            padding: 0 4px;
+            line-height: 1.2;
+        }
+
+        .mixed-whole {
+            margin-right: 4px;
+            font-size: 1.4rem;
+        }
+
+        /* Inputs */
+        .q-input {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffeaa7;
+            text-align: center;
+            border: 1px dashed #74b9ff;
+            font-family: 'Press Start 2P';
+            font-size: 0.8rem;
+            outline: none;
+        }
+
+        .q-input:focus {
+            border: 1px solid #ffeaa7;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .q-input.correct {
+            border: 2px solid #55efc4 !important;
+            color: #55efc4 !important;
+            background: rgba(85, 239, 196, 0.1) !important;
+            pointer-events: none;
+        }
+
+        .q-input.wrong {
+            border: 2px solid #ff7675 !important;
+            animation: shake 0.3s;
+        }
+
+        /* Sizes for inputs */
+        .w-in {
+            width: 40px;
+            height: 30px;
+            margin-right: 4px;
+        }
+
+        .n-in {
+            width: 35px;
+            height: 25px;
+            border-bottom: 2px solid white !important;
+        }
+
+        .d-in {
+            width: 35px;
+            height: 25px;
+        }
+
+        .i-in {
+            width: 60px;
+            height: 30px;
+            margin: 0 5px;
+        }
+
+        /* Animations */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+
+        @keyframes slash {
+            0% {
+                transform: scale(1) rotate(0deg);
+                filter: brightness(1);
+            }
+
+            50% {
+                transform: scale(0.9) rotate(-5deg) translateX(-10px);
+                filter: brightness(2) drop-shadow(0 0 10px red);
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                filter: brightness(1);
+            }
+        }
+
+        .slash-anim {
+            animation: slash 0.3s ease-in-out;
+        }
+
+        /* Map Paths */
+        .map-node {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid white;
+            background: #e74c3c;
+            transition: all 0.2s;
+            position: absolute;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .map-node.completed {
+            background: #3498db;
+            border-color: #ecf0f1;
+        }
+
+        .map-node.locked {
+            background: #7f8c8d;
+            border-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
+        .map-node.unlocked:not(.completed) {
+            animation: pulse-node 1.5s infinite;
+        }
+
+        @keyframes pulse-node {
+            0% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+            }
+        }
+
+        .map-node:hover:not(.locked) {
+            transform: translate(-50%, -50%) scale(1.3);
+            z-index: 20;
+        }
+
+        .node-label {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.6rem;
+            white-space: nowrap;
+            pointer-events: none;
+            border: 1px solid #555;
+        }
+
+        /* Health Bar */
+        .hp-bar-container {
+            width: 100%;
+            background: #2d3436;
+            border: 2px solid white;
+            border-radius: 10px;
+            height: 20px;
+            overflow: hidden;
+        }
+
+        .hp-bar {
+            height: 100%;
+            background: #55efc4;
+            width: 100%;
+            transition: width 0.3s, background-color 0.3s;
+        }
+
+        .hp-bar.med {
+            background: #fdcb6e;
+        }
+
+        .hp-bar.low {
+            background: #ff7675;
+        }
+
+        .pixel-box {
+            border: 4px solid #fff;
+            background: #000;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 4px 4px 0px #888;
+        }
+
+        .sprite-img {
+            image-rendering: pixelated;
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+        }
+
+        /* Tactical Board */
+        #tactics-btn {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .tactic-step {
+            opacity: 0;
+            transform: translateX(-20px);
+            animation: slideIn 0.3s forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Question Animations */
+        .slide-in-right {
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes slideInRight {
+            0% {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .q-container {
+            transition: opacity 0.3s;
+        }
+
+            .q-container:not(.active-q) {
+                opacity: 0.6;
+                pointer-events: none;
+            }
+
+            /* --- Home Button --- */
+            .home-btn-fixed {
+                position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+                background: linear-gradient(135deg, #1e3a8a, #764ba2);
+                color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+                font-size: 14px; font-weight: 700; cursor: pointer;
+                text-decoration: none; display: flex; align-items: center; gap: 8px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+                transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+                letter-spacing: 0.5px;
+            }
+            .home-btn-fixed:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55); color: #fff; }
+        </style>
+</head>
+
+<body class="h-screen w-screen overflow-hidden flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-red-600 border-b-4 border-red-800 p-4 flex justify-between items-center shadow-lg z-20">
+        <h1 class="text-xl text-white shadow-black drop-shadow-md tracking-wider">Fraction Quest</h1>
+        <div class="flex space-x-4">
+            <button onclick="switchView('map')"
+                class="bg-blue-500 hover:bg-blue-400 border-2 border-white px-4 py-2 rounded text-xs">MAP</button>
+            <button onclick="switchView('pokedex')"
+                class="bg-green-500 hover:bg-green-400 border-2 border-white px-4 py-2 rounded text-xs">POKÉDEX</button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main
+        class="flex-grow relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-gray-800">
+
+        <!-- MAP VIEW -->
+        <div id="view-map" class="absolute inset-0 p-8 overflow-y-auto hidden">
+            <h2 class="text-center text-yellow-300 mb-6 text-2xl shadow-black drop-shadow-md tracking-wider">Select a
+                Location</h2>
+            <div id="map-container"
+                class="relative w-full max-w-4xl mx-auto h-[600px] border-8 border-gray-900 rounded-xl overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.8)]">
+                <!-- Base Grass Pattern -->
+                <div class="absolute inset-0 bg-[#78C850]"
+                    style="background-image: linear-gradient(45deg, #68A048 25%, transparent 25%, transparent 75%, #68A048 75%, #68A048), linear-gradient(45deg, #68A048 25%, transparent 25%, transparent 75%, #68A048 75%, #68A048); background-size: 32px 32px; background-position: 0 0, 16px 16px;">
+                </div>
+
+                <!-- Terrains -->
+                <div
+                    class="absolute top-[30%] left-[-10%] w-[40%] h-[40%] bg-[#208030] rounded-full opacity-90 border-4 border-[#186020]">
+                </div> <!-- Forest -->
+                <div
+                    class="absolute top-[-20%] left-[20%] w-[50%] h-[50%] bg-[#B8A038] rounded-full opacity-90 border-4 border-[#8B782A]">
+                </div> <!-- Mountain -->
+                <div
+                    class="absolute top-[-10%] right-[-10%] w-[40%] h-[60%] bg-[#3890E8] rounded-full opacity-90 border-4 border-[#2A6Cae]">
+                </div> <!-- Water -->
+                <div
+                    class="absolute top-[50%] left-[35%] w-[30%] h-[30%] bg-[#E0C068] rounded-full opacity-90 border-4 border-[#A8904E]">
+                </div> <!-- Elite Island -->
+
+                <!-- SVG Paths -->
+                <svg id="map-paths" class="absolute inset-0 w-full h-full pointer-events-none drop-shadow-md"></svg>
+
+                <!-- Nodes -->
+                <div id="map-nodes" class="absolute inset-0"></div>
+            </div>
+        </div>
+
+        <!-- BATTLE VIEW -->
+        <div id="view-battle" class="absolute inset-0 flex flex-col hidden">
+            <!-- Top: Encounter Info & Timer -->
+            <div class="bg-gray-900 border-b-4 border-gray-700 p-4 flex flex-col items-center flex-shrink-0">
+                <div class="w-full max-w-2xl flex justify-between items-end mb-2">
+                    <div class="text-sm text-yellow-300" id="battle-loc-name">Route 1</div>
+                    <div class="text-sm flex items-center">
+                        <span class="mr-2">TIME:</span>
+                        <span id="timer-text" class="text-xl">05:00</span>
+                    </div>
+                </div>
+                <!-- Timer Bar -->
+                <div class="w-full max-w-2xl bg-gray-700 h-4 rounded border border-gray-500 mb-4">
+                    <div id="timer-bar" class="h-full bg-blue-400 rounded w-full transition-all duration-1000 linear">
+                    </div>
+                </div>
+
+                <!-- Pokemon Stage -->
+                <div class="flex justify-between items-center w-full max-w-2xl pixel-box bg-white text-black p-4">
+                    <div class="flex-1 pr-4">
+                        <h3 class="text-xl uppercase font-bold mb-2" id="poke-name">RAYQUAZA</h3>
+                        <div class="text-xs mb-1 font-bold">HP</div>
+                        <div class="hp-bar-container">
+                            <div id="poke-hp" class="hp-bar"></div>
+                        </div>
+                    </div>
+                    <img id="poke-sprite" src="" class="sprite-img" alt="Pokemon">
+                </div>
+            </div>
+
+            <!-- Bottom: Questions & Controls -->
+            <div class="flex-grow overflow-y-auto p-4 flex flex-col items-center">
+                <div id="questions-container" class="w-full max-w-3xl space-y-6 pb-20">
+                    <!-- Questions injected here -->
+                </div>
+            </div>
+
+            <!-- Attack Bar Fixed Bottom -->
+            <div class="absolute bottom-0 w-full bg-gray-900 border-t-4 border-gray-700 p-4 flex justify-center">
+                <button onclick="attack()"
+                    class="bg-red-500 hover:bg-red-400 text-white border-4 border-red-200 px-8 py-4 text-xl rounded shadow-[0_0_15px_rgba(255,0,0,0.5)] active:scale-95 transition-transform">
+                    ⚔️ ATTACK! ⚔️
+                </button>
+            </div>
+
+            <!-- Tactical Board Button (Floating Bottom Right) -->
+            <div id="tactics-btn"
+                class="fixed bottom-24 right-8 z-40 cursor-pointer hover:scale-110 transition-transform"
+                onclick="openTacticsBoard()">
+                <div
+                    class="bg-yellow-400 border-4 border-white text-black rounded-full w-16 h-16 flex items-center justify-center shadow-[0_0_15px_rgba(255,255,0,0.5)]">
+                    <span class="text-3xl">📋</span>
+                </div>
+                <div
+                    class="absolute -top-2 -left-4 bg-red-500 text-white text-[10px] px-2 py-1 rounded border border-white pulse-node">
+                    TACTICS!</div>
+            </div>
+        </div>
+
+        <!-- POKEDEX VIEW -->
+        <div id="view-pokedex" class="absolute inset-0 p-8 overflow-y-auto hidden">
+            <div class="max-w-4xl mx-auto pixel-box bg-red-600/90 min-h-[500px]">
+                <h2 class="text-center text-white mb-8 text-2xl border-b-4 border-white pb-4">Pokédex Collection</h2>
+                <div id="pokedex-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <!-- Caught Pokemon injected here -->
+                </div>
+                <p id="pokedex-empty" class="text-center text-white mt-10">No Pokémon caught yet. Go explore the map!
+                </p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal (Alerts/Fleeing) -->
+    <div id="modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center hidden">
+        <div class="pixel-box bg-blue-900 text-white max-w-lg w-full text-center flex flex-col items-center">
+            <img id="modal-img" src="" class="w-32 h-32 object-contain mb-4 pixelated hidden">
+            <p id="modal-text" class="text-lg leading-loose mb-6">Text</p>
+            <button id="modal-btn"
+                class="bg-yellow-400 text-black px-6 py-3 border-2 border-white hover:bg-yellow-300">Continue</button>
+        </div>
+    </div>
+
+    <!-- TACTICAL BOARD MODAL -->
+    <div id="tactics-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
+        <div
+            class="pixel-box bg-[#1e272e] border-[#0be881] text-white max-w-2xl w-full max-h-[90vh] flex flex-col relative shadow-[0_0_30px_rgba(11,232,129,0.3)]">
+            <button onclick="closeTactics()"
+                class="absolute top-2 right-2 text-red-500 text-xl font-bold hover:text-red-400">X</button>
+            <h2 class="text-[#0be881] text-center mb-4 text-xl border-b-2 border-[#0be881] pb-2">📋 COACH'S BOARD</h2>
+            <div id="tactics-q-text"
+                class="mb-4 text-yellow-300 bg-black/50 p-3 rounded text-sm leading-loose border border-gray-600"></div>
+            <div id="tactics-steps-container" class="space-y-4 overflow-y-auto flex-grow pr-2 mb-4">
+                <!-- Steps injected here -->
+            </div>
+            <div class="mt-2 flex justify-center border-t-2 border-gray-700 pt-4">
+                <button onclick="checkTacticsStep()"
+                    class="bg-[#0be881] text-black px-6 py-3 border-2 border-white hover:bg-[#05c46b] active:scale-95 transition-transform font-bold w-full">CHECK
+                    STEP</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- 1. AUDIO SYNTHESIZER (NO EXTERNAL ASSETS NEEDED) --- */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playTone(freq, type, duration, vol = 0.1) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+        function sndAttack() {
+            playTone(150, 'sawtooth', 0.1, 0.2);
+            setTimeout(() => playTone(100, 'square', 0.2, 0.2), 50);
+        }
+        function sndCorrect() {
+            playTone(400, 'sine', 0.1);
+            setTimeout(() => playTone(600, 'sine', 0.15), 100);
+        }
+        function sndWrong() {
+            playTone(200, 'sawtooth', 0.3);
+        }
+        function sndCatch() {
+            [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'square', 0.2), i * 150));
+        }
+
+        /* --- 2. GAME DATA (All 90 Questions Encoded) --- */
+        // Syntax: {num/den} = static fraction | [M:w n/d] = mixed input | [F:n/d] = frac input | [W:ans] = whole input | [I:ans] = standard input
+        const MAP_DATA = [
+            {
+                id: 0, name: "Route 1 Basics", pos: { x: 15, y: 80 },
+                pokemon: ["ho-oh", "skarmory", "pidgey"], timeLimit: [300, 300, -1], // 5 mins, 5 mins, infinite
+                questions: [
+                    "1. 3 + {1/2} = [M:3 1/2]",
+                    "2. 6 + {2/3} = [M:6 2/3]",
+                    "3. 5 + {1/4} = [M:5 1/4]",
+                    "4. 9 + {1/12} = [M:9 1/12]",
+                    "5. 7 + {5/7} = [M:7 5/7]",
+                    "6. 8 + {2/5} = [M:8 2/5]",
+                    "7. {5/8} + 4 = [M:4 5/8]",
+                    "8. {4/9} + 1 = [M:1 4/9]",
+                    "9. {3/5} + 2 = [M:2 3/5]",
+                    "10. {1/6} + 8 = [M:8 1/6]",
+                    "11. {9/11} + 3 = [M:3 9/11]",
+                    "12. [W:3] wholes and [W:1] fifths = 3 {1/5}",
+                    "13. [W:4] wholes and [W:2] sevenths = 4 {2/7}",
+                    "14. [W:2] wholes and [W:5] eighths = 2 {5/8}",
+                    "15. [W:5] wholes and [W:5] sixths = 5 {5/6}"
+                ]
+            },
+            {
+                id: 1, name: "Number Line Forest", pos: { x: 15, y: 50 },
+                pokemon: ["celebi", "scyther", "caterpie"], timeLimit: [300, 300, -1],
+                questions: [
+                    "16. Line(Halves): 1, [M:1 1/2], 2, [M:2 1/2], 3",
+                    "17. Line(Thirds): 2, [M:2 1/3], [M:2 2/3], 3",
+                    "18. Line(Quarters): 6, [M:6 1/4], [M:6 2/4], [M:6 3/4], 7",
+                    "28. Line: 0, {1/4}, {2/4}, {3/4}, 1, {5/4}, [F:6/4], [F:7/4], 2",
+                    "29. Line: 0, {1/7}, {2/7}, [F:3/7], {4/7}, [F:5/7], {6/7}, 1, [F:8/7]",
+                    "30. Line: 0, {1/5}, {2/5}, [F:3/5], {4/5}, 1, {6/5}, [F:7/5], {8/5}"
+                ]
+            },
+            {
+                id: 2, name: "Conversion Cave", pos: { x: 40, y: 20 },
+                pokemon: ["lugia", "onix", "zubat"], timeLimit: [900, 600, -1], // 15 mins for 29 questions
+                questions: [
+                    "19. 2 = [F:6/3]", "20. 3 {1/3} = [F:10/3]", "21. 5 {7/11} = [F:62/11]", "22. 1 {9/12} = [F:21/12]", "23. 8 {5/7} = [F:61/7]",
+                    "24. There are [I:9] halves in 4 {1/2}.", "25. There are [I:5] thirds in 1 {2/3}.", "26. There are [I:73] elevenths in 6 {7/11}.", "27. There are [I:111] twelfths in 9 {3/12}.",
+                    "31. 1 {1/2} = [F:3/2]", "32. 1 {3/10} = [F:13/10]", "33. 2 {3/4} = [F:11/4]", "34. 4 {3/5} = [F:23/5]", "35. 7 {1/6} = [F:43/6]",
+                    "36. 8 {2/3} = [F:26/3]", "37. 3 {5/8} = [F:29/8]", "38. 3 {7/12} = [F:43/12]", "39. 8 {4/9} = [F:40/9]", "40. 2 {4/7} = [F:18/7]",
+                    "41. {11/2} = [M:5 1/2]", "42. {9/4} = [M:2 1/4]", "43. {5/5} = [W:1]", "44. {16/2} = [W:8]", "45. {37/5} = [M:7 2/5]",
+                    "46. {12/3} = [W:4]", "47. {15/8} = [M:1 7/8]", "48. {17/6} = [M:2 5/6]", "49. {23/6} = [M:3 5/6]", "50. {38/9} = [M:4 2/9]"
+                ]
+            },
+            {
+                id: 3, name: "Addition Lake Gym", pos: { x: 75, y: 25 },
+                pokemon: ["kyogre", "lapras", "magikarp"], timeLimit: [480, 480, -1],
+                questions: [
+                    "51. {2/5} + {4/5} = [M:1 1/5]",
+                    "52. {2/3} + {4/9} = [M:1 1/9]",
+                    "53. {3/7} + {13/14} = [M:1 5/14]",
+                    "54. {5/8} + {3/4} = [M:1 3/8]",
+                    "55. {7/12} + {2/4} + {7/12} = [M:1 2/3]",
+                    "56. {1/6} + {9/12} = [F:11/12]",
+                    "57. 2 + {3/10} + {9/10} = [M:3 1/5]",
+                    "58. 8 + {1/4} + {1/3} + {3/4} = [M:9 1/3]" // Note: Condensed to fit logic
+                ]
+            },
+            {
+                id: 4, name: "Subtraction Safari", pos: { x: 85, y: 60 },
+                pokemon: ["suicune", "vaporeon", "marill"], timeLimit: [480, 480, -1],
+                questions: [
+                    "59. 6 - {2/8} = [M:5 3/4]",
+                    "60. 10 - {5/12} = [M:9 7/12]",
+                    "61. {8/9} - {2/9} = [F:2/3]",
+                    "62. {9/10} - {1/2} = [F:2/5]",
+                    "63. 2 {6/9} - {1/3} = [M:2 1/3]",
+                    "64. 4 {9/12} - {2/4} = [M:4 1/4]",
+                    "65. 5 {7/12} - {1/4} = [M:5 1/3]",
+                    "66. 7 - {9/10} - {2/5} = [M:5 7/10]"
+                ]
+            },
+            {
+                id: 5, name: "Multiplication Meadow", pos: { x: 65, y: 85 },
+                pokemon: ["groudon", "tyranitar", "rhyhorn"], timeLimit: [600, 600, -1],
+                questions: [
+                    "67. {2/3} of 21 = [I:14]",
+                    "68. {1/8} of 72 = [I:9]",
+                    "69. {5/9} of 81 = [I:45]",
+                    "70. {4/5} of 65 = [I:52]",
+                    "71. {9/10} of 20 = [I:18]",
+                    "72. {5/6} × 48 = [I:40]",
+                    "73. {3/7} × 63 = [I:27]",
+                    "74. {3/4} × 52 = [I:39]",
+                    "75. {4/9} × 27 = [I:12]",
+                    "76. {1/6} × 84 = [I:14]"
+                ]
+            },
+            {
+                id: 6, name: "Elite Word Problem League", pos: { x: 45, y: 60 },
+                pokemon: ["mewtwo", "alakazam", "abra"], timeLimit: [1200, 900, -1],
+                questions: [
+                    "77. Judi baked a cake. She gave {3/8} to her neighbor. What fraction left? [F:5/8]",
+                    "78. Empty can = {1/6} lb. With sand = {7/12} lb. Mass of sand? [F:5/12] lb",
+                    "79. Box A = {5/6}kg, Box B = 1 {1/10}kg, Box C = {9/10}kg. Total mass? [M:2 5/6] kg",
+                    "80. Start ribbon = {11/12}m. Left = {1/4}m. Cut and gave = [F:2/3] m",
+                    "81. Maggie={5/9}L, Joyce={1/3}L. Total=1 {2/3}L. Lina = [F:7/9] L",
+                    "82. Eduardo={6/10}L. Viktor drank {1/2}L LESS than Eduardo. Total both drink? [F:7/10] L",
+                    "83. Bought 5L. Used {1/4}L Mon, {1/8}L Tue. Left = [M:4 5/8] L",
+                    "84. Total=12 {7/8}km. Ran={3/4}km, Swam={3/8}km. Biked = [M:11 3/4] km",
+                    "85. 16 red, 24 green, 20 blue. Fraction blue = [F:1/3]",
+                    "86. Total 18 miles. Traveled {1/6}. Further to travel = [I:15] miles",
+                    "87. 32 chocolates. Left {5/8}. How many eaten? [I:12]",
+                    "88(a). 28 chickens, 15 ducks, 7 turkeys (Total 50). Sold {4/5}. Total sold? [I:40]",
+                    "88(b). If sold 12 chickens, fraction of chickens left? [F:4/7]",
+                    "89. 568 people. {5/8} women, {1/4} men. How many children? [I:71]",
+                    "90. Gave {1/3} to brother. $60 left. Received = $[I:90]"
+                ]
+            }
+        ];
+
+        /* --- 3. STATE MANAGEMENT --- */
+        let state = {
+            view: 'map',
+            unlocked: [0],
+            completed: [],
+            pokedex: [],
+            currentStage: null,
+            tier: 0,
+            timer: 0,
+            interval: null,
+            currentStageQIdx: 0, // Tracks which question is currently active
+            // Tactics State
+            tacticsSteps: [],
+            currentTacticStep: 0,
+            targetQuestionIdx: -1,
+            targetQuestionRaw: ""
+        };
+
+        /* --- TACTICS ENGINE RULES --- */
+        const TACTICS_RULES = [
+            {
+                // Rule: Mixed to Improper (e.g., 1 {1/2} = [F:3/2])
+                regex: /(\d+)\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Step 1: Multiply the whole number by the denominator, then add the numerator.<br><br>` +
+                    `<span class="math-text">` +
+                    `<span class="frac-block"><span class="frac-num">( [I:${m[1]}] × [I:${m[3]}] ) + [I:${m[2]}]</span><span class="frac-den">[I:${m[3]}]</span></span>` +
+                    `</span>`,
+                    `Step 2: Calculate the top part to get the final improper fraction.<br><br>` +
+                    `<span class="math-text">[F:${m[4]}/${m[5]}]</span>`
+                ]
+            },
+            {
+                // Rule: Improper to Mixed (e.g., {11/2} = [M:5 1/2])
+                regex: /\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Step 1: Divide the numerator (top) by the denominator (bottom).<br><br>` +
+                    `<span class="math-text">[I:${m[1]}] ÷ [I:${m[2]}] = [I:${m[3]}] R [I:${m[4]}]</span>`,
+                    `Step 2: Write as a mixed number.<br>The quotient is the whole number. The remainder is the new numerator.<br><br>` +
+                    `<span class="math-text">[M:${m[3]} ${m[4]}/${m[5]}]</span>`
+                ]
+            },
+            {
+                // Rule: Add fractions (e.g., {2/5} + {4/5} = [M:1 1/5])
+                regex: /\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Step 1: The denominators are the same, so add the numerators.<br><br>` +
+                    `<span class="math-text">` +
+                    `<span class="frac-block"><span class="frac-num">[I:${m[1]}] + [I:${m[3]}]</span><span class="frac-den">[I:${m[2]}]</span></span>` +
+                    ` = [F:${parseInt(m[1]) + parseInt(m[3])}/${m[2]}]` +
+                    `</span>`,
+                    `Step 2: Convert the improper fraction to a mixed number (and simplify if needed).<br><br>` +
+                    `<span class="math-text">${parseInt(m[1]) + parseInt(m[3])} ÷ ${m[2]} = [I:${m[5]}] R [I:${m[6]}]<br><br>➔ [M:${m[5]} ${m[6]}/${m[7]}]</span>`
+                ]
+            },
+            {
+                // Rule: Whole - Fraction (e.g., 6 - {2/8} = [M:5 3/4])
+                regex: /(\d+)\s*-\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Step 1: Borrow 1 from the whole number to make a fraction.<br><br>` +
+                    `<span class="math-text">${m[1]} = [I:${parseInt(m[1]) - 1}] <span class="frac-block"><span class="frac-num">[I:${m[3]}]</span><span class="frac-den">[I:${m[3]}]</span></span></span>`,
+                    `Step 2: Subtract the fraction from your borrowed fraction.<br><br>` +
+                    `<span class="math-text">` +
+                    `[M:${parseInt(m[1]) - 1} ${m[3]}/${m[3]}] - {${m[2]}/${m[3]}} = [M:${parseInt(m[1]) - 1} ${parseInt(m[3]) - parseInt(m[2])}/${m[3]}]` +
+                    `</span>`,
+                    `Step 3: Simplify the fraction to get the final answer.<br><br>` +
+                    `<span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                ]
+            },
+            {
+                // Rule: Fraction of set (e.g., {2/3} of 21 = [I:14])
+                regex: /\{(\d+)\/(\d+)\}\s*(?:of|×)\s*(\d+)\s*=\s*\[I:(\d+)\]/,
+                handler: (m) => [
+                    `Step 1: Divide the whole number by the denominator.<br><br>` +
+                    `<span class="math-text">[I:${m[3]}] ÷ [I:${m[2]}] = [I:${parseInt(m[3]) / parseInt(m[2])}]</span>`,
+                    `Step 2: Multiply that answer by the numerator.<br><br>` +
+                    `<span class="math-text">[I:${parseInt(m[3]) / parseInt(m[2])}] × [I:${m[1]}] = [I:${m[4]}]</span>`
+                ]
+            },
+            {
+                // Rule: Whole + Fraction (e.g., 3 + {1/2} = [M:3 1/2])
+                regex: /(\d+)\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Written Method: Just combine the whole number and the fraction!<br><br>` +
+                    `<span class="math-text">[I:${m[1]}] + [F:${m[2]}/${m[3]}] = [M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                ]
+            },
+            {
+                // Rule: Fraction + Whole (e.g., {5/8} + 4 = [M:4 5/8])
+                regex: /\{(\d+)\/(\d+)\}\s*\+\s*(\d+)\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Written Method: Just combine the whole number and the fraction!<br><br>` +
+                    `<span class="math-text">[F:${m[1]}/${m[2]}] + [I:${m[3]}] = [M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                ]
+            },
+            {
+                // Fallback for word problems & uncaught formats
+                regex: /(.*)/,
+                handler: (m, raw) => {
+                    let matches = [...raw.matchAll(/\[([MFWI]):(.*?)\]/g)];
+                    let stepText = matches.map((match, i) => `Part ${i + 1}: [${match[1]}:${match[2]}]`).join('<br><br>');
+                    return [
+                        `Step 1: Read the problem carefully and find the key numbers.`,
+                        `Step 2: Decide if you need to Add, Subtract, or Multiply.`,
+                        `Step 3: Solve it using the written method!<br><br><span class="math-text">${stepText}</span>`
+                    ];
+                }
+            }
+        ];
+
+        /* --- 4. GAME ENGINE LOGIC --- */
+
+        function switchView(viewName) {
+            document.getElementById('view-map').classList.add('hidden');
+            document.getElementById('view-battle').classList.add('hidden');
+            document.getElementById('view-pokedex').classList.add('hidden');
+            document.getElementById(`view-${viewName}`).classList.remove('hidden');
+            state.view = viewName;
+
+            if (viewName === 'map') renderMap();
+            if (viewName === 'pokedex') renderPokedex();
+            
+            if (window.ProgressTracker) {
+                window.ProgressTracker.save({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
+            }
+        }
+
+        function getSpriteUrl(name) {
+            return `https://img.pokemondb.net/sprites/black-white/anim/normal/${name}.gif`;
+        }
+        function getStaticSpriteUrl(name) {
+            // fallback if gif fails
+            return `https://img.pokemondb.net/sprites/black-white/normal/${name}.png`;
+        }
+
+        /* MAP RENDERING */
+        function renderMap() {
+            const nodesContainer = document.getElementById('map-nodes');
+            const pathsContainer = document.getElementById('map-paths');
+            nodesContainer.innerHTML = '';
+            pathsContainer.innerHTML = '';
+
+            MAP_DATA.forEach((stage, idx) => {
+                const isCompleted = state.completed.includes(idx);
+                const isUnlocked = state.unlocked.includes(idx) || isCompleted;
+
+                const node = document.createElement('div');
+                node.className = `map-node text-xs font-bold ${isCompleted ? 'completed' : isUnlocked ? 'unlocked' : 'locked'}`;
+                node.style.left = `${stage.pos.x}%`;
+                node.style.top = `${stage.pos.y}%`;
+
+                // Label
+                const label = document.createElement('div');
+                label.className = "node-label";
+                label.innerText = `${idx + 1}. ${stage.name}`;
+                node.appendChild(label);
+
+                if (isUnlocked) {
+                    node.onclick = () => initBattle(idx);
+                }
+                nodesContainer.appendChild(node);
+
+                // Draw lines to next node using SVG
+                if (idx < MAP_DATA.length - 1) {
+                    const next = MAP_DATA[idx + 1];
+                    const nextUnlocked = state.unlocked.includes(idx + 1) || state.completed.includes(idx + 1);
+
+                    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    line.setAttribute("x1", `${stage.pos.x}%`);
+                    line.setAttribute("y1", `${stage.pos.y}%`);
+                    line.setAttribute("x2", `${next.pos.x}%`);
+                    line.setAttribute("y2", `${next.pos.y}%`);
+                    line.setAttribute("stroke", nextUnlocked ? "#ffeaa7" : "#7f8c8d");
+                    line.setAttribute("stroke-width", "4");
+                    line.setAttribute("stroke-dasharray", "8, 8");
+                    pathsContainer.appendChild(line);
+                }
+            });
+        }
+
+        /* PARSER ENGINE */
+        function parseQuestionText(text) {
+            let html = text;
+
+            // 1. Static fractions: {1/2}
+            html = html.replace(/\{(\d+)\/(\d+)\}/g, '<span class="frac-block"><span class="frac-num">$1</span><span class="frac-den">$2</span></span>');
+
+            // 2. Input Mixed: [M:w n/d]
+            html = html.replace(/\[M:(\d+)\s+(\d+)\/(\d+)\]/g, (match, w, n, d) => {
+                return `<span class="math-text">
+                    <input type="number" class="q-input w-in" data-ans="${w}">
+                    <span class="frac-block">
+                        <input type="number" class="q-input n-in" data-ans="${n}">
+                        <input type="number" class="q-input d-in" data-ans="${d}">
+                    </span>
+                </span>`;
+            });
+
+            // 3. Input Fraction: [F:n/d]
+            html = html.replace(/\[F:(\d+)\/(\d+)\]/g, (match, n, d) => {
+                return `<span class="math-text frac-block">
+                    <input type="number" class="q-input n-in" data-ans="${n}">
+                    <input type="number" class="q-input d-in" data-ans="${d}">
+                </span>`;
+            });
+
+            // 4. Input Whole: [W:ans]
+            html = html.replace(/\[W:(\d+)\]/g, (match, ans) => {
+                return `<input type="number" class="q-input w-in" data-ans="${ans}">`;
+            });
+
+            // 5. Input Standard: [I:ans]
+            html = html.replace(/\[I:(\d+)\]/g, (match, ans) => {
+                return `<input type="number" class="q-input i-in" data-ans="${ans}">`;
+            });
+
+            return `<div class="math-text text-sm leading-loose w-full">${html}</div>`;
+        }
+
+        /* BATTLE LOGIC */
+        function initBattle(stageIdx) {
+            state.currentStage = MAP_DATA[stageIdx];
+            state.tier = 0;
+            state.currentStageQIdx = 0; // Reset question index for new battle
+
+            startEncounterModal(() => {
+                switchView('battle');
+                setupBattleUI();
+            });
+        }
+
+        function setupBattleUI() {
+            const stage = state.currentStage;
+            const pokeName = stage.pokemon[state.tier];
+
+            document.getElementById('battle-loc-name').innerText = stage.name;
+            document.getElementById('poke-name').innerText = pokeName;
+
+            const sprite = document.getElementById('poke-sprite');
+            sprite.src = getSpriteUrl(pokeName);
+            sprite.onerror = () => { sprite.src = getStaticSpriteUrl(pokeName); };
+
+            updateHPBar();
+
+            // Clear questions and render ONLY the first one
+            const qContainer = document.getElementById('questions-container');
+            qContainer.innerHTML = '';
+
+            renderNextQuestion();
+
+            // Start Timer
+            startTimer();
+        }
+
+        function renderNextQuestion() {
+            const stage = state.currentStage;
+            if (state.currentStageQIdx >= stage.questions.length) return;
+
+            const qText = stage.questions[state.currentStageQIdx];
+            const qContainer = document.getElementById('questions-container');
+
+            const qDiv = document.createElement('div');
+            // Add slide-in animation and active-q marker
+            qDiv.className = "pixel-box bg-gray-800 p-4 w-full q-container active-q slide-in-right mb-6";
+            qDiv.setAttribute('data-idx', state.currentStageQIdx);
+            qDiv.setAttribute('data-raw', qText);
+            qDiv.innerHTML = parseQuestionText(qText);
+
+            qContainer.appendChild(qDiv);
+
+            // Auto-scroll the battle area down so the new question is visible
+            const scrollArea = qContainer.parentElement;
+            setTimeout(() => {
+                scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
+            }, 50);
+        }
+
+        function updateHPBar() {
+            if (!state.currentStage) return;
+            const total = state.currentStage.questions.length;
+            const hpPercent = 100 - ((state.currentStageQIdx / total) * 100);
+
+            const hpBar = document.getElementById('poke-hp');
+            hpBar.style.width = `${hpPercent}%`;
+
+            hpBar.className = 'hp-bar';
+            if (hpPercent <= 50) hpBar.classList.add('med');
+            if (hpPercent <= 20) hpBar.classList.add('low');
+        }
+
+        function attack() {
+            sndAttack();
+            let allCorrect = true;
+            let checkCount = 0;
+
+            // ONLY check the currently active question
+            const activeQ = document.querySelector('.active-q');
+            if (!activeQ) return;
+
+            const inputs = activeQ.querySelectorAll('.q-input');
+
+            inputs.forEach(input => {
+                checkCount++;
+                const ans = input.getAttribute('data-ans');
+                const val = input.value.trim();
+
+                if (val === ans) {
+                    input.classList.add('correct');
+                    input.classList.remove('wrong');
+                } else if (val !== '') {
+                    input.classList.add('wrong');
+                    allCorrect = false;
+                    setTimeout(() => input.classList.remove('wrong'), 400);
+                } else {
+                    allCorrect = false;
+                }
+            });
+
+            if (allCorrect) {
+                sndCorrect();
+
+                // Lock the current question so it grays out slightly
+                activeQ.classList.remove('active-q');
+
+                const sprite = document.getElementById('poke-sprite');
+                sprite.classList.add('slash-anim');
+                setTimeout(() => sprite.classList.remove('slash-anim'), 300);
+
+                // Progress to next question
+                state.currentStageQIdx++;
+                updateHPBar();
+
+                // Check Win Condition
+                if (state.currentStageQIdx >= state.currentStage.questions.length) {
+                    clearInterval(state.interval);
+                    setTimeout(catchPokemon, 600);
+                } else {
+                    // Slight delay before throwing the next question at them
+                    setTimeout(renderNextQuestion, 400);
+                }
+            } else if (checkCount > 0) {
+                sndWrong();
+            }
+        }
+
+        /* TIMER LOGIC */
+        function startTimer() {
+            clearInterval(state.interval);
+            const timeLimit = state.currentStage.timeLimit[state.tier];
+
+            if (timeLimit === -1) {
+                document.getElementById('timer-text').innerText = "∞";
+                document.getElementById('timer-bar').style.width = "100%";
+                return;
+            }
+
+            state.timer = timeLimit;
+            updateTimerUI(timeLimit);
+
+            state.interval = setInterval(() => {
+                state.timer--;
+                updateTimerUI(timeLimit);
+
+                if (state.timer <= 0) {
+                    clearInterval(state.interval);
+                    handleFlee();
+                }
+            }, 1000);
+        }
+
+        function updateTimerUI(maxTime) {
+            if (maxTime === -1) return;
+            const min = Math.floor(state.timer / 60).toString().padStart(2, '0');
+            const sec = (state.timer % 60).toString().padStart(2, '0');
+            document.getElementById('timer-text').innerText = `${min}:${sec}`;
+
+            const pct = (state.timer / maxTime) * 100;
+            document.getElementById('timer-bar').style.width = `${pct}%`;
+            if (pct < 25) document.getElementById('timer-bar').style.backgroundColor = '#ff7675';
+            else document.getElementById('timer-bar').style.backgroundColor = '#74b9ff';
+        }
+
+        function handleFlee() {
+            sndWrong();
+            closeTactics(); // Close board if timer runs out!
+            const oldPoke = state.currentStage.pokemon[state.tier];
+            state.tier++;
+            const newPoke = state.currentStage.pokemon[state.tier];
+
+            showModal(
+                getSpriteUrl(oldPoke),
+                `Oh no! You took too long and ${oldPoke.toUpperCase()} fled!<br><br>But wait... a wild ${newPoke.toUpperCase()} appeared!`,
+                "Continue Battle",
+                () => {
+                    setupBattleUI(); // re-renders with new pokemon, keeps input states because correct ones are locked, wait...
+                    // ACTUALLY, to keep inputs, we should just update the sprite and timer.
+                    document.getElementById('poke-name').innerText = newPoke;
+                    const sprite = document.getElementById('poke-sprite');
+                    sprite.src = getSpriteUrl(newPoke);
+                    startTimer();
+                }
+            );
+        }
+
+        /* MODALS & PROGRESSION */
+        function startEncounterModal(callback) {
+            const poke = state.currentStage.pokemon[0];
+            showModal(
+                getSpriteUrl(poke),
+                `A wild ${poke.toUpperCase()} appeared!<br>Solve the fractions quickly before it runs away!`,
+                "BATTLE!",
+                callback
+            );
+        }
+
+        function catchPokemon() {
+            sndCatch();
+            const poke = state.currentStage.pokemon[state.tier];
+            if (!state.pokedex.includes(poke)) {
+                state.pokedex.push(poke);
+            }
+
+            // Progression
+            const stageIdx = state.currentStage.id;
+            if (!state.completed.includes(stageIdx)) state.completed.push(stageIdx);
+            if (stageIdx + 1 < MAP_DATA.length && !state.unlocked.includes(stageIdx + 1)) {
+                state.unlocked.push(stageIdx + 1);
+            }
+
+            if (window.ProgressTracker) {
+                window.ProgressTracker.save({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
+            }
+
+            showModal(
+                getSpriteUrl(poke),
+                `Gotcha! ${poke.toUpperCase()} was caught!<br>Map Updated!`,
+                "Return to Map",
+                () => switchView('map')
+            );
+        }
+
+        function showModal(imgSrc, text, btnText, callback) {
+            const modal = document.getElementById('modal');
+            const img = document.getElementById('modal-img');
+            const btn = document.getElementById('modal-btn');
+
+            if (imgSrc) {
+                img.src = imgSrc;
+                img.classList.remove('hidden');
+            } else {
+                img.classList.add('hidden');
+            }
+
+            document.getElementById('modal-text').innerHTML = text;
+            btn.innerText = btnText;
+
+            btn.onclick = () => {
+                modal.classList.add('hidden');
+                if (callback) callback();
+            };
+
+            modal.classList.remove('hidden');
+        }
+
+        /* --- TACTICAL BOARD LOGIC --- */
+        function openTacticsBoard() {
+            // Find the first question container that has unsolved inputs
+            const containers = document.querySelectorAll('.q-container');
+            let targetDiv = null;
+
+            for (let div of containers) {
+                if (div.querySelector('.q-input:not(.correct)')) {
+                    targetDiv = div;
+                    break;
+                }
+            }
+
+            if (!targetDiv) {
+                sndWrong();
+                return; // Nothing to solve!
+            }
+
+            state.targetQuestionIdx = targetDiv.getAttribute('data-idx');
+            state.targetQuestionRaw = targetDiv.getAttribute('data-raw');
+
+            // Clean question for header display (removes input brackets)
+            let cleanQ = state.targetQuestionRaw.replace(/\[[MFWI]:[^\]]+\]/g, '<span class="text-white border-b-2 border-dashed border-white inline-block w-8"></span>');
+            document.getElementById('tactics-q-text').innerHTML = parseQuestionText(cleanQ);
+
+            // Generate Steps using regex engine
+            state.tacticsSteps = [];
+            for (let rule of TACTICS_RULES) {
+                const match = state.targetQuestionRaw.match(rule.regex);
+                if (match) {
+                    state.tacticsSteps = rule.handler(match, state.targetQuestionRaw);
+                    break;
+                }
+            }
+
+            state.currentTacticStep = 0;
+            renderTacticsSteps();
+            document.getElementById('tactics-modal').classList.remove('hidden');
+            sndAttack();
+        }
+
+        function renderTacticsSteps() {
+            const container = document.getElementById('tactics-steps-container');
+            container.innerHTML = '';
+
+            for (let i = 0; i <= state.currentTacticStep; i++) {
+                if (i >= state.tacticsSteps.length) break;
+
+                const stepDiv = document.createElement('div');
+                stepDiv.className = "tactic-step bg-gray-800 p-4 border-l-4 border-[#0be881]";
+
+                // Parse the math inputs inside the step
+                stepDiv.innerHTML = parseQuestionText(state.tacticsSteps[i]);
+
+                // If it's an older step, disable it and mark correct
+                if (i < state.currentTacticStep) {
+                    const inputs = stepDiv.querySelectorAll('.q-input');
+                    inputs.forEach(inp => {
+                        inp.value = inp.getAttribute('data-ans');
+                        inp.classList.add('correct');
+                    });
+                }
+
+                container.appendChild(stepDiv);
+            }
+
+            // Auto scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function checkTacticsStep() {
+            const container = document.getElementById('tactics-steps-container');
+            const currentStepDiv = container.lastElementChild;
+            if (!currentStepDiv) return;
+
+            const inputs = currentStepDiv.querySelectorAll('.q-input');
+            let allCorrect = true;
+
+            inputs.forEach(input => {
+                if (input.value.trim() !== input.getAttribute('data-ans')) {
+                    allCorrect = false;
+                    input.classList.add('wrong');
+                    setTimeout(() => input.classList.remove('wrong'), 400);
+                }
+            });
+
+            if (allCorrect) {
+                sndCorrect();
+                state.currentTacticStep++;
+
+                if (state.currentTacticStep >= state.tacticsSteps.length) {
+                    // Board Finished! Auto-fill main question
+                    setTimeout(() => finishTactics(), 500);
+                } else {
+                    renderTacticsSteps();
+                }
+            } else {
+                sndWrong();
+            }
+        }
+
+        function finishTactics() {
+            closeTactics();
+
+            // Auto-fill the active question
+            const activeQ = document.querySelector('.active-q');
+            if (activeQ) {
+                const inputs = activeQ.querySelectorAll('.q-input:not(.correct)');
+                inputs.forEach(input => {
+                    input.value = input.getAttribute('data-ans');
+                    input.classList.add('correct');
+                });
+
+                // Automatically trigger the attack so it damages the pokemon and pulls the next question
+                setTimeout(attack, 300);
+            }
+        }
+
+        function closeTactics() {
+            document.getElementById('tactics-modal').classList.add('hidden');
+        }
+
+        /* POKEDEX RENDERING */
+        function renderPokedex() {
+            const grid = document.getElementById('pokedex-grid');
+            const empty = document.getElementById('pokedex-empty');
+            grid.innerHTML = '';
+
+            if (state.pokedex.length === 0) {
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                state.pokedex.forEach(poke => {
+                    const card = document.createElement('div');
+                    card.className = "pixel-box bg-gray-800 flex flex-col items-center p-2";
+                    card.innerHTML = `
+                        <img src="${getSpriteUrl(poke)}" class="w-24 h-24 object-contain" onerror="this.src='${getStaticSpriteUrl(poke)}'">
+                        <span class="text-xs mt-2 uppercase text-yellow-300">${poke}</span>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+        }
+
+        // Initialize Map on load
+        window.onload = () => {
+            if (window.ProgressTracker) {
+                const saved = window.ProgressTracker.load();
+                if (saved) {
+                    if (saved.unlocked) state.unlocked = saved.unlocked;
+                    if (saved.completed) state.completed = saved.completed;
+                    if (saved.pokedex) state.pokedex = saved.pokedex;
+                }
+            }
+            switchView('map');
+        };
+
+    </script>
+
+    <!-- Progress Tracker -->
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SG_Y4_Math_Ch5Fractions"
+            data-module-name="Singapore Y4 Math: Fraction Quest"
+            data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter5_Fractions/index.html"></script>
+
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+</body>
+
+</html>
