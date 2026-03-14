@@ -32,12 +32,12 @@
         /* Fraction CSS Styling */
         .math-text {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 1.2rem;
+            font-size: 1.6rem;
             font-weight: bold;
             display: inline-flex;
             align-items: center;
             white-space: nowrap;
-            margin: 0 4px;
+            margin: 0 8px;
         }
 
         .frac-block {
@@ -46,17 +46,17 @@
             align-items: center;
             justify-content: center;
             vertical-align: middle;
-            margin: 0 4px;
+            margin: 0 6px;
         }
 
         .frac-num {
-            border-bottom: 2px solid white;
-            padding: 0 4px;
+            border-bottom: 3px solid white;
+            padding: 0 6px;
             line-height: 1.2;
         }
 
         .frac-den {
-            padding: 0 4px;
+            padding: 0 6px;
             line-height: 1.2;
         }
 
@@ -70,51 +70,51 @@
             background: rgba(255, 255, 255, 0.1);
             color: #ffeaa7;
             text-align: center;
-            border: 1px dashed #74b9ff;
+            border: 2px dashed #74b9ff;
             font-family: 'Press Start 2P';
-            font-size: 0.8rem;
+            font-size: 1.2rem;
             outline: none;
         }
 
         .q-input:focus {
-            border: 1px solid #ffeaa7;
+            border: 2px solid #ffeaa7;
             background: rgba(255, 255, 255, 0.2);
         }
 
         .q-input.correct {
-            border: 2px solid #55efc4 !important;
+            border: 3px solid #55efc4 !important;
             color: #55efc4 !important;
             background: rgba(85, 239, 196, 0.1) !important;
             pointer-events: none;
         }
 
         .q-input.wrong {
-            border: 2px solid #ff7675 !important;
+            border: 3px solid #ff7675 !important;
             animation: shake 0.3s;
         }
 
         /* Sizes for inputs */
         .w-in {
-            width: 40px;
-            height: 30px;
-            margin-right: 4px;
+            width: 65px;
+            height: 45px;
+            margin-right: 8px;
         }
 
         .n-in {
-            width: 35px;
-            height: 25px;
-            border-bottom: 2px solid white !important;
+            width: 60px;
+            height: 40px;
+            border-bottom: 3px solid white !important;
         }
 
         .d-in {
-            width: 35px;
-            height: 25px;
+            width: 60px;
+            height: 40px;
         }
 
         .i-in {
-            width: 60px;
-            height: 30px;
-            margin: 0 5px;
+            width: 90px;
+            height: 45px;
+            margin: 0 8px;
         }
 
         /* Animations */
@@ -160,6 +160,138 @@
         }
 
         /* Map Paths */
+        .fraction-vis-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .frac-shape {
+            display: flex;
+            border: 2px solid white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .frac-rect {
+            width: 80px;
+            height: 30px;
+        }
+
+        .frac-rect-part {
+            flex: 1;
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            height: 100%;
+        }
+
+        .frac-rect-part:last-child {
+            border-right: none;
+        }
+
+        .frac-rect-part.filled {
+            background-color: #55efc4;
+        }
+
+        .frac-circ {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid white;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .frac-circ.whole {
+            background-color: #55efc4;
+        }
+
+        .frac-circ svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .frac-slice {
+            fill: transparent;
+            stroke: #55efc4;
+            stroke-width: 25;
+            /* Half the radius */
+        }
+
+        .frac-line {
+            stroke: rgba(255, 255, 255, 0.5);
+            stroke-width: 1;
+        }
+
+        /* Number Line Vis */
+        .number-line-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 40px auto;
+            position: relative;
+        }
+
+        .nline-svg {
+            width: 100%;
+            height: 30px;
+            overflow: visible;
+        }
+
+        .nline-axis {
+            stroke: rgba(255, 255, 255, 0.8);
+            stroke-width: 3;
+        }
+
+        .nline-tick-major {
+            stroke: rgba(255, 255, 255, 0.8);
+            stroke-width: 3;
+        }
+
+        .nline-tick-minor {
+            stroke: rgba(255, 255, 255, 0.4);
+            stroke-width: 2;
+        }
+
+        .nline-labels {
+            position: relative;
+            width: 100%;
+            height: 60px;
+            /* Space for fractions/inputs */
+            margin-top: 10px;
+        }
+
+        .nline-label {
+            position: absolute;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Tweak input sizes specifically for number lines so they fit */
+        .nline-label .q-input {
+            margin: 0 !important;
+        }
+
+        .nline-label .w-in,
+        .nline-label .i-in {
+            width: 50px;
+            height: 35px;
+        }
+
+        .nline-label .frac-block {
+            margin: 0;
+        }
+
+        .nline-label .n-in,
+        .nline-label .d-in {
+            width: 40px;
+            height: 30px;
+        }
+
         .map-node {
             width: 24px;
             height: 24px;
@@ -317,24 +449,41 @@
             transition: opacity 0.3s;
         }
 
-            .q-container:not(.active-q) {
-                opacity: 0.6;
-                pointer-events: none;
-            }
+        .q-container:not(.active-q) {
+            opacity: 0.6;
+            pointer-events: none;
+        }
 
-            /* --- Home Button --- */
-            .home-btn-fixed {
-                position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-                background: linear-gradient(135deg, #1e3a8a, #764ba2);
-                color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-                font-size: 14px; font-weight: 700; cursor: pointer;
-                text-decoration: none; display: flex; align-items: center; gap: 8px;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-                transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-                letter-spacing: 0.5px;
-            }
-            .home-btn-fixed:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55); color: #fff; }
-        </style>
+        /* --- Home Button --- */
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
 </head>
 
 <body class="h-screen w-screen overflow-hidden flex flex-col">
@@ -342,17 +491,34 @@
     <!-- Header -->
     <header class="bg-red-600 border-b-4 border-red-800 p-4 flex justify-between items-center shadow-lg z-20">
         <h1 class="text-xl text-white shadow-black drop-shadow-md tracking-wider">Fraction Quest</h1>
-        <div class="flex space-x-4">
+        <div class="flex items-center space-x-4">
+            <div class="group relative">
+                <button onclick="toggleBGM()" id="bgm-btn"
+                    class="bg-purple-500 hover:bg-purple-400 border-2 border-white px-4 py-2 rounded text-xs transition-colors shadow-md">🎵
+                    BGM: OFF</button>
+                <!-- Hidden Volume Slider -->
+                <div
+                    class="absolute top-full left-1/2 -translate-x-1/2 mt-2 bg-gray-900 border-2 border-white p-2 rounded shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-[9999] flex flex-col items-center w-32">
+                    <label for="bgm-volume" class="text-[8px] text-yellow-300 mb-1 font-bold tracking-wider">VOLUME:
+                        <span id="vol-display">25%</span></label>
+                    <input type="range" id="bgm-volume" min="0" max="100" value="25"
+                        class="w-full h-2 rounded-lg accent-purple-500 cursor-pointer"
+                        oninput="changeVolume(this.value)">
+                </div>
+            </div>
             <button onclick="switchView('map')"
-                class="bg-blue-500 hover:bg-blue-400 border-2 border-white px-4 py-2 rounded text-xs">MAP</button>
+                class="bg-blue-500 hover:bg-blue-400 border-2 border-white px-4 py-2 rounded text-xs transition-colors shadow-md">MAP</button>
             <button onclick="switchView('pokedex')"
-                class="bg-green-500 hover:bg-green-400 border-2 border-white px-4 py-2 rounded text-xs">POKÉDEX</button>
+                class="bg-green-500 hover:bg-green-400 border-2 border-white px-4 py-2 rounded text-xs transition-colors shadow-md">POKÉDEX</button>
         </div>
     </header>
 
     <!-- Main Content Area -->
     <main
         class="flex-grow relative overflow-hidden bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-gray-800">
+
+        <!-- Local BGM Audio Element -->
+        <audio id="bgm-player"></audio>
 
         <!-- MAP VIEW -->
         <div id="view-map" class="absolute inset-0 p-8 overflow-y-auto hidden">
@@ -389,45 +555,65 @@
 
         <!-- BATTLE VIEW -->
         <div id="view-battle" class="absolute inset-0 flex flex-col hidden">
-            <!-- Top: Encounter Info & Timer -->
-            <div class="bg-gray-900 border-b-4 border-gray-700 p-4 flex flex-col items-center flex-shrink-0">
-                <div class="w-full max-w-2xl flex justify-between items-end mb-2">
-                    <div class="text-sm text-yellow-300" id="battle-loc-name">Route 1</div>
-                    <div class="text-sm flex items-center">
-                        <span class="mr-2">TIME:</span>
-                        <span id="timer-text" class="text-xl">05:00</span>
-                    </div>
-                </div>
-                <!-- Timer Bar -->
-                <div class="w-full max-w-2xl bg-gray-700 h-4 rounded border border-gray-500 mb-4">
-                    <div id="timer-bar" class="h-full bg-blue-400 rounded w-full transition-all duration-1000 linear">
-                    </div>
-                </div>
+            <!-- Top: Encounter Info, Timer & Pokemon Stage -->
+            <div
+                class="bg-gray-900 border-b-4 border-gray-700 p-3 flex justify-center flex-shrink-0 shadow-lg z-10 w-full relative">
+                <div class="w-full max-w-4xl flex flex-col sm:flex-row items-center justify-between gap-4">
 
-                <!-- Pokemon Stage -->
-                <div class="flex justify-between items-center w-full max-w-2xl pixel-box bg-white text-black p-4">
-                    <div class="flex-1 pr-4">
-                        <h3 class="text-xl uppercase font-bold mb-2" id="poke-name">RAYQUAZA</h3>
-                        <div class="text-xs mb-1 font-bold">HP</div>
-                        <div class="hp-bar-container">
-                            <div id="poke-hp" class="hp-bar"></div>
+                    <!-- Timer Box -->
+                    <div
+                        class="flex-1 pixel-box bg-gray-800 text-white p-2 border-2 border-gray-600 rounded flex flex-col justify-center w-full">
+                        <div class="flex justify-between items-end mb-1">
+                            <div class="text-[0.6rem] md:text-xs text-yellow-300 tracking-wider" id="battle-loc-name">
+                                Route 1</div>
+                            <div class="text-[0.6rem] md:text-xs flex items-center">
+                                <span class="mr-1">TIME:</span>
+                                <span id="timer-text" class="text-xs md:text-sm font-bold">05:00</span>
+                            </div>
+                        </div>
+                        <div class="w-full bg-gray-700 h-2 md:h-3 rounded border border-gray-500 overflow-hidden">
+                            <div id="timer-bar"
+                                class="h-full bg-blue-400 rounded w-full transition-all duration-1000 linear"></div>
                         </div>
                     </div>
-                    <img id="poke-sprite" src="" class="sprite-img" alt="Pokemon">
+
+                    <!-- Pokemon Box -->
+                    <div
+                        class="flex-1 pixel-box bg-white text-black p-2 flex items-center justify-between border-2 border-white rounded w-full">
+                        <img id="poke-sprite" src="" class="sprite-img object-contain mr-3"
+                            style="width: 64px; height: 64px;" alt="Pokemon">
+                        <div class="flex-1 text-right">
+                            <h3 class="text-xs md:text-sm uppercase font-bold mb-1" id="poke-name">RAYQUAZA</h3>
+                            <div class="flex justify-end items-center gap-2">
+                                <div class="text-[0.55rem] font-bold">HP</div>
+                                <div class="hp-bar-container border border-black bg-gray-800"
+                                    style="height: 10px; width: 80%; border-radius: 4px; overflow: hidden;">
+                                    <div id="poke-hp" class="hp-bar h-full transition-all duration-300"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
             <!-- Bottom: Questions & Controls -->
-            <div class="flex-grow overflow-y-auto p-4 flex flex-col items-center">
-                <div id="questions-container" class="w-full max-w-3xl space-y-6 pb-20">
+            <div class="flex-grow flex flex-col items-center justify-center p-4">
+                <div id="questions-container" class="w-full max-w-5xl pb-16">
                     <!-- Questions injected here -->
                 </div>
             </div>
 
-            <!-- Attack Bar Fixed Bottom -->
-            <div class="absolute bottom-0 w-full bg-gray-900 border-t-4 border-gray-700 p-4 flex justify-center">
+            <!-- Attack Bar Fixed Bottom & Pagination -->
+            <div
+                class="absolute bottom-0 w-full bg-gray-900 border-t-4 border-gray-700 p-3 flex flex-col items-center z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.5)]">
+                <!-- Pagination (Progress) Bar -->
+                <div id="q-pagination"
+                    class="flex flex-wrap justify-center gap-2 mb-3 max-h-24 overflow-y-auto w-full max-w-4xl custom-scrollbar">
+                    <!-- Pagination buttons injected here -->
+                </div>
                 <button onclick="attack()"
-                    class="bg-red-500 hover:bg-red-400 text-white border-4 border-red-200 px-8 py-4 text-xl rounded shadow-[0_0_15px_rgba(255,0,0,0.5)] active:scale-95 transition-transform">
+                    class="bg-red-500 hover:bg-red-400 text-white border-4 border-red-200 px-8 py-2 text-sm md:text-lg font-bold rounded shadow-[0_0_15px_rgba(255,0,0,0.5)] active:scale-95 transition-transform">
                     ⚔️ ATTACK! ⚔️
                 </button>
             </div>
@@ -521,6 +707,63 @@
             [523, 659, 783, 1046].forEach((f, i) => setTimeout(() => playTone(f, 'square', 0.2), i * 150));
         }
 
+        /* --- BACKGROUND MUSIC (LOCAL MP3) --- */
+        let bgmPlayer = null;
+        let isBgmPlaying = false;
+
+        const BGM_TRACKS = [
+            'route1.mp3',
+            'pallet_town.mp3',
+            'route24.mp3',
+            'mt_moon.mp3'
+        ];
+        let currentTrackIndex = 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            bgmPlayer = document.getElementById('bgm-player');
+            bgmPlayer.volume = 0.25; // 25% volume
+            bgmPlayer.src = BGM_TRACKS[currentTrackIndex];
+
+            // Loop smoothly to the next track when one finishes
+            bgmPlayer.addEventListener('ended', () => {
+                currentTrackIndex = (currentTrackIndex + 1) % BGM_TRACKS.length;
+                bgmPlayer.src = BGM_TRACKS[currentTrackIndex];
+                bgmPlayer.play().catch(err => console.log("Playback error:", err));
+            });
+
+            // Attempt to autoplay on first click ANYWHERE on the document to bypass browser restrictions
+            document.body.addEventListener('click', () => {
+                if (!isBgmPlaying && bgmPlayer) {
+                    bgmPlayer.play().then(() => {
+                        isBgmPlaying = true;
+                        document.getElementById('bgm-btn').innerText = "🎵 BGM: ON";
+                    }).catch(err => console.log("Autoplay blocked:", err));
+                }
+            }, { once: true });
+        });
+
+        function toggleBGM() {
+            if (!bgmPlayer) return;
+            const btn = document.getElementById('bgm-btn');
+            if (isBgmPlaying) {
+                bgmPlayer.pause();
+                isBgmPlaying = false;
+                btn.innerText = "🎵 BGM: OFF";
+            } else {
+                bgmPlayer.play().then(() => {
+                    isBgmPlaying = true;
+                    btn.innerText = "🎵 BGM: ON";
+                }).catch(err => console.log("Playback error:", err));
+            }
+        }
+
+        function changeVolume(val) {
+            document.getElementById('vol-display').innerText = val + '%';
+            if (bgmPlayer) {
+                bgmPlayer.volume = val / 100;
+            }
+        }
+
         /* --- 2. GAME DATA (All 90 Questions Encoded) --- */
         // Syntax: {num/den} = static fraction | [M:w n/d] = mixed input | [F:n/d] = frac input | [W:ans] = whole input | [I:ans] = standard input
         const MAP_DATA = [
@@ -533,36 +776,43 @@
                     "3. 5 + {1/4} = [M:5 1/4]",
                     "4. 9 + {1/12} = [M:9 1/12]",
                     "5. 7 + {5/7} = [M:7 5/7]",
-                    "6. 8 + {2/5} = [M:8 2/5]",
-                    "7. {5/8} + 4 = [M:4 5/8]",
-                    "8. {4/9} + 1 = [M:1 4/9]",
-                    "9. {3/5} + 2 = [M:2 3/5]",
-                    "10. {1/6} + 8 = [M:8 1/6]",
-                    "11. {9/11} + 3 = [M:3 9/11]",
-                    "12. [W:3] wholes and [W:1] fifths = 3 {1/5}",
-                    "13. [W:4] wholes and [W:2] sevenths = 4 {2/7}",
-                    "14. [W:2] wholes and [W:5] eighths = 2 {5/8}",
-                    "15. [W:5] wholes and [W:5] sixths = 5 {5/6}"
+                    "6. {5/8} + 4 = [M:4 5/8]",
+                    "7. {4/9} + 1 = [M:1 4/9]",
+                    "8. {3/5} + 2 = [M:2 3/5]",
+                    "9. {1/6} + 8 = [M:8 1/6]",
+                    "10. {9/11} + 3 = [M:3 9/11]",
+                    "[DRAW_RECT:2:3:5] 11. [W:2] wholes and [W:3] fifths = [M:2 3/5]",
+                    "[DRAW_RECT:4:6:7] 12. [W:4] wholes and [W:6] sevenths = [M:4 6/7]",
+                    "[DRAW_CIRC:8:3:8] 13. [W:8] wholes and [W:3] eighths = [M:8 3/8]",
+                    "[DRAW_CIRC:3:1:6] 14. [W:3] wholes and [W:1] sixths = [M:3 1/6]",
+                    "[DRAW_CIRC:6:7:12] 15. [W:6] wholes and [W:7] twelfths = [M:6 7/12]"
                 ]
             },
             {
                 id: 1, name: "Number Line Forest", pos: { x: 15, y: 50 },
                 pokemon: ["celebi", "scyther", "caterpie"], timeLimit: [300, 300, -1],
                 questions: [
-                    "16. Line(Halves): 1, [M:1 1/2], 2, [M:2 1/2], 3",
-                    "17. Line(Thirds): 2, [M:2 1/3], [M:2 2/3], 3",
-                    "18. Line(Quarters): 6, [M:6 1/4], [M:6 2/4], [M:6 3/4], 7",
-                    "28. Line: 0, {1/4}, {2/4}, {3/4}, 1, {5/4}, [F:6/4], [F:7/4], 2",
-                    "29. Line: 0, {1/7}, {2/7}, [F:3/7], {4/7}, [F:5/7], {6/7}, 1, [F:8/7]",
-                    "30. Line: 0, {1/5}, {2/5}, [F:3/5], {4/5}, 1, {6/5}, [F:7/5], {8/5}"
+                    "16. [NUMBER_LINE:2:15:5:2:{3/5}={M:2 3/5},3:{2/5}={M:3 2/5},4:{4/5}={M:4 4/5}]",
+                    "17. [NUMBER_LINE:1:18:9:1:{3/9}={M:1 3/9},1:{8/9}={M:1 8/9},2:{7/9}={M:2 7/9}]",
+                    "18. [NUMBER_LINE:6:14:7:6:{4/7}={M:6 4/7},7:{1/7}={M:7 1/7},7:{4/7}={M:7 4/7}]",
+                    "28. [NUMBER_LINE:0:9:4:0:{1/4}={1/4},0:{2/4}={F:2/4},0:{3/4}={3/4},1:{1/4}={F:5/4},1:{2/4}={6/4},1:{3/4}={7/4},2:{1/4}={F:9/4}]",
+                    "29. [NUMBER_LINE:0:10:7:0:{1/7}={1/7},0:{2/7}={2/7},0:{3/7}={3/7},0:{4/7}={F:4/7},0:{5/7}={5/7},0:{6/7}={6/7},1:{0/7}={F:7/7},1:{1/7}={8/7},1:{2/7}={F:9/7},1:{3/7}={10/7}]",
+                    "30. [NUMBER_LINE:0:14:5:0:{1/5}={F:1/5},0:{2/5}={2/5},0:{3/5}={3/5},0:{4/5}={4/5},1:{1/5}={F:6/5},1:{2/5}={7/5},1:{3/5}={8/5},1:{4/5}={9/5},2:{0/5}={F:10/5},2:{1/5}={11/5},2:{2/5}={12/5},2:{3/5}={13/5},2:{4/5}={14/5}]"
                 ]
             },
             {
                 id: 2, name: "Conversion Cave", pos: { x: 40, y: 20 },
                 pokemon: ["lugia", "onix", "zubat"], timeLimit: [900, 600, -1], // 15 mins for 29 questions
                 questions: [
-                    "19. 2 = [F:6/3]", "20. 3 {1/3} = [F:10/3]", "21. 5 {7/11} = [F:62/11]", "22. 1 {9/12} = [F:21/12]", "23. 8 {5/7} = [F:61/7]",
-                    "24. There are [I:9] halves in 4 {1/2}.", "25. There are [I:5] thirds in 1 {2/3}.", "26. There are [I:73] elevenths in 6 {7/11}.", "27. There are [I:111] twelfths in 9 {3/12}.",
+                    "19. 2 = [I:4] halves",
+                    "20. 3 {1/3} = [I:10] thirds",
+                    "21. 5 {7/11} = [I:62] elevenths",
+                    "22. 1 {9/12} = [I:21] twelfths",
+                    "23. 8 {5/7} = [I:61] sevenths",
+                    "24. There are [I:19] quarters in 4 {3/4}.",
+                    "25. There are [I:11] sixths in 1 {5/6}.",
+                    "26. There are [I:75] eighths in 9 {3/8}.",
+                    "27. There are [I:67] tenths in 6 {7/10}.",
                     "31. 1 {1/2} = [F:3/2]", "32. 1 {3/10} = [F:13/10]", "33. 2 {3/4} = [F:11/4]", "34. 4 {3/5} = [F:23/5]", "35. 7 {1/6} = [F:43/6]",
                     "36. 8 {2/3} = [F:26/3]", "37. 3 {5/8} = [F:29/8]", "38. 3 {7/12} = [F:43/12]", "39. 8 {4/9} = [F:40/9]", "40. 2 {4/7} = [F:18/7]",
                     "41. {11/2} = [M:5 1/2]", "42. {9/4} = [M:2 1/4]", "43. {5/5} = [W:1]", "44. {16/2} = [W:8]", "45. {37/5} = [M:7 2/5]",
@@ -577,10 +827,10 @@
                     "52. {2/3} + {4/9} = [M:1 1/9]",
                     "53. {3/7} + {13/14} = [M:1 5/14]",
                     "54. {5/8} + {3/4} = [M:1 3/8]",
-                    "55. {7/12} + {2/4} + {7/12} = [M:1 2/3]",
-                    "56. {1/6} + {9/12} = [F:11/12]",
-                    "57. 2 + {3/10} + {9/10} = [M:3 1/5]",
-                    "58. 8 + {1/4} + {1/3} + {3/4} = [M:9 1/3]" // Note: Condensed to fit logic
+                    "55. {7/12} + {2/6} + {9/12} = [M:1 2/3]",
+                    "56. {1/2} + {3/10} + {9/10} = [M:1 7/10]",
+                    "57. {2/4} + {7/8} + {1/4} = [M:1 5/8]",
+                    "58. {1/3} + {3/9} + {5/9} = [M:1 2/9]" // Note: Condensed to fit logic
                 ]
             },
             {
@@ -647,6 +897,7 @@
             timer: 0,
             interval: null,
             currentStageQIdx: 0, // Tracks which question is currently active
+            battleAnswers: [], // Array tracking completeness and inputs per question
             // Tactics State
             tacticsSteps: [],
             currentTacticStep: 0,
@@ -657,78 +908,84 @@
         /* --- TACTICS ENGINE RULES --- */
         const TACTICS_RULES = [
             {
-                // Rule: Mixed to Improper (e.g., 1 {1/2} = [F:3/2])
+                // Rule: Mixed to Improper (e.g., 8 {5/7} = [F:61/7])
                 regex: /(\d+)\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
                 handler: (m) => [
-                    `Step 1: Multiply the whole number by the denominator, then add the numerator.<br><br>` +
-                    `<span class="math-text">` +
-                    `<span class="frac-block"><span class="frac-num">( [I:${m[1]}] × [I:${m[3]}] ) + [I:${m[2]}]</span><span class="frac-den">[I:${m[3]}]</span></span>` +
-                    `</span>`,
-                    `Step 2: Calculate the top part to get the final improper fraction.<br><br>` +
-                    `<span class="math-text">[F:${m[4]}/${m[5]}]</span>`
+                    `Concept: Multiply the whole number by the denominator, and then add the numerator.`,
+                    `Step 1: Multiply Whole Number × Denominator.<br><br><span class="math-text">[I:${m[1]}] × [I:${m[3]}] = [I:${m[1] * m[3]}]</span>`,
+                    `Step 2: Add the Numerator to that answer.<br><br><span class="math-text">[I:${m[1] * m[3]}] + [I:${m[2]}] = [I:${m[4]}]</span>`,
+                    `Step 3: Put that new number over the original denominator.<br><br><span class="math-text">[F:${m[4]}/${m[5]}]</span>`
                 ]
             },
             {
                 // Rule: Improper to Mixed (e.g., {11/2} = [M:5 1/2])
                 regex: /\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
                 handler: (m) => [
-                    `Step 1: Divide the numerator (top) by the denominator (bottom).<br><br>` +
-                    `<span class="math-text">[I:${m[1]}] ÷ [I:${m[2]}] = [I:${m[3]}] R [I:${m[4]}]</span>`,
-                    `Step 2: Write as a mixed number.<br>The quotient is the whole number. The remainder is the new numerator.<br><br>` +
-                    `<span class="math-text">[M:${m[3]} ${m[4]}/${m[5]}]</span>`
+                    `Concept: Divide the numerator (top) by the denominator (bottom).`,
+                    `Step 1: How many times does ${m[2]} go into ${m[1]} completely?<br><br><span class="math-text">It goes in [I:${m[3]}] times.</span>`,
+                    `Step 2: Calculate the remainder.<br><br><span class="math-text">${m[1]} - (${m[3]} × ${m[2]}) = [I:${m[4]}]</span>`,
+                    `Step 3: Write the final mixed number. The whole number comes from Step 1, the remainder from Step 2.<br><br><span class="math-text">[M:${m[3]} ${m[4]}/${m[5]}]</span>`
                 ]
             },
             {
                 // Rule: Add fractions (e.g., {2/5} + {4/5} = [M:1 1/5])
                 regex: /\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
-                handler: (m) => [
-                    `Step 1: The denominators are the same, so add the numerators.<br><br>` +
-                    `<span class="math-text">` +
-                    `<span class="frac-block"><span class="frac-num">[I:${m[1]}] + [I:${m[3]}]</span><span class="frac-den">[I:${m[2]}]</span></span>` +
-                    ` = [F:${parseInt(m[1]) + parseInt(m[3])}/${m[2]}]` +
-                    `</span>`,
-                    `Step 2: Convert the improper fraction to a mixed number (and simplify if needed).<br><br>` +
-                    `<span class="math-text">${parseInt(m[1]) + parseInt(m[3])} ÷ ${m[2]} = [I:${m[5]}] R [I:${m[6]}]<br><br>➔ [M:${m[5]} ${m[6]}/${m[7]}]</span>`
-                ]
+                handler: (m) => {
+                    let top = parseInt(m[1]) + parseInt(m[3]);
+                    return [
+                        `Step 1: The denominators are the same, so add the numerators.<br><br><span class="math-text">[I:${m[1]}] + [I:${m[3]}] = [I:${top}]</span>`,
+                        `Step 2: Put the new total over the same denominator.<br><br><span class="math-text">[F:${top}/${m[2]}]</span>`,
+                        `Step 3: Convert that improper fraction into a mixed number.<br><br><span class="math-text">[M:${m[5]} ${m[6]}/${m[7]}]</span>`
+                    ];
+                }
             },
             {
                 // Rule: Whole - Fraction (e.g., 6 - {2/8} = [M:5 3/4])
                 regex: /(\d+)\s*-\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let borrowWhole = parseInt(m[1]) - 1;
+                    let num = parseInt(m[2]);
+                    let denom = parseInt(m[3]);
+                    return [
+                        `Step 1: Borrow 1 from the whole number ${m[1]}.<br><br><span class="math-text">${m[1]} - 1 = [I:${borrowWhole}]</span>`,
+                        `Step 2: Convert that borrowed '1' into a fraction with a denominator of ${denom}.<br><br><span class="math-text">1 = [F:${denom}/${denom}]</span>`,
+                        `Step 3: Subtract the fraction piece from it.<br><br><span class="math-text">{${denom}/${denom}} - {${num}/${denom}} = [F:${denom - num}/${denom}]</span>`,
+                        `Step 4: Combine the whole number and fraction, and simplify!<br><br><span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                    ];
+                }
+            },
+            {
+                // Rule: Add fractions resulting in fraction (e.g. {1/6} + {9/12} = [F:11/12])
+                regex: /\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
                 handler: (m) => [
-                    `Step 1: Borrow 1 from the whole number to make a fraction.<br><br>` +
-                    `<span class="math-text">${m[1]} = [I:${parseInt(m[1]) - 1}] <span class="frac-block"><span class="frac-num">[I:${m[3]}]</span><span class="frac-den">[I:${m[3]}]</span></span></span>`,
-                    `Step 2: Subtract the fraction from your borrowed fraction.<br><br>` +
-                    `<span class="math-text">` +
-                    `[M:${parseInt(m[1]) - 1} ${m[3]}/${m[3]}] - {${m[2]}/${m[3]}} = [M:${parseInt(m[1]) - 1} ${parseInt(m[3]) - parseInt(m[2])}/${m[3]}]` +
-                    `</span>`,
-                    `Step 3: Simplify the fraction to get the final answer.<br><br>` +
-                    `<span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                    `Concept: Before adding, ensure both denominators are the same or simplify them.`,
+                    `Step 1: Add the numerators together if denominators are matching.<br><br><span class="math-text">Target Numerator: [I:${m[5]}]</span>`,
+                    `Step 2: Write out the final simplified fraction.<br><br><span class="math-text">[F:${m[5]}/${m[6]}]</span>`
                 ]
             },
             {
-                // Rule: Fraction of set (e.g., {2/3} of 21 = [I:14])
+                // Rule: Fraction of set: (e.g., {2/3} of 21 = [I:14]) or (e.g., {5/6} × 48 = [I:40])
                 regex: /\{(\d+)\/(\d+)\}\s*(?:of|×)\s*(\d+)\s*=\s*\[I:(\d+)\]/,
                 handler: (m) => [
-                    `Step 1: Divide the whole number by the denominator.<br><br>` +
-                    `<span class="math-text">[I:${m[3]}] ÷ [I:${m[2]}] = [I:${parseInt(m[3]) / parseInt(m[2])}]</span>`,
-                    `Step 2: Multiply that answer by the numerator.<br><br>` +
-                    `<span class="math-text">[I:${parseInt(m[3]) / parseInt(m[2])}] × [I:${m[1]}] = [I:${m[4]}]</span>`
+                    `Concept: Finding ${m[1]}/${m[2]} of ${m[3]} means splitting ${m[3]} into ${m[2]} equal groups.`,
+                    `Step 1: Divide by the denominator to find out how much is in 1 group.<br><br><span class="math-text">[I:${m[3]}] ÷ [I:${m[2]}] = [I:${parseInt(m[3]) / parseInt(m[2])}]</span>`,
+                    `Step 2: Multiply by the numerator to get the total for ${m[1]} groups.<br><br><span class="math-text">[I:${parseInt(m[3]) / parseInt(m[2])}] × [I:${m[1]}] = [I:${m[4]}]</span>`
                 ]
             },
             {
-                // Rule: Whole + Fraction (e.g., 3 + {1/2} = [M:3 1/2])
+                // Rule: Number of parts in mixed number (e.g., There are [I:9] halves in 4 {1/2})
+                regex: /There are \[I:(\d+)\] (\w+) in (\d+)\s*\{(\d+)\/(\d+)\}/,
+                handler: (m) => [
+                    `Concept: This is essentially changing a mixed number into an improper fraction.`,
+                    `Step 1: Multiply the whole number by the denominator.<br><br><span class="math-text">[I:${m[3]}] × [I:${m[5]}] = [I:${m[3] * m[5]}]</span>`,
+                    `Step 2: Add the extra numerator.<br><br><span class="math-text">[I:${m[3] * m[5]}] + [I:${m[4]}] = [I:${m[1]}]</span>`
+                ]
+            },
+            {
+                // Rule: Whole + Fractions (e.g., 3 + {1/2} = [M:3 1/2])
                 regex: /(\d+)\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
                 handler: (m) => [
-                    `Written Method: Just combine the whole number and the fraction!<br><br>` +
-                    `<span class="math-text">[I:${m[1]}] + [F:${m[2]}/${m[3]}] = [M:${m[4]} ${m[5]}/${m[6]}]</span>`
-                ]
-            },
-            {
-                // Rule: Fraction + Whole (e.g., {5/8} + 4 = [M:4 5/8])
-                regex: /\{(\d+)\/(\d+)\}\s*\+\s*(\d+)\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
-                handler: (m) => [
-                    `Written Method: Just combine the whole number and the fraction!<br><br>` +
-                    `<span class="math-text">[F:${m[1]}/${m[2]}] + [I:${m[3]}] = [M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                    `Step 1: Just stick the whole number and fraction together!<br><br><span class="math-text">[I:${m[1]}] and [F:${m[2]}/${m[3]}] becomes [M:${m[4]} ${m[5]}/${m[6]}]</span>`
                 ]
             },
             {
@@ -736,11 +993,11 @@
                 regex: /(.*)/,
                 handler: (m, raw) => {
                     let matches = [...raw.matchAll(/\[([MFWI]):(.*?)\]/g)];
-                    let stepText = matches.map((match, i) => `Part ${i + 1}: [${match[1]}:${match[2]}]`).join('<br><br>');
+                    let stepText = matches.map((match, i) => `Final Answer: [${match[1]}:${match[2]}]`).join('<br><br>');
                     return [
-                        `Step 1: Read the problem carefully and find the key numbers.`,
-                        `Step 2: Decide if you need to Add, Subtract, or Multiply.`,
-                        `Step 3: Solve it using the written method!<br><br><span class="math-text">${stepText}</span>`
+                        `Step 1: Read the problem carefully and identify the key numbers.`,
+                        `Step 2: Determine if you should Add, Subtract, Multiply, or Divide.`,
+                        `Step 3: Solve the math and fill out the answer below.<br><br><span class="math-text">${stepText}</span>`
                     ];
                 }
             }
@@ -757,7 +1014,7 @@
 
             if (viewName === 'map') renderMap();
             if (viewName === 'pokedex') renderPokedex();
-            
+
             if (window.ProgressTracker) {
                 window.ProgressTracker.save({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
             }
@@ -793,15 +1050,14 @@
                 label.innerText = `${idx + 1}. ${stage.name}`;
                 node.appendChild(label);
 
-                if (isUnlocked) {
-                    node.onclick = () => initBattle(idx);
-                }
+                // --- GLOBALLY UNLOCKED FOR TEACHER NAVIGATION ---
+                node.onclick = () => initBattle(idx);
                 nodesContainer.appendChild(node);
 
                 // Draw lines to next node using SVG
                 if (idx < MAP_DATA.length - 1) {
                     const next = MAP_DATA[idx + 1];
-                    const nextUnlocked = state.unlocked.includes(idx + 1) || state.completed.includes(idx + 1);
+                    const nextUnlocked = true; // Temporary bypass so we can click around
 
                     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
                     line.setAttribute("x1", `${stage.pos.x}%`);
@@ -819,11 +1075,147 @@
         /* PARSER ENGINE */
         function parseQuestionText(text) {
             let html = text;
+            let visuals = '';
 
-            // 1. Static fractions: {1/2}
+            // 1. Draw Rectangles: [DRAW_RECT:wholes:part:total]
+            html = html.replace(/\[DRAW_RECT:(\d+):(\d+):(\d+)\]/g, (match, wStr, pStr, tStr) => {
+                const wholes = parseInt(wStr);
+                const parts = parseInt(pStr);
+                const total = parseInt(tStr);
+
+                let visHtml = '<div class="fraction-vis-container">';
+                for (let i = 0; i < wholes; i++) {
+                    visHtml += `<div class="frac-shape frac-rect" style="background-color: #55efc4;"></div>`;
+                }
+                let partialHtml = `<div class="frac-shape frac-rect">`;
+                for (let i = 0; i < total; i++) {
+                    partialHtml += `<div class="frac-rect-part ${i < parts ? 'filled' : ''}"></div>`;
+                }
+                partialHtml += `</div>`;
+                visHtml += partialHtml + '</div>';
+
+                visuals += visHtml;
+                return ''; // remove from main math text
+            });
+
+            // 2. Draw Circles: [DRAW_CIRC:wholes:part:total]
+            html = html.replace(/\[DRAW_CIRC:(\d+):(\d+):(\d+)\]/g, (match, wStr, pStr, tStr) => {
+                const wholes = parseInt(wStr);
+                const parts = parseInt(pStr);
+                const total = parseInt(tStr);
+
+                let visHtml = '<div class="fraction-vis-container">';
+                for (let i = 0; i < wholes; i++) {
+                    visHtml += `<div class="frac-circ whole"></div>`;
+                }
+
+                const circumference = 78.5398;
+                const dashLen = (parts / total) * circumference;
+
+                let svgLines = '';
+                for (let i = 0; i < total; i++) {
+                    let angle = (i * 360) / total;
+                    svgLines += `<line x1="25" y1="25" x2="25" y2="0" class="frac-line" transform="rotate(${angle} 25 25)"/>`;
+                }
+
+                visHtml += `
+                    <div class="frac-circ">
+                        <svg viewBox="0 0 50 50">
+                            <circle cx="25" cy="25" r="12.5" class="frac-slice" stroke-dasharray="${dashLen} ${circumference}"></circle>
+                            ${svgLines}
+                        </svg>
+                    </div></div>`;
+
+                visuals += visHtml;
+                return ''; // remove from main math text
+            });
+
+            // 3. Number Lines: [NUMBER_LINE:start:totalTicks:ticksPerWhole:marks]
+            // Marks format uses curly braces: whole:{n/d}={F:n/d} OR ={M:w n/d} OR ={static n/d}
+            html = html.replace(/\[NUMBER_LINE:(\d+):(\d+):(\d+):(.*?)\]/g, (match, startStr, totalStr, ticksStr, marksStr) => {
+                const start = parseInt(startStr);
+                const totalTicks = parseInt(totalStr);
+                const ticksPerWhole = parseInt(ticksStr);
+
+                const parseValue = (valStr) => {
+                    if (!valStr) return '';
+                    let v = valStr.trim();
+                    // {M:w n/d} → mixed number inputs (MUST come before generic {n/d})
+                    v = v.replace(/\{M:(\d+)\s+(\d+)\/(\d+)\}/g,
+                        '<span class="math-text inline-flex items-center gap-1"><input type="number" class="q-input w-in" data-ans="$1"><span class="frac-block"><input type="number" class="q-input n-in" data-ans="$2"><input type="number" class="q-input d-in" data-ans="$3"></span></span>');
+                    // {F:n/d} → fraction inputs
+                    v = v.replace(/\{F:(\d+)\/(\d+)\}/g,
+                        '<span class="math-text frac-block"><input type="number" class="q-input n-in" data-ans="$1"><input type="number" class="q-input d-in" data-ans="$2"></span>');
+                    // {n/d} → static fraction label
+                    v = v.replace(/\{(\d+)\/(\d+)\}/g,
+                        '<span class="frac-block"><span class="frac-num text-base">$1</span><span class="frac-den text-base">$2</span></span>');
+                    return v;
+                };
+
+                let marksData = {};
+                if (marksStr && marksStr.length > 0) {
+                    // Split by ',' but carefully join back pairs split badly  
+                    marksStr.split(',').forEach(chunk => {
+                        const eqIdx = chunk.indexOf('=');
+                        if (eqIdx > -1) {
+                            const pos = chunk.substring(0, eqIdx).trim();
+                            const val = chunk.substring(eqIdx + 1).trim();
+                            marksData[pos] = parseValue(val);
+                        }
+                    });
+                }
+
+                const startXPct = 5;
+                const endXPct = 95;
+                const usableWidth = endXPct - startXPct;
+                const tickSpacing = usableWidth / totalTicks;
+
+                let svgTicks = '';
+                let labelsHtml = '<div class="nline-labels" style="height:70px;">';
+
+                for (let i = 0; i <= totalTicks; i++) {
+                    const isMajor = (i % ticksPerWhole) === 0;
+                    const xPos = (startXPct + i * tickSpacing).toFixed(2);
+                    const wholeVal = start + Math.floor(i / ticksPerWhole);
+                    const numVal = i % ticksPerWhole;
+                    const posKey = `${wholeVal}:{${numVal}/${ticksPerWhole}}`;
+                    const hasMark = !!marksData[posKey];
+
+                    if (isMajor) {
+                        svgTicks += `<line x1="${xPos}%" y1="5" x2="${xPos}%" y2="25" class="nline-tick-major" />`;
+                        if (hasMark) {
+                            // Replace integer label with the input/label mark
+                            labelsHtml += `<div class="nline-label" style="left:${xPos}%;">${marksData[posKey]}</div>`;
+                        } else {
+                            labelsHtml += `<div class="nline-label font-bold" style="left:${xPos}%;font-size:1rem;">${wholeVal}</div>`;
+                        }
+                    } else {
+                        svgTicks += `<line x1="${xPos}%" y1="10" x2="${xPos}%" y2="20" class="nline-tick-minor" />`;
+                        if (hasMark) {
+                            labelsHtml += `<div class="nline-label" style="left:${xPos}%;">${marksData[posKey]}</div>`;
+                        }
+                    }
+                }
+
+                labelsHtml += '</div>';
+
+                const visHtml = `
+                    <div class="number-line-container">
+                        <svg class="nline-svg" viewBox="0 0 1000 30" preserveAspectRatio="none">
+                            <line x1="${startXPct}%" y1="15" x2="${endXPct}%" y2="15" class="nline-axis" />
+                            ${svgTicks}
+                        </svg>
+                        ${labelsHtml}
+                    </div>`;
+
+                visuals += visHtml;
+                return ''; // strip from text
+            });
+
+            // 4. Static fractions: {1/2}
             html = html.replace(/\{(\d+)\/(\d+)\}/g, '<span class="frac-block"><span class="frac-num">$1</span><span class="frac-den">$2</span></span>');
 
-            // 2. Input Mixed: [M:w n/d]
+            // 4. Input Mixed: [M:w n/d]
             html = html.replace(/\[M:(\d+)\s+(\d+)\/(\d+)\]/g, (match, w, n, d) => {
                 return `<span class="math-text">
                     <input type="number" class="q-input w-in" data-ans="${w}">
@@ -834,7 +1226,7 @@
                 </span>`;
             });
 
-            // 3. Input Fraction: [F:n/d]
+            // 5. Input Fraction: [F:n/d]
             html = html.replace(/\[F:(\d+)\/(\d+)\]/g, (match, n, d) => {
                 return `<span class="math-text frac-block">
                     <input type="number" class="q-input n-in" data-ans="${n}">
@@ -842,17 +1234,23 @@
                 </span>`;
             });
 
-            // 4. Input Whole: [W:ans]
+            // 6. Input Whole: [W:ans]
             html = html.replace(/\[W:(\d+)\]/g, (match, ans) => {
                 return `<input type="number" class="q-input w-in" data-ans="${ans}">`;
             });
 
-            // 5. Input Standard: [I:ans]
+            // 7. Input Standard: [I:ans]
             html = html.replace(/\[I:(\d+)\]/g, (match, ans) => {
                 return `<input type="number" class="q-input i-in" data-ans="${ans}">`;
             });
 
-            return `<div class="math-text text-sm leading-loose w-full">${html}</div>`;
+            return `
+                <div class="w-full flex flex-col items-center justify-center gap-6 pt-4 pb-2">
+                    ${visuals}
+                    <div class="math-text text-sm md:text-xl leading-loose text-center" style="white-space: normal;">
+                        ${html}
+                    </div>
+                </div>`;
         }
 
         /* BATTLE LOGIC */
@@ -878,16 +1276,52 @@
             sprite.src = getSpriteUrl(pokeName);
             sprite.onerror = () => { sprite.src = getStaticSpriteUrl(pokeName); };
 
-            updateHPBar();
+            // Initialize Battle Answers State
+            state.battleAnswers = Array(stage.questions.length).fill(null).map(() => ({
+                isCorrect: false,
+                inputs: []
+            }));
 
             // Clear questions and render ONLY the first one
-            const qContainer = document.getElementById('questions-container');
-            qContainer.innerHTML = '';
-
+            renderPagination();
             renderNextQuestion();
 
             // Start Timer
             startTimer();
+            updateHPBar();
+        }
+
+        function saveCurrentInputs() {
+            const activeQ = document.querySelector('.active-q');
+            if (activeQ) {
+                const idx = parseInt(activeQ.getAttribute('data-idx'));
+                const inputs = Array.from(activeQ.querySelectorAll('.q-input'));
+                state.battleAnswers[idx].inputs = inputs.map(i => i.value);
+            }
+        }
+
+        function renderPagination() {
+            const pag = document.getElementById('q-pagination');
+            pag.innerHTML = '';
+            for (let i = 0; i < state.currentStage.questions.length; i++) {
+                const btn = document.createElement('button');
+                const isCurrent = state.currentStageQIdx === i;
+                const isDone = state.battleAnswers[i].isCorrect;
+
+                btn.className = `w-8 h-8 md:w-10 md:h-10 text-xs md:text-sm font-bold border-2 rounded shrink-0 transition-colors ${isCurrent
+                        ? 'bg-yellow-400 border-white text-black shadow-[0_0_10px_rgba(255,255,0,0.8)] scale-110'
+                        : isDone
+                            ? 'bg-green-500 border-green-200 text-white opacity-80'
+                            : 'bg-gray-700 border-gray-500 text-white hover:bg-gray-600'
+                    }`;
+                btn.innerText = i + 1;
+                btn.onclick = () => {
+                    saveCurrentInputs();
+                    state.currentStageQIdx = i;
+                    renderNextQuestion();
+                };
+                pag.appendChild(btn);
+            }
         }
 
         function renderNextQuestion() {
@@ -896,32 +1330,93 @@
 
             const qText = stage.questions[state.currentStageQIdx];
             const qContainer = document.getElementById('questions-container');
+            qContainer.innerHTML = ''; // Clear container to enforce Flashcard View
 
             const qDiv = document.createElement('div');
             // Add slide-in animation and active-q marker
-            qDiv.className = "pixel-box bg-gray-800 p-4 w-full q-container active-q slide-in-right mb-6";
+            qDiv.className = "pixel-box bg-gray-800 p-4 min-h-[150px] w-full q-container active-q slide-in-right mb-6 flex items-center justify-center";
             qDiv.setAttribute('data-idx', state.currentStageQIdx);
             qDiv.setAttribute('data-raw', qText);
             qDiv.innerHTML = parseQuestionText(qText);
 
+            const answerState = state.battleAnswers[state.currentStageQIdx];
+            const inputs = qDiv.querySelectorAll('.q-input');
+
+            // Restore any saved inputs
+            if (answerState.inputs.length > 0) {
+                inputs.forEach((input, i) => {
+                    input.value = answerState.inputs[i] || '';
+                });
+            }
+
+            // Lock if already correct
+            if (answerState.isCorrect) {
+                qDiv.classList.remove('active-q');
+                inputs.forEach(input => {
+                    input.classList.add('correct');
+                    input.setAttribute('disabled', 'true');
+                });
+            } else {
+                // --- AUTO CHECK LOGIC ---
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        let allCorrect = true;
+                        inputs.forEach(inp => {
+                            if (inp.value.trim() !== inp.getAttribute('data-ans')) allCorrect = false;
+                        });
+                        // If all fields are filled out correctly, wait a split second then attack!
+                        if (allCorrect) setTimeout(attack, 300);
+                    });
+                    // Allow pressing 'Enter' to submit immediately
+                    input.addEventListener('keyup', (e) => {
+                        if (e.key === 'Enter') checkSubmission();
+                    });
+
+                    // Allow Arrow Keys navigation
+                    input.addEventListener('keydown', (e) => {
+                        if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
+                            e.preventDefault();
+                            const allInputs = Array.from(qDiv.querySelectorAll('.q-input:not(.correct)'));
+                            const idx = allInputs.indexOf(input);
+                            if (idx > -1 && idx < allInputs.length - 1) allInputs[idx + 1].focus();
+                        } else if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
+                            e.preventDefault();
+                            const allInputs = Array.from(qDiv.querySelectorAll('.q-input:not(.correct)'));
+                            const idx = allInputs.indexOf(input);
+                            if (idx > 0) allInputs[idx - 1].focus();
+                        }
+                    });
+                });
+            }
+
             qContainer.appendChild(qDiv);
 
-            // Auto-scroll the battle area down so the new question is visible
-            const scrollArea = qContainer.parentElement;
+            // Re-render pagination to update active state
+            renderPagination();
+
             setTimeout(() => {
-                scrollArea.scrollTo({ top: scrollArea.scrollHeight, behavior: 'smooth' });
+                // Auto focus first input
+                const firstInput = qDiv.querySelector('.q-input:not(.correct)');
+                if (firstInput) firstInput.focus();
             }, 50);
+        }
+
+        function checkSubmission() {
+            // Evaluates current box if user explicitly hits enter to show wrong anim
+            const activeQ = document.querySelector('.active-q');
+            if (activeQ) attack();
         }
 
         function updateHPBar() {
             if (!state.currentStage) return;
-            const total = state.currentStage.questions.length;
-            const hpPercent = 100 - ((state.currentStageQIdx / total) * 100);
+            const total = state.battleAnswers.length;
+            const correctCount = state.battleAnswers.filter(a => a.isCorrect).length;
+            const hpPercent = 100 - ((correctCount / total) * 100);
 
             const hpBar = document.getElementById('poke-hp');
             hpBar.style.width = `${hpPercent}%`;
 
-            hpBar.className = 'hp-bar';
+            hpBar.className = 'hp-bar transition-all duration-300';
             if (hpPercent <= 50) hpBar.classList.add('med');
             if (hpPercent <= 20) hpBar.classList.add('low');
         }
@@ -957,23 +1452,35 @@
             if (allCorrect) {
                 sndCorrect();
 
-                // Lock the current question so it grays out slightly
+                // Lock question and update state
                 activeQ.classList.remove('active-q');
+                state.battleAnswers[state.currentStageQIdx].isCorrect = true;
+                saveCurrentInputs();
 
                 const sprite = document.getElementById('poke-sprite');
                 sprite.classList.add('slash-anim');
                 setTimeout(() => sprite.classList.remove('slash-anim'), 300);
 
-                // Progress to next question
-                state.currentStageQIdx++;
                 updateHPBar();
 
-                // Check Win Condition
-                if (state.currentStageQIdx >= state.currentStage.questions.length) {
+                // Check Win Condition: ALL questions correct
+                const win = state.battleAnswers.every(ans => ans.isCorrect);
+
+                if (win) {
                     clearInterval(state.interval);
                     setTimeout(catchPokemon, 600);
                 } else {
-                    // Slight delay before throwing the next question at them
+                    // Try to auto-progress to the next unfinished question
+                    let nextIdx = state.currentStageQIdx + 1;
+                    while (nextIdx < state.currentStage.questions.length && state.battleAnswers[nextIdx].isCorrect) {
+                        nextIdx++;
+                    }
+                    if (nextIdx < state.currentStage.questions.length) {
+                        state.currentStageQIdx = nextIdx;
+                    } else {
+                        // Loop back from start to find any remaining unanswered
+                        state.currentStageQIdx = state.battleAnswers.findIndex(ans => !ans.isCorrect);
+                    }
                     setTimeout(renderNextQuestion, 400);
                 }
             } else if (checkCount > 0) {
@@ -1161,9 +1668,47 @@
                         inp.value = inp.getAttribute('data-ans');
                         inp.classList.add('correct');
                     });
+                } else {
+                    // --- AUTO CHECK LOGIC FOR TACTICS ---
+                    const inputs = stepDiv.querySelectorAll('.q-input');
+                    inputs.forEach(input => {
+                        input.addEventListener('input', () => {
+                            let allCorrect = true;
+                            inputs.forEach(inp => {
+                                if (inp.value.trim() !== inp.getAttribute('data-ans')) allCorrect = false;
+                            });
+                            // If all fields in this step are correct, auto-progress!
+                            if (allCorrect) setTimeout(checkTacticsStep, 300);
+                        });
+                        // Allow pressing 'Enter' to check step
+                        input.addEventListener('keyup', (e) => {
+                            if (e.key === 'Enter') checkTacticsStep();
+                        });
+
+                        // Allow Arrow Keys navigation
+                        input.addEventListener('keydown', (e) => {
+                            if (['ArrowRight', 'ArrowDown'].includes(e.key)) {
+                                e.preventDefault();
+                                const allInputs = Array.from(stepDiv.querySelectorAll('.q-input:not(.correct)'));
+                                const idx = allInputs.indexOf(input);
+                                if (idx > -1 && idx < allInputs.length - 1) allInputs[idx + 1].focus();
+                            } else if (['ArrowLeft', 'ArrowUp'].includes(e.key)) {
+                                e.preventDefault();
+                                const allInputs = Array.from(stepDiv.querySelectorAll('.q-input:not(.correct)'));
+                                const idx = allInputs.indexOf(input);
+                                if (idx > 0) allInputs[idx - 1].focus();
+                            }
+                        });
+                    });
                 }
 
                 container.appendChild(stepDiv);
+
+                // Auto focus first input of the new step
+                setTimeout(() => {
+                    const firstInput = stepDiv.querySelector('.q-input:not(.correct)');
+                    if (firstInput) firstInput.focus();
+                }, 50);
             }
 
             // Auto scroll to bottom
@@ -1260,10 +1805,9 @@
     </script>
 
     <!-- Progress Tracker -->
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="SG_Y4_Math_Ch5Fractions"
-            data-module-name="Singapore Y4 Math: Fraction Quest"
-            data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter5_Fractions/index.html"></script>
+    <script src="../../../../../js/progress-tracker.js" data-module-id="SG_Y4_Math_Ch5Fractions"
+        data-module-name="Singapore Y4 Math: Fraction Quest"
+        data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter5_Fractions/index.html"></script>
 
     <!-- Home Button -->
     <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
