@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE Science: Planet Earth</title>
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel for JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:10px 24px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;position:sticky;top:0;z-index:1000;box-shadow:0 1px 6px rgba(0,0,0,0.07);">
+    <a href="slides.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:10px;font-weight:600;font-size:13px;color:#0369a1;text-decoration:none;">&#128196; Slides PDF</a>
+    <a href="Worksheet.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;font-weight:600;font-size:13px;color:#15803d;text-decoration:none;">&#128203; Worksheet</a>
+    <a href="Answer_Key.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;font-weight:600;font-size:13px;color:#92400e;text-decoration:none;">&#128273; Answer Key</a>
+</div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- AUDIO ENGINE ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        const playCuteSound = (isCorrect) => {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            const rand = Math.floor(Math.random() * 3);
+
+            if (isCorrect) {
+                // 3 Different Correct Sounds
+                if (rand === 0) { // Coin / Ping
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(987.77, now);
+                    osc.frequency.setValueAtTime(1318.51, now + 0.1);
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now); osc.stop(now + 0.5);
+                } else if (rand === 1) { // Happy Arpeggio
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                    osc.start(now); osc.stop(now + 0.6);
+                } else { // Chime
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, now);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    osc.start(now); osc.stop(now + 0.8);
+
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(1108.73, now + 0.1);
+                    gain2.gain.setValueAtTime(0.2, now + 0.1);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    osc2.start(now + 0.1); osc2.stop(now + 0.8);
+                }
+            } else {
+                // 3 Different Wrong Sounds
+                if (rand === 0) { // Boink
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(50, now + 0.4);
+                    gainNode.gain.setValueAtTime(0.4, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now); osc.stop(now + 0.4);
+                } else if (rand === 1) { // Buzz
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(100, now);
+                    osc.frequency.linearRampToValueAtTime(80, now + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
+                } else { // Wah-wah
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(250, now);
+                    osc.frequency.setValueAtTime(200, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.linearRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now); osc.stop(now + 0.5);
+                }
+            }
+        };
+
+        // --- 50 QUESTIONS DATABASE (TOPIC 6: Planet Earth) ---
+        const questionsData = [
+            // Set 1: MCQ (0-9)
+            { id: 1, type: 'mcq', text: "What is the thinnest layer of the Earth's surface where we live?", options: ["A) Mantle", "B) Core", "C) Crust", "D) Magma"], answer: "C) Crust" },
+            { id: 2, type: 'mcq', text: "Which layer of the Earth is made of liquid metal?", options: ["A) Continental crust", "B) Outer core", "C) Inner core", "D) Upper mantle"], answer: "B) Outer core" },
+            { id: 3, type: 'mcq', text: "What geographical feature is created when tectonic plates collide and push land upwards?", options: ["A) Deep valleys", "B) Oceans", "C) Mountains", "D) Rivers"], answer: "C) Mountains" },
+            { id: 4, type: 'mcq', text: "What happens when the edges of tectonic plates pull apart from one another?", options: ["A) They create deep valleys", "B) They form a new core", "C) They freeze into solid rock", "D) They stop volcanoes from erupting"], answer: "A) They create deep valleys" },
+            { id: 5, type: 'mcq', text: "What is molten rock called once it reaches the surface of the Earth?", options: ["A) Magma", "B) Ash", "C) Lava", "D) Crust"], answer: "C) Lava" },
+            { id: 6, type: 'mcq', text: "Which scale do scientists use to measure the strength of an earthquake?", options: ["A) Celsius Scale", "B) Richter Scale", "C) Newton Scale", "D) Tectonic Scale"], answer: "B) Richter Scale" },
+            { id: 7, type: 'mcq', text: "Approximately how many active volcanoes are there on Earth?", options: ["A) Less than 100", "B) Exactly 500", "C) More than 1,500", "D) Over 10,000"], answer: "C) More than 1,500" },
+            { id: 8, type: 'mcq', text: "What triggers the formation of a tsunami?", options: ["A) Heavy rainfall", "B) An earthquake under the ocean", "C) A volcanic eruption on a mountain", "D) Strong hurricane winds"], answer: "B) An earthquake under the ocean" },
+            { id: 9, type: 'mcq', text: "Despite being extremely hot, what state of matter is the Earth's inner core?", options: ["A) Liquid", "B) Gas", "C) Solid", "D) Plasma"], answer: "C) Solid" },
+            { id: 10, type: 'mcq', text: "What important invisible feature does the metal in the inner core create for the Earth?", options: ["A) The magnetic field", "B) The atmosphere", "C) The oceans", "D) The tectonic plates"], answer: "A) The magnetic field" },
+
+            // Set 2: True or False (10-19)
+            { id: 11, type: 'tf', text: "The Earth's crust is divided into continental crust and oceanic crust.", answer: "True" },
+            { id: 12, type: 'tf', text: "The lower mantle is mainly made up of solid, cold rock.", answer: "False" },
+            { id: 13, type: 'tf', text: "Volcanoes can only occur on dry land, never in the oceans.", answer: "False" },
+            { id: 14, type: 'tf', text: "Most earthquakes last for more than an hour.", answer: "False" },
+            { id: 15, type: 'tf', text: "An aftershock is a smaller earthquake that affects the same place where the main earthquake took place.", answer: "True" },
+            { id: 16, type: 'tf', text: "Scientists have developed a machine that can predict exactly when an earthquake is going to happen before it starts.", answer: "False" },
+            { id: 17, type: 'tf', text: "Sensors placed in the ground help warn people that earthquake shaking is about to begin.", answer: "True" },
+            { id: 18, type: 'tf', text: "The Earth's crust is made of one solid, unbroken piece of rock.", answer: "False" },
+            { id: 19, type: 'tf', text: "When lava cools, it forms black rocks.", answer: "True" },
+            { id: 20, type: 'tf', text: "Before a tsunami rushes towards the shore, the water on the shore is sucked back out to sea.", answer: "True" },
+
+            // Set 3: Fill in the Blanks (20-29)
+            { id: 21, type: 'fill', text: "Planet Earth is shaped roughly like a ________.", answer: ["sphere"] },
+            { id: 22, type: 'fill', text: "The centre of the Earth is called the ________.", answer: ["core"] },
+            { id: 23, type: 'fill', text: "A mountain that opens downwards to a pool of molten rock below the crust is called a ________.", answer: ["volcano"] },
+            { id: 24, type: 'fill', text: "Stresses in the Earth's crust are released at cracks known as ________ lines.", answer: ["fault"] },
+            { id: 25, type: 'fill', text: "The Earth's crust is made of huge slabs called ________ plates.", answer: ["tectonic"] },
+            { id: 26, type: 'fill', text: "Magma is molten rock found ________ the Earth's crust.", answer: ["below", "under", "underneath"] },
+            { id: 27, type: 'fill', text: "A tall, destructive wave formed by an underwater earthquake is called a ________.", answer: ["tsunami"] },
+            { id: 28, type: 'fill', text: "The largest active volcano is located in ________.", answer: ["hawaii"] },
+            { id: 29, type: 'fill', text: "When pressure builds, ash, steam, gas, and ________ rock erupt into the air.", answer: ["molten", "liquid"] },
+            { id: 30, type: 'fill', text: "A level 2 on the Richter Scale usually ________ be felt by people.", answer: ["cannot", "can't"] },
+
+            // Set 4: Matching (30-34)
+            { id: 31, type: 'match', text: "Inner core", options: ["A) Hot molten rock that comes out of the top of a volcano", "B) The layer just below the crust made of hot rock", "C) Cracks in the Earth's crust where stress is found", "D) The thinnest layer on the outside of the Earth", "E) Made of solid metal and creates the magnetic field"], answer: "E) Made of solid metal and creates the magnetic field" },
+            { id: 32, type: 'match', text: "Lava", options: ["A) Hot molten rock that comes out of the top of a volcano", "B) The layer just below the crust made of hot rock", "C) Cracks in the Earth's crust where stress is found", "D) The thinnest layer on the outside of the Earth", "E) Made of solid metal and creates the magnetic field"], answer: "A) Hot molten rock that comes out of the top of a volcano" },
+            { id: 33, type: 'match', text: "Crust", options: ["A) Hot molten rock that comes out of the top of a volcano", "B) The layer just below the crust made of hot rock", "C) Cracks in the Earth's crust where stress is found", "D) The thinnest layer on the outside of the Earth", "E) Made of solid metal and creates the magnetic field"], answer: "D) The thinnest layer on the outside of the Earth" },
+            { id: 34, type: 'match', text: "Upper Mantle", options: ["A) Hot molten rock that comes out of the top of a volcano", "B) The layer just below the crust made of hot rock", "C) Cracks in the Earth's crust where stress is found", "D) The thinnest layer on the outside of the Earth", "E) Made of solid metal and creates the magnetic field"], answer: "B) The layer just below the crust made of hot rock" },
+            { id: 35, type: 'match', text: "Fault line", options: ["A) Hot molten rock that comes out of the top of a volcano", "B) The layer just below the crust made of hot rock", "C) Cracks in the Earth's crust where stress is found", "D) The thinnest layer on the outside of the Earth", "E) Made of solid metal and creates the magnetic field"], answer: "C) Cracks in the Earth's crust where stress is found" },
+
+            // Set 5: Short Answer (35-39)
+            { id: 36, type: 'long', text: "Name the three main structural layers of the Earth.", expected: "The core, the mantle, and the crust." },
+            { id: 37, type: 'long', text: "What materials build up to form a composite volcano?", expected: "Lava and ash build up to form a cone-shaped composite volcano." },
+            { id: 38, type: 'long', text: "Why are the continental crust and oceanic crust considered different?", expected: "They are different because the main type of rock found on these two crusts is different." },
+            { id: 39, type: 'long', text: "What causes the ground to shake and roll during an earthquake?", expected: "Tectonic plates squeeze or stretch, causing rocks at the surface to lift or move apart to get rid of stress." },
+            { id: 40, type: 'long', text: "How do gravity and water interact to form a tsunami after an underwater earthquake?", expected: "After the water is pushed up and sucked back out to sea, gravity pulls the water downwards, forming a tall wave that rushes towards the shore." },
+
+            // Set 6: Enquiry (40-44)
+            { id: 41, type: 'long', text: "If you were building a physical model of the Earth's layers, what property must the material representing the inner core have compared to the outer core?", expected: "The material for the inner core should be solid, while the outer core should be liquid." },
+            { id: 42, type: 'long', text: "An architect wants to design a house in a fault zone. What geological event must they plan for, and what happens to the ground during this event?", expected: "They must plan for earthquakes, where the ground shakes, rolls, and rocks move apart." },
+            { id: 43, type: 'long', text: "How would you use two pieces of cardboard to model the formation of deep valleys by tectonic plates?", expected: "You would pull the two pieces of cardboard apart from one another to show a gap or valley forming." },
+            { id: 44, type: 'long', text: "Look at the Richter Scale. If a scientist records an earthquake that causes serious damage to buildings, what is the minimum number it would be rated on the scale?", expected: "It would be rated a 6 (Moderate, causes serious damage)." },
+            { id: 45, type: 'long', text: "A scientist installs sensors in the ground near a city. Why is this important for public safety?", expected: "The sensors detect when an earthquake has started, allowing an alert centre to send warnings before heavy shaking begins so people are not trapped under collapsing buildings." },
+
+            // Set 7: Exam Style (45-49)
+            { id: 46, type: 'long', text: "The Earth is roughly shaped like a sphere.\n\na) Identify the layer of the Earth that is made of liquid metal.\nb) State what important field the inner core creates for the planet.", expected: "a) The outer core.\nb) The magnetic field." },
+            { id: 47, type: 'long', text: "A volcano is a mountain that opens downwards into the Earth.\n\na) What is the scientific term for the molten rock before it erupts?\nb) What is this molten rock called once it reaches the surface?", expected: "a) Magma.\nb) Lava." },
+            { id: 48, type: 'long', text: "Tectonic plates are large slabs that make up the Earth's crust. Describe the two different geographical outcomes when these plates collide versus when they pull apart.", expected: "When they collide, land is pushed upwards to create mountains. When they pull apart, they create deep valleys." },
+            { id: 49, type: 'long', text: "Earthquakes release stress built up in the crust.\n\na) What is the name of the cracks where these stresses are found?\nb) What are the smaller shakes called that happen days after the main earthquake?", expected: "a) Fault lines.\nb) Aftershocks." },
+            { id: 50, type: 'long', text: "Undersea earthquakes can be extremely dangerous to coastal lands. Explain step-by-step how an underwater earthquake creates a tsunami wave.", expected: "First, two plates collide and cause an earthquake under the ocean, pushing water upwards quickly. Second, the water on the shore is sucked back out to sea. Finally, gravity pulls the water downwards, forming a tall wave that rushes towards the shore." }
+        ];
+
+        // Set Navigation Bounds
+        const questionSets = [
+            { id: 1, label: "Set 1: MCQ", start: 0 },
+            { id: 2, label: "Set 2: True/False", start: 10 },
+            { id: 3, label: "Set 3: Fill in Blanks", start: 20 },
+            { id: 4, label: "Set 4: Matching", start: 30 },
+            { id: 5, label: "Set 5: Short Answer", start: 35 },
+            { id: 6, label: "Set 6: Enquiry", start: 40 },
+            { id: 7, label: "Set 7: Exam Style", start: 45 }
+        ];
+
+        const getActiveSetId = (index) => {
+            if (index < 10) return 1;
+            if (index < 20) return 2;
+            if (index < 30) return 3;
+            if (index < 35) return 4;
+            if (index < 40) return 5;
+            if (index < 45) return 6;
+            return 7;
+        };
+
+        const getSetName = (index) => {
+            const setObj = questionSets.find(s => s.id === getActiveSetId(index));
+            return setObj ? setObj.label : "Questions";
+        };
+
+        // --- MAIN APPLICATION COMPONENT ---
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('presentation');
+
+
+            const [currentQIndex, setCurrentQIndex] = useState(0);
+            const [userInputs, setUserInputs] = useState({});
+            const [isCompleted, setIsCompleted] = useState({});
+            const [feedback, setFeedback] = useState(null);
+            const [showSelfGrade, setShowSelfGrade] = useState(false);
+
+            const q = questionsData[currentQIndex];
+
+            useEffect(() => {
+                setFeedback(null);
+                setShowSelfGrade(false);
+            }, [currentQIndex]);
+
+            const handleInput = (val) => {
+                setUserInputs(prev => ({ ...prev, [currentQIndex]: val }));
+            };
+
+            const checkAnswer = () => {
+                const input = userInputs[currentQIndex];
+                if (!input) {
+                    setFeedback({ type: 'error', msg: 'Please provide an answer first!' });
+                    return;
+                }
+
+                if (q.type === 'mcq' || q.type === 'tf' || q.type === 'match') {
+                    if (input === q.answer) markCorrect();
+                    else markWrong();
+                } else if (q.type === 'fill') {
+                    const cleanInput = input.trim().toLowerCase();
+                    const isRight = q.answer.some(ans => cleanInput === ans.toLowerCase());
+                    if (isRight) markCorrect();
+                    else markWrong();
+                } else if (q.type === 'long') {
+                    setShowSelfGrade(true);
+                }
+            };
+
+            const markCorrect = () => {
+                playCuteSound(true);
+                setFeedback({ type: 'success', msg: 'Correct! Great job!' });
+                setIsCompleted(prev => ({ ...prev, [currentQIndex]: true }));
+            };
+
+            const markWrong = () => {
+                playCuteSound(false);
+                setFeedback({ type: 'error', msg: 'Not quite right. Try again!' });
+            };
+
+            const handleSelfGrade = (wasCorrect) => {
+                if (wasCorrect) {
+                    markCorrect();
+                } else {
+                    markWrong();
+                    setShowSelfGrade(false);
+                }
+            };
+
+            const nextQuestion = () => {
+                if (currentQIndex < questionsData.length - 1) setCurrentQIndex(currentQIndex + 1);
+            };
+
+            const prevQuestion = () => {
+                if (currentQIndex > 0) setCurrentQIndex(currentQIndex - 1);
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col items-center p-4 md:p-8">
+                    {/* Header */}
+                    <header className="w-full max-w-6xl bg-white rounded-xl shadow-md p-6 mb-6 text-center border-t-4 border-amber-500">
+                        <h1 className="text-3xl font-bold text-slate-800">IGCSE Year 4 Science</h1>
+                        <h2 className="text-xl text-amber-600 mt-2 font-semibold">Topic 6: Planet Earth</h2>
+                    </header>
+
+                    {/* Navigation Tabs */}
+                    <div className="w-full max-w-6xl flex space-x-2 mb-6">
+                        <button
+                            onClick={() => setActiveTab('presentation')}
+                            className={`flex-1 py-3 rounded-t-lg font-bold text-lg transition-colors border-b-4 ${activeTab === 'presentation' ? 'bg-white text-amber-600 border-amber-500 shadow-md' : 'bg-slate-50 text-gray-500 border-transparent hover:bg-slate-100'}`}>
+                            📺 Presentation View
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('questions')}
+                            className={`flex-1 py-3 rounded-t-lg font-bold text-lg transition-colors border-b-4 ${activeTab === 'questions' ? 'bg-white text-amber-600 border-amber-500 shadow-md' : 'bg-slate-50 text-gray-500 border-transparent hover:bg-slate-100'}`}>
+                            📝 Interactive Questions (50)
+                        </button>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="w-full max-w-6xl bg-white rounded-b-xl rounded-tr-xl shadow-xl overflow-hidden min-h-[650px] flex flex-col">
+
+                        {/* --- PRESENTATION TAB --- */}
+                        {activeTab === 'presentation' && (
+                            <div className="flex flex-col h-full flex-grow fade-in" style={{padding: '16px'}}>
+                                <h3 className="text-xl font-bold mb-4" style={{color: '#1e293b'}}>Presentation Slides</h3>
+                                <div style={{flex: 1, background: '#f1f5f9', borderRadius: '12px', overflow: 'hidden', minHeight: '540px', position: 'relative'}}>
+                                    <iframe src="slides.pdf" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none'}} title="Presentation Slides"></iframe>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* --- QUESTIONS TAB --- */}
+                        {activeTab === 'questions' && (
+                            <div className="flex flex-col h-full flex-grow p-6 md:p-10 fade-in">
+
+                                {/* Set Navigation Menu */}
+                                <div className="flex overflow-x-auto space-x-3 pb-4 mb-6 hide-scrollbar border-b border-gray-200">
+                                    {questionSets.map(set => (
+                                        <button
+                                            key={set.id}
+                                            onClick={() => {
+                                                setCurrentQIndex(set.start);
+                                                setFeedback(null);
+                                                setShowSelfGrade(false);
+                                            }}
+                                            className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${getActiveSetId(currentQIndex) === set.id
+                                                    ? 'bg-amber-500 text-white shadow-md transform scale-105'
+                                                    : 'bg-amber-50 text-amber-700 hover:bg-amber-100 hover:shadow'
+                                                }`}
+                                        >
+                                            {set.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Question Header */}
+                                <div className="flex justify-between items-center mb-6">
+                                    <span className="text-amber-600 font-bold uppercase tracking-wider text-lg">{getSetName(currentQIndex)}</span>
+                                    <span className="bg-slate-800 text-white py-1 px-4 rounded-full font-bold text-sm tracking-widest shadow-inner">
+                                        Q: {currentQIndex + 1} / 50
+                                    </span>
+                                </div>
+
+                                {/* Question Body */}
+                                <div className="flex-grow">
+                                    <h3 className="text-2xl font-semibold text-gray-800 mb-8 whitespace-pre-wrap leading-relaxed">{q.text}</h3>
+
+                                    {/* MCQ / Match Options */}
+                                    {(q.type === 'mcq' || q.type === 'match') && (
+                                        <div className="space-y-3">
+                                            {q.options.map((opt, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => !isCompleted[currentQIndex] && handleInput(opt)}
+                                                    className={`w-full text-left p-4 rounded-lg border-2 font-medium transition-all ${userInputs[currentQIndex] === opt
+                                                            ? (isCompleted[currentQIndex] ? 'bg-green-100 border-green-500 text-green-900' : 'bg-amber-50 border-amber-500 text-amber-900')
+                                                            : 'bg-white border-gray-200 hover:border-amber-300 hover:bg-amber-50'
+                                                        } ${isCompleted[currentQIndex] ? 'cursor-default' : 'cursor-pointer'}`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* True / False Options */}
+                                    {q.type === 'tf' && (
+                                        <div className="flex space-x-6">
+                                            {['True', 'False'].map((opt) => (
+                                                <button
+                                                    key={opt}
+                                                    onClick={() => !isCompleted[currentQIndex] && handleInput(opt)}
+                                                    className={`flex-1 p-6 rounded-lg border-2 text-2xl font-bold transition-all ${userInputs[currentQIndex] === opt
+                                                            ? (isCompleted[currentQIndex] ? 'bg-green-100 border-green-500 text-green-900' : 'bg-amber-50 border-amber-500 text-amber-900')
+                                                            : 'bg-white border-gray-200 hover:border-amber-300'
+                                                        } ${isCompleted[currentQIndex] ? 'cursor-default' : 'cursor-pointer'}`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Fill in the Blanks */}
+                                    {q.type === 'fill' && (
+                                        <div>
+                                            <input
+                                                type="text"
+                                                disabled={isCompleted[currentQIndex]}
+                                                placeholder="Type your one-word answer here..."
+                                                value={userInputs[currentQIndex] || ''}
+                                                onChange={(e) => handleInput(e.target.value)}
+                                                className={`w-full p-4 border-2 rounded-lg text-xl focus:outline-none focus:ring-2 focus:ring-amber-500 ${isCompleted[currentQIndex] ? 'bg-green-50 border-green-500 text-green-900 font-bold shadow-inner' : 'border-gray-300'}`}
+                                                onKeyDown={(e) => { if (e.key === 'Enter') checkAnswer(); }}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Long Answer */}
+                                    {q.type === 'long' && (
+                                        <div>
+                                            <textarea
+                                                disabled={isCompleted[currentQIndex] || showSelfGrade}
+                                                placeholder="Explain your reasoning here..."
+                                                value={userInputs[currentQIndex] || ''}
+                                                onChange={(e) => handleInput(e.target.value)}
+                                                rows="5"
+                                                className={`w-full p-4 border-2 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none ${isCompleted[currentQIndex] ? 'bg-green-50 border-green-500 text-green-900 font-medium' : 'border-gray-300'}`}
+                                            ></textarea>
+
+                                            {showSelfGrade && !isCompleted[currentQIndex] && (
+                                                <div className="mt-6 p-6 bg-slate-50 border-l-4 border-slate-500 rounded-r-lg shadow-sm fade-in">
+                                                    <h4 className="font-bold text-slate-700 mb-2 uppercase text-sm tracking-wider">Expected Answer:</h4>
+                                                    <p className="text-slate-900 mb-6 text-lg italic whitespace-pre-wrap">"{q.expected}"</p>
+                                                    <div className="bg-white p-4 rounded border border-slate-200">
+                                                        <p className="font-bold text-gray-800 mb-3 text-center">Did your answer capture this scientific meaning correctly?</p>
+                                                        <div className="flex justify-center space-x-4">
+                                                            <button onClick={() => handleSelfGrade(true)} className="px-6 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-600 transition shadow">Yes, I got it right!</button>
+                                                            <button onClick={() => handleSelfGrade(false)} className="px-6 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition shadow">No, let me try again</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Feedback Message */}
+                                    {feedback && (
+                                        <div className={`mt-8 p-4 rounded-lg font-bold text-center text-xl shadow-sm fade-in ${feedback.type === 'success' ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-red-100 text-red-800 border border-red-300'}`}>
+                                            {feedback.type === 'success' ? '✨ ' : '❌ '}{feedback.msg}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Controls */}
+                                <div className="mt-8 flex justify-between items-center pt-6 border-t border-gray-200">
+                                    <button
+                                        onClick={prevQuestion}
+                                        disabled={currentQIndex === 0}
+                                        className={`px-6 py-3 rounded-lg font-bold transition ${currentQIndex === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                    >
+                                        &larr; Previous
+                                    </button>
+
+                                    {!isCompleted[currentQIndex] && !showSelfGrade ? (
+                                        <button
+                                            onClick={checkAnswer}
+                                            className="px-10 py-3 bg-amber-500 text-white rounded-lg font-bold text-lg hover:bg-amber-600 shadow-lg transform hover:scale-105 transition"
+                                        >
+                                            Check Answer
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={nextQuestion}
+                                            disabled={!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1}
+                                            className={`px-10 py-3 rounded-lg font-bold text-lg flex items-center shadow-lg transition ${(!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1) ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600 transform hover:scale-105 animate-pulse'}`}
+                                        >
+                                            Next Question &rarr;
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover {
+  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+  color: #fff;
+}
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed">&#127968; Home</a>
+
+<script src="../../../../../js/progress-tracker.js"
+        data-module-id="IGCSE_Y4_Sci_T6"
+        data-module-name="IGCSE Y4 Science - Planet Earth"
+        data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic6_Planet_Earth/index.html"></script>
+<script>
+window.addEventListener('load', function() {
+    if (!window.ProgressTracker) return;
+    ProgressTracker.load().then(function() { ProgressTracker.save({ visited: true }); });
+});
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE Science: Earth and Space</title>
+    <!-- Tailwind CSS for Styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel for JSX compilation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f3ff;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:10px 24px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;position:sticky;top:0;z-index:1000;box-shadow:0 1px 6px rgba(0,0,0,0.07);">
+    <a href="slides.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:10px;font-weight:600;font-size:13px;color:#0369a1;text-decoration:none;">&#128196; Slides PDF</a>
+    <a href="Worksheet.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;font-weight:600;font-size:13px;color:#15803d;text-decoration:none;">&#128203; Worksheet</a>
+    <a href="Answer_Key.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;font-weight:600;font-size:13px;color:#92400e;text-decoration:none;">&#128273; Answer Key</a>
+</div>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- AUDIO ENGINE ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        const playCuteSound = (isCorrect) => {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+            const rand = Math.floor(Math.random() * 3);
+
+            if (isCorrect) {
+                // 3 Different Correct Sounds
+                if (rand === 0) { // Coin / Ping
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(987.77, now);
+                    osc.frequency.setValueAtTime(1318.51, now + 0.1);
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now); osc.stop(now + 0.5);
+                } else if (rand === 1) { // Happy Arpeggio
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+                    osc.start(now); osc.stop(now + 0.6);
+                } else { // Chime
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, now);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    osc.start(now); osc.stop(now + 0.8);
+
+                    const osc2 = audioCtx.createOscillator();
+                    const gain2 = audioCtx.createGain();
+                    osc2.connect(gain2); gain2.connect(audioCtx.destination);
+                    osc2.type = 'sine';
+                    osc2.frequency.setValueAtTime(1108.73, now + 0.1);
+                    gain2.gain.setValueAtTime(0.2, now + 0.1);
+                    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+                    osc2.start(now + 0.1); osc2.stop(now + 0.8);
+                }
+            } else {
+                // 3 Different Wrong Sounds
+                if (rand === 0) { // Boink
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(50, now + 0.4);
+                    gainNode.gain.setValueAtTime(0.4, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now); osc.stop(now + 0.4);
+                } else if (rand === 1) { // Buzz
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(100, now);
+                    osc.frequency.linearRampToValueAtTime(80, now + 0.3);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
+                } else { // Wah-wah
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(250, now);
+                    osc.frequency.setValueAtTime(200, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.linearRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now); osc.stop(now + 0.5);
+                }
+            }
+        };
+
+        // --- 50 QUESTIONS DATABASE (TOPIC 7: Earth and Space) ---
+        const questionsData = [
+            // Set 1: MCQ (0-9)
+            { id: 1, type: 'mcq', text: "In which direction does the Earth spin on its axis?", options: ["A) North to South", "B) Clockwise", "C) Anti-clockwise (West to East)", "D) Up and down"], answer: "C) Anti-clockwise (West to East)" },
+            { id: 2, type: 'mcq', text: "What is located at the very center of our Solar System?", options: ["A) The Earth", "B) The Moon", "C) The Milky Way", "D) The Sun"], answer: "D) The Sun" },
+            { id: 3, type: 'mcq', text: "How long does it take for the Earth to make one complete rotation on its axis?", options: ["A) 12 hours", "B) 24 hours", "C) 7 days", "D) 365 days"], answer: "B) 24 hours" },
+            { id: 4, type: 'mcq', text: "What do scientists call the imaginary line that runs straight through the center of the Earth from the North Pole to the South Pole?", options: ["A) The Equator", "B) The Orbit", "C) The Axis", "D) The Horizon"], answer: "C) The Axis" },
+            { id: 5, type: 'mcq', text: "Which of the following is considered an \"outer planet\"?", options: ["A) Mercury", "B) Mars", "C) Earth", "D) Neptune"], answer: "D) Neptune" },
+            { id: 6, type: 'mcq', text: "What is the Sun classified as?", options: ["A) A star", "B) A planet", "C) A comet", "D) An asteroid"], answer: "A) A star" },
+            { id: 7, type: 'mcq', text: "What causes a comet to form a beautiful tail of gases?", options: ["A) It crashes into an asteroid", "B) The ice melts as it gets close to the hot Sun", "C) It spins very fast", "D) It hits the Earth's atmosphere"], answer: "B) The ice melts as it gets close to the hot Sun" },
+            { id: 8, type: 'mcq', text: "Why do we have day and night on Earth?", options: ["A) The Sun turns on and off", "B) The Sun moves around the Earth", "C) The Moon blocks the Sun", "D) The Earth rotates on its own axis"], answer: "D) The Earth rotates on its own axis" },
+            { id: 9, type: 'mcq', text: "What is the name of the galaxy where our Solar System is located?", options: ["A) The Andromeda Galaxy", "B) The Milky Way", "C) The Solar Galaxy", "D) The Universe"], answer: "B) The Milky Way" },
+            { id: 10, type: 'mcq', text: "What is a \"moon\" in astronomy?", options: ["A) A star that reflects light", "B) A chunk of ice orbiting the Sun", "C) A large natural object in orbit around a planet", "D) An asteroid that hits the ground"], answer: "C) A large natural object in orbit around a planet" },
+
+            // Set 2: True or False (10-19)
+            { id: 11, type: 'tf', text: "The Sun moves across the sky from east to west because it orbits the Earth.", answer: "False" },
+            { id: 12, type: 'tf', text: "The Earth's axis is completely straight up and down.", answer: "False" },
+            { id: 13, type: 'tf', text: "The Sun's gravity keeps all the planets in their orbits.", answer: "True" },
+            { id: 14, type: 'tf', text: "An orbit is the path an object takes around something else.", answer: "True" },
+            { id: 15, type: 'tf', text: "Mercury, Venus, Earth, and Mars are the four inner planets.", answer: "True" },
+            { id: 16, type: 'tf', text: "If it is daytime in your country, your part of the Earth is facing away from the Sun.", answer: "False" },
+            { id: 17, type: 'tf', text: "The Solar System contains only the Sun and eight planets; there is nothing else in it.", answer: "False" },
+            { id: 18, type: 'tf', text: "Earth is the only planet in the Solar System located at the right distance from the Sun to have liquid water and support life.", answer: "True" },
+            { id: 19, type: 'tf', text: "A meteorite is a space rock that has successfully hit the ground.", answer: "True" },
+            { id: 20, type: 'tf', text: "The Earth's atmosphere prevents the heat of the Sun from completely escaping into space at night.", answer: "True" },
+
+            // Set 3: Fill in the Blanks (20-29)
+            { id: 21, type: 'fill', text: "The Earth is shaped roughly like a giant ________.", answer: ["sphere", "ball"] },
+            { id: 22, type: 'fill', text: "The Earth's axis is tilted at an angle of ________ degrees.", answer: ["23.5", "23.5 degrees"] },
+            { id: 23, type: 'fill', text: "The four planets furthest from the Sun (Jupiter, Saturn, Uranus, and Neptune) are known as the ________ planets.", answer: ["outer"] },
+            { id: 24, type: 'fill', text: "As the Earth spins, the Sun seems to rise in the east and ________ in the west.", answer: ["set", "sets"] },
+            { id: 25, type: 'fill', text: "The Earth moves around the Sun once a ________.", answer: ["year", "one year"] },
+            { id: 26, type: 'fill', text: "The Sun is a huge, hot ball of glowing ________ at the center of the Solar System.", answer: ["gas", "gases", "plasma"] },
+            { id: 27, type: 'fill', text: "A planetary system is a group of planetary bodies in orbit around a ________.", answer: ["star", "star system", "stars"] },
+            { id: 28, type: 'fill', text: "When the Sun seems to sink below the horizon, it creates long ________ on the surface of the Earth.", answer: ["shadows", "shadow"] },
+            { id: 29, type: 'fill', text: "A ________ is a chunk of ice and rock that orbits the Sun.", answer: ["comet"] },
+            { id: 30, type: 'fill', text: "The entire universe contains billions of ________, and ours is called the Milky Way.", answer: ["galaxies", "galaxy"] },
+
+            // Set 4: Matching (30-34)
+            { id: 31, type: 'match', text: "Comet", options: ["A) A rock from space that does not completely burn up and hits the ground.", "B) The star at the center of our Solar System.", "C) A small rocky object that orbits the Sun.", "D) The curved path followed by an object going around the Sun or a planet.", "E) A small object with an icy core that has a tail of gases near the Sun."], answer: "E) A small object with an icy core that has a tail of gases near the Sun." },
+            { id: 32, type: 'match', text: "Orbit", options: ["A) A rock from space that does not completely burn up and hits the ground.", "B) The star at the center of our Solar System.", "C) A small rocky object that orbits the Sun.", "D) The curved path followed by an object going around the Sun or a planet.", "E) A small object with an icy core that has a tail of gases near the Sun."], answer: "D) The curved path followed by an object going around the Sun or a planet." },
+            { id: 33, type: 'match', text: "Meteorite", options: ["A) A rock from space that does not completely burn up and hits the ground.", "B) The star at the center of our Solar System.", "C) A small rocky object that orbits the Sun.", "D) The curved path followed by an object going around the Sun or a planet.", "E) A small object with an icy core that has a tail of gases near the Sun."], answer: "A) A rock from space that does not completely burn up and hits the ground." },
+            { id: 34, type: 'match', text: "Sun", options: ["A) A rock from space that does not completely burn up and hits the ground.", "B) The star at the center of our Solar System.", "C) A small rocky object that orbits the Sun.", "D) The curved path followed by an object going around the Sun or a planet.", "E) A small object with an icy core that has a tail of gases near the Sun."], answer: "B) The star at the center of our Solar System." },
+            { id: 35, type: 'match', text: "Asteroid", options: ["A) A rock from space that does not completely burn up and hits the ground.", "B) The star at the center of our Solar System.", "C) A small rocky object that orbits the Sun.", "D) The curved path followed by an object going around the Sun or a planet.", "E) A small object with an icy core that has a tail of gases near the Sun."], answer: "C) A small rocky object that orbits the Sun." },
+
+            // Set 5: Short Answer (35-39)
+            { id: 36, type: 'long', text: "Why did people in the past think the Sun moved around the Earth?", expected: "Because every day the Sun appeared to travel across the sky from east to west." },
+            { id: 37, type: 'long', text: "Name the four inner planets closest to the Sun.", expected: "Mercury, Venus, Earth, and Mars." },
+            { id: 38, type: 'long', text: "Explain why Earth is the perfect planet to support life.", expected: "It is at the right distance from the Sun to be warm enough, it has liquid water on its surface, and it has an atmosphere." },
+            { id: 39, type: 'long', text: "What happens to the gases on a comet when it moves away from the Sun's heat?", expected: "The gases refreeze." },
+            { id: 40, type: 'long', text: "What invisible force from the Sun keeps all the planets, asteroids, and comets safely in their orbits?", expected: "Gravity (or the gravitational pull of the Sun)." },
+
+            // Set 6: Enquiry (40-44)
+            { id: 41, type: 'long', text: "Safia is making a papier-mâché model of the Earth. To show how the Earth spins, she pushes a wooden stick straight through the center from top to bottom. What does this wooden stick represent?", expected: "The Earth's axis." },
+            { id: 42, type: 'long', text: "Safia wants her model to be completely accurate to the real Earth. Should she hold the stick perfectly straight up and down, or tilted? Explain why.", expected: "She should hold it tilted, because the Earth's axis is tilted at an angle (23.5 degrees)." },
+            { id: 43, type: 'long', text: "Youssef uses a flashlight to represent the Sun and shines it at Safia's spinning globe. What do the parts of the globe that are in darkness represent?", expected: "The countries experiencing night-time." },
+            { id: 44, type: 'long', text: "If you wanted to investigate how shadows change during the day, what observation would you make about a shadow at sunrise versus midday?", expected: "At sunrise the shadow is very long, and at midday the shadow is shorter." },
+            { id: 45, type: 'long', text: "Look at a model of the Solar System in a classroom. Why does a physical model fail to show the exact true distances and sizes of planets at the same time?", expected: "Models are not fully representative of the real world because the real distances and sizes are too huge (vast) to fit perfectly to scale in a single classroom model." },
+
+            // Set 7: Exam Style (45-49)
+            { id: 46, type: 'long', text: "The Earth is a planet that moves in space.\n\na) State the name of the path the Earth takes as it travels around the Sun.\nb) State how long it takes for the Earth to complete this journey around the Sun.", expected: "a) An orbit.\nb) One year (or 365 and a quarter days)." },
+            { id: 47, type: 'long', text: "A planetary system contains many different bodies.\n\na) Name the galaxy that our Solar System is part of.\nb) What is the main difference between a planet and the Sun?", expected: "a) The Milky Way.\nb) The Sun is a star (a hot ball of glowing gas that produces light), while a planet orbits a star and only reflects light." },
+            { id: 48, type: 'long', text: "Chen builds a model of the Earth and the Sun using a ball and a lamp. He spins the ball on an axis.\n\na) Explain how this model shows the cause of day and night.", expected: "a) As the ball (Earth) spins, the side facing the lamp (Sun) has daylight. The side facing away is in darkness, showing night." },
+            { id: 49, type: 'long', text: "Look at the following space objects: Moon, Asteroid, Comet. Which of these objects is made of ice and rock and forms a tail when it gets close to the Sun?", expected: "A comet." },
+            { id: 50, type: 'long', text: "The Earth has an atmosphere. Describe one reason why the atmosphere is important for keeping the Earth warm at night.", expected: "The atmosphere is a mixture of gases that surrounds the Earth. Without it, the heat from the Sun would be lost into space at night, making the Earth much too cold." }
+        ];
+
+        // Set Navigation Bounds
+        const questionSets = [
+            { id: 1, label: "Set 1: MCQ", start: 0 },
+            { id: 2, label: "Set 2: True/False", start: 10 },
+            { id: 3, label: "Set 3: Fill in Blanks", start: 20 },
+            { id: 4, label: "Set 4: Matching", start: 30 },
+            { id: 5, label: "Set 5: Short Answer", start: 35 },
+            { id: 6, label: "Set 6: Enquiry", start: 40 },
+            { id: 7, label: "Set 7: Exam Style", start: 45 }
+        ];
+
+        const getActiveSetId = (index) => {
+            if (index < 10) return 1;
+            if (index < 20) return 2;
+            if (index < 30) return 3;
+            if (index < 35) return 4;
+            if (index < 40) return 5;
+            if (index < 45) return 6;
+            return 7;
+        };
+
+        const getSetName = (index) => {
+            const setObj = questionSets.find(s => s.id === getActiveSetId(index));
+            return setObj ? setObj.label : "Questions";
+        };
+
+        // --- MAIN APPLICATION COMPONENT ---
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('presentation');
+
+
+            const [currentQIndex, setCurrentQIndex] = useState(0);
+            const [userInputs, setUserInputs] = useState({});
+            const [isCompleted, setIsCompleted] = useState({});
+            const [feedback, setFeedback] = useState(null);
+            const [showSelfGrade, setShowSelfGrade] = useState(false);
+
+            const q = questionsData[currentQIndex];
+
+            useEffect(() => {
+                setFeedback(null);
+                setShowSelfGrade(false);
+            }, [currentQIndex]);
+
+            const handleInput = (val) => {
+                setUserInputs(prev => ({ ...prev, [currentQIndex]: val }));
+            };
+
+            const checkAnswer = () => {
+                const input = userInputs[currentQIndex];
+                if (!input) {
+                    setFeedback({ type: 'error', msg: 'Please provide an answer first!' });
+                    return;
+                }
+
+                if (q.type === 'mcq' || q.type === 'tf' || q.type === 'match') {
+                    if (input === q.answer) markCorrect();
+                    else markWrong();
+                } else if (q.type === 'fill') {
+                    const cleanInput = input.trim().toLowerCase();
+                    const isRight = q.answer.some(ans => cleanInput === ans.toLowerCase());
+                    if (isRight) markCorrect();
+                    else markWrong();
+                } else if (q.type === 'long') {
+                    setShowSelfGrade(true);
+                }
+            };
+
+            const markCorrect = () => {
+                playCuteSound(true);
+                setFeedback({ type: 'success', msg: 'Correct! Stellar job!' });
+                setIsCompleted(prev => ({ ...prev, [currentQIndex]: true }));
+            };
+
+            const markWrong = () => {
+                playCuteSound(false);
+                setFeedback({ type: 'error', msg: 'Not quite right. Try again!' });
+            };
+
+            const handleSelfGrade = (wasCorrect) => {
+                if (wasCorrect) {
+                    markCorrect();
+                } else {
+                    markWrong();
+                    setShowSelfGrade(false);
+                }
+            };
+
+            const nextQuestion = () => {
+                if (currentQIndex < questionsData.length - 1) setCurrentQIndex(currentQIndex + 1);
+            };
+
+            const prevQuestion = () => {
+                if (currentQIndex > 0) setCurrentQIndex(currentQIndex - 1);
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col items-center p-4 md:p-8">
+                    {/* Header */}
+                    <header className="w-full max-w-6xl bg-white rounded-xl shadow-md p-6 mb-6 text-center border-t-4 border-indigo-600">
+                        <h1 className="text-3xl font-bold text-slate-800">IGCSE Year 4 Science</h1>
+                        <h2 className="text-xl text-indigo-700 mt-2 font-semibold">Topic 7: Earth and Space</h2>
+                    </header>
+
+                    {/* Navigation Tabs */}
+                    <div className="w-full max-w-6xl flex space-x-2 mb-6">
+                        <button
+                            onClick={() => setActiveTab('presentation')}
+                            className={`flex-1 py-3 rounded-t-lg font-bold text-lg transition-colors border-b-4 ${activeTab === 'presentation' ? 'bg-white text-indigo-700 border-indigo-600 shadow-md' : 'bg-indigo-50 text-gray-500 border-transparent hover:bg-indigo-100'}`}>
+                            📺 Presentation View
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('questions')}
+                            className={`flex-1 py-3 rounded-t-lg font-bold text-lg transition-colors border-b-4 ${activeTab === 'questions' ? 'bg-white text-indigo-700 border-indigo-600 shadow-md' : 'bg-indigo-50 text-gray-500 border-transparent hover:bg-indigo-100'}`}>
+                            📝 Interactive Questions (50)
+                        </button>
+                    </div>
+
+                    {/* Content Area */}
+                    <div className="w-full max-w-6xl bg-white rounded-b-xl rounded-tr-xl shadow-xl overflow-hidden min-h-[650px] flex flex-col">
+
+                        {/* --- PRESENTATION TAB --- */}
+                        {activeTab === 'presentation' && (
+                            <div className="flex flex-col h-full flex-grow fade-in" style={{padding: '16px'}}>
+                                <h3 className="text-xl font-bold mb-4" style={{color: '#1e293b'}}>Presentation Slides</h3>
+                                <div style={{flex: 1, background: '#f1f5f9', borderRadius: '12px', overflow: 'hidden', minHeight: '540px', position: 'relative'}}>
+                                    <iframe src="slides.pdf" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none'}} title="Presentation Slides"></iframe>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* --- QUESTIONS TAB --- */}
+                        {activeTab === 'questions' && (
+                            <div className="flex flex-col h-full flex-grow p-6 md:p-10 fade-in">
+
+                                {/* Set Navigation Menu */}
+                                <div className="flex overflow-x-auto space-x-3 pb-4 mb-6 hide-scrollbar border-b border-gray-200">
+                                    {questionSets.map(set => (
+                                        <button
+                                            key={set.id}
+                                            onClick={() => {
+                                                setCurrentQIndex(set.start);
+                                                setFeedback(null);
+                                                setShowSelfGrade(false);
+                                            }}
+                                            className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${getActiveSetId(currentQIndex) === set.id
+                                                    ? 'bg-indigo-600 text-white shadow-md transform scale-105'
+                                                    : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 hover:shadow'
+                                                }`}
+                                        >
+                                            {set.label}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* Question Header */}
+                                <div className="flex justify-between items-center mb-6">
+                                    <span className="text-indigo-600 font-bold uppercase tracking-wider text-lg">{getSetName(currentQIndex)}</span>
+                                    <span className="bg-slate-800 text-white py-1 px-4 rounded-full font-bold text-sm tracking-widest shadow-inner">
+                                        Q: {currentQIndex + 1} / 50
+                                    </span>
+                                </div>
+
+                                {/* Question Body */}
+                                <div className="flex-grow">
+                                    <h3 className="text-2xl font-semibold text-gray-800 mb-8 whitespace-pre-wrap leading-relaxed">{q.text}</h3>
+
+                                    {/* MCQ / Match Options */}
+                                    {(q.type === 'mcq' || q.type === 'match') && (
+                                        <div className="space-y-3">
+                                            {q.options.map((opt, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => !isCompleted[currentQIndex] && handleInput(opt)}
+                                                    className={`w-full text-left p-4 rounded-lg border-2 font-medium transition-all ${userInputs[currentQIndex] === opt
+                                                            ? (isCompleted[currentQIndex] ? 'bg-green-100 border-green-500 text-green-900' : 'bg-indigo-50 border-indigo-500 text-indigo-900')
+                                                            : 'bg-white border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                                                        } ${isCompleted[currentQIndex] ? 'cursor-default' : 'cursor-pointer'}`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* True / False Options */}
+                                    {q.type === 'tf' && (
+                                        <div className="flex space-x-6">
+                                            {['True', 'False'].map((opt) => (
+                                                <button
+                                                    key={opt}
+                                                    onClick={() => !isCompleted[currentQIndex] && handleInput(opt)}
+                                                    className={`flex-1 p-6 rounded-lg border-2 text-2xl font-bold transition-all ${userInputs[currentQIndex] === opt
+                                                            ? (isCompleted[currentQIndex] ? 'bg-green-100 border-green-500 text-green-900' : 'bg-indigo-50 border-indigo-500 text-indigo-900')
+                                                            : 'bg-white border-gray-200 hover:border-indigo-300'
+                                                        } ${isCompleted[currentQIndex] ? 'cursor-default' : 'cursor-pointer'}`}
+                                                >
+                                                    {opt}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Fill in the Blanks */}
+                                    {q.type === 'fill' && (
+                                        <div>
+                                            <input
+                                                type="text"
+                                                disabled={isCompleted[currentQIndex]}
+                                                placeholder="Type your one-word answer here..."
+                                                value={userInputs[currentQIndex] || ''}
+                                                onChange={(e) => handleInput(e.target.value)}
+                                                className={`w-full p-4 border-2 rounded-lg text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 ${isCompleted[currentQIndex] ? 'bg-green-50 border-green-500 text-green-900 font-bold shadow-inner' : 'border-gray-300'}`}
+                                                onKeyDown={(e) => { if (e.key === 'Enter') checkAnswer(); }}
+                                            />
+                                        </div>
+                                    )}
+
+                                    {/* Long Answer */}
+                                    {q.type === 'long' && (
+                                        <div>
+                                            <textarea
+                                                disabled={isCompleted[currentQIndex] || showSelfGrade}
+                                                placeholder="Explain your scientific reasoning here..."
+                                                value={userInputs[currentQIndex] || ''}
+                                                onChange={(e) => handleInput(e.target.value)}
+                                                rows="5"
+                                                className={`w-full p-4 border-2 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none ${isCompleted[currentQIndex] ? 'bg-green-50 border-green-500 text-green-900 font-medium' : 'border-gray-300'}`}
+                                            ></textarea>
+
+                                            {showSelfGrade && !isCompleted[currentQIndex] && (
+                                                <div className="mt-6 p-6 bg-slate-50 border-l-4 border-slate-500 rounded-r-lg shadow-sm fade-in">
+                                                    <h4 className="font-bold text-slate-700 mb-2 uppercase text-sm tracking-wider">Expected Answer:</h4>
+                                                    <p className="text-slate-900 mb-6 text-lg italic whitespace-pre-wrap">"{q.expected}"</p>
+                                                    <div className="bg-white p-4 rounded border border-slate-200">
+                                                        <p className="font-bold text-gray-800 mb-3 text-center">Did your answer capture this scientific meaning correctly?</p>
+                                                        <div className="flex justify-center space-x-4">
+                                                            <button onClick={() => handleSelfGrade(true)} className="px-6 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-600 transition shadow">Yes, I got it right!</button>
+                                                            <button onClick={() => handleSelfGrade(false)} className="px-6 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition shadow">No, let me try again</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Feedback Message */}
+                                    {feedback && (
+                                        <div className={`mt-8 p-4 rounded-lg font-bold text-center text-xl shadow-sm fade-in ${feedback.type === 'success' ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-red-100 text-red-800 border border-red-300'}`}>
+                                            {feedback.type === 'success' ? '✨ ' : '❌ '}{feedback.msg}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Controls */}
+                                <div className="mt-8 flex justify-between items-center pt-6 border-t border-gray-200">
+                                    <button
+                                        onClick={prevQuestion}
+                                        disabled={currentQIndex === 0}
+                                        className={`px-6 py-3 rounded-lg font-bold transition ${currentQIndex === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                    >
+                                        &larr; Previous
+                                    </button>
+
+                                    {!isCompleted[currentQIndex] && !showSelfGrade ? (
+                                        <button
+                                            onClick={checkAnswer}
+                                            className="px-10 py-3 bg-indigo-600 text-white rounded-lg font-bold text-lg hover:bg-indigo-700 shadow-lg transform hover:scale-105 transition"
+                                        >
+                                            Check Answer
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={nextQuestion}
+                                            disabled={!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1}
+                                            className={`px-10 py-3 rounded-lg font-bold text-lg flex items-center shadow-lg transition ${(!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1) ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600 transform hover:scale-105 animate-pulse'}`}
+                                        >
+                                            Next Question &rarr;
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover {
+  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+  color: #fff;
+}
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed">&#127968; Home</a>
+
+<script src="../../../../../js/progress-tracker.js"
+        data-module-id="IGCSE_Y4_Sci_T7"
+        data-module-name="IGCSE Y4 Science - Earth and Space"
+        data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html"></script>
+<script>
+window.addEventListener('load', function() {
+    if (!window.ProgressTracker) return;
+    ProgressTracker.load().then(function() { ProgressTracker.save({ visited: true }); });
+});
+</script>
+
+</body>
+
+</html>
