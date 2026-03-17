@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The AI Co-Founder Simulator Pro</title>
+    <style>
+        /* --- 科技感 x 少女創業風 (Tech meets Chic) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            color: #333;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #6a11cb;
+            text-align: center;
+        }
+
+        /* --- 雙語翻譯控制器 --- */
+        .translate-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #6a11cb;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+        }
+
+        .lang-cn {
+            display: none;
+        }
+
+        body.show-cn .lang-cn {
+            display: block;
+            color: #5a189a;
+            font-size: 0.9em;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        body.show-cn span.lang-cn {
+            display: inline;
+            margin-left: 5px;
+        }
+
+        /* --- 螢幕容器與標籤 --- */
+        .simulator-screen {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 4px solid #fff;
+            position: relative;
+        }
+
+        .scenario-badge {
+            background: #f3e8ff;
+            color: #6a11cb;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: 1px dashed #6a11cb;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(106, 17, 203, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #6a11cb;
+            color: #6a11cb;
+        }
+
+        .btn-outline:hover {
+            background: #6a11cb;
+            color: #fff;
+        }
+
+        /* ================= STAGE 1: UI Clones ================= */
+        .gt-widget {
+            background: #202124;
+            border-radius: 12px;
+            overflow: hidden;
+            color: #e8eaed;
+            font-family: Roboto, Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: 1px solid #5f6368;
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .gt-header-bar {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 1px solid #5f6368;
+            gap: 15px;
+            background: #202124;
+        }
+
+        .gt-select {
+            background: #202124;
+            color: #8ab4f8;
+            border: 1px solid #5f6368;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 15px;
+            outline: none;
+            appearance: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .gt-swap {
+            color: #9aa0a6;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .gt-body {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .gt-panel {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+        }
+
+        .gt-panel.left {
+            border-right: 1px solid #5f6368;
+        }
+
+        .gt-text-source {
+            font-size: 22px;
+            color: #e8eaed;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .gt-text-target {
+            font-size: 22px;
+            color: #e8eaed;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .gt-tools {
+            display: flex;
+            gap: 20px;
+            color: #9aa0a6;
+            font-size: 20px;
+            margin-top: 20px;
+            align-items: center;
+        }
+
+        @media (max-width: 600px) {
+            .gt-body {
+                flex-direction: column;
+            }
+
+            .gt-panel.left {
+                border-right: none;
+                border-bottom: 1px solid #5f6368;
+            }
+        }
+
+        .ai-chat-widget {
+            background: #343541;
+            border-radius: 12px;
+            overflow: hidden;
+            color: #ececf1;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            border: 1px solid #565869;
+            display: none;
+            margin-top: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .ai-msg-row {
+            display: flex;
+            padding: 20px;
+            border-bottom: 1px solid #565869;
+            gap: 15px;
+        }
+
+        .ai-msg-row.bot {
+            background: #444654;
+        }
+
+        .ai-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+            color: white;
+            font-size: 18px;
+        }
+
+        .ai-avatar.user {
+            background: #8a2be2;
+        }
+
+        .ai-avatar.bot {
+            background: #10a37f;
+        }
+
+        .ai-bubble {
+            flex: 1;
+            font-size: 15.5px;
+            line-height: 1.6;
+        }
+
+        .ai-analysis {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #565869;
+            color: #9ca3af;
+            font-size: 0.9em;
+        }
+
+        .typing-cursor::after {
+            content: '▋';
+            animation: blink 1s step-start infinite;
+            color: #10a37f;
+        }
+
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* ================= STAGE 2: Prompt Builder ================= */
+        .prompt-builder {
+            background: #343541;
+            color: #ececf1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 1.1em;
+            line-height: 1.8;
+        }
+
+        .prompt-select {
+            background: #40414f;
+            color: #10a37f;
+            border: 1px dashed #10a37f;
+            padding: 5px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 1em;
+            cursor: pointer;
+            outline: none;
+            margin-bottom: 5px;
+        }
+
+        .ai-output-box {
+            background: #444654;
+            color: #d1d5db;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            border-left: 4px solid #10a37f;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* ================= STAGE 3: Crisis PR ================= */
+        .email-app {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .email-header {
+            background: #f1f3f4;
+            padding: 10px 15px;
+            border-bottom: 1px solid #ccc;
+            font-weight: bold;
+            color: #d93025;
+        }
+
+        .email-body {
+            padding: 15px;
+            background: #fff;
+        }
+
+        .email-draft {
+            padding: 15px;
+            background: #e8f0fe;
+            border-top: 1px solid #ccc;
+            line-height: 1.8;
+        }
+
+        .word-bank {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        .word-pill {
+            background: #fff;
+            border: 1px solid #6a11cb;
+            color: #6a11cb;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95em;
+            transition: 0.2s;
+        }
+
+        .word-pill:hover {
+            background: #f3e8ff;
+        }
+
+        .word-pill.selected {
+            background: #6a11cb;
+            color: #fff;
+        }
+
+        .drop-zone {
+            display: inline-block;
+            min-width: 120px;
+            height: 26px;
+            border-bottom: 2px dashed #6a11cb;
+            margin: 0 5px;
+            vertical-align: bottom;
+            text-align: center;
+            color: #6a11cb;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            background: rgba(106, 17, 203, 0.05);
+            border-radius: 4px 4px 0 0;
+        }
+
+        .drop-zone:hover {
+            background: rgba(106, 17, 203, 0.15);
+        }
+
+        .drop-zone.filled {
+            border-bottom: 2px solid #10a37f;
+            color: #10a37f;
+            background: rgba(16, 163, 127, 0.1);
+        }
+
+        /* ================= STAGE 4: AI Designer (Terminal) ================= */
+        .designer-panel {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .controls {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .prompt-terminal {
+            flex: 1;
+            min-width: 250px;
+            background: #1e1e1e;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 2px solid #444;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            background: #333;
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+            font-weight: bold;
+            border-bottom: 1px solid #555;
+        }
+
+        .terminal-body {
+            padding: 20px;
+            color: #00ff00;
+            font-family: monospace;
+            font-size: 1.1em;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .copy-btn {
+            background: #555;
+            border: 1px solid #777;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: #6a11cb;
+            border-color: #6a11cb;
+        }
+
+        .prop-group {
+            margin-bottom: 15px;
+        }
+
+        .prop-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #6a11cb;
+        }
+
+        .prop-select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .client-brief {
+            background: #fff0f3;
+            border-left: 4px solid #ff758c;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            font-style: italic;
+            color: #d6336c;
+            font-weight: bold;
+        }
+
+        /* --- General Utils --- */
+        .stage {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #6a11cb;
+            width: 25%;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .mini-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #ced4da;
+        }
+
+        .nav-btn {
+            background: #f8f9fa;
+            color: #868e96;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #e9ecef;
+            color: #495057;
+            border-color: #ced4da;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="translate-btn" onclick="toggleLanguage()">🇨🇳 EN/中</button>
+
+    <h1>
+        <span class="lang-en">🤖 The AI Co-Founder</span>
+        <span class="lang-cn">🤖 AI 聯合創始人</span>
+    </h1>
+    <div class="progress-bar">
+        <div class="progress-fill" id="mainProgress"></div>
+    </div>
+
+    <!-- ================= STAGE 1: Google Translate Disaster ================= -->
+    <div id="stage1" class="stage active simulator-screen">
+        <div class="scenario-badge" id="s1-badge">Scenario 1/6</div>
+        <h2><span class="lang-en">Task 1: Translation Disaster 🚨</span><span class="lang-cn">任務 1：翻譯災難對決</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Relying purely on Google Translate vs using an AI with Context. Let's see the
+                difference in business impact.</span>
+            <span class="lang-cn">純靠字面直譯的 Google 翻譯，對比具備語境分析的 AI。讓我們看看商業效果的差距！</span>
+        </p>
+
+        <div
+            style="background: #fdf5f5; padding: 15px; border-left: 4px solid #d6336c; border-radius: 5px; font-weight: bold;">
+            <span class="lang-en">Original Chinese Copy:</span><span class="lang-cn">原始中文文案：</span><br>
+            <span style="font-size: 1.2em; color: #d6336c;" id="s1-cn-text">「這款穿戴甲現在超火，戴上它你就是整條街最亮的崽！快點來薅羊毛！」</span>
+        </div>
+
+        <div style="display:flex; gap:15px; margin-top:20px;" id="s1-action-btns">
+            <button class="btn btn-outline" style="margin:0; flex:1;" id="btn-run-gt" onclick="runGoogleTranslate()">
+                🌐 <span class="lang-en">Run Google Translate</span><span class="lang-cn">執行直譯</span>
+            </button>
+            <button class="btn" style="margin:0; flex:1; background: #10a37f; display: none;" id="btn-run-ai"
+                onclick="runAITranslate()">
+                🤖 <span class="lang-en">Ask AI Co-Founder</span><span class="lang-cn">呼叫 AI 合夥人</span>
+            </button>
+        </div>
+
+        <div class="gt-widget" id="gt-ui">
+            <div class="gt-header-bar">
+                <select class="gt-select">
+                    <option>中文 (繁體) - detected</option>
+                </select>
+                <span class="gt-swap">⇄</span>
+                <select class="gt-select">
+                    <option>英文</option>
+                </select>
+            </div>
+            <div class="gt-body">
+                <div class="gt-panel left">
+                    <div class="gt-text-source" id="gt-source-text">這款穿戴甲現在超火...</div>
+                    <div class="gt-tools"><span>🎤</span><span>🔊</span></div>
+                </div>
+                <div class="gt-panel right">
+                    <div class="gt-text-target" id="gt-target-text">...</div>
+                    <div class="gt-tools"><span>📋</span><span>🔊</span><span
+                            style="color:#4285f4; font-weight:bold; margin-left:auto;">G</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ai-chat-widget" id="ai-ui">
+            <div class="ai-msg-row">
+                <div class="ai-avatar user">U</div>
+                <div class="ai-bubble" id="ai-prompt-text">Act as a Gen Z beauty marketer. Translate this slang...</div>
+            </div>
+            <div class="ai-msg-row bot">
+                <div class="ai-avatar bot">AI</div>
+                <div class="ai-bubble">
+                    <div id="ai-result-text">...</div>
+                    <div class="ai-analysis" id="ai-analysis-text" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-nav">
+            <div></div>
+            <button class="nav-btn" style="background:#6a11cb; color:#fff;" onclick="nextScenario(1)">🔄 <span
+                    class="lang-en">Next Scenario</span><span class="lang-cn">換個情境</span></button>
+            <button class="nav-btn" onclick="goToStage(2)">▶ <span class="lang-en">Next Stage</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 2: Prompt Builder ================= -->
+    <div id="stage2" class="stage simulator-screen">
+        <div class="scenario-badge" id="s2-badge">Scenario 1/6</div>
+        <h2><span class="lang-en">Task 2: The Magic Formula 🪄</span><span class="lang-cn">任務 2：百萬提示詞公式</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Use the <b>[Role] + [Task] + [Tone]</b> formula to guide AI. Try mixing weird
+                combinations to see what happens!</span>
+            <span class="lang-cn">使用 <b>[角色] + [任務] + [語氣]</b> 公式來引導 AI。嘗試混搭奇怪的組合，看看會發生什麼事！</span>
+        </p>
+
+        <div class="prompt-builder">
+            Act as a <br>
+            <select id="p-role" class="prompt-select">
+                <option value="Professional Beauty Marketer">Professional Beauty Marketer (專業美妝行銷)</option>
+                <option value="Gen Z Fashion Influencer">Gen Z Fashion Influencer (Z世代時尚網紅)</option>
+                <option value="Strict Luxury Manager">Strict Luxury Manager (嚴格的奢侈品經理)</option>
+                <option value="Lazy Student">Lazy Student (懶惰的學生)</option>
+            </select>,
+            <br>write a <br>
+            <select id="p-task" class="prompt-select">
+                <option value="catchy Instagram caption">catchy Instagram caption (吸引人的IG貼文)</option>
+                <option value="15-second TikTok script">15-second TikTok script (15秒TikTok短影音腳本)</option>
+                <option value="boring scientific report">boring scientific report (無聊的科學報告)</option>
+                <option value="passive-aggressive email">passive-aggressive email (帶刺的電子郵件)</option>
+            </select>
+            <br>about <br>
+            <span
+                style="color:#fff; font-weight:bold; background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px; display:inline-block; margin-bottom:5px;"
+                id="s2-product-name">
+                "Midnight Galaxy" press-on nails
+            </span>,
+            <br>in a <br>
+            <select id="p-tone" class="prompt-select">
+                <option value="persuasive and aesthetic">persuasive and aesthetic (具說服力且具美感的)</option>
+                <option value="mysterious and elegant">mysterious and elegant (神秘且優雅的)</option>
+                <option value="humorous and sarcastic">humorous and sarcastic (幽默且諷刺的)</option>
+                <option value="rude and angry">rude and angry (粗魯且生氣的)</option>
+            </select> tone.
+        </div>
+
+        <button class="btn" onclick="generateAIOutput()" style="background: #10a37f;">
+            <span class="lang-en">Generate Result ✨</span><span class="lang-cn">生成 AI 結果 ✨</span>
+        </button>
+
+        <div id="ai-output" class="ai-output-box"></div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(1)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#6a11cb; color:#fff;" onclick="nextScenario(2)">🔄 <span
+                    class="lang-en">Next Product</span><span class="lang-cn">換個產品</span></button>
+            <button class="nav-btn" onclick="goToStage(3)">▶ <span class="lang-en">Next Stage</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 3: Crisis PR ================= -->
+    <div id="stage3" class="stage simulator-screen">
+        <div class="scenario-badge" id="s3-badge">Scenario 1/6</div>
+        <h2><span class="lang-en">Task 3: Dealing with "Karens" 🤬</span><span class="lang-cn">任務 3：處理公關危機 (Formal
+                English)</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Rewrite angry thoughts into <b>Formal Business English</b> using AI. Click a word
+                below, then click the correct blank to fill it in.</span>
+            <span class="lang-cn">利用 AI 將憤怒的情緒轉化為 <b>正式的商業英文</b>。先點擊下方的單字，再點擊上方的底線來填空！(UEC Formal Letter 考點)</span>
+        </p>
+
+        <div class="email-app">
+            <div class="email-header" id="s3-email-subject">⚠️ Urgent: Angry Customer "Karen"</div>
+            <div class="email-body">
+                <p><b id="s3-customer-name">Customer:</b> <span id="s3-customer-msg">"Your nails fell off in ONE day!
+                        Absolute trash! I want my money back NOW!"</span></p>
+                <div
+                    style="background:#fff0f3; padding:10px; border-radius:5px; border-left:3px solid #d6336c; margin-top:10px;">
+                    <span class="lang-en"><b>Your angry brain wants to type:</b> </span><span
+                        class="lang-cn"><b>你大腦的直覺生氣回覆：</b> </span>
+                    <span id="s3-angry-reply" style="color: #d6336c; font-weight: bold;">"It's your fault, you didn't
+                        read the manual. No refund."</span>
+                </div>
+            </div>
+            <div class="email-draft">
+                <p style="color:#10a37f; font-weight:bold; margin-top:0;">🤖 AI Suggested Formal Reply:</p>
+                <p id="s3-formal-draft">
+                    <!-- Generated by JS -->
+                </p>
+            </div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <div class="word-bank" id="s3-word-bank">
+                <!-- Generated by JS -->
+            </div>
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(2)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#6a11cb; color:#fff;" onclick="nextScenario(3)">🔄 <span
+                    class="lang-en">Next Customer</span><span class="lang-cn">換個奧客</span></button>
+            <button class="nav-btn" onclick="goToStage(4)">▶ <span class="lang-en">Next Stage</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 4: AI Designer (Prompt Terminal) ================= -->
+    <div id="stage4" class="stage simulator-screen">
+        <div class="scenario-badge" id="s4-badge">Scenario 1/6</div>
+        <h2><span class="lang-en">Task 4: The AI Designer 🎨</span><span class="lang-cn">任務 4：AI 產品設計師 (Prompt
+                Engineering)</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Select descriptive adjectives to build the perfect Midjourney Prompt. Then, copy it to
+                the clipboard!</span>
+            <span class="lang-cn">選擇正確的描寫性形容詞來組建完美的 Midjourney 繪圖指令。最後點擊複製按鈕！(UEC 描寫文考點)</span>
+        </p>
+
+        <div class="client-brief" id="s4-client-brief">
+            <!-- Generated by JS -->
+        </div>
+
+        <div class="designer-panel">
+            <div class="controls">
+                <div class="prop-group">
+                    <label><span class="lang-en">Base Color (基底顏色):</span><span class="lang-cn">Base Color
+                            (基底顏色):</span></label>
+                    <select id="img-color" class="prop-select">
+                        <option value="Pastel Pink">Pastel Pink (粉彩色)</option>
+                        <option value="Midnight Black">Midnight Black (午夜黑)</option>
+                        <option value="Translucent Nude">Translucent Nude (半透明裸色)</option>
+                        <option value="Cyber Silver">Cyber Silver (賽博銀)</option>
+                    </select>
+                </div>
+                <div class="prop-group">
+                    <label><span class="lang-en">Surface Finish (表面材質):</span><span class="lang-cn">Surface Finish
+                            (表面材質):</span></label>
+                    <select id="img-finish" class="prop-select">
+                        <option value="Glossy">Glossy (亮面/光澤的)</option>
+                        <option value="Matte">Matte (霧面/磨砂的)</option>
+                        <option value="Metallic">Metallic (金屬質感的)</option>
+                        <option value="Velvet">Velvet (天鵝絨質感的)</option>
+                    </select>
+                </div>
+                <div class="prop-group">
+                    <label><span class="lang-en">Decorations (裝飾細節):</span><span class="lang-cn">Decorations
+                            (裝飾細節):</span></label>
+                    <select id="img-deco" class="prop-select">
+                        <option value="Silver Rhinestones">Silver Rhinestones (銀色水鑽)</option>
+                        <option value="Gold Foil Flakes">Gold Foil Flakes (金箔碎片)</option>
+                        <option value="Holographic Glitter">Holographic Glitter (全息亮片)</option>
+                        <option value="Minimalist lines">Minimalist lines (極簡線條)</option>
+                    </select>
+                </div>
+                <button class="btn" style="width:100%; margin-top:10px; background: #ea4c89;"
+                    onclick="generateImagePrompt()">
+                    <span class="lang-en">Generate Prompt 🪄</span><span class="lang-cn">生成指令 🪄</span>
+                </button>
+            </div>
+
+            <!-- 右側：Prompt 終端機 -->
+            <div class="prompt-terminal">
+                <div class="terminal-header">
+                    <span>>_ Midjourney Terminal</span>
+                    <button class="copy-btn" onclick="copyPrompt()">📋 <span class="lang-en">Copy</span><span
+                            class="lang-cn">複製</span></button>
+                </div>
+                <div class="terminal-body" id="prompt-output-text">
+                    <span style="color:#888;">Select parameters and click "Generate Prompt" to build your instruction
+                        code.</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(3)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#6a11cb; color:#fff;" onclick="nextScenario(4)">🔄 <span
+                    class="lang-en">Next Brief</span><span class="lang-cn">換個客戶要求</span></button>
+            <div><span style="color:#28a745; font-weight:bold; display:none;" id="finish-msg">🎉 AI Mastery
+                    Completed!</span></div>
+        </div>
+    </div>
+
+    <script>
+        /* ================= UTILS ================= */
+        function toggleLanguage() { document.body.classList.toggle('show-cn'); }
+        function goToStage(target) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage' + target).classList.add('active');
+            document.getElementById('mainProgress').style.width = (target * 25) + '%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        let currT1 = 0, currT2 = 0, currT3 = 0, currT4 = 0;
+        function nextScenario(stageNum) {
+            if (stageNum === 1) { currT1 = (currT1 + 1) % dataT1.length; renderT1(); }
+            if (stageNum === 2) { currT2 = (currT2 + 1) % dataT2.length; renderT2(); }
+            if (stageNum === 3) { currT3 = (currT3 + 1) % dataT3.length; renderT3(); }
+            if (stageNum === 4) { currT4 = (currT4 + 1) % dataT4.length; renderT4(); }
+        }
+
+        /* ================= DATA: STAGE 1 (Translation) ================= */
+        const dataT1 = [
+            {
+                cn: "這款穿戴甲現在超火，戴上它你就是整條街最亮的崽！快點來薅羊毛！",
+                gt: "This wear armor is super fire now, wear it you are the brightest cub on the whole street! Hurry up to pull the sheep's wool!",
+                prompt: "Act as a Gen Z beauty marketer. Translate this slang into trendy English:",
+                ai: "These press-on nails are totally trending right now! Wear them and steal the spotlight. Grab this amazing deal before it's gone!",
+                noteEn: "Literal translation sounds ridiculous. AI understands the 'intent' and uses proper idioms like 'steal the spotlight' and 'grab this deal'.",
+                noteCn: "直譯聽起來極度荒謬（拔羊毛？）。AI 理解了背後的「意圖」，並使用了道地的慣用語如 'steal the spotlight'。"
+            },
+            {
+                cn: "你的快遞丟了，真倒霉。我隨便補發一個給你吧，別生氣了。",
+                gt: "Your express is lost, really bad luck. I casually reissue one to you, don't be angry.",
+                prompt: "Act as a professional customer service rep. Rewrite this into a polite apology:",
+                ai: "We sincerely apologize for the delay with your package. We have immediately dispatched a complimentary replacement. Thank you for your patience!",
+                noteEn: "Google Translate sounds extremely rude and unprofessional. AI changes the tone to formal business English.",
+                noteCn: "直譯聽起來極其粗魯且不專業。AI 將語氣轉換成了正式的商業客服英文。"
+            },
+            {
+                cn: "買前看清楚，不退不換！誰買錯尺寸自己負責！",
+                gt: "Look clearly before buying, no refund no exchange! Whoever buys the wrong size is responsible for himself!",
+                prompt: "Rewrite this strict no-refund policy into a friendly but firm store policy:",
+                ai: "Please ensure you check our sizing guide carefully before purchasing! Kindly note that all sales are final and we cannot accept returns for incorrect sizes.",
+                noteEn: "Aggressive Chinese translated directly sounds like a threat. AI makes it sound like a premium brand policy ('Kindly note', 'All sales are final').",
+                noteCn: "咄咄逼人的中文直譯聽起來像威脅。AI 讓它聽起來像高級品牌的政策條款。"
+            },
+            {
+                cn: "走過路過不要錯過，大出血跳樓價，只剩最後三天！",
+                gt: "Walk past pass by don't miss, massive bleeding jumping building price, only left last 3 days!",
+                prompt: "Translate this aggressive Chinese sale pitch into a high-end, urgent English marketing copy:",
+                ai: "Don't miss out on our biggest sale of the season! Massive markdowns are live, but hurry—this exclusive offer ends in 3 days!",
+                noteEn: "'Jumping building price' is literal nonsense in English. AI uses 'massive markdowns' to convey the same urgency professionally.",
+                noteCn: "「跳樓價」直譯在英文裡毫無意義。AI 使用了 'massive markdowns' 專業地傳達了相同的促銷緊迫感。"
+            },
+            {
+                cn: "我們的指甲很便宜，而且是用塑料做的，隨便用不心疼。",
+                gt: "Our nails are very cheap, and are made of plastic, use casually don't feel heartache.",
+                prompt: "Rewrite this to sound affordable but high-quality, avoiding cheap words:",
+                ai: "Our press-on nails offer a budget-friendly option without compromising on style. Crafted from durable materials, you can switch up your look worry-free!",
+                noteEn: "Words like 'cheap' and 'plastic' devalue your brand. AI uses 'budget-friendly' and 'durable materials' instead.",
+                noteCn: "像 cheap 和 plastic 這樣的詞會貶低品牌價值。AI 替換成了 budget-friendly 和 durable materials。"
+            },
+            {
+                cn: "喂，大網紅，幫我打廣告，我送你兩盒指甲。",
+                gt: "Hey, big internet red, help me do advertisement, I send you two boxes of nails.",
+                prompt: "Write a professional and polite influencer collaboration DM offering free PR packages:",
+                ai: "Hi there! We absolutely love your content. We’d be thrilled to send you a PR package from our latest nail collection in exchange for a shoutout. Let us know if you're interested!",
+                noteEn: "'Internet red' (網紅) is a classic machine translation error. AI uses 'influencer content' and 'PR package' perfectly.",
+                noteCn: "「Internet red」是經典的機翻笑話。AI 完美使用了 influencer、PR package 等道地的行銷詞彙。"
+            }
+        ];
+
+        function renderT1() {
+            document.getElementById('s1-badge').innerText = `Scenario ${currT1 + 1}/6`;
+            let d = dataT1[currT1];
+
+            document.getElementById('gt-ui').style.display = 'none';
+            document.getElementById('ai-ui').style.display = 'none';
+            document.getElementById('btn-run-ai').style.display = 'none';
+            document.getElementById('btn-run-gt').style.display = 'block';
+
+            document.getElementById('s1-cn-text').innerText = `「${d.cn}」`;
+            document.getElementById('gt-source-text').innerText = d.cn;
+            document.getElementById('gt-target-text').innerText = d.gt;
+
+            document.getElementById('ai-prompt-text').innerText = d.prompt;
+            document.getElementById('ai-result-text').innerText = "";
+            document.getElementById('ai-analysis-text').style.display = 'none';
+            document.getElementById('ai-analysis-text').innerHTML = `<b>First Principles Analysis:</b><br><span class="lang-en">${d.noteEn}</span><span class="lang-cn">${d.noteCn}</span>`;
+        }
+
+        function runGoogleTranslate() {
+            document.getElementById('btn-run-gt').style.display = 'none';
+            document.getElementById('gt-ui').style.display = 'block';
+            setTimeout(() => { document.getElementById('btn-run-ai').style.display = 'block'; }, 1000);
+        }
+
+        function runAITranslate() {
+            document.getElementById('btn-run-ai').style.display = 'none';
+            let aiUi = document.getElementById('ai-ui');
+            aiUi.style.display = 'block';
+
+            let resBox = document.getElementById('ai-result-text');
+            let finalTxt = dataT1[currT1].ai;
+            resBox.innerHTML = '<span class="typing-cursor"></span>';
+
+            let i = 0;
+            let typing = setInterval(() => {
+                resBox.innerHTML = finalTxt.substring(0, i) + '<span class="typing-cursor"></span>';
+                i += 2;
+                if (i > finalTxt.length) {
+                    clearInterval(typing);
+                    resBox.innerHTML = finalTxt;
+                    document.getElementById('ai-analysis-text').style.display = 'block';
+                }
+            }, 15);
+        }
+
+        /* ================= DATA: STAGE 2 (Prompt Builder) ================= */
+        const dataT2 = [
+            '"Midnight Galaxy" press-on nails',
+            '"Cherry Blossom" everyday nails',
+            '"Cyberpunk Silver" metallic nails',
+            '"Vampire Red" stiletto nails',
+            '"Matcha Latte" gradient nails',
+            '"Ocean Pearl" 3D design nails'
+        ];
+
+        function renderT2() {
+            document.getElementById('s2-badge').innerText = `Scenario ${currT2 + 1}/6`;
+            document.getElementById('s2-product-name').innerText = dataT2[currT2];
+            document.getElementById('ai-output').style.display = 'none';
+        }
+
+        function generateAIOutput() {
+            let role = document.getElementById('p-role').value;
+            let task = document.getElementById('p-task').value;
+            let tone = document.getElementById('p-tone').value;
+            let product = dataT2[currT2].replace(/"/g, "");
+
+            let box = document.getElementById('ai-output');
+            box.style.display = 'block';
+
+            // 動態邏輯生成：根據選項組合來變換產出內容
+            let outputText = "";
+
+            if (task.includes("TikTok")) {
+                outputText = `[Scene: Close up on hands]\nVoiceover: Stop scrolling! If you don't have the ${product}, what are you even doing? 💅✨\n[Scene: Tapping nails on glass]\nGet yours now! Link in bio.`;
+            } else if (task.includes("scientific")) {
+                outputText = `Abstract: An analysis of the ${product}. Observations indicate a 99.9% increase in aesthetic appeal among test subjects. The structural integrity is maintained via polymer adhesion.`;
+            } else if (task.includes("email")) {
+                outputText = `To whom it may concern,\n\nPer my last email, the ${product} is currently available. I strongly suggest you purchase it before it sells out, though I suppose that is entirely up to you.\n\nRegards.`;
+            } else {
+                // IG Caption fallback
+                if (tone.includes("mysterious")) {
+                    outputText = `Unveil the secret. 🌒 The ${product} is finally here. Only for those who dare to stand out. Link in bio if you seek the truth. 🤫✨`;
+                } else if (tone.includes("humorous")) {
+                    outputText = `My bank account is crying but my hands look FABULOUS. 💅 Buy the ${product} so I can afford to eat this week. Pls and thank u. 😂✨`;
+                } else if (tone.includes("rude") || role.includes("Lazy")) {
+                    outputText = `Ugh, buy these ${product} nails or don't. I'm too tired to write a caption. They look cool. Just give me your money. 🙄💅`;
+                } else {
+                    outputText = `✨ Ready to elevate your look? Meet the ${product} collection! 💅 These aesthetic press-on nails give you salon-quality perfection in just 10 minutes. Click the link in bio to shine! 💫 #NailEmpire`;
+                }
+            }
+
+            box.innerHTML = '<span class="typing-cursor"></span>';
+            let i = 0;
+            let typing = setInterval(() => {
+                box.innerHTML = outputText.substring(0, i) + '<span class="typing-cursor"></span>';
+                i += 3;
+                if (i > outputText.length) { clearInterval(typing); box.innerHTML = outputText; }
+            }, 15);
+        }
+
+        /* ================= DATA: STAGE 3 (Crisis PR) ================= */
+        const dataT3 = [
+            {
+                cust: "Your nails fell off in ONE day! Absolute trash! I want my money back NOW!", angry: "It's your fault, you didn't read the manual. No refund.",
+                draft: `Dear customer, we sincerely <span class="drop-zone" id="dz1" onclick="handleDrop('dz1')"></span> for the <span class="drop-zone" id="dz2" onclick="handleDrop('dz2')"></span> you experienced. According to our application <span class="drop-zone" id="dz3" onclick="handleDrop('dz3')"></span>, proper prep is required. However, we offer a free replacement as <span class="drop-zone" id="dz4" onclick="handleDrop('dz4')"></span>.`,
+                words: ["inconvenience", "apologize", "compensation", "guidelines"], answers: { dz1: "apologize", dz2: "inconvenience", dz3: "guidelines", dz4: "compensation" }
+            },
+            {
+                cust: "The color looks completely different from the picture! You are scammers!", angry: "Your phone screen is just cheap. Not my problem.",
+                draft: `We understand your <span class="drop-zone" id="dz1" onclick="handleDrop('dz1')"></span> regarding the color difference. Please note that studio <span class="drop-zone" id="dz2" onclick="handleDrop('dz2')"></span> can slightly alter appearances. We process a <span class="drop-zone" id="dz3" onclick="handleDrop('dz3')"></span> or exchange to ensure your <span class="drop-zone" id="dz4" onclick="handleDrop('dz4')"></span>.`,
+                words: ["satisfaction", "disappointment", "return", "lighting"], answers: { dz1: "disappointment", dz2: "lighting", dz3: "return", dz4: "satisfaction" }
+            },
+            {
+                cust: "Where is my package? It's been a week! You stole my money!", angry: "I already shipped it. Go yell at the post office.",
+                draft: `We understand your <span class="drop-zone" id="dz1" onclick="handleDrop('dz1')"></span> regarding the delayed delivery. We have contacted the courier to <span class="drop-zone" id="dz2" onclick="handleDrop('dz2')"></span> the process. You can <span class="drop-zone" id="dz3" onclick="handleDrop('dz3')"></span> your parcel using the link. Thank you for your <span class="drop-zone" id="dz4" onclick="handleDrop('dz4')"></span>.`,
+                words: ["track", "frustration", "patience", "expedite"], answers: { dz1: "frustration", dz2: "expedite", dz3: "track", dz4: "patience" }
+            },
+            {
+                cust: "I ordered Medium but got Large! You guys are stupid and blind.", angry: "You probably clicked the wrong button. Send it back if you want.",
+                draft: `We deeply regret the <span class="drop-zone" id="dz1" onclick="handleDrop('dz1')"></span> in fulfilling your order. We will arrange an <span class="drop-zone" id="dz2" onclick="handleDrop('dz2')"></span> at our own expense <span class="drop-zone" id="dz3" onclick="handleDrop('dz3')"></span>. Please accept this 20% <span class="drop-zone" id="dz4" onclick="handleDrop('dz4')"></span> code for your next purchase.`,
+                words: ["discount", "error", "immediately", "exchange"], answers: { dz1: "error", dz2: "exchange", dz3: "immediately", dz4: "discount" }
+            },
+            {
+                cust: "The glue gave me a rash! My fingers hurt! I'm suing you!", angry: "Nobody else has a problem. You just have weird skin.",
+                draft: `We are very sorry to hear about your allergic <span class="drop-zone" id="dz1" onclick="handleDrop('dz1')"></span>. Please <span class="drop-zone" id="dz2" onclick="handleDrop('dz2')"></span> use immediately. We attached the full <span class="drop-zone" id="dz3" onclick="handleDrop('dz3')"></span> list for your doctor. A full <span class="drop-zone" id="dz4" onclick="handleDrop('dz4')"></span> has been issued.`,
+                words: ["ingredients", "reaction", "refund", "discontinue"], answers: { dz1: "reaction", dz2: "discontinue", dz3: "ingredients", dz4: "refund" }
+            },
+            {
+                cust: "I found this exact same design on Taobao for RM5! What a rip off!", angry: "Then go buy it on Taobao! Bye!",
+                draft: `We understand your <span class="drop-zone" id="dz1" onclick="handleDrop('dz1')"></span> about the pricing. Please note our products are <span class="drop-zone" id="dz2" onclick="handleDrop('dz2')"></span> locally using premium gel polish. We ensure the highest <span class="drop-zone" id="dz3" onclick="handleDrop('dz3')"></span> and durability, which justifies the <span class="drop-zone" id="dz4" onclick="handleDrop('dz4')"></span>.`,
+                words: ["value", "concerns", "quality", "handcrafted"], answers: { dz1: "concerns", dz2: "handcrafted", dz3: "quality", dz4: "value" }
+            }
+        ];
+
+        let selectedWordForDrop = "";
+        let prCorrect = 0;
+
+        function renderT3() {
+            document.getElementById('s3-badge').innerText = `Scenario ${currT3 + 1}/6`;
+            let d = dataT3[currT3];
+            prCorrect = 0; selectedWordForDrop = "";
+
+            document.getElementById('s3-customer-msg').innerText = `"${d.cust}"`;
+            document.getElementById('s3-angry-reply').innerText = `"${d.angry}"`;
+            document.getElementById('s3-formal-draft').innerHTML = d.draft;
+
+            let wordsHtml = "";
+            [...d.words].sort(() => Math.random() - 0.5).forEach(w => {
+                wordsHtml += `<div class="word-pill" onclick="selectWord('${w}', this)">${w}</div>`;
+            });
+            document.getElementById('s3-word-bank').innerHTML = wordsHtml;
+        }
+
+        function selectWord(word, el) {
+            selectedWordForDrop = word;
+            document.querySelectorAll('.word-pill').forEach(e => { e.classList.remove('selected'); });
+            el.classList.add('selected');
+        }
+
+        function handleDrop(zoneId) {
+            if (!selectedWordForDrop) return;
+            let correctWord = dataT3[currT3].answers[zoneId];
+            let zone = document.getElementById(zoneId);
+
+            if (selectedWordForDrop === correctWord) {
+                zone.innerText = selectedWordForDrop;
+                zone.classList.add('filled');
+                selectedWordForDrop = "";
+                document.querySelectorAll('.word-pill').forEach(e => { e.classList.remove('selected'); });
+                prCorrect++;
+            } else {
+                zone.style.borderColor = "red";
+                setTimeout(() => { zone.style.borderColor = "#6a11cb"; }, 500);
+            }
+        }
+
+        /* ================= DATA: STAGE 4 (AI Designer Prompt Terminal) ================= */
+        const dataT4 = [
+            { en: "Client 1: I want a cute, sweet vibe for a spring picnic. (Pink, Glossy)", cn: "客戶 1：我想要春季野餐那種可愛、甜美的感覺。 (粉色, 亮面)" },
+            { en: "Client 2: I need an edgy, futuristic look for a tech party. (Silver, Metallic)", cn: "客戶 2：科技派對需要的、前衛有未來感的造型。 (銀色, 金屬感)" },
+            { en: "Client 3: Something elegant but subtle for a wedding. (Nude, Matte)", cn: "客戶 3：適合婚禮的，優雅但低調的款式。 (裸色, 霧面)" },
+            { en: "Client 4: Loud, sparkly, and eye-catching for a concert! (Black, Glitter)", cn: "客戶 4：看演唱會要用的，誇張、閃亮、超吸睛！ (黑色, 亮片)" },
+            { en: "Client 5: 'Clean girl' aesthetic, very natural and minimalist. (Nude, Glossy, Lines)", cn: "客戶 5：'Clean girl' 乾淨美學，非常自然且極簡。 (裸色, 亮面, 線條)" },
+            { en: "Client 6: Dark academia aesthetic, mysterious and moody. (Black, Matte)", cn: "客戶 6：暗黑學術風，充滿神祕和情緒感。 (黑色, 霧面)" }
+        ];
+
+        function renderT4() {
+            document.getElementById('s4-badge').innerText = `Scenario ${currT4 + 1}/6`;
+            document.getElementById('s4-client-brief').innerHTML = `<span class="lang-en">${dataT4[currT4].en}</span><span class="lang-cn">${dataT4[currT4].cn}</span>`;
+            document.getElementById('prompt-output-text').innerHTML = `<span style="color:#888;">Select parameters and click "Generate Prompt" to build your instruction code.</span>`;
+            document.getElementById('finish-msg').style.display = 'none';
+        }
+
+        function generateImagePrompt() {
+            let color = document.getElementById('img-color').value;
+            let finish = document.getElementById('img-finish').value;
+            let deco = document.getElementById('img-deco').value;
+
+            let prompt = `/imagine prompt: A highly detailed close-up photography of hand wearing beautiful press-on nails, ${color} base color, elegant ${finish} surface finish, decorated with stunning ${deco}, studio lighting, 8k resolution, photorealistic --ar 4:5 --v 6.0`;
+
+            let outputBox = document.getElementById('prompt-output-text');
+            outputBox.innerHTML = `<span style="color:#fff;">Generating...</span>`;
+
+            setTimeout(() => {
+                outputBox.innerText = prompt;
+                document.getElementById('finish-msg').style.display = 'inline';
+            }, 800);
+        }
+
+        function copyPrompt() {
+            let text = document.getElementById('prompt-output-text').innerText;
+            if (text.includes("Select parameters") || text.includes("Generating")) return;
+
+            // 使用 document.execCommand('copy') 來確保在 iFrame (Google Sites) 中正常運作
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                let btn = document.querySelector('.copy-btn');
+                btn.innerHTML = `✅ <span class="lang-en">Copied!</span><span class="lang-cn">已複製</span>`;
+                setTimeout(() => {
+                    btn.innerHTML = `📋 <span class="lang-en">Copy</span><span class="lang-cn">複製</span>`;
+                }, 2000);
+            } catch (err) {
+                console.error('Oops, unable to copy');
+            }
+            document.body.removeChild(textArea);
+        }
+
+        window.onload = function () { renderT1(); renderT2(); renderT3(); renderT4(); };
+    </script>
+
+</body>
+
+</html>
