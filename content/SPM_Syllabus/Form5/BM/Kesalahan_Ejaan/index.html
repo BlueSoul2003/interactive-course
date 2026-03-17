@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPM BM Kesalahan Ejaan Dashboard</title>
+    <!-- React & Tailwind via CDN for rapid deployment -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="../../../../../js/progress-tracker.js" 
+            data-module-id="SPM_BM_Kesalahan_Ejaan"
+            data-module-name="SPM BM Kesalahan Ejaan"
+            data-module-url="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html"></script>
+    <style>
+        body { font-family: 'Outfit', sans-serif; }
+        .perspective-1000 { perspective: 1000px; }
+        .animate-bounce-in { animation: bounce-in 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .animate-slide-in-right { animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes bounce-in { 
+            0% { transform: scale(0.8); opacity: 0; } 
+            50% { transform: scale(1.03); opacity: 1; } 
+            100% { transform: scale(1); opacity: 1; } 
+        }
+        @keyframes slide-in-right { 
+            from { transform: translateX(100%); opacity: 0; } 
+            to { transform: translateX(0); opacity: 1; } 
+        }
+        .home-btn-fixed {
+            position: fixed; bottom: 24px; left: 24px; z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+            font-size: 14px; font-weight: 700; cursor: pointer;
+            text-decoration: none; display: flex; align-items: center; gap: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+            transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .home-btn-fixed:hover {
+            transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
+            color: #fff;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <div id="root"></div>
+    <a href="../../../../../index.html" class="home-btn-fixed">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+    </a>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        
+        // --- Lucide Icons Mock (Simulating lucide-react in browser) ---
+        const Icon = ({ name, className = "w-6 h-6" }) => {
+            const icons = {
+                Bug: <><path d="m8 2 1.88 1.88M14.12 3.88 16 2M9 7.13v-1M15 7.13v-1M12 11v1M12 17v1M6.53 10.64a2 2 0 0 1 1 3.5 2.11 2.11 0 0 1-1 3.5M17.47 10.64a2 2 0 0 0-1-3.5 2.11 2.11 0 0 0 1 3.5M20 9.2a2 2 0 0 0-1.8-1.5 5 5 0 0 0-12.4 0 2 2 0 0 0-1.8 1.5 5.06 5.06 0 0 0 1.5 5.7 6.3 6.3 0 0 0 1.5 9.1M10 22h4" /></>,
+                ShieldCheck: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4" />,
+                Zap: <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z" />,
+                Trophy: <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z" />,
+                ArrowRight: <path d="M5 12h14M12 5l7 7-7 7" />,
+                RefreshCcw: <><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16M16 16h5v5M8 8H3V3" /></>,
+                BookOpen: <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" /></>,
+                Target: <><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="6" /><circle cx="12" cy="12" r="2" /></>,
+                X: <path d="M18 6 6 18M6 6l12 12" />,
+                Heart: <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />,
+                Database: <><ellipse cx="12" cy="5" rx="9" ry="3" /><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" /><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3" /></>,
+                CheckCircle2: <circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" />,
+                LayoutDashboard: <rect width="7" height="9" x="3" y="3" rx="1" /><rect width="7" height="5" x="14" y="3" rx="1" /><rect width="7" height="9" x="14" y="12" rx="1" /><rect width="7" height="5" x="3" y="16" rx="1" />,
+                BrainCircuit: <><path d="M12 4.5V2M15 7.5h2.5M12 19.5V22M6.5 7.5H4M15 16.5h2.5M6.5 16.5H4M16 12h2M8 12h-2M15 12H9m3 3V9" /><circle cx="12" cy="12" r="3" /></>,
+                History: <><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /><path d="M12 7v5l4 2" /></>,
+                RotateCcw: <><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></>,
+            };
+            return (
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                    {icons[name] || <path d="M12 12h.01" />}
+                </svg>
+            );
+        };
+
+        // ==========================================
+        // 📚 終極 SPM 題庫中心
+        // ==========================================
+        const allSwipeData = [
+            { id: 's1_f', word: 'gambarajah', isCorrect: false, correction: 'gambar rajah', meaning: '圖表' },
+            { id: 's1_t', word: 'gambar rajah', isCorrect: true, correction: '', meaning: '圖表' },
+            { id: 's2_f', word: 'aturcara', isCorrect: false, correction: 'atur cara', meaning: '程序' },
+            { id: 's2_t', word: 'atur cara', isCorrect: true, correction: '', meaning: '程序' },
+            { id: 's3_f', word: 'keretapi', isCorrect: false, correction: 'kereta api', meaning: '火車' },
+            { id: 's3_t', word: 'kereta api', isCorrect: true, correction: '', meaning: '火車' },
+            { id: 's4_f', word: 'lebuhraya', isCorrect: false, correction: 'lebuh raya', meaning: '高速公路' },
+            { id: 's4_t', word: 'lebuh raya', isCorrect: true, correction: '', meaning: '高速公路' },
+            { id: 's5_f', word: 'bandarraya', isCorrect: false, correction: 'bandar raya', meaning: '大城市' },
+            { id: 's5_t', word: 'bandar raya', isCorrect: true, correction: '', meaning: '大城市' },
+            { id: 's6_f', word: 'tengahari', isCorrect: false, correction: 'tengah hari', meaning: '中午' },
+            { id: 's6_t', word: 'tengah hari', isCorrect: true, correction: '', meaning: '中午' },
+            { id: 's7_f', word: 'rekabentuk', isCorrect: false, correction: 'reka bentuk', meaning: '設計' },
+            { id: 's7_t', word: 'reka bentuk', isCorrect: true, correction: '', meaning: '設計' },
+            { id: 's8_t', word: 'urus setia', isCorrect: true, correction: '', meaning: '秘書處' },
+            { id: 's9_t', word: 'penguat kuasa', isCorrect: true, correction: '', meaning: '執法人員' },
+            { id: 's10_f', word: 'tanggongjawab', isCorrect: false, correction: 'tanggungjawab', meaning: '責任' },
+            { id: 's11_t', word: 'tanggungjawab', isCorrect: true, correction: '', meaning: '責任' },
+            { id: 's12_f', word: 'pesuruh jaya', isCorrect: false, correction: 'pesuruhjaya', meaning: '專員' },
+            { id: 's12_t', word: 'pesuruhjaya', isCorrect: true, correction: '', meaning: '專員' },
+            { id: 's13_f', word: 'jawatan kuasa', isCorrect: false, correction: 'jawatankuasa', meaning: '委員會' },
+            { id: 's13_t', word: 'jawatankuasa', isCorrect: true, correction: '', meaning: '委員會' },
+            { id: 's14_f', word: 'kerja sama', isCorrect: false, correction: 'kerjasama', meaning: '合作' },
+            { id: 's14_t', word: 'kerjasama', isCorrect: true, correction: '', meaning: '合作' },
+            { id: 's15_f', word: 'mata hari', isCorrect: false, correction: 'matahari', meaning: '太陽' },
+            { id: 's15_t', word: 'matahari', isCorrect: true, correction: '', meaning: '太陽' }
+        ];
+
+        const allEjaanData = [
+            { id: 'e1', wrong: 'walaubagaimanapun', right: 'walau bagaimanapun', meaning: '無論如何 (分開寫)' },
+            { id: 'e2', wrong: 'diantara', right: 'di antara', meaning: '在...之間 (空間)' },
+            { id: 'e3', wrong: 'disamping', right: 'di samping', meaning: '除此之外' },
+            { id: 'e4', wrong: 'ibubapa', right: 'ibu bapa', meaning: '父母' },
+            { id: 'e5', wrong: 'kemaskini', right: 'kemas kini', meaning: '更新' },
+            { id: 'e6', wrong: 'samada', right: 'sama ada', meaning: '是否' }
+        ];
+
+        const allGrammarRules = [
+            {
+                id: 'g1',
+                title: "1. 空間與抽象 (di dalam vs dalam)",
+                rule: "有物理空間（能鑽進去的，如 bilik, kotak）用 di dalam；抽象的（如 ingatan, masa, masyarakat）用 dalam。",
+                quiz: { sentence: "Ali sedang tidur ________ bilik.", choices: ['di dalam', 'dalam'], answer: 'di dalam' }
+            },
+            {
+                id: 'g2',
+                title: "2. 身份與介詞 (ialah vs adalah)",
+                rule: "後面接名詞（身份/物品）用 ialah；後面接介詞（untuk/pada/dari）或形容詞用 adalah。",
+                quiz: { sentence: "Tujuan program ini ________ untuk memupuk nilai murni.", choices: ['ialah', 'adalah'], answer: 'adalah' }
+            }
+        ];
+
+        const allBossData = [
+            {
+                id: 'boss1',
+                title: '【主題 1】學生的網絡危害',
+                text: [
+                    { id: 'b1_1', text: "Pada masa kini, banyak ", isBug: false },
+                    { id: 'b1_2', text: "pelajar-pelajar", isBug: true, correct: "pelajar", hint: "banyak 後面不能放重疊詞" },
+                    { id: 'b1_3', text: " yang suka melayari internet. Mereka sering menghabiskan masa ", isBug: false },
+                    { id: 'b1_4', text: "di dalam", isBug: true, correct: "dalam", hint: "網絡世界是抽象的，不能鑽進去" },
+                    { id: 'b1_5', text: " talian. Perkara ini ", isBug: false },
+                    { id: 'b1_6', text: "ialah", isBug: true, correct: "adalah", hint: "後面接了介詞 sangat (形容/程度)" },
+                    { id: 'b1_7', text: " sangat merbahaya jika tidak dikawal oleh ibu bapa.", isBug: false }
+                ]
+            }
+        ];
+
+        function BugHunterApp() {
+            const [masteredSwipes, setMasteredSwipes] = useState([]);
+            const [masteredEjaan, setMasteredEjaan] = useState([]);
+            const [masteredGrammar, setMasteredGrammar] = useState([]);
+            const [seenSwipes, setSeenSwipes] = useState([]);
+            const [seenEjaan, setSeenEjaan] = useState([]);
+            const [seenGrammar, setSeenGrammar] = useState([]);
+            const [seenBoss, setSeenBoss] = useState([]);
+            const [historyLog, setHistoryLog] = useState([]);
+            const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+            const [currentMode, setCurrentMode] = useState('dashboard');
+            const [score, setScore] = useState(0);
+
+            // --- Swipe State ---
+            const [swipeQueue, setSwipeQueue] = useState([]);
+            const [swipeCard, setSwipeCard] = useState(null);
+            const [swipeDirection, setSwipeDirection] = useState(null);
+            const [swipeFeedback, setSwipeFeedback] = useState(null);
+            const [isDragging, setIsDragging] = useState(false);
+            const [dragStartX, setDragStartX] = useState(0);
+            const [dragCurrentX, setDragCurrentX] = useState(0);
+
+            // --- Ejaan State ---
+            const [ejaanQueue, setEjaanQueue] = useState([]);
+            const [currentEjaan, setCurrentEjaan] = useState(null);
+            const [currentEjaanChoices, setCurrentEjaanChoices] = useState([]);
+            const [ejaanFeedback, setEjaanFeedback] = useState(null);
+
+            // --- Grammar State ---
+            const [grammarQueue, setGrammarQueue] = useState([]);
+            const [currentGrammar, setCurrentGrammar] = useState(null);
+            const [grammarFeedback, setGrammarFeedback] = useState(null);
+
+            // --- Boss State ---
+            const [activeBossGroup, setActiveBossGroup] = useState(allBossData[0]);
+            const [foundBugs, setFoundBugs] = useState([]);
+            const [activeBugId, setActiveBugId] = useState(null);
+            const [bossFixInput, setBossFixInput] = useState('');
+
+            const totalItems = allSwipeData.length + allEjaanData.length + allGrammarRules.length;
+            const masteredItems = masteredSwipes.length + masteredEjaan.length + masteredGrammar.length;
+            const progressPercent = Math.round((masteredItems / totalItems) * 100) || 0;
+
+            // --- Load Progress ---
+            useEffect(() => {
+                const load = async () => {
+                    const saved = await ProgressTracker.load();
+                    if (saved && saved.progress_data) {
+                        const d = saved.progress_data;
+                        if (d.masteredSwipes) setMasteredSwipes(d.masteredSwipes);
+                        if (d.masteredEjaan) setMasteredEjaan(d.masteredEjaan);
+                        if (d.masteredGrammar) setMasteredGrammar(d.masteredGrammar);
+                        if (d.score) setScore(d.score);
+                        if (d.historyLog) setHistoryLog(d.historyLog);
+                    }
+                };
+                load();
+            }, []);
+
+            // --- Save Progress ---
+            useEffect(() => {
+                if (masteredSwipes.length > 0 || masteredEjaan.length > 0 || masteredGrammar.length > 0) {
+                    ProgressTracker.save({
+                        masteredSwipes,
+                        masteredEjaan,
+                        masteredGrammar,
+                        score,
+                        historyLog
+                    });
+                }
+            }, [masteredSwipes, masteredEjaan, masteredGrammar, score, historyLog]);
+            const startSwipeMode = () => {
+                const batch = allSwipeData.filter(i => !seenSwipes.includes(i.id)).sort(() => Math.random() - 0.5).slice(0, 10);
+                setSwipeQueue(batch);
+                setSwipeCard(batch[0]);
+                setCurrentMode('swipe');
+            };
+
+            const startEjaanMode = () => {
+                const batch = allEjaanData.filter(i => !seenEjaan.includes(i.id)).sort(() => Math.random() - 0.5).slice(0, 5);
+                setEjaanQueue(batch);
+                if (batch.length > 0) {
+                    setCurrentEjaan(batch[0]);
+                    setCurrentEjaanChoices([batch[0].wrong, batch[0].right].sort(() => Math.random() - 0.5));
+                }
+                setCurrentMode('ejaan');
+            };
+
+            const startGrammarMode = () => {
+                const batch = allGrammarRules.filter(i => !seenGrammar.includes(i.id)).sort(() => Math.random() - 0.5).slice(0, 3);
+                setGrammarQueue(batch);
+                setCurrentGrammar(batch[0]);
+                setCurrentMode('grammar');
+            };
+
+            const startBossMode = () => {
+                const randomBoss = allBossData[Math.floor(Math.random() * allBossData.length)];
+                setActiveBossGroup(randomBoss);
+                setFoundBugs([]);
+                setActiveBugId(null);
+                setCurrentMode('boss');
+            };
+
+            const handleSwipe = (isBetul) => {
+                if (swipeDirection || swipeFeedback) return;
+                const userGotItRight = isBetul === swipeCard.isCorrect;
+                setSeenSwipes([...seenSwipes, swipeCard.id]);
+                
+                const logEntry = {
+                    id: Date.now(),
+                    mode: '刷卡',
+                    question: swipeCard.word,
+                    isCorrect: userGotItRight,
+                    userAns: isBetul ? 'BETUL' : 'SALAH'
+                };
+                setHistoryLog([logEntry, ...historyLog]);
+
+                if (userGotItRight) {
+                    setScore(s => s + 15);
+                    setSwipeFeedback({ type: 'success', msg: '答對了！' });
+                    setMasteredSwipes([...masteredSwipes, swipeCard.id]);
+                } else {
+                    setSwipeFeedback({ type: 'error', msg: `答錯了！應為：${swipeCard.correction || '正確'}` });
+                }
+
+                setSwipeDirection(isBetul ? 'right' : 'left');
+                setTimeout(() => {
+                    setSwipeFeedback(null);
+                    setSwipeDirection(null);
+                    const next = swipeQueue.slice(1);
+                    setSwipeQueue(next);
+                    setSwipeCard(next[0] || null);
+                }, 1000);
+            };
+
+            const handleEjaanClick = (choice) => {
+                if (ejaanFeedback) return;
+                const isCorrect = choice === currentEjaan.right;
+                setSeenEjaan([...seenEjaan, currentEjaan.id]);
+                
+                if (isCorrect) {
+                    setScore(s => s + 10);
+                    setEjaanFeedback({ type: 'success', msg: '正確！' });
+                    setMasteredEjaan([...masteredEjaan, currentEjaan.id]);
+                } else {
+                    setEjaanFeedback({ type: 'error', msg: `正確為：${currentEjaan.right}` });
+                }
+
+                setTimeout(() => {
+                    setEjaanFeedback(null);
+                    const next = ejaanQueue.slice(1);
+                    setEjaanQueue(next);
+                    if (next.length > 0) {
+                        setCurrentEjaan(next[0]);
+                        setCurrentEjaanChoices([next[0].wrong, next[0].right].sort(() => Math.random() - 0.5));
+                    } else setCurrentEjaan(null);
+                }, 1000);
+            };
+
+            const handleGrammarClick = (choice) => {
+                if (grammarFeedback) return;
+                const isCorrect = choice === currentGrammar.quiz.answer;
+                setSeenGrammar([...seenGrammar, currentGrammar.id]);
+
+                if (isCorrect) {
+                  setScore(s => s + 20);
+                  setGrammarFeedback({ type: 'success', msg: '正确！' });
+                  setMasteredGrammar([...masteredGrammar, currentGrammar.id]);
+                } else {
+                  setGrammarFeedback({ type: 'error', msg: '错误！' });
+                }
+
+                setTimeout(() => {
+                  setGrammarFeedback(null);
+                  const next = grammarQueue.slice(1);
+                  setGrammarQueue(next);
+                  setCurrentGrammar(next[0] || null);
+                }, 1000);
+            };
+
+            const submitBugFix = () => {
+                const bugItem = activeBossGroup.text.find(b => b.id === activeBugId);
+                if (bossFixInput.trim().toLowerCase() === bugItem.correct.toLowerCase()) {
+                    setFoundBugs([...foundBugs, activeBugId]);
+                    setActiveBugId(null);
+                    setScore(s => s + 50);
+                } else {
+                    alert(`修復失敗！提示：${bugItem.hint}`);
+                }
+            };
+
+            const renderDashboard = () => (
+                <div className="max-w-4xl mx-auto py-12 px-6">
+                    <div className="bg-white rounded-3xl shadow-xl p-8 mb-8 border border-slate-100">
+                        <div className="flex justify-between items-center mb-10">
+                            <div>
+                                <h1 className="text-4xl font-black text-slate-800 flex items-center mb-2">
+                                    <Icon name="BrainCircuit" className="w-10 h-10 mr-4 text-blue-600" />
+                                    SPM 系統化特訓中心
+                                </h1>
+                                <p className="text-slate-500 font-medium text-lg">透過間隔重複機制徹底掌握考點</p>
+                            </div>
+                            <div className="text-center bg-blue-50 px-8 py-4 rounded-3xl border border-blue-100">
+                                <p className="text-sm font-bold text-blue-500 mb-1 uppercase tracking-wider">總掌握度</p>
+                                <p className="text-4xl font-black text-blue-700">{progressPercent}%</p>
+                            </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="border-2 border-slate-100 rounded-3xl p-6 hover:border-red-200 transition-all bg-white group" onClick={startSwipeMode}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="bg-red-50 p-4 rounded-2xl text-red-600 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                                        <Icon name="Zap" className="w-8 h-8" />
+                                    </div>
+                                    <span className="font-bold text-slate-400">{masteredSwipes.length} / {allSwipeData.length}</span>
+                                </div>
+                                <h3 className="text-2xl font-black text-slate-800 mb-2">錯別字刷卡特訓</h3>
+                                <p className="text-slate-500 mb-6 min-h-[3rem]">利用滑動機制，快速建立單詞肌肉記憶。</p>
+                                <button className="w-full py-4 bg-red-500 text-white rounded-2xl font-bold shadow-lg shadow-red-200 hover:-translate-y-1 transition-all">開始 10 題特訓</button>
+                            </div>
+
+                            <div className="border-2 border-slate-100 rounded-3xl p-6 hover:border-blue-200 transition-all bg-white group" onClick={startEjaanMode}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="bg-blue-50 p-4 rounded-2xl text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                                        <Icon name="Target" className="w-8 h-8" />
+                                    </div>
+                                    <span className="font-bold text-slate-400">{masteredEjaan.length} / {allEjaanData.length}</span>
+                                </div>
+                                <h3 className="text-2xl font-black text-slate-800 mb-2">陷阱二選一</h3>
+                                <p className="text-slate-500 mb-6 min-h-[3rem]">破解常考的「連寫/分開寫」與外來詞陷阱。</p>
+                                <button className="w-full py-4 bg-blue-500 text-white rounded-2xl font-bold shadow-lg shadow-blue-200 hover:-translate-y-1 transition-all">開始 5 題特訓</button>
+                            </div>
+
+                            <div className="md:col-span-2 border-2 border-slate-100 rounded-3xl p-6 bg-slate-900 text-white group" onClick={startBossMode}>
+                                <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                                    <div className="flex items-center gap-6">
+                                        <div className="bg-orange-500 p-5 rounded-3xl">
+                                            <Icon name="Bug" className="w-10 h-10 text-white" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-2xl font-black text-orange-400">終極階段：代碼 Debug</h3>
+                                            <p className="text-slate-400 font-medium">在隨機短文中揪出 3 個系統級 Bug 並手動修復！</p>
+                                        </div>
+                                    </div>
+                                    <button className="bg-orange-500 py-4 px-10 rounded-2xl font-black text-lg hover:bg-orange-600 transition-all shadow-xl shadow-orange-950/20">開始挑戰</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen bg-slate-50 pb-20">
+                    <div className="max-w-4xl mx-auto pt-8 px-6 flex justify-between items-center">
+                        <button onClick={() => setCurrentMode('dashboard')} className="text-slate-400 hover:text-slate-800 font-bold flex items-center bg-white py-2 px-4 rounded-2xl shadow-sm border border-slate-100">
+                             返回主頁
+                        </button>
+                        <div className="font-black text-2xl text-yellow-700 bg-yellow-300 px-6 py-2 rounded-full shadow-md border-2 border-yellow-400">
+                            積分: {score}
+                        </div>
+                    </div>
+
+                    {currentMode === 'dashboard' && renderDashboard()}
+                    
+                    {currentMode === 'swipe' && swipeCard && (
+                        <div className="max-w-md mx-auto mt-12 px-6">
+                            <div className="bg-white rounded-[2.5rem] shadow-2xl p-8 mb-8 text-center border-4 border-slate-50">
+                                <span className="text-slate-400 font-bold uppercase text-sm tracking-widest mb-4 block">判斷拼寫</span>
+                                <h2 className="text-5xl font-black text-slate-800 mb-6">{swipeCard.word}</h2>
+                                <p className="bg-amber-50 text-amber-800 py-2 px-6 rounded-2xl font-bold inline-block">意思：{swipeCard.meaning}</p>
+                            </div>
+                            <div className="flex justify-center gap-8">
+                                <button onClick={() => handleSwipe(false)} className="w-24 h-24 bg-white border-4 border-red-50 text-red-500 rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all shadow-xl"><Icon name="X" className="w-10 h-10" /></button>
+                                <button onClick={() => handleSwipe(true)} className="w-24 h-24 bg-white border-4 border-green-50 text-green-500 rounded-full flex items-center justify-center hover:bg-green-500 hover:text-white transition-all shadow-xl"><Icon name="CheckCircle2" className="w-10 h-10" /></button>
+                            </div>
+                            {swipeFeedback && <div className={`mt-8 text-center p-4 rounded-2xl font-black animate-bounce-in ${swipeFeedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{swipeFeedback.msg}</div>}
+                        </div>
+                    )}
+
+                    {currentMode === 'ejaan' && currentEjaan && (
+                         <div className="max-w-2xl mx-auto mt-12 px-6">
+                            <div className="bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100">
+                                <p className="text-center text-slate-500 font-bold mb-8">選擇以下意思對應的正確拼寫：</p>
+                                <div className="text-center mb-10">
+                                    <span className="text-3xl font-black text-blue-600 bg-blue-50 py-4 px-10 rounded-3xl border border-blue-100 inline-block">{currentEjaan.meaning}</span>
+                                </div>
+                                <div className="grid grid-cols-1 gap-4">
+                                    {currentEjaanChoices.map((choice, i) => (
+                                        <button key={i} onClick={() => handleEjaanClick(choice)} className="py-6 bg-slate-50 border-2 border-slate-100 rounded-3xl text-2xl font-bold text-slate-700 hover:border-blue-500 hover:bg-blue-50 transition-all">{choice}</button>
+                                    ))}
+                                </div>
+                                {ejaanFeedback && <div className={`mt-8 text-center p-4 rounded-2xl font-black animate-bounce-in ${ejaanFeedback.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{ejaanFeedback.msg}</div>}
+                            </div>
+                         </div>
+                    )}
+
+                    {currentMode === 'boss' && activeBossGroup && (
+                        <div className="max-w-4xl mx-auto mt-12 px-6">
+                            <div className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-slate-100">
+                                <div className="p-10 bg-slate-900 border-b border-slate-800">
+                                    <h2 className="text-2xl font-black text-orange-400 mb-4 flex items-center"><Icon name="Bug" className="mr-3" /> {activeBossGroup.title}</h2>
+                                    <p className="text-slate-400">點擊有問題的詞，並輸入正確的修復補丁！</p>
+                                </div>
+                                <div className="p-12 text-2xl leading-relaxed bg-slate-950 font-mono text-slate-300">
+                                    {activeBossGroup.text.map(item => {
+                                        const isFixed = foundBugs.includes(item.id);
+                                        if (!item.isBug) return <span key={item.id}>{item.text}</span>;
+                                        return (
+                                            <span key={item.id} onClick={() => !isFixed && setActiveBugId(item.id)} className={`px-2 py-1 rounded cursor-pointer mx-1 transition-all ${isFixed ? 'bg-green-600 text-white line-through' : activeBugId === item.id ? 'bg-blue-600 text-white' : 'bg-red-500/20 text-red-400 border-b-2 border-dashed border-red-500'}`}>
+                                                {item.text}
+                                                {isFixed && <span className="ml-2 text-white font-black bg-slate-900/50 px-2 rounded">[{item.correct}]</span>}
+                                            </span>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                            {activeBugId && (
+                                <div className="fixed inset-0 bg-slate-950/90 backdrop-blur-sm z-50 flex items-center justify-center p-6">
+                                    <div className="bg-white p-10 rounded-[3rem] w-full max-w-lg animate-bounce-in shadow-2xl">
+                                        <h3 className="text-2xl font-black text-red-600 mb-8 flex items-center"><Icon name="Zap" className="mr-3" /> 修復系統 Bug</h3>
+                                        <input type="text" value={bossFixInput} onChange={e => setBossFixInput(e.target.value)} placeholder="輸入正確寫法..." autoFocus className="w-full border-4 border-slate-100 rounded-3xl p-6 text-2xl font-bold mb-8 focus:border-blue-500 outline-none transition-all" />
+                                        <div className="flex gap-4">
+                                            <button onClick={() => setActiveBugId(null)} className="flex-1 py-4 bg-slate-100 text-slate-500 font-bold rounded-2xl">取消</button>
+                                            <button onClick={submitBugFix} className="flex-1 py-4 bg-green-500 text-white font-bold rounded-2xl shadow-lg shadow-green-200">應用補丁</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<BugHunterApp />);
+    </script>
+</body>
+</html>
