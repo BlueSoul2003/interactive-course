@@ -56,12 +56,6 @@
 </head>
 
 <body>
-    <div style="background:#ffffff;border-bottom:1px solid #e2e8f0;padding:10px 24px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;position:sticky;top:0;z-index:1000;box-shadow:0 1px 6px rgba(0,0,0,0.07);">
-    <a href="slides.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#f0f9ff;border:1.5px solid #bae6fd;border-radius:10px;font-weight:600;font-size:13px;color:#0369a1;text-decoration:none;">&#128196; Slides PDF</a>
-    <a href="Worksheet.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#f0fdf4;border:1.5px solid #86efac;border-radius:10px;font-weight:600;font-size:13px;color:#15803d;text-decoration:none;">&#128203; Worksheet</a>
-    <a href="Answer_Key.pdf" target="_blank" style="display:inline-flex;align-items:center;gap:7px;padding:7px 16px;background:#fffbeb;border:1.5px solid #fcd34d;border-radius:10px;font-weight:600;font-size:13px;color:#92400e;text-decoration:none;">&#128273; Answer Key</a>
-</div>
-
     <div id="root"></div>
 
     <script type="text/babel">
@@ -245,7 +239,9 @@
         // --- MAIN APPLICATION COMPONENT ---
         const App = () => {
             const [activeTab, setActiveTab] = useState('presentation');
-
+            const [isDualPane, setIsDualPane] = useState(false);
+            const [pdfUrl1, setPdfUrl1] = useState('');
+            const [pdfUrl2, setPdfUrl2] = useState('');
 
             const [currentQIndex, setCurrentQIndex] = useState(0);
             const [userInputs, setUserInputs] = useState({});
@@ -339,10 +335,60 @@
 
                         {/* --- PRESENTATION TAB --- */}
                         {activeTab === 'presentation' && (
-                            <div className="flex flex-col h-full flex-grow fade-in" style={{padding: '16px'}}>
-                                <h3 className="text-xl font-bold mb-4" style={{color: '#1e293b'}}>Presentation Slides</h3>
-                                <div style={{flex: 1, background: '#f1f5f9', borderRadius: '12px', overflow: 'hidden', minHeight: '540px', position: 'relative'}}>
-                                    <iframe src="slides.pdf" style={{position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none'}} title="Presentation Slides"></iframe>
+                            <div className="flex flex-col h-full flex-grow p-6 fade-in">
+                                <div className="flex justify-between items-center mb-4">
+                                    <h3 className="text-xl font-bold text-gray-800">Presentation Materials</h3>
+                                    <button
+                                        onClick={() => setIsDualPane(!isDualPane)}
+                                        className="bg-green-100 text-green-800 px-4 py-2 rounded font-bold hover:bg-green-200 transition"
+                                    >
+                                        {isDualPane ? "Switch to Single Pane View" : "Enable Side-by-Side View"}
+                                    </button>
+                                </div>
+
+                                <div className={`grid gap-4 mb-4 ${isDualPane ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 mb-1">Document / Simulation URL {isDualPane && "(LeftPane)"}:</label>
+                                        <input
+                                            type="text"
+                                            placeholder="e.g., https://phet.colorado.edu/sims/html/circuit-construction-kit-dc/latest/circuit-construction-kit-dc_en.html"
+                                            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500 outline-none"
+                                            value={pdfUrl1}
+                                            onChange={(e) => setPdfUrl1(e.target.value)}
+                                        />
+                                    </div>
+                                    {isDualPane && (
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-1">Document URL (Right Pane):</label>
+                                            <input
+                                                type="text"
+                                                placeholder="e.g., https://example.com/topic5-notes.pdf"
+                                                className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-green-500 outline-none"
+                                                value={pdfUrl2}
+                                                onChange={(e) => setPdfUrl2(e.target.value)}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className={`flex-grow flex gap-4 min-h-[500px]`}>
+                                    <div className="flex-1 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative">
+                                        {pdfUrl1 ? (
+                                            <iframe src={pdfUrl1} className="absolute inset-0 w-full h-full border-none" title="Presentation Pane 1"></iframe>
+                                        ) : (
+                                            <span className="text-gray-400 font-medium">Paste URL above to load content</span>
+                                        )}
+                                    </div>
+
+                                    {isDualPane && (
+                                        <div className="flex-1 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative">
+                                            {pdfUrl2 ? (
+                                                <iframe src={pdfUrl2} className="absolute inset-0 w-full h-full border-none" title="Presentation Pane 2"></iframe>
+                                            ) : (
+                                                <span className="text-gray-400 font-medium">Paste URL above to load content</span>
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
@@ -507,35 +553,6 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
-
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-}
-.home-btn-fixed:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  color: #fff;
-}
-</style>
-<a href="../../../../../index.html" class="home-btn-fixed">&#127968; Home</a>
-
-<script src="../../../../../js/progress-tracker.js"
-        data-module-id="IGCSE_Y4_Sci_T5"
-        data-module-name="IGCSE Y4 Science - Electricity"
-        data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic5_Electricity/index.html"></script>
-<script>
-window.addEventListener('load', function() {
-    if (!window.ProgressTracker) return;
-    ProgressTracker.load().then(function() { ProgressTracker.save({ visited: true }); });
-});
-</script>
-
 </body>
 
 </html>

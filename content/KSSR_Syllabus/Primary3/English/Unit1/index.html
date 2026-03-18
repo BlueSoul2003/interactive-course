@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Primary 3 English - Interactive Lesson</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 自訂字體與基礎設定 */
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4;
+            touch-action: manipulation;
+        }
+
+        /* 隱藏滾動條但保持可滾動 */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* ======== 通用閱讀區樣式 ======== */
+        .vocab-word {
+            position: relative;
+            cursor: pointer;
+            color: #2563eb;
+            font-weight: 700;
+            border-bottom: 2px dashed #93c5fd;
+            padding: 0 2px;
+            transition: all 0.2s;
+        }
+
+        .vocab-word:active {
+            background-color: #dbeafe;
+            border-radius: 4px;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 10px) scale(0.9);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+
+        .vocab-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #1f2937;
+            color: #fff;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            white-space: nowrap;
+            z-index: 50;
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            pointer-events: none;
+        }
+
+        .vocab-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1f2937 transparent transparent transparent;
+        }
+
+        .trans-content {
+            transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .trans-content.show {
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+
+        /* ======== 互動遊戲區樣式 ======== */
+
+        /* 錯誤震動動畫 */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .shake-anim {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* 遊戲一：連連看按鈕 */
+        .match-btn {
+            width: 100%;
+            padding: 12px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid #e2e8f0;
+            background-color: white;
+            color: #475569;
+        }
+
+        .match-btn.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            color: #1d4ed8;
+            transform: scale(1.05);
+        }
+
+        .match-btn.matched {
+            border-color: #22c55e;
+            background-color: #dcfce7;
+            color: #15803d;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .match-btn.error {
+            border-color: #ef4444;
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
+        /* 遊戲二：記憶翻牌 */
+        .memory-card {
+            perspective: 1000px;
+            cursor: pointer;
+            aspect-ratio: 1 / 1;
+        }
+
+        .memory-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .memory-card.flipped .memory-inner {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card.matched {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .memory-front,
+        .memory-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 4px;
+        }
+
+        .memory-front {
+            background-color: #f8fafc;
+            border: 2px solid #cbd5e1;
+            font-size: 24px;
+            color: #94a3b8;
+        }
+
+        .memory-front::after {
+            content: '?';
+        }
+
+        .memory-back {
+            background-color: #fef08a;
+            border: 2px solid #eab308;
+            color: #854d0e;
+            transform: rotateY(180deg);
+            font-weight: bold;
+            font-size: 14px;
+            word-break: break-word;
+        }
+
+        .memory-back.en {
+            background-color: #bfdbfe;
+            border-color: #3b82f6;
+            color: #1e3a8a;
+        }
+
+        /* 遊戲三：拖曳卡片 (取代原本的翻牌) */
+        .drag-card {
+            touch-action: none;
+            /* 關鍵：防止觸控時畫面滾動 */
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .drop-slot {
+            transition: all 0.2s;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 antialiased pb-24">
+    <!-- Pillar 3: Local Navigation (Home Button) -->
+    <a href="../../../../index.html" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: white; padding: 10px 15px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#f8fafc';" onmouseout="this.style.transform='scale(1)'; this.style.background='white';">
+        <span style="font-size: 1.2rem;">🏠</span> <span>Home</span>
+    </a>
+
+    <div class="max-w-4xl mx-auto p-4 md:p-6">
+
+        <!-- Header -->
+        <header class="text-center mb-6 pt-4">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-teal-700 mb-2">✨ Unit 1: Interactive English</h1>
+            <p class="text-gray-500 text-sm md:text-base">For Primary 3 Students</p>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="flex justify-center gap-2 md:gap-3 mb-6 flex-wrap">
+            <button id="tabBtn0" onclick="switchTab(0)"
+                class="tab-btn active px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition-colors bg-indigo-500 text-white shadow-md">
+                🎮 課前遊戲
+            </button>
+            <button id="tabBtn1" onclick="switchTab(1)"
+                class="tab-btn px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition-colors bg-white text-teal-600 border-2 border-teal-100 hover:bg-teal-50">
+                📖 Part A: Reading
+            </button>
+            <button id="tabBtn2" onclick="switchTab(2)"
+                class="tab-btn px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition-colors bg-white text-teal-600 border-2 border-teal-100 hover:bg-teal-50">
+                ✏️ Part B: Vocabulary
+            </button>
+        </div>
+
+        <!-- ================= PAGE 0: PRE-VOCAB GAMES ================= -->
+        <div id="page0" class="page-content block space-y-10">
+
+            <div
+                class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-indigo-800 text-center text-sm md:text-base shadow-sm">
+                🎯 <strong>課前暖身任務：</strong>從課文中精選的核心生字。完成以下三個挑戰，再進入閱讀吧！
+            </div>
+
+            <!-- Challenge 1: Match -->
+            <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-2 mb-4 border-b pb-2">
+                    <span class="text-2xl">🧩</span>
+                    <h2 class="text-xl font-bold text-gray-800">挑戰一：外貌與特徵 (Tap & Match)</h2>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">點擊左邊的英文，再點擊右邊正確的中文意思，把它們連起來！</p>
+                <div class="flex justify-between gap-4">
+                    <div id="match-col-en" class="flex-1 flex flex-col gap-2"></div>
+                    <div id="match-col-zh" class="flex-1 flex flex-col gap-2"></div>
+                </div>
+                <div id="match-success"
+                    class="hidden mt-4 bg-green-100 text-green-800 p-3 rounded-lg text-center font-bold">🎉 第一關挑戰成功！
+                </div>
+            </div>
+
+            <!-- Challenge 2: Memory -->
+            <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-2 mb-4 border-b pb-2">
+                    <span class="text-2xl">🃏</span>
+                    <h2 class="text-xl font-bold text-gray-800">挑戰二：物品與名詞 (Memory Match)</h2>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">翻開卡片，找出配對的中英文名詞（共10組）。找出所有配對即可消除！</p>
+                <!-- 4x5 Grid for 20 cards -->
+                <div id="memory-board" class="grid grid-cols-4 md:grid-cols-5 gap-2 md:gap-3"></div>
+                <div id="memory-success"
+                    class="hidden mt-4 bg-yellow-100 text-yellow-800 p-3 rounded-lg text-center font-bold">🎉 第二關記憶大師！
+                </div>
+            </div>
+
+            <!-- Challenge 3: Drag & Drop (Updated) -->
+            <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-2 mb-4 border-b pb-2">
+                    <span class="text-2xl">📇</span>
+                    <h2 class="text-xl font-bold text-gray-800">挑戰三：動作與形容 (Drag & Drop)</h2>
+                </div>
+                <p class="text-sm text-gray-500 mb-4">用手指按住上方的英文卡片，拖拉到下方正確的中文意思框框中！</p>
+
+                <!-- 單字池區 -->
+                <div id="drag-cards-pool"
+                    class="flex flex-wrap justify-center gap-2 mb-8 min-h-[100px] p-4 bg-purple-50 rounded-xl border-2 border-purple-100">
+                    <!-- JavaScript generated Draggable Cards -->
+                </div>
+
+                <!-- 放置區 -->
+                <div id="drop-zones-pool" class="grid grid-cols-2 md:grid-cols-5 gap-3">
+                    <!-- JavaScript generated Drop Zones -->
+                </div>
+
+                <div id="drag-success"
+                    class="hidden mt-6 bg-purple-100 text-purple-800 p-3 rounded-lg text-center font-bold">🎉
+                    第三關配對完成！你太棒了！</div>
+            </div>
+
+            <button onclick="switchTab(1)"
+                class="w-full mt-8 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 active:scale-95 text-white font-bold py-4 rounded-xl shadow-lg transition-transform text-lg">
+                🚀 我準備好了！進入閱讀練習
+            </button>
+        </div>
+
+        <!-- ================= PAGE 1: READING ================= -->
+        <div id="page1" class="page-content hidden space-y-8">
+            <div
+                class="bg-blue-50 border border-blue-100 rounded-xl p-4 text-blue-800 text-center text-sm md:text-base">
+                💡 <strong>學習小提示：</strong>用手指點擊藍色單字看意思。如果整段看不懂，可以點擊下方的按鈕看完整翻譯！
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- Maya -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border-2 border-purple-100 flex flex-col">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center text-2xl mb-3">
+                        👧🏽</div>
+                    <h3 class="font-bold text-lg text-purple-700 mb-2">A. Maya</h3>
+                    <p class="leading-relaxed text-gray-600 flex-grow">
+                        Maya has got short, brown hair and bright blue eyes. She has a <span class="vocab-word"
+                            onclick="showVocab(this, '撒落/少量')">sprinkle</span> of <span class="vocab-word"
+                            onclick="showVocab(this, '雀斑')">freckles</span> on her nose. Maya can make amazing things
+                        with <span class="vocab-word" onclick="showVocab(this, '黏土')">clay</span> and paint, and she
+                        loves doing different kinds of arts and <span class="vocab-word"
+                            onclick="showVocab(this, '手工藝')">crafts</span>. She can't, however, play football very well
+                        because she finds it hard to kick the ball in the right <span class="vocab-word"
+                            onclick="showVocab(this, '方向')">direction</span>.
+                    </p>
+                    <button onclick="toggleTrans('trans-maya', this, 'purple')"
+                        class="mt-4 bg-purple-50 hover:bg-purple-100 text-purple-700 py-2 px-4 rounded-xl font-bold text-sm transition-colors w-full">
+                        🌐 顯示完整翻譯
+                    </button>
+                    <div id="trans-maya"
+                        class="trans-content bg-gray-50 p-4 rounded-xl border border-gray-200 text-sm text-gray-700 leading-relaxed">
+                        Maya 有著棕色短髮和明亮的藍色眼睛。她的鼻子上散落著一些雀斑。Maya
+                        可以用黏土和顏料做出令人驚嘆的東西，她喜歡做各種不同的美術和手工藝。然而，她不太會踢足球，因為她覺得很難把球踢向正確的方向。
+                    </div>
+                </div>
+
+                <!-- Zara -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border-2 border-pink-100 flex flex-col">
+                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center text-2xl mb-3">🏃‍♀️
+                    </div>
+                    <h3 class="font-bold text-lg text-pink-700 mb-2">B. Zara</h3>
+                    <p class="leading-relaxed text-gray-600 flex-grow">
+                        Zara has got long, dark hair that she keeps tied in a <span class="vocab-word"
+                            onclick="showVocab(this, '馬尾')">ponytail</span>. She is quite tall for her age and has very
+                        strong legs. Zara can run <span class="vocab-word"
+                            onclick="showVocab(this, '難以置信地')">incredibly</span> fast and is great at scoring goals
+                        during football games. She can't, however, play the piano because her fingers get all mixed up
+                        on the keys.
+                    </p>
+                    <button onclick="toggleTrans('trans-zara', this, 'pink')"
+                        class="mt-4 bg-pink-50 hover:bg-pink-100 text-pink-700 py-2 px-4 rounded-xl font-bold text-sm transition-colors w-full">
+                        🌐 顯示完整翻譯
+                    </button>
+                    <div id="trans-zara"
+                        class="trans-content bg-gray-50 p-4 rounded-xl border border-gray-200 text-sm text-gray-700 leading-relaxed">
+                        Zara 有著深色的長髮，她總是綁著馬尾。在同齡人中她算相當高，並且有著非常強壯的雙腿。Zara 跑得不可思議地快，在足球比賽中很擅長進球。然而，她不會彈鋼琴，因為她的手指會在琴鍵上打結。
+                    </div>
+                </div>
+
+                <!-- Leo -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border-2 border-orange-100 flex flex-col">
+                    <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center text-2xl mb-3">
+                        👦🏼</div>
+                    <h3 class="font-bold text-lg text-orange-700 mb-2">C. Leo</h3>
+                    <p class="leading-relaxed text-gray-600 flex-grow">
+                        Leo has got bright, <span class="vocab-word" onclick="showVocab(this, '捲曲的')">curly</span>
+                        blonde hair and wears shiny blue glasses. He always has a big smile on his face, which makes his
+                        eyes <span class="vocab-word" onclick="showVocab(this, '起皺紋/瞇起來')">crinkle</span> at the
+                        corners. Leo can beat anyone at a game of <span class="vocab-word"
+                            onclick="showVocab(this, '西洋棋')">chess</span> and can finish a difficult puzzle in no time.
+                        He can't, however, stay on a skateboard without falling over.
+                    </p>
+                    <button onclick="toggleTrans('trans-leo', this, 'orange')"
+                        class="mt-4 bg-orange-50 hover:bg-orange-100 text-orange-700 py-2 px-4 rounded-xl font-bold text-sm transition-colors w-full">
+                        🌐 顯示完整翻譯
+                    </button>
+                    <div id="trans-leo"
+                        class="trans-content bg-gray-50 p-4 rounded-xl border border-gray-200 text-sm text-gray-700 leading-relaxed">
+                        Leo 有著明亮的淡黃色捲髮，戴著閃亮的藍色眼鏡。他的臉上總是掛著大大的笑容，這讓他的眼角都瞇起了皺紋。Leo
+                        可以在西洋棋比賽中擊敗任何人，並且能立刻完成困難的拼圖。然而，他沒辦法站在滑板上不摔倒。
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-8">
+                <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">Assign the correct letter:</h2>
+                <div id="quiz1-container" class="space-y-6"></div>
+                <button onclick="checkAnswers1()"
+                    class="w-full mt-8 bg-teal-500 hover:bg-teal-600 active:bg-teal-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform active:scale-95 text-lg">
+                    ✅ Check Answers
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= PAGE 2: VOCABULARY ================= -->
+        <div id="page2" class="page-content hidden space-y-8">
+            <div
+                class="bg-yellow-50 border border-yellow-100 rounded-xl p-4 text-yellow-800 text-center text-sm md:text-base">
+                💡 <strong>學習小提示：</strong>讀句子並拼出正確的單字。如果卡住了，點擊「Hint」可以看中文提示！
+            </div>
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                <h2 class="text-xl font-bold mb-6 text-gray-800 border-b pb-2">Fill in the blanks:</h2>
+                <div id="quiz2-container" class="space-y-6"></div>
+                <button onclick="checkAnswers2()"
+                    class="w-full mt-8 bg-teal-500 hover:bg-teal-600 active:bg-teal-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform active:scale-95 text-lg">
+                    ✅ Check Answers
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= FLOATING DICTIONARY ================= -->
+    <button onclick="toggleVocabModal()"
+        class="fixed bottom-6 right-6 z-40 bg-indigo-600 text-white w-14 h-14 rounded-full shadow-2xl hover:bg-indigo-700 transition-transform transform hover:scale-105 active:scale-95 flex items-center justify-center border-4 border-indigo-200">
+        <span class="text-2xl">📖</span>
+    </button>
+
+    <!-- Vocab List Modal -->
+    <div id="vocabModal"
+        class="fixed inset-0 z-50 hidden bg-gray-900 bg-opacity-60 flex justify-center items-center p-4 backdrop-blur-sm">
+        <div id="vocabModalContent"
+            class="bg-white rounded-2xl w-full max-w-md max-h-[85vh] flex flex-col shadow-2xl overflow-hidden transform transition-all duration-300 scale-95 opacity-0">
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-indigo-100 bg-indigo-50 flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">📖</span>
+                    <h2 class="text-lg font-extrabold text-indigo-900">隨身生字表 <span
+                            class="text-sm font-normal text-indigo-600 ml-2">(已打亂順序 🔍)</span></h2>
+                </div>
+                <button onclick="toggleVocabModal()"
+                    class="text-indigo-400 hover:text-red-500 hover:bg-red-50 w-8 h-8 rounded-full flex items-center justify-center text-2xl font-bold transition-colors">&times;</button>
+            </div>
+            <!-- Modal Body (List) -->
+            <div id="vocab-list-container" class="p-4 overflow-y-auto flex-1 no-scrollbar space-y-4 bg-gray-50">
+                <!-- Data injected by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // --- Tab Logic ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            const defaultBtnClass = "tab-btn px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition-colors bg-white text-teal-600 border-2 border-teal-100 hover:bg-teal-50";
+            document.getElementById('tabBtn0').className = defaultBtnClass;
+            document.getElementById('tabBtn1').className = defaultBtnClass;
+            document.getElementById('tabBtn2').className = defaultBtnClass;
+
+            document.getElementById('page' + tabId).classList.remove('hidden');
+            let activeBtn = document.getElementById('tabBtn' + tabId);
+            if (tabId === 0) activeBtn.className = "tab-btn active px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition-colors bg-indigo-500 text-white shadow-md";
+            else activeBtn.className = "tab-btn active px-4 md:px-6 py-2 md:py-3 rounded-full font-bold text-sm md:text-base transition-colors bg-teal-500 text-white shadow-md";
+            window.scrollTo(0, 0);
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // ================= GAME 1: TAP & MATCH (10 Words) =================
+        const matchData = [
+            { id: 1, en: "freckles", zh: "雀斑" }, { id: 2, en: "ponytail", zh: "馬尾" },
+            { id: 3, en: "curly", zh: "捲曲的" }, { id: 4, en: "blonde", zh: "淡黃色的" },
+            { id: 5, en: "crinkle", zh: "起皺/瞇起" }, { id: 6, en: "bright", zh: "明亮的" },
+            { id: 7, en: "strong", zh: "強壯的" }, { id: 8, en: "shiny", zh: "閃亮的" },
+            { id: 9, en: "fingers", zh: "手指" }, { id: 10, en: "tall", zh: "高的" }
+        ];
+        let selectedMatch = { type: null, id: null, el: null };
+        let matchedCount = 0;
+
+        function initMatchGame() {
+            const enCol = document.getElementById('match-col-en');
+            const zhCol = document.getElementById('match-col-zh');
+            let enArr = shuffle([...matchData]);
+            let zhArr = shuffle([...matchData]);
+
+            enArr.forEach(item => {
+                const btn = document.createElement('div');
+                btn.className = 'match-btn en-btn';
+                btn.innerText = item.en;
+                btn.onclick = () => handleMatchClick('en', item.id, btn);
+                enCol.appendChild(btn);
+            });
+
+            zhArr.forEach(item => {
+                const btn = document.createElement('div');
+                btn.className = 'match-btn zh-btn';
+                btn.innerText = item.zh;
+                btn.onclick = () => handleMatchClick('zh', item.id, btn);
+                zhCol.appendChild(btn);
+            });
+        }
+
+        function handleMatchClick(type, id, el) {
+            if (el.classList.contains('matched')) return;
+
+            if (selectedMatch.type === type) {
+                if (selectedMatch.el) selectedMatch.el.classList.remove('selected');
+                el.classList.add('selected');
+                selectedMatch = { type, id, el };
+                return;
+            }
+
+            if (!selectedMatch.type) {
+                el.classList.add('selected');
+                selectedMatch = { type, id, el };
+                return;
+            }
+
+            let prevEl = selectedMatch.el;
+            if (selectedMatch.id === id) {
+                prevEl.className = 'match-btn matched';
+                el.className = 'match-btn matched';
+                matchedCount++;
+                if (matchedCount === matchData.length) {
+                    document.getElementById('match-success').classList.remove('hidden');
+                }
+            } else {
+                prevEl.classList.remove('selected');
+                prevEl.classList.add('error', 'shake-anim');
+                el.classList.add('error', 'shake-anim');
+
+                setTimeout(() => {
+                    prevEl.classList.remove('error', 'shake-anim');
+                    el.classList.remove('error', 'shake-anim');
+                }, 400);
+            }
+            selectedMatch = { type: null, id: null, el: null };
+        }
+
+        // ================= GAME 2: MEMORY MATCH (10 Pairs = 20 Cards) =================
+        const memoryWords = [
+            { id: 1, en: "clay", zh: "黏土" }, { id: 2, en: "crafts", zh: "手工藝" },
+            { id: 3, en: "direction", zh: "方向" }, { id: 4, en: "piano", zh: "鋼琴" },
+            { id: 5, en: "chess", zh: "西洋棋" }, { id: 6, en: "puzzle", zh: "拼圖" },
+            { id: 7, en: "skateboard", zh: "滑板" }, { id: 8, en: "glasses", zh: "眼鏡" },
+            { id: 9, en: "keys", zh: "琴鍵" }, { id: 10, en: "goals", zh: "球門/得分" }
+        ];
+
+        let flippedCards = [];
+        let memoryMatched = 0;
+        let lockBoard = false;
+
+        function initMemoryGame() {
+            const board = document.getElementById('memory-board');
+            let deck = [];
+            memoryWords.forEach(item => {
+                deck.push({ id: item.id, text: item.en, lang: 'en' });
+                deck.push({ id: item.id, text: item.zh, lang: 'zh' });
+            });
+            deck = shuffle(deck);
+
+            deck.forEach((card, index) => {
+                const el = document.createElement('div');
+                el.className = 'memory-card';
+                el.dataset.id = card.id;
+
+                const bgClass = card.lang === 'en' ? 'memory-back en' : 'memory-back';
+                el.innerHTML = `
+                    <div class="memory-inner">
+                        <div class="memory-front"></div>
+                        <div class="${bgClass}">${card.text}</div>
+                    </div>
+                `;
+                el.onclick = () => handleMemoryFlip(el);
+                board.appendChild(el);
+            });
+        }
+
+        function handleMemoryFlip(cardEl) {
+            if (lockBoard) return;
+            if (cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+            cardEl.classList.add('flipped');
+            flippedCards.push(cardEl);
+
+            if (flippedCards.length === 2) {
+                lockBoard = true;
+                checkForMatch();
+            }
+        }
+
+        function checkForMatch() {
+            let isMatch = flippedCards[0].dataset.id === flippedCards[1].dataset.id;
+
+            if (isMatch) {
+                setTimeout(() => {
+                    flippedCards[0].classList.add('matched');
+                    flippedCards[1].classList.add('matched');
+                    memoryMatched++;
+                    if (memoryMatched === memoryWords.length) {
+                        document.getElementById('memory-success').classList.remove('hidden');
+                    }
+                    resetBoard();
+                }, 600);
+            } else {
+                setTimeout(() => {
+                    flippedCards[0].classList.remove('flipped');
+                    flippedCards[1].classList.remove('flipped');
+                    resetBoard();
+                }, 1000);
+            }
+        }
+
+        function resetBoard() {
+            flippedCards = [];
+            lockBoard = false;
+        }
+
+        // ================= GAME 3: DRAG & DROP (10 Words) =================
+        const flashcardsData = [
+            { en: "sprinkle", zh: "撒落/少量", emoji: "✨" }, { en: "amazing", zh: "令人驚嘆的", emoji: "🤩" },
+            { en: "incredibly", zh: "難以置信地", emoji: "🤯" }, { en: "scoring", zh: "得分", emoji: "⚽" },
+            { en: "beat", zh: "擊敗", emoji: "🥊" }, { en: "difficult", zh: "困難的", emoji: "😓" },
+            { en: "falling", zh: "摔倒", emoji: "📉" }, { en: "tied", zh: "綁著的", emoji: "🎀" },
+            { en: "kick", zh: "踢", emoji: "🦶" }, { en: "fast", zh: "快速地", emoji: "⚡" }
+        ];
+
+        let currentDrag = null;
+        let dragClone = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        let dragMatchedCount = 0;
+
+        function initDragGame() {
+            const cardsContainer = document.getElementById('drag-cards-pool');
+            const zonesContainer = document.getElementById('drop-zones-pool');
+
+            // Generate draggable cards
+            let cards = shuffle([...flashcardsData]);
+            cards.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'drag-card bg-white border-2 border-purple-200 rounded-xl px-4 py-2 shadow-sm cursor-grab flex flex-col items-center justify-center transition-transform hover:scale-105';
+                card.dataset.id = item.en;
+                card.innerHTML = `<span class="text-2xl mb-1">${item.emoji}</span><span class="font-bold text-purple-900">${item.en}</span>`;
+
+                // Add pointer event for universal drag/touch support
+                card.onpointerdown = startDrag;
+                cardsContainer.appendChild(card);
+            });
+
+            // Generate drop zones with chinese text
+            let zones = shuffle([...flashcardsData]);
+            zones.forEach(item => {
+                const zone = document.createElement('div');
+                zone.className = 'drop-zone bg-gray-50 rounded-xl p-2 flex flex-col items-center justify-between border-2 border-gray-200';
+                zone.dataset.id = item.en;
+                zone.innerHTML = `
+                    <span class="text-gray-600 font-bold text-sm mb-2 text-center h-10 flex items-center leading-tight">${item.zh}</span>
+                    <div class="drop-slot w-full h-20 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center transition-colors"></div>
+                `;
+                zonesContainer.appendChild(zone);
+            });
+        }
+
+        function startDrag(e) {
+            // Prevent dragging if already matched inside a slot
+            if (e.target.closest('.matched')) return;
+
+            currentDrag = e.target.closest('.drag-card');
+            if (!currentDrag) return;
+
+            const rect = currentDrag.getBoundingClientRect();
+            dragOffsetX = e.clientX - rect.left;
+            dragOffsetY = e.clientY - rect.top;
+
+            // Create clone to follow finger/mouse
+            dragClone = currentDrag.cloneNode(true);
+            dragClone.classList.add('fixed', 'z-50', 'shadow-2xl', 'scale-110', 'pointer-events-none');
+            dragClone.classList.remove('hover:scale-105');
+            dragClone.style.width = `${rect.width}px`;
+            dragClone.style.height = `${rect.height}px`;
+            dragClone.style.left = `${e.clientX - dragOffsetX}px`;
+            dragClone.style.top = `${e.clientY - dragOffsetY}px`;
+            dragClone.style.margin = '0';
+            document.body.appendChild(dragClone);
+
+            // Make original semitransparent
+            currentDrag.classList.add('opacity-30');
+
+            document.addEventListener('pointermove', dragMove);
+            document.addEventListener('pointerup', endDrag);
+            document.addEventListener('pointercancel', endDrag);
+        }
+
+        function dragMove(e) {
+            if (!dragClone) return;
+            dragClone.style.left = `${e.clientX - dragOffsetX}px`;
+            dragClone.style.top = `${e.clientY - dragOffsetY}px`;
+        }
+
+        function endDrag(e) {
+            if (!dragClone) return;
+
+            // Hide clone to check what is directly underneath the pointer
+            dragClone.style.display = 'none';
+            const elemBelow = document.elementFromPoint(e.clientX, e.clientY);
+            dragClone.style.display = 'flex';
+
+            const dropZone = elemBelow ? elemBelow.closest('.drop-zone') : null;
+
+            if (dropZone && dropZone.dataset.id === currentDrag.dataset.id && !dropZone.classList.contains('filled')) {
+                // Correct match!
+                const slot = dropZone.querySelector('.drop-slot');
+                slot.appendChild(currentDrag);
+
+                // Style the placed card
+                currentDrag.classList.remove('opacity-30', 'cursor-grab', 'hover:scale-105');
+                currentDrag.classList.add('w-full', 'h-full', 'shadow-none', 'matched', 'border-transparent', 'bg-transparent');
+                currentDrag.onpointerdown = null; // Remove drag ability
+
+                // Style the drop zone
+                dropZone.classList.add('filled', 'border-purple-300', 'bg-purple-100');
+                slot.classList.remove('border-dashed', 'border-gray-300');
+                slot.classList.add('border-transparent');
+
+                dragMatchedCount++;
+                if (dragMatchedCount === flashcardsData.length) {
+                    document.getElementById('drag-success').classList.remove('hidden');
+                }
+            } else {
+                // Incorrect match or dropped outside
+                currentDrag.classList.remove('opacity-30');
+                currentDrag.classList.add('shake-anim');
+                setTimeout(() => { if (currentDrag) currentDrag.classList.remove('shake-anim'); }, 400);
+            }
+
+            // Cleanup
+            dragClone.remove();
+            dragClone = null;
+            currentDrag = null;
+            document.removeEventListener('pointermove', dragMove);
+            document.removeEventListener('pointerup', endDrag);
+            document.removeEventListener('pointercancel', endDrag);
+        }
+
+        // ================= FLOATING DICTIONARY LOGIC =================
+
+        const partBNewWords = [
+            { en: "pretty", zh: "迷人的/漂亮的" },
+            { en: "muscular", zh: "肌肉發達的" },
+            { en: "nice", zh: "友善的/好心的" },
+            { en: "purple", zh: "紫色的" },
+            { en: "karate", zh: "空手道" },
+            { en: "football", zh: "足球" },
+            { en: "dive", zh: "跳水" },
+            { en: "swimming", zh: "游泳" }
+        ];
+
+        function initVocabList() {
+            const container = document.getElementById('vocab-list-container');
+
+            const categories = [
+                { title: "🧩 外貌與特徵 (Part A)", data: matchData, color: "text-blue-800", bg: "bg-blue-100", border: "border-blue-200" },
+                { title: "🃏 物品與名詞 (Part A)", data: memoryWords, color: "text-yellow-800", bg: "bg-yellow-100", border: "border-yellow-200" },
+                { title: "📇 動作與形容 (Part A)", data: flashcardsData, color: "text-purple-800", bg: "bg-purple-100", border: "border-purple-200" },
+                { title: "📝 Part B 補充生字 (共8字)", data: partBNewWords, color: "text-emerald-800", bg: "bg-emerald-100", border: "border-emerald-200" }
+            ];
+
+            categories.forEach(cat => {
+                let html = `<div class="bg-white rounded-xl shadow-sm border ${cat.border} overflow-hidden">
+                    <h3 class="font-bold ${cat.color} ${cat.bg} px-4 py-2 sticky top-0 z-10">${cat.title}</h3>
+                    <div class="grid grid-cols-1 divide-y divide-gray-100">`;
+
+                // 在渲染字典前，先拷貝一份陣列並打亂順序 (Desirable Difficulty)
+                const shuffledData = shuffle([...cat.data]);
+
+                shuffledData.forEach(word => {
+                    html += `<div class="flex justify-between items-center px-4 py-3 hover:bg-gray-50 transition-colors">
+                        <span class="font-bold text-gray-800 text-lg">${word.en}</span>
+                        <span class="text-gray-600 bg-gray-100 px-3 py-1 rounded-full text-sm">${word.zh}</span>
+                    </div>`;
+                });
+
+                html += `</div></div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        function toggleVocabModal() {
+            const modal = document.getElementById('vocabModal');
+            const content = document.getElementById('vocabModalContent');
+
+            if (modal.classList.contains('hidden')) {
+                modal.classList.remove('hidden');
+                void modal.offsetWidth; // Trigger reflow
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            } else {
+                content.classList.remove('scale-100', 'opacity-100');
+                content.classList.add('scale-95', 'opacity-0');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+        }
+
+        // Initialize Everything
+        initMatchGame();
+        initMemoryGame();
+        initDragGame(); // 替換原本的 initFlashcards
+        initVocabList();
+
+        // ================= PREVIOUS PAGE LOGICS =================
+
+        let currentTooltip = null;
+        function showVocab(element, zhText) {
+            if (currentTooltip) currentTooltip.remove();
+            const tooltip = document.createElement('div');
+            tooltip.className = 'vocab-tooltip';
+            tooltip.innerText = zhText;
+            element.appendChild(tooltip);
+            currentTooltip = tooltip;
+            setTimeout(() => { if (currentTooltip === tooltip) { tooltip.remove(); currentTooltip = null; } }, 2500);
+        }
+
+        function toggleTrans(transId, btn, colorName) {
+            const transDiv = document.getElementById(transId);
+            if (transDiv.classList.contains('show')) {
+                transDiv.classList.remove('show');
+                btn.innerHTML = "🌐 顯示完整翻譯";
+                btn.className = `mt-4 bg-${colorName}-50 hover:bg-${colorName}-100 text-${colorName}-700 py-2 px-4 rounded-xl font-bold text-sm transition-colors w-full`;
+            } else {
+                transDiv.classList.add('show');
+                btn.innerHTML = "👀 隱藏翻譯";
+                btn.className = `mt-4 bg-${colorName}-200 hover:bg-${colorName}-300 text-${colorName}-800 py-2 px-4 rounded-xl font-bold text-sm transition-colors w-full`;
+            }
+        }
+
+        // Quiz 1 Data
+        const questions1 = [
+            { q: "This child has got long, dark hair that she keeps tied in a ponytail.", ans: "B" },
+            { q: "This child can play chess but can't stay on a skateboard.", ans: "C" },
+            { q: "This child can run incredibly fast but can't play the piano.", ans: "B" },
+            { q: "This child has got short, brown hair and bright blue eyes.", ans: "A" },
+            { q: "This child has got curly blonde hair and wears shiny blue glasses.", ans: "C" },
+            { q: "This child can make things with clay and paint but can't play football.", ans: "A" }
+        ];
+        let answers1 = new Array(questions1.length).fill("");
+        const q1Container = document.getElementById('quiz1-container');
+        questions1.forEach((item, index) => {
+            q1Container.innerHTML += `
+                <div class="question-block bg-gray-50 p-4 rounded-xl">
+                    <p class="font-semibold text-gray-700 mb-3">${index + 1}. ${item.q}</p>
+                    <div class="flex gap-2">
+                        <button onclick="selectOption1(${index}, 'A', this)" class="opt-btn-${index} flex-1 py-2 border-2 border-gray-200 rounded-lg font-bold text-gray-500 hover:bg-purple-50 hover:border-purple-300 transition-colors">A</button>
+                        <button onclick="selectOption1(${index}, 'B', this)" class="opt-btn-${index} flex-1 py-2 border-2 border-gray-200 rounded-lg font-bold text-gray-500 hover:bg-pink-50 hover:border-pink-300 transition-colors">B</button>
+                        <button onclick="selectOption1(${index}, 'C', this)" class="opt-btn-${index} flex-1 py-2 border-2 border-gray-200 rounded-lg font-bold text-gray-500 hover:bg-orange-50 hover:border-orange-300 transition-colors">C</button>
+                    </div>
+                    <div id="fb1-${index}" class="mt-2 text-sm font-bold hidden"></div>
+                </div>
+            `;
+        });
+        function selectOption1(qIndex, choice, btn) {
+            answers1[qIndex] = choice;
+            document.querySelectorAll(`.opt-btn-${qIndex}`).forEach(b => { b.classList.remove('bg-teal-500', 'text-white', 'border-teal-500'); b.classList.add('text-gray-500', 'border-gray-200'); });
+            btn.classList.remove('text-gray-500', 'border-gray-200'); btn.classList.add('bg-teal-500', 'text-white', 'border-teal-500');
+        }
+        function checkAnswers1() {
+            questions1.forEach((item, index) => {
+                const fb = document.getElementById(`fb1-${index}`);
+                fb.classList.remove('hidden');
+                if (answers1[index] === "") { fb.innerHTML = "⚠️ Please select an answer."; fb.className = "mt-2 text-sm font-bold text-yellow-600"; }
+                else if (answers1[index] === item.ans) { fb.innerHTML = "🎉 Correct!"; fb.className = "mt-2 text-sm font-bold text-green-600"; }
+                else { fb.innerHTML = "❌ Try again."; fb.className = "mt-2 text-sm font-bold text-red-500"; }
+            });
+        }
+
+        // Quiz 2 Data
+        const questions2 = [
+            { q: "It is an adjective to describe yellowish hair.", ans: "blonde", hint: "形容淡黃色的頭髮。" },
+            { q: "It is an adjective to describe having a lot of curls.", ans: "curly", hint: "形容頭髮有很多捲曲。" },
+            { q: "It is an adjective to describe someone who looks attractive.", ans: "pretty", hint: "形容看起來很迷人/漂亮的人。" },
+            { q: "It is an adjective to describe someone with large strong muscles.", ans: "muscular", hint: "形容肌肉發達、強壯的人。" },
+            { q: "It is an adjective to describe someone who is really kind and friendly.", ans: "nice", hint: "形容非常友善和好心的人。" },
+            { q: "It is an adjective to describe a secondary colour resulting from the combination of red and blue.", ans: "purple", hint: "由紅色和藍色混合而成的顏色 (紫色)。" },
+            { q: "It is a Japanese fighting sport using hands and feet to kick and hit.", ans: "karate", hint: "一種使用手腳踢打的日本格鬥運動 (空手道)。" },
+            { q: "It is a sport played by two teams of eleven players using a round ball.", ans: "football", hint: "兩隊各十一人使用圓球進行的運動 (足球)。" },
+            { q: "It is an action to jump into deep water with head and arms going in first.", ans: "dive", hint: "頭和手臂先入水，跳入深水的動作 (跳水)。" },
+            { q: "It is an activity involving moving through the water using your legs and hands.", ans: "swimming", hint: "使用手腳在水中移動的活動 (游泳)。" }
+        ];
+        const q2Container = document.getElementById('quiz2-container');
+        questions2.forEach((item, index) => {
+            q2Container.innerHTML += `
+                <div class="question-block border-b border-gray-100 pb-4">
+                    <p class="font-semibold text-gray-700 mb-2">${index + 1}. ${item.q}</p>
+                    <div class="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
+                        <input type="text" id="q2-input-${index}" placeholder="Type word here..." class="flex-1 border-2 border-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:border-teal-400 text-lg w-full sm:w-auto" autocomplete="off">
+                        <button onclick="document.getElementById('hint-${index}').classList.toggle('hidden')" class="bg-yellow-100 text-yellow-700 px-4 py-2 rounded-lg font-bold hover:bg-yellow-200 transition-colors text-sm w-full sm:w-auto whitespace-nowrap">💡 Hint</button>
+                    </div>
+                    <div id="hint-${index}" class="hidden mt-2 p-3 bg-yellow-50 text-yellow-800 rounded-lg text-sm border border-yellow-100">${item.hint}</div>
+                    <div id="fb2-${index}" class="mt-2 text-sm font-bold hidden"></div>
+                </div>
+            `;
+        });
+        function checkAnswers2() {
+            questions2.forEach((item, index) => {
+                const inputEl = document.getElementById(`q2-input-${index}`);
+                const fb = document.getElementById(`fb2-${index}`);
+                fb.classList.remove('hidden');
+                if (inputEl.value.trim() === "") { fb.innerHTML = "⚠️ Please type an answer."; fb.className = "mt-2 text-sm font-bold text-yellow-600"; }
+                else if (inputEl.value.trim().toLowerCase() === item.ans) { fb.innerHTML = "🎉 Correct!"; fb.className = "mt-2 text-sm font-bold text-green-600"; inputEl.className = "flex-1 border-2 border-green-400 bg-green-50 text-green-700 rounded-lg px-4 py-2 focus:outline-none text-lg w-full sm:w-auto"; }
+                else { fb.innerHTML = `❌ Try again. <span class="text-gray-500 font-normal">(Answer: ${item.ans})</span>`; fb.className = "mt-2 text-sm font-bold text-red-500"; inputEl.className = "flex-1 border-2 border-red-400 bg-red-50 text-red-700 rounded-lg px-4 py-2 focus:outline-none text-lg w-full sm:w-auto"; }
+            });
+
+            // Pillar 4: State Management (Save progress when checking answers)
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save('kssr-p3-eng-u1', 'Primary 3 English - Unit 1', 'content/KSSR_Syllabus/Primary3/English/Unit1/index.html');
+            }
+        }
+
+        // Pillar 4: State Management (Load progress on start)
+        window.addEventListener('load', () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.load('kssr-p3-eng-u1');
+            }
+        });
+    </script>
+    <!-- Pillar 4: State Management (SDK) -->
+    <script src="../../../../js/progress-tracker.js"></script>
+</body>
+
+</html>
