@@ -70,19 +70,8 @@
 
 <body class="bg-slate-50 font-sans selection:bg-blue-200 overflow-x-hidden min-h-screen pb-10">
 
-    <!-- Pillar 3: Local Navigation -->
-    <a href="../../../../../index.html" class="fixed top-4 left-4 z-50 bg-white hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded-xl shadow-md border-2 border-gray-200 flex items-center transition-all hover:-translate-y-1">
-        <i class="ph-bold ph-house mr-2 text-xl"></i> Home
-    </a>
-
     <!-- 挂载点 -->
     <div id="app"></div>
-
-    <!-- Pillar 4: State Management SDK -->
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="spm-bm-ejaan" 
-            data-module-name="Module 1 - Kesalahan Ejaan" 
-            data-module-url="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html"></script>
 
     <script>
         // ==========================================
@@ -260,16 +249,6 @@
         // 🚀 業務邏輯 (Business Logic)
         // ==========================================
 
-        window.addEventListener('load', async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data && saved.progress_data.score) {
-                    state.score = saved.progress_data.score;
-                    render();
-                }
-            }
-        });
-
         window.changeMode = (mode) => {
             state.currentMode = mode;
             render();
@@ -371,7 +350,6 @@
                 state.score += 15;
                 state.swipeFeedback = { type: 'success', msg: isActuallyCorrect ? '答對了！完全正確！' : '答對了！成功抓出錯別字！' };
                 if (!state.masteredSwipes.includes(state.swipeCard.id)) state.masteredSwipes.push(state.swipeCard.id);
-                if (typeof ProgressTracker !== 'undefined') ProgressTracker.save({ score: state.score });
             } else {
                 state.swipeFeedback = { type: 'error', msg: isActuallyCorrect ? '其實這是對的！' : `錯了！應為：${state.swipeCard.correction}` };
             }
@@ -405,7 +383,6 @@
                 state.score += 10;
                 state.ejaanFeedback = { type: 'success', msg: '命中！已完全掌握。' };
                 if (!state.masteredEjaan.includes(state.currentEjaan.id)) state.masteredEjaan.push(state.currentEjaan.id);
-                if (typeof ProgressTracker !== 'undefined') ProgressTracker.save({ score: state.score });
             } else {
                 state.ejaanFeedback = { type: 'error', msg: `記住！正確寫法是 ${state.currentEjaan.right}` };
             }
@@ -436,7 +413,6 @@
                 state.score += 20;
                 state.grammarFeedback = { type: 'success', msg: '套用公式正確！' };
                 if (!state.masteredGrammar.includes(state.currentGrammar.id)) state.masteredGrammar.push(state.currentGrammar.id);
-                if (typeof ProgressTracker !== 'undefined') ProgressTracker.save({ score: state.score });
             } else {
                 state.grammarFeedback = { type: 'error', msg: `再看一眼口訣：${state.currentGrammar.rule}` };
             }
@@ -481,7 +457,6 @@
                 state.foundBugs.push(state.activeBugId);
                 state.activeBugId = null;
                 state.score += 50;
-                if (typeof ProgressTracker !== 'undefined') ProgressTracker.save({ score: state.score });
                 showToast("修復成功！", true);
             } else {
                 showToast(`修復失敗！提示：${bugItem.hint}`, false);
