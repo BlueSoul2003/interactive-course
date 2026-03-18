@@ -941,19 +941,25 @@
 
             // Pillar 4: State Management (Save progress when checking answers)
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save('kssr-p3-eng-u1', 'Primary 3 English - Unit 1', 'content/KSSR_Syllabus/Primary3/English/Unit1/index.html');
+                ProgressTracker.save({ completed_vocab: true });
             }
         }
 
         // Pillar 4: State Management (Load progress on start)
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.load('kssr-p3-eng-u1');
+                const saved = await ProgressTracker.load();
+                if (saved) {
+                    console.log("P3 English Progress loaded:", saved.progress_data);
+                }
             }
         });
     </script>
     <!-- Pillar 4: State Management (SDK) -->
-    <script src="../../../../../js/progress-tracker.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p3-eng-u1" 
+            data-module-name="Primary 3 English - Unit 1" 
+            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit1/index.html"></script>
 </body>
 
 </html>

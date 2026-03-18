@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Scenario Practice</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdf4;
+            /* Light green background */
+        }
+
+        /* Toggleable Translation Class */
+        .zh {
+            display: none;
+            color: #4b5563;
+            /* Gray-600 */
+            font-size: 0.9em;
+            margin-top: 0.25rem;
+            font-weight: 400;
+        }
+
+        .show-zh .zh {
+            display: block;
+        }
+
+        /* Sentence Builder Styles */
+        .word-btn {
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .word-btn:active {
+            transform: scale(0.95);
+        }
+
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed #cbd5e1;
+            transition: border-color 0.3s ease;
+        }
+
+        .drop-zone.filled {
+            border-color: #3b82f6;
+            /* Blue-500 */
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 pb-20">
+    <!-- Pillar 3: Local Navigation (Home Button) -->
+    <a href="../../../../../index.html" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: white; padding: 10px 15px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#f8fafc';" onmouseout="this.style.transform='scale(1)'; this.style.background='white';">
+        <span style="font-size: 1.2rem;">🏠</span> <span>Home</span>
+    </a>
+
+    <!-- Header & Controls -->
+    <div
+        class="sticky top-0 bg-white shadow-sm p-4 z-50 flex justify-between items-center max-w-4xl mx-auto rounded-b-2xl mb-8">
+        <h1 class="text-2xl font-extrabold text-green-600 flex items-center gap-2">
+            🚀 Let's Practice!
+            <span class="zh block text-sm font-normal text-gray-500">我们来练习吧！</span>
+        </h1>
+        <button id="translateBtn"
+            class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-full font-bold shadow-md transition-colors flex items-center gap-2">
+            <span>🇨🇳</span> Toggle Chinese
+        </button>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div
+        class="max-w-4xl mx-auto px-4 mb-6 flex gap-2 sm:gap-4 border-b-2 border-gray-200 z-40 relative overflow-x-auto">
+        <button onclick="switchTab('tab-1')" id="btn-tab-1"
+            class="py-2 px-4 font-bold text-indigo-600 border-b-4 border-indigo-600 transition-colors whitespace-nowrap">Worksheet
+            1: Scenarios</button>
+        <button onclick="switchTab('tab-2')" id="btn-tab-2"
+            class="py-2 px-4 font-bold text-gray-500 hover:text-indigo-500 transition-colors whitespace-nowrap">Worksheet
+            2: Past Actions</button>
+        <button onclick="switchTab('tab-3')" id="btn-tab-3"
+            class="py-2 px-4 font-bold text-gray-500 hover:text-indigo-500 transition-colors whitespace-nowrap">Worksheet
+            3: Email</button>
+    </div>
+
+    <!-- TAB 1: Worksheet 1 (Original Content) -->
+    <div id="tab-1" class="tab-pane max-w-4xl mx-auto px-4 space-y-10">
+
+        <!-- Preparation for Scenario 1: Checking on someone -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-blue-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">🤕</div>
+                <div>
+                    <h2 class="text-xl font-bold text-blue-600">Part 1: Checking on someone</h2>
+                    <p class="zh text-blue-800">第一部分：关心别人</p>
+                    <p class="mt-2 text-gray-700">When someone falls down or looks hurt, what should we ask them?</p>
+                    <p class="zh">当有人摔倒或看起来受伤时，我们应该问他们什么？</p>
+                </div>
+            </div>
+
+            <!-- Q1.1 -->
+            <div class="bg-blue-50 p-4 rounded-2xl mb-4 border border-blue-100">
+                <p class="font-semibold text-gray-700">1. Scenario <span class="zh inline text-gray-500">(情境)</span>:
+                    Your friend dropped their books and looks sad.</p>
+                <p class="zh mb-2 text-gray-600">你的朋友掉了书，看起来很难过。</p>
+
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the question: <span
+                            class="zh font-normal">拼出问题：</span></p>
+                    <div id="ans-zone-1-1" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-1-1', 'word-bank-1-1')"></div>
+
+                    <div id="word-bank-1-1"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-1')">okay</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-1')">Are</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-1')">?</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-1')">you</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-1-1', 'Are you okay ?', 'feedback-1-1')"
+                        class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600">Check
+                        Answer</button>
+                    <p id="feedback-1-1" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- Q1.2 -->
+            <div class="bg-blue-50 p-4 rounded-2xl mb-4 border border-blue-100">
+                <p class="font-semibold text-gray-700">2. Scenario <span class="zh inline text-gray-500">(情境)</span>:
+                    Your little brother is crying.</p>
+                <p class="zh mb-2 text-gray-600">你的弟弟在哭。</p>
+
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the question: <span
+                            class="zh font-normal">拼出问题：</span></p>
+                    <div id="ans-zone-1-2" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-1-2', 'word-bank-1-2')"></div>
+
+                    <div id="word-bank-1-2"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-2')">wrong</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-2')">is</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-2')">What</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-2')">?</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-1-2', 'What is wrong ?', 'feedback-1-2')"
+                        class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600">Check
+                        Answer</button>
+                    <p id="feedback-1-2" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- Q1.3 -->
+            <div class="bg-blue-50 p-4 rounded-2xl mb-4 border border-blue-100">
+                <p class="font-semibold text-gray-700">3. Scenario <span class="zh inline text-gray-500">(情境)</span>: A
+                    classmate is carrying a lot of heavy boxes.</p>
+                <p class="zh mb-2 text-gray-600">一个同学拿着很多沉重的箱子。</p>
+
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the question: <span
+                            class="zh font-normal">拼出问题：</span></p>
+                    <div id="ans-zone-1-3" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-1-3', 'word-bank-1-3')"></div>
+
+                    <div id="word-bank-1-3"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-3')">you</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-3')">help</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-3')">Do</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-3')">?</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-3')">need</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-1-3', 'Do you need help ?', 'feedback-1-3')"
+                        class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600">Check
+                        Answer</button>
+                    <p id="feedback-1-3" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- Q1.4 -->
+            <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                <p class="font-semibold text-gray-700">4. Scenario <span class="zh inline text-gray-500">(情境)</span>:
+                    Your friend bumped their head on the table.</p>
+                <p class="zh mb-2 text-gray-600">你的朋友头撞到了桌子。</p>
+
+                <div class="mt-4">
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the question: <span
+                            class="zh font-normal">拼出问题：</span></p>
+                    <div id="ans-zone-1-4" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-1-4', 'word-bank-1-4')"></div>
+
+                    <div id="word-bank-1-4"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-4')">hurt</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-4')">Does</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-4')">?</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-blue-400"
+                            onclick="moveWord(this, 'ans-zone-1-4')">it</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-1-4', 'Does it hurt ?', 'feedback-1-4')"
+                        class="mt-4 bg-blue-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-600">Check
+                        Answer</button>
+                    <p id="feedback-1-4" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preparation for Scenario 2: Giving Reasons -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-yellow-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">🏃‍♀️</div>
+                <div>
+                    <h2 class="text-xl font-bold text-yellow-600">Part 2: Answering "Why"</h2>
+                    <p class="zh text-yellow-800">第二部分：回答“为什么” (Why)</p>
+                    <p class="mt-2 text-gray-700">When someone asks "Why...", we usually answer with "Because...".</p>
+                    <p class="zh">当有人问“Why（为什么）...”时，我们通常用“Because（因为）...”来回答。</p>
+                </div>
+            </div>
+
+            <!-- Q2.1 -->
+            <div class="bg-yellow-50 p-4 rounded-2xl mb-4 border border-yellow-100">
+                <p class="font-semibold text-gray-700 mb-2">1. Question <span
+                        class="zh inline text-gray-500">(问题)</span>: "Why are you wearing a raincoat?" <span
+                        class="zh text-sm font-normal">为什么你穿着雨衣？</span></p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-1')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) Because I am hungry. <span class="zh font-normal text-gray-500 block">因为我很饿。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-2-1')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) Because it is raining. <span class="zh font-normal text-gray-500 block">因为正在下雨。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-1')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) I like apples. <span class="zh font-normal text-gray-500 block">我喜欢苹果。</span>
+                    </button>
+                </div>
+                <p id="feedback-2-1" class="mt-4 font-bold text-lg"></p>
+            </div>
+
+            <!-- Q2.2 -->
+            <div class="bg-yellow-50 p-4 rounded-2xl mb-4 border border-yellow-100">
+                <p class="font-semibold text-gray-700 mb-2">2. Question <span
+                        class="zh inline text-gray-500">(问题)</span>: "Why are you running?" <span
+                        class="zh text-sm font-normal">你为什么在跑步？</span></p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-2')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) Because I am a boy. <span class="zh font-normal text-gray-500 block">因为我是个男孩。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-2-2')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) Because I am late for school. <span
+                            class="zh font-normal text-gray-500 block">因为我上学迟到了。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-2')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) I am running. <span class="zh font-normal text-gray-500 block">我在跑步。</span>
+                    </button>
+                </div>
+                <p id="feedback-2-2" class="mt-4 font-bold text-lg"></p>
+            </div>
+
+            <!-- Q2.3 -->
+            <div class="bg-yellow-50 p-4 rounded-2xl mb-4 border border-yellow-100">
+                <p class="font-semibold text-gray-700 mb-2">3. Question <span
+                        class="zh inline text-gray-500">(问题)</span>: "Why is the baby crying?" <span
+                        class="zh text-sm font-normal">为什么宝宝在哭？</span></p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-2-3')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) Because he is hungry. <span class="zh font-normal text-gray-500 block">因为他饿了。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-3')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) Because he is happy. <span class="zh font-normal text-gray-500 block">因为他很开心。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-3')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) He is a baby. <span class="zh font-normal text-gray-500 block">他是个宝宝。</span>
+                    </button>
+                </div>
+                <p id="feedback-2-3" class="mt-4 font-bold text-lg"></p>
+            </div>
+
+            <!-- Q2.4 -->
+            <div class="bg-yellow-50 p-4 rounded-2xl border border-yellow-100">
+                <p class="font-semibold text-gray-700 mb-2">4. Question <span
+                        class="zh inline text-gray-500">(问题)</span>: "Why are you going to bed early?" <span
+                        class="zh text-sm font-normal">你为什么这么早去睡觉？</span></p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-4')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) Because it is morning. <span class="zh font-normal text-gray-500 block">因为现在是早上。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-2-4')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) Because I like to play. <span class="zh font-normal text-gray-500 block">因为我喜欢玩。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-2-4')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) Because I am very tired. <span class="zh font-normal text-gray-500 block">因为我非常累。</span>
+                    </button>
+                </div>
+                <p id="feedback-2-4" class="mt-4 font-bold text-lg"></p>
+            </div>
+        </section>
+
+        <!-- Preparation for Scenario 3: Emergencies -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-red-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">📞</div>
+                <div>
+                    <h2 class="text-xl font-bold text-red-600">Part 3: Calling for Help</h2>
+                    <p class="zh text-red-800">第三部分：求救</p>
+                    <p class="mt-2 text-gray-700">How do we tell someone there is an emergency?</p>
+                    <p class="zh">我们怎么告诉别人发生了紧急情况？</p>
+                </div>
+            </div>
+
+            <!-- Q3.1 -->
+            <div class="bg-red-50 p-4 rounded-2xl mb-4 border border-red-100">
+                <p class="font-semibold text-gray-700">1. Scenario <span class="zh inline text-gray-500">(例子)</span>:
+                    You see a thief taking a bag.</p>
+                <p class="zh mb-4 text-gray-600">你看到一个小偷在偷包。</p>
+
+                <div>
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the sentence: <span
+                            class="zh font-normal">拼出句子：</span></p>
+                    <div id="ans-zone-3-1" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-3-1', 'word-bank-3-1')"></div>
+
+                    <div id="word-bank-3-1"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-1')">a</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-1')">is</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-1')">Help</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-1')">!</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-1')">There</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-1')">thief</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-3-1', 'Help ! There is a thief', 'feedback-3-1')"
+                        class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600">Check
+                        Answer</button>
+                    <p id="feedback-3-1" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- Q3.2 -->
+            <div class="bg-red-50 p-4 rounded-2xl mb-4 border border-red-100">
+                <p class="font-semibold text-gray-700">2. Scenario <span class="zh inline text-gray-500">(例子)</span>: A
+                    man is very sick on the street.</p>
+                <p class="zh mb-4 text-gray-600">街上有一个病得很重的人。</p>
+
+                <div>
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the sentence: <span
+                            class="zh font-normal">拼出句子：</span></p>
+                    <div id="ans-zone-3-2" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-3-2', 'word-bank-3-2')"></div>
+
+                    <div id="word-bank-3-2"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-2')">an</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-2')">!</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-2')">ambulance</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-2')">Call</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-3-2', 'Call an ambulance !', 'feedback-3-2')"
+                        class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600">Check
+                        Answer</button>
+                    <p id="feedback-3-2" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- Q3.3 -->
+            <div class="bg-red-50 p-4 rounded-2xl mb-4 border border-red-100">
+                <p class="font-semibold text-gray-700">3. Scenario <span class="zh inline text-gray-500">(例子)</span>:
+                    You see smoke coming from a house.</p>
+                <p class="zh mb-4 text-gray-600">你看到一栋房子里冒出烟。</p>
+
+                <div>
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the sentence: <span
+                            class="zh font-normal">拼出句子：</span></p>
+                    <div id="ans-zone-3-3" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-3-3', 'word-bank-3-3')"></div>
+
+                    <div id="word-bank-3-3"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-3')">is</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-3')">fire</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-3')">There</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-3')">!</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-3')">a</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-3-3', 'There is a fire !', 'feedback-3-3')"
+                        class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600">Check
+                        Answer</button>
+                    <p id="feedback-3-3" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+
+            <!-- Q3.4 -->
+            <div class="bg-red-50 p-4 rounded-2xl border border-red-100">
+                <p class="font-semibold text-gray-700">4. Scenario <span class="zh inline text-gray-500">(例子)</span>:
+                    You are lost in a big shopping mall.</p>
+                <p class="zh mb-4 text-gray-600">你在一个大购物中心迷路了。</p>
+
+                <div>
+                    <p class="text-sm text-gray-500 mb-2 font-bold">Build the sentence: <span
+                            class="zh font-normal">拼出句子：</span></p>
+                    <div id="ans-zone-3-4" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                        onclick="returnWord(event, 'ans-zone-3-4', 'word-bank-3-4')"></div>
+
+                    <div id="word-bank-3-4"
+                        class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-4')">me</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-4')">Please</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-4')">!</button>
+                        <button
+                            class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-red-400"
+                            onclick="moveWord(this, 'ans-zone-3-4')">help</button>
+                    </div>
+                    <button onclick="checkSentence('ans-zone-3-4', 'Please help me !', 'feedback-3-4')"
+                        class="mt-4 bg-red-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-red-600">Check
+                        Answer</button>
+                    <p id="feedback-3-4" class="mt-2 font-bold text-lg"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Preparation for Scenario 4: Feelings -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-purple-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">🥶</div>
+                <div>
+                    <h2 class="text-xl font-bold text-purple-600">Part 4: Expressing Feelings</h2>
+                    <p class="zh text-purple-800">第四部分：表达感受</p>
+                    <p class="mt-2 text-gray-700">When asked "How did you feel?", we reply with "I felt..." (past
+                        tense).</p>
+                    <p class="zh">当被问到“你当时感觉怎么样？”时，我们用“I felt...（我感觉...）”回答（过去式）。</p>
+                </div>
+            </div>
+
+            <!-- Q4.1 -->
+            <div class="bg-purple-50 p-4 rounded-2xl mb-4 border border-purple-100">
+                <p class="font-semibold text-gray-700 mb-2">1. Scenario <span
+                        class="zh inline text-gray-500">(情境)</span>: You played in the snow without a jacket. Someone
+                    asks: "How did you feel?"</p>
+                <p class="zh mb-4 text-gray-600">你不穿外套在雪地里玩。有人问：“你当时感觉怎么样？”</p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-1')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) I feel hot. <span class="zh font-normal text-gray-500 block">我觉得热。 (注意时态错误)</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-4-1')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) I felt very cold. <span class="zh font-normal text-gray-500 block">我感觉很冷。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-1')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) I am a student. <span class="zh font-normal text-gray-500 block">我是一名学生。</span>
+                    </button>
+                </div>
+                <p id="feedback-4-1" class="mt-4 font-bold text-lg"></p>
+            </div>
+
+            <!-- Q4.2 -->
+            <div class="bg-purple-50 p-4 rounded-2xl mb-4 border border-purple-100">
+                <p class="font-semibold text-gray-700 mb-2">2. Scenario <span
+                        class="zh inline text-gray-500">(情境)</span>: You won first prize in a drawing competition.</p>
+                <p class="zh mb-4 text-gray-600">你在画画比赛中得了一等奖。</p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-2')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) I felt angry. <span class="zh font-normal text-gray-500 block">我感到生气。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-2')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) I feel sad. <span class="zh font-normal text-gray-500 block">我感到伤心。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-4-2')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) I felt very happy. <span class="zh font-normal text-gray-500 block">我感到非常开心。</span>
+                    </button>
+                </div>
+                <p id="feedback-4-2" class="mt-4 font-bold text-lg"></p>
+            </div>
+
+            <!-- Q4.3 -->
+            <div class="bg-purple-50 p-4 rounded-2xl mb-4 border border-purple-100">
+                <p class="font-semibold text-gray-700 mb-2">3. Scenario <span
+                        class="zh inline text-gray-500">(情境)</span>: You watched a scary movie in the dark.</p>
+                <p class="zh mb-4 text-gray-600">你在黑暗中看了一部恐怖电影。</p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-4-3')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) I felt scared. <span class="zh font-normal text-gray-500 block">我感到害怕。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-3')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) I felt thirsty. <span class="zh font-normal text-gray-500 block">我感到口渴。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-3')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) I feel sleepy. <span class="zh font-normal text-gray-500 block">我感到困了。</span>
+                    </button>
+                </div>
+                <p id="feedback-4-3" class="mt-4 font-bold text-lg"></p>
+            </div>
+
+            <!-- Q4.4 -->
+            <div class="bg-purple-50 p-4 rounded-2xl border border-purple-100">
+                <p class="font-semibold text-gray-700 mb-2">4. Scenario <span
+                        class="zh inline text-gray-500">(情境)</span>: You lost your favorite toy at the park.</p>
+                <p class="zh mb-4 text-gray-600">你在公园里弄丢了最喜欢的玩具。</p>
+                <div class="space-y-3 mt-4">
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-4')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        A) I felt happy. <span class="zh font-normal text-gray-500 block">我感到开心。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, true, 'feedback-4-4')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        B) I felt sad. <span class="zh font-normal text-gray-500 block">我感到伤心。</span>
+                    </button>
+                    <button onclick="checkMultipleChoice(this, false, 'feedback-4-4')"
+                        class="w-full text-left bg-white border-2 border-gray-200 p-4 rounded-xl font-bold hover:bg-gray-50 transition-colors">
+                        C) I felt hot. <span class="zh font-normal text-gray-500 block">我感到热。</span>
+                    </button>
+                </div>
+                <p id="feedback-4-4" class="mt-4 font-bold text-lg"></p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- TAB 2: Worksheet 2 (New Content) -->
+    <div id="tab-2" class="tab-pane hidden max-w-4xl mx-auto px-4 space-y-10">
+
+        <!-- Grammar Rule Explanation (First Principles) -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-indigo-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">⏱️</div>
+                <div>
+                    <h2 class="text-xl font-bold text-indigo-600">Grammar Rule: Two Actions in the Past</h2>
+                    <p class="zh text-indigo-800">语法规则：过去的两个动作</p>
+                    <p class="mt-2 text-gray-700">When two things happen in the past, one is usually a <b>LONG</b>
+                        action and one is a <b>SHORT</b> action that interrupts it.</p>
+                    <p class="zh">当过去发生两件事时，通常一个是<b>长动作</b>，另一个是突然发生并打断它的<b>短动作</b>。</p>
+
+                    <ul class="mt-4 space-y-2">
+                        <li class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <b>1. Long Action (长动作):</b> Use <i>was/were + -ing</i>. We often use <b>"while"</b> before
+                            it. <br>
+                            <span class="text-sm text-gray-600">Example: ... <b>while</b> she <b>was cooking</b>.
+                                (当时她正在做饭)</span>
+                        </li>
+                        <li class="bg-indigo-50 p-3 rounded-lg border border-indigo-100">
+                            <b>2. Short Action (短动作):</b> Use simple past (ends in <i>-ed</i> or irregular). We often
+                            use <b>"when"</b> before it. <br>
+                            <span class="text-sm text-gray-600">Example: ... <b>when</b> the phone <b>rang</b>.
+                                (这时电话响了)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Q1: brush - when - see -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-teal-400">
+            <h3 class="text-lg font-bold text-teal-600 mb-2">Question 1: brush - when - see</h3>
+            <p class="zh text-teal-800 mb-2">第一题：刷牙 - 当...时 - 看到</p>
+
+            <div class="bg-teal-50 p-4 rounded-2xl border border-teal-100">
+                <p class="text-sm text-gray-500 mb-2 font-bold">Build the model sentence: <span
+                        class="zh font-normal">拼出完整句子：</span></p>
+                <div id="ans-zone-ws2-1" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                    onclick="returnWord(event, 'ans-zone-ws2-1', 'word-bank-ws2-1')"></div>
+
+                <div id="word-bank-ws2-1"
+                    class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">saw</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">She</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">a</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">when</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">brushing</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">cockroach</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">was</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">she</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">teeth</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-1')">her</button>
+                </div>
+                <button
+                    onclick="checkSentence('ans-zone-ws2-1', 'She was brushing her teeth when she saw a cockroach', 'feedback-ws2-1')"
+                    class="mt-4 bg-teal-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-teal-600">Check
+                    Answer</button>
+                <p id="feedback-ws2-1" class="mt-2 font-bold text-lg"></p>
+            </div>
+        </section>
+
+        <!-- Q2: ring - while - cook -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-teal-400">
+            <h3 class="text-lg font-bold text-teal-600 mb-2">Question 2: ring - while - cook</h3>
+            <p class="zh text-teal-800 mb-2">第二题：响 - 当...时 - 做饭</p>
+
+            <div class="bg-teal-50 p-4 rounded-2xl border border-teal-100">
+                <p class="text-sm text-gray-500 mb-2 font-bold">Build the model sentence: <span
+                        class="zh font-normal">拼出完整句子：</span></p>
+                <div id="ans-zone-ws2-2" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                    onclick="returnWord(event, 'ans-zone-ws2-2', 'word-bank-ws2-2')"></div>
+
+                <div id="word-bank-ws2-2"
+                    class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">phone</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">while</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">The</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">cooking</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">was</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">she</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-2')">rang</button>
+                </div>
+                <button
+                    onclick="checkSentence('ans-zone-ws2-2', 'The phone rang while she was cooking', 'feedback-ws2-2')"
+                    class="mt-4 bg-teal-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-teal-600">Check
+                    Answer</button>
+                <p id="feedback-ws2-2" class="mt-2 font-bold text-lg"></p>
+            </div>
+        </section>
+
+        <!-- Q3: run - when - slip -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-teal-400">
+            <h3 class="text-lg font-bold text-teal-600 mb-2">Question 3: run - when - slip</h3>
+            <p class="zh text-teal-800 mb-2">第三题：跑 - 当...时 - 滑倒</p>
+
+            <div class="bg-teal-50 p-4 rounded-2xl border border-teal-100">
+                <p class="text-sm text-gray-500 mb-2 font-bold">Build the model sentence: <span
+                        class="zh font-normal">拼出完整句子：</span></p>
+                <div id="ans-zone-ws2-3" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                    onclick="returnWord(event, 'ans-zone-ws2-3', 'word-bank-ws2-3')"></div>
+
+                <div id="word-bank-ws2-3"
+                    class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">to</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">slipped</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">when</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">running</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">He</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">the</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">he</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">was</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-3')">bus</button>
+                </div>
+                <button
+                    onclick="checkSentence('ans-zone-ws2-3', 'He was running to the bus when he slipped', 'feedback-ws2-3')"
+                    class="mt-4 bg-teal-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-teal-600">Check
+                    Answer</button>
+                <p id="feedback-ws2-3" class="mt-2 font-bold text-lg"></p>
+            </div>
+        </section>
+
+        <!-- Q4: enter - while - sleep -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-teal-400">
+            <h3 class="text-lg font-bold text-teal-600 mb-2">Question 4: enter - while - sleep</h3>
+            <p class="zh text-teal-800 mb-2">第四题：进入 - 当...时 - 睡觉</p>
+
+            <div class="bg-teal-50 p-4 rounded-2xl border border-teal-100">
+                <p class="text-sm text-gray-500 mb-2 font-bold">Build the model sentence: <span
+                        class="zh font-normal">拼出完整句子：</span></p>
+                <div id="ans-zone-ws2-4" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                    onclick="returnWord(event, 'ans-zone-ws2-4', 'word-bank-ws2-4')"></div>
+
+                <div id="word-bank-ws2-4"
+                    class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">while</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">was</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">entered</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">sleeping</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">A</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">he</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-4')">thief</button>
+                </div>
+                <button
+                    onclick="checkSentence('ans-zone-ws2-4', 'A thief entered while he was sleeping', 'feedback-ws2-4')"
+                    class="mt-4 bg-teal-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-teal-600">Check
+                    Answer</button>
+                <p id="feedback-ws2-4" class="mt-2 font-bold text-lg"></p>
+            </div>
+        </section>
+
+        <!-- Q5: snatch - while - wait -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-teal-400">
+            <h3 class="text-lg font-bold text-teal-600 mb-2">Question 5: snatch - while - wait</h3>
+            <p class="zh text-teal-800 mb-2">第五题：抢走 - 当...时 - 等待</p>
+
+            <div class="bg-teal-50 p-4 rounded-2xl border border-teal-100">
+                <p class="text-sm text-gray-500 mb-2 font-bold">Build the model sentence: <span
+                        class="zh font-normal">拼出完整句子：</span></p>
+                <div id="ans-zone-ws2-5" class="drop-zone rounded-xl p-3 flex flex-wrap gap-2 mb-4 items-center"
+                    onclick="returnWord(event, 'ans-zone-ws2-5', 'word-bank-ws2-5')"></div>
+
+                <div id="word-bank-ws2-5"
+                    class="flex flex-wrap gap-2 p-3 bg-white shadow-inner rounded-xl border border-gray-200">
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">waiting</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">snatched</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">A</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">her</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">was</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">she</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">man</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">while</button>
+                    <button
+                        class="word-btn bg-white border-2 border-gray-200 px-4 py-2 rounded-lg font-bold text-lg hover:border-teal-400"
+                        onclick="moveWord(this, 'ans-zone-ws2-5')">bag</button>
+                </div>
+                <button
+                    onclick="checkSentence('ans-zone-ws2-5', 'A man snatched her bag while she was waiting', 'feedback-ws2-5')"
+                    class="mt-4 bg-teal-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-teal-600">Check
+                    Answer</button>
+                <p id="feedback-ws2-5" class="mt-2 font-bold text-lg"></p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- TAB 3: Worksheet 3 (Email Scaffolding) -->
+    <div id="tab-3" class="tab-pane hidden max-w-4xl mx-auto px-4 space-y-10">
+
+        <!-- Scaffolding Step 1: The Blueprint -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-orange-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">📧</div>
+                <div>
+                    <h2 class="text-xl font-bold text-orange-600">Step 1: The Email Blueprint</h2>
+                    <p class="zh text-orange-800">第一步：电子邮件的蓝图</p>
+                    <p class="mt-2 text-gray-700">Writing an email is like building a burger. You just need the right
+                        layers!</p>
+                    <p class="zh">写电子邮件就像做汉堡一样。你只需要放对每一层！</p>
+
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-orange-50 p-3 rounded-lg border border-orange-100 flex gap-3">
+                            <span class="text-2xl">👋</span>
+                            <div>
+                                <b class="text-orange-700">1. Greeting (问候):</b> <br>
+                                <span class="text-sm text-gray-700">Dear Sherry,</span>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-3 rounded-lg border border-orange-100 flex gap-3">
+                            <span class="text-2xl">📢</span>
+                            <div>
+                                <b class="text-orange-700">2. Why are you writing? (目的):</b> <br>
+                                <span class="text-sm text-gray-700">I want to tell you about...</span>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-3 rounded-lg border border-orange-100 flex gap-3">
+                            <span class="text-2xl">💥</span>
+                            <div>
+                                <b class="text-orange-700">3. The Event (事件过程):</b> <br>
+                                <span class="text-sm text-gray-700">Use <i>"was -ing"</i> and <i>"when"</i> from Tab
+                                    2!</span>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-3 rounded-lg border border-orange-100 flex gap-3">
+                            <span class="text-2xl">😨</span>
+                            <div>
+                                <b class="text-orange-700">4. Feelings (感受):</b> <br>
+                                <span class="text-sm text-gray-700">Use <i>"I felt..."</i> from Tab 1!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Scaffolding Step 2: Build the Model Essay -->
+        <section class="bg-white p-6 rounded-3xl shadow-md border-t-4 border-orange-400">
+            <div class="flex items-start gap-4 mb-4">
+                <div class="text-4xl">✍️</div>
+                <div class="w-full">
+                    <h2 class="text-xl font-bold text-orange-600">Step 2: Build the Model Email</h2>
+                    <p class="zh text-orange-800">第二步：组合模范邮件</p>
+                    <p class="mt-2 text-gray-700 font-bold mb-4">Choose the correct chunks to complete the email about
+                        the accident.</p>
+                    <p class="zh text-sm mb-6">选择正确的短语来完成关于这场车祸的电子邮件。</p>
+
+                    <!-- Interactive Email UI -->
+                    <div class="bg-gray-50 border-2 border-gray-200 rounded-xl overflow-hidden font-sans">
+                        <div class="bg-gray-200 p-3 border-b-2 border-gray-300">
+                            <p class="text-sm text-gray-600"><b>To:</b> sherryrahman@mail.com</p>
+                            <p class="text-sm text-gray-600"><b>Subject:</b> I Saw an Accident This Morning</p>
+                        </div>
+                        <div class="p-6 text-lg leading-loose text-gray-800">
+                            <p>Dear Sherry,</p>
+                            <p class="mt-4">
+                                <select id="email-blank-1"
+                                    class="bg-white border-b-2 border-orange-400 text-orange-600 font-bold cursor-pointer outline-none transition-colors"
+                                    onchange="resetDropdownStyle(this)">
+                                    <option value="">[ Choose an opening ]</option>
+                                    <option value="wrong">I am eating breakfast right now.</option>
+                                    <option value="wrong">I hope you are having a great day at work.</option>
+                                    <option value="wrong">I forgot to bring my homework today.</option>
+                                    <option value="correct">I want to tell you about an accident I saw</option>
+                                </select>
+                                on my way to school today.
+                            </p>
+
+                            <p class="mt-4">
+                                A car
+                                <select id="email-blank-2"
+                                    class="bg-white border-b-2 border-orange-400 text-orange-600 font-bold cursor-pointer outline-none transition-colors"
+                                    onchange="resetDropdownStyle(this)">
+                                    <option value="">[ Choose the Long Action ]</option>
+                                    <option value="wrong">is trying to avoid a pothole</option>
+                                    <option value="wrong">tries to avoid a pothole</option>
+                                    <option value="wrong">will try to avoid a pothole</option>
+                                    <option value="correct">was trying to avoid a pothole</option>
+                                </select>
+                                <b>when</b> it
+                                <select id="email-blank-3"
+                                    class="bg-white border-b-2 border-orange-400 text-orange-600 font-bold cursor-pointer outline-none transition-colors"
+                                    onchange="resetDropdownStyle(this)">
+                                    <option value="">[ Choose the Short Action ]</option>
+                                    <option value="wrong">bought a new motorbike.</option>
+                                    <option value="wrong">is hitting a motorbike.</option>
+                                    <option value="wrong">was hitting a motorbike.</option>
+                                    <option value="correct">hit a passing motorbike.</option>
+                                </select>
+                                The rider fell onto the pavement.
+                            </p>
+
+                            <p class="mt-4">
+                                Some kind people helped him and
+                                <select id="email-blank-4"
+                                    class="bg-white border-b-2 border-orange-400 text-orange-600 font-bold cursor-pointer outline-none transition-colors"
+                                    onchange="resetDropdownStyle(this)">
+                                    <option value="">[ Choose the Aftermath ]</option>
+                                    <option value="wrong">went to sleep.</option>
+                                    <option value="wrong">are calling an ambulance.</option>
+                                    <option value="wrong">calls an ambulance.</option>
+                                    <option value="correct">called an ambulance.</option>
+                                </select>
+                                He was taken to the hospital.
+                            </p>
+
+                            <p class="mt-4">
+                                <select id="email-blank-5"
+                                    class="bg-white border-b-2 border-orange-400 text-orange-600 font-bold cursor-pointer outline-none transition-colors"
+                                    onchange="resetDropdownStyle(this)">
+                                    <option value="">[ Choose your Feelings ]</option>
+                                    <option value="wrong">I felt very happy and excited.</option>
+                                    <option value="wrong">I am feeling shocked.</option>
+                                    <option value="wrong">I feel bored and sleepy.</option>
+                                    <option value="correct">I felt very shocked and scared.</option>
+                                </select>
+                            </p>
+
+                            <p class="mt-6">Love,<br>Your sister</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <button onclick="checkEmail()"
+                            class="bg-orange-500 text-white px-8 py-3 rounded-full font-bold text-lg hover:bg-orange-600 transition-colors shadow-md">Check
+                            My Email!</button>
+                        <p id="email-feedback" class="mt-4 font-bold text-xl"></p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.add('hidden'));
+            // Show selected tab
+            document.getElementById(tabId).classList.remove('hidden');
+
+            // Update button styles
+            const btnIds = ['btn-tab-1', 'btn-tab-2', 'btn-tab-3'];
+            btnIds.forEach(id => {
+                const isSelected = (id.replace('btn-', '') === tabId);
+                document.getElementById(id).className = isSelected
+                    ? 'py-2 px-4 font-bold text-indigo-600 border-b-4 border-indigo-600 transition-colors whitespace-nowrap'
+                    : 'py-2 px-4 font-bold text-gray-500 hover:text-indigo-500 transition-colors whitespace-nowrap';
+            });
+        }
+
+        // Dropdown Reset Logic
+        function resetDropdownStyle(sel) {
+            // Reset to default orange style when user makes a new choice
+            sel.classList.remove('border-green-500', 'text-green-700', 'border-red-500', 'text-red-600');
+            sel.classList.add('border-orange-400', 'text-orange-600');
+        }
+
+        // Check Email Logic
+        function checkEmail() {
+            const selects = [
+                document.getElementById('email-blank-1'),
+                document.getElementById('email-blank-2'),
+                document.getElementById('email-blank-3'),
+                document.getElementById('email-blank-4'),
+                document.getElementById('email-blank-5')
+            ];
+
+            const feedback = document.getElementById('email-feedback');
+
+            let allFilled = true;
+            let allCorrect = true;
+
+            // First pass: Check if all are answered
+            selects.forEach(sel => {
+                if (!sel.value) allFilled = false;
+            });
+
+            if (!allFilled) {
+                feedback.innerHTML = '⚠️ Please fill in all the blanks! <span class="zh block text-sm font-normal text-orange-600">请填满所有空格！</span>';
+                feedback.className = 'mt-4 font-bold text-lg text-orange-500';
+                return;
+            }
+
+            // Second pass: Validate each answer
+            selects.forEach(sel => {
+                // Reset basic color classes before checking
+                sel.classList.remove('border-orange-400', 'text-orange-600', 'border-green-500', 'text-green-700', 'border-red-500', 'text-red-600');
+
+                if (sel.value === 'correct') {
+                    // Turn green
+                    sel.classList.add('border-green-500', 'text-green-700');
+                } else if (sel.value === 'wrong') {
+                    // Turn red
+                    sel.classList.add('border-red-500', 'text-red-600');
+                    allCorrect = false;
+
+                    // Disable and mark the wrong option so it can't be chosen again
+                    const selectedOption = sel.options[sel.selectedIndex];
+                    if (!selectedOption.disabled) {
+                        selectedOption.disabled = true;
+                        selectedOption.text = "❌ " + selectedOption.text;
+                    }
+                }
+            });
+
+            if (allCorrect) {
+                feedback.innerHTML = '🌟 Fantastic! You built a perfect email! (About 65 words) <span class="zh block text-sm font-normal text-green-700">太棒了！你写出了一封完美的电子邮件！（大约65个词）</span>';
+                feedback.className = 'mt-4 font-bold text-xl text-green-600';
+
+                // Pillar 4: Save progress
+                if (typeof ProgressTracker !== 'undefined') {
+                    ProgressTracker.save({ email_completed: true });
+                }
+            } else {
+                feedback.innerHTML = '❌ Some choices were wrong. The red ones are incorrect, and those choices have been crossed out. Try another option! <span class="zh block text-sm font-normal text-red-700">有些选择错了。红色的选项是不正确的，且错误选项已被划掉。请尝试其他的！</span>';
+                feedback.className = 'mt-4 font-bold text-lg text-red-500';
+            }
+        }
+
+        // Toggle Chinese Translations
+        const translateBtn = document.getElementById('translateBtn');
+        let showChinese = false;
+
+        translateBtn.addEventListener('click', () => {
+            showChinese = !showChinese;
+            if (showChinese) {
+                document.body.classList.add('show-zh');
+                translateBtn.innerHTML = '<span>🇬🇧</span> Hide Chinese';
+                translateBtn.classList.replace('bg-indigo-500', 'bg-gray-500');
+                translateBtn.classList.replace('hover:bg-indigo-600', 'hover:bg-gray-600');
+            } else {
+                document.body.classList.remove('show-zh');
+                translateBtn.innerHTML = '<span>🇨🇳</span> Toggle Chinese';
+                translateBtn.classList.replace('bg-gray-500', 'bg-indigo-500');
+                translateBtn.classList.replace('hover:bg-gray-600', 'hover:bg-indigo-600');
+            }
+        });
+
+        // Sentence Builder Logic
+        function moveWord(button, targetZoneId) {
+            const targetZone = document.getElementById(targetZoneId);
+            targetZone.appendChild(button);
+            button.classList.replace('bg-white', 'bg-blue-100');
+
+            // Visual cue for drop zone
+            if (targetZone.children.length > 0) {
+                targetZone.classList.add('filled');
+            }
+        }
+
+        function returnWord(event, zoneId, bankId) {
+            // Only trigger if clicking a button inside the answer zone
+            if (event.target.tagName === 'BUTTON') {
+                const button = event.target;
+                const wordBank = document.getElementById(bankId);
+                wordBank.appendChild(button);
+                button.classList.replace('bg-blue-100', 'bg-white');
+
+                const targetZone = document.getElementById(zoneId);
+                if (targetZone.children.length === 0) {
+                    targetZone.classList.remove('filled');
+                }
+            }
+        }
+
+        function checkSentence(zoneId, correctSentence, feedbackId) {
+            const zone = document.getElementById(zoneId);
+            const feedback = document.getElementById(feedbackId);
+
+            // Get text from buttons
+            let currentWords = [];
+            for (let child of zone.children) {
+                currentWords.push(child.innerText);
+            }
+
+            const currentSentence = currentWords.join(' ');
+
+            if (currentSentence === correctSentence) {
+                feedback.innerHTML = '🎉 Correct! Excellent job! <span class="zh block text-sm font-normal text-green-700">完全正确！做得好！</span>';
+                feedback.className = 'mt-4 font-bold text-lg text-green-600';
+                zone.style.borderColor = '#22c55e'; // green border
+
+                // Pillar 4: Save progress
+                if (typeof ProgressTracker !== 'undefined') {
+                    ProgressTracker.save({ [zoneId]: 'correct' });
+                }
+            } else {
+                feedback.innerHTML = '❌ Not quite right. Try moving the words again! <span class="zh block text-sm font-normal text-red-700">不太对哦，尝试重新排列单词！</span>';
+                feedback.className = 'mt-4 font-bold text-lg text-red-500';
+                zone.style.borderColor = '#ef4444'; // red border
+            }
+        }
+
+        // Multiple Choice Logic
+        function checkMultipleChoice(button, isCorrect, feedbackId) {
+            // Reset all siblings
+            const siblings = button.parentElement.children;
+            for (let sib of siblings) {
+                sib.classList.remove('border-green-500', 'border-red-500', 'bg-green-50', 'bg-red-50');
+                sib.classList.add('border-gray-200');
+            }
+
+            const feedback = document.getElementById(feedbackId);
+
+            if (isCorrect) {
+                button.classList.remove('border-gray-200');
+                button.classList.add('border-green-500', 'bg-green-50');
+                feedback.innerHTML = '🎉 Great! That makes perfect sense. <span class="zh block text-sm font-normal text-green-700">太棒了！非常有道理。</span>';
+                feedback.className = 'mt-4 font-bold text-lg text-green-600';
+
+                // Pillar 4: Save progress
+                if (typeof ProgressTracker !== 'undefined') {
+                    ProgressTracker.save({ [feedbackId]: 'correct' });
+                }
+            } else {
+                button.classList.remove('border-gray-200');
+                button.classList.add('border-red-500', 'bg-red-50');
+                feedback.innerHTML = '❌ Hmm, think about what the question is asking. Try again! <span class="zh block text-sm font-normal text-red-700">嗯，想想问题问的是什么。再试一次！</span>';
+                feedback.className = 'mt-4 font-bold text-lg text-red-500';
+            }
+        }
+        // Pillar 4: Load saved progress
+        window.addEventListener('load', async () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data) {
+                    // Logic to restore state could be added here (e.g. marking questions as green)
+                    console.log("Loaded student progress:", saved.progress_data);
+                }
+            }
+        });
+    </script>
+    <script src="../../../../../js/progress-tracker.js" 
+            data-module-id="kssr-p6-eng-u1" 
+            data-module-name="Primary 6 English - Unit 1" 
+            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit1/index.html"></script>
+</body>
+
+</html>
