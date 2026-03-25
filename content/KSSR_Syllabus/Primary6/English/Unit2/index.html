@@ -101,6 +101,11 @@
 
 <body class="text-slate-800 pb-24">
 
+    <!-- Pillar 3: Local Navigation (Home Button) -->
+    <a href="../../../../../index.html" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: white; padding: 10px 15px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#f8fafc';" onmouseout="this.style.transform='scale(1)'; this.style.background='white';">
+        <span style="font-size: 1.2rem;">🏠</span> <span>Home</span>
+    </a>
+
     <!-- Floating Header -->
     <header class="sticky top-0 bg-white/80 backdrop-blur-md shadow-sm p-4 z-50 border-b border-slate-200">
         <div class="max-w-3xl mx-auto flex justify-between items-center">
@@ -2854,6 +2859,11 @@
                     btn.className = 'px-6 py-2 rounded-full font-bold text-sm text-slate-500 hover:text-slate-700 hover:bg-slate-300 transition-all cursor-pointer';
                 }
             });
+
+            // Pillar 4: Save current tab on every switch
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({ activeTab: tabId, clozeCorrect: clozeCorrect });
+            }
         }
 
         // True/False & MCQ Logic
@@ -3114,7 +3124,23 @@
                 zone.classList.add('border-rose-400', 'bg-rose-50');
             }
         }
+        // Pillar 4: Load saved progress on page start
+        window.addEventListener('load', async () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data && saved.progress_data.activeTab) {
+                    switchTab(saved.progress_data.activeTab);
+                    console.log('Year 6 Unit 2 progress loaded:', saved.progress_data);
+                }
+            }
+        });
     </script>
+
+    <!-- Pillar 4: State Management (SDK) -->
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p6-eng-u2"
+            data-module-name="Primary 6 English - Unit 2: Interactive Reading"
+            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit2/index.html"></script>
 </body>
 
 </html>
