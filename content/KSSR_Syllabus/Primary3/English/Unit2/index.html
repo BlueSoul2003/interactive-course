@@ -571,6 +571,11 @@
             else if (currentStep === 5) renderPhase5(content);
             else if (currentStep === 6) renderPhase6(content);
             else if (currentStep === 7) renderPhase7(content);
+
+            // Pillar 4: Save progress on every render
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({ step: currentStep, subLevel: subLevel, score: myCurrentScore });
+            }
         }
 
         // --- PHASE RENDERING LOGIC ---
@@ -1001,33 +1006,19 @@
         window.onload = async () => {
             goToPhase(1);
 
-            // Pillar 4: State Management (Load progress on start)
+            // Pillar 4: State Management (Load saved progress on start)
             if (typeof ProgressTracker !== 'undefined') {
                 const saved = await ProgressTracker.load();
                 if (saved && saved.progress_data) {
                     const p = saved.progress_data;
-                    // Restore progress: go to the saved step and sub-level
                     currentStep = p.step || 1;
                     subLevel = p.subLevel || 0;
                     myCurrentScore = p.score || 0;
-                    goToPhase(currentStep);
+                    renderCurrentPhase();
                     console.log('Unit 2 progress loaded:', p);
                 }
             }
         };
-
-        // Pillar 4: Save progress whenever the phase changes
-        const _originalGoToPhase = goToPhase;
-        function goToPhase(phase) {
-            _originalGoToPhase(phase);
-            if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({
-                    step: currentStep,
-                    subLevel: subLevel,
-                    score: myCurrentScore
-                });
-            }
-        }
 
     </script>
 
