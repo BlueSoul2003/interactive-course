@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CRITICAL Automator Metadata -->
+    <meta name="ai-path" content="Primary_English/Standard_3">
+    <meta name="ai-folder" content="Unit_2_Occupations_And_Routines_Pro">
+    <meta name="ai-title" content="🌟 Unit 2: City Heroes Pro - Complete Grammar & Vocab!">
+    <meta name="ai-desc" content="第2單元完整預習版：包含所有核心生字、频度副词与一般现在时态造句训练">
+
+    <title>🌟 Unit 2: City Heroes & Dream Jobs!</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Custom Styles & Animations -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', 'Comic Sans MS', sans-serif;
+            background-color: #f0fdf4;
+            touch-action: manipulation;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-8px) rotate(-3deg);
+            }
+
+            50% {
+                transform: translateX(8px) rotate(3deg);
+            }
+
+            75% {
+                transform: translateX(-8px) rotate(-3deg);
+            }
+        }
+
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+            background-color: #fca5a5 !important;
+            color: #7f1d1d !important;
+            border-color: #ef4444 !important;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .animate-pop {
+            animation: pop 0.3s ease-out;
+        }
+
+        @keyframes drop-in {
+            0% {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .animate-drop {
+            animation: drop-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .confetti {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: fall linear forwards;
+            z-index: 50;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 4px solid #fff;
+        }
+
+        /* Hide scrollbar for tabs */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-gray-800 flex flex-col items-center py-4 px-4 overflow-x-hidden relative">
+
+    <!-- Top Navigation Tabs -->
+    <div class="w-full max-w-3xl flex overflow-x-auto gap-2 mb-4 no-scrollbar pb-2 snap-x" id="nav-tabs">
+        <button onclick="goToPhase(1)" id="tab-1"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">1.
+            Match (认字)</button>
+        <button onclick="goToPhase(2)" id="tab-2"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">2.
+            Spell (拼写)</button>
+        <button onclick="goToPhase(3)" id="tab-3"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">3.
+            Train (造句)</button>
+        <button onclick="goToPhase(4)" id="tab-4"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">4.
+            Read (阅读)</button>
+        <button onclick="goToPhase(5)" id="tab-5"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">5.
+            Quiz (测验)</button>
+        <button onclick="goToPhase(6)" id="tab-6"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">6.
+            Essay (作文)</button>
+        <button onclick="goToPhase(7)" id="tab-7"
+            class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">7.
+            Copy (抄写)</button>
+    </div>
+
+    <!-- Header / Status Bar -->
+    <div
+        class="w-full max-w-3xl bg-white rounded-3xl shadow-sm p-4 mb-4 flex justify-between items-center border-4 border-blue-200">
+        <div>
+            <h1 class="text-xl md:text-3xl font-black text-blue-600">🌟 City Heroes</h1>
+            <p class="text-xs md:text-sm font-bold text-gray-500">
+                Stage <span id="ui-step">1</span> - Q<span id="ui-sublevel">1</span>/<span id="ui-total">0</span>
+            </p>
+        </div>
+        <div class="bg-yellow-100 px-4 py-2 rounded-2xl border-2 border-yellow-400 flex flex-col items-center">
+            <span class="text-[10px] md:text-xs font-bold text-yellow-600 uppercase tracking-wider">Score</span>
+            <span id="ui-score" class="text-2xl md:text-3xl font-black text-yellow-500">0</span>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <div id="game-container"
+        class="w-full max-w-3xl min-h-[450px] glass-panel rounded-3xl shadow-xl p-4 md:p-8 relative flex flex-col justify-between">
+        <div id="game-content" class="flex-grow flex flex-col items-center justify-center">
+            <!-- Content will be injected here -->
+        </div>
+
+        <!-- Bottom Navigation Controls -->
+        <div class="w-full flex justify-between mt-8 pt-4 border-t-2 border-gray-100">
+            <button onclick="prevLevel()"
+                class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 px-6 rounded-full shadow-sm active:scale-95 transition-all">
+                ⬅️ Prev (上一题)
+            </button>
+            <button onclick="nextLevel()"
+                class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-6 rounded-full shadow-sm active:scale-95 transition-all">
+                Next (下一题) ➡️
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // --- AUDIO SYSTEM (Web Audio API) ---
+        let audioCtx = null;
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        function playTone(freq, type, duration, vol = 0.1, startTimeOffset = 0) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime + startTimeOffset);
+
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime + startTimeOffset);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + startTimeOffset + duration);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(audioCtx.currentTime + startTimeOffset);
+            osc.stop(audioCtx.currentTime + startTimeOffset + duration);
+        }
+
+        // 2 Varieties for Correct
+        function playCorrect1() { playTone(523.25, 'sine', 0.2); playTone(659.25, 'sine', 0.3, 0.1, 0.1); } // C5 then E5
+        function playCorrect2() { playTone(880, 'triangle', 0.2, 0.15); playTone(1046.50, 'triangle', 0.3, 0.15, 0.1); } // A5 then C6
+        function playCorrectSound() {
+            initAudio();
+            Math.random() > 0.5 ? playCorrect1() : playCorrect2();
+        }
+
+        // 2 Varieties for Wrong
+        function playWrong1() { playTone(150, 'sawtooth', 0.3, 0.1); } // Low buzz
+        function playWrong2() { playTone(200, 'square', 0.15, 0.1); playTone(150, 'square', 0.2, 0.1, 0.15); } // Descending beep
+        function playWrongSound() {
+            initAudio();
+            Math.random() > 0.5 ? playWrong1() : playWrong2();
+        }
+
+        // --- GLOBAL STATE ---
+        window.myCurrentScore = 0;
+        window.currentStep = 1; // 1 to 4
+        let subLevel = 0;
+        let essayAnswers = []; // Store answers for Phase 4
+
+        // --- COMPREHENSIVE GAME DATA ---
+        const gameData = {
+            phase1: [
+                { emoji: "📅", zh: "日常事务", en: "routine", options: ["routine", "shift", "skip"] },
+                { emoji: "⏰", zh: "轮班", en: "shift", options: ["patient", "shift", "rescue"] },
+                { emoji: "🛟", zh: "营救", en: "rescue", options: ["rescue", "avoid", "achieve"] },
+                { emoji: "🤒", zh: "病人", en: "patient", options: ["butcher", "mechanic", "patient"] },
+                { emoji: "💯", zh: "总是 (100%)", en: "always", options: ["always", "sometimes", "never"] },
+                { emoji: "🚫", zh: "从不 (0%)", en: "never", options: ["always", "sometimes", "never"] },
+                { emoji: "✂️", zh: "裁缝", en: "tailor", options: ["librarian", "tailor", "zookeeper"] },
+                { emoji: "📚", zh: "图书管理员", en: "librarian", options: ["author", "photographer", "librarian"] },
+                { emoji: "🥩", zh: "肉贩/屠夫", en: "butcher", options: ["chef", "butcher", "dentist"] }
+            ],
+            phase2: [
+                {
+                    clueEn: "Someone who plays musical instruments or writes music.", clueZh: "演奏乐器或写音乐的人", emoji: "🎹", word: "MUSICIAN",
+                    given: ["M", "", "", "I", "", "", "", "N"], letters: ["U", "S", "C", "I", "A"]
+                },
+                {
+                    clueEn: "Someone who flies the plane and wears a white uniform.", clueZh: "驾驶飞机并穿着白色制服的人", emoji: "✈️", word: "PILOT",
+                    given: ["P", "", "L", "", "T"], letters: ["I", "O"]
+                },
+                {
+                    clueEn: "Someone who designs and makes things with wood.", clueZh: "用木头设计和制作物品的人", emoji: "🪚", word: "CARPENTER",
+                    given: ["C", "", "R", "", "E", "", "", "E", "R"], letters: ["A", "P", "N", "T"]
+                },
+                {
+                    clueEn: "Someone who prepares and cooks food in a restaurant.", clueZh: "在餐厅准备和烹饪食物的人", emoji: "👨‍🍳", word: "CHEF",
+                    given: ["C", "", "", "F"], letters: ["H", "E"]
+                },
+                {
+                    clueEn: "Someone who writes stories, books and articles.", clueZh: "写故事、书和文章的人", emoji: "✍️", word: "AUTHOR",
+                    given: ["A", "", "T", "", "", "R"], letters: ["U", "H", "O"]
+                },
+                {
+                    clueEn: "Someone who designs and builds bridges and buildings.", clueZh: "设计并建造桥梁和建筑的人", emoji: "🏗️", word: "ENGINEER",
+                    given: ["E", "", "", "I", "", "E", "", "R"], letters: ["N", "G", "N", "E"]
+                },
+                {
+                    clueEn: "Someone who helps sick people get better and stay healthy.", clueZh: "帮助病人康复并保持健康的人", emoji: "🩺", word: "DOCTOR",
+                    given: ["D", "", "C", "", "", "R"], letters: ["O", "T", "O"]
+                },
+                {
+                    clueEn: "Someone who helps you learn at school.", clueZh: "在学校帮助你学习的人", emoji: "🧑‍🏫", word: "TEACHER",
+                    given: ["T", "", "A", "", "", "E", "R"], letters: ["E", "C", "H"]
+                },
+                {
+                    clueEn: "Someone who catches criminals and investigates crimes.", clueZh: "抓捕罪犯并调查犯罪的人", emoji: "👮", word: "POLICEMAN",
+                    given: ["P", "", "L", "", "C", "", "M", "", "N"], letters: ["O", "I", "E", "A"]
+                },
+                {
+                    clueEn: "Someone who cuts and sells meat in a shop.", clueZh: "在店里切肉和卖肉的人", emoji: "🥩", word: "BUTCHER",
+                    given: ["B", "", "T", "", "", "E", "R"], letters: ["U", "C", "H"]
+                },
+                {
+                    clueEn: "This person feeds and takes care of animals that live in the zoo.", clueZh: "喂养和照顾动物园里的动物的人", emoji: "🦓", word: "ZOOKEEPER",
+                    given: ["Z", "", "O", "", "E", "", "P", "", "R"], letters: ["O", "K", "E", "E"]
+                },
+                {
+                    clueEn: "This person fixes cars and makes sure engines run properly.", clueZh: "修理汽车并确保引擎正常运转的人", emoji: "🔧", word: "MECHANIC",
+                    given: ["M", "", "C", "", "A", "", "I", "C"], letters: ["E", "H", "N"]
+                },
+                {
+                    clueEn: "This person makes, mends and adjusts clothes to make them fit better.", clueZh: "制作、修补和调整衣服的人", emoji: "🧵", word: "TAILOR",
+                    given: ["T", "", "I", "", "O", "R"], letters: ["A", "L"]
+                },
+                {
+                    clueEn: "This person takes care of flowers and plants.", clueZh: "照顾花草的人", emoji: "🌻", word: "GARDENER",
+                    given: ["G", "", "R", "", "E", "", "E", "R"], letters: ["A", "D", "N"]
+                },
+                {
+                    clueEn: "This person uses a camera to take pictures of people, places or events.", clueZh: "使用相机拍照的人", emoji: "📸", word: "PHOTOGRAPHER",
+                    given: ["P", "", "O", "", "O", "", "R", "", "P", "", "E", "R"], letters: ["H", "T", "G", "A", "H"]
+                },
+                {
+                    clueEn: "This person works in a library and helps you find books to read.", clueZh: "在图书馆工作并帮助你找书的人", emoji: "📚", word: "LIBRARIAN",
+                    given: ["L", "", "B", "", "A", "", "I", "", "N"], letters: ["I", "R", "R", "A"]
+                }
+            ],
+            phase3: [
+                // Page 11: Example
+                {
+                    emoji: "🛟", cue: "Example: - lifeguard - save - drowning -", targetIds: ["L1", "L2", "L3", "L4", "L5", "L6"],
+                    blocks: [{ id: "L3", text: "I" }, { id: "L2", text: "lifeguard." }, { id: "L5", text: "people" }, { id: "L1", text: "I'm a" }, { id: "L4", text: "save" }, { id: "L6", text: "from drowning." }]
+                },
+                // Page 11: Question 1
+                {
+                    emoji: "👨‍🌾", cue: "1. - farmer - grow - vegetables -", targetIds: ["f1", "f2", "f3", "f4", "f5"],
+                    blocks: [{ id: "f4", text: "grow" }, { id: "f1", text: "I'm a" }, { id: "f5", text: "vegetables." }, { id: "f2", text: "farmer." }, { id: "f3", text: "I" }]
+                },
+                // Page 11: Question 2
+                {
+                    emoji: "🚒", cue: "2. - firefighter - put out fires - rescue -", targetIds: ["ff1", "ff2", "ff3", "ff4", "ff5", "ff6"],
+                    blocks: [{ id: "ff3", text: "I" }, { id: "ff6", text: "rescue." }, { id: "ff1", text: "I'm a" }, { id: "ff4", text: "put out fires" }, { id: "ff2", text: "firefighter." }, { id: "ff5", text: "and" }]
+                },
+                // Page 11: Question 3
+                {
+                    emoji: "🦷", cue: "3. - dentist - fix - teeth -", targetIds: ["d1", "d2", "d3", "d4", "d5"],
+                    blocks: [{ id: "d3", text: "I" }, { id: "d5", text: "teeth." }, { id: "d1", text: "I'm a" }, { id: "d4", text: "fix" }, { id: "d2", text: "dentist." }]
+                },
+                // Page 11: Question 4
+                {
+                    emoji: "📺", cue: "4. - newscaster - read - news -", targetIds: ["n1", "n2", "n3", "n4", "n5"],
+                    blocks: [{ id: "n3", text: "I" }, { id: "n2", text: "newscaster." }, { id: "n4", text: "read" }, { id: "n5", text: "news." }, { id: "n1", text: "I'm a" }]
+                }
+            ],
+            phase4: [
+                {
+                    emoji: "🤖",
+                    en: "Wei Ming loves to draw robots. Every day after school, he takes out his sketchbook and fills the pages with cool machines that can fly, clean the house, and even talk!",
+                    zh: "伟明喜欢画机器人。每天放学后，他都会拿出素描本，画满会飞、会打扫房子甚至会说话的酷炫机器！"
+                },
+                {
+                    emoji: "💻",
+                    en: "He also watches videos about inventors and how they build amazing things.",
+                    zh: "他还会观看关于发明家的视频，了解他们如何制造出令人惊叹的东西。"
+                },
+                {
+                    emoji: "🧑‍🏫",
+                    en: "One day, Wei Ming told his teacher, 'When I grow up, I want to be an inventor!' His teacher smiled and said, 'That's a great ambition! Inventors help make life better for everyone.'",
+                    zh: "有一天，伟明告诉他的老师：“我长大后想成为一名发明家！”老师微笑着说：“那是个伟大的志向！发明家帮助让每个人的生活变得更好。”"
+                },
+                {
+                    emoji: "👩‍🍳",
+                    en: "Wei Ming nodded. 'One day, I'll build a robot that helps my mum cook dinner!'",
+                    zh: "伟明点点头。“总有一天，我要造一个机器人帮我妈妈做晚饭！”"
+                }
+            ],
+            phase5: [
+                {
+                    qEn: "1. What does Wei Ming like to do after school?",
+                    qZh: "伟明放学后喜欢做什么？",
+                    options: [
+                        { text: "A. Watch cartoons (看卡通)", isCorrect: false },
+                        { text: "B. Draw robots (画机器人)", isCorrect: true },
+                        { text: "C. Play football (踢足球)", isCorrect: false }
+                    ]
+                },
+                {
+                    qEn: "2. What do Wei Ming's robots do?",
+                    qZh: "伟明的机器人能做什么？",
+                    options: [
+                        { text: "A. Sleep and eat (睡觉和吃东西)", isCorrect: false },
+                        { text: "B. Build houses (建房子)", isCorrect: false },
+                        { text: "C. Fly, clean and talk (飞、打扫和说话)", isCorrect: true }
+                    ]
+                },
+                {
+                    qEn: "3. What does Wei Ming want to be when he grows up?",
+                    qZh: "伟明长大后想成为什么？",
+                    options: [
+                        { text: "A. A scientist (科学家)", isCorrect: false },
+                        { text: "B. An inventor (发明家)", isCorrect: true },
+                        { text: "C. A teacher (老师)", isCorrect: false }
+                    ]
+                },
+                {
+                    qEn: "4. Why did the teacher say Wei Ming's dream was great?",
+                    qZh: "老师为什么说伟明的梦想很伟大？",
+                    options: [
+                        { text: "A. Because inventors make money (因为赚钱)", isCorrect: false },
+                        { text: "B. Because inventors help people (因为帮助别人)", isCorrect: true },
+                        { text: "C. Because inventors are smart (因为很聪明)", isCorrect: false }
+                    ]
+                },
+                {
+                    qEn: "5. What kind of robot does Wei Ming want to build for his mum?",
+                    qZh: "伟明想为他妈妈造什么样的机器人？",
+                    options: [
+                        { text: "A. A robot that washes the car (洗车的机器人)", isCorrect: false },
+                        { text: "B. A robot that sings songs (唱歌的机器人)", isCorrect: false },
+                        { text: "C. A robot that helps cook dinner (帮忙做晚饭的机器人)", isCorrect: true }
+                    ]
+                },
+                {
+                    qEn: "6. What lesson can you learn from Wei Ming's story?",
+                    qZh: "你能从伟明的故事中学到什么道理？",
+                    options: [
+                        { text: "A. Follow your dreams and work hard. (追随梦想并努力)", isCorrect: true },
+                        { text: "B. It's fun to play with robots. (玩机器人很有趣)", isCorrect: false },
+                        { text: "C. Always ask your teacher for help. (经常向老师求助)", isCorrect: false }
+                    ]
+                }
+            ],
+            phase6: [
+                {
+                    qEn: "1. What is the name of your job?", qZh: "你想做什么工作？",
+                    options: [
+                        { text: "I want to be an inventor.", zhText: "我想成为一名发明家。", emoji: "💡", requires: 0 },
+                        { text: "I want to be a zookeeper.", zhText: "我想成为一名动物管理员。", emoji: "🦓", requires: 1 },
+                        { text: "I want to be a photographer.", zhText: "我想成为一名摄影师。", emoji: "📸", requires: 2 },
+                        { text: "I want to be a chef.", zhText: "我想成为一名厨师。", emoji: "👨‍🍳", requires: 3 }
+                    ]
+                },
+                {
+                    qEn: "2. What is the nature of your job?", qZh: "你的工作内容是什么？",
+                    options: [
+                        { text: "I design and build cool machines.", zhText: "我设计并制造很酷的机器。", emoji: "🤖", requires: 0 },
+                        { text: "I feed and take care of animals.", zhText: "我喂养和照顾动物。", emoji: "🦁", requires: 1 },
+                        { text: "I take beautiful pictures of people and places.", zhText: "我拍摄人物和风景的美丽照片。", emoji: "🖼️", requires: 2 },
+                        { text: "I prepare and cook delicious food.", zhText: "我准备并烹饪美味的食物。", emoji: "🍲", requires: 3 }
+                    ]
+                },
+                {
+                    qEn: "3. What is the name of your workplace?", qZh: "你的工作地点在哪里？",
+                    options: [
+                        { text: "I will work in a high-tech laboratory.", zhText: "我将在一个高科技实验室工作。", emoji: "🔬", requires: 0 },
+                        { text: "I will work in a large zoo.", zhText: "我将在一个大型动物园工作。", emoji: "🏞️", requires: 1 },
+                        { text: "I will work in a photo studio and outdoors.", zhText: "我将在摄影棚和户外工作。", emoji: "🏙️", requires: 2 },
+                        { text: "I will work in a busy restaurant.", zhText: "我将在一家繁忙的餐厅工作。", emoji: "🍽️", requires: 3 }
+                    ]
+                },
+                {
+                    qEn: "4. What tools will you be using?", qZh: "你会使用什么工具？",
+                    options: [
+                        { text: "I will use a sketchbook, computers, and tools.", zhText: "我将使用素描本、电脑和工具。", emoji: "💻", requires: 0 },
+                        { text: "I will use food buckets, hoses, and medical kits.", zhText: "我将使用食物桶、水管和医疗箱。", emoji: "🪣", requires: 1 },
+                        { text: "I will use a digital camera and different lenses.", zhText: "我将使用数码相机和不同的镜头。", emoji: "🔭", requires: 2 },
+                        { text: "I will use sharp knives, pots, and pans.", zhText: "我将使用锋利的刀具、锅和煎锅。", emoji: "🔪", requires: 3 }
+                    ]
+                },
+                {
+                    qEn: "5. What will you be wearing to work?", qZh: "你上班会穿什么？",
+                    options: [
+                        { text: "I will wear a white lab coat and safety goggles.", zhText: "我将穿着白色实验袍和安全护目镜。", emoji: "🥽", requires: 0 },
+                        { text: "I will wear a green uniform and strong boots.", zhText: "我将穿着绿色制服和结实的靴子。", emoji: "🥾", requires: 1 },
+                        { text: "I will wear comfortable clothes and a vest.", zhText: "我将穿着舒适的衣服和背心。", emoji: "🦺", requires: 2 },
+                        { text: "I will wear a white uniform and a tall chef's hat.", zhText: "我将穿着白色制服和高高的厨师帽。", emoji: "🧑‍🍳", requires: 3 }
+                    ]
+                },
+                {
+                    qEn: "6. What must you do to achieve your ambition?", qZh: "你必须怎么做才能实现理想？",
+                    options: [
+                        { text: "To achieve this, I must study hard and never skip classes!", zhText: "为了实现这个目标，我必须努力学习，从不逃课！", emoji: "🎓" } // 通用结尾
+                    ]
+                }
+            ]
+        };
+
+        // --- UTILITY & NAVIGATION ---
+        function updateUI() {
+            document.getElementById('ui-step').innerText = currentStep;
+            document.getElementById('ui-sublevel').innerText = subLevel + 1;
+
+            // Handle Step 7 which has no sub-levels
+            if (currentStep === 7) {
+                document.getElementById('ui-total').innerText = "1";
+                document.getElementById('ui-sublevel').innerText = "1";
+            } else {
+                const total = gameData[`phase${currentStep}`].length;
+                document.getElementById('ui-total').innerText = total;
+            }
+
+            document.getElementById('ui-score').innerText = myCurrentScore;
+
+            // Update Tabs (now 1 to 7)
+            for (let i = 1; i <= 7; i++) {
+                const tab = document.getElementById(`tab-${i}`);
+                if (tab) {
+                    if (i === currentStep) {
+                        tab.className = "whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all bg-blue-500 text-white border-blue-700 shadow-md";
+                        // Auto-scroll the active tab into the center of the view smoothly
+                        tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    } else {
+                        tab.className = "whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all bg-gray-100 text-gray-400 border-gray-300 hover:bg-gray-200 cursor-pointer";
+                    }
+                }
+            }
+        }
+
+        function playConfetti() {
+            for (let i = 0; i < 40; i++) {
+                const conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.backgroundColor = ['#fde047', '#60a5fa', '#f472b6', '#4ade80'][Math.floor(Math.random() * 4)];
+                conf.style.animationDuration = (Math.random() * 2 + 1) + 's';
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 3000);
+            }
+        }
+
+        function shuffleArray(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // Global Navigation
+        function goToPhase(phase) {
+            initAudio(); // Initialize audio context on first user click anywhere
+            currentStep = phase;
+            subLevel = 0;
+            if (phase === 6) essayAnswers = []; // Reset essay if jumping to phase 6
+            renderCurrentPhase();
+        }
+
+        function nextLevel() {
+            initAudio();
+            if (currentStep === 7) return; // End of game
+            const total = gameData[`phase${currentStep}`].length;
+            if (subLevel < total - 1) {
+                subLevel++;
+                renderCurrentPhase();
+            } else if (currentStep < 7) { // Can advance up to Phase 7
+                goToPhase(currentStep + 1);
+            }
+        }
+
+        function prevLevel() {
+            initAudio();
+            if (currentStep === 7) {
+                goToPhase(6);
+            } else if (subLevel > 0) {
+                subLevel--;
+                renderCurrentPhase();
+            } else if (currentStep > 1) {
+                currentStep--;
+                subLevel = gameData[`phase${currentStep}`].length - 1;
+                renderCurrentPhase();
+            }
+        }
+
+        function renderCurrentPhase() {
+            updateUI();
+            const content = document.getElementById('game-content');
+            content.innerHTML = ''; // Clear current
+
+            if (currentStep === 1) renderPhase1(content);
+            else if (currentStep === 2) renderPhase2(content);
+            else if (currentStep === 3) renderPhase3(content);
+            else if (currentStep === 4) renderPhase4(content);
+            else if (currentStep === 5) renderPhase5(content);
+            else if (currentStep === 6) renderPhase6(content);
+            else if (currentStep === 7) renderPhase7(content);
+        }
+
+        // --- PHASE RENDERING LOGIC ---
+
+        // Phase 1: Vocab
+        function renderPhase1(container) {
+            const data = gameData.phase1[subLevel];
+            let shuffledOptions = shuffleArray(data.options);
+
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full">
+                    <h2 class="text-2xl font-bold text-blue-800 mb-2">Step 1: Vocab Match</h2>
+                    <p class="text-gray-500 mb-6 font-bold">听音/看意，选择正确的英文单词</p>
+                    
+                    <div class="bg-blue-50 rounded-3xl p-8 mb-8 inline-block border-4 border-blue-200 shadow-inner">
+                        <div class="text-7xl mb-4">${data.emoji}</div>
+                        <div class="text-3xl font-black text-gray-800">${data.zh}</div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row gap-4 justify-center w-full max-w-md mx-auto">
+                        ${shuffledOptions.map(opt => `
+                            <button onclick="handlePhase1Click('${opt}', '${data.en}', this)" 
+                                class="flex-1 bg-white border-4 border-gray-200 hover:border-blue-400 hover:bg-blue-50 text-2xl font-bold py-4 px-4 rounded-2xl shadow-sm transition-all transform active:scale-95 text-gray-700">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.handlePhase1Click = function (selected, correct, btn) {
+            initAudio();
+            if (selected === correct) {
+                playCorrectSound();
+                btn.classList.replace('border-gray-200', 'border-green-500');
+                btn.classList.replace('hover:border-blue-400', 'border-green-500');
+                btn.classList.replace('text-gray-700', 'text-green-600');
+                btn.classList.add('bg-green-100');
+                myCurrentScore += 10;
+
+                setTimeout(() => {
+                    if (subLevel === gameData.phase1.length - 1) playConfetti();
+                    nextLevel();
+                }, 800);
+            } else {
+                playWrongSound();
+                btn.classList.add('animate-shake');
+                setTimeout(() => btn.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        // Phase 2: Spell
+        let currentSpellIndex = 0;
+        function renderPhase2(container) {
+            const data = gameData.phase2[subLevel];
+            currentSpellIndex = 0;
+            while (currentSpellIndex < data.given.length && data.given[currentSpellIndex] !== "") {
+                currentSpellIndex++;
+            }
+
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full">
+                    <h2 class="text-2xl font-bold text-purple-800 mb-2">Step 2: Magic Spelling</h2>
+                    <p class="text-gray-500 mb-4 font-bold">点击泡泡，补全单词 (Page 12)</p>
+                    
+                    <div class="bg-purple-50 rounded-2xl p-4 mb-6 border-2 border-purple-200 flex items-center justify-center gap-4 text-left">
+                        <div class="text-5xl">${data.emoji}</div>
+                        <div>
+                            <p class="font-bold text-sm md:text-lg text-gray-800">"${data.clueEn}"</p>
+                            <p class="text-xs md:text-sm text-gray-500">${data.clueZh}</p>
+                        </div>
+                    </div>
+
+                    <div id="spell-slots" class="flex flex-wrap justify-center gap-1 md:gap-2 mb-8">
+                        ${data.given.map((ltr, idx) => `
+                            <div class="w-8 h-12 md:w-12 md:h-14 rounded-xl border-b-4 ${ltr ? 'bg-purple-100 border-purple-400 text-purple-700' : 'bg-gray-100 border-gray-300 text-gray-800'} text-xl md:text-2xl font-black flex items-center justify-center shadow-sm" id="slot-${idx}">
+                                ${ltr}
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <div id="bubble-container" class="flex flex-wrap justify-center gap-2 max-w-lg mx-auto">
+                        ${shuffleArray(data.letters).map((ltr, i) => `
+                            <button onclick="handlePhase2Click('${ltr}', this)" class="w-12 h-12 md:w-14 md:h-14 bg-white border-2 border-pink-300 text-pink-600 rounded-full text-xl md:text-2xl font-black shadow-md hover:bg-pink-50 hover:scale-110 transition-transform active:scale-90">
+                                ${ltr}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            highlightCurrentSlot();
+        }
+
+        function highlightCurrentSlot() {
+            document.querySelectorAll('[id^="slot-"]').forEach(el => el.classList.remove('border-pink-500', 'bg-pink-50'));
+            const activeSlot = document.getElementById(`slot-${currentSpellIndex}`);
+            if (activeSlot) activeSlot.classList.add('border-pink-500', 'bg-pink-50');
+        }
+
+        window.handlePhase2Click = function (letter, btn) {
+            initAudio();
+            const data = gameData.phase2[subLevel];
+            const targetLetter = data.word[currentSpellIndex];
+
+            if (letter === targetLetter) {
+                playCorrectSound();
+                const slot = document.getElementById(`slot-${currentSpellIndex}`);
+                slot.innerText = letter;
+                slot.className = "w-8 h-12 md:w-12 md:h-14 rounded-xl border-b-4 bg-green-100 border-green-400 text-green-700 text-xl md:text-2xl font-black flex items-center justify-center shadow-sm animate-pop";
+                btn.style.visibility = 'hidden';
+                myCurrentScore += 5;
+                updateUI();
+
+                do { currentSpellIndex++; }
+                while (currentSpellIndex < data.word.length && data.given[currentSpellIndex] !== "");
+
+                if (currentSpellIndex >= data.word.length) {
+                    myCurrentScore += 10;
+                    setTimeout(() => {
+                        if (subLevel === gameData.phase2.length - 1) playConfetti();
+                        nextLevel();
+                    }, 1000);
+                } else {
+                    highlightCurrentSlot();
+                }
+            } else {
+                playWrongSound();
+                btn.classList.add('animate-shake');
+                setTimeout(() => btn.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        // Phase 3: Train
+        let currentTrainBlocks = [];
+        function renderPhase3(container) {
+            const data = gameData.phase3[subLevel];
+            currentTrainBlocks = [];
+
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full">
+                    <h2 class="text-2xl font-bold text-green-800 mb-2">Step 3: Sentence Train</h2>
+                    <p class="text-gray-500 mb-4 font-bold">按顺序点击方块造句 (注意时态和副词位置！)</p>
+                    
+                    <div class="bg-green-50 rounded-2xl p-4 mb-6 border-2 border-green-200 flex flex-col items-center">
+                        <div class="text-4xl mb-2">${data.emoji}</div>
+                        <div class="font-mono bg-white px-3 py-1 rounded-lg border text-gray-700 font-bold text-sm md:text-base">${data.cue}</div>
+                    </div>
+
+                    <div class="bg-gray-100 rounded-2xl p-4 mb-6 min-h-[80px] flex flex-wrap gap-2 items-center justify-start border-4 border-dashed border-gray-300" id="train-area">
+                        <span class="text-gray-400 font-bold w-full text-center" id="train-placeholder">Click words below to load train! 🚂</span>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-2" id="block-bank">
+                        ${shuffleArray(data.blocks).map(b => `
+                            <button onclick="handlePhase3Move('${b.id}', this)" id="btn-${b.id}"
+                                class="bg-white border-b-4 border-blue-400 text-blue-700 text-base md:text-lg font-bold py-2 px-4 rounded-xl shadow-md active:translate-y-1 transition-transform">
+                                ${b.text}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.handlePhase3Move = function (id, btnElement) {
+            initAudio();
+            const trainArea = document.getElementById('train-area');
+            const placeholder = document.getElementById('train-placeholder');
+            const data = gameData.phase3[subLevel];
+            const text = data.blocks.find(b => b.id === id).text;
+            const expectedId = data.targetIds[currentTrainBlocks.length];
+
+            if (id === expectedId) {
+                playCorrectSound();
+                if (placeholder) placeholder.remove();
+                btnElement.style.visibility = 'hidden';
+
+                currentTrainBlocks.push(id);
+                const blockHTML = `
+                    <div class="bg-blue-500 border-b-4 border-blue-700 text-white text-base md:text-lg font-bold py-2 px-3 rounded-xl shadow-md animate-pop">
+                        ${text}
+                    </div>
+                `;
+                trainArea.insertAdjacentHTML('beforeend', blockHTML);
+                myCurrentScore += 10;
+                updateUI();
+
+                if (currentTrainBlocks.length === data.targetIds.length) {
+                    trainArea.classList.replace('border-gray-300', 'border-green-400');
+                    trainArea.classList.replace('bg-gray-100', 'bg-green-100');
+                    myCurrentScore += 20;
+                    updateUI();
+                    setTimeout(() => {
+                        if (subLevel === gameData.phase3.length - 1) playConfetti();
+                        nextLevel();
+                    }, 1500);
+                }
+            } else {
+                playWrongSound();
+                btnElement.classList.add('animate-shake');
+                setTimeout(() => btnElement.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        // Phase 4: Story Reading
+        function renderPhase4(container) {
+            const data = gameData.phase4[subLevel];
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full max-w-lg mx-auto">
+                    <h2 class="text-2xl font-bold text-teal-800 mb-2">Step 4: Story Time</h2>
+                    <p class="text-gray-500 mb-6 font-bold">读故事，点击翻译按钮了解意思 (Page 15)</p>
+                    
+                    <div class="bg-teal-50 rounded-2xl p-6 md:p-8 mb-8 border-4 border-teal-200 shadow-sm relative text-left">
+                        <div class="text-6xl mb-4 text-center">${data.emoji}</div>
+                        <p class="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed mb-4">${data.en}</p>
+                        
+                        <div id="zh-translation" class="hidden">
+                            <hr class="border-teal-200 my-4">
+                            <p class="text-lg text-teal-700 font-bold">${data.zh}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 justify-center">
+                        <button onclick="document.getElementById('zh-translation').classList.remove('hidden'); playCorrect1();" class="flex-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold py-3 px-4 rounded-xl shadow-sm active:scale-95 transition-all">
+                            🪄 Translate (翻译)
+                        </button>
+                        <button onclick="handlePhase4Next()" class="flex-1 bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-xl shadow-sm active:scale-95 transition-all">
+                            Next (继续) ➡️
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        window.handlePhase4Next = function () {
+            initAudio(); playCorrectSound();
+            myCurrentScore += 5;
+            nextLevel();
+        }
+
+        // Phase 5: Quiz
+        function renderPhase5(container) {
+            const data = gameData.phase5[subLevel];
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full">
+                    <h2 class="text-2xl font-bold text-cyan-800 mb-2">Step 5: Story Quiz</h2>
+                    <p class="text-gray-500 mb-6 font-bold">根据刚才的故事回答问题 (Page 15)</p>
+                    
+                    <div class="bg-cyan-50 rounded-2xl p-4 md:p-6 mb-8 border-4 border-cyan-200 text-left">
+                        <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2">${data.qEn}</h3>
+                        <p class="text-sm md:text-md text-cyan-700 font-bold">${data.qZh}</p>
+                    </div>
+
+                    <div class="flex flex-col gap-3 max-w-md mx-auto">
+                        ${data.options.map((opt) => `
+                            <button onclick="handlePhase5Click(${opt.isCorrect}, this)" 
+                                class="flex items-center text-left bg-white border-2 border-gray-200 hover:border-cyan-400 hover:bg-cyan-50 p-3 md:p-4 rounded-2xl shadow-sm transition-all transform hover:translate-x-2 active:scale-95">
+                                <span class="block text-base md:text-lg font-bold text-gray-700">${opt.text}</span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.handlePhase5Click = function (isCorrect, btn) {
+            initAudio();
+            if (isCorrect) {
+                playCorrectSound();
+                myCurrentScore += 15;
+                btn.classList.replace('border-gray-200', 'border-green-500');
+                btn.classList.replace('hover:border-cyan-400', 'border-green-500');
+                btn.classList.add('bg-green-100');
+
+                setTimeout(() => {
+                    if (subLevel === gameData.phase5.length - 1) playConfetti();
+                    nextLevel();
+                }, 800);
+            } else {
+                playWrongSound();
+                btn.classList.add('animate-shake');
+                setTimeout(() => btn.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        // Phase 6: Essay
+        let chosenPath = -1;
+        let isTranslationVisible = false;
+
+        window.toggleTranslation = function () {
+            isTranslationVisible = !isTranslationVisible;
+            const zhElements = document.querySelectorAll('.zh-text');
+            zhElements.forEach(el => {
+                if (isTranslationVisible) {
+                    el.classList.remove('hidden');
+                    el.classList.add('inline-block');
+                } else {
+                    el.classList.add('hidden');
+                    el.classList.remove('inline-block');
+                }
+            });
+        }
+
+        function renderPhase6(container) {
+            // Safety fallback: if somehow trying to render beyond phase length, go to step 7
+            if (subLevel >= gameData.phase6.length) {
+                goToPhase(7);
+                return;
+            }
+
+            const question = gameData.phase6[subLevel];
+
+            // 不再過濾選項，給出所有選項來考驗學生。
+            // 為了增加趣味性，將第 2~5 題的選項打亂順序，防止他們死記位置。
+            let availableOptions = [...question.options];
+            if (subLevel > 0 && availableOptions.length > 1) {
+                availableOptions = shuffleArray(availableOptions);
+            }
+
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full">
+                    <h2 class="text-2xl font-bold text-orange-600 mb-2">Step 6: My Dream Job Story</h2>
+                    <p class="text-gray-500 mb-6 font-bold">回答问题，自动生成完整作文</p>
+                    
+                    <div class="bg-orange-50 rounded-2xl p-4 md:p-6 mb-8 border-4 border-orange-200">
+                        <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2">${question.qEn}</h3>
+                        <p class="text-sm md:text-md text-orange-600 font-bold">${question.qZh}</p>
+                    </div>
+
+                    <div class="flex flex-col gap-3 max-w-md mx-auto">
+                        ${availableOptions.map((opt) => `
+                            <button onclick="handlePhase6Select('${opt.text.replace(/'/g, "\\'")}', '${opt.zhText}', ${opt.requires !== undefined ? opt.requires : 'undefined'}, this)" 
+                                class="flex items-center text-left bg-white border-2 border-gray-200 hover:border-orange-400 hover:bg-orange-50 p-3 md:p-4 rounded-2xl shadow-sm transition-all transform hover:translate-x-2 active:scale-95">
+                                <span class="text-3xl md:text-4xl mr-4">${opt.emoji}</span>
+                                <div>
+                                    <span class="block text-base md:text-lg font-bold text-gray-700">${opt.text}</span>
+                                </div>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.handlePhase6Select = function (text, zhText, pathIdx, btnElement) {
+            initAudio();
+
+            // 將字串的 'undefined' 轉回真正的 undefined
+            if (pathIdx === 'undefined') pathIdx = undefined;
+
+            // 邏輯判斷：第一題永遠正確 / 選擇與職業匹配 / 通用結尾問題
+            const isCorrect = (subLevel === 0) || (pathIdx === chosenPath) || (pathIdx === undefined);
+
+            if (isCorrect) {
+                playCorrectSound();
+                if (subLevel === 0) chosenPath = pathIdx; // 鎖定選擇的職業路徑
+
+                essayAnswers[subLevel] = { text: text, zhText: zhText };
+                essayAnswers.length = subLevel + 1;
+
+                myCurrentScore += 20;
+
+                // 視覺反饋：變綠
+                btnElement.classList.replace('border-gray-200', 'border-green-500');
+                btnElement.classList.replace('hover:border-orange-400', 'border-green-500');
+                btnElement.classList.add('bg-green-100');
+
+                // 延遲一點點時間再進入下一題，讓學生看到成功的視覺效果
+                setTimeout(() => {
+                    nextLevel();
+                }, 450);
+            } else {
+                // 如果選錯了不符合職業邏輯的選項
+                playWrongSound();
+                btnElement.classList.add('animate-shake');
+                setTimeout(() => btnElement.classList.remove('animate-shake'), 400);
+            }
+        }
+
+        // Phase 7: Final Copy Essay
+        function renderPhase7(container) {
+            // Check if they skipped straight to tab 7 without finishing tab 6
+            if (essayAnswers.length < gameData.phase6.length) {
+                container.innerHTML = `
+                    <div class="text-center animate-drop w-full py-10">
+                        <div class="text-6xl mb-4">🚧</div>
+                        <h2 class="text-2xl font-bold text-gray-500 mb-2">Essay Not Finished!</h2>
+                        <p class="text-gray-400 font-bold mb-6">请先完成第六关 (Step 6)，才能生成你的专属作文哦！</p>
+                        <button onclick="goToPhase(6)" class="bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-3 px-8 rounded-full shadow-sm transition-all active:scale-95">
+                            ⬅️ Go to Step 6 (去写作文)
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Play celebration sounds if arriving here normally
+            playConfetti();
+            playCorrect1(); setTimeout(playCorrect2, 300);
+
+            container.innerHTML = `
+                <div class="text-center animate-drop w-full">
+                    <h2 class="text-3xl font-black text-yellow-600 mb-2">🏆 Final Essay Ready!</h2>
+                    <p class="text-gray-600 font-bold mb-4">太棒了！现在把这段完整的作文抄进你的练习本吧 (Page 16)</p>
+                    
+                    <div class="mb-4">
+                        <button onclick="toggleTranslation()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold py-2 px-6 rounded-full shadow-sm active:scale-95 transition-all">
+                            🌐 Show/Hide Chinese Meaning (显示/隐藏中文)
+                        </button>
+                    </div>
+
+                    <div class="bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjI4Ij48bGluZSB4MT0iMCIgeTE9IjI3IiB4Mj0iMTAwJSIgeTI9IjI3IiBzdHJva2U9IiNlNWU3ZWIiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] bg-white rounded-xl p-8 text-left border border-gray-200 shadow-xl mb-6 relative overflow-hidden" style="line-height: 28px;">
+                        <div class="absolute top-0 right-0 p-4 text-6xl opacity-10">📝</div>
+                        <h3 class="text-2xl font-black text-gray-800 mb-4 text-center">My Ambition</h3>
+                        <div class="text-lg font-medium text-gray-800 indent-8">
+                            ${essayAnswers.map(ans => `
+                                <span class="en-text">${ans.text}</span>
+                                <span class="zh-text ${isTranslationVisible ? 'inline-block' : 'hidden'} text-[13px] text-indigo-500 bg-indigo-50 px-2 py-0.5 rounded mx-1 leading-tight">${ans.zhText}</span>
+                            `).join(' ')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize App
+        window.onload = () => {
+            goToPhase(1);
+        };
+
+    </script>
+</body>
+
+</html>
