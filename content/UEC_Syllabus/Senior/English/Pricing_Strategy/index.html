@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Profit Playbook Pro: Pricing Strategy</title>
+    <style>
+        /* --- 財富與高級感配色 (Wealth & Elegance Aesthetic) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #e6f9f0 0%, #a3d9c9 100%);
+            color: #2c3e50;
+            padding: 20px;
+            max-width: 850px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #059669;
+            text-align: center;
+        }
+
+        /* --- 雙語翻譯控制器 --- */
+        .translate-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);
+        }
+
+        .lang-cn {
+            display: none;
+        }
+
+        body.show-cn .lang-cn {
+            display: block;
+            color: #047857;
+            font-size: 0.9em;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        body.show-cn span.lang-cn {
+            display: inline;
+            margin-left: 5px;
+        }
+
+        /* --- 螢幕容器與標籤 --- */
+        .simulator-screen {
+            background: #fff;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border: 4px solid #fff;
+            position: relative;
+        }
+
+        .scenario-badge {
+            background: #d1fae5;
+            color: #059669;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: 1px dashed #059669;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(5, 150, 105, 0.4);
+        }
+
+        /* --- Stage 1: The Decoy Effect --- */
+        .pricing-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .popcorn-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 12px;
+            padding: 20px;
+            width: 28%;
+            min-width: 150px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .popcorn-box:hover {
+            transform: translateY(-5px);
+            border-color: #10b981;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.2);
+        }
+
+        .popcorn-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .popcorn-price {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .decoy-label {
+            display: none;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #e74c3c;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            transform: rotate(15deg);
+        }
+
+        .grammar-box {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            line-height: 1.8;
+        }
+
+        .grammar-select {
+            padding: 5px;
+            border: 1px dashed #10b981;
+            border-radius: 4px;
+            color: #059669;
+            font-weight: bold;
+            outline: none;
+            margin: 0 5px;
+        }
+
+        /* --- Stage 2: Anchoring Effect (Reading) --- */
+        .reading-passage {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #f59f00;
+            font-size: 1.05em;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .mcq-question {
+            margin-bottom: 15px;
+        }
+
+        .mcq-question p {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .mcq-opt {
+            display: block;
+            padding: 10px 15px;
+            background: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .mcq-opt:hover {
+            background: #fff3cd;
+            border-color: #f59f00;
+        }
+
+        .mcq-opt.correct {
+            background: #d1fae5;
+            border-color: #10b981;
+            color: #059669;
+            font-weight: bold;
+        }
+
+        .mcq-opt.wrong {
+            background: #fee2e2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        /* --- Stage 3: Information Transfer (Charts) --- */
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #dee2e6;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .bar-label {
+            width: 130px;
+            font-weight: bold;
+            font-size: 0.9em;
+            color: #495057;
+            display: flex;
+            justify-content: space-between;
+            padding-right: 10px;
+        }
+
+        .bar-track {
+            flex: 1;
+            background: #e9ecef;
+            height: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: 1s ease-out;
+        }
+
+        .fill-1 {
+            background: #f59f00;
+            width: 0%;
+        }
+
+        .fill-2 {
+            background: #3b5bdb;
+            width: 0%;
+        }
+
+        .fill-3 {
+            background: #e64980;
+            width: 0%;
+        }
+
+        .fill-4 {
+            background: #12b886;
+            width: 0%;
+        }
+
+        .cloze-test {
+            background: #fff;
+            padding: 20px;
+            border: 2px dashed #ced4da;
+            border-radius: 10px;
+            line-height: 2;
+        }
+
+        .cloze-select {
+            border: none;
+            border-bottom: 2px solid #adb5bd;
+            min-width: 120px;
+            text-align: center;
+            font-weight: bold;
+            color: #10b981;
+            outline: none;
+            font-size: 1em;
+            padding: 2px 5px;
+            cursor: pointer;
+            background: transparent;
+            border-radius: 4px 4px 0 0;
+            transition: 0.2s;
+        }
+
+        .cloze-select:focus {
+            border-bottom-color: #10b981;
+            background: #f8f9fa;
+        }
+
+        /* --- Stage 4: Scarcity (FOMO) --- */
+        .fomo-box {
+            background: #fff5f5;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #e64980;
+            margin-bottom: 20px;
+        }
+
+        .fomo-row {
+            margin-bottom: 15px;
+        }
+
+        .fomo-bad {
+            color: #868e96;
+            text-decoration: line-through;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .fomo-select {
+            padding: 6px;
+            border: 2px solid #e64980;
+            border-radius: 6px;
+            color: #e64980;
+            font-weight: bold;
+            outline: none;
+            font-size: 1em;
+        }
+
+        .fomo-res {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        /* --- Stage 5: Tiered Pricing Builder --- */
+        .tiers-grid {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tier-card {
+            flex: 1;
+            min-width: 200px;
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+
+        .tier-header {
+            font-weight: bold;
+            font-size: 1.1em;
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tier-card input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-weight: bold;
+        }
+
+        .tier-card textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+
+        .tier-anchor {
+            border-color: #9b59b6;
+            background: #faf5ff;
+        }
+
+        .tier-anchor .tier-header {
+            color: #8e44ad;
+        }
+
+        .tier-decoy {
+            border-color: #e74c3c;
+            background: #fdf5f5;
+        }
+
+        .tier-decoy .tier-header {
+            color: #c0392b;
+        }
+
+        .tier-target {
+            border-color: #f1c40f;
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.3);
+        }
+
+        .tier-target .tier-header {
+            color: #d35400;
+        }
+
+        /* --- Stage 6: Boardroom Pitch --- */
+        .pitch-deck {
+            background: #2c3e50;
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            border: 4px solid #f1c40f;
+            margin-top: 20px;
+        }
+
+        .pitch-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #ecf0f1;
+        }
+
+        .pitch-text span.highlight {
+            color: #f1c40f;
+            font-weight: bold;
+            background: rgba(241, 196, 15, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* --- General Utils --- */
+        .stage {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #059669;
+            width: 16.66%;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .mini-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed #ced4da;
+        }
+
+        .nav-btn {
+            background: #f8f9fa;
+            color: #868e96;
+            border: 1px solid #dee2e6;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: #e9ecef;
+            color: #495057;
+            border-color: #ced4da;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="../../../../../index.html" class="home-btn" style="position: fixed; top: 20px; left: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
+
+    <button class="translate-btn" onclick="toggleLanguage()">🇨🇳 EN/中</button>
+
+    <h1>
+        <span class="lang-en">📈 The Profit Playbook Pro</span>
+        <span class="lang-cn">📈 財商與定價心理學 Pro</span>
+    </h1>
+    <div class="progress-bar">
+        <div class="progress-fill" id="mainProgress"></div>
+    </div>
+
+    <!-- ================= STAGE 1: The Decoy Effect ================= -->
+    <div id="stage1" class="stage active simulator-screen">
+        <div class="scenario-badge" id="s1-badge">Scenario 1/5</div>
+        <h2><span class="lang-en">Stage 1: The Decoy Effect 🎣</span><span class="lang-cn">階段 1：破解誘餌效應</span></h2>
+        <p style="color:#555;" id="s1-desc">
+            <span class="lang-en">Imagine you are at a cinema. Which popcorn size would you buy? Click your
+                choice.</span>
+            <span class="lang-cn">想像你在電影院。你會買哪個尺寸的爆米花？點擊你的選擇。</span>
+        </p>
+
+        <div class="pricing-options" id="s1-options">
+            <!-- Generated by JS -->
+        </div>
+
+        <div id="decoy-explanation"
+            style="display:none; margin-top:20px; background:#fff3cd; border-left:4px solid #ffc107; padding:15px; border-radius:5px;">
+            <p style="margin-top:0; font-weight:bold; color:#856404;">
+                <span class="lang-en">First Principles Analysis: Value is Relative!</span>
+                <span class="lang-cn">第一性原理分析：價值是比較出來的！</span>
+            </p>
+            <p style="color:#856404; font-size:0.95em;" id="s1-exp">
+                <!-- Generated by JS -->
+            </p>
+        </div>
+
+        <div class="grammar-box" id="s1-grammar">
+            <!-- Generated by JS -->
+        </div>
+
+        <div class="mini-nav">
+            <div></div>
+            <button class="nav-btn" style="background:#059669; color:#fff;" onclick="nextScenario(1)">🔄 <span
+                    class="lang-en">Next Scenario</span><span class="lang-cn">換個情境</span></button>
+            <button class="nav-btn" onclick="goToStage(2)">▶ <span class="lang-en">Next: Anchoring</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 2: Anchoring Effect (Reading) ================= -->
+    <div id="stage2" class="stage simulator-screen">
+        <div class="scenario-badge" id="s2-badge" style="background:#fef3c7; color:#d97706; border-color:#d97706;">
+            Scenario 1/4</div>
+        <h2><span class="lang-en">Stage 2: The Anchoring Effect ⚓</span><span class="lang-cn">階段 2：錨定效應 (UEC
+                閱讀理解)</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Read the passage about pricing psychology and answer the questions below.</span>
+            <span class="lang-cn">閱讀這段關於定價心理學的短文，並回答下方的 UEC 模擬問題。</span>
+        </p>
+
+        <div class="reading-passage" id="s2-passage">
+            <!-- Generated by JS -->
+        </div>
+
+        <div id="s2-questions">
+            <!-- Generated by JS -->
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(1)">◀ <span class="lang-en">Prev</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#d97706; color:#fff;" onclick="nextScenario(2)">🔄 <span
+                    class="lang-en">Next Reading</span><span class="lang-cn">換篇文章</span></button>
+            <button class="nav-btn" onclick="goToStage(3)">▶ <span class="lang-en">Next: Margins</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 3: Information Transfer ================= -->
+    <div id="stage3" class="stage simulator-screen">
+        <div class="scenario-badge" id="s3-badge" style="background:#e0e7ff; color:#047857; border-color:#047857;">
+            Scenario 1/4</div>
+        <h2><span class="lang-en">Stage 3: Know Your Margins 📊</span><span class="lang-cn">階段 3：計算你的利潤 (圖表寫作)</span>
+        </h2>
+        <p style="color:#555;" id="s3-desc">
+            <span class="lang-en">Analyze the cost breakdown of ONE box of press-on nails (Selling Price: RM25).</span>
+            <span class="lang-cn">分析一盒穿戴甲的成本結構（售價：RM25）。</span>
+        </p>
+
+        <div class="chart-container" id="s3-chart">
+            <!-- Generated by JS -->
+        </div>
+
+        <div class="cloze-test" id="s3-cloze">
+            <!-- Generated by JS -->
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(2)">◀ <span class="lang-en">Prev</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#047857; color:#fff;" onclick="nextScenario(3)">🔄 <span
+                    class="lang-en">Next Industry</span><span class="lang-cn">換個行業</span></button>
+            <button class="nav-btn" onclick="goToStage(4)">▶ <span class="lang-en">Next: FOMO</span><span
+                    class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 4: Scarcity (FOMO) ================= -->
+    <div id="stage4" class="stage simulator-screen">
+        <h2><span class="lang-en">Stage 4: FOMO Marketing ⏰</span><span class="lang-cn">階段 4：稀缺性與飢餓行銷</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Fear Of Missing Out (FOMO) drives sales. Upgrade these boring sentences into powerful
+                marketing hooks using correct grammar (Prepositions & Phrasal Verbs).</span>
+            <span class="lang-cn">「錯失恐懼症」(FOMO) 是推動銷量的利器。利用正確的語法（介詞與動詞短語），將這些無聊的句子升級為強有力的行銷文案！(UEC 改錯填空)</span>
+        </p>
+
+        <div class="fomo-box">
+            <div class="fomo-row">
+                <span class="fomo-bad">1. Buy now because we only have 5 left.</span>
+                <span class="lang-en">"Hurry! Only 5 sets </span><span class="lang-cn">「快點！只 </span>
+                <select class="fomo-select" id="f1" onchange="checkFomo('f1', 'remain')">
+                    <option value="">---</option>
+                    <option value="remains">remains</option>
+                    <option value="remain">remain</option>
+                    <option value="remaining">remaining</option>
+                </select>
+                <span class="lang-en"> in stock!"</span><span class="lang-cn"> 5套庫存了！」</span>
+                <span class="fomo-res" id="res-f1"></span>
+            </div>
+
+            <div class="fomo-row">
+                <span class="fomo-bad">2. The discount will end at Friday.</span>
+                <span class="lang-en">"This exclusive 50% discount will end </span><span class="lang-cn">「這項獨家50%折扣將
+                </span>
+                <select class="fomo-select" id="f2" onchange="checkFomo('f2', 'on')">
+                    <option value="">---</option>
+                    <option value="in">in</option>
+                    <option value="at">at</option>
+                    <option value="on">on</option>
+                </select>
+                <span class="lang-en"> Friday midnight!"</span><span class="lang-cn"> 週五午夜結束！」</span>
+                <span class="fomo-res" id="res-f2"></span>
+            </div>
+
+            <div class="fomo-row">
+                <span class="fomo-bad">3. If you don't buy, you will regret.</span>
+                <span class="lang-en">"Don't miss </span><span class="lang-cn">「不要 </span>
+                <select class="fomo-select" id="f3" onchange="checkFomo('f3', 'out on')">
+                    <option value="">---</option>
+                    <option value="out">out</option>
+                    <option value="out of">out of</option>
+                    <option value="out on">out on</option>
+                </select>
+                <span class="lang-en"> this once-in-a-lifetime offer!"</span><span class="lang-cn"> 這個千載難逢的優惠！」</span>
+                <span class="fomo-res" id="res-f3"></span>
+            </div>
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(3)">◀ <span class="lang-en">Prev</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" onclick="goToStage(5)">▶ <span class="lang-en">Next: Build Tiers</span><span
+                    class="lang-cn">下一關：打造定價</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 5: Pricing Builder ================= -->
+    <div id="stage5" class="stage simulator-screen">
+        <h2><span class="lang-en">Stage 5: Build Your Empire 🏗️</span><span class="lang-cn">階段 5：打造你的定價階梯</span></h2>
+        <p style="color:#555;">
+            <span class="lang-en">Apply BOTH the Anchor and the Decoy Effect! Design 4 tiers to push customers to the
+                VIP package.</span>
+            <span class="lang-cn">將「錨定效應」與「誘餌效應」同時應用！設計 4 個定價階梯，完美引導顧客購買 VIP 套餐。</span>
+        </p>
+
+        <div class="tiers-grid">
+            <!-- The Anchor -->
+            <div class="tier-card tier-anchor">
+                <div class="decoy-label" style="display:block; background:#8e44ad; right:auto; left:-10px;">⚓ THE ANCHOR
+                </div>
+                <div class="tier-header"><span class="lang-en">1. Super Luxury</span><span class="lang-cn">1.
+                        奢華錨點</span></div>
+                <label>Name:</label><input type="text" id="t0-name" value="Swarovski Crystal Set">
+                <label>Price (RM):</label><input type="number" id="t0-price" value="199">
+                <label>Includes:</label><textarea
+                    id="t0-desc">Hand-placed real crystals. Not expected to sell much, just to make others look cheap.</textarea>
+            </div>
+
+            <!-- Basic Tier -->
+            <div class="tier-card">
+                <div class="tier-header"><span class="lang-en">2. Basic Tier</span><span class="lang-cn">2. 基礎套餐</span>
+                </div>
+                <label>Name:</label><input type="text" id="t1-name" value="Plain Color Nails">
+                <label>Price (RM):</label><input type="number" id="t1-price" value="15">
+                <label>Includes:</label><textarea id="t1-desc">Just 10 plain nails. No glue.</textarea>
+            </div>
+
+            <!-- Decoy Tier -->
+            <div class="tier-card tier-decoy">
+                <div class="decoy-label" style="display:block;">🎣 THE DECOY</div>
+                <div class="tier-header"><span class="lang-en">3. Premium</span><span class="lang-cn">3. 進階套餐</span>
+                </div>
+                <label>Name:</label><input type="text" id="t2-name" value="Custom Design">
+                <label>Price (RM):</label><input type="number" id="t2-price" value="28">
+                <label>Includes:</label><textarea id="t2-desc">Beautiful designs + Jelly glue.</textarea>
+            </div>
+
+            <!-- VIP Target Tier -->
+            <div class="tier-card tier-target">
+                <div class="decoy-label" style="display:block; background:#f1c40f; color:#333; right:10px;">👑 TARGET
+                </div>
+                <div class="tier-header"><span class="lang-en">4. VIP Package</span><span class="lang-cn">4. 尊享套餐</span>
+                </div>
+                <label>Name:</label><input type="text" id="t3-name" value="The Ultimate Set">
+                <label>Price (RM):</label><input type="number" id="t3-price" value="30">
+                <label>Includes:</label><textarea id="t3-desc">Custom designs + Prep kit + Fast shipping!</textarea>
+            </div>
+        </div>
+
+        <button class="btn" onclick="generatePitch()" style="margin-top:30px;">
+            <span class="lang-en">Finalize Pricing & Prepare Pitch</span><span class="lang-cn">確認定價並準備路演</span>
+        </button>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(4)">◀ <span class="lang-en">Prev</span><span
+                    class="lang-cn">上一關</span></button>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 6: Boardroom Pitch ================= -->
+    <div id="stage6" class="stage simulator-screen" style="background: #2c3e50; border-color: #f1c40f;">
+        <h2 style="color:#f1c40f;"><span class="lang-en">Stage 6: The Boardroom Pitch 🎤</span><span class="lang-cn">階段
+                6：董事會英文匯報</span></h2>
+        <p style="color:#ddd;">
+            <span class="lang-en">Read your auto-generated business pitch aloud. See how psychology and formal English
+                create a persuasive argument.</span>
+            <span class="lang-cn">大聲朗讀你自動生成的商業匯報。感受心理學和正式英文是如何結合成為極具說服力的論點的。(訓練口語表達)</span>
+        </p>
+
+        <div class="pitch-deck" id="pitch-output">
+            <div style="text-align:center; color:#7f8c8d; font-style:italic;">Please complete Stage 5 first to generate
+                your pitch.</div>
+        </div>
+
+        <div class="mini-nav" style="border-top-color: rgba(255,255,255,0.2);">
+            <button class="nav-btn"
+                style="background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.2); color:#f1c40f;"
+                onclick="goToStage(5)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <div><span style="color:#2ecc71; font-weight:bold; display:none;" id="finish-msg">🎉 CEO Training
+                    Completed!</span></div>
+        </div>
+    </div>
+
+    <script>
+        /* ================= UTILS ================= */
+        function toggleLanguage() { document.body.classList.toggle('show-cn'); }
+        function goToStage(target) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage' + target).classList.add('active');
+
+            // 計算進度條 (每關約 16.66%)
+            document.getElementById('mainProgress').style.width = (target * 16.66) + '%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 觸發 Stage 3 的柱狀圖動畫
+            if (target === 3) {
+                setTimeout(() => {
+                    triggerStage3Bars();
+                }, 300);
+            }
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({ stage: target });
+            }
+        }
+
+        let currS1 = 0, currS2 = 0, currS3 = 0;
+        function nextScenario(stage) {
+            if (stage === 1) { currS1 = (currS1 + 1) % dataS1.length; renderS1(); }
+            if (stage === 2) { currS2 = (currS2 + 1) % dataS2.length; renderS2(); }
+            if (stage === 3) { currS3 = (currS3 + 1) % dataS3.length; renderS3(); triggerStage3Bars(); }
+        }
+
+        function checkG(id, correctAns) {
+            let el = document.getElementById(id);
+            if (el.value === correctAns) { el.style.backgroundColor = '#d1fae5'; el.style.borderColor = '#10b981'; }
+            else if (el.value !== "") { el.style.backgroundColor = '#fee2e2'; el.style.borderColor = '#ef4444'; }
+        }
+
+        /* ================= DATA: STAGE 1 (Decoy Effect - 5 Sets) ================= */
+        const dataS1 = [
+            {
+                icon: "🍿", itemEn: "Popcorn", itemCn: "電影院爆米花", p1: "Small (RM 10)", p2: "Medium (RM 16)", p3: "Large (RM 17)", target: "Large", diff: "RM1",
+                expEn: "Almost everyone chooses Large. Why? Because the Medium size is a Decoy. It exists ONLY to make the Large size look like a fantastic deal.",
+                expCn: "幾乎所有人都會選大份。因為中份只是一個「誘餌」。它存在的唯一目的就是讓大份看起來超級划算。",
+                g1: { pre: "The Medium popcorn is significantly ", opts: ["expensive", "more expensive", "the most expensive"], ans: "more expensive", post: " than the Small one." },
+                g2: { pre: "However, the Large popcorn is only RM1 extra, making it ", opts: ["attractive", "more attractive", "the most attractive"], ans: "the most attractive", post: " option." },
+                g3: { pre: "Because of this decoy, selling the Large size becomes highly ", opts: ["profitable", "more profitable", "the most profitable"], ans: "profitable", post: " for the cinema." }
+            },
+            {
+                icon: "☕", itemEn: "Coffee Shop", itemCn: "星巴克咖啡", p1: "Tall (RM 12)", p2: "Grande (RM 15)", p3: "Venti (RM 16)", target: "Venti", diff: "RM1",
+                expEn: "The Grande size is the decoy. By pushing the price of Grande closer to Venti, customers feel foolish not upgrading for just RM1.",
+                expCn: "大杯 (Grande) 是誘餌。把大杯價格定得很靠近特大杯 (Venti)，顧客會覺得不加 RM1 升級簡直是傻瓜。",
+                g1: { pre: "A Venti cup is ", opts: ["large", "much larger", "the largest"], ans: "much larger", post: " than a Tall cup, but costs only RM4 more." },
+                g2: { pre: "Compared to buying Grande, upgrading to Venti is definitely ", opts: ["smart", "smarter", "the smartest"], ans: "the smartest", post: " financial choice." },
+                g3: { pre: "This pricing model has proven to be ", opts: ["effective", "highly effective", "the most effective"], ans: "highly effective", post: " for global coffee chains." }
+            },
+            {
+                icon: "💻", itemEn: "Software Subscription", itemCn: "軟體訂閱", p1: "Basic (RM 20)", p2: "Pro (RM 45)", p3: "Premium (RM 49)", target: "Premium", diff: "RM4",
+                expEn: "Digital products cost nothing to duplicate. The Pro tier is a decoy to trick you into buying Premium, maximizing their Monthly Recurring Revenue.",
+                expCn: "數位產品複製零成本。Pro 版本是誘餌，為了騙你買 Premium，從而最大化他們每月的經常性收入 (MRR)。",
+                g1: { pre: "The features in the Premium plan are ", opts: ["good", "better", "the best"], ans: "the best", post: " among all the options." },
+                g2: { pre: "For a business, acquiring Premium users generates a ", opts: ["high", "substantially higher", "the highest"], ans: "substantially higher", post: " lifetime value." },
+                g3: { pre: "Therefore, using the Pro tier as a decoy is an ", opts: ["incredibly successful", "more successful", "most successful"], ans: "incredibly successful", post: " marketing tactic." }
+            },
+            {
+                icon: "🎢", itemEn: "Theme Park Tickets", itemCn: "遊樂園門票", p1: "1-Day (RM 150)", p2: "2-Day (RM 240)", p3: "3-Day (RM 250)", target: "3-Day", diff: "RM10",
+                expEn: "Theme parks want to keep you trapped in their ecosystem to buy overpriced food. The 2-Day ticket makes the 3-Day ticket look irresistible.",
+                expCn: "遊樂園想把你困在裡面買昂貴的食物。2日票的存在讓3日票看起來無法抗拒。",
+                g1: { pre: "When calculating the cost per day, the 3-Day ticket is ", opts: ["affordable", "more affordable", "the most affordable"], ans: "the most affordable", post: " choice." },
+                g2: { pre: "The park ensures that visitors stay for ", opts: ["long", "longer", "the longest"], ans: "the longest", post: " possible duration." },
+                g3: { pre: "This is a ", opts: ["persuasive", "highly persuasive", "the most persuasive"], ans: "highly persuasive", post: " strategy to maximize spending." }
+            },
+            {
+                icon: "🏋️‍♀️", itemEn: "Gym Membership", itemCn: "健身房會員", p1: "Gym Only (RM 100)", p2: "Classes (RM 120)", p3: "Gym+Classes (RM 130)", target: "Gym+Classes", diff: "RM10",
+                expEn: "They want to upsell you. Offering 'Classes Only' for RM120 makes the 'All Access' pass for RM130 seem like an incredible bargain.",
+                expCn: "他們想向上銷售 (Upsell)。提供 RM120 的「純課程」會讓 RM130 的「全通行證」看起來像個不可思議的便宜貨。",
+                g1: { pre: "The 'Gym+Classes' pass offers a ", opts: ["good", "slightly better", "the best"], ans: "slightly better", post: " deal compared to 'Classes Only'." },
+                g2: { pre: "This combination is undoubtedly ", opts: ["ultimate", "more ultimate", "the ultimate"], ans: "the ultimate", post: " package for fitness lovers." },
+                g3: { pre: "As a result, this membership tier remains ", opts: ["popular", "extremely popular", "the most popular"], ans: "extremely popular", post: " all year round." }
+            }
+        ];
+
+        function renderS1() {
+            document.getElementById('s1-badge').innerText = `Scenario ${currS1 + 1}/5`;
+            let d = dataS1[currS1];
+
+            document.getElementById('s1-desc').innerHTML = `<span class="lang-en">Scenario: ${d.itemEn}. Which option would you buy? Click your choice.</span><span class="lang-cn">情境：${d.itemCn}。你會買哪個？點擊選擇。</span>`;
+
+            document.getElementById('s1-options').innerHTML = `
+      <div class="popcorn-box" onclick="revealDecoy()"><div class="popcorn-icon">${d.icon}</div><div>${d.p1.split(' ')[0]}</div><div class="popcorn-price">${d.p1.split(' ').slice(1).join(' ')}</div></div>
+      <div class="popcorn-box" id="box-medium" onclick="revealDecoy()"><div class="decoy-label" id="decoy-tag">THE DECOY!</div><div class="popcorn-icon">${d.icon}${d.icon}</div><div>${d.p2.split(' ')[0]}</div><div class="popcorn-price">${d.p2.split(' ').slice(1).join(' ')}</div></div>
+      <div class="popcorn-box" style="border-color: #f1c40f;" onclick="revealDecoy()"><div class="popcorn-icon">${d.icon}${d.icon}${d.icon}</div><div>${d.p3.split(' ')[0]}</div><div class="popcorn-price">${d.p3.split(' ').slice(1).join(' ')}</div></div>
+    `;
+
+            document.getElementById('s1-exp').innerHTML = `<span class="lang-en">${d.expEn}</span><span class="lang-cn">${d.expCn}</span>`;
+
+            // Hide explanation initially
+            document.getElementById('decoy-explanation').style.display = 'none';
+
+            document.getElementById('s1-grammar').innerHTML = `
+      <p style="margin-top:0; font-weight:bold; color:#059669;">UEC Grammar Challenge (Comparatives & Superlatives):</p>
+      ${d.g1.pre} <select class="grammar-select" id="g1" onchange="checkG('g1', '${d.g1.ans}')"><option value="">---</option>${d.g1.opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select> ${d.g1.post}
+      ${d.g2.pre} <select class="grammar-select" id="g2" onchange="checkG('g2', '${d.g2.ans}')"><option value="">---</option>${d.g2.opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select> ${d.g2.post}
+      ${d.g3.pre} <select class="grammar-select" id="g3" onchange="checkG('g3', '${d.g3.ans}')"><option value="">---</option>${d.g3.opts.map(o => `<option value="${o}">${o}</option>`).join('')}</select> ${d.g3.post}
+    `;
+        }
+
+        /* ================= DATA: STAGE 2 (Anchoring Effect - 4 Readings) ================= */
+        const dataS2 = [
+            { // 1. Luxury Bag
+                passage: {
+                    en: "Have you ever walked past a luxury store like Hermès? They often place a spectacular RM100,000 diamond-encrusted handbag right in the front window. Interestingly, they don't actually expect to sell many of these bags. The true purpose of this ridiculously expensive item is to set an <b>'Anchor'</b> in the customer's mind. Once your brain is anchored to the RM100,000 price tag, suddenly the RM3,000 leather wallet inside the store looks incredibly cheap and affordable! Human psychology relies heavily on the first piece of information received when making decisions.",
+                    cn: "你有沒有路過像愛馬仕這樣的奢侈品店？他們經常在正門櫥窗放一個價值 RM100,000 的鑲鑽手提包。有趣的是，他們其實並不指望能賣出這個包。這個貴得離譜的物品的真正目的，是在顧客的腦海中設定一個<b>「錨點」</b>。一旦你的大腦被 10 萬的標籤錨定，店裡 RM3,000 的真皮錢包看起來就變得難以置信地便宜！人類心理學在做決定時，嚴重依賴接收到的第一條資訊。"
+                },
+                q1: { q: "1. What is the main purpose of the RM100,000 bag in the window?", opts: [{ t: "To show off the store's wealth.", a: false }, { t: "To make other items seem cheaper by comparison.", a: true }, { t: "To attract rich people to buy it.", a: false }] },
+                q2: { q: "2. The phrase 'relies heavily on' can be best replaced by:", opts: [{ t: "depends greatly on", a: true }, { t: "ignores completely", a: false }, { t: "complains about", a: false }] },
+                q3: { q: "3. True or False: The store expects the RM100,000 bag to be their best-selling item.", opts: [{ t: "True", a: false }, { t: "False", a: true }] }
+            },
+            { // 2. Apple Mac Pro Wheels
+                passage: {
+                    en: "In tech, anchoring is used to shift our perception of 'expensive'. For example, Apple once released a set of wheels for their Mac Pro computer that cost an astonishing RM3,000. People were outraged on Twitter! However, this was a calculated move. By anchoring consumers to a RM3,000 set of simple metal wheels, upgrading your iPhone storage for an extra RM500 suddenly feels completely reasonable. The wheels justify the premium ecosystem.",
+                    cn: "在科技界，錨定效應被用來改變我們對「昂貴」的認知。例如，蘋果曾為其 Mac Pro 電腦推出一套要價驚人 RM3,000 的輪子。網上一片嘩然！然而，這是計算好的。透過讓消費者對一套簡單的金屬輪子產生 3000 塊的錨點，花 RM500 升級 iPhone 的儲存空間突然變得完全合理。輪子合理化了這個高溢價的生態系統。"
+                },
+                q1: { q: "1. Why did Apple release RM3,000 computer wheels?", opts: [{ t: "Because the wheels feature advanced AI tech.", a: false }, { t: "To make other RM500 upgrades feel reasonable.", a: true }, { t: "Because metal is extremely rare.", a: false }] },
+                q2: { q: "2. In this context, what does 'justify' mean?", opts: [{ t: "To provide a good reason for something.", a: true }, { t: "To apologize for a mistake.", a: false }, { t: "To make something illegal.", a: false }] },
+                q3: { q: "3. True or False: The outrage on Twitter ruined Apple's calculated strategy.", opts: [{ t: "True", a: false }, { t: "False", a: true }] }
+            },
+            { // 3. Menu Engineering
+                passage: {
+                    en: "Restaurants use 'Menu Engineering' to maximize profits. A classic trick is placing a RM300 Wagyu Steak at the very top right corner of the menu. Most diners will not order it. But its psychological job is done: it serves as the anchor. Because you saw the RM300 steak first, ordering the RM80 truffle pasta on the next page feels like a smart, economical choice. The steak is the decoy that drives pasta sales.",
+                    cn: "餐廳利用「菜單工程」來最大化利潤。一個經典的把戲是把售價 RM300 的和牛牛排放在菜單右上角。大多數食客不會點它。但它的心理學任務已經完成：作為錨點。因為你先看到了 300 塊的牛排，翻到下一頁點 RM80 的松露義大利麵時，就會覺得這是一個聰明、經濟的選擇。牛排是帶動義大利麵銷量的誘餌。"
+                },
+                q1: { q: "1. Why is the RM300 Wagyu Steak placed at the top of the menu?", opts: [{ t: "To ensure every customer orders it.", a: false }, { t: "To act as a psychological anchor.", a: true }, { t: "To show the chef's best cooking skills.", a: false }] },
+                q2: { q: "2. Which word in the passage is a synonym for 'economical'?", opts: [{ t: "expensive", a: false }, { t: "smart", a: true }, { t: "classic", a: false }] },
+                q3: { q: "3. True or False: The RM80 pasta is the actual item the restaurant wants you to buy.", opts: [{ t: "True", a: true }, { t: "False", a: false }] }
+            },
+            { // 4. Salary Negotiation
+                passage: {
+                    en: "Anchoring is a powerful tool in salary negotiations. Imagine you want a salary of RM5,000. If you ask for exactly RM5,000, the employer might counter-offer RM4,500. Instead, experts suggest setting a high anchor, like RM8,000. The employer will likely reject this, but their perception of your value has shifted upward. When they counter-offer with RM6,000, they feel like they won the negotiation, while you actually got RM1,000 more than your original goal!",
+                    cn: "錨定效應在薪資談判中是個強大的工具。想像你想要 RM5,000 的月薪。如果你直接要 5000，雇主可能會砍價到 4500。專家建議先設定一個高錨點，比如 RM8,000。雇主很可能會拒絕，但他們對你價值的認知已經被拉高了。當他們還價 RM6,000 時，他們覺得自己贏了談判，而你實際上比原定目標多拿了 1000 塊！"
+                },
+                q1: { q: "1. What is the recommended strategy when negotiating a salary?", opts: [{ t: "Ask for exactly what you want to be honest.", a: false }, { t: "Set a high initial number as an anchor.", a: true }, { t: "Wait for the employer to speak first.", a: false }] },
+                q2: { q: "2. What does 'counter-offer' mean in this passage?", opts: [{ t: "To propose an alternative deal or price.", a: true }, { t: "To accept the offer immediately.", a: false }, { t: "To end the conversation angrily.", a: false }] },
+                q3: { q: "3. True or False: The goal of asking for RM8,000 is to actually get RM8,000.", opts: [{ t: "True", a: false }, { t: "False", a: true }] }
+            }
+        ];
+
+        function renderS2() {
+            document.getElementById('s2-badge').innerText = `Scenario ${currS2 + 1}/4`;
+            let d = dataS2[currS2];
+            document.getElementById('s2-passage').innerHTML = `<span class="lang-en">${d.passage.en}</span><span class="lang-cn">${d.passage.cn}</span>`;
+
+            let html = "";
+            [d.q1, d.q2, d.q3].forEach((q, i) => {
+                html += `<div class="mcq-question"><p>${q.q}</p>`;
+                q.opts.forEach(opt => {
+                    html += `<div class="mcq-opt" onclick="checkMCQ(this, ${opt.a})">${opt.t}</div>`;
+                });
+                html += `</div>`;
+            });
+            document.getElementById('s2-questions').innerHTML = html;
+        }
+        function checkMCQ(el, isCorrect) {
+            let siblings = el.parentElement.querySelectorAll('.mcq-opt');
+            siblings.forEach(s => { s.classList.remove('correct', 'wrong'); });
+            if (isCorrect) el.classList.add('correct'); else el.classList.add('wrong');
+        }
+
+        /* ================= DATA: STAGE 3 (Information Transfer - Select Dropdowns) ================= */
+        const dataS3 = [
+            {
+                ind: "Press-on Nails", total: 25, l1: "Nails/Glue", v1: 5, l2: "Packaging", v2: 3, l3: "IG Ads", v3: 2, profit: 15,
+                clzPre: "Based on the chart, the selling price is RM25. The ", c1: "highest", o1: ["highest", "lowest", "average"], clz2: " expense is raw materials, which ", c2: "accounts", o2: ["accounts", "makes", "takes"], clz3: " for RM5. Packaging and ads cost RM3 and RM2 ", c3: "respectively", o3: ["separately", "respectively", "individually"], clz4: ". After costs, it generates a net ", c4: "profit", o4: ["revenue", "loss", "profit"], clz5: " of RM15."
+            },
+            {
+                ind: "3D Printed Custom Parts", total: 50, l1: "Filament", v1: 10, l2: "Electricity", v2: 5, l3: "Maintenance", v3: 5, profit: 30,
+                clzPre: "According to the chart, the 3D printed part sells for RM50. The ", c1: "majority", o1: ["minority", "majority", "half"], clz2: " of the cost goes to filament, which ", c2: "represents", o2: ["represents", "shows", "gives"], clz3: " RM10. Electricity and maintenance are equal, costing RM5 ", c3: "respectively", o3: ["equally", "respectively", "totally"], clz4: ". This yields a high profit ", c4: "margin", o4: ["margin", "cost", "price"], clz5: " of RM30."
+            },
+            {
+                ind: "Online Physics Course", total: 100, l1: "Platform Fee", v1: 10, l2: "Materials", v2: 5, l3: "Marketing", v3: 15, profit: 70,
+                clzPre: "The online course is priced at RM100. Interestingly, the ", c1: "lowest", o1: ["highest", "lowest", "maximum"], clz2: " expense is study materials at RM5. Marketing ", c2: "comprises", o2: ["comprises", "contains", "excludes"], clz3: " RM15. ", c3: "Additionally", o3: ["However", "Additionally", "Therefore"], clz4: ", the platform fee takes RM10. This makes digital courses a highly ", c4: "lucrative", o4: ["lucrative", "risky", "failing"], clz5: " business with RM70 profit."
+            },
+            {
+                ind: "Smartphone Cases", total: 40, l1: "Manufacturing", v1: 8, l2: "Shipping", v2: 4, l3: "Influencer PR", v3: 8, profit: 20,
+                clzPre: "A phone case retails for RM40. The ", c1: "highest", o1: ["highest", "lowest", "average"], clz2: " costs are manufacturing and Influencer PR, which both ", c2: "account", o2: ["account", "amount", "charge"], clz3: " for RM8, proving they are of ", c3: "equal", o3: ["different", "equal", "lesser"], clz4: " importance. Shipping takes RM4, leaving total net ", c4: "earnings", o4: ["earnings", "spending", "debts"], clz5: " at RM20."
+            }
+        ];
+
+        function renderS3() {
+            document.getElementById('s3-badge').innerText = `Scenario ${currS3 + 1}/4`;
+            let d = dataS3[currS3];
+            document.getElementById('s3-desc').innerHTML = `<span class="lang-en">Analyze the cost breakdown of ONE unit of <b>${d.ind}</b> (Selling Price: RM${d.total}).</span><span class="lang-cn">分析 <b>${d.ind}</b> 的單位成本結構（售價：RM${d.total}）。</span>`;
+
+            // Reset widths to 0 before rendering
+            document.getElementById('s3-chart').innerHTML = `
+      <div class="bar-row"><div class="bar-label">${d.l1} <span>RM${d.v1}</span></div><div class="bar-track"><div class="bar-fill fill-1" id="bar-mat"></div></div></div>
+      <div class="bar-row"><div class="bar-label">${d.l2} <span>RM${d.v2}</span></div><div class="bar-track"><div class="bar-fill fill-2" id="bar-pac"></div></div></div>
+      <div class="bar-row"><div class="bar-label">${d.l3} <span>RM${d.v3}</span></div><div class="bar-track"><div class="bar-fill fill-3" id="bar-ads"></div></div></div>
+      <div class="bar-row" style="margin-top:20px; border-top:2px dashed #adb5bd; padding-top:10px;"><div class="bar-label" style="color:#059669;">Net Profit <span>RM${d.profit}</span></div><div class="bar-track"><div class="bar-fill fill-4" id="bar-pro"></div></div></div>
+    `;
+
+            document.getElementById('s3-cloze').innerHTML = `
+      <p style="margin-top:0; font-weight:bold; color:#059669;">UEC Information Transfer Report:</p>
+      ${d.clzPre} 
+      <select class="cloze-select" id="c1" onchange="checkCloze('c1', '${d.c1}')">
+        <option value="">---</option>${d.o1.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select> 
+      ${d.clz2} 
+      <select class="cloze-select" id="c2" onchange="checkCloze('c2', '${d.c2}')">
+        <option value="">---</option>${d.o2.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select> 
+      ${d.clz3} 
+      <select class="cloze-select" id="c3" onchange="checkCloze('c3', '${d.c3}')">
+        <option value="">---</option>${d.o3.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select> 
+      ${d.clz4} 
+      <select class="cloze-select" id="c4" onchange="checkCloze('c4', '${d.c4}')">
+        <option value="">---</option>${d.o4.map(o => `<option value="${o}">${o}</option>`).join('')}
+      </select> 
+      ${d.clz5}
+    `;
+        }
+
+        function checkCloze(id, correctAns) {
+            let el = document.getElementById(id);
+            if (el.value === correctAns) {
+                el.style.color = '#059669'; el.style.borderBottomColor = '#059669'; el.style.backgroundColor = '#d1fae5';
+            } else if (el.value !== "") {
+                el.style.color = '#b91c1c'; el.style.borderBottomColor = '#ef4444'; el.style.backgroundColor = '#fee2e2';
+            } else {
+                el.style.color = '#10b981'; el.style.borderBottomColor = '#adb5bd'; el.style.backgroundColor = 'transparent';
+            }
+        }
+
+        function triggerStage3Bars() {
+            let d = dataS3[currS3];
+            setTimeout(() => {
+                document.getElementById('bar-mat').style.width = ((d.v1 / d.total) * 100) + '%';
+                document.getElementById('bar-pac').style.width = ((d.v2 / d.total) * 100) + '%';
+                document.getElementById('bar-ads').style.width = ((d.v3 / d.total) * 100) + '%';
+                document.getElementById('bar-pro').style.width = ((d.profit / d.total) * 100) + '%';
+            }, 300);
+        }
+
+        // FOMO Check
+        function checkFomo(id, correctAns) {
+            let el = document.getElementById(id);
+            let res = document.getElementById('res-' + id);
+            if (el.value === correctAns) {
+                el.style.backgroundColor = '#d1fae5'; el.style.borderColor = '#10b981'; el.style.color = '#059669';
+                res.innerText = "✅";
+            } else if (el.value !== "") {
+                el.style.backgroundColor = '#fee2e2'; el.style.borderColor = '#ef4444'; el.style.color = '#ef4444';
+                res.innerText = "❌";
+            }
+        }
+
+        // Pitch Gen
+        function generatePitch() {
+            let n0 = document.getElementById('t0-name').value; let p0 = document.getElementById('t0-price').value;
+            let n1 = document.getElementById('t1-name').value; let p1 = document.getElementById('t1-price').value;
+            let n2 = document.getElementById('t2-name').value; let p2 = document.getElementById('t2-price').value;
+            let n3 = document.getElementById('t3-name').value; let p3 = document.getElementById('t3-price').value; let d3 = document.getElementById('t3-desc').value;
+
+            let diff = p3 - p2;
+
+            let pitchHtml = `
+      <div class="pitch-text">
+        "Good morning, Investors. Today, I am presenting the pricing strategy for my press-on nail brand. Based on <b>consumer psychology</b>, we have structured four distinct tiers.<br><br>
+        
+        First, we introduce the <span class="highlight">${n0}</span> at <b>RM${p0}</b>. This acts as our <b>Price Anchor</b>. We don't expect to sell many, but its high price instantly makes our other products look extremely affordable.<br><br>
+
+        Our entry-level product is <span class="highlight">${n1}</span> priced at <b>RM${p1}</b>.<br><br>
+
+        However, our core strategy relies on the <b>Decoy Effect</b>. We introduced the <span class="highlight">${n2}</span> at <b>RM${p2}</b>. It is intentionally priced very close to our target product.<br><br>
+
+        Our ultimate goal is to drive sales to the <span class="highlight">${n3}</span>. Priced at <b>RM${p3}</b>, it is only <b>RM${diff}</b> more expensive than the decoy, but it includes <span style="font-size:0.9em; opacity:0.8;">${d3}</span>.<br><br>
+
+        By combining the <b>Anchoring</b> and <b>Decoy</b> effects, customers will perceive the VIP Package as <b>the most cost-effective</b> option, maximizing our overall profit margins. Furthermore, we will utilize FOMO marketing tactics like 'limited stock' to accelerate purchasing decisions. Thank you."
+      </div>
+    `;
+
+            document.getElementById('pitch-output').innerHTML = pitchHtml;
+            goToStage(6);
+            document.getElementById('finish-msg').style.display = 'inline';
+        }
+
+        window.onload = async function () { 
+            renderS1(); renderS2(); renderS3(); 
+            if (typeof ProgressTracker !== 'undefined') {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data && saved.progress_data.stage) {
+                    goToStage(saved.progress_data.stage);
+                }
+            }
+        };
+    </script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="uec-sen-eng-pricing"
+            data-module-name="The Profit Playbook Pro"
+            data-module-url="content/UEC_Syllabus/Senior/English/Pricing_Strategy/index.html">
+    </script>
+
+</body>
+
+</html>

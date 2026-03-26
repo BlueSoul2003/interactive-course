@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SPM 阅读理解黑客 V7 - 终极双语辅助版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.4s ease-out forwards',
+                        'slide-in-right': 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { transform: 'translateY(10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideInRight: {
+                            '0%': { transform: 'translateX(100%)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .highlight-text {
+            background: linear-gradient(120deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #166534;
+            font-weight: 600;
+            border-radius: 4px;
+            padding: 2px 4px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .error-text {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border-radius: 4px;
+            padding: 2px 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 针对打印的特殊优化 */
+        @media print {
+            body {
+                background: white !important;
+            }
+
+            .print-hidden {
+                display: none !important;
+            }
+
+            .print-break-inside-avoid {
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .print-text-black {
+                color: black !important;
+            }
+
+            .print-border-black {
+                border-color: black !important;
+            }
+
+            .print-bg-transparent {
+                background: transparent !important;
+            }
+
+            .shadow-sm,
+            .shadow-md,
+            .shadow-lg,
+            .shadow-xl {
+                box-shadow: none !important;
+                border: 1px solid #e5e7eb;
+            }
+        }
+
+        /* 翻译 Toggle 动画 */
+        .trans-text {
+            display: none;
+        }
+
+        .show-trans .trans-text {
+            display: block;
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="font-sans text-slate-800 antialiased min-h-screen pb-12">
+    <a href="../../../../../index.html" class="home-btn print-hidden" style="position: fixed; top: 20px; left: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
+
+    <div id="app"></div>
+
+    <script>
+        // ==========================================
+        // 📚 数据库 (Databases) - 简体中文版
+        // ==========================================
+
+        // --- Module 1: 带有中文翻译的检索库 ---
+        const mod1Data = [
+            {
+                id: 'm1_1', title: 'Level 1: 暖身 (适中)', question: 'Berdasarkan petikan di bawah, nyatakan punca-punca berlakunya kemalangan jalan raya.', targetCount: 2,
+                text: [
+                    { t: "Kemalangan jalan raya semakin kerap berlaku di negara kita saban hari.", trans: "我国每天发生车祸的频率越来越高。", isTarget: false },
+                    { t: "Terdapat pelbagai faktor yang menyebabkan tragedi ini terus meningkat.", trans: "有许多因素导致这场悲剧不断增加。", isTarget: false },
+                    { t: "Antaranya, sikap pemandu yang suka memandu melebihi had laju yang ditetapkan.", trans: "其中，司机喜欢超速驾驶的态度是原因之一。", isTarget: true },
+                    { t: "Mereka sering berlumba-lumba untuk cepat sampai ke destinasi.", trans: "他们经常争先恐后地想快点到达目的地。", isTarget: false },
+                    { t: "Selain itu, keadaan jalan raya yang berlubang dan rosak turut mengundang bahaya.", trans: "此外，坑洼和损坏的路况也带来了危险。", isTarget: true },
+                    { t: "Oleh itu, kita haruslah berhati-hati semasa memandu.", trans: "因此，我们在驾驶时必须小心。", isTarget: false }
+                ]
+            },
+            {
+                id: 'm1_2', title: 'Level 2: 进阶 (稍长)', question: 'Apakah faedah-faedah bersukan kepada masyarakat?', targetCount: 3,
+                text: [
+                    { t: "Bersukan merupakan aktiviti fizikal yang mendatangkan banyak kebaikan.", trans: "运动是一项带来许多好处的体育活动。", isTarget: false },
+                    { t: "Masyarakat kini semakin sedar tentang kepentingan gaya hidup sihat.", trans: "现在的社会越来越意识到健康生活方式的重要性。", isTarget: false },
+                    { t: "Faedah utama bersukan ialah aktiviti ini dapat menyihatkan tubuh badan dan mencergaskan minda.", trans: "运动的主要好处是这项活动能使身体健康，头脑敏捷。", isTarget: true },
+                    { t: "Peluh yang keluar akan menyingkirkan toksin dari dalam badan.", trans: "流出的汗水将排除体内的毒素。", isTarget: false },
+                    { t: "Di samping itu, senaman yang kerap mampu mengurangkan tekanan di tempat kerja.", trans: "除此之外，经常锻炼能够减轻工作压力。", isTarget: true },
+                    { t: "Ramai pekerja mengalami stres akibat bebanan tugas yang banyak.", trans: "许多员工因工作繁重而承受压力。", isTarget: false },
+                    { t: "Seterusnya, kita dapat mengeratkan silaturahim antara kaum apabila bersukan bersama-sama.", trans: "接着，我们在一起运动时能增进各族之间的联系。", isTarget: true },
+                    { t: "Jelaslah bahawa bersukan amat penting untuk semua.", trans: "很明显，运动对所有人来说都非常重要。", isTarget: false }
+                ]
+            },
+            {
+                id: 'm1_3', title: 'Level 3: 挑战 (长篇)', question: 'Nyatakan kesan-kesan pencemaran alam sekitar.', targetCount: 3,
+                text: [
+                    { t: "Isu pencemaran alam sekitar bukanlah satu isu yang baharu di negara ini.", trans: "环境污染问题在我国并不是一个新课题。", isTarget: false },
+                    { t: "Sekiranya dibiarkan, pencemaran ini akan memusnahkan habitat flora dan fauna.", trans: "如果任由其发展，这种污染将破坏动植物的栖息地。", isTarget: true },
+                    { t: "Banyak haiwan akuatik akan mati akibat pembuangan sisa toksik ke dalam sungai.", trans: "许多水生动物将因有毒废物排入河流而死亡。", isTarget: false },
+                    { t: "Kesan yang paling membimbangkan ialah kesihatan manusia akan terjejas teruk.", trans: "最令人担忧的后果是人类的健康将受到严重影响。", isTarget: true },
+                    { t: "Penyakit seperti asma dan batuk akan mudah tersebar akibat kualiti udara yang kotor.", trans: "由于空气质量差，哮喘和咳嗽等疾病将很容易传播。", isTarget: false },
+                    { t: "Tambahan pula, nelayan akan kehilangan sumber pendapatan harian mereka.", trans: "此外，渔民将失去他们的日常收入来源。", isTarget: true },
+                    { t: "Kekurangan hasil tangkapan laut amat menyusahkan kehidupan nelayan.", trans: "海产捕获量的减少给渔民的生活带来了极大困难。", isTarget: false }
+                ]
+            },
+            {
+                id: 'm1_4', title: 'Level 4: 历年真题 (超长)', question: 'Berdasarkan petikan, jelaskan langkah-langkah memupuk amalan membaca.', targetCount: 4,
+                text: [
+                    { t: "Membaca jambatan ilmu. Namun, amalan membaca dalam kalangan rakyat kita masih rendah.", trans: "阅读是知识的桥梁。然而，我国人民的阅读习惯仍然很低。", isTarget: false },
+                    { t: "Menyedari hakikat ini, pelbagai langkah perlu diambil dengan segera.", trans: "意识到这个事实，必须立即采取各种措施。", isTarget: false },
+                    { t: "Pertama sekali, ibu bapa perlulah menjadi suri teladan dengan membaca buku bersama anak.", trans: "首先，父母必须成为榜样，与孩子一起读书。", isTarget: true },
+                    { t: "Anak-anak akan mudah terikut dengan perbuatan ibu bapa mereka.", trans: "孩子们很容易跟随父母的行为。", isTarget: false },
+                    { t: "Selain itu, ibu bapa wajar membawa anak-anak mengunjungi pameran buku.", trans: "此外，父母理应带孩子参观书展。", isTarget: true },
+                    { t: "Pihak sekolah pula haruslah mengadakan kempen galakan membaca secara besar-besaran.", trans: "学校方面则应该大规模举办鼓励阅读的活动。", isTarget: true },
+                    { t: "Program NILAM perlu diperkasakan dengan ganjaran yang menarik.", trans: "NILAM 计划需要通过吸引人的奖励来加强。", isTarget: false },
+                    { t: "Akhir sekali, kerajaan mestilah membina lebih banyak perpustakaan awam yang selesa.", trans: "最后，政府必须建造更多舒适的公共图书馆。", isTarget: true }
+                ]
+            },
+            {
+                id: 'm1_5', title: 'Level 5: 考场大魔王 (高难度)', question: 'Apakah cabaran-cabaran yang dihadapi oleh industri pelancongan?', targetCount: 4,
+                text: [
+                    { t: "Industri pelancongan merupakan sumber pendapatan utama negara.", trans: "旅游业是国家的主要收入来源。", isTarget: false },
+                    { t: "Namun begitu, industri ini sedang berhadapan dengan pelbagai halangan.", trans: "然而，这个行业正面临着各种障碍。", isTarget: false },
+                    { t: "Antara cabaran utamanya ialah penularan wabak penyakit berjangkit secara global.", trans: "其主要挑战之一是传染病在全球的蔓延。", isTarget: true },
+                    { t: "Hal ini menyebabkan pelancong takut untuk melancong ke luar negara.", trans: "这导致游客害怕出国旅游。", isTarget: false },
+                    { t: "Selain itu, kekurangan infrastruktur bertaraf antarabangsa di sesetengah kawasan turut membantutkan usaha ini.", trans: "此外，部分地区缺乏国际水平的基础设施也阻碍了这项努力。", isTarget: true },
+                    { t: "Seterusnya, ketidakstabilan ekonomi dunia menyebabkan kuasa beli pelancong merosot.", trans: "接着，世界经济的不稳定导致游客的购买力下降。", isTarget: true },
+                    { t: "Mereka lebih suka menyimpan wang untuk kegunaan kecemasan.", trans: "他们更喜欢把钱存起来以备不时之需。", isTarget: false },
+                    { t: "Masalah kebersihan di tempat tumpuan awam juga menjejaskan imej negara kita.", trans: "公共场所的卫生问题也影响了我国的形象。", isTarget: true },
+                    { t: "Oleh itu, pihak berkuasa perlu mengatasi cabaran ini segera.", trans: "因此，当局需要尽快克服这些挑战。", isTarget: false }
+                ]
+            }
+        ];
+
+        // --- Module 4: 带有翻译的 Boss 战文本 (6 组) ---
+        const allBossData = [
+            {
+                id: 'boss1', title: '【主题 1】学生的网络危害',
+                text: [
+                    { id: 'b1_1', text: "Pada masa kini, banyak ", trans: "现在，许多", isBug: false },
+                    { id: 'b1_2', text: "pelajar-pelajar", trans: "学生们", isBug: true, correct: "pelajar", hint: "banyak 后面不能放重叠词" },
+                    { id: 'b1_3', text: " yang suka melayari internet. Mereka sering menghabiskan masa ", trans: "喜欢上网。他们经常花时间", isBug: false },
+                    { id: 'b1_4', text: "di dalam", trans: "在里面", isBug: true, correct: "dalam", hint: "网络世界是抽象的，不能钻进去" },
+                    { id: 'b1_5', text: " talian. Perkara ini ", trans: "线上。这件事", isBug: false },
+                    { id: 'b1_6', text: "ialah", trans: "是", isBug: true, correct: "adalah", hint: "后面接了介词 sangat (形容/程度)" },
+                    { id: 'b1_7', text: " sangat merbahaya jika tidak dikawal oleh ibu bapa.", trans: "非常危险的，如果没有父母的监督。", isBug: false }
+                ]
+            },
+            {
+                id: 'boss2', title: '【主题 2】环境污染问题',
+                text: [
+                    { id: 'b2_1', text: "Isu pencemaran alam sekitar semakin serius. ", trans: "环境污染课题越来越严重。", isBug: false },
+                    { id: 'b2_2', text: "Disamping", trans: "除此之外", isBug: true, correct: "Di samping", hint: "除此之外 (Di samping) 必须分开写" },
+                    { id: 'b2_3', text: " itu, semua pihak mesti ", trans: "各方必须", isBug: false },
+                    { id: 'b2_4', text: "saling bantu-membantu", trans: "互相帮助", isBug: true, correct: "saling membantu", hint: "saling 后面绝对不能加重叠词" },
+                    { id: 'b2_5', text: " untuk menyelesaikannya. Kerajaan telah ", trans: "来解决它。政府已经", isBug: false },
+                    { id: 'b2_6', text: "memperbesarkan", trans: "扩大", isBug: true, correct: "memperbesar", hint: "遇到形容词 (besar)，前面加了 memper-，后面绝对不能有 -kan" },
+                    { id: 'b2_7', text: " kempen kesedaran di seluruh negara.", trans: "全国的醒觉运动。", isBug: false }
+                ]
+            },
+            {
+                id: 'boss3', title: '【主题 3】健康与传染病',
+                text: [
+                    { id: 'b3_1', text: "Kesihatan amat penting dalam kehidupan. Oleh itu, ", trans: "健康在生活中非常重要。因此，", isBug: false },
+                    { id: 'b3_2', text: "ibubapa", trans: "父母", isBug: true, correct: "ibu bapa", hint: "父母 (ibu bapa) 必须分开写" },
+                    { id: 'b3_3', text: " perlu memantau anak-anak. ", trans: "需要监督孩子们。", isBug: false },
+                    { id: 'b3_4', text: "Bila", trans: "当", isBug: true, correct: "Apabila", hint: "陈述「当...时候」必须用 apabila，bila 只用来问问题" },
+                    { id: 'b3_5', text: " mereka mendapat ", trans: "他们得到", isBug: false },
+                    { id: 'b3_6', text: "selsema", trans: "感冒", isBug: true, correct: "selesema", hint: "感冒的正确拼写中间有 e" },
+                    { id: 'b3_7', text: ", rawatan segera mesti diberikan.", trans: "，必须立即给予治疗。", isBug: false }
+                ]
+            },
+            {
+                id: 'boss4', title: '【主题 4】阅读习惯',
+                text: [
+                    { id: 'b4_1', text: "Amalan membaca amat penting. ", trans: "阅读习惯非常重要。", isBug: false },
+                    { id: 'b4_2', text: "Kesemua-semua", trans: "所有的", isBug: true, correct: "Semua", hint: "直接接名词 (pelajar) 时，用 Semua 即可" },
+                    { id: 'b4_3', text: " pelajar akan mendapat banyak faedah ", trans: "学生将获得许多好处", isBug: false },
+                    { id: 'b4_4', text: "dari", trans: "从", isBug: true, correct: "daripada", hint: "来源（非方向/地方/时间）必须用 daripada" },
+                    { id: 'b4_5', text: " amalan yang mulia ini. ", trans: "这个高尚的习惯。", isBug: false },
+                    { id: 'b4_6', text: "Walaubagaimanapun", trans: "无论如何", isBug: true, correct: "Walau bagaimanapun", hint: "无论如何 (walau bagaimanapun) 必须分开写" },
+                    { id: 'b4_7', text: ", masih ramai yang malas membaca buku.", trans: "，依然有很多人懒惰读书。", isBug: false }
+                ]
+            },
+            {
+                id: 'boss5', title: '【主题 5】道路安全',
+                text: [
+                    { id: 'b5_1', text: "Kemalangan sering berlaku di ", trans: "车祸经常发生在", isBug: false },
+                    { id: 'b5_2', text: "lebuhraya", trans: "高速公路", isBug: true, correct: "lebuh raya", hint: "高速公路 (lebuh raya) 必须分开写" },
+                    { id: 'b5_3', text: ". Sesetengah pemandu memandu dengan ", trans: "。有些司机驾驶得", isBug: false },
+                    { id: 'b5_4', text: "merbahaya", trans: "危险", isBug: true, correct: "berbahaya", hint: "危险的正确前缀是 ber-" },
+                    { id: 'b5_5', text: " dan tidak mematuhi undang-undang. Tindakan tegas oleh ", trans: "且不遵守法律。严厉的行动由", isBug: false },
+                    { id: 'b5_6', text: "penguatkuasa", trans: "执法人员", isBug: true, correct: "penguat kuasa", hint: "执法人员 (penguat kuasa) 必须分开写" },
+                    { id: 'b5_7', text: " amat diperlukan.", trans: "是非常需要的。", isBug: false }
+                ]
+            },
+            {
+                id: 'boss6', title: '【主题 6】本地旅游业',
+                text: [
+                    { id: 'b6_1', text: "Malaysia mempunyai ", trans: "马来西亚拥有", isBug: false },
+                    { id: 'b6_2', text: "banyak tempat-tempat", trans: "许多地方", isBug: true, correct: "banyak tempat", hint: "表示多数的词 (banyak) 后面，名词绝对不能重叠" },
+                    { id: 'b6_3', text: " menarik. Ramai ", trans: "吸引人的。许多", isBug: false },
+                    { id: 'b6_4', text: "pelancung", trans: "游客", isBug: true, correct: "pelancong", hint: "游客的正确拼写是 pelancong (o 不是 u)" },
+                    { id: 'b6_5', text: " asing datang ke sini untuk melihat ", trans: "外国人来这里看", isBug: false },
+                    { id: 'b6_6', text: "rekabentuk", trans: "设计", isBug: true, correct: "reka bentuk", hint: "设计 (reka bentuk) 必须分开写" },
+                    { id: 'b6_7', text: " bangunan bersejarah yang unik.", trans: "独特历史建筑的。", isBug: false }
+                ]
+            }
+        ];
+
+        // --- Module 2: KBAT 万能积木 5大方向 (扩展版) ---
+        const mod2Langkah = [
+            { id: 'l1', isi: "Ibu bapa menjadi suri teladan", isiZh: "父母成为榜样", isiEn: "Parents become role models", huraian: "Mereka perlu menunjukkan contoh yang baik kepada anak-anak sejak kecil.", huraianZh: "他们需要从小向孩子展示良好的榜样。", huraianEn: "They need to show good examples to their children since childhood." },
+            { id: 'l2', isi: "Pihak sekolah mengadakan kempen", isiZh: "学校举办活动/运动", isiEn: "Schools organize campaigns", huraian: "Hal ini dapat memberikan kesedaran yang mendalam kepada murid-murid di sekolah.", huraianZh: "这能给学校里的学生带来深刻的醒觉。", huraianEn: "This can provide deep awareness to the students in school." },
+            { id: 'l3', isi: "Kerajaan menguatkuasakan undang-undang", isiZh: "政府加强执法", isiEn: "Government enforces laws", huraian: "Hukuman dan denda yang lebih berat mesti dikenakan kepada pihak yang bersalah.", huraianZh: "必须对违法者施加更重的刑罚和罚款。", huraianEn: "Heavier punishments and fines must be imposed on the guilty parties." },
+            { id: 'l4', isi: "Media massa menyiarkan iklan", isiZh: "大众媒体播放广告", isiEn: "Mass media broadcasts advertisements", huraian: "Maklumat berguna dapat disampaikan kepada seluruh lapisan masyarakat dengan cepat.", huraianZh: "有用的资讯能迅速传达给社会各阶层。", huraianEn: "Useful information can be delivered to all levels of society quickly." },
+            { id: 'l5', isi: "Masyarakat saling bekerjasama", isiZh: "社会大众互相合作", isiEn: "Society works together", huraian: "Sikap bagai aur dengan tebing perlu diamalkan untuk menangani masalah ini.", huraianZh: "必须实践守望相助的态度来解决这个问题。", huraianEn: "A cooperative attitude must be practiced to tackle this problem." }
+        ];
+
+        const mod2Kebaikan = [
+            { id: 'k1', isi: "Menjamin kesihatan fizikal dan mental", isiZh: "保障身心健康", isiEn: "Ensures physical and mental health", huraian: "Tubuh badan akan menjadi cergas dan otak akan menjadi cerdas.", huraianZh: "身体将会变得敏捷，头脑也会变得聪明。", huraianEn: "The body will become fit and the mind will become sharp." },
+            { id: 'k2', isi: "Mengisi masa lapang dengan berfaedah", isiZh: "有益地填补空闲时间", isiEn: "Fills free time beneficially", huraian: "Kita dapat mengelakkan diri daripada terjebak dalam gejala sosial yang negatif.", huraianZh: "我们能避免自己陷入负面的社会问题中。", huraianEn: "We can prevent ourselves from getting involved in negative social ills." },
+            { id: 'k3', isi: "Mengeratkan hubungan silaturahim", isiZh: "增进感情/促进团结", isiEn: "Strengthens relationships/unity", huraian: "Kita dapat memupuk semangat perpaduan dan kasih sayang dalam masyarakat berbilang kaum.", huraianZh: "我们在多元种族社会中培养团结与关爱精神。", huraianEn: "We can foster a spirit of unity and love in a multiracial society." },
+            { id: 'k4', isi: "Menaikkan imej negara di persada dunia", isiZh: "提升国家在国际上的形象", isiEn: "Raises the country's image globally", huraian: "Negara kita akan dihormati dan disanjung tinggi oleh negara luar.", huraianZh: "我们的国家将受到外国的尊重与推崇。", huraianEn: "Our country will be respected and highly regarded by foreign nations." },
+            { id: 'k5', isi: "Menambah ilmu pengetahuan", isiZh: "增加知识", isiEn: "Increases knowledge", huraian: "Kita akan menjadi orang yang berfikiran matang dan dapat membuat keputusan yang bijak.", huraianZh: "我们将成为思想成熟且能做出明智决定的人。", huraianEn: "We will become mature thinkers and able to make wise decisions." }
+        ];
+
+        const mod2Punca = [
+            { id: 'p1', isi: "Sikap individu yang tidak bertanggungjawab", isiZh: "个人不负责任的态度", isiEn: "Irresponsible individual attitude", huraian: "Mereka memandang remeh terhadap isu ini dan bersikap mementingkan diri sendiri.", huraianZh: "他们轻视这个课题，并且抱有自私的态度。", huraianEn: "They take this issue lightly and behave selfishly." },
+            { id: 'p2', isi: "Kurangnya didikan agama dan moral", isiZh: "缺乏宗教和道德教育", isiEn: "Lack of religious and moral education", huraian: "Ibu bapa terlalu sibuk bekerja sehingga mengabaikan tanggungjawab mendidik anak-anak.", huraianZh: "父母过于忙碌工作以至于忽略了教育孩子的责任。", huraianEn: "Parents are too busy working that they neglect the responsibility of educating their children." },
+            { id: 'p3', isi: "Pengaruh rakan sebaya", isiZh: "同龄人的影响 (交友不慎)", isiEn: "Peer pressure", huraian: "Remaja yang mudah terpengaruh akan terikut-ikut dengan perbuatan negatif rakan mereka.", huraianZh: "容易受影响的青少年会盲目跟从朋友的负面行为。", huraianEn: "Easily influenced teenagers will blindly follow their friends' negative actions." },
+            { id: 'p4', isi: "Pengaruh media massa dan internet", isiZh: "大众媒体和互联网的影响", isiEn: "Influence of mass media and internet", huraian: "Banyak maklumat palsu dan budaya negatif yang mudah tersebar melalui media sosial.", huraianZh: "许多虚假信息和负面文化很容易通过社交媒体传播。", huraianEn: "A lot of false information and negative culture are easily spread through social media." },
+            { id: 'p5', isi: "Kelemahan penguatkuasaan undang-undang", isiZh: "执法不严/法律弱点", isiEn: "Weak law enforcement", huraian: "Hukuman yang ringan menyebabkan pesalah tidak berasa takut untuk mengulangi kesalahan.", huraianZh: "较轻的惩罚导致违规者不怕重犯。", huraianEn: "Light punishments cause offenders to not be afraid of repeating the offense." }
+        ];
+
+        const mod2Kesan = [
+            { id: 'kb1', isi: "Menjejaskan kesihatan masyarakat", isiZh: "影响社会大众的健康", isiEn: "Affects public health", huraian: "Pelbagai penyakit yang berbahaya akan mudah tersebar luas dan mengancam nyawa.", huraianZh: "各种危险的疾病将容易广泛传播并威胁生命。", huraianEn: "Various dangerous diseases will easily spread and threaten lives." },
+            { id: 'kb2', isi: "Mencemarkan imej negara", isiZh: "玷污国家形象", isiEn: "Tarnishes the country's image", huraian: "Pelancong asing akan berasa takut dan tidak mahu datang melancong ke negara kita.", huraianZh: "外国游客会感到害怕，并且不想来我国旅游。", huraianEn: "Foreign tourists will feel afraid and will not want to visit our country." },
+            { id: 'kb3', isi: "Menggugat keamanan dan keharmonian", isiZh: "破坏和平与和谐", isiEn: "Threatens peace and harmony", huraian: "Masyarakat akan hidup dalam keadaan yang penuh ketakutan dan tidak selesa.", huraianZh: "社会大众将生活在充满恐惧和不适的环境中。", huraianEn: "The public will live in a state full of fear and discomfort." },
+            { id: 'kb4', isi: "Menjejaskan ekonomi negara", isiZh: "影响国家经济", isiEn: "Affects the country's economy", huraian: "Kerajaan terpaksa mengeluarkan kos dan peruntukan yang tinggi untuk membaik pulih keadaan.", huraianZh: "政府被迫拨出高昂的成本和预算来修复情况。", huraianEn: "The government is forced to spend high costs and allocations to restore the situation." },
+            { id: 'kb5', isi: "Memusnahkan masa depan generasi muda", isiZh: "毁掉年轻一代的未来", isiEn: "Destroys the future of the younger generation", huraian: "Mereka akan kehilangan arah tujuan hidup dan menjadi beban kepada negara kelak.", huraianZh: "他们会失去人生的方向，并在日后成为国家的负担。", huraianEn: "They will lose their life direction and become a burden to the country later." }
+        ];
+
+        const mod2Peranan = [
+            { id: 'pr1', isi: "Menjadi suri teladan yang baik", isiZh: "成为好榜样", isiEn: "Become a good role model", huraian: "Ibu bapa perlu sentiasa menunjukkan contoh perbuatan yang positif kepada anak-anak.", huraianZh: "父母需要经常向孩子们展示正面的行为榜样。", huraianEn: "Parents need to constantly show positive behavioral examples to their children." },
+            { id: 'pr2', isi: "Memberikan didikan agama dan moral", isiZh: "给予宗教与道德教育", isiEn: "Provide religious and moral education", huraian: "Nilai-nilai murni perlu dipupuk dan ditanam dalam jiwa anak-anak sejak dari kecil lagi.", huraianZh: "高尚的价值观需要从小就培养和植入孩子们的心中。", huraianEn: "Noble values need to be nurtured and instilled in children's souls from a young age." },
+            { id: 'pr3', isi: "Meluangkan lebih banyak masa bersama", isiZh: "花更多时间陪伴", isiEn: "Spend more time together", huraian: "Anak-anak tidak akan berasa diabaikan, kesunyian, atau kurang kasih sayang daripada keluarga.", huraianZh: "孩子们不会感到被家人忽略、孤独或缺乏关爱。", huraianEn: "Children will not feel neglected, lonely, or lack love from the family." },
+            { id: 'pr4', isi: "Memantau pergerakan dan aktiviti", isiZh: "监督行踪与活动", isiEn: "Monitor movements and activities", huraian: "Ibu bapa perlu sentiasa mengambil tahu dengan siapa anak-anak mereka berkawan di luar.", huraianZh: "父母需要随时了解孩子们在外面和谁交朋友。", huraianEn: "Parents need to always know who their children make friends with outside." },
+            { id: 'pr5', isi: "Memberikan sokongan dan dorongan", isiZh: "给予支持与鼓励", isiEn: "Provide support and encouragement", huraian: "Hal ini dapat memotivasikan diri anak-anak untuk terus mencapai kejayaan dalam kehidupan.", huraianZh: "这能够激励孩子们在生活中继续取得成功。", huraianEn: "This can motivate children to continue achieving success in life." }
+        ];
+
+        // 🔥 更新：加入 sampleQEn
+        const m2Categories = {
+            langkah: {
+                id: 'langkah', title: '方案 / 方法', subtitle: '(Langkah / Cara)', icon: 'ph-wrench', color: 'emerald',
+                sampleQ: 'Pada pendapat anda, apakah langkah-langkah yang patut diambil untuk memupuk amalan membaca dalam kalangan remaja?',
+                sampleQZh: '在您看来，应该采取什么措施来培养青少年的阅读习惯？',
+                sampleQEn: 'In your opinion, what steps should be taken to foster the reading habit among teenagers?',
+                prefix: 'langkah yang patut diambil',
+                data: mod2Langkah
+            },
+            kebaikan: {
+                id: 'kebaikan', title: '益处 / 好处', subtitle: '(Kebaikan / Faedah)', icon: 'ph-thumbs-up', color: 'indigo',
+                sampleQ: 'Pada pendapat anda, apakah faedah-faedah bersukan kepada masyarakat?',
+                sampleQZh: '在您看来，运动对社会有什么好处？',
+                sampleQEn: 'In your opinion, what are the benefits of sports to society?',
+                prefix: 'kebaikan yang akan diperoleh',
+                data: mod2Kebaikan
+            },
+            punca: {
+                id: 'punca', title: '原因 / 因素', subtitle: '(Punca / Sebab)', icon: 'ph-magnifying-glass', color: 'rose',
+                sampleQ: 'Pada pendapat anda, apakah punca-punca yang menyebabkan berlakunya kemalangan jalan raya?',
+                sampleQZh: '在您看来，导致车祸发生的原因是什么？',
+                sampleQEn: 'In your opinion, what are the main causes of road accidents?',
+                prefix: 'punca utamanya',
+                data: mod2Punca
+            },
+            kesan: {
+                id: 'kesan', title: '后果 / 坏处', subtitle: '(Kesan Buruk / Akibat)', icon: 'ph-warning-circle', color: 'amber',
+                sampleQ: 'Pada pendapat anda, apakah kesan-kesan buruk pencemaran alam sekitar kepada negara?',
+                sampleQZh: '在您看来，环境污染对国家有什么负面影响？',
+                sampleQEn: 'In your opinion, what are the negative effects of environmental pollution to the country?',
+                prefix: 'kesan buruk yang akan timbul',
+                data: mod2Kesan
+            },
+            peranan: {
+                id: 'peranan', title: '角色 / 责任', subtitle: '(Peranan / Tanggungjawab)', icon: 'ph-users', color: 'cyan',
+                sampleQ: 'Pada pendapat anda, apakah peranan ibu bapa dalam mengatasi masalah gejala sosial remaja?',
+                sampleQZh: '在您看来，父母在克服青少年社会问题中扮演什么角色？',
+                sampleQEn: 'In your opinion, what is the role of parents in overcoming the problem of social ills among teenagers?',
+                prefix: 'peranan yang boleh dimainkan',
+                data: mod2Peranan
+            }
+        };
+
+        // --- Module 3: 全马小说 (Zon 1 - 4) ---
+        const mod3Novels = [
+            // ZON 1
+            {
+                id: 'n1', title: 'Jendela Menghadap Jalan (T4 Zon 1)',
+                data: [
+                    { nilai: 'Kasih Sayang', nilaiZh: '关爱/爱心', nilaiEn: 'Love / Affection', watak: 'Lili', huraian: 'Lili amat menyayangi ibunya dan sanggup menurut perintah ibunya untuk pulang bercuti di kampung.', huraianZh: 'Lili 非常爱她的母亲，并愿意听从母亲的吩咐回乡下度假。', huraianEn: 'Lili loves her mother very much and is willing to obey her order to return to the village for a holiday.' },
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Datuk', huraian: 'Datuk bertanggungjawab merawat pesakit yang datang ke rumahnya dengan ikhlas.', huraianZh: '祖父负责任且真诚地治疗来到他家里的病人。', huraianEn: 'The grandfather is responsible and sincerely treats the patients who come to his house.' },
+                    { nilai: 'Bekerjasama', nilaiZh: '合作', nilaiEn: 'Cooperation', watak: 'Penduduk Kampung', huraian: 'Mereka bekerjasama dan bergotong-royong membina kubah masjid yang baharu.', huraianZh: '他们合作并分工建造清真寺的新圆顶。', huraianEn: 'They cooperate and work together to build the new mosque dome.' }
+                ]
+            },
+            {
+                id: 'n2', title: 'Songket Berbenang Emas (T5 Zon 1)',
+                data: [
+                    { nilai: 'Kasih Sayang', nilaiZh: '关爱/爱心', nilaiEn: 'Love / Affection', watak: 'Dahlia', huraian: 'Dahlia amat menyayangi keluarganya dan sanggup menjaga adik-adiknya di rumah semasa ibunya dirawat di hospital.', huraianZh: 'Dahlia 非常爱她的家人，并愿意在母亲住院期间在家照顾弟弟妹妹。', huraianEn: 'Dahlia loves her family deeply and is willing to take care of her siblings at home while her mother is treated in the hospital.' },
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Embong', huraian: 'Embong bertanggungjawab bekerja keras di ladang sawit dari pagi hingga petang untuk menyara keluarganya.', huraianZh: 'Embong 负责任地从早到晚在油棕园努力工作以养家糊口。', huraianEn: 'Embong is responsible and works hard in the palm oil estate from morning to evening to support his family.' },
+                    { nilai: 'Ketabahan', nilaiZh: '坚强', nilaiEn: 'Perseverance', watak: 'Dahlia', huraian: 'Dahlia tabah menghadapi pelbagai ujian keluarganya dan tetap fokus sehingga berjaya dalam pelajaran.', huraianZh: 'Dahlia 坚强地面对家庭的各种考验，并保持专注直到学业成功。', huraianEn: 'Dahlia perseveres through various family trials and remains focused until she succeeds in her studies.' }
+                ]
+            },
+            // ZON 2
+            {
+                id: 'n3', title: 'Leftenan Adnan Wira Bangsa (T4 Zon 2)',
+                data: [
+                    { nilai: 'Keberanian', nilaiZh: '勇敢', nilaiEn: 'Courage', watak: 'Leftenan Adnan', huraian: 'Leftenan Adnan berani berjuang menentang tentera Jepun sehingga titisan darah terakhir.', huraianZh: 'Leftenan Adnan 勇敢地与日军战斗直到流尽最后一滴血。', huraianEn: 'Leftenan Adnan bravely fought against the Japanese army until his last drop of blood.' },
+                    { nilai: 'Patriotisme', nilaiZh: '爱国精神', nilaiEn: 'Patriotism', watak: 'Leftenan Adnan', huraian: 'Beliau sanggup menggadai nyawa demi mempertahankan tanah air daripada dijajah.', huraianZh: '他愿意牺牲生命来保卫祖国免受殖民。', huraianEn: 'He is willing to risk his life to defend the homeland from being colonized.' },
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Pak Saidi', huraian: 'Pak Saidi bertanggungjawab mendidik anak-anaknya dengan ilmu agama dan ilmu mempertahankan diri.', huraianZh: 'Pak Saidi 负责任地向孩子们传授宗教知识和自卫术。', huraianEn: 'Pak Saidi is responsible for educating his children with religious knowledge and self-defense skills.' }
+                ]
+            },
+            {
+                id: 'n4', title: 'Tirani (T5 Zon 2)',
+                data: [
+                    { nilai: 'Kasih Sayang', nilaiZh: '关爱/爱心', nilaiEn: 'Love / Affection', watak: 'Waheeda', huraian: 'Waheeda amat menyayangi keluarganya dan sentiasa rindu akan mereka semasa bekerja di Singapura.', huraianZh: 'Waheeda 非常爱她的家人，在新加坡工作时经常想念他们。', huraianEn: 'Waheeda loves her family very much and always misses them while working in Singapore.' },
+                    { nilai: 'Ketabahan', nilaiZh: '坚强', nilaiEn: 'Perseverance', watak: 'Waheeda', huraian: 'Waheeda tabah menghadapi cabaran pahit dalam perkahwinannya dan bangkit membina perniagaan.', huraianZh: 'Waheeda 坚强地面对婚姻中的痛苦挑战，并重新振作建立事业。', huraianEn: 'Waheeda perseveres through the bitter challenges in her marriage and rises to build a business.' },
+                    { nilai: 'Kegigihan', nilaiZh: '毅力', nilaiEn: 'Tenacity', watak: 'Waheeda', huraian: 'Waheeda gigih berusaha memajukan sektor pelancongan di Chalet Tajau Emas.', huraianZh: 'Waheeda 坚持不懈地努力发展 Chalet Tajau Emas 的旅游业。', huraianEn: 'Waheeda works hard to develop the tourism sector at Chalet Tajau Emas.' }
+                ]
+            },
+            // ZON 3
+            {
+                id: 'n5', title: 'Di Sebalik Dinara (T4 Zon 3)',
+                data: [
+                    { nilai: 'Kasih Sayang', nilaiZh: '关爱/爱心', nilaiEn: 'Love / Affection', watak: 'Farisha', huraian: 'Farisha amat menyayangi abangnya, Azraai dan sangat risau apabila abangnya jatuh sakit.', huraianZh: 'Farisha 非常爱她的哥哥 Azraai，并在他生病时感到非常担心。', huraianEn: 'Farisha loves her brother, Azraai, and is very worried when he falls ill.' },
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Aqram', huraian: 'Aqram bertanggungjawab mencari dan membawa Farisha ke Soft Lab untuk menyelamatkan sistem Dinara.', huraianZh: 'Aqram 负责寻找并将 Farisha 带到 Soft Lab 以拯救 Dinara 系统。', huraianEn: 'Aqram is responsible for finding and bringing Farisha to Soft Lab to save the Dinara system.' },
+                    { nilai: 'Keberanian', nilaiZh: '勇敢', nilaiEn: 'Courage', watak: 'Farisha', huraian: 'Farisha berani menerima tawaran projek bernilai tinggi daripada Soft Lab walaupun menyedari risikonya.', huraianZh: '尽管意识到风险，Farisha 还是勇敢地接受了 Soft Lab 的高价值项目。', huraianEn: 'Farisha bravely accepts the high-value project offer from Soft Lab despite realizing the risks.' }
+                ]
+            },
+            {
+                id: 'n6', title: 'Silir Daksina (T5 Zon 3)',
+                data: [
+                    { nilai: 'Kasih Sayang', nilaiZh: '关爱/爱心', nilaiEn: 'Love / Affection', watak: 'Haiqal', huraian: 'Haiqal amat menyayangi arwah ayahnya dan sanggup ke Johor untuk menjejaki warisan ayahnya.', huraianZh: 'Haiqal 非常爱他已故的父亲，并愿意去柔佛追寻父亲的遗产。', huraianEn: 'Haiqal loves his late father very much and is willing to go to Johor to trace his father\'s heritage.' },
+                    { nilai: 'Ketabahan', nilaiZh: '坚强', nilaiEn: 'Perseverance', watak: 'Haiqal', huraian: 'Haiqal tabah menghadapi tentangan ibunya apabila dia memutuskan untuk pergi ke kampung halaman ayahnya.', huraianZh: '当 Haiqal 决定去他父亲的家乡时，他坚强地面对母亲的反对。', huraianEn: 'Haiqal perseveres in facing his mother\'s opposition when he decides to go to his father\'s hometown.' },
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Tauke Ong', huraian: 'Tauke Ong bertanggungjawab menjaga kebun kelapa sawit peninggalan arwah ayah Haiqal dengan jujur.', huraianZh: 'Tauke Ong 负责任且诚实地照顾 Haiqal 已故父亲留下的油棕园。', huraianEn: 'Tauke Ong is responsible for honestly taking care of the oil palm plantation left by Haiqal\'s late father.' }
+                ]
+            },
+            // ZON 4
+            {
+                id: 'n7', title: 'Pantai Kasih (T4 Zon 4)',
+                data: [
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Dr. Raiha', huraian: 'Dr. Raiha bertanggungjawab merawat pesakit-pesakitnya dengan penuh dedikasi di Pusat Rawatan Pantai Kasih.', huraianZh: 'Dr. Raiha 在 Pantai Kasih 治疗中心充满奉献精神地治疗她的病人。', huraianEn: 'Dr. Raiha is responsible for treating her patients with full dedication at Pantai Kasih Treatment Center.' },
+                    { nilai: 'Ketabahan', nilaiZh: '坚强', nilaiEn: 'Perseverance', watak: 'Dr. Raiha', huraian: 'Dr. Raiha tabah menghadapi ujian berat dan kenangan pahit berikutan kematian anak perempuannya.', huraianZh: 'Dr. Raiha 坚强地面对女儿逝世带来的严峻考验和痛苦回忆。', huraianEn: 'Dr. Raiha perseveres through severe trials and bitter memories following the death of her daughter.' },
+                    { nilai: 'Kasih Sayang', nilaiZh: '关爱/爱心', nilaiEn: 'Love / Affection', watak: 'Dr. Raiha', huraian: 'Dr. Raiha amat menyayangi anaknya, Rohayu dan sentiasa cuba mempertahankannya daripada kekejaman suami.', huraianZh: 'Dr. Raiha 非常爱她的女儿 Rohayu，并一直试图保护她免受丈夫的残酷对待。', huraianEn: 'Dr. Raiha loves her daughter, Rohayu very much and always tries to defend her from her husband\'s cruelty.' }
+                ]
+            },
+            {
+                id: 'n8', title: 'Bimasakti Menari (T5 Zon 4)',
+                data: [
+                    { nilai: 'Bertanggungjawab', nilaiZh: '负责任', nilaiEn: 'Responsibility', watak: 'Nurul Hafsa', huraian: 'Nurul Hafsa bertanggungjawab untuk memulihkan populasi kelip-kelip di Kuala Selangor.', huraianZh: 'Nurul Hafsa 负责任地恢复瓜拉雪兰莪的萤火虫数量。', huraianEn: 'Nurul Hafsa is responsible for restoring the firefly population in Kuala Selangor.' },
+                    { nilai: 'Cinta akan alam sekitar', nilaiZh: '热爱大自然', nilaiEn: 'Love for the environment', watak: 'Nurul Hafsa', huraian: 'Beliau berusaha keras untuk menjadikan Kuala Selangor sebagai Kawasan Simpanan Langit Gelap.', huraianZh: '她努力使瓜拉雪兰莪成为暗空保护区以保护生态。', huraianEn: 'She works hard to make Kuala Selangor a Dark Sky Reserve to protect the ecosystem.' },
+                    { nilai: 'Keberanian', nilaiZh: '勇敢', nilaiEn: 'Courage', watak: 'Muhammad Taufik', huraian: 'Muhammad Taufik berani menghadapi ancaman dan serangan daripada penjenayah yang menentang projek mereka.', huraianZh: 'Muhammad Taufik 勇敢地面对反对他们项目的罪犯的威胁和攻击。', huraianEn: 'Muhammad Taufik bravely faces threats and attacks from criminals opposing their project.' }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // 🧠 状态管理 (State Management)
+        // ==========================================
+        const state = {
+            currentMode: 'dashboard',
+            score: 0,
+            showTranslation: false,
+
+            m1Level: 0,
+            m1Progress: {},
+
+            m2Type: null,
+            m2SelectedIsi: [],
+
+            m3SelectedNovelIndex: 0,
+            m3SelectedNilaiIndex: null,
+
+            bossLevel: 0,
+            bossProgress: {},
+            activeBugId: null
+        };
+
+        // ==========================================
+        // 🛠 工具与 UI 函数
+        // ==========================================
+        function showToast(msg, isSuccess = true) {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-6 left-1/2 transform -translate-x-1/2 px-5 py-3 rounded-full text-sm font-semibold shadow-lg z-[100] animate-fade-in-up flex items-center print-hidden backdrop-blur-md border ${isSuccess ? 'bg-emerald-500/90 border-emerald-400 text-white' : 'bg-rose-500/90 border-rose-400 text-white'}`;
+            toast.innerHTML = isSuccess
+                ? `<i class="ph ph-check-circle text-xl mr-2"></i> <span>${msg}</span>`
+                : `<i class="ph ph-warning-circle text-xl mr-2"></i> <span>${msg}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe.toString().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        window.toggleTranslation = () => {
+            state.showTranslation = !state.showTranslation;
+            render();
+        }
+
+        window.changeMode = (mode) => {
+            state.currentMode = mode;
+            if (mode === 'dashboard' || mode === 'notes') {
+                state.showTranslation = false;
+            }
+            render();
+            window.scrollTo(0, 0);
+        }
+
+        // --- Mod 1 Handlers ---
+        window.handleM1Click = (index, isTarget) => {
+            const currentLevel = state.m1Level;
+            if (!state.m1Progress[currentLevel]) state.m1Progress[currentLevel] = [];
+            if (state.m1Progress[currentLevel].includes(index)) return;
+
+            if (isTarget) {
+                state.m1Progress[currentLevel].push(index);
+                state.score += 20;
+                showToast('提取成功', true);
+
+                const targetCount = mod1Data[currentLevel].targetCount;
+                if (state.m1Progress[currentLevel].length === targetCount) {
+                    showToast(`本关已完成！可以点击“下一题”继续。`, true);
+                }
+                render();
+            } else {
+                const el = document.getElementById(`m1_text_${index}`);
+                if (el) {
+                    el.classList.add('error-text');
+                    setTimeout(() => el.classList.remove('error-text'), 600);
+                }
+                showToast('这句未包含信号词', false);
+            }
+        };
+
+        window.prevM1 = () => {
+            if (state.m1Level > 0) {
+                state.m1Level--;
+                state.showTranslation = false;
+                render();
+            }
+        };
+
+        window.nextM1 = () => {
+            if (state.m1Level < mod1Data.length - 1) {
+                state.m1Level++;
+                state.showTranslation = false;
+                render();
+            }
+        };
+
+        // --- Mod 2 Handlers ---
+        window.setM2Type = (type) => {
+            state.m2Type = type;
+            state.m2SelectedIsi = [];
+            render();
+        };
+
+        window.toggleM2Isi = (id) => {
+            if (state.m2SelectedIsi.includes(id)) {
+                state.m2SelectedIsi = state.m2SelectedIsi.filter(i => i !== id);
+            } else {
+                if (state.m2SelectedIsi.length >= 3) {
+                    showToast("考卷要求 3 个点已足够", false);
+                    return;
+                }
+                state.m2SelectedIsi.push(id);
+            }
+            render();
+        };
+
+        window.submitM2 = () => {
+            if (state.m2SelectedIsi.length === 0) return showToast("请至少选择 1 个模块", false);
+            state.score += 30;
+            showToast("成功组装并保存模板！", true);
+            setTimeout(() => { changeMode('dashboard'); }, 1500);
+        };
+
+        // --- Mod 3 Handlers ---
+        window.setM3Novel = (index) => {
+            state.m3SelectedNovelIndex = index;
+            state.m3SelectedNilaiIndex = null;
+            render();
+        };
+
+        window.setM3Nilai = (index) => {
+            state.m3SelectedNilaiIndex = index;
+            render();
+        };
+
+        window.submitM3 = () => {
+            state.score += 20;
+            showToast("模板生成完毕！", true);
+            setTimeout(() => { changeMode('dashboard'); }, 1500);
+        }
+
+        // --- Boss Handlers ---
+        window.handleBugClick = (id) => {
+            const currentLevel = state.bossLevel;
+            if (!state.bossProgress[currentLevel]) state.bossProgress[currentLevel] = [];
+
+            if (!state.bossProgress[currentLevel].includes(id)) {
+                state.activeBugId = id;
+                render();
+                setTimeout(() => document.getElementById('bossFixInput')?.focus(), 100);
+            }
+        };
+
+        window.closeBossModal = () => {
+            state.activeBugId = null;
+            render();
+        }
+
+        window.submitBossFix = () => {
+            const inputEl = document.getElementById('bossFixInput');
+            if (!inputEl) return;
+            const fixInput = inputEl.value;
+            const activeBossGroup = allBossData[state.bossLevel];
+            const bugItem = activeBossGroup.text.find(b => b.id === state.activeBugId);
+            const isCorrect = fixInput.trim().toLowerCase() === bugItem.correct.toLowerCase();
+
+            if (isCorrect) {
+                const currentLevel = state.bossLevel;
+                if (!state.bossProgress[currentLevel]) state.bossProgress[currentLevel] = [];
+                state.bossProgress[currentLevel].push(state.activeBugId);
+                state.activeBugId = null;
+                state.score += 50;
+                showToast("修复成功！", true);
+
+                if (state.bossProgress[currentLevel].length === 3) {
+                    setTimeout(() => showToast("本关 Bug 已全部扫除！可以前往下一题。", true), 1000);
+                }
+            } else {
+                showToast(`修复失败！提示：${bugItem.hint}`, false);
+            }
+            render();
+        };
+
+        window.prevBoss = () => {
+            if (state.bossLevel > 0) {
+                state.bossLevel--;
+                state.showTranslation = false;
+                state.activeBugId = null;
+                render();
+            }
+        };
+
+        window.nextBoss = () => {
+            if (state.bossLevel < allBossData.length - 1) {
+                state.bossLevel++;
+                state.showTranslation = false;
+                state.activeBugId = null;
+                render();
+            }
+        };
+
+        window.printNotes = () => { window.print(); };
+
+        window.clearData = () => {
+            state.score = 0;
+            state.m1Level = 0; state.m1Progress = {};
+            state.m2Type = null; state.m2SelectedIsi = [];
+            state.m3SelectedNovelIndex = 0; state.m3SelectedNilaiIndex = null;
+            state.bossLevel = 0; state.bossProgress = {};
+            render();
+            showToast("数据已清空重置", true);
+        }
+
+        // ==========================================
+        // 🎨 渲染引擎 (Render Engine)
+        // ==========================================
+        function render() {
+            const app = document.getElementById('app');
+
+            let html = `
+                <div class="fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md border-b border-slate-200 z-50 print-hidden h-14 flex items-center px-6 justify-between">
+                    <div class="flex items-center text-slate-800 font-bold text-lg cursor-pointer" onclick="changeMode('dashboard')">
+                        <i class="ph-duotone ph-terminal-window text-indigo-600 text-2xl mr-2"></i> 
+                        <span class="tracking-tight">Pemahaman<span class="text-indigo-600 font-light">Hacker</span></span>
+                    </div>
+                    <div class="flex items-center bg-slate-100 rounded-full px-3 py-1 border border-slate-200 shadow-sm text-sm font-semibold text-slate-600">
+                        <i class="ph-fill ph-lightning text-yellow-500 mr-1.5 text-base"></i> 
+                        <span id="global-score">${state.score}</span> XP
+                    </div>
+                </div>
+                <div class="pt-20"> 
+            `;
+
+            // ==========================================
+            // DASHBOARD
+            // ==========================================
+            if (state.currentMode === 'dashboard') {
+                html += `
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
+                    <div class="mb-10 text-center sm:text-left mt-8">
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-3">
+                            阅读理解 <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-cyan-500">自动化</span>
+                        </h1>
+                        <p class="text-slate-500 text-lg max-w-2xl">放弃依赖语感，运用第一性原理。将 SPM 考题拆解为“数据检索”与“模块调用”。</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Module 1: Ctrl+F -->
+                        <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:border-indigo-200 transition-all duration-300 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center mb-5 text-indigo-600 group-hover:scale-110 transition-transform">
+                                    <i class="ph-duotone ph-scan text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-slate-800 mb-2">Ctrl+F 检索训练</h3>
+                                <p class="text-slate-500 mb-8 leading-relaxed text-sm">针对 Pemindahan Maklumat 题型。输入信号词，扫描匹配句子，精准提取 10 分。</p>
+                            </div>
+                            <button onclick="changeMode('mod1')" class="w-full py-3 bg-slate-900 hover:bg-indigo-600 text-white rounded-xl font-semibold text-sm transition-colors flex justify-center items-center">
+                                执行检索程序 <i class="ph-bold ph-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Module 2: KBAT -->
+                        <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_rgba(0,0,0,0.06)] hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mb-5 text-emerald-600 group-hover:scale-110 transition-transform">
+                                    <i class="ph-duotone ph-plugs text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-slate-800 mb-2">KBAT 万能组装器</h3>
+                                <p class="text-slate-500 mb-8 leading-relaxed text-sm">直接调用内建的 5 大方向万能积木与标准解释，拼接成完美高分段落。</p>
+                            </div>
+                            <button onclick="changeMode('mod2')" class="w-full py-3 bg-slate-900 hover:bg-emerald-600 text-white rounded-xl font-semibold text-sm transition-colors flex justify-center items-center">
+                                启动组装器 <i class="ph-bold ph-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Module 3: Novel -->
+                        <div class="bg-slate-900 rounded-2xl p-6 md:p-8 border border-slate-800 shadow-[0_10px_30px_rgba(0,0,0,0.1)] hover:border-cyan-500/50 transition-all duration-300 md:col-span-2 flex flex-col md:flex-row gap-8 items-center group relative overflow-hidden">
+                            <!-- Background abstract glow -->
+                            <div class="absolute -right-20 -top-20 w-64 h-64 bg-cyan-500/10 blur-[80px] rounded-full pointer-events-none"></div>
+                            
+                            <div class="flex-1 relative z-10">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mb-4 text-cyan-400 group-hover:scale-110 transition-transform border border-white/5">
+                                    <i class="ph-duotone ph-book-open-text text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2 tracking-wide">Novel 自动生成脚本</h3>
+                                <p class="text-slate-400 leading-relaxed text-sm max-w-xl">
+                                    全马小说通用模块。无需阅读原著小说。选择你的考区和核心价值观参数，系统将自动实例化对应的人物动作与作答模板。
+                                </p>
+                            </div>
+                            <button onclick="changeMode('mod3')" class="w-full md:w-auto py-3 px-8 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-xl font-bold text-sm transition-colors flex justify-center items-center relative z-10 whitespace-nowrap">
+                                执行生成脚本 <i class="ph-bold ph-caret-right ml-2"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Boss Mode -->
+                        <div class="md:col-span-2 mt-2">
+                             <button onclick="changeMode('boss')" class="w-full bg-orange-50 border border-orange-200 rounded-2xl p-5 flex items-center justify-between transition-all hover:bg-orange-100 hover:border-orange-300 group shadow-sm">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-orange-200 rounded-lg flex items-center justify-center mr-4 text-orange-600 group-hover:bg-orange-500 group-hover:text-white transition-colors">
+                                        <i class="ph-bold ph-bug text-xl"></i>
+                                    </div>
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-bold text-orange-900">实战模拟：考场 Debug</h3>
+                                        <p class="text-orange-700/80 text-xs mt-0.5">挑战 SPM 真题难度的抓虫任务，验证学习成果。</p>
+                                    </div>
+                                </div>
+                                <i class="ph-bold ph-arrow-right text-orange-400 group-hover:text-orange-700 transition-colors"></i>
+                            </button>
+                        </div>
+
+                        <!-- Buku Nota -->
+                        <div class="md:col-span-2">
+                            <button onclick="changeMode('notes')" class="w-full bg-white border border-slate-200 rounded-2xl p-5 flex items-center justify-between transition-all hover:bg-slate-50 hover:border-slate-300 group shadow-sm">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center mr-4 text-slate-600 group-hover:text-slate-900 transition-colors">
+                                        <i class="ph-duotone ph-printer text-xl"></i>
+                                    </div>
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-bold text-slate-800">导出实体双语讲义 (Buku Nota)</h3>
+                                        <p class="text-slate-500 text-xs mt-0.5">预览并打印所有 KBAT 积木与全马 Novel 模板，自带中英双语翻译！</p>
+                                    </div>
+                                </div>
+                                <i class="ph-bold ph-arrow-right text-slate-400 group-hover:text-slate-800 transition-colors"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center pt-8 mt-8 border-t border-slate-200 mb-8">
+                        <button onclick="clearData()" class="text-slate-400 hover:text-red-500 font-bold text-xs flex items-center justify-center mx-auto transition-colors z-20 relative">
+                            <i class="ph-bold ph-arrows-clockwise mr-1"></i> 清空所有作答进度 (导师专用)
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // MODULE 1: Ctrl+F Scanner
+            // ==========================================
+            else if (state.currentMode === 'mod1') {
+                const currentData = mod1Data[state.m1Level];
+                const foundItems = state.m1Progress[state.m1Level] || [];
+                const isLevelComplete = foundItems.length === currentData.targetCount;
+
+                html += `
+                <div class="max-w-4xl mx-auto px-4 animate-fade-in-up">
+                    <div class="mb-6 flex justify-between items-center">
+                        <button onclick="changeMode('dashboard')" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> 终止程序并返回
+                        </button>
+                        
+                        <button onclick="toggleTranslation()" class="text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-indigo-200 flex items-center">
+                            ${state.showTranslation ? '<i class="ph-fill ph-eye-slash mr-1.5"></i> 隐藏翻译' : '<i class="ph-fill ph-translate mr-1.5"></i> 显示逐句翻译'}
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden ${state.showTranslation ? 'show-trans' : ''}">
+                        <div class="bg-slate-50 px-6 py-3 border-b border-slate-200 flex justify-between items-center">
+                            <div class="flex items-center text-slate-600 text-sm font-semibold">
+                                <i class="ph-duotone ph-folder-open mr-2 text-indigo-500"></i> ${currentData.title}
+                            </div>
+                            <div class="text-xs font-bold bg-white border border-slate-200 text-slate-600 px-3 py-1 rounded-md shadow-sm">
+                                目标: <span id="m1_counter" class="text-indigo-600">${foundItems.length} / ${currentData.targetCount}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 border-b border-slate-100 bg-slate-900 text-white relative overflow-hidden">
+                            <div class="absolute right-0 top-0 w-32 h-full bg-gradient-to-l from-indigo-500/20 to-transparent pointer-events-none"></div>
+                            <p class="text-indigo-300 font-mono text-xs mb-2 flex items-center"><i class="ph-bold ph-terminal mr-1.5"></i> QUERY_PARAMETER</p>
+                            <h2 class="text-lg sm:text-xl font-medium leading-relaxed relative z-10 text-slate-100">${currentData.question}</h2>
+                        </div>
+
+                        <div class="p-8 sm:p-10 bg-white">
+                            <div class="flex items-center text-slate-400 text-xs font-bold tracking-wider uppercase mb-6 border-b border-slate-100 pb-2">
+                                <i class="ph-bold ph-file-text mr-2"></i> Document Stream
+                            </div>
+                            
+                            <div class="space-y-4">
+                                ${currentData.text.map((item, idx) => {
+                    const isFound = foundItems.includes(idx);
+                    const spanClass = isFound
+                        ? "highlight-text px-1 mx-[2px] transition-all duration-300 inline-block cursor-default"
+                        : "inline-block cursor-pointer hover:bg-slate-100 transition-colors rounded-md px-2 py-1 border border-transparent hover:border-slate-200 text-slate-700 text-base sm:text-lg leading-relaxed font-medium";
+
+                    return `
+                                    <div class="group relative">
+                                        <span id="m1_text_${idx}" onclick="handleM1Click(${idx}, ${item.isTarget})" class="${spanClass}">
+                                            ${item.t}
+                                        </span>
+                                        ${item.trans ? `<div class="trans-text pl-2 mt-1 text-sm text-indigo-600/80 font-medium border-l-2 border-indigo-200 ml-1 pb-2">${item.trans}</div>` : ''}
+                                    </div>
+                                    `;
+                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 🚀 导航栏 -->
+                    <div class="mt-8 flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-8">
+                        <button onclick="prevM1()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center" ${state.m1Level === 0 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-left mr-2"></i> 上一题
+                        </button>
+                        <div class="text-slate-400 font-bold text-sm tracking-widest">${state.m1Level + 1} / ${mod1Data.length}</div>
+                        <button onclick="nextM1()" class="px-5 py-2.5 rounded-xl font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center ${isLevelComplete ? 'bg-emerald-500 hover:bg-emerald-600 shadow-[0_4px_0_rgb(5,150,105)] active:translate-y-1 active:shadow-none' : 'bg-indigo-500 hover:bg-indigo-600'}" ${state.m1Level === mod1Data.length - 1 ? 'disabled' : ''}>
+                            下一题 <i class="ph-bold ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // MODULE 2: KBAT Builder
+            // ==========================================
+            else if (state.currentMode === 'mod2') {
+                const config = state.m2Type ? m2Categories[state.m2Type] : null;
+
+                html += `
+                <div class="max-w-6xl mx-auto px-4 animate-fade-in-up pb-8 ${state.showTranslation ? 'show-trans' : ''}">
+                    <div class="mb-6 flex justify-between items-center">
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeMode('dashboard')" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center transition-colors">
+                                <i class="ph-bold ph-arrow-left mr-1.5"></i> 终止程序
+                            </button>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            ${state.m2Type ? `
+                            <button onclick="toggleTranslation()" class="text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-indigo-200 flex items-center">
+                                ${state.showTranslation ? '<i class="ph-fill ph-eye-slash mr-1.5"></i> 隐藏翻译' : '<i class="ph-fill ph-translate mr-1.5"></i> 显示双语翻译'}
+                            </button>
+                            <button onclick="setM2Type(null)" class="text-emerald-600 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-emerald-200 flex items-center">
+                                <i class="ph-bold ph-arrow-u-up-left mr-1.5"></i> 重选类型
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center">
+                            <i class="ph-duotone ph-plugs mr-2 text-emerald-500 text-lg"></i>
+                            <span class="font-semibold text-slate-700 text-sm">KBAT 模块构建器</span>
+                        </div>
+
+                        <div class="p-6 md:p-8">
+                            ${!state.m2Type ? `
+                                <div class="max-w-4xl mx-auto py-6">
+                                    <h2 class="text-2xl font-bold text-slate-800 mb-2 text-center">选择输出方向</h2>
+                                    <p class="text-slate-500 text-sm text-center mb-8">确定题目要求的解答逻辑类型。SPM 考题通常围绕以下 5 个方向：</p>
+                                    
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
+                                        ${Object.values(m2Categories).map(cat => `
+                                            <button onclick="setM2Type('${cat.id}')" class="border border-slate-200 bg-white p-6 rounded-xl hover:border-${cat.color}-500 hover:shadow-md transition-all text-left group">
+                                                <div class="w-10 h-10 bg-${cat.color}-50 rounded-full flex items-center justify-center mb-4 text-${cat.color}-600 group-hover:bg-${cat.color}-500 group-hover:text-white transition-colors">
+                                                    <i class="ph-bold ${cat.icon} text-xl"></i>
+                                                </div>
+                                                <h3 class="text-lg font-bold text-slate-800 mb-1">${cat.title}</h3>
+                                                <p class="text-slate-500 text-xs">${cat.subtitle}</p>
+                                            </button>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="flex flex-col lg:flex-row gap-6">
+                                    <div class="flex-1 flex flex-col">
+                                        
+                                        <!-- 🆕 真题示例展示区 (支持翻译) -->
+                                        <div class="bg-slate-900 text-white p-5 rounded-xl mb-6 shadow-inner relative border-l-4 border-${config.color}-500">
+                                            <p class="text-${config.color}-400 font-mono text-xs mb-1 tracking-wider uppercase">📝 Soalan Contoh KBAT (真实考题示例)</p>
+                                            <p class="font-medium text-lg leading-snug">${config.sampleQ}</p>
+                                            <div class="trans-text text-sm border-t border-slate-700 pt-3 mt-3 space-y-1.5">
+                                                <p class="text-indigo-300 leading-relaxed"><span class="font-bold text-indigo-400">EN:</span> ${config.sampleQEn}</p>
+                                                <p class="text-indigo-300 leading-relaxed"><span class="font-bold text-indigo-400">ZH:</span> ${config.sampleQZh}</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex justify-between items-center mb-4">
+                                            <h2 class="text-sm font-bold text-slate-400 tracking-wider uppercase"><i class="ph-bold ph-database mr-1"></i> 模块库 (选择 2-3 个)</h2>
+                                        </div>
+                                        <div class="space-y-3 h-[400px] overflow-y-auto pr-2">
+                                            ${config.data.map(item => {
+                    const isSelected = state.m2SelectedIsi.includes(item.id);
+                    return `
+                                                <div onclick="toggleM2Isi('${item.id}')" class="cursor-pointer border rounded-xl p-4 transition-all relative overflow-hidden bg-white ${isSelected ? `border-${config.color}-500 ring-1 ring-${config.color}-500 shadow-sm` : 'border-slate-200 hover:border-slate-400'}">
+                                                    ${isSelected ? `<div class="absolute top-3 right-4 text-${config.color}-500"><i class="ph-fill ph-check-circle text-lg"></i></div>` : ''}
+                                                    <h4 class="font-bold text-sm text-slate-800 pr-6">${item.isi}</h4>
+                                                    <div class="trans-text text-xs text-indigo-600/80 mb-2 font-medium">
+                                                        <p>EN: ${item.isiEn} <span class="mx-1 opacity-50">|</span> ZH: ${item.isiZh}</p>
+                                                    </div>
+                                                    <p class="text-slate-500 text-xs leading-relaxed mt-1">${item.huraian}</p>
+                                                    <div class="trans-text text-xs text-indigo-600/80 mt-1 font-medium border-l-2 border-indigo-100 pl-2 space-y-0.5">
+                                                        <p>EN: ${item.huraianEn}</p>
+                                                        <p>ZH: ${item.huraianZh}</p>
+                                                    </div>
+                                                </div>`;
+                }).join('')}
+                                        </div>
+                                    </div>
+
+                                    <div class="flex-1 flex flex-col mt-6 lg:mt-0">
+                                        <h2 class="text-sm font-bold text-slate-400 tracking-wider uppercase mb-4"><i class="ph-bold ph-terminal-window mr-1"></i> 编译预览 (Compiled Output)</h2>
+                                        <div class="bg-slate-900 text-slate-300 p-6 rounded-xl flex-1 shadow-inner text-sm leading-[1.8] font-mono relative">
+                                            <div class="absolute top-3 left-4 flex gap-1.5 opacity-50">
+                                                <div class="w-2.5 h-2.5 rounded-full bg-rose-500"></div>
+                                                <div class="w-2.5 h-2.5 rounded-full bg-amber-500"></div>
+                                                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
+                                            </div>
+                                            <div class="mt-4">
+                                            ${state.m2SelectedIsi.length === 0 ? `
+                                                <div class="h-full flex flex-col items-center justify-center text-slate-600 opacity-50 py-20">
+                                                    <i class="ph-duotone ph-code text-4xl mb-3"></i>
+                                                    <p class="font-sans">等待组件导入...</p>
+                                                </div>
+                                            ` : `
+                                                <div class="font-sans text-[15px] text-slate-200 tracking-wide">
+                                                    <p class="mb-4">
+                                                        <span class="text-slate-500">Pada pendapat saya, ${config.prefix} ialah</span> 
+                                                        <span class="text-${config.color}-400 font-semibold">${config.data.find(i => i.id === state.m2SelectedIsi[0]).isi.toLowerCase()}</span>. 
+                                                        <span class="text-cyan-300">${config.data.find(i => i.id === state.m2SelectedIsi[0]).huraian}</span>
+                                                    </p>
+                                                    
+                                                    ${state.m2SelectedIsi.length > 1 ? `
+                                                        <p class="mb-4">
+                                                            <span class="text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono mr-1 border border-slate-700">Selain itu,</span> 
+                                                            <span class="text-slate-500">${config.prefix.replace('utamanya', 'lain')} ialah</span> 
+                                                            <span class="text-${config.color}-400 font-semibold">${config.data.find(i => i.id === state.m2SelectedIsi[1]).isi.toLowerCase()}</span>. 
+                                                            <span class="text-cyan-300">${config.data.find(i => i.id === state.m2SelectedIsi[1]).huraian}</span>
+                                                        </p>
+                                                    ` : ''}
+
+                                                    ${state.m2SelectedIsi.length > 2 ? `
+                                                        <p class="mb-4">
+                                                            <span class="text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded text-xs font-mono mr-1 border border-slate-700">Seterusnya,</span> 
+                                                            <span class="text-slate-500">${config.prefix.replace('utamanya', 'yang seterusnya')} ialah</span> 
+                                                            <span class="text-${config.color}-400 font-semibold">${config.data.find(i => i.id === state.m2SelectedIsi[2]).isi.toLowerCase()}</span>. 
+                                                            <span class="text-cyan-300">${config.data.find(i => i.id === state.m2SelectedIsi[2]).huraian}</span>
+                                                        </p>
+                                                    ` : ''}
+                                                </div>
+                                            `}
+                                            </div>
+                                        </div>
+                                        ${state.m2SelectedIsi.length > 0 ? `
+                                        <button onclick="submitM2()" class="w-full py-3 mt-4 bg-slate-900 hover:bg-emerald-600 text-white rounded-xl font-bold text-sm transition-colors shadow-sm flex justify-center items-center">
+                                            <i class="ph-bold ph-check mr-2"></i> 导出标准答案
+                                        </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // MODULE 3: Novel Data Extractor
+            // ==========================================
+            else if (state.currentMode === 'mod3') {
+                const currentNovel = mod3Novels[state.m3SelectedNovelIndex];
+                const currentNilai = state.m3SelectedNilaiIndex !== null ? currentNovel.data[state.m3SelectedNilaiIndex] : null;
+
+                html += `
+                <div class="max-w-5xl mx-auto px-4 animate-fade-in-up pb-8 ${state.showTranslation ? 'show-trans' : ''}">
+                    <div class="mb-6 flex justify-between items-center">
+                        <button onclick="changeMode('dashboard')" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> 终止程序并返回
+                        </button>
+                        <button onclick="toggleTranslation()" class="text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-indigo-200 flex items-center">
+                            ${state.showTranslation ? '<i class="ph-fill ph-eye-slash mr-1.5"></i> 隐藏翻译' : '<i class="ph-fill ph-translate mr-1.5"></i> 显示双语翻译'}
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-900 rounded-[2rem] shadow-xl border border-slate-800 overflow-hidden text-slate-300">
+                        <div class="p-8 md:p-12">
+                            <div class="flex items-center justify-between mb-10 border-b border-slate-800 pb-6">
+                                <div>
+                                    <h2 class="text-3xl font-extrabold text-white tracking-tight mb-2">Novel <span class="text-cyan-400 font-light">Data Extractor</span></h2>
+                                    <p class="text-slate-500 text-sm">选择参数，系统将自动编译全马小说标准作答脚本。</p>
+                                </div>
+                                <i class="ph-duotone ph-book-open-text text-4xl text-slate-700"></i>
+                            </div>
+
+                            <div class="flex flex-col lg:flex-row gap-10">
+                                <div class="flex-1 space-y-8">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 tracking-wider uppercase mb-3"><span class="text-cyan-500 mr-2">01</span>对象源 (Source)</label>
+                                        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                                            ${mod3Novels.map((novel, idx) => `
+                                                <button onclick="setM3Novel(${idx})" class="py-3 px-4 rounded-xl text-sm font-semibold border transition-all text-left flex flex-col ${state.m3SelectedNovelIndex === idx ? 'bg-cyan-500/10 border-cyan-500/50 text-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.2)]' : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-600'}">
+                                                    <span class="truncate w-full leading-tight mb-1 text-xs sm:text-sm">${novel.title.split(' (')[0]}</span>
+                                                    <span class="text-[10px] opacity-70 font-normal uppercase tracking-wider">${novel.title.split(' (')[1].replace(')', '')}</span>
+                                                </button>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 tracking-wider uppercase mb-3"><span class="text-cyan-500 mr-2">02</span>特征值 (Nilai Parameter)</label>
+                                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            ${currentNovel.data.map((data, idx) => `
+                                                <button onclick="setM3Nilai(${idx})" class="py-3 px-3 rounded-xl text-sm font-semibold border transition-all relative ${state.m3SelectedNilaiIndex === idx ? 'bg-indigo-500 border-indigo-400 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'bg-slate-800/50 border-slate-700 text-slate-400 hover:border-slate-600'}">
+                                                    ${data.nilai}
+                                                    <div class="trans-text text-[10px] opacity-70 mt-0.5">${data.nilaiZh}</div>
+                                                </button>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex-1 lg:max-w-md">
+                                    <label class="block text-xs font-bold text-slate-500 tracking-wider uppercase mb-3"><span class="text-cyan-500 mr-2">03</span>编译输出 (Generated Script)</label>
+                                    ${currentNilai ? `
+                                        <div class="bg-black/40 border border-slate-800 p-6 rounded-2xl relative animate-fade-in-up">
+                                            <p class="text-base leading-[2] font-medium text-slate-300">
+                                                Berdasarkan novel yang saya kaji, iaitu <span class="font-bold text-cyan-400 underline decoration-cyan-500/30 underline-offset-4">${currentNovel.title.split(' (')[0]}</span>, 
+                                                terdapat <span class="font-bold text-indigo-400">nilai ${currentNilai.nilai.toLowerCase()}</span> yang ditunjukkan oleh watak utama.
+                                                <br/><br/>
+                                                Contohnya, <span class="font-bold text-emerald-400">${currentNilai.watak}</span> <span class="text-white">${currentNilai.huraian.replace(currentNilai.watak + ' ', '')}</span>
+                                            </p>
+                                            
+                                            <!-- 🆕 生成脚本的中英翻译 -->
+                                            <div class="trans-text mt-4 pt-4 border-t border-slate-700 space-y-2 text-sm">
+                                                <p class="text-indigo-300 leading-relaxed"><span class="font-bold text-indigo-400">EN:</span> Based on the novel I studied, which is <span class="text-cyan-400">${currentNovel.title.split(' (')[0]}</span>, there is the value of <span class="text-indigo-400">${currentNilai.nilaiEn.toLowerCase()}</span> shown by the main character. For example, <span class="text-emerald-400">${currentNilai.watak}</span> ${currentNilai.huraianEn.replace(/they/gi, 'he/she')}</p>
+                                                <p class="text-indigo-300 leading-relaxed mt-2"><span class="font-bold text-indigo-400">ZH:</span> 根据我所研究的小说，即 <span class="text-cyan-400">${currentNovel.title.split(' (')[0]}</span>，主角展现了<span class="text-indigo-400">${currentNilai.nilaiZh}</span>的价值观。例如，<span class="text-emerald-400">${currentNilai.watak}</span> ${currentNilai.huraianZh}</p>
+                                            </div>
+
+                                            <button onclick="submitM3()" class="w-full mt-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-900 rounded-xl font-bold text-sm transition-colors flex justify-center items-center"><i class="ph-bold ph-copy mr-2"></i> 复制脚本</button>
+                                        </div>
+                                    ` : `
+                                        <div class="h-[200px] border-2 border-dashed border-slate-800 rounded-2xl flex items-center justify-center text-slate-600 font-medium text-sm bg-black/20">
+                                            等待参数输入...
+                                        </div>
+                                    `}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // BOSS MODE
+            // ==========================================
+            else if (state.currentMode === 'boss') {
+                const activeBossGroup = allBossData[state.bossLevel];
+                const foundBugsForLevel = state.bossProgress[state.bossLevel] || [];
+                const isAllFixed = foundBugsForLevel.length === 3;
+
+                let textHtml = activeBossGroup.text.map(item => {
+                    const isFixed = foundBugsForLevel.includes(item.id);
+
+                    let malayText = `<span>${item.text}</span>`;
+                    if (item.isBug) {
+                        let classes = `inline-block px-2 rounded cursor-pointer transition-all `;
+                        if (isFixed) {
+                            classes += `bg-emerald-600 text-white line-through decoration-[2px] decoration-rose-400 pointer-events-none`;
+                            malayText = `<span class="${classes}">${item.text}</span> <span class="bg-white text-emerald-700 px-2 py-0.5 rounded text-sm font-bold shadow-sm mx-1">${item.correct}</span>`;
+                        } else if (state.activeBugId === item.id) {
+                            classes += `bg-indigo-600 text-white ring-2 ring-indigo-300`;
+                            malayText = `<span onclick="handleBugClick('${item.id}')" class="${classes}">${item.text}</span>`;
+                        } else {
+                            classes += `bg-rose-50 text-rose-600 hover:bg-rose-100 border-b-2 border-dashed border-rose-400`;
+                            malayText = `<span onclick="handleBugClick('${item.id}')" class="${classes}">${item.text}</span>`;
+                        }
+                    }
+
+                    return `
+                        <div class="inline-block relative group mb-2">
+                            ${malayText}
+                            ${item.trans ? `<span class="trans-text block text-xs text-indigo-400 mt-0.5 px-1">${item.trans}</span>` : ''}
+                        </div>
+                    `;
+                }).join(' ');
+
+                html += `
+                <div class="max-w-5xl mx-auto mt-4 px-4 animate-fade-in-up">
+                    <div class="mb-6 flex justify-between items-center">
+                        <button onclick="changeMode('dashboard')" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> 终止程序并返回
+                        </button>
+                        <button onclick="toggleTranslation()" class="text-orange-600 bg-orange-50 hover:bg-orange-100 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-orange-200 flex items-center">
+                            ${state.showTranslation ? '<i class="ph-fill ph-eye-slash mr-1.5"></i> 隐藏翻译' : '<i class="ph-fill ph-translate mr-1.5"></i> 显示逐句翻译'}
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-[2rem] shadow-xl border-t-8 border-orange-500 overflow-hidden ${state.showTranslation ? 'show-trans' : ''}">
+                        <div class="bg-orange-50 px-6 py-4 border-b border-orange-100 flex justify-between items-center">
+                            <div class="flex items-center text-orange-800 text-sm font-bold">
+                                <i class="ph-fill ph-target mr-2 text-lg"></i> ${activeBossGroup.title}
+                            </div>
+                            <div class="text-xs font-bold bg-white text-orange-600 px-3 py-1 rounded-md shadow-sm border border-orange-200">
+                                已修复: ${foundBugsForLevel.length} / 3
+                            </div>
+                        </div>
+
+                        <div class="p-8 md:p-12">
+                            <div class="bg-slate-900 p-8 rounded-3xl text-slate-300 text-lg sm:text-xl leading-loose font-mono shadow-inner relative">
+                                <p class="text-xs text-slate-500 mb-4 tracking-wider uppercase"><i class="ph-bold ph-code"></i> Text Source</p>
+                                ${textHtml}
+                            </div>
+                        </div>
+
+                        ${state.activeBugId ? `
+                        <div class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                            <div class="bg-white p-8 rounded-[2rem] shadow-2xl max-w-md w-full animate-bounce-in border border-slate-200">
+                                <h3 class="text-2xl font-black text-rose-600 mb-2 flex items-center"><i class="ph-fill ph-bug mr-2 text-3xl"></i> 异常变量</h3>
+                                <p class="text-slate-500 text-sm mb-6">请为选中的词语输入正确的修复补丁：
+                                    <br><span class="inline-block mt-2 font-mono font-bold text-slate-800 bg-slate-100 px-2 py-1 rounded">${activeBossGroup.text.find(b => b.id === state.activeBugId).text}</span>
+                                </p>
+                                <input type="text" id="bossFixInput" placeholder="正确写法..." 
+                                    class="w-full border-2 border-slate-200 rounded-xl p-4 text-lg font-bold mb-6 focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-100 transition-all"
+                                    onkeydown="if(event.key === 'Enter') submitBossFix()" />
+                                <div class="flex justify-end gap-3">
+                                    <button onclick="closeBossModal()" class="px-6 py-2.5 rounded-xl font-bold text-slate-500 bg-slate-100 hover:bg-slate-200 transition-colors text-sm">取消</button>
+                                    <button onclick="submitBossFix()" class="px-6 py-2.5 rounded-xl font-bold text-white bg-emerald-500 hover:bg-emerald-600 shadow-sm transition-colors text-sm">应用补丁</button>
+                                </div>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+
+                    <!-- 🚀 导航栏 -->
+                    <div class="mt-8 flex justify-between items-center bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-8">
+                        <button onclick="prevBoss()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center" ${state.bossLevel === 0 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-left mr-2"></i> 上一题
+                        </button>
+                        <div class="text-slate-400 font-bold text-sm tracking-widest">${state.bossLevel + 1} / ${allBossData.length}</div>
+                        <button onclick="nextBoss()" class="px-5 py-2.5 rounded-xl font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center ${isAllFixed ? 'bg-orange-500 hover:bg-orange-600 shadow-[0_4px_0_rgb(234,88,12)] active:translate-y-1 active:shadow-none' : 'bg-slate-800 hover:bg-slate-900'}" ${state.bossLevel === allBossData.length - 1 ? 'disabled' : ''}>
+                            下一题 <i class="ph-bold ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // NOTES MODE (BUKU NOTA)
+            // ==========================================
+            else if (state.currentMode === 'notes') {
+                html += `
+                <div class="max-w-4xl mx-auto px-4 py-8 animate-fade-in-up">
+                    <div class="flex justify-between items-center mb-8 print-hidden">
+                        <button onclick="changeMode('dashboard')" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> 返回大厅
+                        </button>
+                        <button onclick="printNotes()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-xl text-sm font-bold flex items-center shadow-md active:scale-95 transition-all">
+                            <i class="ph-bold ph-printer mr-2"></i> 打印双语讲义
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-8 md:p-14 rounded-2xl shadow-sm border border-slate-200 print:shadow-none print:border-none print:p-0">
+                        <div class="text-center mb-12 border-b border-slate-200 pb-8 print-border-black">
+                            <h1 class="text-3xl font-extrabold text-slate-900 mb-3 print-text-black">理解文与小说作弊码 (Buku Nota)</h1>
+                            <p class="text-slate-500 text-sm">包含中英双语翻译的万能积木与模板，SPM 考前必读。</p>
+                        </div>
+
+                        <!-- Section: KBAT -->
+                        <div class="mb-14 print-break-inside-avoid">
+                            <h2 class="text-xl font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 mb-6 print-text-black print-border-black flex items-center"><i class="ph-fill ph-puzzle-piece mr-2 text-indigo-500"></i> 模块二：KBAT 5 大方向万能点子</h2>
+                            
+                            ${Object.values(m2Categories).map(cat => `
+                                <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 mt-8 print-text-black border-b border-slate-100 pb-2">📌 ${cat.title}</h3>
+                                <div class="space-y-4">
+                                    ${cat.data.map(item => `
+                                        <div class="border border-slate-200 p-5 rounded-xl print-border-black bg-slate-50">
+                                            <div class="mb-3 border-b border-slate-200 pb-3 print-border-black">
+                                                <p class="font-black text-lg text-slate-800 print-text-black"><span class="text-${cat.color}-600 mr-2 text-sm font-black bg-${cat.color}-100 px-2 py-0.5 rounded">ISI</span> ${item.isi}</p>
+                                                <p class="text-slate-500 text-sm mt-1 print-text-black"><span class="font-bold text-slate-400">EN:</span> ${item.isiEn} <span class="mx-2 text-slate-300">|</span> <span class="font-bold text-slate-400">ZH:</span> ${item.isiZh}</p>
+                                            </div>
+                                            <div>
+                                                <p class="text-slate-700 font-medium text-sm print-text-black"><span class="text-slate-400 mr-2 font-bold text-xs bg-slate-200 px-2 py-0.5 rounded">HURAIAN</span> ${item.huraian}</p>
+                                                <p class="text-slate-500 text-xs mt-1.5 print-text-black"><span class="font-bold text-slate-400">EN:</span> ${item.huraianEn}</p>
+                                                <p class="text-slate-500 text-xs mt-0.5 print-text-black"><span class="font-bold text-slate-400">ZH:</span> ${item.huraianZh}</p>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <!-- Section: Novel -->
+                        <div class="print-break-inside-avoid pt-8 border-t border-slate-200 print-border-black">
+                            <h2 class="text-xl font-bold text-slate-800 border-l-4 border-cyan-500 pl-3 mb-6 print-text-black print-border-black flex items-center"><i class="ph-fill ph-book-open-text mr-2 text-cyan-500"></i> 全马 SPM 小说万能答案 (Novel Zon 1-4)</h2>
+                            
+                            ${mod3Novels.map(novel => `
+                                <div class="mb-10">
+                                    <h3 class="text-sm font-bold text-slate-700 bg-slate-100 inline-block px-3 py-1.5 rounded-lg mb-4 print-text-black print-bg-transparent border print-border-black"><i class="ph-bold ph-book mr-1"></i> ${novel.title}</h3>
+                                    <div class="space-y-3">
+                                        ${novel.data.map((item, idx) => `
+                                            <div class="border border-slate-200 p-4 rounded-xl print-border-black bg-white">
+                                                <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-3 border-b border-slate-100 pb-2 print-border-black">
+                                                    <p class="font-black text-base text-cyan-700 print-text-black">${item.nilai} <span class="text-xs font-semibold text-slate-400 ml-2">(${item.nilaiEn} | ${item.nilaiZh})</span></p>
+                                                    <p class="text-sm font-bold text-slate-600 print-text-black mt-1 sm:mt-0"><span class="bg-slate-100 px-2 py-0.5 rounded text-xs mr-1">Watak:</span> ${item.watak}</p>
+                                                </div>
+                                                <p class="text-slate-700 font-medium text-sm print-text-black leading-relaxed">${item.huraian}</p>
+                                                <div class="mt-2 text-xs text-slate-500 print-text-black space-y-0.5">
+                                                    <p><span class="font-bold text-slate-400">EN:</span> ${item.huraianEn}</p>
+                                                    <p><span class="font-bold text-slate-400">ZH:</span> ${item.huraianZh}</p>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            html += `</div>`; // Close pt-20 spacer
+            app.innerHTML = html;
+        }
+
+        // Init
+        render();
+
+        window.addEventListener('load', async () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data) {
+                    const p = saved.progress_data;
+                    if (p.score !== undefined) state.score = p.score;
+                    if (p.m1Level !== undefined) state.m1Level = p.m1Level;
+                    if (p.m1Progress) state.m1Progress = p.m1Progress;
+                    if (p.bossLevel !== undefined) state.bossLevel = p.bossLevel;
+                    if (p.bossProgress) state.bossProgress = p.bossProgress;
+                    render();
+                }
+            }
+        });
+
+        const originalShowToast = showToast;
+        showToast = function(msg, isSuccess = true) {
+            originalShowToast(msg, isSuccess);
+            if (isSuccess && typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({
+                    score: state.score,
+                    m1Level: state.m1Level,
+                    m1Progress: state.m1Progress,
+                    bossLevel: state.bossLevel,
+                    bossProgress: state.bossProgress
+                });
+            }
+        };
+
+        const originalClearData = window.clearData;
+        window.clearData = function() {
+            originalClearData();
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({
+                    score: 0,
+                    m1Level: 0,
+                    m1Progress: {},
+                    m2Type: null,
+                    m2SelectedIsi: [],
+                    bossLevel: 0,
+                    bossProgress: {}
+                });
+            }
+        };
+    </script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="spm-f5-bm-reading"
+            data-module-name="SPM Reading Hacker"
+            data-module-url="content/SPM_Syllabus/Form5/BM/Reading_Comprehension/index.html">
+    </script>
+</body>
+
+</html>
