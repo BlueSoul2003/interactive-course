@@ -118,6 +118,24 @@
         }
 
         /* Animations */
+        @keyframes movQ { 0%, 50% { transform: translate(0,0); opacity:1; } 100% { transform: translate(110px, 30px); opacity:0; } }
+        @keyframes movR { 0%, 50% { transform: translate(0,0); opacity:1; } 100% { transform: translate(150px, -15px); opacity:0; } }
+        @keyframes movD { 0%, 50% { transform: translate(0,0); opacity:1; } 100% { transform: translate(150px, 35px); opacity:0; } }
+        @keyframes fadeAns { 0%, 80% { opacity: 0; transform: scale(0.8); } 100% { opacity: 1; transform: scale(1); box-shadow: 0 0 20px rgba(255,255,0,0.8); } }
+        
+        .anim-mov-q { animation: movQ 3.5s infinite; }
+        .anim-mov-r { animation: movR 3.5s infinite; }
+        .anim-mov-d { animation: movD 3.5s infinite; }
+        .anim-fade-ans { animation: fadeAns 3.5s infinite; border-radius: 8px; }
+
+        @keyframes strikeAnim { 0% { width: 0; } 100% { width: 100%; } }
+        @keyframes popAnim { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        .anim-strike { position: relative; display: inline-block; }
+        .anim-strike::after { content: ''; position: absolute; left: 0; top: 50%; width: 100%; height: 4px; background-color: red; animation: strikeAnim 0.5s ease forwards; animation-delay: 1s; }
+        .anim-pop { animation: popAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; animation-delay: 1.5s; display: inline-block; }
+        .anim-pop-text { animation: popAnim 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; animation-delay: 0.5s; display: inline-block; color: #ff9f43; margin: 0 10px; font-weight: bold; }
+
         @keyframes shake {
 
             0%,
@@ -659,7 +677,7 @@
     <!-- TACTICAL BOARD MODAL -->
     <div id="tactics-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center hidden">
         <div
-            class="pixel-box bg-[#1e272e] border-[#0be881] text-white max-w-2xl w-full max-h-[90vh] flex flex-col relative shadow-[0_0_30px_rgba(11,232,129,0.3)]">
+            class="pixel-box bg-[#1e272e] border-[#0be881] text-white w-full h-full max-w-full max-h-screen border-none rounded-none flex flex-col relative shadow-[0_0_30px_rgba(11,232,129,0.3)]">
             <button onclick="closeTactics()"
                 class="absolute top-2 right-2 text-red-500 text-xl font-bold hover:text-red-400">X</button>
             <h2 class="text-[#0be881] text-center mb-4 text-xl border-b-2 border-[#0be881] pb-2">📋 COACH'S BOARD</h2>
@@ -905,66 +923,653 @@
             targetQuestionRaw: ""
         };
 
-        /* --- TACTICS ENGINE RULES --- */
+        const genSimplifyStep = (n, d, targetN, targetD, stepNum) => {
+            if (parseInt(n)*parseInt(targetD) === parseInt(targetN)*parseInt(d) && parseInt(n) !== parseInt(targetN)) {
+                let gcd = parseInt(n) / parseInt(targetN);
+                return `Step ${stepNum}: Simplify the fraction by dividing top and bottom by ${gcd}.<br><br>
+                <div class="flex items-center text-3xl font-mono mx-auto w-max mb-6">
+                    <div class="flex flex-col items-center mr-4 relative">
+                        <span class="anim-strike text-yellow-300">[I:${n}]</span>
+                        <span class="w-full border-b-2 border-white my-1"></span>
+                        <span class="anim-strike text-white">[I:${d}]</span>
+                    </div>
+                    <div class="anim-pop-text text-xl">÷ [I:${gcd}]</div>
+                    <div class="flex flex-col items-center ml-4">
+                        <span class="anim-pop text-cyan-300">[F:${targetN}/${targetD}]</span>
+                    </div>
+                </div>`;
+            }
+            return "";
+        };
+
         const TACTICS_RULES = [
+            // Q77: Judi baked a cake. She gave {3/8} to her neighbor. What fraction left? [F:5/8]
             {
-                // Rule: Mixed to Improper (e.g., 8 {5/7} = [F:61/7])
-                regex: /(\d+)\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
+                regex: /Judi baked a cake\. She gave \{(\d+)\/(\d+)\}.+\[F:(\d+)\/(\d+)\]/,
                 handler: (m) => [
-                    `Concept: Multiply the whole number by the denominator, and then add the numerator.`,
-                    `Step 1: Multiply Whole Number × Denominator.<br><br><span class="math-text">[I:${m[1]}] × [I:${m[3]}] = [I:${m[1] * m[3]}]</span>`,
-                    `Step 2: Add the Numerator to that answer.<br><br><span class="math-text">[I:${m[1] * m[3]}] + [I:${m[2]}] = [I:${m[4]}]</span>`,
-                    `Step 3: Put that new number over the original denominator.<br><br><span class="math-text">[F:${m[4]}/${m[5]}]</span>`
+                    `Concept: A whole cake is 1! Let's subtract the part she gave away.`,
+                    `Step 1: Convert 1 whole cake into a fraction.<br><br><span class="math-text">1 = [F:${m[2]}/${m[2]}]</span>`,
+                    `Step 2: Subtract the part given away from the whole.<br><br><span class="math-text">[F:${m[2]}/${m[2]}] - [F:${m[1]}/${m[2]}] = [F:${m[3]}/${m[4]}]</span>`
                 ]
             },
+            // Q78: Empty can = {1/6} lb. With sand = {7/12} lb. Mass of sand? [F:5/12] lb
             {
-                // Rule: Improper to Mixed (e.g., {11/2} = [M:5 1/2])
-                regex: /\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
-                handler: (m) => [
-                    `Concept: Divide the numerator (top) by the denominator (bottom).`,
-                    `Step 1: How many times does ${m[2]} go into ${m[1]} completely?<br><br><span class="math-text">It goes in [I:${m[3]}] times.</span>`,
-                    `Step 2: Calculate the remainder.<br><br><span class="math-text">${m[1]} - (${m[3]} × ${m[2]}) = [I:${m[4]}]</span>`,
-                    `Step 3: Write the final mixed number. The whole number comes from Step 1, the remainder from Step 2.<br><br><span class="math-text">[M:${m[3]} ${m[4]}/${m[5]}]</span>`
-                ]
-            },
-            {
-                // Rule: Add fractions (e.g., {2/5} + {4/5} = [M:1 1/5])
-                regex: /\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                regex: /Empty can = \{(\d+)\/(\d+)\}.+With sand = \{(\d+)\/(\d+)\}.+\[F:(\d+)\/(\d+)\]/,
                 handler: (m) => {
-                    let top = parseInt(m[1]) + parseInt(m[3]);
+                    let d1 = parseInt(m[2]); let d2 = parseInt(m[4]);
+                    let cDenom = Math.max(d1, d2);
+                    let n1 = m[1] * (cDenom/d1); let n2 = m[3] * (cDenom/d2);
+                    let finalN = n2 - n1;
+                    let arr = [
+                        `Concept: Mass of sand = (Total with sand) - (Empty can).`,
+                        `Step 1: Write the subtraction equation.<br><br><span class="math-text">{${m[3]}/${d2}} - {${m[1]}/${d1}}</span>`,
+                        `Step 2: Change to the common denominator ${cDenom}.<br><br><span class="math-text">[F:${n2}/${cDenom}] - [F:${n1}/${cDenom}] = [F:${finalN}/${cDenom}]</span>`
+                    ];
+                    let sim = genSimplifyStep(finalN, cDenom, m[5], m[6], 3);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Q79: Box A = {5/6}kg, Box B = 1 {1/10}kg, Box C = {9/10}kg. Total mass? [M:2 5/6] kg
+            {
+                regex: /Box A = \{(\d+)\/(\d+)\}.+Box B = (\d+)\s+\{(\d+)\/(\d+)\}.+Box C = \{(\d+)\/(\d+)\}.+\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let sumN = parseInt(m[4])+parseInt(m[6]);
                     return [
-                        `Step 1: The denominators are the same, so add the numerators.<br><br><span class="math-text">[I:${m[1]}] + [I:${m[3]}] = [I:${top}]</span>`,
-                        `Step 2: Put the new total over the same denominator.<br><br><span class="math-text">[F:${top}/${m[2]}]</span>`,
-                        `Step 3: Convert that improper fraction into a mixed number.<br><br><span class="math-text">[M:${m[5]} ${m[6]}/${m[7]}]</span>`
+                        `Concept: Total = Box A + Box B + Box C. Group the matching denominators first!`,
+                        `Step 1: Add Box B and Box C.<br><br><span class="math-text">${m[3]} {${m[4]}/${m[5]}} + {${m[6]}/${m[7]}}</span>`,
+                        `Step 2: Combine the fractions for B and C.<br><br><span class="math-text">[F:${m[4]}/${m[5]}] + [F:${m[6]}/${m[7]}] = [F:${sumN}/${m[5]}]</span>`,
+                        `Step 3: Convert the improper fraction to a whole number and add to B's whole number.<br><br><span class="math-text">${m[3]} + [I:${Math.floor(sumN/parseInt(m[5]))}] = [I:${parseInt(m[3])+Math.floor(sumN/parseInt(m[5]))}] kg</span>`,
+                        `Step 4: Now add Box A!<br><br><span class="math-text">[I:${parseInt(m[3])+Math.floor(sumN/parseInt(m[5]))}] + [F:${m[1]}/${m[2]}] = [M:${m[8]} ${m[9]}/${m[10]}]</span>`
                     ];
                 }
             },
+            // Q80: Start ribbon = {11/12}m. Left = {1/4}m. Cut and gave = [F:2/3] m
             {
-                // Rule: Whole - Fraction (e.g., 6 - {2/8} = [M:5 3/4])
+                regex: /Start ribbon = \{(\d+)\/(\d+)\}.+Left = \{(\d+)\/(\d+)\}.+\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let d1 = parseInt(m[2]); let d2 = parseInt(m[4]);
+                    let cDenom = Math.max(d1, d2);
+                    let n1 = m[1] * (cDenom/d1); let n2 = m[3] * (cDenom/d2);
+                    let finalN = n1 - n2;
+                    let arr = [
+                        `Concept: Amount cut = Start amount - Left amount.`,
+                        `Step 1: Write the subtraction equation.<br><br><span class="math-text">{${m[1]}/${d1}} - {${m[3]}/${d2}}</span>`,
+                        `Step 2: Change to the common denominator ${cDenom}.<br><br><span class="math-text">[F:${n1}/${cDenom}] - [F:${n2}/${cDenom}] = [F:${finalN}/${cDenom}]</span>`
+                    ];
+                    let sim = genSimplifyStep(finalN, cDenom, m[5], m[6], 3);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Q81: Maggie={5/9}L, Joyce={1/3}L. Total=1 {2/3}L. Lina = [F:7/9] L
+            {
+                regex: /Maggie=\{(\d+)\/(\d+)\}.+Joyce=\{(\d+)\/(\d+)\}.+Total=(\d+)\s+\{(\d+)\/(\d+)\}.+\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let cDenom = 9; 
+                    let magN = m[1] * (9/m[2]);
+                    let joyN = m[3] * (9/m[4]);
+                    let totN = (m[5] * m[7] + parseInt(m[6])) * (9/m[7]);
+                    return [
+                        `Concept: Lina = Total - Maggie - Joyce. Let's use common denominator 9!`,
+                        `Step 1: Convert Total to improper fraction over 9.<br><br><span class="math-text">${m[5]} {${m[6]}/${m[7]}} = [F:${totN}/9]</span>`,
+                        `Step 2: Convert Joyce to denominator 9.<br><br><span class="math-text">{${m[3]}/${m[4]}} = [F:${joyN}/9]</span>`,
+                        `Step 3: Subtract Maggie from Total!<br><br><span class="math-text">[F:${totN}/9] - [F:${magN}/9] = [F:${totN - magN}/9]</span>`,
+                        `Step 4: Subtract Joyce from the remainder to get Lina!<br><br><span class="math-text">[F:${totN - magN}/9] - [F:${joyN}/9] = [F:${m[8]}/${m[9]}]</span>`
+                    ];
+                }
+            },
+            // Q82: Eduardo={6/10}L. Viktor drank {1/2}L LESS than Eduardo. Total both drink? [F:7/10] L
+            {
+                regex: /Eduardo=\{(\d+)\/(\d+)\}.+Viktor drank \{(\d+)\/(\d+)\}.+\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let edN = parseInt(m[1]);
+                    let lessN = m[3] * (10/m[4]);
+                    let vikN = edN - lessN;
+                    return [
+                        `Concept: Calculate Viktor first, then find the Total! Viktor = Eduardo - ${m[3]}/${m[4]}`,
+                        `Step 1: Convert Viktor's difference to denominator 10.<br><br><span class="math-text">{${m[3]}/${m[4]}} = [F:${lessN}/10]</span>`,
+                        `Step 2: Subtract to find Viktor's amount!<br><br><span class="math-text">[F:${edN}/10] - [F:${lessN}/10] = [F:${vikN}/10]</span>`,
+                        `Step 3: Find Total = Eduardo + Viktor.<br><br><span class="math-text">[F:${edN}/10] + [F:${vikN}/10] = [F:${m[5]}/${m[6]}]</span>`
+                    ];
+                }
+            },
+            // Q83: Bought 5L. Used {1/4}L Mon, {1/8}L Tue. Left = [M:4 5/8] L
+            {
+                regex: /Bought (\d+)L.+Used \{(\d+)\/(\d+)\}.+\{(\d+)\/(\d+)\}.+\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let cDenom = Math.max(m[3], m[5]);
+                    let n1 = m[2] * (cDenom/m[3]);
+                    let n2 = m[4] * (cDenom/m[5]);
+                    let totUsed = n1 + n2;
+                    return [
+                        `Concept: Add the parts used first, then subtract from the total bought!`,
+                        `Step 1: Combine what was used: {${m[2]}/${m[3]}} + {${m[4]}/${m[5]}} using common denominator ${cDenom}.<br><br><span class="math-text">[F:${n1}/${cDenom}] + [F:${n2}/${cDenom}] = [F:${totUsed}/${cDenom}] used.</span>`,
+                        `Step 2: Subtract used from total (${m[1]}L). Borrow 1 from ${m[1]}!<br><br><span class="math-text">${m[1]} - 1 = [I:${m[1]-1}]</span>`,
+                        `Step 3: Convert the borrowed 1 to a fraction.<br><br><span class="math-text">1 = [F:${cDenom}/${cDenom}]</span>`,
+                        `Step 4: Subtract the used fraction!<br><br><span class="math-text">[F:${cDenom}/${cDenom}] - [F:${totUsed}/${cDenom}] = [F:${cDenom - totUsed}/${cDenom}]</span>`,
+                        `Step 5: Combine with the whole number!<br><br><span class="math-text">[M:${m[6]} ${m[7]}/${m[8]}]</span>`
+                    ];
+                }
+            },
+            // Q84: Total=12 {7/8}km. Ran={3/4}km, Swam={3/8}km. Biked = [M:11 3/4] km
+            {
+                regex: /Total=(\d+)\s+\{(\d+)\/(\d+)\}.+Ran=\{(\d+)\/(\d+)\}.+Swam=\{(\d+)\/(\d+)\}.+Biked = \[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let totH = parseInt(m[1]); let nTot = parseInt(m[2]);
+                    let nRan = m[4] * (8/m[5]); let nSwam = parseInt(m[6]);
+                    let totUsed = nRan + nSwam;
+                    let arr = [
+                        `Concept: Add what you Ran and Swam first, then subtract from the Total!`,
+                        `Step 1: Combine Ran and Swam: {${m[4]}/${m[5]}} + {${m[6]}/${m[7]}} using denominator 8.<br><br><span class="math-text">[F:${nRan}/8] + [F:${nSwam}/8] = [F:${totUsed}/8]</span>`,
+                        `Step 2: Subtract this from the fractional part of the Total (${m[2]}/${m[3]}). Wait, ${m[2]} - ${totUsed} is negative! We need to borrow!`,
+                        `Step 3: Borrow 1 from the whole number ${totH}.<br><br><span class="math-text">${totH} - 1 = [I:${totH-1}]</span> and the fraction becomes <span class="math-text">${nTot} + 8 = [F:${nTot+8}/8]</span>`,
+                        `Step 4: Now subtract the used parts!<br><br><span class="math-text">[F:${nTot+8}/8] - [F:${totUsed}/8] = [F:${nTot+8 - totUsed}/8]</span>`,
+                        `Step 5: Final unsimplified mixed number = <span class="math-text">${totH-1} ${nTot+8 - totUsed}/8</span>`
+                    ];
+                    let sim = genSimplifyStep(nTot+8-totUsed, 8, m[9], m[10], 6);
+                    if (sim) arr.push(sim);
+                    arr.push(`Step ${arr.length + 1}: Write the final answer!<br><br><span class="math-text">[M:${m[8]} ${m[9]}/${m[10]}]</span>`);
+                    return arr;
+                }
+            },
+            // Q85: 16 red, 24 green, 20 blue. Fraction blue = [F:1/3]
+            {
+                regex: /(\d+) red, (\d+) green, (\d+) blue.+\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let sum = parseInt(m[1]) + parseInt(m[2]) + parseInt(m[3]);
+                    let arr = [
+                        `Concept: Fraction = (Part) / (Total). First find the Total!`,
+                        `Step 1: Add all the items together.<br><br><span class="math-text">[I:${m[1]}] + [I:${m[2]}] + [I:${m[3]}] = [I:${sum}]</span>`,
+                        `Step 2: Write the unsimplified fraction for blue!<br><br><span class="math-text">[F:${m[3]}/${sum}]</span>`
+                    ];
+                    let sim = genSimplifyStep(parseInt(m[3]), sum, m[4], m[5], 3);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Q86: Total 18 miles. Traveled {1/6}. Further to travel = [I:15] miles
+            {
+                regex: /Total (\d+) miles.+Traveled \{(\d+)\/(\d+)\}.+\[I:(\d+)\]/,
+                handler: (m) => {
+                    let tot = parseInt(m[1]); let den = parseInt(m[3]); let num = parseInt(m[2]);
+                    return [
+                        `Concept: Find the remaining fraction, then multiply by the total!`,
+                        `Step 1: If you traveled ${num}/${den}, the remaining fraction is 1 - ${num}/${den}.<br><br><span class="math-text">[F:${den}/${den}] - [F:${num}/${den}] = [F:${den-num}/${den}]</span> left.`,
+                        `Step 2: Find 1 fraction unit of the 18 miles. Divide 18 by the denominator ${den}!<br><br><span class="math-text">[I:${tot}] ÷ [I:${den}] = [I:${tot/den}]</span>`,
+                        `Step 3: Multiply by the remaining ${den-num} units!<br><br><span class="math-text">[I:${tot/den}] × [I:${den-num}] = [I:${m[4]}] miles</span>`
+                    ];
+                }
+            },
+            // Q87: 32 chocolates. Left {5/8}. How many eaten? [I:12]
+            {
+                regex: /(\d+) chocolates.+Left \{(\d+)\/(\d+)\}.+eaten.+\[I:(\d+)\]/,
+                handler: (m) => {
+                    let tot = parseInt(m[1]); let num = parseInt(m[2]); let den = parseInt(m[3]);
+                    return [
+                        `Concept: Find the fraction eaten, then multiply by the total!`,
+                        `Step 1: If ${num}/${den} are left, the fraction eaten is 1 - ${num}/${den}.<br><br><span class="math-text">[F:${den}/${den}] - [F:${num}/${den}] = [F:${den-num}/${den}]</span> eaten.`,
+                        `Step 2: Find 1 fraction unit of the ${tot} chocolates. Divide by ${den}!<br><br><span class="math-text">[I:${tot}] ÷ [I:${den}] = [I:${tot/den}]</span>`,
+                        `Step 3: Multiply by the ${den-num} eaten units!<br><br><span class="math-text">[I:${tot/den}] × [I:${den-num}] = [I:${m[4]}] eaten</span>`
+                    ];
+                }
+            },
+            // Q88(a): 28 chickens, 15 ducks, 7 turkeys (Total 50). Sold {4/5}. Total sold? [I:40]
+            {
+                regex: /28 chickens.+Total (\d+).+Sold \{(\d+)\/(\d+)\}.+\[I:(\d+)\]/,
+                handler: (m) => {
+                    let tot = parseInt(m[1]); let num = parseInt(m[2]); let den = parseInt(m[3]);
+                    return [
+                        `Concept: We know the total is ${tot}. Let's find ${num}/${den} of ${tot}!`,
+                        `Step 1: Find 1 unit of ${tot} by dividing by the denominator ${den}.<br><br><span class="math-text">[I:${tot}] ÷ [I:${den}] = [I:${tot/den}]</span>`,
+                        `Step 2: Multiply by the ${num} sold units!<br><br><span class="math-text">[I:${tot/den}] × [I:${num}] = [I:${m[4]}] sold</span>`
+                    ];
+                }
+            },
+            // Q88(b): If sold 12 chickens, fraction of chickens left? [F:4/7]
+            {
+                regex: /If sold 12 chickens.+left\?.+\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let arr = [
+                        `Concept: Fraction = (Remaining) / (Total Chickens).`,
+                        `Step 1: Find the remaining chickens. There were 28 chickens originally.<br><br><span class="math-text">[I:28] - [I:12] = [I:16] left</span>`,
+                        `Step 2: Write the fraction over the total chickens.<br><br><span class="math-text">[F:16/28]</span>`
+                    ];
+                    let sim = genSimplifyStep(16, 28, m[1], m[2], 3);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Q89: 568 people. {5/8} women, {1/4} men. How many children? [I:71]
+            {
+                regex: /(\d+) people.+?\{(\d+)\/(\d+)\}.+?\{(\d+)\/(\d+)\}.+?\[I:(\d+)\]/,
+                handler: (m) => {
+                    let decTot = parseInt(m[1]);
+                    // m2/m3 = women, m4/m5 = men
+                    let d1 = parseInt(m[3]); let d2 = parseInt(m[5]);
+                    let cDenom = Math.max(d1, d2);
+                    let n1 = m[2] * (cDenom/d1);
+                    let n2 = m[4] * (cDenom/d2);
+                    return [
+                        `Concept: Children = 1 whole - women - men. Find the remaining fraction!`,
+                        `Step 1: Convert men's fraction to common denominator ${cDenom}.<br><br><span class="math-text">{${m[4]}/${m[5]}} = [F:${n2}/${cDenom}]</span>`,
+                        `Step 2: Subtract both from 1 whole (${cDenom}/${cDenom})!<br><br><span class="math-text">[F:${cDenom}/${cDenom}] - [F:${n1}/${cDenom}] - [F:${n2}/${cDenom}] = [F:${cDenom - n1 - n2}/${cDenom}]</span>`,
+                        `Step 3: Find 1 unit of the ${decTot} people! Divide by ${cDenom}.<br><br><span class="math-text">[I:${decTot}] ÷ [I:${cDenom}] = [I:${decTot/cDenom}]</span>`,
+                        `Step 4: Multiply by the ${cDenom-n1-n2} children units!<br><br><span class="math-text">[I:${decTot/cDenom}] × [I:${cDenom-n1-n2}] = [I:${m[6]}] children</span>`
+                    ];
+                }
+            },
+            // Q90: Gave {1/3} to brother. $60 left. Received = $[I:90]
+            {
+                regex: /Gave \{(\d+)\/(\d+)\}.+\$(\d+).+\[I:(\d+)\]/,
+                handler: (m) => {
+                    let num = parseInt(m[1]); let den = parseInt(m[2]);
+                    let leftM = parseInt(m[3]);
+                    return [
+                        `Concept: Work backwards! Find the fraction that equals the money left.`,
+                        `Step 1: If ${num}/${den} was given away, find the fraction left over.<br><br><span class="math-text">[F:${den}/${den}] - [F:${num}/${den}] = [F:${den-num}/${den}]</span> left.`,
+                        `Step 2: Those ${den-num} remaining units equal $${leftM}. Find 1 unit!<br><br><span class="math-text">[I:${leftM}] ÷ [I:${den-num}] = [I:${leftM/(den-num)}]</span>`,
+                        `Step 3: Multiply by the total ${den} units to find the original amount!<br><br><span class="math-text">[I:${leftM/(den-num)}] × [I:${den}] = [I:${m[4]}]</span>`
+                    ];
+                }
+            },
+            // Type 1: Type 7/8/12: Add/Sub Multiple Fractions (e.g., {7/12} + {2/6} + {9/12} = [M:1 2/3])
+            // Rule order matters! Longer rules (3 fractions) should go before 2 fractions.
+            {   
+                regex: /\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let d1 = parseInt(m[2]); let d2 = parseInt(m[4]); let d3 = parseInt(m[6]);
+                    let cDenom = Math.max(d1, d2, d3);
+                    if (cDenom % Math.min(d1,d2) !== 0 || cDenom % Math.min(d2,d3) !== 0) cDenom = d1*d2*d3; // fallback
+                    let top = (m[1] * (cDenom/d1)) + (m[3] * (cDenom/d2)) + (m[5] * (cDenom/d3));
+                    let calcQ = Math.floor(top / cDenom);
+                    let calcR = top % cDenom;
+                    let arr = [
+                        `Concept: Ensure all denominators match! The common denominator is ${cDenom}.`,
+                        `Step 1: Convert all fractions to the common denominator ${cDenom}.<br><br><span class="math-text">[F:${m[1] * (cDenom/d1)}/${cDenom}] + [F:${m[3] * (cDenom/d2)}/${cDenom}] + [F:${m[5] * (cDenom/d3)}/${cDenom}]</span>`,
+                        `Step 2: Add the fractions together.<br><br><span class="math-text">[F:${m[1] * (cDenom/d1)}/${cDenom}] + [F:${m[3] * (cDenom/d2)}/${cDenom}] + [F:${m[5] * (cDenom/d3)}/${cDenom}] = [F:${top}/${cDenom}]</span>`,
+                        `Step 3: Convert the improper fraction ${top}/${cDenom} to a mixed number using division.<br><br>
+                        <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                            <div class="flex px-2 border-b-2 border-white mb-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-yellow-300">[I:${calcQ}]</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 text-right pr-2">${cDenom}</div>
+                                <div class="border-l-2 border-white px-2">${top}</div>
+                            </div>
+                        </div>`,
+                        `Step 4: Guide step by step until get the remainder.<br><br>
+                        <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                            <div class="flex px-2 border-b-2 border-white mb-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-yellow-300">${calcQ}</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 text-right pr-2">${cDenom}</div>
+                                <div class="border-l-2 border-white px-2">${top}</div>
+                            </div>
+                            <div class="flex px-2 mt-2">
+                                <div class="w-8 text-right">-</div>
+                                <div class="px-2 text-red-400">[I:${calcQ * cDenom}]</div>
+                            </div>
+                            <div class="flex px-2 border-t-2 border-white mt-1 pt-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-cyan-300">[I:${calcR}]</div>
+                            </div>
+                        </div>`,
+                        `Step 5: Move the answer to whole number, remainder to numerator and divider to denominator.<br><br>
+                        <div class="relative h-48 w-full flex justify-center items-center mt-4 bg-black/40 rounded border border-gray-600 overflow-hidden">
+                            <div class="flex flex-col justify-center items-start gap-4 absolute left-10 md:left-24">
+                                <div class="text-yellow-300 text-xl font-bold flex items-center anim-mov-q">Quotient: ${calcQ}</div>
+                                <div class="text-cyan-300 text-xl font-bold flex items-center anim-mov-r">Remainder: ${calcR}</div>
+                                <div class="text-white text-xl font-bold flex items-center anim-mov-d">Divisor: ${cDenom}</div>
+                            </div>
+                            <div class="p-4 bg-gray-800 border-2 border-green-400 text-3xl anim-fade-ans ml-48 z-10 font-mono flex items-center">
+                                <span class="mr-2 text-yellow-300">${calcQ}</span>
+                                <span class="frac-block">
+                                    <span class="frac-num text-cyan-300">${calcR}</span>
+                                    <span class="frac-den text-white">${cDenom}</span>
+                                </span>
+                            </div>
+                        </div><br>Result:<br><br><span class="math-text">[M:${calcQ} ${calcR}/${cDenom}]</span>`
+                    ];
+                    let sim = genSimplifyStep(calcR, cDenom, m[8], m[9], 6);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            {   // Whole minus fractions (e.g. 7 - {9/10} - {2/5} = [M:5 7/10])
+                regex: /(\d+)\s*-\s*\{(\d+)\/(\d+)\}\s*-\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let part1 = m[2] * (m[8]/m[3]);
+                    let part2 = m[4] * (m[8]/m[5]);
+                    let totalParts = part1 + part2;
+                    return [
+                        `Concept: Let's convert the fractions to common denominators and borrow from the whole number!`,
+                        `Step 1: Convert the fractions explicitly to denominator ${m[8]}.<br><br><span class="math-text">-{${part1}/${m[8]}} and -{${part2}/${m[8]}} = total parts to subtract: [I:${totalParts}]</span>`,
+                        `Step 2: Borrow 1 from the whole number ${m[1]}.<br><br><span class="math-text">[I:${m[1]}] - 1 = [I:${m[1]-1}]</span>`,
+                        `Step 3: Convert that 1 into a fraction.<br><br><span class="math-text">1 = [F:${m[8]}/${m[8]}]</span>`,
+                        `Step 4: Subtract the total parts from it.<br><br><span class="math-text">[F:${m[8]}/${m[8]}] - [F:${totalParts}/${m[8]}] = [F:${m[8] - totalParts}/${m[8]}]</span>`,
+                        `Step 5: Write the final mixed number!<br><br><span class="math-text">[M:${m[6]} ${m[7]}/${m[8]}]</span>`
+                    ];
+                }
+            },
+            // Type 10: Mixed - fraction (e.g., 2 {6/9} - {1/3} = [M:2 1/3])
+            {
+                regex: /(\d+)\s*\{(\d+)\/(\d+)\}\s*-\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let d1 = parseInt(m[3]); let d2 = parseInt(m[5]);
+                    let cDenom = Math.max(d1, d2);
+                    if (cDenom % Math.min(d1, d2) !== 0) cDenom = d1 * d2;
+
+                    let topI = (m[1] * d1) + parseInt(m[2]);
+                    let firstNum = topI * (cDenom/d1);
+                    let secondNum = m[4] * (cDenom/d2);
+                    let top = firstNum - secondNum;
+                    
+                    let calcQ = Math.floor(top / cDenom);
+                    let calcR = top % cDenom;
+
+                    let arr = [
+                        `Concept: Change the mixed number to an improper fraction, then subtract!`,
+                        `Step 1: Convert ${m[1]} ${m[2]}/${d1} to an improper fraction.<br><br><span class="math-text">[I:${m[1]}] × [I:${d1}] + [I:${m[2]}] = [I:${topI}]</span><br>Fraction is <span class="math-text">[F:${topI}/${d1}]</span>`,
+                        `Step 2: Change to common denominator ${cDenom}.<br><br><span class="math-text">{${topI}/${d1}} = [F:${firstNum}/${cDenom}]</span> and <span class="math-text">{${m[4]}/${d2}} = [F:${secondNum}/${cDenom}]</span>`,
+                        `Step 3: Subtract the fractions.<br><br><span class="math-text">[F:${firstNum}/${cDenom}] - [F:${secondNum}/${cDenom}] = [F:${top}/${cDenom}]</span>`,
+                        `Step 4: Convert the improper fraction ${top}/${cDenom} to a mixed number using division.<br><br>
+                        <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                            <div class="flex px-2 border-b-2 border-white mb-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-yellow-300">[I:${calcQ}]</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 text-right pr-2">${cDenom}</div>
+                                <div class="border-l-2 border-white px-2">${top}</div>
+                            </div>
+                        </div>`,
+                        `Step 5: Guide step by step until get the remainder.<br><br>
+                        <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                            <div class="flex px-2 border-b-2 border-white mb-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-yellow-300">${calcQ}</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 text-right pr-2">${cDenom}</div>
+                                <div class="border-l-2 border-white px-2">${top}</div>
+                            </div>
+                            <div class="flex px-2 mt-2">
+                                <div class="w-8 text-right">-</div>
+                                <div class="px-2 text-red-400">[I:${calcQ * cDenom}]</div>
+                            </div>
+                            <div class="flex px-2 border-t-2 border-white mt-1 pt-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-cyan-300">[I:${calcR}]</div>
+                            </div>
+                        </div>`,
+                        `Step 6: Move the answer to whole number, remainder to numerator and divider to denominator.<br><br>
+                        <div class="relative h-48 w-full flex justify-center items-center mt-4 bg-black/40 rounded border border-gray-600 overflow-hidden">
+                            <div class="flex flex-col justify-center items-start gap-4 absolute left-10 md:left-24">
+                                <div class="text-yellow-300 text-xl font-bold flex items-center anim-mov-q">Quotient: ${calcQ}</div>
+                                <div class="text-cyan-300 text-xl font-bold flex items-center anim-mov-r">Remainder: ${calcR}</div>
+                                <div class="text-white text-xl font-bold flex items-center anim-mov-d">Divisor: ${cDenom}</div>
+                            </div>
+                            <div class="p-4 bg-gray-800 border-2 border-green-400 text-3xl anim-fade-ans ml-48 z-10 font-mono flex items-center">
+                                <span class="mr-2 text-yellow-300">${calcQ}</span>
+                                <span class="frac-block">
+                                    <span class="frac-num text-cyan-300">${calcR}</span>
+                                    <span class="frac-den text-white">${cDenom}</span>
+                                </span>
+                            </div>
+                        </div><br>Result:<br><br><span class="math-text">[M:${calcQ} ${calcR}/${cDenom}]</span>`
+                    ];
+                    let sim = genSimplifyStep(calcR, cDenom, m[7], m[8], 7);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Type 9: Whole - fraction (e.g., 6 - {2/8} = [M:5 3/4])
+            {
                 regex: /(\d+)\s*-\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
                 handler: (m) => {
-                    let borrowWhole = parseInt(m[1]) - 1;
-                    let num = parseInt(m[2]);
-                    let denom = parseInt(m[3]);
+                    let d = parseInt(m[3]);
+                    let subN = parseInt(m[2]);
+                    let finalN = d - subN;
+                    let arr = [
+                        `Concept: We need to subtract a fraction from a whole number. Let's borrow!`,
+                        `Step 1: Borrow 1 from the whole number ${m[1]}.<br><br><span class="math-text">${m[1]} - 1 = [I:${m[1]-1}]</span>`,
+                        `Step 2: Convert the 1 you borrowed into a fraction.<br><br><span class="math-text">1 = [F:${d}/${d}]</span>`,
+                        `Step 3: Now subtract the fraction from it.<br><br><span class="math-text">[F:${d}/${d}] - [F:${subN}/${d}] = [F:${finalN}/${d}]</span>`,
+                        `Step 4: Combine the whole number and the fraction!<br><br><span class="math-text">[M:${m[1]-1} ${finalN}/${d}]</span>`
+                    ];
+                    let sim = genSimplifyStep(finalN, d, m[5], m[6], 5);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Type 7/8: Add/Subtract fractions -> Mixed Number
+            {
+                regex: /\{(\d+)\/(\d+)\}\s*([\+\-])\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let d1 = parseInt(m[2]); let d2 = parseInt(m[5]);
+                    let cDenom = Math.max(d1, d2);
+                    if (cDenom % Math.min(d1, d2) !== 0) cDenom = d1 * d2;
+
+                    let n1 = m[1] * (cDenom/d1);
+                    let n2 = m[4] * (cDenom/d2);
+                    let top = m[3] === '+' ? n1 + n2 : n1 - n2;
+                    let calcQ = Math.floor(top / cDenom);
+                    let calcR = top % cDenom;
+
+                    let arr = [
+                        `Concept: Make sure the denominators match and convert answer to mixed number!`,
+                        `Step 1: The common denominator is [I:${cDenom}]. Convert the fractions.<br><br><span class="math-text">[F:${n1}/${cDenom}] ${m[3]} [F:${n2}/${cDenom}]</span>`,
+                        `Step 2: ${m[3]==='+'?'Add':'Subtract'} the fractions to form an improper fraction.<br><br><span class="math-text">[F:${n1}/${cDenom}] ${m[3]} [F:${n2}/${cDenom}] = [F:${top}/${cDenom}]</span>`,
+                        `Step 3: Convert the improper fraction ${top}/${cDenom} to a mixed number using division.<br><br>
+                        <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                            <div class="flex px-2 border-b-2 border-white mb-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-yellow-300">[I:${calcQ}]</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 text-right pr-2">${cDenom}</div>
+                                <div class="border-l-2 border-white px-2">${top}</div>
+                            </div>
+                        </div>`,
+                        `Step 4: Guide step by step until get the remainder.<br><br>
+                        <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                            <div class="flex px-2 border-b-2 border-white mb-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-yellow-300">${calcQ}</div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="w-8 text-right pr-2">${cDenom}</div>
+                                <div class="border-l-2 border-white px-2">${top}</div>
+                            </div>
+                            <div class="flex px-2 mt-2">
+                                <div class="w-8 text-right">-</div>
+                                <div class="px-2 text-red-400">[I:${calcQ * cDenom}]</div>
+                            </div>
+                            <div class="flex px-2 border-t-2 border-white mt-1 pt-2">
+                                <div class="w-8"></div>
+                                <div class="px-2 text-cyan-300">[I:${calcR}]</div>
+                            </div>
+                        </div>`,
+                        `Step 5: Move the answer to whole number, remainder to numerator and divider to denominator.<br><br>
+                        <div class="relative h-48 w-full flex justify-center items-center mt-4 bg-black/40 rounded border border-gray-600 overflow-hidden">
+                            <div class="flex flex-col justify-center items-start gap-4 absolute left-10 md:left-24">
+                                <div class="text-yellow-300 text-xl font-bold flex items-center anim-mov-q">Quotient: ${calcQ}</div>
+                                <div class="text-cyan-300 text-xl font-bold flex items-center anim-mov-r">Remainder: ${calcR}</div>
+                                <div class="text-white text-xl font-bold flex items-center anim-mov-d">Divisor: ${cDenom}</div>
+                            </div>
+                            <div class="p-4 bg-gray-800 border-2 border-green-400 text-3xl anim-fade-ans ml-48 z-10 font-mono flex items-center">
+                                <span class="mr-2 text-yellow-300">${calcQ}</span>
+                                <span class="frac-block">
+                                    <span class="frac-num text-cyan-300">${calcR}</span>
+                                    <span class="frac-den text-white">${cDenom}</span>
+                                </span>
+                            </div>
+                        </div><br>Result:<br><br><span class="math-text">[M:${calcQ} ${calcR}/${cDenom}]</span>`
+                    ];
+                    let sim = genSimplifyStep(calcR, cDenom, m[7], m[8], 6);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Type 7/8: Add/Subtract fractions -> Fraction
+            {
+                regex: /\{(\d+)\/(\d+)\}\s*([\+\-])\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => {
+                    let d1 = parseInt(m[2]); let d2 = parseInt(m[5]);
+                    let calcDenom = Math.max(d1, d2);
+                    if (calcDenom % Math.min(d1, d2) !== 0) calcDenom = d1 * d2;
+
+                    let n1 = m[1] * (calcDenom/d1);
+                    let n2 = m[4] * (calcDenom/d2);
+                    let top = m[3] === '+' ? n1 + n2 : n1 - n2;
+                    let arr = [
+                        `Concept: To add or subtract fractions, you need a common denominator!`,
+                        `Step 1: The common denominator is [I:${calcDenom}].`,
+                        `Step 2: Rewrite the fractions.<br><br><span class="math-text">[F:${n1}/${calcDenom}] ${m[3]} [F:${n2}/${calcDenom}]</span>`,
+                        `Step 3: ${m[3]==='+'?'Add':'Subtract'} the fractions.<br><br><span class="math-text">[F:${n1}/${calcDenom}] ${m[3]} [F:${n2}/${calcDenom}] = [F:${top}/${calcDenom}]</span>`,
+                        `Step 4: Write the calculated fraction.<br><br><span class="math-text">[F:${top}/${calcDenom}]</span>`
+                    ];
+                    let sim = genSimplifyStep(top, calcDenom, m[6], m[7], 5);
+                    if (sim) arr.push(sim);
+                    return arr;
+                }
+            },
+            // Type 1: Whole + Fraction (e.g., 3 + {1/2} = [M:3 1/2] OR {5/8} + 4 = [M:4 5/8])
+            {
+                regex: /(\d+)\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Concept: Combine a whole number and a fraction into a Mixed Number!`,
+                    `Step 1: Bring down the whole number.<br><br><span class="math-text">Whole: [I:${m[1]}]</span>`,
+                    `Step 2: Bring down the fraction.<br><br><span class="math-text">Fraction: [F:${m[2]}/${m[3]}]</span>`,
+                    `Step 3: Combine them into a mixed number!<br><br><span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                ]
+            },
+            {
+                regex: /\{(\d+)\/(\d+)\}\s*\+\s*(\d+)\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Concept: Combine a whole number and a fraction into a Mixed Number!`,
+                    `Step 1: Bring down the whole number.<br><br><span class="math-text">Whole: [I:${m[3]}]</span>`,
+                    `Step 2: Bring down the fraction.<br><br><span class="math-text">Fraction: [F:${m[1]}/${m[2]}]</span>`,
+                    `Step 3: Combine them into a mixed number!<br><br><span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                ]
+            },
+            // Type 2: Wholes and Parts (e.g., [W:2] wholes and [W:3] fifths = [M:2 3/5])
+            {
+                regex: /\[W:(\d+)\] wholes and \[W:(\d+)\] (\w+) = \[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Concept: Convert the word problem into a mixed number.`,
+                    `Step 1: Identify the whole number.<br><br><span class="math-text">Whole: [I:${m[1]}]</span>`,
+                    `Step 2: Identify the numerator (parts).<br><br><span class="math-text">Numerator: [I:${m[2]}]</span>`,
+                    `Step 3: What is the denominator based on the word "${m[3]}"?<br><br><span class="math-text">Denominator: [I:${m[6]}]</span>`,
+                    `Step 4: Write the mixed number.<br><br><span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                ]
+            },
+            // Type 3: Whole to Pieces Conversion (e.g. There are [I:19] quarters in 4 {3/4})
+            {
+                regex: /There are \[I:(\d+)\] (\w+) in (\d+)\s*\{(\d+)\/(\d+)\}/,
+                handler: (m) => [
+                    `Concept: Change a mixed number into an improper fraction.`,
+                    `Step 1: Multiply the whole number by the denominator.<br><br><span class="math-text">[I:${m[3]}] × [I:${m[5]}] = [I:${m[3] * m[5]}]</span>`,
+                    `Step 2: Add the extra numerator.<br><br><span class="math-text">[I:${m[3] * m[5]}] + [I:${m[4]}] = [I:${m[1]}]</span>`
+                ]
+            },
+            // Type 3.5: Whole to Pieces (e.g. 2 = [I:4] halves)
+            {
+                regex: /(\d+)\s*=\s*\[I:(\d+)\]\s+(\w+)/,
+                handler: (m) => {
+                    let den = parseInt(m[2]) / parseInt(m[1]);
                     return [
-                        `Step 1: Borrow 1 from the whole number ${m[1]}.<br><br><span class="math-text">${m[1]} - 1 = [I:${borrowWhole}]</span>`,
-                        `Step 2: Convert that borrowed '1' into a fraction with a denominator of ${denom}.<br><br><span class="math-text">1 = [F:${denom}/${denom}]</span>`,
-                        `Step 3: Subtract the fraction piece from it.<br><br><span class="math-text">{${denom}/${denom}} - {${num}/${denom}} = [F:${denom - num}/${denom}]</span>`,
-                        `Step 4: Combine the whole number and fraction, and simplify!<br><br><span class="math-text">[M:${m[4]} ${m[5]}/${m[6]}]</span>`
+                        `Concept: Find how many pieces make up the whole numbers!`,
+                        `Step 1: Based on "${m[3]}", what is the denominator?<br><br><span class="math-text">Denominator: [I:${den}]</span>`,
+                        `Step 2: Multiply the whole number by the denominator.<br><br><span class="math-text">[I:${m[1]}] × [I:${den}] = [I:${m[2]}]</span>`
                     ];
                 }
             },
             {
-                // Rule: Add fractions resulting in fraction (e.g. {1/6} + {9/12} = [F:11/12])
-                regex: /\{(\d+)\/(\d+)\}\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
+                regex: /(\d+)\s*\{(\d+)\/(\d+)\}\s*=\s*\[I:(\d+)\]\s+(\w+)/,
                 handler: (m) => [
-                    `Concept: Before adding, ensure both denominators are the same or simplify them.`,
-                    `Step 1: Add the numerators together if denominators are matching.<br><br><span class="math-text">Target Numerator: [I:${m[5]}]</span>`,
-                    `Step 2: Write out the final simplified fraction.<br><br><span class="math-text">[F:${m[5]}/${m[6]}]</span>`
+                    `Concept: Change a mixed number into pieces (improper fraction).`,
+                    `Step 1: Multiply the whole number by the denominator.<br><br><span class="math-text">[I:${m[1]}] × [I:${m[3]}] = [I:${m[1] * m[3]}]</span>`,
+                    `Step 2: Add the extra ${m[2]} parts!<br><br><span class="math-text">[I:${m[1] * m[3]}] + [I:${m[2]}] = [I:${m[4]}]</span>`
                 ]
             },
+            // Type 4: Mixed to Improper
             {
-                // Rule: Fraction of set: (e.g., {2/3} of 21 = [I:14]) or (e.g., {5/6} × 48 = [I:40])
+                regex: /(\d+)\s*\{(\d+)\/(\d+)\}\s*=\s*\[F:(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Concept: Let's convert ${m[1]} ${m[2]}/${m[3]} to an improper fraction!`,
+                    `Step 1: Multiply the whole number by the denominator.<br><br><span class="math-text">[I:${m[1]}] × [I:${m[3]}] = [I:${m[1] * m[3]}]</span>`,
+                    `Step 2: Add the result to the numerator.<br><br><span class="math-text">[I:${m[1] * m[3]}] + [I:${m[2]}] = [I:${m[4]}]</span>`,
+                    `Step 3: Fill in the final answer of improper fraction.<br><br><span class="math-text">[F:${m[4]}/${m[5]}]</span>`
+                ]
+            },
+            // Type 5: Improper to Mixed
+            {
+                regex: /\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
+                handler: (m) => [
+                    `Concept: Change the improper fraction ${m[1]}/${m[2]} into a mixed number using division!`,
+                    `Step 1: Show division in column format. Divide ${m[1]} by ${m[2]}.<br><br>
+                    <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                        <div class="flex px-2 border-b-2 border-white mb-2">
+                            <div class="w-8"></div>
+                            <div class="px-2 text-yellow-300">[I:${m[3]}]</div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-8 text-right pr-2">${m[2]}</div>
+                            <div class="border-l-2 border-white px-2">${m[1]}</div>
+                        </div>
+                    </div>`,
+                    `Step 2: Guide step by step until get the remainder.<br><br>
+                    <div class="flex flex-col items-center text-2xl font-mono mx-auto w-max mb-6">
+                        <div class="flex px-2 border-b-2 border-white mb-2">
+                            <div class="w-8"></div>
+                            <div class="px-2 text-yellow-300">${m[3]}</div>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-8 text-right pr-2">${m[2]}</div>
+                            <div class="border-l-2 border-white px-2">${m[1]}</div>
+                        </div>
+                        <div class="flex px-2 mt-2">
+                            <div class="w-8 text-right">-</div>
+                            <div class="px-2 text-red-400">[I:${m[3] * m[2]}]</div>
+                        </div>
+                        <div class="flex px-2 border-t-2 border-white mt-1 pt-2">
+                            <div class="w-8"></div>
+                            <div class="px-2 text-cyan-300">[I:${m[4]}]</div>
+                        </div>
+                    </div>`,
+                    `Step 3: Move the answer to whole number, remainder to numerator and divider to denominator.<br><br>
+                    <div class="relative h-48 w-full flex justify-center items-center mt-4 bg-black/40 rounded border border-gray-600 overflow-hidden">
+                        <div class="flex flex-col justify-center items-start gap-4 absolute left-10 md:left-24">
+                            <div class="text-yellow-300 text-xl font-bold flex items-center anim-mov-q">Quotient: ${m[3]}</div>
+                            <div class="text-cyan-300 text-xl font-bold flex items-center anim-mov-r">Remainder: ${m[4]}</div>
+                            <div class="text-white text-xl font-bold flex items-center anim-mov-d">Divisor: ${m[2]}</div>
+                        </div>
+                        <div class="p-4 bg-gray-800 border-2 border-green-400 text-3xl anim-fade-ans ml-48 z-10 font-mono flex items-center">
+                            <span class="mr-2 text-yellow-300">${m[3]}</span>
+                            <span class="frac-block">
+                                <span class="frac-num text-cyan-300">${m[4]}</span>
+                                <span class="frac-den text-white">${m[5]}</span>
+                            </span>
+                        </div>
+                    </div><br>Fill in the final answer below:<br><br><span class="math-text">[M:${m[3]} ${m[4]}/${m[5]}]</span>`
+                ]
+            },
+            // Type 6: Improper to Whole
+            {
+                regex: /\{(\d+)\/(\d+)\}\s*=\s*\[W:(\d+)\]/,
+                handler: (m) => [
+                    `Concept: A fraction line is basically a division sign!`,
+                    `Step 1: Divide the top by the bottom.<br><br><span class="math-text">[I:${m[1]}] ÷ [I:${m[2]}]</span>`,
+                    `Step 2: Write the final whole number.<br><br><span class="math-text">[I:${m[3]}]</span>`
+                ]
+            },
+            // Type 11: Fraction of set: (e.g., {2/3} of 21 = [I:14])
+            {
                 regex: /\{(\d+)\/(\d+)\}\s*(?:of|×)\s*(\d+)\s*=\s*\[I:(\d+)\]/,
                 handler: (m) => [
                     `Concept: Finding ${m[1]}/${m[2]} of ${m[3]} means splitting ${m[3]} into ${m[2]} equal groups.`,
@@ -972,24 +1577,8 @@
                     `Step 2: Multiply by the numerator to get the total for ${m[1]} groups.<br><br><span class="math-text">[I:${parseInt(m[3]) / parseInt(m[2])}] × [I:${m[1]}] = [I:${m[4]}]</span>`
                 ]
             },
+            // Type 13: Fallback for word problems & uncaught formats
             {
-                // Rule: Number of parts in mixed number (e.g., There are [I:9] halves in 4 {1/2})
-                regex: /There are \[I:(\d+)\] (\w+) in (\d+)\s*\{(\d+)\/(\d+)\}/,
-                handler: (m) => [
-                    `Concept: This is essentially changing a mixed number into an improper fraction.`,
-                    `Step 1: Multiply the whole number by the denominator.<br><br><span class="math-text">[I:${m[3]}] × [I:${m[5]}] = [I:${m[3] * m[5]}]</span>`,
-                    `Step 2: Add the extra numerator.<br><br><span class="math-text">[I:${m[3] * m[5]}] + [I:${m[4]}] = [I:${m[1]}]</span>`
-                ]
-            },
-            {
-                // Rule: Whole + Fractions (e.g., 3 + {1/2} = [M:3 1/2])
-                regex: /(\d+)\s*\+\s*\{(\d+)\/(\d+)\}\s*=\s*\[M:(\d+)\s+(\d+)\/(\d+)\]/,
-                handler: (m) => [
-                    `Step 1: Just stick the whole number and fraction together!<br><br><span class="math-text">[I:${m[1]}] and [F:${m[2]}/${m[3]}] becomes [M:${m[4]} ${m[5]}/${m[6]}]</span>`
-                ]
-            },
-            {
-                // Fallback for word problems & uncaught formats
                 regex: /(.*)/,
                 handler: (m, raw) => {
                     let matches = [...raw.matchAll(/\[([MFWI]):(.*?)\]/g)];
