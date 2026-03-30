@@ -53,9 +53,9 @@ Your module exists, but students need a button to click it from the main menu.
 Once a student is inside the module, they need a way to get back to the Grand Landing Page.
 1. Open your new module's `index.html` file.
 2. Add a Home Button link near the top of your `<body>`.
-3. You must calculate the relative path back to the root folder. For example, if your module is 4 folders deep (`content/Subject/Year/Topic/index.html`), you need four `../`:
+3. You must calculate the relative path back to the root folder. For example, if your module is 4 folders deep (`content/Subject/Year/Topic/index.html`), you need four `../`. Make sure to position the home button at the **bottom right** so it does not block the content of the webpage:
    ```html
-   <a href="../../../../index.html" class="home-btn" style="position: fixed; top: 20px; left: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
+   <a href="../../../../index.html" class="home-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
    ```
    *(Note: It is usually easiest to just copy the Home Button from another module in the same syllabus level and paste it into yours).*
 
