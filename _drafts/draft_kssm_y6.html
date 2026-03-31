@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 3: Outdoor Activities & Present Perfect</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+            /* light slate */
+            color: #334155;
+        }
+
+        /* Translation Toggle Logic */
+        .zh {
+            display: block;
+            color: #64748b;
+            /* slate 500 */
+            font-size: 0.9em;
+            margin-top: 2px;
+        }
+
+        body.hide-zh .zh {
+            display: none !important;
+        }
+
+        /* Interactive Element Styles */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23475569%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat, repeat;
+            background-position: right .7em top 50%, 0 0;
+            background-size: .65em auto, 100%;
+            cursor: pointer;
+        }
+
+        select:disabled {
+            cursor: not-allowed;
+            opacity: 0.9;
+        }
+
+        .correct-ans {
+            background-color: #d1fae5 !important;
+            /* emerald-100 */
+            border-color: #10b981 !important;
+            /* emerald-500 */
+            color: #065f46 !important;
+            transition: all 0.3s ease;
+        }
+
+        .wrong-ans {
+            background-color: #ffe4e6 !important;
+            /* rose-100 */
+            border-color: #f43f5e !important;
+            /* rose-500 */
+            color: #9f1239 !important;
+            animation: shake 0.4s;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        /* Tabs */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Sentence Builder Blocks */
+        .word-block {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 4px;
+            background-color: #fff;
+            border: 2px solid #cbd5e1;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.1s, box-shadow 0.1s;
+            font-weight: 600;
+        }
+
+        .word-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-color: #94a3b8;
+        }
+
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed #94a3b8;
+            border-radius: 12px;
+            padding: 8px;
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+
+<body class="pb-20">
+
+    <!-- Sticky Header -->
+    <header
+        class="sticky top-0 z-50 bg-white border-b-2 border-slate-200 shadow-sm px-4 py-3 flex justify-between items-center">
+        <div>
+            <h1 class="text-xl md:text-2xl font-bold text-teal-600">Unit 3: Outdoor Activities</h1>
+            <span class="zh text-teal-700">第三单元：户外活动</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <div
+                class="bg-rose-50 border-2 border-rose-200 px-3 py-1 rounded-full text-rose-600 font-bold text-sm flex flex-col items-center">
+                <span>Mistakes ❌</span>
+                <span id="mistake-counter" class="text-lg">0</span>
+            </div>
+            <button onclick="toggleChinese()"
+                class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold py-2 px-4 rounded-full border-2 border-indigo-300 transition-colors shadow-sm">
+                A / 中
+            </button>
+        </div>
+    </header>
+
+    <!-- Tab Navigation -->
+    <nav class="flex overflow-x-auto p-4 gap-2 bg-slate-50 border-b border-slate-200 sticky top-[76px] z-40">
+        <button onclick="switchTab('page23')" id="btn-page23"
+            class="tab-btn active bg-teal-500 text-white px-5 py-2 rounded-full font-bold whitespace-nowrap shadow-md">Page
+            23 (Sec A)</button>
+        <button onclick="switchTab('page24')" id="btn-page24"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            24 (Sec B & C)</button>
+        <button onclick="switchTab('page25')" id="btn-page25"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            25 (Sec D & E)</button>
+        <button onclick="switchTab('page2627')" id="btn-page2627"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            26-27 (Sec F)</button>
+        <button onclick="switchTab('page28')" id="btn-page28"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            28 (Sec G)</button>
+        <button onclick="switchTab('page29')" id="btn-page29"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            29 (Sec H)</button>
+        <button onclick="switchTab('page30')" id="btn-page30"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            30 (Sec I)</button>
+        <button onclick="switchTab('page31')" id="btn-page31"
+            class="tab-btn bg-white text-slate-600 border-2 border-slate-200 px-5 py-2 rounded-full font-bold whitespace-nowrap hover:bg-slate-100">Page
+            31 (Sec J & K)</button>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-4 md:p-6">
+
+        <!-- PAGE 23: Activities -->
+        <section id="page23" class="tab-content active">
+            <!-- First Principles Rule Box -->
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                <h3 class="font-bold text-blue-800 text-lg">💡 Concept: Vocabulary Mapping</h3>
+                <span class="zh">概念：词汇匹配</span>
+                <p class="mt-2 text-slate-700">Read the description carefully to figure out the activity. Look for key
+                    words!</p>
+                <span class="zh">仔细阅读描述以找出对应的活动。寻找关键词！</span>
+            </div>
+
+            <!-- Phase 1: Spelling Game -->
+            <div id="phase1-spelling"
+                class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group mb-6 transition-all">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-400"></div>
+                <h2 class="text-xl font-bold mb-2">A1. Word Unscramble Game 🧩</h2>
+                <span class="zh mb-6 block text-indigo-600 font-bold">A1.
+                    拼字游戏：在进行配对之前，先把打乱的字母拼成正确的活动名称！(点击下方字母拼凑)</span>
+
+                <div id="spelling-game-content"
+                    class="text-center py-4 bg-slate-50 rounded-xl border border-slate-100 shadow-inner">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Phase 2: Matching Game (Initially Hidden) -->
+            <div id="phase2-matching"
+                class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group hidden opacity-0 transition-all duration-700">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-teal-400"></div>
+                <h2 class="text-xl font-bold mb-2">A2. Match the activities to their descriptions.</h2>
+                <span class="zh mb-6 block">A2. 将活动与其描述匹配。（先点击上方词库中的单词，再点击下方对应的虚线框）</span>
+
+                <!-- Word Bank Container -->
+                <div class="mb-6">
+                    <p class="text-sm font-bold text-slate-400 mb-2 uppercase tracking-wider">Word Bank (Click to
+                        select)</p>
+                    <div id="activity-bank-container"
+                        class="flex flex-wrap gap-3 p-4 bg-slate-100 rounded-xl border-2 border-slate-200 shadow-inner min-h-[70px] items-center">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="space-y-4" id="section-a-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 24: Past Participles & Cloze -->
+        <section id="page24" class="tab-content">
+            <!-- SECTION B -->
+            <div class="mb-10">
+                <div class="bg-purple-50 border-l-4 border-purple-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                    <h3 class="font-bold text-purple-800 text-lg">💡 Formula: Present Perfect Tense (V3)</h3>
+                    <span class="zh">公式：现在完成时 (动词第三态 V3)</span>
+                    <p class="mt-2 text-slate-700">To show something happened in the past and is still relevant, we use
+                        <b>Past Participles (V3)</b>.</p>
+                    <span class="zh">为了表示某事发生在过去且现在仍有影响，我们使用 <b>过去分词 (V3)</b>。</span>
+                    <div class="mt-3 flex gap-2 flex-wrap items-center">
+                        <span class="bg-white px-3 py-1 rounded-md border shadow-sm">Base (V1)<br><span
+                                class="text-sm text-slate-400">e.g., eat</span></span>
+                        <span>➡️</span>
+                        <span class="bg-white px-3 py-1 rounded-md border shadow-sm">Past (V2)<br><span
+                                class="text-sm text-slate-400">e.g., ate</span></span>
+                        <span>➡️</span>
+                        <span
+                            class="bg-purple-200 px-3 py-1 rounded-md border border-purple-400 font-bold shadow-sm">Past
+                            Participle (V3)<br><span class="text-sm text-purple-700">e.g., eaten</span></span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <h2 class="text-xl font-bold mb-2">B. Select the correct Past Participle (V3) for each verb.</h2>
+                    <span class="zh mb-6 block">B. 为每个动词选择正确的过去分词 (V3)。</span>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="section-b-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION C -->
+            <div>
+                <div class="bg-orange-50 border-l-4 border-orange-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                    <h3 class="font-bold text-orange-800 text-lg">💡 Formula: Subject + has/have + V3</h3>
+                    <span class="zh">公式：主语 + has/have + 过去分词(V3)</span>
+                    <ul class="mt-2 text-slate-700 list-disc list-inside">
+                        <li><b>has</b>: He, She, It, Singular (单数)</li>
+                        <li><b>have</b>: I, You, We, They, Plural (复数)</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <h2 class="text-xl font-bold mb-2">C. Complete the sentences in the present perfect.</h2>
+                    <span class="zh mb-6 block">C. 用现在完成时完成以下句子。(注意：你需要选择包含正确助动词和V3的选项)</span>
+
+                    <div class="space-y-6" id="section-c-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 25: True/False & Sentence Builder -->
+        <section id="page25" class="tab-content">
+            <!-- SECTION D -->
+            <div class="mb-10">
+                <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                    <h3 class="font-bold text-indigo-800 text-lg">💡 Concept: Spot the Error!</h3>
+                    <span class="zh">概念：找出错误！</span>
+                    <p class="mt-2 text-slate-700">Check two things:<br>1. Does the subject match <b>has/have</b>?<br>2.
+                        Is the main verb in <b>Past Participle (V3)</b> form?</p>
+                    <span class="zh">检查两件事：<br>1. 主语是否与 <b>has/have</b> 匹配？<br>2. 主动词是否是 <b>过去分词 (V3)</b> 形式？</span>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <h2 class="text-xl font-bold mb-2">D. Determine if the underlined phrases are correct.</h2>
+                    <span class="zh mb-6 block">D. 确定划线的短语是否使用正确。（点击 ✅ 查对，❌ 查错）</span>
+
+                    <div class="space-y-4" id="section-d-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION E -->
+            <div>
+                <div class="bg-pink-50 border-l-4 border-pink-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                    <h3 class="font-bold text-pink-800 text-lg">💡 Formula: Asking Present Perfect Questions</h3>
+                    <span class="zh">公式：提问现在完成时的问题</span>
+                    <p class="mt-2 text-slate-700 flex gap-2 flex-wrap items-center">
+                        <span class="bg-white px-2 py-1 rounded border">Has/Have</span> +
+                        <span class="bg-white px-2 py-1 rounded border">Subject (主语)</span> +
+                        <span class="bg-white px-2 py-1 rounded border">ever (曾经)</span> +
+                        <span class="bg-pink-200 px-2 py-1 rounded border font-bold">V3</span> +
+                        <span class="bg-white px-2 py-1 rounded border">Object/Place ?</span>
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <h2 class="text-xl font-bold mb-2">E. Rearrange the words to form meaningful questions.</h2>
+                    <span class="zh mb-6 block">E. 重新排列单词以形成有意义的问句。（点击单词将它们移动到框中）</span>
+
+                    <div class="space-y-8" id="section-e-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 26-27: Reading & Comprehension -->
+        <section id="page2627" class="tab-content">
+            <div class="bg-rose-50 border-l-4 border-rose-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                <h3 class="font-bold text-rose-800 text-lg">💡 Concept: Reading Comprehension (Scanning)</h3>
+                <span class="zh">概念：阅读理解 (略读与寻读)</span>
+                <p class="mt-2 text-slate-700">Scan the text for keywords from the question to find the answer.</p>
+                <span class="zh">浏览文本寻找问题中的关键词以找到答案。</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group mb-6">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-rose-400"></div>
+                <h2 class="text-xl font-bold mb-4">F. Read the adventure blog.</h2>
+
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl text-lg leading-relaxed font-serif">
+                    <h3 class="text-center font-bold text-2xl tracking-wide mb-4 uppercase">Adventures of a Thrill
+                        Seeker</h3>
+                    <div
+                        class="grid grid-cols-3 text-center font-bold bg-slate-200 rounded-lg p-2 mb-6 text-sm md:text-base">
+                        <div>About Aaron</div>
+                        <div class="bg-slate-700 text-white rounded py-1">Adventure: JULY</div>
+                        <div>Gallery</div>
+                    </div>
+
+                    <p class="font-bold mt-4">About Universal Studios Beijing</p>
+                    <p>Universal Studios Beijing Resort opened in late September 2021. It's huge and has seven themed
+                        zones. You can take the Beijing Subway, Batong Line 7 to Universal Resort Station.</p>
+                    <span
+                        class="zh text-base block mb-4 border-l-2 border-slate-300 pl-3">关于北京环球影城：北京环球度假区于2021年9月下旬开业。它非常大，有七个主题区域。你可以乘坐北京地铁八通线7号线到环球度假区站。</span>
+
+                    <p class="font-bold mt-4">My review</p>
+                    <p>It was an A-MAZING experience! I managed to visit The Wizarding World of Harry Potter, Minion
+                        Land, Jurassic World and Transformers Metrobase. The best ride for me was the Transformers
+                        Decepticoaster. It's a roller-coaster ride with special effects and lighting. You get to zoom up
+                        and down and in and out of a cave! Thrilling! The Harry Potter and The Forbidden Journey ride
+                        was fun as well. Lots of climbing, stopping and dropping! I got a bit light-headed after the
+                        ride. After resting, we went around looking for a drink. I tried butterbeer (it's non-alcoholic,
+                        by the way), and it tasted like butterscotch and caramel. Yummy! Check out my gallery for photos
+                        and vids!</p>
+                    <span
+                        class="zh text-base block mb-4 border-l-2 border-slate-300 pl-3">我的评价：这是一次令人惊叹的体验！我参观了哈利波特的魔法世界、小黄人乐园、侏罗纪世界和变形金刚基地。对我来说最好的游乐设施是霸天虎过山车。这是一个带有特效和灯光的过山车。你可以忽上忽下，穿梭于山洞之间！太刺激了！哈利波特与禁忌之旅也很有趣。有很多攀爬、停顿和坠落！坐完后我有点头晕。休息后，我们到处找喝的。我尝了黄油啤酒（顺便说一句，它是无酒精的），味道像奶油糖果和焦糖。好吃！去我的图库查看照片和视频吧！</span>
+
+                    <p class="font-bold mt-4">Tips</p>
+                    <ul class="list-disc list-inside">
+                        <li>Purchase your tickets online to avoid queuing up.</li>
+                        <li>Wear suitable shoes (sneakers) and comfortable clothes (T-shirts and jeans).</li>
+                        <li>Food is expensive, so pack snacks if you want to save some pennies.</li>
+                        <li>Remember, mask up if there's a crowd. Covid-19 is still hovering among us.</li>
+                    </ul>
+                    <span
+                        class="zh text-base block mb-4 border-l-2 border-slate-300 pl-3">贴士：在线购买门票以避免排队。穿合适的鞋子（运动鞋）和舒适的衣服（T恤和牛仔裤）。食物很贵，所以如果你想省钱就带点零食。记住，如果人多就要戴上口罩。Covid-19
+                        仍然在我们周围徘徊。</span>
+
+                    <p class="font-bold mt-4">Comments (100):</p>
+                    <p class="italic">Ju Ming – Awesome! I'm planning to visit Universal Studios Beijing soon! Hope I
+                        have just as much fun as you!</p>
+                    <p class="italic">Renee – How much do the tickets cost? Are they expensive?</p>
+                </div>
+            </div>
+
+            <!-- F: Question 1 & 2 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group mb-6">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-rose-400"></div>
+
+                <h3 class="font-bold text-lg mb-2">1. Match List A to List B.</h3>
+                <span class="zh mb-4 block">1. 将列表 A 与列表 B 进行匹配。(点击下拉菜单选择对应的 B 列表内容)</span>
+                <div class="space-y-3 mb-8" id="sec-f-q1-container">
+                    <!-- Populated by JS -->
+                </div>
+
+                <h3 class="font-bold text-lg mb-2 mt-6">2. Find words in the blog that have the opposite meaning.</h3>
+                <span class="zh mb-4 block">2. 在博客中找到与下列单词含义相反的单词。(点击下拉菜单选择)</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="sec-f-q2-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- F: Question 3 - 7 -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-rose-400"></div>
+                <h3 class="font-bold text-lg mb-2">Answer the following questions.</h3>
+                <span class="zh mb-4 block">回答以下问题。（使用下拉菜单构建正确的句子，避免打字）</span>
+
+                <div class="space-y-6" id="sec-f-q3-7-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 28: Fact File -->
+        <section id="page28" class="tab-content">
+            <div class="bg-fuchsia-50 border-l-4 border-fuchsia-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                <h3 class="font-bold text-fuchsia-800 text-lg">💡 Concept: Extracting Facts (Fact File)</h3>
+                <span class="zh">概念：提取事实信息 (信息档案)</span>
+                <p class="mt-2 text-slate-700">A fact file summarizes key information. Look for specific nouns, dates,
+                    and names in the text.</p>
+                <span class="zh">信息档案总结了关键信息。在文本中寻找特定的名词、日期和名称。</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-fuchsia-400"></div>
+                <h2 class="text-xl font-bold mb-2 text-center bg-slate-800 text-white py-2 rounded-t-lg">UNIVERSAL
+                    STUDIOS BEIJING</h2>
+                <span class="zh mb-6 block text-center">G. 根据博客完成事实档案。(点击下拉菜单选择正确信息)</span>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 bg-slate-50 p-4 border border-slate-200 rounded-b-lg"
+                    id="sec-g-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 29: MCQ -->
+        <section id="page29" class="tab-content">
+            <div class="bg-emerald-50 border-l-4 border-emerald-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                <h3 class="font-bold text-emerald-800 text-lg">💡 Concept: Inferencing & Main Idea (MCQ)</h3>
+                <span class="zh">概念：推理与主旨 (选择题)</span>
+                <p class="mt-2 text-slate-700">Sometimes the exact words aren't in the text. You have to guess the
+                    meaning based on clues!</p>
+                <span class="zh">有时原文中没有确切的词语。你必须根据线索猜测意思！</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-emerald-400"></div>
+                <h2 class="text-xl font-bold mb-2">H. Read the texts and choose the most suitable answer.</h2>
+                <span class="zh mb-6 block">H. 阅读短文并选择最合适的答案。（点击你认为正确的选项按钮）</span>
+
+                <div class="space-y-10" id="sec-h-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 30: Guided Blog Writing -->
+        <section id="page30" class="tab-content">
+            <div class="bg-lime-50 border-l-4 border-lime-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                <h3 class="font-bold text-lime-800 text-lg">💡 Concept: Guided Essay Writing (Information Transfer)</h3>
+                <span class="zh">概念：引导式写作（信息转移）</span>
+                <p class="mt-2 text-slate-700">Instead of writing from scratch, read the poster carefully. Find the
+                    <b>Who, Where, When, and What</b>, then slot them into the correct parts of the story!</p>
+                <span class="zh">不要从头开始写，仔细阅读海报。找出<b>谁、在哪里、什么时候、做什么</b>，然后把它们填入故事的正确部分！</span>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1.5 h-full bg-lime-400"></div>
+                <h2 class="text-xl font-bold mb-2">I. Write a blog entry based on the poster.</h2>
+                <span class="zh mb-6 block">I. 根据海报写一篇博客文章。（通过选择下拉菜单完成这篇博客，构建完整的句子）</span>
+
+                <!-- Poster Info -->
+                <div class="bg-slate-800 text-white p-5 rounded-xl shadow-inner mb-8">
+                    <h3 class="text-2xl font-black text-center mb-2 text-lime-400 tracking-wider">Let's Hike Together!
+                    </h3>
+                    <p class="text-center italic text-slate-300 mb-6">Join us for a fun and exciting hiking trip with
+                        friends and teachers!</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-slate-700 p-4 rounded-lg">
+                        <div>
+                            <p><span class="font-bold text-lime-300">Location:</span> Bukit Kiara Federal Park, Kuala
+                                Lumpur</p>
+                            <p><span class="font-bold text-lime-300">Date:</span> 14th June 2026</p>
+                            <p><span class="font-bold text-lime-300">Time:</span> 8.30 a.m. – 10.30 a.m.</p>
+                        </div>
+                        <ul class="list-disc list-inside text-sm text-slate-200">
+                            <li>Discover nature trails, spot wildlife and enjoy fresh air</li>
+                            <li>Packed brunch and water will be provided</li>
+                            <li>Take photos, play group games and collect leaves for a class project</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Guided Writing Area -->
+                <div class="bg-slate-50 p-6 rounded-2xl border-2 border-slate-200 font-lora text-lg leading-loose shadow-sm"
+                    id="sec-i-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 31: Fact vs Opinion & Phrasal Verbs -->
+        <section id="page31" class="tab-content">
+            <!-- SECTION J -->
+            <div class="mb-10">
+                <div class="bg-cyan-50 border-l-4 border-cyan-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                    <h3 class="font-bold text-cyan-800 text-lg">💡 Concept: Fact vs. Opinion</h3>
+                    <span class="zh">概念：事实 vs. 观点</span>
+                    <ul class="mt-2 text-slate-700 list-disc list-inside">
+                        <li><b>Fact (事实):</b> Can be proven true or false. (e.g., Water boils at 100°C).</li>
+                        <li><b>Opinion (观点):</b> A feeling or belief. Often uses words like <i>best, boring, easy,
+                                fun</i>.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-cyan-400"></div>
+                    <h2 class="text-xl font-bold mb-2">J. Identify the sentence types (Fact or Opinion).</h2>
+                    <span class="zh mb-6 block">J. 识别句子类型，判断是事实还是观点。（点击对应的按钮）</span>
+
+                    <div class="space-y-3" id="sec-j-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION K -->
+            <div>
+                <div class="bg-indigo-50 border-l-4 border-indigo-400 p-4 rounded-r-lg mb-6 shadow-sm">
+                    <h3 class="font-bold text-indigo-800 text-lg">💡 Concept: Phrasal Verbs in Context</h3>
+                    <span class="zh">概念：语境中的短语动词</span>
+                    <p class="mt-2 text-slate-700">Phrasal verbs consist of a verb and a preposition. Read the whole
+                        sentence to guess the hidden meaning!</p>
+                    <span class="zh">短语动词由动词和介词组成。阅读整个句子来猜测隐藏的含义！</span>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1.5 h-full bg-indigo-400"></div>
+                    <h2 class="text-xl font-bold mb-2">K. Complete the following sentences with phrases from the answer
+                        bank.</h2>
+                    <span class="zh mb-6 block">K. 用答案库中的短语完成以下句子。（选择正确的下拉选项）</span>
+
+                    <div
+                        class="grid grid-cols-2 md:grid-cols-3 gap-2 bg-slate-100 p-4 rounded-xl font-bold text-indigo-700 text-center mb-6 shadow-inner border border-slate-200">
+                        <div>get into</div>
+                        <div>pass through</div>
+                        <div>pluck up</div>
+                        <div>just go for it</div>
+                        <div>get a thrill out of</div>
+                        <div>set forth</div>
+                    </div>
+
+                    <div class="space-y-6" id="sec-k-container">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- GLOBAL VARIABLES ---
+        let mistakes = 0;
+        const mistakeCounterEl = document.getElementById('mistake-counter');
+
+        function addMistake() {
+            mistakes++;
+            mistakeCounterEl.innerText = mistakes;
+            mistakeCounterEl.parentElement.classList.add('bg-rose-200');
+            setTimeout(() => {
+                mistakeCounterEl.parentElement.classList.remove('bg-rose-200');
+            }, 300);
+        }
+
+        // --- NAVIGATION ---
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('bg-teal-500', 'text-white');
+                el.classList.add('bg-white', 'text-slate-600');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.remove('bg-white', 'text-slate-600');
+            activeBtn.classList.add('bg-teal-500', 'text-white');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleChinese() {
+            document.body.classList.toggle('hide-zh');
+        }
+
+        // --- VALIDATION HELPER ---
+        function handleDropdownSelect(selectEl, correctAnswer) {
+            const selectedOpt = selectEl.options[selectEl.selectedIndex];
+
+            if (selectEl.value === correctAnswer) {
+                // Correct
+                selectEl.classList.remove('wrong-ans');
+                selectEl.classList.add('correct-ans');
+                selectEl.disabled = true;
+
+                // Add checkmark visual to parent without resetting the select element's state
+                const parent = selectEl.parentElement;
+                if (!parent.querySelector('.status-icon')) {
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = 'status-icon text-2xl ml-2 absolute -right-8';
+                    iconSpan.innerText = '✅';
+                    parent.appendChild(iconSpan);
+                }
+            } else if (selectEl.value !== "") {
+                // Wrong
+                addMistake();
+                selectEl.classList.add('wrong-ans');
+                selectedOpt.disabled = true; // disable this wrong option so they can't click it again
+                selectedOpt.text = "❌ " + selectedOpt.text; // strike out visually
+
+                setTimeout(() => {
+                    selectEl.classList.remove('wrong-ans');
+                    selectEl.value = ""; // Reset to default
+                }, 800);
+            }
+        }
+
+        // --- DATA & RENDER: SECTION A (Spelling Game + Interactive Game) ---
+        const secAData = [
+            { descEn: "1. To spend time in nature in a tent.", descZh: "在大自然中的帐篷里度过时光。", ans: "Camping" },
+            { descEn: "2. To walk through a jungle with a backpack and a walking stick.", descZh: "背着背包、拿着手杖穿过丛林。", ans: "Hiking" },
+            { descEn: "3. To dive into the ocean using specialised gear such as an oxygen tank and a diving mask.", descZh: "使用氧气罐和潜水面罩等专业装备潜入海洋。", ans: "Scuba diving" },
+            { descEn: "4. To paddle a light, narrow boat in a river.", descZh: "在河里划一种轻窄的小船。", ans: "Kayaking" },
+            { descEn: "5. To glide around a hard surface on roller skates in a roller skating rink.", descZh: "在溜冰场的坚硬表面上滑行。", ans: "Roller skating" },
+            { descEn: "6. To sit or lie in the sun usually by the pool or at the beach.", descZh: "通常在游泳池旁或海滩上坐在或躺在阳光下。", ans: "Sunbathing" }
+        ];
+
+        // --- PHASE 1: Spelling Game Logic ---
+        let currentSpellIdx = 0;
+        let spellState = { target: "", bank: [], zone: [] };
+        let currentSpellMistakes = 0;
+        let solvedSpells = new Set(); // Track completed words
+
+        function unlockPhase2() {
+            document.getElementById('spelling-game-content').innerHTML = `
+                <div class="py-8">
+                    <span class="text-6xl mb-4 block">🎉</span>
+                    <h3 class="text-2xl font-bold text-indigo-600 mb-2 font-quicksand">Vocabulary Unlocked!</h3>
+                    <p class="zh text-slate-500 font-bold text-lg">太棒了！所有单词已解锁。现在向下滚动开始配对任务吧！👇</p>
+                </div>
+            `;
+            const phase2 = document.getElementById('phase2-matching');
+            phase2.classList.remove('hidden');
+            // Trigger reflow for transition
+            void phase2.offsetWidth;
+            phase2.classList.remove('opacity-0');
+        }
+
+        function navigateSpell(direction) {
+            let newIdx = currentSpellIdx + direction;
+            if (newIdx >= 0 && newIdx < secAData.length) {
+                currentSpellIdx = newIdx;
+                initSpelling(currentSpellIdx);
+            }
+        }
+
+        function initSpelling(index) {
+            currentSpellMistakes = 0; // Reset mistakes for the current view
+            const word = secAData[index].ans;
+            spellState.target = word;
+
+            if (solvedSpells.has(index)) {
+                // If already solved, just display the completed state
+                spellState.zone = word.split('');
+                spellState.bank = [];
+            } else {
+                // Extract letters ignoring spaces
+                let letters = word.split('').filter(c => c !== ' ');
+                spellState.bank = letters.sort(() => Math.random() - 0.5);
+                // Pre-fill spaces in the drop zone
+                spellState.zone = word.split('').map(char => char === ' ' ? ' ' : null);
+            }
+
+            renderSpelling();
+        }
+
+        function renderSpelling() {
+            const container = document.getElementById('spelling-game-content');
+            const data = secAData[currentSpellIdx];
+
+            let bankHTML = spellState.bank.map((letter, i) =>
+                `<button onclick="spellLetter(${i})" class="w-10 h-12 sm:w-12 sm:h-14 m-1 text-xl sm:text-2xl font-bold bg-white text-indigo-700 border-2 border-indigo-300 rounded-xl hover:bg-indigo-50 shadow-sm transition-transform hover:-translate-y-1">${letter}</button>`
+            ).join('');
+
+            let zoneHTML = spellState.zone.map((char, i) => {
+                if (char === ' ') return `<div class="w-4 sm:w-6 h-12 m-1 inline-block"></div>`; // space divider
+                if (char === null) return `<div class="w-10 h-12 sm:w-12 sm:h-14 m-1 inline-block border-b-4 border-slate-300 bg-slate-100 rounded-t-xl align-top"></div>`; // empty slot
+
+                // If solved, render green locked buttons
+                if (solvedSpells.has(currentSpellIdx)) {
+                    return `<button class="w-10 h-12 sm:w-12 sm:h-14 m-1 text-xl sm:text-2xl font-bold bg-emerald-500 text-white border-2 border-emerald-600 rounded-xl shadow-md align-top cursor-default">${char}</button>`;
+                }
+
+                return `<button onclick="unspellLetter(${i})" class="w-10 h-12 sm:w-12 sm:h-14 m-1 text-xl sm:text-2xl font-bold bg-indigo-500 text-white border-2 border-indigo-600 rounded-xl shadow-md align-top hover:bg-indigo-600">${char}</button>`;
+            }).join('');
+
+            // Hint & Success Banners
+            let hintBanner = (!solvedSpells.has(currentSpellIdx) && currentSpellMistakes >= 3) ? `<div class="w-[90%] mx-auto text-center text-amber-700 bg-amber-100 p-2 rounded-lg font-bold mb-4 animate-pulse border-2 border-amber-300 shadow-sm">💡 提示：我们帮你排好了一些字母！继续加油！(Hint: We placed some letters for you!)</div>` : '';
+            let successBanner = solvedSpells.has(currentSpellIdx) ? `<div class="w-[90%] mx-auto text-center text-emerald-700 bg-emerald-100 p-2 rounded-lg font-bold mb-4 border-2 border-emerald-300 shadow-sm">✅ 完美！(Perfect!)</div>` : '';
+
+            container.innerHTML = `
+                <!-- Navigation Bar -->
+                <div class="flex justify-between items-center px-4 mb-4 border-b border-slate-200 pb-3">
+                    <button onclick="navigateSpell(-1)" class="px-4 py-2 bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm" ${currentSpellIdx === 0 ? 'disabled' : ''}>⬅️ Prev</button>
+                    <span class="text-xs font-bold text-indigo-500 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">Word ${currentSpellIdx + 1} of 6</span>
+                    <button onclick="navigateSpell(1)" class="px-4 py-2 bg-white border-2 border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm" ${currentSpellIdx === secAData.length - 1 ? 'disabled' : ''}>Next ➡️</button>
+                </div>
+
+                <div class="px-4 mb-4">
+                    <p class="font-lora text-lg text-slate-700 mt-2">${data.descEn}</p>
+                    <p class="zh mt-1 text-indigo-600 font-bold">${data.descZh}</p>
+                </div>
+                
+                ${hintBanner}
+                ${successBanner}
+
+                <div class="min-h-[70px] mb-8 flex justify-center flex-wrap" id="spell-zone">
+                    ${zoneHTML}
+                </div>
+
+                ${!solvedSpells.has(currentSpellIdx) ? `
+                <div class="p-4 bg-indigo-50/50 rounded-2xl inline-block border border-indigo-100 w-full sm:w-auto mx-4 sm:mx-0 min-h-[80px]">
+                    <div class="flex justify-center flex-wrap">
+                        ${bankHTML || '<span class="text-slate-400 italic">Empty</span>'}
+                    </div>
+                </div>` : ''}
+            `;
+        }
+
+        function spellLetter(bankIndex) {
+            const firstEmpty = spellState.zone.indexOf(null);
+            if (firstEmpty !== -1) {
+                const letter = spellState.bank.splice(bankIndex, 1)[0];
+                spellState.zone[firstEmpty] = letter;
+                renderSpelling();
+                checkSpellingComplete();
+            }
+        }
+
+        function unspellLetter(zoneIndex) {
+            const letter = spellState.zone[zoneIndex];
+            if (letter && letter !== ' ') {
+                spellState.zone[zoneIndex] = null;
+                spellState.bank.push(letter);
+                renderSpelling();
+            }
+        }
+
+        function checkSpellingComplete() {
+            if (!spellState.zone.includes(null)) {
+                const spelledWord = spellState.zone.join('');
+                const zoneDiv = document.getElementById('spell-zone');
+
+                // Case-insensitive check just to be safe
+                if (spelledWord.toLowerCase() === spellState.target.toLowerCase()) {
+                    zoneDiv.classList.add('scale-105', 'transition-transform');
+                    // Change colors to green instantly
+                    const buttons = zoneDiv.querySelectorAll('button');
+                    buttons.forEach(btn => {
+                        btn.classList.remove('bg-indigo-500', 'border-indigo-600');
+                        btn.classList.add('bg-emerald-500', 'border-emerald-600');
+                    });
+
+                    solvedSpells.add(currentSpellIdx);
+
+                    setTimeout(() => {
+                        if (solvedSpells.size === secAData.length) {
+                            unlockPhase2();
+                        } else {
+                            // Find next unsolved automatically
+                            let nextIdx = (currentSpellIdx + 1) % secAData.length;
+                            while (solvedSpells.has(nextIdx)) {
+                                nextIdx = (nextIdx + 1) % secAData.length;
+                            }
+                            currentSpellIdx = nextIdx;
+                            initSpelling(currentSpellIdx);
+                        }
+                    }, 800);
+                } else {
+                    addMistake();
+                    currentSpellMistakes++; // Track mistakes specifically for this word
+                    zoneDiv.classList.add('wrong-ans');
+
+                    setTimeout(() => {
+                        zoneDiv.classList.remove('wrong-ans');
+
+                        if (currentSpellMistakes >= 3) {
+                            // 3 Mistakes: Trigger Hint
+                            provideSpellingHint();
+                        } else {
+                            // 1 or 2 Mistakes: Bounce back ALL letters automatically
+                            spellState.zone.forEach((char, i) => {
+                                if (char !== null && char !== ' ') {
+                                    spellState.bank.push(char);
+                                    spellState.zone[i] = null;
+                                }
+                            });
+                            renderSpelling();
+                        }
+                    }, 600);
+                }
+            }
+        }
+
+        function provideSpellingHint() {
+            const target = spellState.target;
+            const letters = target.split('');
+            const nonSpaceIndices = [];
+
+            // Find indices of all actual letters (ignoring spaces)
+            letters.forEach((char, i) => { if (char !== ' ') nonSpaceIndices.push(i); });
+
+            // Calculate how many letters to reveal (~50% of the word)
+            const revealCount = Math.ceil(nonSpaceIndices.length / 2);
+
+            // Randomly select indices to reveal
+            const shuffledIndices = [...nonSpaceIndices].sort(() => Math.random() - 0.5);
+            const indicesToReveal = shuffledIndices.slice(0, revealCount);
+
+            // Reset the zone and bank
+            spellState.zone = letters.map(char => char === ' ' ? ' ' : null);
+            spellState.bank = [];
+
+            // Distribute letters: correct ones to the zone, the rest to the bank
+            letters.forEach((char, i) => {
+                if (char === ' ') return;
+
+                if (indicesToReveal.includes(i)) {
+                    spellState.zone[i] = char;
+                } else {
+                    spellState.bank.push(char);
+                }
+            });
+
+            // Shuffle the remaining bank letters
+            spellState.bank.sort(() => Math.random() - 0.5);
+            renderSpelling();
+        }
+
+        // --- PHASE 2: Matching Game Logic ---
+        let activityBank = ["Camping", "Hiking", "Scuba diving", "Kayaking", "Roller skating", "Sunbathing"].sort(() => Math.random() - 0.5);
+        let activeActivity = null;
+        let matchedActivities = [];
+
+        function renderSecA() {
+            // Render Bank
+            const bankContainer = document.getElementById('activity-bank-container');
+            let bankHTML = activityBank.map(act => {
+                if (matchedActivities.includes(act)) return '';
+                let isSelected = activeActivity === act;
+                return `<button onclick="selectActivity('${act}')" class="px-4 py-2 rounded-xl font-bold transition-all shadow-sm border-2 ${isSelected ? 'bg-teal-500 text-white border-teal-600 scale-105' : 'bg-white text-teal-700 border-teal-200 hover:bg-teal-50'}">${act}</button>`;
+            }).join('');
+
+            if (matchedActivities.length === 6) {
+                bankHTML = '<div class="text-emerald-600 font-bold p-2 w-full text-center text-lg">🎉 All activities matched perfectly!</div>';
+            }
+            bankContainer.innerHTML = bankHTML;
+
+            // Render Questions
+            const containerA = document.getElementById('section-a-container');
+            containerA.innerHTML = '';
+            secAData.forEach((item, index) => {
+                let isMatched = matchedActivities.includes(item.ans);
+                let dropZoneHTML = isMatched
+                    ? `<div class="w-full md:w-48 p-3 text-center rounded-xl bg-emerald-100 border-2 border-emerald-400 text-emerald-800 font-bold shadow-sm">✅ ${item.ans}</div>`
+                    : `<button onclick="attemptMatch(${index})" class="w-full md:w-48 p-3 text-center rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 hover:bg-teal-50 hover:border-teal-300 hover:text-teal-500 font-bold transition-all" id="dropzone-${index}">Drop here</button>`;
+
+                containerA.innerHTML += `
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col md:flex-row gap-4 items-start md:items-center justify-between transition-all hover:shadow-md">
+                        <div class="flex-1">
+                            <p class="font-bold text-lg">${item.descEn}</p>
+                            <span class="zh">${item.descZh}</span>
+                        </div>
+                        <div class="shrink-0 flex items-center justify-center w-full md:w-auto mt-2 md:mt-0">
+                            ${dropZoneHTML}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectActivity(act) {
+            activeActivity = activeActivity === act ? null : act;
+            renderSecA();
+        }
+
+        function attemptMatch(index) {
+            if (!activeActivity) return;
+            if (secAData[index].ans === activeActivity) {
+                matchedActivities.push(activeActivity);
+                activeActivity = null;
+                renderSecA();
+            } else {
+                addMistake();
+                let dz = document.getElementById(`dropzone-${index}`);
+                dz.classList.add('wrong-ans');
+                setTimeout(() => dz.classList.remove('wrong-ans'), 800);
+            }
+        }
+
+        // --- DATA & RENDER: SECTION B ---
+        const secBData = [
+            { v1: "hurt", ans: "hurt", zh: "受伤", wr1: "hurted", wr2: "hurting" },
+            { v1: "decide", ans: "decided", zh: "决定", wr1: "decide", wr2: "deciden" },
+            { v1: "blow", ans: "blown", zh: "吹", wr1: "blowed", wr2: "blew" },
+            { v1: "catch", ans: "caught", zh: "抓住", wr1: "catched", wr2: "cot" },
+            { v1: "begin", ans: "begun", zh: "开始", wr1: "began", wr2: "beginned" },
+            { v1: "grow", ans: "grown", zh: "成长", wr1: "grew", wr2: "growed" },
+            { v1: "collapse", ans: "collapsed", zh: "坍塌", wr1: "collapse", wr2: "collapsen" },
+            { v1: "break", ans: "broken", zh: "打破", wr1: "broke", wr2: "breaked" },
+            { v1: "cut", ans: "cut", zh: "切", wr1: "cutted", wr2: "cutting" },
+            { v1: "speak", ans: "spoken", zh: "说", wr1: "spoke", wr2: "speaked" },
+            { v1: "fall", ans: "fallen", zh: "落下", wr1: "fell", wr2: "falled" },
+            { v1: "drive", ans: "driven", zh: "驾驶", wr1: "drove", wr2: "drived" },
+            { v1: "dig", ans: "dug", zh: "挖", wr1: "digged", wr2: "dog" },
+            { v1: "forbid", ans: "forbidden", zh: "禁止", wr1: "forbad", wr2: "forbidded" },
+            { v1: "wake", ans: "woken", zh: "醒来", wr1: "woke", wr2: "waked" },
+            { v1: "freeze", ans: "frozen", zh: "结冰", wr1: "froze", wr2: "freezed" },
+            { v1: "sell", ans: "sold", zh: "卖", wr1: "selled", wr2: "saled" },
+            { v1: "give", ans: "given", zh: "给", wr1: "gave", wr2: "gived" },
+            { v1: "rise", ans: "risen", zh: "升起", wr1: "rose", wr2: "rised" },
+            { v1: "write", ans: "written", zh: "写", wr1: "wrote", wr2: "writed" }
+        ];
+
+        const containerB = document.getElementById('section-b-container');
+        secBData.forEach((item, index) => {
+            // Shuffle options
+            let opts = [item.ans, item.wr1, item.wr2].sort(() => Math.random() - 0.5);
+            let optionsHTML = `<option value="">-- V3 Form --</option>`;
+            opts.forEach(opt => {
+                optionsHTML += `<option value="${opt === item.ans ? item.ans : 'wrong'}">${opt}</option>`;
+            });
+
+            containerB.innerHTML += `
+                <div class="flex items-center p-3 border border-slate-200 rounded-xl bg-slate-50 transition-all hover:shadow-md">
+                    <div class="w-8 font-bold text-slate-400">${index + 1}.</div>
+                    <div class="w-24 font-bold text-lg">${item.v1}<br><span class="zh text-xs">${item.zh}</span></div>
+                    <div class="flex-1 flex items-center">
+                        <select onchange="handleDropdownSelect(this, '${item.ans}')" class="w-full p-2 border-2 border-amber-200 rounded-lg bg-white text-slate-700 outline-none focus:border-amber-500 transition-all font-bold">
+                            ${optionsHTML}
+                        </select>
+                    </div>
+                </div>
+            `;
+        });
+
+        // --- DATA & RENDER: SECTION C ---
+        const secCData = [
+            {
+                parts: ["1. The grizzly bear", "up from its slumber."],
+                zh: "灰熊已经从睡梦中醒来。",
+                hint: "Grizzly bear is singular (It). Base verb: wake.",
+                ans: "has woken",
+                opts: ["has woken", "have woken", "has woke"]
+            },
+            {
+                parts: ["2. The old bridge", "due to the strong currents of the river."],
+                zh: "由于河水湍急，这座老桥已经坍塌了。",
+                hint: "Bridge is singular (It). Base verb: collapse.",
+                ans: "has collapsed",
+                opts: ["have collapsed", "has collapsed", "has collapse"]
+            },
+            {
+                parts: ["3. We", "never", "to Thailand before."],
+                zh: "我们以前从未开车去过泰国。",
+                hint: "We is plural. Base verb: drive.",
+                ans: "have ... driven", // This one is tricky due to split blank. We'll handle it specially.
+                opts: [] // Handled custom below
+            },
+            {
+                parts: ["4. Mr and Mrs Yong's children", "up."],
+                zh: "杨先生和杨太太的孩子们已经长大了。",
+                hint: "Children is plural (They). Base verb: grow.",
+                ans: "have grown",
+                opts: ["has grown", "have grew", "have grow"]
+            },
+            {
+                parts: ["5. My parents have", "me to go camping in the woods."],
+                zh: "我的父母已经禁止我去树林里露营。 (注意：have 已经给了)",
+                hint: "Base verb: forbid. Just need V3.",
+                ans: "forbidden",
+                opts: ["forbidden", "forbade", "forbid"]
+            },
+            {
+                parts: ["6. Kew Lock", "to take up rock climbing during the holidays."],
+                zh: "Kew Lock 已经决定在假期里学习攀岩。",
+                hint: "Kew Lock is singular (He). Base verb: decide.",
+                ans: "has decided",
+                opts: ["have decided", "has decided", "has decide"]
+            },
+            {
+                parts: ["7. The lake water", "overnight. We can go ice skating now."],
+                zh: "湖水一夜之间结冰了。我们现在可以去滑冰了。",
+                hint: "Water is uncountable/singular (It). Base verb: freeze.",
+                ans: "has frozen",
+                opts: ["has frozen", "have frozen", "has froze"]
+            },
+            {
+                parts: ["8. The park rangers", "the person who has been littering at the national park."],
+                zh: "公园管理员已经抓住了在国家公园里乱扔垃圾的人。",
+                hint: "Rangers is plural (They). Base verb: catch.",
+                ans: "have caught",
+                opts: ["has caught", "have catched", "have catch"]
+            }
+        ];
+
+        const containerC = document.getElementById('section-c-container');
+        secCData.forEach((item, index) => {
+            if (index === 2) {
+                // Custom handling for Question 3 (split blank)
+                containerC.innerHTML += `
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl leading-loose transition-all hover:shadow-md">
+                        <span class="text-lg">
+                            We 
+                            <span class="inline-flex items-center relative">
+                                <select onchange="handleDropdownSelect(this, 'have')" class="mx-2 p-1 border-2 border-amber-200 rounded-lg bg-white text-amber-700 font-bold outline-none focus:border-amber-500 transition-all cursor-pointer">
+                                    <option value="">---</option>
+                                    <option value="have">have</option>
+                                    <option value="has">has</option>
+                                </select>
+                            </span>
+                            never 
+                            <span class="inline-flex items-center relative">
+                                <select onchange="handleDropdownSelect(this, 'driven')" class="mx-2 p-1 border-2 border-amber-200 rounded-lg bg-white text-amber-700 font-bold outline-none focus:border-amber-500 transition-all cursor-pointer">
+                                    <option value="">---</option>
+                                    <option value="driven">driven</option>
+                                    <option value="drove">drove</option>
+                                </select>
+                            </span>
+                            to Thailand before.
+                        </span>
+                        <div class="zh mt-2">${item.zh}</div>
+                        <div class="text-sm text-amber-600 mt-2 font-semibold">Hint: ${item.hint}</div>
+                    </div>
+                `;
+            } else {
+                let opts = [...item.opts].sort(() => Math.random() - 0.5);
+                let optionsHTML = `<option value="">--- select ---</option>`;
+                opts.forEach(opt => {
+                    optionsHTML += `<option value="${opt === item.ans ? item.ans : 'wrong'}">${opt}</option>`;
+                });
+
+                containerC.innerHTML += `
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl leading-loose transition-all hover:shadow-md">
+                        <span class="text-lg">
+                            ${item.parts[0]} 
+                            <span class="inline-flex items-center relative">
+                                <select onchange="handleDropdownSelect(this, '${item.ans}')" class="mx-2 p-1 border-2 border-amber-200 rounded-lg bg-white text-amber-700 font-bold outline-none focus:border-amber-500 transition-all cursor-pointer">
+                                    ${optionsHTML}
+                                </select>
+                            </span>
+                            ${item.parts[1]}
+                        </span>
+                        <div class="zh mt-2">${item.zh}</div>
+                        <div class="text-sm text-amber-600 mt-2 font-semibold">Hint: ${item.hint}</div>
+                    </div>
+                `;
+            }
+        });
+
+        // --- DATA & RENDER: SECTION D ---
+        const secDData = [
+            { text: "1. I <u class='font-bold text-indigo-700'>have never hiked</u> up Mount Kinabalu before.", zh: "我以前从未爬过京那巴鲁山。 (I + have + V3)", isCorrect: true },
+            { text: "2. Meera and Natalie <u class='font-bold text-indigo-700'>has gone</u> camping.", zh: "Meera 和 Natalie 已经去露营了。 (两人 = plural = has 还是 have?)", isCorrect: false },
+            { text: "3. We <u class='font-bold text-indigo-700'>haven't hear</u> any news about the landslide.", zh: "我们没有听到任何关于山体滑坡的消息。 (hear 是 V1，应该是 heard)", isCorrect: false },
+            { text: "4. The sailors <u class='font-bold text-indigo-700'>have been trapped</u> in the submarine for over two days.", zh: "水手们被困在潜艇里两天多了。 (Sailors + have + V3)", isCorrect: true },
+            { text: "5. Richard <u class='font-bold text-indigo-700'>has just completed</u> writing his travel blog.", zh: "Richard 刚刚写完他的旅行博客。 (Richard + has + V3)", isCorrect: true },
+            { text: "6. The children <u class='font-bold text-indigo-700'>haven't travelled</u> on a plane before.", zh: "孩子们以前没有坐过飞机。 (Children + have + V3)", isCorrect: true },
+            { text: "7. I <u class='font-bold text-indigo-700'>hasn't tried</u> bungee jumping.", zh: "我没有尝试过蹦极。 (I + hasn't 还是 haven't?)", isCorrect: false },
+            { text: "8. Erina <u class='font-bold text-indigo-700'>has catch</u> a chill.", zh: "Erina 着凉了。 (catch 是 V1，应该是 caught)", isCorrect: false }
+        ];
+
+        const containerD = document.getElementById('section-d-container');
+        secDData.forEach((item, index) => {
+            containerD.innerHTML += `
+                <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col md:flex-row gap-4 items-start md:items-center justify-between transition-all hover:shadow-md" id="row-d-${index}">
+                    <div class="flex-1">
+                        <p class="text-lg">${item.text}</p>
+                        <span class="zh">${item.zh}</span>
+                    </div>
+                    <div class="flex gap-2 shrink-0" id="btns-d-${index}">
+                        <button onclick="checkTF(${index}, true, ${item.isCorrect})" class="px-4 py-2 bg-white border-2 border-sky-200 rounded-xl hover:bg-sky-50 font-bold flex items-center gap-1 shadow-sm transition-all text-slate-600"><span class="text-emerald-500 text-xl">✓</span> Correct</button>
+                        <button onclick="checkTF(${index}, false, ${item.isCorrect})" class="px-4 py-2 bg-white border-2 border-sky-200 rounded-xl hover:bg-sky-50 font-bold flex items-center gap-1 shadow-sm transition-all text-slate-600"><span class="text-rose-500 text-xl">✗</span> Wrong</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        function checkTF(index, userGuess, actualAnswer) {
+            const btnContainer = document.getElementById(`btns-d-${index}`);
+            const row = document.getElementById(`row-d-${index}`);
+
+            if (userGuess === actualAnswer) {
+                // Correctly identified
+                row.classList.add('bg-emerald-50', 'border-emerald-300');
+
+                // Show the specific symbol (Tick or Cross) so the student can copy it to the workbook
+                const icon = actualAnswer ? '<span class="text-emerald-600 text-2xl font-black">✓</span>' : '<span class="text-rose-600 text-2xl font-black">✗</span>';
+                const label = actualAnswer ? 'Correct' : 'Wrong';
+
+                btnContainer.innerHTML = `
+                    <div class="px-5 py-2 bg-emerald-100 text-emerald-900 font-bold rounded-xl border-2 border-emerald-300 shadow-sm flex items-center gap-3">
+                        <span class="text-sm text-emerald-700">✅ Answer:</span> 
+                        <div class="flex items-center gap-1 bg-white px-3 py-1 rounded-lg border border-emerald-200 shadow-inner">
+                            ${icon} <span class="text-slate-700">${label}</span>
+                        </div>
+                    </div>`;
+            } else {
+                // Wrongly identified
+                addMistake();
+                row.classList.add('wrong-ans');
+                setTimeout(() => {
+                    row.classList.remove('wrong-ans');
+                }, 800);
+            }
+        }
+
+        // --- DATA & RENDER: SECTION E (Sentence Builder) ---
+        const secEData = [
+            { words: ["Have", "you", "ever", "been", "to", "Norway", "?"], zh: "你曾经去过挪威吗？" },
+            { words: ["Has", "it", "ever", "rained", "in", "January", "?"], zh: "一月份曾经下过雨吗？" },
+            { words: ["Have", "they", "ever", "seen", "the", "northern", "lights", "?"], zh: "他们曾经见过北极光吗？" },
+            { words: ["Has", "Rita", "ever", "tried", "skydiving", "?"], zh: "Rita 曾经尝试过跳伞吗？" },
+            { words: ["Have", "you", "eaten", "any", "interesting", "food", "in", "Japan", "?"], zh: "你在日本吃过什么有趣的食物吗？" },
+            { words: ["Have", "you", "ever", "experienced", "a", "volcanic", "eruption", "before", "?"], zh: "你以前经历过火山爆发吗？" }
+        ];
+
+        // State for sentences: { bank: [words], zone: [words] }
+        let sentenceStates = [];
+
+        function renderSentenceBuilder() {
+            const container = document.getElementById('section-e-container');
+            container.innerHTML = "";
+
+            secEData.forEach((item, index) => {
+                // Init state if not exists
+                if (!sentenceStates[index]) {
+                    // Shuffle bank words initially
+                    let shuffled = [...item.words].sort(() => Math.random() - 0.5);
+                    sentenceStates[index] = { bank: shuffled, zone: [], correct: false };
+                }
+
+                const state = sentenceStates[index];
+
+                if (state.correct) {
+                    // Render Success State
+                    container.innerHTML += `
+                        <div class="p-5 bg-emerald-50 border-2 border-emerald-300 rounded-xl shadow-sm">
+                            <h4 class="font-bold text-slate-500 mb-1">Target: ${item.zh}</h4>
+                            <div class="flex gap-2 flex-wrap items-center mt-3">
+                                <span class="text-2xl">✅</span>
+                                <p class="text-xl font-bold text-emerald-800">${item.words.join(" ")}</p>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Render Active State
+                let bankHTML = state.bank.map((w, wIdx) =>
+                    `<button onclick="moveWord(${index}, 'bank', ${wIdx})" class="word-block">${w}</button>`
+                ).join('');
+
+                let zoneHTML = state.zone.map((w, wIdx) =>
+                    `<button onclick="moveWord(${index}, 'zone', ${wIdx})" class="word-block bg-pink-100 border-pink-300">${w}</button>`
+                ).join('');
+
+                container.innerHTML += `
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-xl shadow-sm" id="sb-container-${index}">
+                        <div class="mb-3">
+                            <h4 class="font-bold text-slate-600">Q${index + 1}. Target Meaning:</h4>
+                            <span class="zh text-pink-700 font-bold text-lg">${item.zh}</span>
+                        </div>
+                        
+                        <!-- Word Bank -->
+                        <div class="mb-4">
+                            <p class="text-sm font-bold text-slate-400 mb-1 uppercase tracking-wider">Word Bank (Click to move)</p>
+                            <div class="min-h-[50px] p-2 bg-white rounded-xl border border-slate-200 shadow-inner">
+                                ${bankHTML || '<span class="text-slate-300 italic p-2">Empty</span>'}
+                            </div>
+                        </div>
+                        
+                        <!-- Drop Zone -->
+                        <div>
+                            <p class="text-sm font-bold text-slate-400 mb-1 uppercase tracking-wider">Your Sentence</p>
+                            <div class="drop-zone shadow-inner flex flex-wrap content-start">
+                                ${zoneHTML || '<span class="text-slate-400 italic p-2">Click words above to build your sentence here...</span>'}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 flex justify-end">
+                            <button onclick="checkSentence(${index})" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-6 rounded-lg shadow-md transition-colors ${state.bank.length > 0 ? 'opacity-50 cursor-not-allowed' : ''}" ${state.bank.length > 0 ? 'disabled' : ''}>
+                                Check Sentence 🔍
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function moveWord(sIndex, source, wIndex) {
+            const state = sentenceStates[sIndex];
+            if (source === 'bank') {
+                const word = state.bank.splice(wIndex, 1)[0];
+                state.zone.push(word);
+            } else {
+                const word = state.zone.splice(wIndex, 1)[0];
+                state.bank.push(word);
+            }
+            renderSentenceBuilder();
+        }
+
+        function checkSentence(index) {
+            const state = sentenceStates[index];
+            const targetWords = secEData[index].words;
+
+            // Check if arrays match
+            let isCorrect = true;
+            if (state.zone.length !== targetWords.length) isCorrect = false;
+            for (let i = 0; i < targetWords.length; i++) {
+                if (state.zone[i] !== targetWords[i]) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                state.correct = true;
+                renderSentenceBuilder();
+            } else {
+                addMistake();
+                const container = document.getElementById(`sb-container-${index}`);
+                container.classList.add('wrong-ans');
+                setTimeout(() => {
+                    container.classList.remove('wrong-ans');
+                }, 800);
+            }
+        }
+
+        // --- DATA & RENDER: SECTION F (Page 26-27) ---
+        const secF_Q1 = [
+            { a: "The blog belongs to", ans: "Aaron.", opts: ["Aaron.", "can be bought online.", "at the theme park.", "is by taking Batong Line 7..."] },
+            { a: "A way to get to Universal Studios Beijing", ans: "is by taking Batong Line 7...", opts: ["Aaron.", "can be bought online.", "at the theme park.", "is by taking Batong Line 7..."] },
+            { a: "Visitors can go on roller-coaster rides", ans: "at the theme park.", opts: ["Aaron.", "can be bought online.", "at the theme park.", "is by taking Batong Line 7..."] },
+            { a: "Tickets for the theme park", ans: "can be bought online.", opts: ["Aaron.", "can be bought online.", "at the theme park.", "is by taking Batong Line 7..."] }
+        ];
+
+        const secF_Q2 = [
+            { word: "closed (关闭)", ans: "opened", opts: ["opened", "queuing", "expensive"] },
+            { word: "hate (讨厌)", ans: "fun", opts: ["fun", "light-headed", "expensive"] },
+            { word: "allowed (允许)", ans: "forbidden", opts: ["forbidden", "comfortable", "suitable"] },
+            { word: "sell (卖)", ans: "purchase", opts: ["purchase", "avoid", "save"] }
+        ];
+
+        const secF_Q3_7 = [
+            {
+                q: "3. When did the writer visit Universal Studios Beijing?",
+                zh: "3. 作者什么时候去了北京环球影城？",
+                text: "The writer visited it in <select onchange=\"handleDropdownSelect(this, 'July')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer\"><option value=''>---</option><option value='late September'>late September</option><option value='July'>July</option><option value='December'>December</option></select>."
+            },
+            {
+                q: "4. Which ride made the writer feel dizzy?",
+                zh: "4. 哪个游乐设施让作者感到头晕 (dizzy = light-headed)?",
+                text: "The <select onchange=\"handleDropdownSelect(this, 'Harry Potter')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer max-w-[200px] md:max-w-none\"><option value=''>---</option><option value='Transformers'>Transformers Decepticoaster</option><option value='Minion Land'>Minion Land</option><option value='Harry Potter'>Harry Potter and The Forbidden Journey</option></select> ride made the writer feel dizzy."
+            },
+            {
+                q: "5. Suggest two other safety measures to prevent getting infected with Covid-19.",
+                zh: "5. 建议另外两项预防感染 Covid-19 的安全措施。(除了戴口罩之外)",
+                text: "a) <select onchange=\"handleDropdownSelect(this, 'wash')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer\"><option value=''>---</option><option value='share'>Share food with strangers</option><option value='touch'>Touch your face often</option><option value='wash'>Wash your hands frequently</option></select><br>b) <select onchange=\"handleDropdownSelect(this, 'distance')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer mt-2\"><option value=''>---</option><option value='distance'>Maintain physical distancing</option><option value='mask'>Take off your mask</option><option value='hug'>Hug everyone</option></select>"
+            },
+            {
+                q: "6. Why do you think the writer advises visitors to wear suitable shoes?",
+                zh: "6. 为什么作者建议游客穿合适的鞋子？",
+                text: "Because the theme park is <select onchange=\"handleDropdownSelect(this, 'huge')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer\"><option value=''>---</option><option value='small'>small</option><option value='huge'>huge</option><option value='tiny'>tiny</option></select> and visitors have to <select onchange=\"handleDropdownSelect(this, 'walk')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer\"><option value=''>---</option><option value='swim'>swim a lot</option><option value='sleep'>sleep a lot</option><option value='walk'>walk a lot</option></select>."
+            },
+            {
+                q: "7. Are you a fan of theme parks? Give a reason.",
+                zh: "7. 你是主题公园的粉丝吗？给出一个理由。",
+                text: "<select onchange=\"handleDropdownSelect(this, 'yes')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer\"><option value=''>---</option><option value='yes'>Yes, I am.</option><option value='no'>No, I am not.</option><option value='not sure'>I am not sure.</option></select> I like them because <select onchange=\"handleDropdownSelect(this, 'rides')\" class=\"p-1 border-2 border-rose-200 rounded-lg bg-white text-rose-700 font-bold outline-none cursor-pointer\"><option value=''>---</option><option value='boring'>they are boring</option><option value='quiet'>they are too quiet</option><option value='rides'>they have thrilling rides</option></select>."
+            }
+        ];
+
+        function renderSecF() {
+            // Q1 Match
+            const q1Container = document.getElementById('sec-f-q1-container');
+            secF_Q1.forEach((item, i) => {
+                let opts = item.opts.map(o => `<option value="${o === item.ans ? item.ans : 'wrong'}">${o}</option>`).join('');
+                q1Container.innerHTML += `
+                    <div class="flex flex-col md:flex-row items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl hover:shadow-sm transition-all">
+                        <div class="font-bold flex-1 text-center md:text-left">${item.a} ➡️</div>
+                        <div class="flex-1 w-full relative">
+                            <select onchange="handleDropdownSelect(this, '${item.ans}')" class="w-full p-2 border-2 border-rose-200 rounded-lg bg-white text-slate-700 font-bold outline-none cursor-pointer focus:border-rose-500">
+                                <option value="">--- Select List B ---</option>
+                                ${opts}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Q2 Opposites
+            const q2Container = document.getElementById('sec-f-q2-container');
+            secF_Q2.forEach((item) => {
+                let opts = item.opts.sort(() => Math.random() - 0.5).map(o => `<option value="${o === item.ans ? item.ans : 'wrong'}">${o}</option>`).join('');
+                q2Container.innerHTML += `
+                    <div class="flex items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl hover:shadow-sm transition-all">
+                        <div class="font-bold w-32 flex shrink-0 justify-between items-center"><span class="bg-slate-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-xs mr-2">${item.word[0]}</span> ${item.word} <span class="mx-2">≠</span></div>
+                        <div class="flex-1 relative">
+                            <select onchange="handleDropdownSelect(this, '${item.ans}')" class="w-full p-2 border-2 border-rose-200 rounded-lg bg-white text-slate-700 font-bold outline-none cursor-pointer focus:border-rose-500">
+                                <option value="">--- Opposite ---</option>
+                                ${opts}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Q3-7
+            const q37Container = document.getElementById('sec-f-q3-7-container');
+            secF_Q3_7.forEach((item) => {
+                // I removed the distractors from HTML to force the user to think based on First Principles, only visually checking if they clicked 'wrong'
+                // Wait, I embedded the 'wrong/correct' inside the HTML string in the array above for Q3-Q7 for simplicity of the sentence builder structure!
+                q37Container.innerHTML += `
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl transition-all hover:shadow-md">
+                        <p class="font-bold text-lg mb-1">${item.q}</p>
+                        <span class="zh mb-3 text-sm">${item.zh}</span>
+                        <div class="text-lg leading-loose font-lora text-slate-800 bg-white p-3 rounded-xl border border-slate-100 shadow-inner">
+                            ${item.text}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- DATA & RENDER: SECTION G (Page 28) ---
+        const secGData = [
+            { label: "1. Month Travelled", zh: "旅行月份", ans: "JULY", opts: ["JULY", "September 2021", "December"] },
+            { label: "2. Location", zh: "地点", ans: "Universal Studios Beijing", opts: ["Universal Studios Beijing", "Universal Resort Station", "Jurassic World"] },
+            { label: "3. Year Opened", zh: "开业年份", ans: "2021", opts: ["2021", "2020", "2022"] },
+            { label: "4. How to Get There", zh: "如何到达", ans: "Beijing Subway, Batong Line 7", opts: ["Beijing Subway, Batong Line 7", "By car", "By airplane"] },
+            { label: "5. Number of Zones", zh: "区域数量", ans: "Seven", opts: ["Seven", "Five", "Ten"] },
+            { label: "6. Name of Zone Visited (1)", zh: "参观的区域(1)", ans: "The Wizarding World of Harry Potter", opts: ["The Wizarding World of Harry Potter", "Disney Land", "Lego Land"] },
+            { label: "7. Name of Zone Visited (2)", zh: "参观的区域(2)", ans: "Minion Land", opts: ["Minion Land", "Transformers Decepticoaster", "Water World"] },
+            { label: "8. Name of Zone Visited (3)", zh: "参观的区域(3)", ans: "Jurassic World", opts: ["Jurassic World", "Batong Line", "Universal Resort"] },
+            { label: "9. Name of Zone Visited (4)", zh: "参观的区域(4)", ans: "Transformers Metrobase", opts: ["Transformers Metrobase", "Gallery", "Universal Studios"] },
+            { label: "10. Suggested Attire", zh: "建议着装", ans: "Sneakers, T-shirts and jeans", opts: ["Sneakers, T-shirts and jeans", "Formal suit and tie", "Winter coat"] },
+            { label: "11. Tips on ticket purchase", zh: "购票提示", ans: "Purchase online to avoid queuing", opts: ["Purchase online to avoid queuing", "Buy at the gate", "Buy from strangers"] },
+            { label: "12. Tips on saving money", zh: "省钱提示", ans: "Pack snacks", opts: ["Pack snacks", "Buy expensive food", "Take the subway"] }
+        ];
+
+        function renderSecG() {
+            const container = document.getElementById('sec-g-container');
+            secGData.forEach((item) => {
+                let opts = item.opts.sort(() => Math.random() - 0.5).map(o => `<option value="${o === item.ans ? item.ans : 'wrong'}">${o}</option>`).join('');
+                container.innerHTML += `
+                    <div class="flex flex-col border-b border-slate-200 pb-3 mb-2 last:border-0">
+                        <label class="font-bold text-slate-600 mb-1">${item.label} <span class="zh font-normal text-xs ml-1">(${item.zh})</span></label>
+                        <div class="relative w-full">
+                            <select onchange="handleDropdownSelect(this, '${item.ans}')" class="w-full p-2 border-2 border-fuchsia-200 rounded-lg bg-white text-slate-800 font-bold outline-none cursor-pointer focus:border-fuchsia-500">
+                                <option value="">--- Select ---</option>
+                                ${opts}
+                            </select>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // --- DATA & RENDER: SECTION H (Page 29) ---
+        const secHData = [
+            {
+                q: "1. What did the pupils do with the leaves, twigs and flowers they collected?",
+                zh: "1. 学生们用收集到的树叶、树枝和花做了什么？",
+                ans: "C",
+                text: "During our nature walk, we collected leaves, twigs and flowers to create our own crafts. Some pupils made leaf animals, while others used sticks to build tiny houses. It was a fun way to be creative while learning about plants and nature.",
+                opts: [
+                    { l: "A", t: "Pressed them into a science book", zh: "压进科学书里" },
+                    { l: "B", t: "Used them to decorate their school bags", zh: "用来装饰书包" },
+                    { l: "C", t: "Made crafts like leaf animals and tiny houses", zh: "制作了像树叶动物和小房子的手工艺品" }
+                ]
+            },
+            {
+                q: "2. What does naming the plants suggest about the pupils' feelings?",
+                zh: "2. 给植物命名暗示了学生们怎样的感受？",
+                ans: "C",
+                text: "Last weekend, our class helped clean and plant a small garden behind the canteen. We planted herbs and vegetables like chilies, lemongrass and kangkung. Some of us even gave the plants names and promised to water them daily.",
+                opts: [
+                    { l: "A", t: "They were bored and had nothing else to do.", zh: "他们很无聊，无事可做。" },
+                    { l: "B", t: "They didn't take the activity seriously.", zh: "他们没有认真对待这项活动。" },
+                    { l: "C", t: "They felt connected to the plants and cared about them.", zh: "他们觉得与植物有联系并且关心它们。" }
+                ]
+            },
+            {
+                q: "3. What lesson can be learnt from the writer's experience?",
+                zh: "3. 从作者的经历中可以学到什么教训/道理？",
+                ans: "A",
+                text: "We had an obstacle course challenge during sports day, and it was not as easy as it looked. I had to crawl under netting, jump over logs and balance on a narrow beam. By the end, I was sweaty, muddy but proud of myself.",
+                opts: [
+                    { l: "A", t: "Facing challenges can make you feel accomplished.", zh: "面对挑战能让你感到有成就感。" },
+                    { l: "B", t: "It's better to stay clean during sports day.", zh: "运动会期间最好保持干净。" },
+                    { l: "C", t: "Obstacle courses are fun and messy.", zh: "障碍训练场既有趣又混乱。" }
+                ]
+            },
+            {
+                q: "4. How does the writer show that the picnic was a meaningful experience?",
+                zh: "4. 作者如何表明这次野餐是一次有意义的经历？",
+                ans: "B",
+                text: "Our class went on a picnic by the lake, and everyone brought something to share. While we ate, we watched ducks swimming and even spotted a turtle on a rock. It felt peaceful, and no one wanted to leave.",
+                opts: [
+                    { l: "A", t: "By describing the food in great detail", zh: "通过非常详细地描述食物" },
+                    { l: "B", t: "By expressing feelings of calmness and not wanting to leave", zh: "通过表达平静和不想离开的感受" },
+                    { l: "C", t: "By saying they spotted wild animals", zh: "通过说他们发现了野生动物" }
+                ]
+            }
+        ];
+
+        function renderSecH() {
+            const container = document.getElementById('sec-h-container');
+            secHData.forEach((item, index) => {
+                let buttonsHTML = item.opts.map(opt => `
+                    <button onclick="checkMCQ(this, ${index}, '${opt.l}', '${item.ans}')" class="w-full text-left p-4 mb-3 border-2 border-emerald-200 rounded-xl bg-white hover:bg-emerald-50 transition-all group flex items-start gap-3">
+                        <span class="font-black text-emerald-600 bg-emerald-100 px-3 py-1 rounded-lg border border-emerald-300 group-hover:bg-emerald-200">${opt.l}</span>
+                        <div>
+                            <span class="font-bold text-slate-700">${opt.t}</span>
+                            <span class="zh text-sm text-slate-500 block mt-1">${opt.zh}</span>
+                        </div>
+                    </button>
+                `).join('');
+
+                container.innerHTML += `
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 shadow-sm" id="mcq-box-${index}">
+                        <div class="mb-4 bg-white p-4 rounded-xl border border-slate-100 shadow-inner italic font-lora text-slate-600">
+                            "${item.text}"
+                        </div>
+                        <h4 class="font-bold text-lg mb-1">${item.q}</h4>
+                        <span class="zh mb-4 text-emerald-700 font-bold">${item.zh}</span>
+                        
+                        <div class="mt-4" id="mcq-opts-${index}">
+                            ${buttonsHTML}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function checkMCQ(btn, index, selected, ans) {
+            const container = document.getElementById(`mcq-box-${index}`);
+            const optsContainer = document.getElementById(`mcq-opts-${index}`);
+
+            if (selected === ans) {
+                // Correct
+                container.classList.add('bg-emerald-50', 'border-emerald-400');
+                btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+                btn.querySelector('span').classList.add('bg-emerald-700', 'text-white', 'border-emerald-800');
+                btn.querySelector('div span:first-child').classList.add('text-white');
+                btn.querySelector('.zh').classList.add('text-emerald-100');
+
+                // Disable all buttons in this question
+                const allBtns = optsContainer.querySelectorAll('button');
+                allBtns.forEach(b => {
+                    b.disabled = true;
+                    b.classList.add('opacity-50', 'cursor-not-allowed');
+                });
+                btn.classList.remove('opacity-50'); // Keep correct one bright
+
+                // Add success badge
+                optsContainer.innerHTML += `<div class="mt-4 p-3 bg-emerald-100 text-emerald-800 font-bold text-center rounded-xl border border-emerald-300">✅ Correct! Excellent reading!</div>`;
+
+            } else {
+                // Wrong
+                addMistake();
+                btn.classList.add('wrong-ans');
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+                btn.querySelector('div span:first-child').innerHTML = `❌ <strike>${btn.querySelector('div span:first-child').innerText}</strike>`;
+
+                setTimeout(() => {
+                    btn.classList.remove('wrong-ans');
+                }, 800);
+            }
+        }
+
+        // --- DATA & RENDER: SECTION I (Page 30 - Blog Writing) ---
+        const secIData = [
+            { id: "i1", ans: "A Fun Hiking Trip", opts: ["A Fun Hiking Trip", "A Boring Day", "Sleeping at Home"] },
+            { id: "i2", ans: "friends and teachers", opts: ["parents and siblings", "friends and teachers", "complete strangers"] },
+            { id: "i3", ans: "Bukit Kiara Federal Park", opts: ["Bukit Kiara Federal Park", "Universal Studios", "Mount Everest"] },
+            { id: "i4", ans: "14th June 2026", opts: ["1st May 2026", "Christmas Day", "14th June 2026"] },
+            { id: "i5", ans: "8.30 a.m.", opts: ["8.30 a.m.", "10.30 a.m.", "midnight"] },
+            { id: "i6", ans: "spot wildlife", opts: ["watch movies", "spot wildlife", "play video games"] },
+            { id: "i7", ans: "packed brunch", opts: ["heavy dinner", "fast food", "packed brunch"] },
+            { id: "i8", ans: "group games", opts: ["basketball", "hide and seek", "group games"] },
+            { id: "i9", ans: "class project", opts: ["class project", "science exam", "art gallery"] }
+        ];
+
+        function renderSecI() {
+            const container = document.getElementById('sec-i-container');
+
+            // Generate dropdowns dynamically
+            let drops = {};
+            secIData.forEach(item => {
+                let optionsHTML = `<option value="">--- Select ---</option>`;
+                let shuffledOpts = [...item.opts].sort(() => Math.random() - 0.5);
+                shuffledOpts.forEach(opt => {
+                    optionsHTML += `<option value="${opt === item.ans ? item.ans : 'wrong'}">${opt}</option>`;
+                });
+                drops[item.id] = `<select onchange="handleDropdownSelect(this, '${item.ans}')" class="mx-1 p-1 border-b-2 border-lime-400 bg-lime-50 text-lime-800 font-bold outline-none cursor-pointer hover:bg-lime-100 transition-all text-base">${optionsHTML}</select>`;
+            });
+
+            container.innerHTML = `
+                <div class="text-center mb-6">
+                    <span class="font-black text-2xl uppercase border-b-4 border-slate-800 pb-1">Title: ${drops.i1}</span>
+                </div>
+                <p class="indent-8 mb-4">
+                    Last weekend, I went on a fun hiking trip with my ${drops.i2}. We went to ${drops.i3} in Kuala Lumpur. The hike was on ${drops.i4}. We started our journey early at ${drops.i5}.
+                </p>
+                <p class="indent-8 mb-4">
+                    During the hike, we managed to discover nature trails and ${drops.i6}. We also breathed in a lot of fresh air. At around 10.30 a.m., we had our ${drops.i7} and drank some water provided by the teachers.
+                </p>
+                <p class="indent-8">
+                    Before going home, we took many beautiful photos, played ${drops.i8}, and even collected some leaves for our ${drops.i9}. It was a tiring but truly great day!
+                </p>
+            `;
+        }
+
+        // --- DATA & RENDER: SECTION J (Page 31 - Fact vs Opinion) ---
+        const secJData = [
+            { text: "1. Summer is the best season of all.", ans: "Opinion" },
+            { text: "2. Hiking is boring.", ans: "Opinion" },
+            { text: "3. A pentathlon is a contest with five sporting events.", ans: "Fact" },
+            { text: "4. You don't need an oxygen tank if you free dive.", ans: "Fact" },
+            { text: "5. Surfing is a water sport.", ans: "Fact" },
+            { text: "6. Swimming is the best form of exercise.", ans: "Opinion" },
+            { text: "7. Snowboarding is done on snowy slopes.", ans: "Fact" },
+            { text: "8. The highest peak in the world is Mount Everest.", ans: "Fact" },
+            { text: "9. Teenagers like outdoor sport.", ans: "Opinion" },
+            { text: "10. Rock climbing is an easy sport to learn.", ans: "Opinion" }
+        ];
+
+        function renderSecJ() {
+            const container = document.getElementById('sec-j-container');
+            secJData.forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl flex flex-col md:flex-row gap-3 items-start md:items-center justify-between transition-all hover:shadow-md" id="row-j-${index}">
+                        <div class="flex-1 font-lora text-lg text-slate-700">${item.text}</div>
+                        <div class="flex gap-2 shrink-0" id="btns-j-${index}">
+                            <button onclick="checkFactOpinion(${index}, 'Fact', '${item.ans}')" class="px-5 py-2 bg-white border-2 border-slate-300 rounded-lg hover:bg-cyan-50 font-bold shadow-sm transition-all text-slate-600 w-24">Fact</button>
+                            <button onclick="checkFactOpinion(${index}, 'Opinion', '${item.ans}')" class="px-5 py-2 bg-white border-2 border-slate-300 rounded-lg hover:bg-cyan-50 font-bold shadow-sm transition-all text-slate-600 w-24">Opinion</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function checkFactOpinion(index, userGuess, actualAnswer) {
+            const btnContainer = document.getElementById(`btns-j-${index}`);
+            const row = document.getElementById(`row-j-${index}`);
+
+            if (userGuess === actualAnswer) {
+                row.classList.add('bg-cyan-50', 'border-cyan-300');
+                btnContainer.innerHTML = `
+                    <div class="px-5 py-2 bg-cyan-500 text-white font-black rounded-lg border border-cyan-600 shadow-md flex items-center justify-center w-full min-w-[200px]">
+                        ✅ ${actualAnswer}
+                    </div>`;
+            } else {
+                addMistake();
+                row.classList.add('wrong-ans');
+                setTimeout(() => row.classList.remove('wrong-ans'), 800);
+            }
+        }
+
+        // --- DATA & RENDER: SECTION K (Page 31 - Phrasal Verbs) ---
+        const secKData = [
+            {
+                parts: ["1. Those who like adventure sport", "doing daring stunts."],
+                zh: "1. 喜欢探险运动的人会从做大胆特技中获得快感。",
+                ans: "get a thrill out of",
+                opts: ["get a thrill out of", "pass through", "pluck up"]
+            },
+            {
+                parts: ["2. I need to", "enough courage to try bungee jumping."],
+                zh: "2. 我需要鼓起足够的勇气去尝试蹦极。",
+                ans: "pluck up",
+                opts: ["pluck up", "get into", "set forth"]
+            },
+            {
+                parts: ["3. Rahman: Should I try paragliding?<br>Hock Meng:", "! You'll never know till you try it out."],
+                zh: "3. Rahman: 我应该尝试滑翔伞吗？<br>Hock Meng: 放手去做吧！你永远不会知道结果，直到你去尝试。",
+                ans: "just go for it",
+                opts: ["just go for it", "pass through", "get into"]
+            },
+            {
+                parts: ["4. We had to", "a narrow ravine during our hike in the canyons."],
+                zh: "4. 在峡谷徒步旅行时，我们必须穿过一个狭窄的山谷。",
+                ans: "pass through",
+                opts: ["pass part through", "set forth", "get a thrill out of"] // Added distractor
+            },
+            {
+                parts: ["5. On Monday, we'll", "on a new adventure into the wilderness."],
+                zh: "5. 星期一，我们将出发去荒野进行一次新的冒险。",
+                ans: "set forth",
+                opts: ["set forth", "pluck up", "just go for it"]
+            },
+            {
+                parts: ["6. You'd better stick to the trail or you'll", "trouble."],
+                zh: "6. 你最好跟着小路走，否则你会惹上麻烦。",
+                ans: "get into",
+                opts: ["get into", "get a thrill out of", "pluck up"]
+            }
+        ];
+
+        function renderSecK() {
+            const container = document.getElementById('sec-k-container');
+            secKData.forEach((item) => {
+                let optionsHTML = `<option value="">--- select ---</option>`;
+                let shuffledOpts = [...item.opts].sort(() => Math.random() - 0.5);
+                shuffledOpts.forEach(opt => {
+                    optionsHTML += `<option value="${opt === item.ans ? item.ans : 'wrong'}">${opt}</option>`;
+                });
+
+                container.innerHTML += `
+                    <div class="p-5 bg-slate-50 border border-slate-200 rounded-2xl leading-loose transition-all hover:shadow-md">
+                        <span class="text-lg font-lora text-slate-800">
+                            ${item.parts[0]} 
+                            <span class="inline-flex items-center relative">
+                                <select onchange="handleDropdownSelect(this, '${item.ans}')" class="mx-2 p-1 border-2 border-indigo-200 rounded-lg bg-white text-indigo-700 font-bold outline-none cursor-pointer focus:border-indigo-500 transition-all">
+                                    ${optionsHTML}
+                                </select>
+                            </span>
+                            ${item.parts[1]}
+                        </span>
+                        <div class="zh mt-3 text-sm text-indigo-600 font-medium">${item.zh}</div>
+                    </div>
+                `;
+            });
+        }
+
+        // Initialize
+        window.onload = () => {
+            initSpelling(0); // Start Phase 1
+            renderSecA();    // Prepare Phase 2 (hidden)
+            renderSentenceBuilder();
+            renderSecF();
+            renderSecG();
+            renderSecH();
+            renderSecI();
+            renderSecJ();
+            renderSecK();
+        };
+
+    </script>
+</body>
+
+</html>
