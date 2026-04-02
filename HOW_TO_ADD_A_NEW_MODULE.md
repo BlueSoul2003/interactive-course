@@ -59,6 +59,27 @@ Once a student is inside the module, they need a way to get back to the Grand La
    ```
    *(Note: It is usually easiest to just copy the Home Button from another module in the same syllabus level and paste it into yours).*
 
+> [!WARNING]
+> **⚠️ Memo: Always count folder depth carefully before setting the `../` path!**
+>
+> A common mistake is miscounting the number of folders and using the wrong number of `../`. Here's how to count correctly:
+>
+> **Method:** Count every folder between the root and your `index.html` file.
+>
+> | Level | Folder |
+> |-------|--------|
+> | 1 | `content/` |
+> | 2 | `KSSR_Syllabus/` |
+> | 3 | `Primary3/` |
+> | 4 | `English/` |
+> | 5 | `Unit3/` ← your `index.html` lives here |
+>
+> → 5 levels deep = **`../../../../../index.html`**
+>
+> A module 4 levels deep would use `../../../../index.html`, a module 5 levels deep uses `../../../../../index.html`, and so on.
+>
+> **Quick check:** Open the file path in your head, count each `/` segment after the root folder — that is your depth number.
+
 ---
 
 ## Pillar 4: State Management (Progress Tracking)
