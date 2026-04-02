@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fun English Unit 3 🌟</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        body {
+            font-family: 'Nunito', 'Comic Sans MS', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Tab Transitions */
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: all 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+            animation: slideIn 0.3s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes bounce-sm {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .bounce-correct {
+            animation: bounce-sm 0.5s ease;
+            border-color: #22c55e !important;
+            background-color: #dcfce7 !important;
+            color: #166534 !important;
+        }
+
+        .error-state {
+            border-color: #ef4444 !important;
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
+        }
+
+        /* Smooth Horizontal Scrolling for Tabs */
+        .tab-container {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scroll-snap-type: x mandatory;
+        }
+
+        .tab-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-container {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .tab-btn {
+            scroll-snap-align: center;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1.5em 1.5em;
+        }
+
+        .word-bubble {
+            transition: transform 0.1s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .word-bubble:active {
+            transform: scale(0.9);
+        }
+
+        .answered-lock {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body class="bg-indigo-50 min-h-screen text-slate-800 pb-24">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-40">
+        <div class="px-4 py-3 bg-indigo-500 text-white flex justify-between items-center">
+            <h1 class="text-xl font-black">🌟 Unit 3: Housework</h1>
+            <span class="text-sm bg-indigo-600 px-3 py-1 rounded-full font-bold shadow-inner">Score: <span
+                    id="total-score">0</span></span>
+        </div>
+
+        <!-- Swipeable Tab Bar -->
+        <div class="bg-indigo-50 text-xs text-center text-indigo-400 font-bold py-1 border-b">👈 Swipe to see more tabs
+            👉</div>
+        <div id="tab-scroll-container" class="tab-container flex overflow-x-auto gap-2 px-4 py-3 bg-white shadow-sm">
+            <button onclick="switchTab('tab0', this)"
+                class="tab-btn active shrink-0 px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-bold border-2 border-indigo-200 transition-colors">🎮
+                Game</button>
+            <button onclick="switchTab('tab1', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">📖
+                Sec A (Read)</button>
+            <button onclick="switchTab('tab2', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✂️
+                Sec B (Shorts)</button>
+            <button onclick="switchTab('tab3', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✏️
+                Sec C (Fill)</button>
+            <button onclick="switchTab('tab4', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🏠
+                Sec D (Sort)</button>
+            <button onclick="switchTab('tab5', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✅
+                Sec E (True/False)</button>
+            <button onclick="switchTab('tab5_2', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">📝
+                Sec E2 (Write)</button>
+            <button onclick="switchTab('tab6', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🧩
+                Sec F (Jumble)</button>
+            <button onclick="switchTab('tab7', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🏅
+                Sec G (Sports)</button>
+            <button onclick="switchTab('tab8', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🎸
+                Sec H (Build)</button>
+            <button onclick="switchTab('tab9', this)"
+                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✉️
+                Sec I (Email)</button>
+        </div>
+    </header>
+
+    <main class="p-4 max-w-2xl mx-auto space-y-6 overflow-hidden">
+
+        <!-- TAB 0: MINI GAMES -->
+        <div id="tab0" class="tab-content active">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-indigo-100">
+                <h2 class="text-2xl font-black text-indigo-600 mb-1">Tap & Match 👆</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">点英文，再点华文，配对正确就过关 leh!</p>
+                <div id="match-game" class="grid grid-cols-2 gap-3"></div>
+                <div id="match-feedback" class="mt-4 text-center font-bold text-lg hidden"></div>
+            </div>
+        </div>
+
+        <!-- TAB 1: SECTION A (READING) -->
+        <div id="tab1" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-sky-100">
+                <h2 class="text-2xl font-black text-sky-600 mb-4">Section A: Read 🏠</h2>
+
+                <div class="bg-sky-50 p-4 rounded-2xl mb-4 relative">
+                    <h3 class="font-black text-sky-800 mb-2">1. Setting the Table</h3>
+                    <p class="text-slate-700 leading-relaxed font-bold text-sm">
+                        Setting the table means to place plates, cups, forks, spoons and <span
+                            class="vocab-word text-sky-600 cursor-pointer underline decoration-wavy decoration-sky-300"
+                            onclick="showTip(this, '餐巾')">napkins</span> in the correct spots.
+                    </p>
+                </div>
+
+                <div class="bg-blue-50 p-4 rounded-2xl mb-6 relative">
+                    <h3 class="font-black text-blue-800 mb-2">2. Doing the Laundry</h3>
+                    <p class="text-slate-700 leading-relaxed font-bold text-sm">
+                        Doing the laundry includes <span
+                            class="vocab-word text-blue-600 cursor-pointer underline decoration-wavy decoration-blue-300"
+                            onclick="showTip(this, '分类')">sorting</span> clothes, putting them into the washing machine,
+                        drying and <span
+                            class="vocab-word text-blue-600 cursor-pointer underline decoration-wavy decoration-blue-300"
+                            onclick="showTip(this, '折叠')">folding</span> them. It may include <span
+                            class="vocab-word text-blue-600 cursor-pointer underline decoration-wavy decoration-blue-300"
+                            onclick="showTip(this, '熨烫')">ironing</span>.
+                    </p>
+                </div>
+
+                <div class="bg-indigo-50 p-4 rounded-2xl mb-6 relative">
+                    <h3 class="font-black text-indigo-800 mb-2">3. Dusting the Shelves</h3>
+                    <p class="text-slate-700 leading-relaxed font-bold text-sm">
+                        Dusting the shelves is the task of wiping away dust and dirt. This job is done with a cloth or
+                        duster and needs to be done gently.
+                    </p>
+                </div>
+
+                <!-- Reading Quiz Pagination -->
+                <div class="bg-slate-50 border-2 border-slate-100 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="font-black text-slate-700">Which housework is it? 🤔</h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="read-progress">1/6</span>
+                    </div>
+                    <!-- CHANGED ID: reading-quiz-container -> read-container to match JS -->
+                    <div id="read-container" class="min-h-[120px]"></div>
+                    <div class="flex justify-between mt-4">
+                        <button onclick="navQuiz('read', -1)" id="btn-read-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('read', 1)" id="btn-read-next"
+                            class="px-4 py-2 bg-sky-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: SECTION B (CONTRACTIONS MATCH) -->
+        <div id="tab2" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-emerald-100">
+                <h2 class="text-2xl font-black text-emerald-600 mb-1">Section B: Short Forms ✂️</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Combine the words correctly.</p>
+
+                <div class="bg-emerald-50 border-2 border-emerald-100 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-emerald-800">Combine the words!</h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="cont-progress">1/9</span>
+                    </div>
+                    <!-- CHANGED ID: contractions-container -> cont-container to match JS -->
+                    <div id="cont-container" class="min-h-[100px] flex flex-col justify-center items-center"></div>
+                    <div class="flex justify-between mt-6 w-full">
+                        <button onclick="navQuiz('cont', -1)" id="btn-cont-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('cont', 1)" id="btn-cont-next"
+                            class="px-4 py-2 bg-emerald-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: SECTION C (CONTRACTIONS FILL) -->
+        <div id="tab3" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-teal-100">
+                <h2 class="text-2xl font-black text-teal-600 mb-1">Section C: Fill in Blanks ✏️</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Use the short forms to complete the sentences.</p>
+
+                <div class="bg-teal-50 border-2 border-teal-100 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-teal-800">Fill in the blanks!</h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="contFill-progress">1/9</span>
+                    </div>
+                    <div id="contFill-container" class="min-h-[140px] flex flex-col justify-center"></div>
+                    <div class="flex justify-between mt-6 w-full">
+                        <button onclick="navQuiz('contFill', -1)" id="btn-contFill-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('contFill', 1)" id="btn-contFill-next"
+                            class="px-4 py-2 bg-teal-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: SECTION D (CLASSIFY HOUSEWORK) -->
+        <div id="tab4" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-purple-100">
+                <h2 class="text-2xl font-black text-purple-600 mb-1">Section D: Classify 🏠</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Which room does this belong to?</p>
+
+                <div class="bg-purple-50 border-2 border-purple-100 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-purple-800">Match to the right room!</h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="classify-progress">1/12</span>
+                    </div>
+                    <div id="classify-container" class="min-h-[160px] flex flex-col justify-center items-center"></div>
+                    <div class="flex justify-between mt-6 w-full">
+                        <button onclick="navQuiz('classify', -1)" id="btn-classify-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('classify', 1)" id="btn-classify-next"
+                            class="px-4 py-2 bg-purple-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5: SECTION E (AFFIRMATIVE / NEGATIVE) -->
+        <div id="tab5" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-yellow-100">
+                <h2 class="text-2xl font-black text-yellow-600 mb-1">Section E: True/False ✅</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Choose the correct description based on the emoji.</p>
+
+                <div class="bg-yellow-50 border-2 border-yellow-200 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-yellow-800">Affirmative vs Negative</h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="affNeg-progress">1/3</span>
+                    </div>
+                    <div id="affNeg-container" class="min-h-[160px] flex flex-col gap-3"></div>
+                    <div class="flex justify-between mt-6 w-full">
+                        <button onclick="navQuiz('affNeg', -1)" id="btn-affNeg-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('affNeg', 1)" id="btn-affNeg-next"
+                            class="px-4 py-2 bg-yellow-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 5.2: SECTION E2 (BUILD SENTENCES FOR COPYING) -->
+        <div id="tab5_2" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-lime-100">
+                <h2 class="text-2xl font-black text-lime-600 mb-1">Section E2: Write 📝</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Build the sentences based on the pictures. When you
+                    finish, salin (copy) them into your book loh!</p>
+
+                <!-- Example Block -->
+                <div class="bg-lime-50 border-2 border-lime-200 p-4 rounded-2xl shadow-inner mb-6">
+                    <span
+                        class="text-xs font-black bg-lime-200 text-lime-800 px-2 py-1 rounded mb-2 inline-block">Example</span>
+                    <p class="font-bold text-lime-900 mb-1">Affirmative (Tick ✅): He is reading a book.</p>
+                    <p class="font-bold text-lime-900">Negative (Cross ❌): He isn't playing outside.</p>
+                </div>
+
+                <div id="affNegBuild-container" class="space-y-6">
+                    <!-- Dynamic Non-paginated content goes here -->
+                </div>
+
+                <div id="affNegBuild-success"
+                    class="mt-6 bg-green-100 border-2 border-green-400 p-4 rounded-2xl text-center hidden transition-all">
+                    <h3 class="font-black text-green-700 text-xl mb-1">Wah, Settle All! 🎉</h3>
+                    <p class="text-sm font-bold text-green-800">Cun cun! Now take out your pencil and copy these
+                        sentences into your book slowly ok?</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 6: SECTION F (JUMBLED SENTENCES) -->
+        <div id="tab6" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-orange-100">
+                <h2 class="text-2xl font-black text-orange-600 mb-1">Section F: Jumbled 🧩</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold text-orange-800 bg-orange-50 p-2 rounded-lg">💡 小贴士:
+                    Click the words in the correct order to build a sentence!</p>
+
+                <div class="bg-white border-2 border-orange-100 p-4 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg border"
+                            id="jumbled-progress">1/12</span>
+                        <button onclick="resetCurrentJumbled()"
+                            class="text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-lg border border-red-100 active:scale-95">🔄
+                            Reset</button>
+                    </div>
+
+                    <div id="jumbled-container" class="min-h-[180px]"></div>
+
+                    <div class="flex justify-between mt-4">
+                        <button onclick="navQuiz('jumbled', -1)" id="btn-jumbled-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('jumbled', 1)" id="btn-jumbled-next"
+                            class="px-4 py-2 bg-orange-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 7: SECTION G (SPORTS) -->
+        <div id="tab7" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-rose-100">
+                <h2 class="text-2xl font-black text-rose-600 mb-1">Section G: Sports 🏅</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Pick the correct words from the dropdowns loh.</p>
+
+                <div class="bg-rose-50 border-2 border-rose-100 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 id="sport-title" class="font-black text-rose-800 text-lg"></h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="sports-progress">1/4</span>
+                    </div>
+
+                    <div id="sports-container" class="min-h-[150px] text-slate-700 leading-9 font-bold text-lg"></div>
+
+                    <div class="flex justify-between mt-6">
+                        <button onclick="navQuiz('sports', -1)" id="btn-sports-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('sports', 1)" id="btn-sports-next"
+                            class="px-4 py-2 bg-rose-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 8: SECTION H (CUE WORDS SENTENCES) -->
+        <div id="tab8" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-cyan-100">
+                <h2 class="text-2xl font-black text-cyan-600 mb-1">Section H: Build Sentences 🎸</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Tap the correct sentence using the cue words. <br><span
+                        class="text-cyan-700 bg-cyan-50 px-2 py-1 rounded-lg mt-2 inline-block border border-cyan-200">✏️
+                        The answer won't auto-skip! Take your time to salin (copy) it into your book, then tap "Next"
+                        loh!</span></p>
+
+                <div class="bg-cyan-50 border-2 border-cyan-200 p-4 rounded-2xl shadow-inner">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-black text-cyan-800">Find the right sentence!</h3>
+                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
+                            id="cue-progress">1/5</span>
+                    </div>
+                    <div id="cue-container" class="min-h-[160px] flex flex-col gap-3"></div>
+                    <div class="flex justify-between mt-6 w-full">
+                        <button onclick="navQuiz('cue', -1)" id="btn-cue-prev"
+                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
+                            Prev</button>
+                        <button onclick="navQuiz('cue', 1)" id="btn-cue-next"
+                            class="px-4 py-2 bg-cyan-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
+                            ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 9: SECTION I (EMAIL) -->
+        <div id="tab9" class="tab-content">
+            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-pink-100">
+                <h2 class="text-2xl font-black text-pink-600 mb-1">Section I: Email ✉️</h2>
+                <p class="text-sm text-slate-500 mb-4 font-bold">Help Sohan complete the email to Danny by tapping the
+                    dropdowns.</p>
+
+                <div
+                    class="bg-pink-50 border-2 border-pink-200 p-4 rounded-2xl shadow-inner text-sm leading-8 font-bold text-slate-700">
+                    <p class="mb-4">Dear Danny,<br>Thank you for your email! My favourite <select id="em-1"
+                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
+                            onchange="checkEmail()">
+                            <option value="" disabled selected>(Tap)</option>
+                            <option value="sport is skateboarding">sport is skateboarding</option>
+                            <option value="What about you?">What about you?</option>
+                        </select>. It's a cool sport where you ride on a board with wheels and do <select id="em-2"
+                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
+                            onchange="checkEmail()">
+                            <option value="" disabled selected>(Tap)</option>
+                            <option value="tricks at the skatepark">tricks at the skatepark</option>
+                            <option value="two years now">two years now</option>
+                        </select> or on the street.</p>
+
+                    <p class="mb-4">I like skateboarding because it's exciting and <select id="em-3"
+                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
+                            onchange="checkEmail()">
+                            <option value="" disabled selected>(Tap)</option>
+                            <option value="helps me practice balance">helps me practice balance</option>
+                            <option value="learning new tricks">learning new tricks</option>
+                        </select> and coordination. I've been skateboarding for <select id="em-4"
+                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
+                            onchange="checkEmail()">
+                            <option value="" disabled selected>(Tap)</option>
+                            <option value="two years now">two years now</option>
+                            <option value="tricks at the skatepark">tricks at the skatepark</option>
+                        </select>, and I enjoy <select id="em-5"
+                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
+                            onchange="checkEmail()">
+                            <option value="" disabled selected>(Tap)</option>
+                            <option value="learning new tricks">learning new tricks</option>
+                            <option value="helps me practice balance">helps me practice balance</option>
+                        </select>.</p>
+
+                    <p class="mb-4"><select id="em-6"
+                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
+                            onchange="checkEmail()">
+                            <option value="" disabled selected>(Tap)</option>
+                            <option value="What about you?">What about you?</option>
+                            <option value="sport is skateboarding">sport is skateboarding</option>
+                        </select> What is your favourite sport?</p>
+                    <p>Your friend,<br>Sohan</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Floating Dictionary Button -->
+    <button onclick="openDict()"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-pink-500 text-white rounded-full shadow-lg text-2xl flex items-center justify-center hover:bg-pink-600 active:scale-90 transition-transform z-50 ring-4 ring-pink-200">📖</button>
+
+    <!-- Dictionary Modal -->
+    <div id="dict-modal"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+        <div
+            class="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border-4 border-pink-400">
+            <div class="bg-pink-500 text-white p-4 flex justify-between items-center">
+                <h3 class="font-black text-lg">📖 魔法字典 (Dictionary)</h3>
+                <button onclick="closeDict()"
+                    class="text-2xl font-black bg-pink-600 w-8 h-8 rounded-full flex items-center justify-center active:scale-90">&times;</button>
+            </div>
+            <div class="p-2 bg-pink-50 text-xs text-center text-pink-700 font-bold border-b border-pink-100">
+                词汇顺序已打乱，自己找找看咯!</div>
+            <div id="dict-content" class="p-4 overflow-y-auto grid grid-cols-2 gap-3 pb-8"></div>
+        </div>
+    </div>
+
+    <!-- Tooltip Element -->
+    <div id="tooltip"
+        class="fixed bg-slate-800 text-white font-bold px-4 py-2 rounded-xl shadow-xl pointer-events-none transition-opacity duration-200 opacity-0 z-50 transform -translate-x-1/2">
+    </div>
+
+    <!-- Feedback Toast Element -->
+    <div id="toast"
+        class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white font-black px-6 py-3 rounded-full shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 scale-90 text-center w-max max-w-xs">
+    </div>
+
+    <script>
+        // --- UTILS ---
+        const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+        let score = 0;
+        function addScore() {
+            document.getElementById('total-score').innerText = ++score;
+            document.getElementById('total-score').classList.add('text-yellow-300');
+            setTimeout(() => document.getElementById('total-score').classList.remove('text-yellow-300'), 300);
+        }
+
+        // --- WEB AUDIO API (8-BIT SOUND EFFECTS) ---
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function playSFX(type) {
+            if (!audioCtx) audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            const now = audioCtx.currentTime;
+            const rand = Math.floor(Math.random() * 3);
+
+            if (type === 'correct') {
+                osc.type = 'sine';
+                if (rand === 0) { // Mario Coin
+                    osc.frequency.setValueAtTime(987.77, now);
+                    osc.frequency.setValueAtTime(1318.51, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now); osc.stop(now + 0.4);
+                } else if (rand === 1) { // Happy Blip
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now); osc.stop(now + 0.4);
+                } else { // Magic Chime
+                    osc.frequency.setValueAtTime(1046.50, now);
+                    osc.frequency.setValueAtTime(1567.98, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                    osc.start(now); osc.stop(now + 0.5);
+                }
+            } else {
+                osc.type = 'sawtooth';
+                if (rand === 0) { // Buzz
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.linearRampToValueAtTime(100, now + 0.3);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.start(now); osc.stop(now + 0.3);
+                } else if (rand === 1) { // Sad Drop
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.4);
+                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                    osc.start(now); osc.stop(now + 0.4);
+                } else { // Error Bonk
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(200, now);
+                    osc.frequency.setValueAtTime(150, now + 0.1);
+                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                    osc.start(now); osc.stop(now + 0.2);
+                }
+            }
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.className = `fixed top-20 left-1/2 transform -translate-x-1/2 font-black px-6 py-3 rounded-full shadow-2xl transition-all duration-300 z-50 text-center w-max max-w-xs ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
+            toast.classList.remove('opacity-0', 'scale-90');
+            toast.classList.add('opacity-100', 'scale-100');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'scale-100');
+                toast.classList.add('opacity-0', 'scale-90');
+            }, 1500);
+        }
+
+        // --- DATA STRUCTURES ---
+        const vocabList = [
+            { en: "Setting", zh: "摆放" }, { en: "Dusting", zh: "除尘" }, { en: "Laundry", zh: "洗衣物" },
+            { en: "Sorting", zh: "分类" }, { en: "Folding", zh: "折叠" }, { en: "Shelves", zh: "架子" },
+            { en: "Vacuuming", zh: "吸尘" }, { en: "Sweeping", zh: "扫" }, { en: "Napkins", zh: "餐巾" },
+            { en: "Gymnastics", zh: "体操" }, { en: "Racquet", zh: "球拍" }, { en: "Contractions", zh: "缩写" },
+            { en: "Porch", zh: "走廊" }, { en: "Groceries", zh: "杂货" }, { en: "Sanitise", zh: "消毒" }, { en: "Dresser", zh: "梳妆台" }
+        ];
+
+        // Section A
+        const readingData = [
+            { q: "This housework is done before meals.", ans: "Setting the Table", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
+            { q: "This housework removes small particles from shelves.", ans: "Dusting the Shelves", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
+            { q: "This housework involves washing and folding clothes.", ans: "Doing the Laundry", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
+            { q: "This housework needs a careful hand to avoid breaking things.", ans: "Dusting the Shelves", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
+            { q: "This housework can include sorting, drying and ironing.", ans: "Doing the Laundry", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
+            { q: "This housework helps prepare the dining area for eating.", ans: "Setting the Table", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] }
+        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
+
+        // Section B
+        const contractionsData = [
+            { q: "She + is", ans: "She's", opts: ["She'm", "She're", "She's"] },
+            { q: "He + is", ans: "He's", opts: ["He's", "He'm", "He're"] },
+            { q: "I + am", ans: "I'm", opts: ["I's", "I'm", "I're"] },
+            { q: "They + are", ans: "They're", opts: ["They's", "They're", "They'm"] },
+            { q: "We + are", ans: "We're", opts: ["We's", "We'm", "We're"] },
+            { q: "You + are", ans: "You're", opts: ["You're", "You'm", "You's"] },
+            { q: "Is + not", ans: "Isn't", opts: ["Aren't", "Is'not", "Isn't"] },
+            { q: "Are + not", ans: "Aren't", opts: ["Isn't", "Aren't", "Are'not"] },
+            { q: "I + am + not", ans: "I'm not", opts: ["I'm not", "Im not", "Imnot"] }
+        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
+
+        // Section C
+        const contFillData = [
+            { q: "Linda is at the badminton court. [X] playing badminton.", ans: "She's", opts: ["She's", "He's", "They're"] },
+            { q: "The boys are wearing goggles. [X] going for a swim.", ans: "They're", opts: ["They're", "We're", "You're"] },
+            { q: "I am making the bed. [X] washing the car.", ans: "I'm not", opts: ["I'm not", "Isn't", "Aren't"] },
+            { q: "I am at the tennis court. [X] playing tennis.", ans: "I'm", opts: ["I'm", "He's", "She's"] },
+            { q: "Jason is kicking the ball. [X] playing football.", ans: "He's", opts: ["He's", "She's", "I'm"] },
+            { q: "Greg is doing the washing-up. He [X] baking a cake.", ans: "isn't", opts: ["isn't", "aren't", "I'm not"] },
+            { q: "You are holding a golf club. [X] playing golf.", ans: "You're", opts: ["You're", "They're", "We're"] },
+            { q: "Diana, Michelle and I are at the volleyball court. [X] playing volleyball.", ans: "We're", opts: ["We're", "They're", "You're"] },
+            { q: "Jane and Sandra are wiping the windows. They [X] watering the plants.", ans: "aren't", opts: ["aren't", "isn't", "I'm not"] }
+        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
+
+        // Section D
+        const classifyData = [
+            { q: "🧹 Sweep the porch", ans: "Porch" }, { q: "🛒 Carry in the groceries", ans: "Kitchen" },
+            { q: "🍳 Cook and bake", ans: "Kitchen" }, { q: "🪞 Dust the dresser", ans: "Bedroom" },
+            { q: "📱 Sanitise the TV remote", ans: "Living room" }, { q: "🛏️ Make the bed", ans: "Bedroom" },
+            { q: "🍽️ Do the washing-up", ans: "Kitchen" }, { q: "🧹 Sweep the room", ans: "Bedroom" },
+            { q: "🧽 Clean the doormats", ans: "Porch" }, { q: "🛋️ Vacuum under the couch", ans: "Living room" },
+            { q: "🚗 Wash the car", ans: "Porch" }, { q: "☕ Wipe the coffee table", ans: "Living room" }
+        ].map(item => ({ ...item, shuffledOpts: shuffleArray(["Porch", "Bedroom", "Kitchen", "Living room"]), status: 'unanswered', selected: null }));
+
+        // Section E (New: Aff/Neg)
+        const affNegData = [
+            { emoji: "🚴 Boy on bicycle", q: "Which sentence is correct?", ans: "He is riding a bicycle.", opts: ["He is riding a bicycle.", "He isn't riding.", "They are walking."] },
+            { emoji: "🏃‍♀️ Girl running", q: "Which sentence is correct?", ans: "She is running.", opts: ["She is running.", "She isn't running.", "He is standing."] },
+            { emoji: "💃 Kids dancing", q: "Which sentence is correct?", ans: "They are dancing.", opts: ["They are dancing.", "They aren't dancing.", "She is studying."] }
+        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
+
+        // Section E2 (Build sentences for copying)
+        const affNegBuildData = [
+            { id: 1, type: "1. Affirmative (Tick ✅):", words: ["He", "is", "riding", "a", "bicycle."], correct: "he is riding a bicycle.", bank: [], ans: [], status: 'unanswered' },
+            { id: 2, type: "1. Negative (Cross ❌):", words: ["He", "isn't", "walking."], correct: "he isn't walking.", bank: [], ans: [], status: 'unanswered' },
+            { id: 3, type: "2. Affirmative (Tick ✅):", words: ["She", "is", "running."], correct: "she is running.", bank: [], ans: [], status: 'unanswered' },
+            { id: 4, type: "2. Negative (Cross ❌):", words: ["She", "isn't", "standing."], correct: "she isn't standing.", bank: [], ans: [], status: 'unanswered' },
+            { id: 5, type: "3. Affirmative (Tick ✅):", words: ["They", "are", "playing", "a", "game."], correct: "they are playing a game.", bank: [], ans: [], status: 'unanswered' },
+            { id: 6, type: "3. Negative (Cross ❌):", words: ["They", "aren't", "dancing."], correct: "they aren't dancing.", bank: [], ans: [], status: 'unanswered' }
+        ];
+        affNegBuildData.forEach(item => {
+            item.shuffledWords = shuffleArray([...item.words]);
+            item.bank = [...item.shuffledWords];
+        });
+
+        // Section F
+        const jumbledData = [
+            { words: ["cake", "mum", "baking", "is", "a"], correct: "mum is baking a cake" },
+            { words: ["plants", "the", "the", "girls", "watering", "are"], correct: "the girls are watering the plants" },
+            { words: ["bed", "i", "am", "my", "making"], correct: "i am making my bed" },
+            { words: ["laundry", "he", "the", "is", "folding", "clean"], correct: "he is folding the clean laundry" },
+            { words: ["brother", "washing-up", "the", "my", "is", "doing"], correct: "my brother is doing the washing-up" },
+            { words: ["their", "are", "putting", "children", "the", "toys", "away"], correct: "the children are putting their toys away" },
+            { words: ["making", "my", "sandwiches", "sister", "is"], correct: "my sister is making sandwiches" },
+            { words: ["am", "doing", "my", "i", "homework"], correct: "i am doing my homework" },
+            { words: ["she", "taking", "is", "rubbish", "out", "the"], correct: "she is taking out the rubbish" },
+            { words: ["vacuuming", "the", "floor", "he", "is", "kitchen"], correct: "he is vacuuming the kitchen floor" },
+            { words: ["dusting", "the", "cabinets", "shelves", "and", "she", "is"], correct: "she is dusting the cabinets and shelves" },
+            { words: ["sweeping", "they", "are", "the", "porch", "front"], correct: "they are sweeping the front porch" }
+        ].map(item => ({ ...item, shuffledWords: shuffleArray(item.words), bank: [], ans: [], status: 'unanswered' }));
+        jumbledData.forEach(item => item.bank = [...item.shuffledWords]);
+
+        // Section G
+        const sportsData = [
+            {
+                title: "Ice Hockey 🏒", text: "Shawn is playing [0]. He plays with his [1]. It is fun to [2] on ice. He needs a [3] to hit the [4].",
+                opts: [{ ans: "ice hockey", distractors: ["ball", "gymnastics", "friends"] }, { ans: "friends", distractors: ["stick", "skate", "hoop"] }, { ans: "skate", distractors: ["run", "jump", "twirl"] }, { ans: "stick", distractors: ["bat", "racquet", "rope"] }, { ans: "puck", distractors: ["ball", "shuttlecock", "hoop"] }]
+            },
+            {
+                title: "Gymnastics 🤸‍♀️", text: "Sally is doing [0]. It is a fun [1]. She also uses apparatuses such as the [2], [3] and [4]. Her favourite is the ribbon.",
+                opts: [{ ans: "gymnastics", distractors: ["badminton", "baseball", "ice hockey"] }, { ans: "sport", distractors: ["food", "book", "game"] }, { ans: "hoop", distractors: ["stick", "bat", "racquet"] }, { ans: "ball", distractors: ["puck", "shuttlecock", "shoe"] }, { ans: "rope", distractors: ["court", "field", "net"] }]
+            },
+            {
+                title: "Badminton 🏸", text: "I like playing [0]. I always play at the [1]. I only need a [2] and some [3]. I also must wear proper [4] to avoid injuries.",
+                opts: [{ ans: "badminton", distractors: ["tennis", "baseball", "gymnastics"] }, { ans: "court", distractors: ["field", "ice", "pool"] }, { ans: "racquet", distractors: ["stick", "bat", "rope"] }, { ans: "shuttlecocks", distractors: ["balls", "pucks", "hoops"] }, { ans: "shoes", distractors: ["goggles", "gloves", "hats"] }]
+            },
+            {
+                title: "Baseball ⚾", text: "Benjamin's favourite sport is [0]. He usually plays at the [1]. Sometimes he is the pitcher and throws the [2]. To [3] the ball, he uses a [4].",
+                opts: [{ ans: "baseball", distractors: ["hockey", "badminton", "football"] }, { ans: "field", distractors: ["court", "pool", "rink"] }, { ans: "ball", distractors: ["puck", "shuttlecock", "hoop"] }, { ans: "hit", distractors: ["kick", "catch", "twirl"] }, { ans: "bat", distractors: ["stick", "racquet", "rope"] }]
+            }
+        ].map(item => {
+            let blanks = item.opts.map(opt => ({ ans: opt.ans, shuffledOpts: shuffleArray([opt.ans, ...opt.distractors]), status: 'unanswered', selected: '' }));
+            return { ...item, blanks };
+        });
+
+        // Section H (New: Cue words)
+        const cueData = [
+            { cue: "- wash - shoes -", ans: "She is washing her shoes.", opts: ["She is washing her shoes.", "She is wash her shoes.", "He washing his shoes."] },
+            { cue: "- jump - trampoline -", ans: "They are jumping on the trampoline.", opts: ["They are jumping on the trampoline.", "They jump on the trampoline.", "He jumping on the trampoline."] },
+            { cue: "- play - guitar -", ans: "He is playing the guitar.", opts: ["He is playing the guitar.", "He play the guitar.", "They is playing the guitar."] },
+            { cue: "- watch - cartoon -", ans: "They are watching a cartoon.", opts: ["They are watching a cartoon.", "They watching a cartoon.", "She is watch a cartoon."] },
+            { cue: "- water - plants -", ans: "She is watering the plants.", opts: ["She is watering the plants.", "She watering the plants.", "He is water the plants."] }
+        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
+
+        // --- STATE & PAGINATION TRACKERS ---
+        let currentIdx = { read: 0, cont: 0, contFill: 0, classify: 0, affNeg: 0, jumbled: 0, sports: 0, cue: 0 };
+        const dataMaps = { read: readingData, cont: contractionsData, contFill: contFillData, classify: classifyData, affNeg: affNegData, jumbled: jumbledData, sports: sportsData, cue: cueData };
+
+        // --- TAB LOGIC ---
+        function switchTab(tabId, btnElem) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => {
+                b.classList.remove('active', 'bg-indigo-100', 'text-indigo-700', 'border-indigo-200');
+                b.classList.add('bg-slate-100', 'text-slate-500', 'border-transparent');
+            });
+            document.getElementById(tabId).classList.add('active');
+
+            if (btnElem) {
+                btnElem.classList.remove('bg-slate-100', 'text-slate-500', 'border-transparent');
+                btnElem.classList.add('active', 'bg-indigo-100', 'text-indigo-700', 'border-indigo-200');
+                // Scroll button into view inside the tab bar smoothly
+                btnElem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+
+            // Render current state for dynamic tabs
+            const typeMap = { 'tab1': 'read', 'tab2': 'cont', 'tab3': 'contFill', 'tab4': 'classify', 'tab5': 'affNeg', 'tab6': 'jumbled', 'tab7': 'sports', 'tab8': 'cue' };
+            if (typeMap[tabId]) renderQuizCard(typeMap[tabId]);
+            if (tabId === 'tab5_2') renderAffNegBuild();
+        }
+
+        // --- GENERIC RENDERER FOR MULTIPLE CHOICE STYLE QUIZZES ---
+        function renderMCQ(type, containerId, promptHtmlFn, btnClassFn) {
+            const idx = currentIdx[type];
+            const item = dataMaps[type][idx];
+
+            document.getElementById(`${type}-progress`).innerText = `${idx + 1}/${dataMaps[type].length}`;
+            document.getElementById(`btn-${type}-prev`).disabled = idx === 0;
+            document.getElementById(`btn-${type}-next`).disabled = idx === dataMaps[type].length - 1;
+
+            const container = document.getElementById(containerId);
+            let html = promptHtmlFn(item) + `<div class="flex flex-col md:flex-row gap-3 w-full">`;
+
+            item.shuffledOpts.forEach(opt => {
+                let btnClass = btnClassFn(item, opt);
+                let safeOpt = opt.replace(/'/g, "\\'");
+                html += `<button onclick="handleGenericAns('${type}', '${safeOpt}')" class="${btnClass}">${opt}</button>`;
+            });
+            container.innerHTML = html + `</div>`;
+        }
+
+        function renderQuizCard(type) {
+            if (['read', 'cont', 'contFill', 'classify', 'affNeg', 'cue'].includes(type)) {
+
+                let promptFn, btnFn, layoutClass;
+
+                if (type === 'read') {
+                    promptFn = item => `<p class="font-black text-lg mb-4 text-sky-900">${item.q}</p>`;
+                    btnFn = (item, opt) => `py-3 px-4 font-bold rounded-xl border-2 transition-all active:scale-95 text-left w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-100 border-green-500 text-green-700 answered-lock' : 'bg-slate-50 border-slate-200 text-slate-400 answered-lock') : 'bg-white border-sky-200 text-sky-700 hover:bg-sky-50'}`;
+                    layoutClass = 'flex-col';
+                } else if (type === 'cont') {
+                    promptFn = item => `<div class="text-3xl font-black text-emerald-600 mb-6 bg-emerald-100 px-6 py-3 rounded-2xl shadow-sm tracking-wider w-full text-center">${item.q} = ?</div>`;
+                    btnFn = (item, opt) => `flex-1 py-4 text-xl font-black rounded-xl border-b-4 transition-all active:scale-95 active:border-b-0 active:translate-y-1 w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-500 border-green-700 text-white answered-lock' : 'bg-slate-200 border-slate-300 text-slate-400 answered-lock') : 'bg-white border-emerald-300 text-emerald-600 hover:bg-emerald-50'}`;
+                } else if (type === 'contFill') {
+                    promptFn = item => `<p class="font-black text-lg mb-4 text-teal-900">${item.q.replace('[X]', '<span class="border-b-4 border-dashed border-teal-400 px-6 text-teal-600">?</span>')}</p>`;
+                    btnFn = (item, opt) => `flex-1 py-3 px-2 font-black rounded-xl border-b-4 transition-all active:scale-95 active:border-b-0 active:translate-y-1 w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-500 border-green-700 text-white answered-lock' : 'bg-slate-200 border-slate-300 text-slate-400 answered-lock') : 'bg-white border-teal-300 text-teal-600 hover:bg-teal-50'}`;
+                } else if (type === 'classify') {
+                    promptFn = item => `<div class="text-xl font-black text-purple-700 mb-6 bg-purple-100 px-6 py-4 rounded-2xl shadow-sm tracking-wide text-center w-full border-2 border-purple-200">${item.q}</div>`;
+                    btnFn = (item, opt) => `flex-1 py-4 text-lg font-black rounded-xl border-b-4 transition-all active:scale-95 active:border-b-0 active:translate-y-1 w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-500 border-green-700 text-white answered-lock' : 'bg-slate-200 border-slate-300 text-slate-400 answered-lock') : 'bg-white border-purple-300 text-purple-600 hover:bg-purple-50'}`;
+                } else if (type === 'affNeg') {
+                    promptFn = item => `<div class="text-4xl text-center mb-2">${item.emoji}</div><p class="font-black text-lg mb-4 text-yellow-900 text-center">${item.q}</p>`;
+                    btnFn = (item, opt) => `py-3 px-4 font-bold rounded-xl border-2 transition-all active:scale-95 text-center w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-100 border-green-500 text-green-700 answered-lock' : 'bg-slate-50 border-slate-200 text-slate-400 answered-lock') : 'bg-white border-yellow-300 text-yellow-700 hover:bg-yellow-50'}`;
+                } else if (type === 'cue') {
+                    promptFn = item => `<div class="text-xl font-black text-cyan-600 mb-4 bg-cyan-100 px-6 py-3 rounded-2xl text-center w-full">${item.cue}</div>`;
+                    btnFn = (item, opt) => `py-3 px-4 font-bold rounded-xl border-2 transition-all active:scale-95 text-left w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-100 border-green-500 text-green-700 answered-lock' : 'bg-slate-50 border-slate-200 text-slate-400 answered-lock') : 'bg-white border-cyan-300 text-cyan-700 hover:bg-cyan-50'}`;
+                }
+
+                // Inject Custom Render structure
+                const idx = currentIdx[type];
+                const item = dataMaps[type][idx];
+                document.getElementById(`${type}-progress`).innerText = `${idx + 1}/${dataMaps[type].length}`;
+                document.getElementById(`btn-${type}-prev`).disabled = idx === 0;
+                document.getElementById(`btn-${type}-next`).disabled = idx === dataMaps[type].length - 1;
+
+                const container = document.getElementById(`${type}-container`);
+                let html = promptFn(item) + `<div class="flex ${type === 'read' || type === 'affNeg' || type === 'cue' ? 'flex-col' : 'flex-wrap sm:flex-nowrap'} gap-3 w-full justify-center">`;
+
+                item.shuffledOpts.forEach(opt => {
+                    let safeOpt = opt.replace(/'/g, "\\'");
+                    html += `<button onclick="handleGenericAns('${type}', '${safeOpt}')" class="${btnFn(item, opt)}">${opt}</button>`;
+                });
+                container.innerHTML = html + `</div>`;
+            }
+
+            if (type === 'jumbled') {
+                const idx = currentIdx.jumbled;
+                const item = jumbledData[idx];
+                document.getElementById(`jumbled-progress`).innerText = `${idx + 1}/${jumbledData.length}`;
+                document.getElementById(`btn-jumbled-prev`).disabled = idx === 0;
+                document.getElementById(`btn-jumbled-next`).disabled = idx === jumbledData.length - 1;
+
+                const container = document.getElementById('jumbled-container');
+                let bankHtml = item.bank.map((w, i) => `<button onclick="moveJumbledWord(${i}, 'bank')" class="word-bubble inline-block bg-orange-100 text-orange-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-orange-300 hover:bg-orange-200 ${item.status === 'correct' ? 'hidden' : ''}">${w}</button>`).join('');
+                let ansHtml = item.ans.map((w, i) => `<button onclick="moveJumbledWord(${i}, 'ans')" class="word-bubble inline-block bg-indigo-100 text-indigo-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-indigo-300 hover:bg-indigo-200 ${item.status === 'correct' ? 'answered-lock bg-green-100 border-green-400 text-green-800' : ''}">${w}</button>`).join('');
+
+                container.innerHTML = `
+                    <div id="jumbled-ans-box" class="min-h-[70px] p-3 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-wrap items-center mb-4 transition-colors ${item.status === 'correct' ? 'border-solid border-green-400 bg-green-50' : ''}">
+                        ${ansHtml.length > 0 ? ansHtml : '<span class="text-slate-400 text-sm font-bold w-full text-center pointer-events-none">Words will appear here...</span>'}
+                    </div>
+                    <div class="min-h-[70px] p-2 flex flex-wrap justify-center items-center">${bankHtml}</div>
+                `;
+            }
+
+            if (type === 'sports') {
+                const idx = currentIdx.sports;
+                const item = sportsData[idx];
+                document.getElementById(`sports-progress`).innerText = `${idx + 1}/${sportsData.length}`;
+                document.getElementById(`btn-sports-prev`).disabled = idx === 0;
+                document.getElementById(`btn-sports-next`).disabled = idx === sportsData.length - 1;
+
+                document.getElementById('sport-title').innerText = item.title;
+                const container = document.getElementById('sports-container');
+                let textHtml = item.text;
+
+                item.blanks.forEach((blank, bIdx) => {
+                    let selectHtml = `<select class="inline-block border-b-4 border-rose-400 bg-transparent font-black text-rose-700 outline-none p-1 mx-1 text-center min-w-[120px] transition-all ${blank.status === 'correct' ? 'answered-lock border-green-500 text-green-600' : ''}" onchange="handleSportsAns(this, ${bIdx})">`;
+                    if (blank.status !== 'correct') selectHtml += `<option value="" disabled ${blank.selected === '' ? 'selected' : ''}>(Tap)</option>`;
+                    blank.shuffledOpts.forEach(opt => selectHtml += `<option value="${opt}" ${blank.selected === opt ? 'selected' : ''}>${opt}</option>`);
+                    selectHtml += `</select>`;
+                    textHtml = textHtml.replace(`[${bIdx}]`, selectHtml);
+                });
+                container.innerHTML = textHtml;
+            }
+        }
+
+        // --- GENERIC HANDLER ---
+        function navQuiz(type, dir) { currentIdx[type] += dir; renderQuizCard(type); }
+
+        function handleGenericAns(type, opt) {
+            const item = dataMaps[type][currentIdx[type]];
+            item.selected = opt;
+            if (opt === item.ans) {
+                item.status = 'correct'; addScore();
+                playSFX('correct'); // Trigger success sound
+                showToast(type === 'classify' ? "Wah, you know your house well! 🏠" : "Cun cun! Geng leh! 🎉");
+            } else {
+                playSFX('wrong'); // Trigger error sound
+                showToast("Aiya, salah! Try again loh! 😅", 'error');
+            }
+            renderQuizCard(type);
+
+            // Auto advance for everything EXCEPT Section H ('cue') so they can copy the answer
+            if (item.status === 'correct' && currentIdx[type] < dataMaps[type].length - 1) {
+                if (type !== 'cue') {
+                    setTimeout(() => navQuiz(type, 1), 800);
+                }
+            }
+        }
+
+        // --- SPECIFIC HANDLERS ---
+        function moveJumbledWord(wIdx, from) {
+            const item = jumbledData[currentIdx.jumbled];
+            if (item.status === 'correct') return;
+
+            if (from === 'bank') item.ans.push(item.bank.splice(wIdx, 1)[0]);
+            else item.bank.push(item.ans.splice(wIdx, 1)[0]);
+
+            renderQuizCard('jumbled');
+
+            if (item.bank.length === 0) {
+                const currentStr = item.ans.join(' ').toLowerCase();
+                const box = document.getElementById('jumbled-ans-box');
+
+                if (currentStr === item.correct.toLowerCase()) {
+                    item.status = 'correct'; addScore();
+                    playSFX('correct'); // Trigger success sound
+                    showToast("Wah, sentence cun cun! 👏");
+                    renderQuizCard('jumbled');
+                    if (currentIdx.jumbled < jumbledData.length - 1) setTimeout(() => navQuiz('jumbled', 1), 1500);
+                } else {
+                    playSFX('wrong'); // Trigger error sound
+                    box.classList.add('shake', 'error-state');
+                    showToast("Not quite right leh...", 'error');
+                    setTimeout(() => box.classList.remove('shake', 'error-state'), 500);
+                }
+            }
+        }
+
+        function resetCurrentJumbled() {
+            const item = jumbledData[currentIdx.jumbled];
+            if (item.status === 'correct') return;
+            item.bank = [...item.ans, ...item.bank];
+            item.ans = [];
+            renderQuizCard('jumbled');
+        }
+
+        function handleSportsAns(selectElem, bIdx) {
+            const item = sportsData[currentIdx.sports];
+            const blank = item.blanks[bIdx];
+            blank.selected = selectElem.value;
+
+            if (blank.selected === blank.ans) {
+                blank.status = 'correct'; addScore();
+                playSFX('correct'); // Trigger success sound
+                selectElem.classList.replace('text-rose-700', 'text-green-600');
+                selectElem.classList.add('bounce-correct');
+                if (item.blanks.every(b => b.status === 'correct')) {
+                    showToast("Full combo! Geng! 🌟");
+                    if (currentIdx.sports < sportsData.length - 1) setTimeout(() => navQuiz('sports', 1), 1500);
+                }
+            } else {
+                playSFX('wrong'); // Trigger error sound
+                selectElem.classList.add('shake', 'bg-red-100', 'text-red-600');
+                setTimeout(() => selectElem.classList.remove('shake', 'bg-red-100', 'text-red-600'), 400);
+                selectElem.value = ""; blank.selected = "";
+            }
+            setTimeout(() => renderQuizCard('sports'), 400);
+        }
+
+        let emailCorrectCount = 0;
+        function checkEmail() {
+            let corrects = { "em-1": "sport is skateboarding", "em-2": "tricks at the skatepark", "em-3": "helps me practice balance", "em-4": "two years now", "em-5": "learning new tricks", "em-6": "What about you?" };
+            let allCorrect = true;
+            let triggeredCorrect = false;
+            let triggeredWrong = false;
+
+            for (let id in corrects) {
+                let el = document.getElementById(id);
+                if (el.value === corrects[id]) {
+                    if (!el.classList.contains('answered-lock')) {
+                        el.classList.add('text-green-600', 'border-green-500', 'answered-lock');
+                        el.classList.remove('text-pink-700', 'border-pink-400');
+                        triggeredCorrect = true;
+                    }
+                } else {
+                    if (el.value !== "") {
+                        el.classList.add('shake', 'text-red-600');
+                        setTimeout(() => el.classList.remove('shake', 'text-red-600'), 400);
+                        el.value = "";
+                        triggeredWrong = true;
+                    }
+                    allCorrect = false;
+                }
+            }
+
+            // Play correct/wrong once per interaction
+            if (triggeredWrong) playSFX('wrong');
+            else if (triggeredCorrect) playSFX('correct');
+
+            if (allCorrect) {
+                addScore(); showToast("Email done! Settle! ✉️");
+            }
+        }
+
+        // --- SECTION E2 HANDLERS (NON-PAGINATED JUMBLED) ---
+        function renderAffNegBuild() {
+            const container = document.getElementById('affNegBuild-container');
+            let html = '';
+            let allCorrect = true;
+
+            affNegBuildData.forEach((item, idx) => {
+                if (item.status !== 'correct') allCorrect = false;
+
+                let bankHtml = item.bank.map((w, i) => `<button onclick="moveAffNegBuildWord(${idx}, ${i}, 'bank')" class="word-bubble inline-block bg-lime-100 text-lime-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-lime-300 hover:bg-lime-200 ${item.status === 'correct' ? 'hidden' : ''}">${w}</button>`).join('');
+                let ansHtml = item.ans.map((w, i) => `<button onclick="moveAffNegBuildWord(${idx}, ${i}, 'ans')" class="word-bubble inline-block bg-indigo-100 text-indigo-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-indigo-300 hover:bg-indigo-200 ${item.status === 'correct' ? 'answered-lock bg-green-100 border-green-400 text-green-800' : ''}">${w}</button>`).join('');
+
+                html += `
+                    <div class="p-4 bg-white border-2 border-lime-100 rounded-2xl shadow-sm">
+                        <p class="text-sm font-black text-lime-700 mb-2">${item.type}</p>
+                        <div class="min-h-[60px] p-2 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-wrap items-center transition-colors ${item.status === 'correct' ? 'border-solid border-green-400 bg-green-50 mb-0' : 'mb-3'}">
+                            ${ansHtml.length > 0 ? ansHtml : '<span class="text-slate-400 text-sm font-bold w-full text-center pointer-events-none">Tap words to build here...</span>'}
+                        </div>
+                        ${item.status !== 'correct' ? `<div class="min-h-[50px] p-1 flex flex-wrap justify-center items-center">${bankHtml}</div>` : ''}
+                        ${item.status === 'correct' ? `<p class="mt-2 text-green-600 font-bold text-sm text-right">Correct! ✅</p>` : `<button onclick="resetAffNegBuild(${idx})" class="mt-2 text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-lg border border-red-100 active:scale-95">🔄 Reset</button>`}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+
+            if (allCorrect) {
+                document.getElementById('affNegBuild-success').classList.remove('hidden');
+            }
+        }
+
+        function moveAffNegBuildWord(itemIdx, wIdx, from) {
+            const item = affNegBuildData[itemIdx];
+            if (item.status === 'correct') return;
+
+            if (from === 'bank') item.ans.push(item.bank.splice(wIdx, 1)[0]);
+            else item.bank.push(item.ans.splice(wIdx, 1)[0]);
+
+            renderAffNegBuild();
+
+            if (item.bank.length === 0) {
+                const currentStr = item.ans.join(' ').toLowerCase();
+                if (currentStr === item.correct.toLowerCase()) {
+                    item.status = 'correct'; addScore();
+                    playSFX('correct'); // Trigger success sound
+                    showToast("Sentence cun cun! 👏");
+                    renderAffNegBuild();
+                } else {
+                    playSFX('wrong'); // Trigger error sound
+                    showToast("Aiya, check the order again loh...", 'error');
+                }
+            }
+        }
+
+        function resetAffNegBuild(itemIdx) {
+            const item = affNegBuildData[itemIdx];
+            if (item.status === 'correct') return;
+            item.bank = [...item.ans, ...item.bank];
+            item.ans = [];
+            renderAffNegBuild();
+        }
+
+        // --- GAME: MATCHING ---
+        let matchSelection = [];
+        function initMatchGame() {
+            const gameDiv = document.getElementById('match-game');
+            gameDiv.innerHTML = '';
+            let subset = vocabList.slice(0, 4);
+            let cards = [];
+            subset.forEach(v => {
+                cards.push({ text: v.en, type: 'en', pair: v.en }); cards.push({ text: v.zh, type: 'zh', pair: v.en });
+            });
+            shuffleArray(cards).forEach(c => {
+                let btn = document.createElement('button');
+                btn.className = 'p-4 rounded-2xl font-black border-4 border-indigo-100 bg-white text-indigo-700 shadow-sm transition-all active:scale-90 select-none';
+                btn.innerText = c.text; btn.dataset.type = c.type; btn.dataset.pair = c.pair;
+                btn.onclick = () => handleMatchClick(btn);
+                gameDiv.appendChild(btn);
+            });
+        }
+
+        function handleMatchClick(btn) {
+            if (btn.classList.contains('opacity-0') || btn.classList.contains('bg-indigo-500')) return;
+
+            btn.classList.add('bg-indigo-500', 'text-white', 'border-indigo-600');
+            matchSelection.push(btn);
+
+            if (matchSelection.length === 2) {
+                let [b1, b2] = matchSelection;
+                if (b1.dataset.pair === b2.dataset.pair && b1.dataset.type !== b2.dataset.type) {
+                    playSFX('correct'); // Trigger success sound
+                    setTimeout(() => {
+                        b1.classList.replace('opacity-100', 'opacity-0'); b1.classList.add('invisible');
+                        b2.classList.replace('opacity-100', 'opacity-0'); b2.classList.add('invisible');
+                        addScore(); checkMatchWin();
+                    }, 400);
+                } else {
+                    playSFX('wrong'); // Trigger error sound
+                    setTimeout(() => {
+                        b1.classList.remove('bg-indigo-500', 'text-white', 'border-indigo-600'); b1.classList.add('shake', 'bg-red-100', 'border-red-300', 'text-red-700');
+                        b2.classList.remove('bg-indigo-500', 'text-white', 'border-indigo-600'); b2.classList.add('shake', 'bg-red-100', 'border-red-300', 'text-red-700');
+                        setTimeout(() => {
+                            b1.classList.remove('shake', 'bg-red-100', 'border-red-300', 'text-red-700'); b2.classList.remove('shake', 'bg-red-100', 'border-red-300', 'text-red-700');
+                        }, 400);
+                    }, 200);
+                }
+                matchSelection = [];
+            }
+        }
+        function checkMatchWin() {
+            let remaining = document.querySelectorAll('#match-game button:not(.invisible)');
+            if (remaining.length === 0) {
+                let fb = document.getElementById('match-feedback');
+                fb.innerText = "Wah, geng leh! You matched all! 🎉"; fb.classList.remove('hidden'); fb.classList.add('text-green-600', 'bounce-correct', 'p-3', 'rounded-xl');
+            }
+        }
+
+        // --- DICTIONARY MODAL ---
+        function openDict() {
+            document.getElementById('dict-modal').classList.remove('hidden');
+            const content = document.getElementById('dict-content');
+            content.innerHTML = '';
+            shuffleArray(vocabList).forEach(v => {
+                content.innerHTML += `<div class="bg-white border-2 border-pink-100 p-3 rounded-2xl shadow-sm flex flex-col items-center justify-center"><span class="font-black text-pink-600 text-lg">${v.en}</span><span class="text-sm font-bold text-slate-500 mt-1">${v.zh}</span></div>`;
+            });
+        }
+        function closeDict() { document.getElementById('dict-modal').classList.add('hidden'); }
+
+        // --- TOOLTIP ---
+        let tooltipTimeout;
+        function showTip(elem, text) {
+            const tooltip = document.getElementById('tooltip'); tooltip.innerText = text;
+            const rect = elem.getBoundingClientRect();
+            tooltip.style.left = rect.left + (rect.width / 2) + 'px'; tooltip.style.top = (rect.top - 40) + 'px';
+            tooltip.classList.remove('opacity-0');
+            clearTimeout(tooltipTimeout); tooltipTimeout = setTimeout(() => { tooltip.classList.add('opacity-0'); }, 2500);
+        }
+
+        // Initialize Everything
+        initMatchGame();
+    </script>
+</body>
+
+</html>
