@@ -178,12 +178,42 @@
             background: #000;
             border: 2px solid #555;
         }
+
+        /* --- Home Button --- */
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col items-center py-4 px-2 sm:px-6">
 
-    <a href="../../../../../index.html" class="home-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
