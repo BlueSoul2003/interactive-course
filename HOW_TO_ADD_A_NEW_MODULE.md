@@ -53,11 +53,22 @@ Your module exists, but students need a button to click it from the main menu.
 Once a student is inside the module, they need a way to get back to the Grand Landing Page.
 1. Open your new module's `index.html` file.
 2. Add a Home Button link near the top of your `<body>`.
-3. You must calculate the relative path back to the root folder. For example, if your module is 4 folders deep (`content/Subject/Year/Topic/index.html`), you need four `../`. Make sure to position the home button at the **bottom right** so it does not block the content of the webpage:
-   ```html
-   <a href="../../../../index.html" class="home-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
-   ```
-   *(Note: It is usually easiest to just copy the Home Button from another module in the same syllabus level and paste it into yours).*
+3. You must calculate the relative path back to the root folder. For example, if your module is 4 folders deep (`content/Subject/Year/Topic/index.html`), you need four `../`.
+
+> [!WARNING]
+> **⚠️ Memo: Always Style Your Home Button Consistently!**
+> Do not use raw emojis or basic inline styles for your Home button. You must ensure your module's Home button visually matches the rest of the modules in your syllabus block. 
+> 
+> **How to fix this:** Always check another existing module in the same syllabus level (e.g. `Singapore_Syllabus/Year4/...`) and **copy both its Home button HTML code and its CSS class (e.g. `.home-btn-fixed`)** directly into your new module's `<style>` block.
+> 
+> Example standard implementation:
+> ```html
+> <style>
+> .home-btn-fixed { position: fixed; bottom: 24px; right: 24px; z-index: 99999; ... }
+> </style>
+>
+> <a href="../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+> ```
 
 > [!WARNING]
 > **⚠️ Memo: Always count folder depth carefully before setting the `../` path!**
