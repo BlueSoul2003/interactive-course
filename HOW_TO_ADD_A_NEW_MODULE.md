@@ -61,6 +61,8 @@ Once a student is inside the module, they need a way to get back to the Grand La
 > 
 > **How to fix this:** Always check another existing module in the same syllabus level (e.g. `Singapore_Syllabus/Year4/...`) and **copy both its Home button HTML code and its CSS class (e.g. `.home-btn-fixed`)** directly into your new module's `<style>` block.
 > 
+> **Important Placement Check:** After adding the button, always verify that it does **not** overlap or block any critical page content (like "Next" buttons or interactive canvas elements). If it does, simply move it to another suitable area (e.g., changing `bottom: 24px; right: 24px;` in the CSS to `top: 24px; left: 24px;`).
+> 
 > Example standard implementation:
 > ```html
 > <style>
