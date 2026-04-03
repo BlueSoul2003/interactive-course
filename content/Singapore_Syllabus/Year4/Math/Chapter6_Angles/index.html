@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Angle Quest - Primary 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'VT323', monospace;
+            background-color: #3b2a1a;
+            background-image:
+                linear-gradient(45deg, #463220 25%, transparent 25%, transparent 75%, #463220 75%, #463220),
+                linear-gradient(45deg, #463220 25%, transparent 25%, transparent 75%, #463220 75%, #463220);
+            background-size: 40px 40px;
+            background-position: 0 0, 20px 20px;
+            color: #ffffff;
+            overflow-x: hidden;
+            user-select: none;
+            text-shadow: 2px 2px 0px #000000;
+            letter-spacing: 1px;
+            font-size: 1.2rem;
+        }
+
+        .mc-panel {
+            background-color: #c6c6c6;
+            border: 4px solid;
+            border-top-color: #ffffff;
+            border-left-color: #ffffff;
+            border-bottom-color: #555555;
+            border-right-color: #555555;
+            color: #ffffff;
+        }
+
+        .mc-btn {
+            background-color: #72a84d;
+            border: 4px solid;
+            border-top-color: #a4e171;
+            border-left-color: #a4e171;
+            border-bottom-color: #3c6321;
+            border-right-color: #3c6321;
+            color: white;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 0 #3c6321;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .mc-btn:active {
+            transform: scale(0.95);
+            border-top-color: #3c6321;
+            border-left-color: #3c6321;
+            border-bottom-color: #a4e171;
+            border-right-color: #a4e171;
+        }
+
+        .mc-input {
+            background-color: #000000;
+            color: #51f0ea;
+            border: 4px solid;
+            border-top-color: #555555;
+            border-left-color: #555555;
+            border-bottom-color: #ffffff;
+            border-right-color: #ffffff;
+            padding: 8px;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .mc-input:focus {
+            outline: none;
+            border-color: #51f0ea;
+        }
+
+        .xp-bar-container {
+            background-color: #000;
+            border: 2px solid #555;
+            height: 24px;
+            width: 100%;
+            position: relative;
+        }
+
+        .xp-bar-fill {
+            background-color: #a4e171;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease-out;
+            box-shadow: inset 0px -4px 0px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes popup {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-10px);
+            }
+
+            75% {
+                transform: translateX(10px);
+            }
+        }
+
+        .animate-popup {
+            animation: popup 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .animate-shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        .feedback-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+            flex-direction: column;
+        }
+
+        .svg-container svg {
+            filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.5));
+        }
+
+        svg text {
+            text-shadow: none;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 32px;
+            width: 32px;
+            background: #72a84d;
+            border: 4px solid #fff;
+            cursor: pointer;
+            margin-top: -12px;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: #000;
+            border: 2px solid #555;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center py-4 px-2 sm:px-6">
+
+    <a href="../../../../../index.html" class="home-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000; text-decoration: none; font-size: 24px;">🏠</a>
+
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playTone(freq, type, delay, duration) {
+            const t = audioCtx.currentTime + delay;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, t);
+            gain.gain.setValueAtTime(0.1, t);
+            gain.gain.exponentialRampToValueAtTime(0.01, t + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(t);
+            osc.stop(t + duration);
+        }
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const t = audioCtx.currentTime;
+
+            if (type === 'win') {
+                const rand = Math.floor(Math.random() * 6);
+                if (rand === 0) {
+                    playTone(880, 'sine', 0, 0.15);
+                    playTone(1108, 'sine', 0.1, 0.3);
+                } else if (rand === 1) {
+                    playTone(523, 'square', 0, 0.1);
+                    playTone(659, 'square', 0.1, 0.1);
+                    playTone(783, 'square', 0.2, 0.1);
+                    playTone(1046, 'square', 0.3, 0.4);
+                } else if (rand === 2) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, t);
+                    osc.frequency.exponentialRampToValueAtTime(200, t + 0.15);
+                    gain.gain.setValueAtTime(0.2, t);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.15);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(t); osc.stop(t + 0.15);
+                } else if (rand === 3) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(2500, t);
+                    osc.frequency.exponentialRampToValueAtTime(800, t + 0.3);
+                    gain.gain.setValueAtTime(0.2, t);
+                    gain.gain.exponentialRampToValueAtTime(0.01, t + 0.3);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(t); osc.stop(t + 0.3);
+                } else if (rand === 4) {
+                    playTone(523, 'sine', 0, 0.4);
+                    playTone(659, 'sine', 0, 0.4);
+                    playTone(783, 'sine', 0, 0.4);
+                } else if (rand === 5) {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(400, t);
+                    osc.frequency.setValueAtTime(600, t + 0.1);
+                    osc.frequency.setValueAtTime(800, t + 0.2);
+                    gain.gain.setValueAtTime(0.1, t);
+                    gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(t); osc.stop(t + 0.3);
+                }
+            } else if (type === 'lose') {
+                playTone(150, 'sawtooth', 0, 0.3);
+            } else if (type === 'click') {
+                const baseFreq = 600 + (Math.random() * 100 - 50);
+                playTone(baseFreq, 'square', 0, 0.05);
+            }
+        }
+    </script>
+
+    <div class="w-full max-w-2xl mb-4 flex flex-col gap-2">
+        <div class="flex justify-between items-end">
+            <h1 class="text-3xl sm:text-4xl text-green-400 drop-shadow-md">Angle Quest</h1>
+            <div class="text-2xl text-yellow-300">XP: <span id="xp-display">0</span></div>
+        </div>
+        <div class="xp-bar-container">
+            <div id="xp-bar" class="xp-bar-fill"></div>
+        </div>
+        <div class="text-right text-gray-300 text-sm" id="progress-text">Level 1 of X</div>
+    </div>
+
+    <div id="game-container"
+        class="w-full max-w-2xl mc-panel p-4 sm:p-8 flex flex-col items-center text-center relative min-h-[400px]">
+    </div>
+
+    <div class="w-full max-w-2xl flex justify-between mt-4 z-10 px-2 sm:px-0">
+        <button onclick="prevSlide()" id="btn-prev" class="mc-btn px-6 py-3 text-xl">&laquo; PREVIOUS</button>
+        <button onclick="nextSlide()" id="btn-next" class="mc-btn px-6 py-3 text-xl hidden">NEXT &raquo;</button>
+    </div>
+
+    <div id="feedback-modal" class="feedback-overlay">
+        <h1 id="feedback-title" class="text-6xl sm:text-8xl text-yellow-300 mb-4 text-shadow"
+            style="text-shadow: 4px 4px 0 #000;">COMBO!</h1>
+        <p id="feedback-message" class="text-2xl text-white mb-8">Diamond found!</p>
+        <button onclick="nextSlide()" class="mc-btn px-8 py-4 text-3xl">NEXT LEVEL &raquo;</button>
+    </div>
+
+    <script>
+        const drawGrid = () => {
+            let svg = '<svg viewBox="-1 -1 7 6" class="w-full h-full" stroke="#888" stroke-width="0.05">';
+            for (let i = 0; i <= 6; i++) svg += '<line x1="' + i + '" y1="0" x2="' + i + '" y2="5" />';
+            for (let i = 0; i <= 5; i++) svg += '<line x1="0" y1="' + i + '" x2="6" y2="' + i + '" />';
+            svg += '<rect x="-0.8" y="0.7" width="0.8" height="0.6" fill="white" stroke="black"/>';
+            svg += '<circle cx="4" cy="1" r="0.3" fill="white" stroke="black"/>';
+            svg += '<rect x="2.7" y="2.7" width="0.6" height="0.6" fill="white" stroke="black"/>';
+            svg += '<polygon points="6,2.6 5.6,3.3 6.4,3.3" fill="white" stroke="black"/>';
+            svg += '<path d="M1,3.6 l0.1,0.3 l0.3,0 l-0.2,0.2 l0.1,0.3 l-0.3,-0.2 l-0.3,0.2 l0.1,-0.3 l-0.2,-0.2 l0.3,0 Z" fill="white" stroke="black"/>';
+            svg += '<path d="M2.7,4.9 A0.3,0.3 0 0,1 3.3,4.9 Z" fill="white" stroke="black"/>';
+            svg += '<path d="M3.8,3.8 h0.4 v0.4 h-0.4 z M4.2,3.8 h0.4 v0.4 h-0.4 z M4.2,3.4 h0.4 v0.4 h-0.4 z M4.2,4.2 h0.4 v0.4 h-0.4 z M4.6,3.8 h0.4 v0.4 h-0.4 z" fill="white" stroke="black"/>';
+            svg += '<g transform="translate(6.5, 3.5) scale(0.3)"><line x1="0" y1="-1" x2="0" y2="1" stroke="black"/><line x1="-0.5" y1="0" x2="0.5" y2="0" stroke="black"/><polygon points="0,-1.5 -0.3,-1 0.3,-1" fill="black"/><text x="-0.2" y="-1.8" font-size="1" fill="black">N</text></g>';
+            svg += '</svg>';
+            return svg;
+        };
+
+        const drawInteractiveCompass = (centerLabel, n, ne, e, se, s, sw, w, nw, showControls = false) => {
+            let linesStr = [0, 45, 90, 135, 180, 225, 270, 315].map(ang => {
+                return '<line x1="0" y1="0" x2="' + (50 * Math.sin(ang * Math.PI / 180)) + '" y2="' + (-50 * Math.cos(ang * Math.PI / 180)) + '" stroke="gray" stroke-dasharray="2 2" />';
+            }).join('');
+
+            let html = '<div class="relative w-full max-w-sm mx-auto">' +
+                '<svg viewBox="-90 -90 180 180" class="w-full font-sans" stroke="black" stroke-width="0.5" style="overflow: visible;">' +
+                linesStr +
+                '<text x="0" y="-60" font-size="8" text-anchor="middle" fill="#ffff55" font-weight="bold">' + n + '</text>' +
+                '<text x="50" y="-50" font-size="8" text-anchor="middle" fill="#ffff55" font-weight="bold">' + ne + '</text>' +
+                '<text x="60" y="3" font-size="8" text-anchor="start" fill="#ffff55" font-weight="bold">' + e + '</text>' +
+                '<text x="50" y="55" font-size="8" text-anchor="middle" fill="#ffff55" font-weight="bold">' + se + '</text>' +
+                '<text x="0" y="70" font-size="8" text-anchor="middle" fill="#ffff55" font-weight="bold">' + s + '</text>' +
+                '<text x="-50" y="55" font-size="8" text-anchor="middle" fill="#ffff55" font-weight="bold">' + sw + '</text>' +
+                '<text x="-60" y="3" font-size="8" text-anchor="end" fill="#ffff55" font-weight="bold">' + w + '</text>' +
+                '<text x="-50" y="-50" font-size="8" text-anchor="middle" fill="#ffff55" font-weight="bold">' + nw + '</text>' +
+                '<g transform="translate(65, -65) scale(0.6)">' +
+                '<circle cx="0" cy="0" r="18" fill="rgba(0,0,0,0.5)" stroke="white" stroke-width="1"/>' +
+                '<line x1="0" y1="-12" x2="0" y2="12" stroke="white" stroke-width="1"/>' +
+                '<line x1="-12" y1="0" x2="12" y2="0" stroke="white" stroke-width="1"/>' +
+                '<polygon points="-3,-12 3,-12 0,-18" fill="red" stroke="none"/>' +
+                '<text x="0" y="-22" font-size="8" text-anchor="middle" fill="white" font-weight="bold">N</text>' +
+                '<text x="20" y="3" font-size="8" text-anchor="start" fill="white" font-weight="bold">E</text>' +
+                '<text x="0" y="26" font-size="8" text-anchor="middle" fill="white" font-weight="bold">S</text>' +
+                '<text x="-20" y="3" font-size="8" text-anchor="end" fill="white" font-weight="bold">W</text>' +
+                '</g>' +
+                '<g id="interactive-player" style="transform: rotate(0deg); transform-origin: 0px 0px; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);">' +
+                '<rect x="-8" y="-8" width="16" height="16" fill="#fca17d" stroke="black"/>' +
+                '<rect x="-8" y="-8" width="16" height="4" fill="#4d3323"/>' +
+                '<rect x="-5" y="-2" width="3" height="3" fill="white"/>' +
+                '<rect x="-4" y="-2" width="2" height="3" fill="#3b2bb0"/>' +
+                '<rect x="2" y="-2" width="3" height="3" fill="white"/>' +
+                '<rect x="2" y="-2" width="2" height="3" fill="#3b2bb0"/>' +
+                '<polygon points="-3,-8 3,-8 0,-15" fill="#51f0ea" stroke="black" />' +
+                '</g>' +
+                '<text x="0" y="18" font-size="6" text-anchor="middle" fill="white" font-weight="bold" stroke="black" stroke-width="0.5">' + centerLabel + '</text>' +
+                '</svg>';
+
+            if (showControls) {
+                html += '<div class="flex items-center justify-center gap-2 mt-4 bg-black/50 p-2 rounded border border-gray-500">' +
+                    '<button onclick="rotatePlayer(-45)" class="mc-btn px-3 py-2 text-sm sm:text-lg">↺ CCW</button>' +
+                    '<div id="player-deg-display" class="text-xl text-yellow-300 w-28 text-center flex flex-col leading-none">' +
+                    '<span>0°</span>' +
+                    '<span class="text-sm text-white mt-1">North</span>' +
+                    '</div>' +
+                    '<button onclick="rotatePlayer(45)" class="mc-btn px-3 py-2 text-sm sm:text-lg">CW ↻</button>' +
+                    '</div>';
+            }
+            html += '</div>';
+            return html;
+        };
+
+        window.currentPlayerRot = 0;
+
+        function getDirectionName(deg) {
+            const dirs = {
+                0: "North",
+                45: "Northeast",
+                90: "East",
+                135: "Southeast",
+                180: "South",
+                225: "Southwest",
+                270: "West",
+                315: "Northwest"
+            };
+            return dirs[deg] || "";
+        }
+
+        window.rotatePlayer = function (delta) {
+            playSound('click');
+            window.currentPlayerRot += delta;
+            document.getElementById('interactive-player').style.transform = 'rotate(' + window.currentPlayerRot + 'deg)';
+            let normalizedDeg = window.currentPlayerRot % 360;
+            if (normalizedDeg < 0) normalizedDeg += 360;
+
+            const dirName = getDirectionName(normalizedDeg);
+            document.getElementById('player-deg-display').innerHTML = '<span>' + normalizedDeg + '°</span><span class="text-sm text-white mt-1">' + dirName + '</span>';
+        };
+
+        const drawProtractorMeasure = (deg, label, showNow = false, baseRotation = 0) => {
+            // Apply base rotation to both lines
+            const rad1 = baseRotation * Math.PI / 180;
+            const rad2 = (baseRotation + deg) * Math.PI / 180;
+
+            const lx1 = 80 * Math.cos(rad1);
+            const ly1 = -80 * Math.sin(rad1);
+            const lx2 = 80 * Math.cos(rad2);
+            const ly2 = -80 * Math.sin(rad2);
+
+            // Calculate bisector angle to position the text label perfectly in the middle
+            const bisectRad = (baseRotation + deg / 2) * Math.PI / 180;
+            const tx = 30 * Math.cos(bisectRad);
+            const ty = -30 * Math.sin(bisectRad);
+
+            let marksStr = Array.from({ length: 37 }).map((_, i) => {
+                const ang = i * 5;
+                const rad = ang * Math.PI / 180;
+                const isMajor = ang % 10 === 0;
+                const lineLen = isMajor ? 75 : 82;
+                let marks = '<line x1="' + (lineLen * Math.cos(rad)) + '" y1="' + (-lineLen * Math.sin(rad)) + '" x2="' + (90 * Math.cos(rad)) + '" y2="' + (-90 * Math.sin(rad)) + '" stroke="black" stroke-width="' + (isMajor ? 1.5 : 1) + '"/>';
+
+                if (isMajor) {
+                    const textX = 64 * Math.cos(rad);
+                    const textY = -64 * Math.sin(rad);
+                    marks += '<text x="' + textX + '" y="' + (textY + 2) + '" font-size="7" font-family="sans-serif" font-weight="bold" text-anchor="middle" dominant-baseline="middle" fill="black">' + ang + '</text>';
+                }
+                return marks;
+            }).join('');
+
+            return '<div class="relative w-full max-w-md mx-auto flex flex-col items-center">' +
+                '<svg viewBox="-100 -100 200 150" class="w-full h-56 bg-gray-900 rounded border-2 border-gray-600 mb-2 shadow-inner">' +
+                '<line x1="0" y1="0" x2="' + lx1 + '" y2="' + ly1 + '" stroke="#ff00ff" stroke-width="3" stroke-linecap="round"/>' +
+                '<line x1="0" y1="0" x2="' + lx2 + '" y2="' + ly2 + '" stroke="#ff00ff" stroke-width="3" stroke-linecap="round"/>' +
+                '<text x="' + tx + '" y="' + ty + '" font-size="16" stroke="none" fill="white" font-weight="bold" text-anchor="middle" dominant-baseline="middle">' + label + '</text>' +
+                '<circle cx="0" cy="0" r="3" fill="#ff00ff"/>' +
+                '<g id="virtual-protractor" style="transform: rotate(0deg); transform-origin: 0px 0px; opacity: ' + (showNow ? '0.9' : '0') + '; pointer-events: none; transition: opacity 0.5s ease-in-out;">' +
+                '<path d="M -90 0 A 90 90 0 0 1 90 0 Z" fill="rgba(200, 255, 255, 0.85)" stroke="black" stroke-width="1.5"/>' +
+                '<path d="M -30 0 A 30 30 0 0 1 30 0" fill="none" stroke="black" stroke-width="1"/>' +
+                '<line x1="-90" y1="0" x2="90" y2="0" stroke="black" stroke-width="1.5"/>' +
+                '<circle cx="0" cy="0" r="3" fill="red"/>' +
+                '<circle cx="0" cy="0" r="1" fill="white"/>' +
+                marksStr +
+                '</g>' +
+                '</svg>' +
+                '<div id="protractor-controls" class="' + (showNow ? '' : 'hidden') + ' text-sm text-yellow-300 w-full text-center mt-2 font-bold bg-black/50 p-2 rounded border border-gray-600">' +
+                'Slide to rotate protractor base:' +
+                '<input type="range" min="-180" max="180" value="0" class="w-full mt-2" oninput="document.getElementById(\'virtual-protractor\').style.transform = \'rotate(\' + this.value + \'deg)\'">' +
+                '</div>' +
+                '</div>';
+        };
+
+        const drawDynamicPie = () => {
+            return '<div class="relative w-full max-w-sm mx-auto flex flex-col items-center">' +
+                '<svg viewBox="-50 -50 100 100" class="w-32 h-32 mb-4 bg-gray-800 rounded-full border-4 border-gray-600">' +
+                '<circle cx="0" cy="0" r="45" fill="#333" stroke="white" stroke-width="0.5"/>' +
+                '<path id="pie-slice" d="M 0 0 L 0 -45 A 45 45 0 0 1 45 0 Z" fill="#a4e171" stroke="black"/>' +
+                '<line x1="0" y1="-45" x2="0" y2="45" stroke="#777" stroke-dasharray="2 2"/>' +
+                '<line x1="-45" y1="0" x2="45" y2="0" stroke="#777" stroke-dasharray="2 2"/>' +
+                '</svg>' +
+                '<input type="range" min="0" max="360" step="90" value="90" class="w-full" oninput="updatePieUI(this.value)">' +
+                '<div id="pie-display" class="text-xl text-yellow-300 mt-2 font-bold">1/4 Turn (90°)</div>' +
+                '</div>';
+        };
+
+        window.updatePieUI = function (deg) {
+            playSound('click');
+            const rad = deg * Math.PI / 180;
+            const x = 45 * Math.sin(rad);
+            const y = -45 * Math.cos(rad);
+            const largeArc = deg > 180 ? 1 : 0;
+            const path = deg == 360
+                ? 'M 0 -45 A 45 45 0 1 1 -0.01 -45 Z'
+                : 'M 0 0 L 0 -45 A 45 45 0 ' + largeArc + ' 1 ' + x + ' ' + y + ' Z';
+            document.getElementById('pie-slice').setAttribute('d', path);
+
+            let text = "0 Turn";
+            if (deg == 90) text = "1/4 Turn (90°)";
+            else if (deg == 180) text = "1/2 Turn (180°)";
+            else if (deg == 270) text = "3/4 Turn (270°)";
+            else if (deg == 360) text = "1 Complete Turn (360°)";
+            document.getElementById('pie-display').innerText = text;
+        };
+
+        const drawAngleSimple = (deg, label, arcRadius = 20, extraClass = "h-48") => {
+            const rad = deg * Math.PI / 180;
+            const x = 80 * Math.cos(rad);
+            const y = -80 * Math.sin(rad);
+            const largeArc = deg > 180 ? 1 : 0;
+            const arcX = arcRadius * Math.cos(rad);
+            const arcY = -arcRadius * Math.sin(rad);
+            return '<svg viewBox="-100 -100 200 150" class="w-full ' + extraClass + ' mx-auto" stroke="white" stroke-width="3" stroke-linecap="round">' +
+                '<line x1="0" y1="0" x2="80" y2="0"/>' +
+                '<line x1="0" y1="0" x2="' + x + '" y2="' + y + '"/>' +
+                '<path d="M ' + arcRadius + ' 0 A ' + arcRadius + ' ' + arcRadius + ' 0 ' + largeArc + ' 0 ' + arcX + ' ' + arcY + '" fill="none" stroke="gray" stroke-width="2"/>' +
+                '<text x="' + (arcX / 2 + 10) + '" y="' + (arcY / 2 - 15) + '" font-size="24" font-weight="bold" stroke="none" fill="yellow">' + label + '</text>' +
+                '</svg>';
+        };
+
+        const drawAnglesGrid = () => {
+            return '<div class="grid grid-cols-2 sm:grid-cols-3 gap-3 w-full">' +
+                '<div class="bg-gray-700 border-2 border-gray-500 rounded p-2 flex flex-col items-center justify-center shadow-md">' + drawAngleSimple(60, 'a', 25, 'h-24') + '</div>' +
+                '<div class="bg-gray-700 border-2 border-gray-500 rounded p-2 flex flex-col items-center justify-center shadow-md">' + drawAngleSimple(130, 'b', 25, 'h-24') + '</div>' +
+                '<div class="bg-gray-700 border-2 border-gray-500 rounded p-2 flex flex-col items-center justify-center shadow-md">' + drawAngleSimple(140, 'c', 25, 'h-24') + '</div>' +
+                '<div class="bg-gray-700 border-2 border-gray-500 rounded p-2 flex flex-col items-center justify-center shadow-md">' + drawAngleSimple(180, 'd', 25, 'h-24') + '</div>' +
+                '<div class="bg-gray-700 border-2 border-gray-500 rounded p-2 flex flex-col items-center justify-center shadow-md">' + drawAngleSimple(30, 'e', 25, 'h-24') + '</div>' +
+                '<div class="bg-gray-700 border-2 border-gray-500 rounded p-2 flex flex-col items-center justify-center shadow-md">' + drawAngleSimple(100, 'f', 25, 'h-24') + '</div>' +
+                '</div>';
+        };
+
+        const drawTriangle = () => {
+            return '<svg viewBox="-10 -10 120 100" class="w-full max-w-xs mx-auto">' +
+                '<polygon points="50,10 10,80 90,80" fill="none" stroke="white" stroke-width="2"/>' +
+                '<text x="50" y="5" font-size="10" fill="yellow">A</text>' +
+                '<text x="5" y="90" font-size="10" fill="yellow">C</text>' +
+                '<text x="95" y="90" font-size="10" fill="yellow">B</text>' +
+                '<path d="M 45 20 Q 50 25 55 20" fill="none" stroke="white"/> <text x="50" y="35" font-size="8" fill="white">z</text>' +
+                '<path d="M 20 80 Q 20 70 15 65" fill="none" stroke="white"/> <text x="25" y="75" font-size="8" fill="white">x</text>' +
+                '<path d="M 80 80 Q 80 70 85 65" fill="none" stroke="white"/> <text x="75" y="75" font-size="8" fill="white">y</text>' +
+                '</svg>';
+        };
+
+        const drawPentagon = () => {
+            return '<svg viewBox="-20 -20 140 140" class="w-full max-w-xs mx-auto">' +
+                '<polygon points="50,10 100,40 80,100 20,100 0,40" fill="none" stroke="white" stroke-width="2"/>' +
+                '<text x="50" y="5" font-size="10" fill="yellow">O</text>' +
+                '<text x="105" y="40" font-size="10" fill="yellow">P</text>' +
+                '<text x="85" y="115" font-size="10" fill="yellow">Q</text>' +
+                '<text x="15" y="115" font-size="10" fill="yellow">R</text>' +
+                '<text x="-10" y="40" font-size="10" fill="yellow">S</text>' +
+                '<path d="M 40 15 Q 50 25 60 15" fill="none" stroke="white"/> <text x="50" y="30" font-size="8" fill="white">f</text>' +
+                '<path d="M 10 45 Q 20 45 15 35" fill="none" stroke="white"/> <text x="25" y="45" font-size="8" fill="white">e</text>' +
+                '<path d="M 90 45 Q 80 45 85 35" fill="none" stroke="white"/> <text x="75" y="45" font-size="8" fill="white">g</text>' +
+                '<path d="M 25 100 Q 25 90 15 90" fill="none" stroke="white"/> <text x="35" y="95" font-size="8" fill="white">d</text>' +
+                '<path d="M 75 100 Q 75 90 85 90" fill="none" stroke="white"/> <text x="65" y="95" font-size="8" fill="white">h</text>' +
+                '</svg>';
+        };
+
+        let currentSlide = 0;
+        let xp = 0;
+
+        const slides = [
+            {
+                type: "info",
+                title: "TUTORIAL: Drawing Angles",
+                text: "Welcome, Crafter! Before we build Steve's house, we need to read blueprints! An angle measures how much a line turns.<br><br>Example: Draw an angle equal to 135°.",
+                svg: drawAngleSimple(135, "135°", 25),
+                buttonText: "I'm ready leh!"
+            },
+            {
+                type: "info",
+                title: "TUTORIAL: Compass Directions",
+                text: "Try turning Steve around! Click the CW (Clockwise) and CCW (Counter-Clockwise) buttons to see where he faces. North is UP!",
+                svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true),
+                buttonText: "Okay, got it!"
+            },
+            { type: "q", title: "Example 2(a)", text: "Rebeca is facing northwest. What can she see?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["laptop"], hint: "Turn the player to point to Top-Left!" },
+            { type: "q", title: "Example 2(b)", text: "Rebeca is facing south. If she turns 90° CCW, what will she see?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["chocolates", "chocolate"], hint: "Point Steve South, then click -45° twice!" },
+            { type: "q", title: "Example 2(c)", text: "Rebeca will see the flowers if she turns 180° clockwise. Where is she facing now?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["southwest"], hint: "180° is a half-turn. What is exactly opposite of flowers?" },
+            { type: "q", title: "Example 2(d)", text: "Rebeca is looking at the papers. If she turns ___° counterclockwise, she will see the radio.", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["315"], hint: "Papers to radio is 1 step clockwise (45°), but we are going counterclockwise the long way around! Try turning Steve left until you hit the radio!" },
+            { type: "info", title: "CPA: Naming Angles", text: "Look at a roof (triangle). We name the corner angle by tracing the points. The middle letter is the vertex (the sharp point)!", svg: drawTriangle(), buttonText: "Mine it!" },
+            { type: "q", title: "Question 1(a)", text: "Name the marked angle in another way: ∠ABC = ?", svg: drawTriangle(), ans: ["y", "∠y", "angle y"], hint: "Trace A -> B -> C. Which small letter is at B?" },
+            { type: "q", title: "Question 1(b)", text: "∠ACB = ?", svg: drawTriangle(), ans: ["x", "∠x", "angle x"], hint: "Trace A -> C -> B. Which letter is at corner C?" },
+            { type: "q", title: "Question 1(c)", text: "∠BAC = ?", svg: drawTriangle(), ans: ["z", "∠z", "angle z"], hint: "Trace B -> A -> C. Which letter is at the top corner A?" },
+            { type: "info", title: "CPA: Naming Angles", text: "Now look at a Nether Portal frame (pentagon). Match the small letter angles to their big 3-letter names!", svg: drawPentagon(), buttonText: "Enter Portal!" },
+            { type: "q", title: "Question 2(a)", text: "Name the marked angle: ∠d = ?", svg: drawPentagon(), ans: ["srq", "qrs", "∠srq", "∠qrs"], hint: "Angle d is at vertex R. What points connect to R?" },
+            { type: "q", title: "Question 2(b)", text: "∠e = ?", svg: drawPentagon(), ans: ["osr", "rso", "∠osr", "∠rso"], hint: "Angle e is at vertex S." },
+            { type: "q", title: "Question 2(c)", text: "∠f = ?", svg: drawPentagon(), ans: ["sop", "pos", "∠sop", "∠pos"], hint: "Angle f is at the top vertex O." },
+            { type: "q", title: "Question 2(d)", text: "∠g = ?", svg: drawPentagon(), ans: ["opq", "qpo", "∠opq", "∠qpo"], hint: "Angle g is at vertex P." },
+            { type: "q", title: "Question 2(e)", text: "∠h = ?", svg: drawPentagon(), ans: ["pqr", "rqp", "∠pqr", "∠rqp"], hint: "Angle h is at vertex Q." },
+            { type: "info", title: "CPA: Greater/Smaller than 90°", text: "A right angle is exactly 90°, like the corner of a Dirt Block! 'Acute' is smaller (sharp), 'Obtuse' is bigger (wide open chest).", svg: drawAnglesGrid(), buttonText: "Let's Go!" },
+            { type: "q", title: "Question 3", text: "Identify the angles that are greater than 90º (type letters with commas, e.g. a,b)", svg: drawAnglesGrid(), ans: ["b,c,d,f", "b, c, d, f", "b c d f"], hint: "Which ones open WIDER than an 'L' shape?" },
+            { type: "q", title: "Question 4", text: "Identify the angles that are smaller than 90º (type letters with commas)", svg: drawAnglesGrid(), ans: ["a,e", "a, e", "a e"], hint: "Which ones are SHARPER than an 'L' shape?" },
+            { type: "info", title: "CPA: Lab Protractor", text: "Time to use your Lab Protractor! Like a true scientist, first GUESS the angle (Hypothesis). Lock it in, and the protractor will appear so you can measure the real thing!", svg: drawProtractorMeasure(90, "90° is L", true), buttonText: "Start Experiment!" },
+            { type: "measure", title: "Question 5", text: "Estimate and measure the marked angle: ∠a", svg: drawProtractorMeasure(100, "a", false, 0), target: 100, hint: "Align the 0° line on the bottom of the protractor with one of the pink lines!" },
+            { type: "measure", title: "Question 6", text: "Estimate and measure the marked angle: ∠b", svg: drawProtractorMeasure(60, "b", false, 120), target: 60, hint: "Rotate the protractor until the base matches a pink line, then read the number on the scale." },
+            { type: "measure", title: "Question 7", text: "Estimate and measure the marked angle: ∠PQR", svg: drawProtractorMeasure(110, "PQR", false, 0), target: 110, hint: "A bit more than 100º loh!" },
+            { type: "measure", title: "Question 8", text: "Estimate and measure the marked angle: ∠XWY", svg: drawProtractorMeasure(140, "XWY", false, 200), target: 140, hint: "Use the slider to align the protractor with the pink angle lines." },
+            { type: "info", title: "CPA: Drawing Angles", text: "Time to craft! Use the slider to rotate the laser beam and draw the exact angle requested.", svg: '<svg viewBox="-50 -50 100 100" class="w-32 h-32 mx-auto"><circle cx="0" cy="0" r="10" fill="gold"/><path d="M0,0 L40,-40" stroke="red" stroke-width="2" stroke-dasharray="2 2"/></svg>', buttonText: "Equip Laser" },
+            { type: "draw", title: "Question 9", text: "Draw the following angle: ∠p = 75º", target: 75 },
+            { type: "draw", title: "Question 10", text: "Draw the following angle: ∠r = 108º", target: 108 },
+            { type: "draw", title: "Question 11", text: "Draw the following angle: ∠q = 45º", target: 45 },
+            { type: "draw", title: "Question 12", text: "Draw the following angle: ∠s = 134º", target: 134 },
+            { type: "info", title: "CPA: Turns", text: "Slide the bar to explore how fractions of a turn match with degrees!", svg: drawDynamicPie(), buttonText: "Spin me!" },
+            { type: "q", title: "Question 13", text: "Fill in the blank: A ______-turn equals 1 right angle.", svg: drawDynamicPie(), ans: ["1/4", "quarter", "1/4 turn", "quarter turn"], hint: "A right angle is 90º. Move the slider to 90º and see what the fraction is." },
+            { type: "q", title: "Question 14", text: "A half-turn equals ______ º.", svg: drawDynamicPie(), ans: ["180", "180º", "180°"], hint: "Move the pie slider to 1/2 Turn. What degree is it?" },
+            { type: "q", title: "Question 15", text: "A ______-turn equals 270º.", svg: drawDynamicPie(), ans: ["3/4", "three quarter", "three-quarter"], hint: "Move the pie slider to 270º and look at the label!" },
+            { type: "q", title: "Question 16", text: "A complete turn equals ______ right angles.", svg: drawDynamicPie(), ans: ["4", "four"], hint: "How many 90s make 360?" },
+            { type: "q", title: "Question 17", text: "______ of a complete turn is 180º.", svg: drawDynamicPie(), ans: ["1/2", "half"], hint: "180 is what fraction of 360?" },
+            { type: "q", title: "Question 18", text: "______ of a complete turn is 90º.", svg: drawDynamicPie(), ans: ["1/4", "quarter"], hint: "90 is what fraction of 360?" },
+            { type: "info", title: "CPA: Multiplayer Radar", text: "Time to check the radar! X is the center. Turn the player to find where your friends are hiding.", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", true), buttonText: "Open Map" },
+            { type: "q", title: "Question 19(a)", text: "Which direction is Tony from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["north", "n"], hint: "Tony is straight UP!" },
+            { type: "q", title: "Question 19(b)", text: "Which direction is Aaron from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["northeast", "ne"], hint: "Aaron is top-right." },
+            { type: "q", title: "Question 19(c)", text: "Which direction is Susan from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["east", "e"], hint: "Susan is to the right." },
+            { type: "q", title: "Question 19(d)", text: "Which direction is Jasmine from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["southeast", "se"], hint: "Jasmine is bottom-right." },
+            { type: "q", title: "Question 19(e)", text: "Which direction is Maggie from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["south", "s"], hint: "Maggie is straight DOWN!" },
+            { type: "q", title: "Question 19(f)", text: "Which direction is Sam from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["southwest", "sw"], hint: "Sam is bottom-left." },
+            { type: "q", title: "Question 19(g)", text: "Which direction is Malik from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["west", "w"], hint: "Malik is to the left." },
+            { type: "q", title: "Question 19(h)", text: "Which direction is Zack from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["northwest", "nw"], hint: "Zack is top-left." },
+            { type: "info", title: "CPA: Coordinates Grid", text: "Look at the crafting grid! Find the shapes and figure out their direction from one another. North is UP.", svg: drawGrid(), buttonText: "Start Crafting!" },
+            { type: "q", title: "Question 20(a)", text: "The circle is ______ of the triangle.", svg: drawGrid(), ans: ["northwest", "nw"], hint: "From triangle, go UP and LEFT to hit the circle." },
+            { type: "q", title: "Question 20(b)", text: "The semicircle is ______ of the star.", svg: drawGrid(), ans: ["southeast", "se"], hint: "From star, go DOWN and RIGHT to hit the semicircle." },
+            { type: "q", title: "Question 20(c)", text: "The square is ______ of the triangle.", svg: drawGrid(), ans: ["west", "w"], hint: "From triangle, go straight LEFT to hit the square." },
+            { type: "q", title: "Question 20(d)", text: "The cross is ______ of the star.", svg: drawGrid(), ans: ["east", "e"], hint: "From star, go straight RIGHT to hit the cross." },
+            { type: "q", title: "Question 20(e)", text: "The square is ______ of the semicircle.", svg: drawGrid(), ans: ["north", "n"], hint: "From semicircle, go straight UP to hit the square." },
+            { type: "q", title: "Question 20(f)", text: "The circle is ______ of the rectangle.", svg: drawGrid(), ans: ["east", "e"], hint: "From rectangle, go straight RIGHT to hit the circle." },
+            { type: "q", title: "Question 20(g)", text: "The triangle is ______ of the cross.", svg: drawGrid(), ans: ["northeast", "ne"], hint: "From cross, go UP and RIGHT." },
+            { type: "q", title: "Question 20(h)", text: "The star is ______ of the circle.", svg: drawGrid(), ans: ["southwest", "sw"], hint: "From circle, go DOWN and LEFT to hit the star." },
+            { type: "info", title: "FINAL BOSS: Navigating The End", text: "George is stuck! Use the interactive compass buttons to help him figure out where to face. Turn him to survive!", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), buttonText: "FIGHT!" },
+            { type: "q", title: "Question 21(a)", text: "George is facing north. If he turns clockwise ______º, he will face southwest.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["225"], hint: "Use the buttons! Turn Steve from North to Southwest and check the degrees." },
+            { type: "q", title: "Question 21(b)", text: "George is facing west. If he turns counterclockwise ______º, he will face east.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["180"], hint: "West to East is exactly opposite. Half turn!" },
+            { type: "q", title: "Question 21(c)", text: "George is facing northwest. If he turns counterclockwise ______º, he will face northeast.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["270"], hint: "Turn him CCW (left) until he faces NE. Read the number!" },
+            { type: "q", title: "Question 21(d)", text: "George is facing south. If he turns counterclockwise ______º, he will face southeast.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["315"], hint: "Keep clicking CCW from South until you hit SE. It's a big spin!" },
+            { type: "q", title: "Question 21(e)", text: "George is facing east. If he makes a ______-turn clockwise, he will face south.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["1/4", "quarter", "1/4 turn", "quarter turn"], hint: "East to South is just one step on the clock. What fraction of 360?" },
+            { type: "q", title: "Question 21(f)", text: "George is facing north. If he makes a ______-turn counterclockwise, he will face east.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["3/4", "three quarter", "three-quarter"], hint: "North -> West -> South -> East. How many quarters is that?" },
+            { type: "end" }
+        ];
+
+        const container = document.getElementById('game-container');
+        const xpDisplay = document.getElementById('xp-display');
+        const xpBar = document.getElementById('xp-bar');
+        const progressText = document.getElementById('progress-text');
+        const feedbackModal = document.getElementById('feedback-modal');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackMessage = document.getElementById('feedback-message');
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+
+        function updateProgress() {
+            const progress = (currentSlide / slides.length) * 100;
+            xpBar.style.width = progress + '%';
+            progressText.innerText = 'Level ' + (currentSlide + 1) + ' of ' + slides.length;
+
+            btnPrev.style.visibility = currentSlide === 0 ? 'hidden' : 'visible';
+            if (currentSlide >= slides.length - 1) {
+                btnNext.style.display = 'none';
+            } else {
+                btnNext.style.display = 'block';
+            }
+        }
+
+        function renderSlide() {
+            if (currentSlide >= slides.length) return;
+            const slide = slides[currentSlide];
+            updateProgress();
+
+            window.currentPlayerRot = 0;
+
+            if (slide.type === "end") {
+                playSound('win');
+                container.innerHTML = '<h1 class="text-6xl text-yellow-300 animate-popup mt-8">QUEST COMPLETE!</h1>' +
+                    '<p class="text-3xl mt-4">Wah, steady boom bibi! You finished all the math!</p>' +
+                    '<p class="text-5xl text-green-400 mt-8">Total XP: ' + xp + '</p>' +
+                    '<button onclick="location.reload()" class="mc-btn mt-8 px-8 py-4 text-3xl">Play Again</button>';
+                return;
+            }
+
+            if (slide.type === "info") {
+                container.innerHTML = '<h2 class="text-4xl text-yellow-300 mb-4 font-bold drop-shadow-md">' + slide.title + '</h2>' +
+                    '<div class="svg-container w-full max-w-md mb-4 bg-gray-800 rounded p-4 border-2 border-dashed border-gray-400 shadow-inner">' +
+                    slide.svg +
+                    '</div>' +
+                    '<p class="text-2xl mb-8 leading-relaxed font-bold">' + slide.text + '</p>' +
+                    '<button onclick="nextSlide()" class="mc-btn px-8 py-3 text-3xl animate-popup">' + slide.buttonText + '</button>';
+            } else if (slide.type === "measure") {
+                container.innerHTML = '<h2 class="text-3xl text-yellow-300 mb-2 font-bold drop-shadow-md">' + slide.title + '</h2>' +
+                    '<div class="svg-container w-full max-w-md mb-4 bg-gray-800 rounded p-4 shadow-inner">' +
+                    slide.svg +
+                    '</div>' +
+                    '<p class="text-2xl mb-4 px-4 font-bold leading-relaxed">' + slide.text + '</p>' +
+                    '<div class="flex flex-row gap-4 justify-center items-center w-full max-w-md mb-4">' +
+                    '<div class="flex flex-col items-center bg-gray-700 p-2 rounded border-2 border-gray-500 w-1/2 transition-opacity duration-300" id="est-container">' +
+                    '<label class="text-yellow-300 text-sm sm:text-lg mb-1 font-bold">Estimated (°)</label>' +
+                    '<input type="number" id="answer-est" class="mc-input w-full text-2xl sm:text-3xl" autocomplete="off" placeholder="???">' +
+                    '</div>' +
+                    '<div class="flex flex-col items-center bg-gray-700 p-2 rounded border-2 border-gray-500 w-1/2 opacity-30 pointer-events-none transition-opacity duration-300" id="act-container">' +
+                    '<label class="text-green-400 text-sm sm:text-lg mb-1 font-bold">Actual Value (°)</label>' +
+                    '<input type="number" id="answer-act" class="mc-input w-full text-2xl sm:text-3xl" autocomplete="off" placeholder="Locked" disabled>' +
+                    '</div>' +
+                    '</div>' +
+                    '<button id="measure-btn" onclick="lockEstimate()" class="mc-btn px-8 py-3 text-3xl w-full max-w-md">Lock Estimate!</button>' +
+                    '<p id="hint-text" class="text-red-400 mt-4 text-xl sm:text-2xl hidden flex items-center justify-center gap-2 font-bold">' +
+                    '<span class="text-3xl">💣</span> <span id="hint-content"></span>' +
+                    '</p>';
+
+                setTimeout(() => {
+                    const est = document.getElementById('answer-est');
+                    const act = document.getElementById('answer-act');
+                    const handleEnterEst = (e) => { if (e.key === 'Enter') { e.preventDefault(); lockEstimate(); } };
+                    const handleEnterAct = (e) => { if (e.key === 'Enter') { e.preventDefault(); checkMeasureAnswer(); } };
+                    if (est) est.addEventListener('keypress', handleEnterEst);
+                    if (act) act.addEventListener('keypress', handleEnterAct);
+                    if (est) est.focus();
+                }, 100);
+
+            } else if (slide.type === "draw") {
+                container.innerHTML = '<h2 class="text-3xl text-yellow-300 mb-2 font-bold drop-shadow-md">' + slide.title + '</h2>' +
+                    '<p class="text-2xl mb-4 font-bold">' + slide.text + '</p>' +
+                    '<div class="relative w-full max-w-sm mx-auto h-64 bg-gray-800 rounded border-2 border-dashed border-gray-400 mb-4 flex flex-col justify-center items-center shadow-inner">' +
+                    '<svg viewBox="-100 -100 200 200" class="w-full h-full" id="draw-svg">' +
+                    '<line x1="0" y1="0" x2="80" y2="0" stroke="white" stroke-width="4" stroke-linecap="round"/>' +
+                    '<line x1="0" y1="0" x2="80" y2="0" stroke="#51f0ea" stroke-width="4" stroke-linecap="round" id="dynamic-line"/>' +
+                    '<path id="dynamic-arc" d="" fill="none" stroke="yellow" stroke-width="2"/>' +
+                    '<text x="30" y="-30" id="dynamic-text" fill="white" font-size="24" font-weight="bold">0°</text>' +
+                    '<circle cx="0" cy="0" r="4" fill="white"/>' +
+                    '</svg>' +
+                    '</div>' +
+                    '<input type="range" id="angle-slider" min="0" max="180" value="0" class="w-full max-w-sm mb-6" oninput="updateDrawAngle(this.value)">' +
+                    '<button onclick="checkDrawAnswer(' + slide.target + ')" class="mc-btn px-8 py-3 text-3xl w-full max-w-sm">Craft it!</button>' +
+                    '<p id="hint-text" class="text-red-400 mt-4 text-2xl hidden font-bold"></p>';
+
+                updateDrawAngle(0);
+            } else {
+                container.innerHTML = '<h2 class="text-3xl text-yellow-300 mb-2 font-bold drop-shadow-md">' + slide.title + '</h2>' +
+                    '<div class="svg-container w-full max-w-md mb-4 bg-gray-800 rounded p-4 shadow-inner">' +
+                    slide.svg +
+                    '</div>' +
+                    '<p class="text-2xl mb-4 px-4 font-bold leading-relaxed">' + slide.text + '</p>' +
+                    '<input type="text" id="answer-input" class="mc-input w-full max-w-sm mb-4 text-3xl" placeholder="Type answer..." autocomplete="off">' +
+                    '<button onclick="checkAnswer()" class="mc-btn px-8 py-3 text-3xl w-full max-w-sm">Submit</button>' +
+                    '<p id="hint-text" class="text-red-400 mt-4 text-2xl hidden flex items-center justify-center gap-2 font-bold">' +
+                    '<span class="text-3xl">💣</span> <span id="hint-content"></span>' +
+                    '</p>';
+
+                setTimeout(() => {
+                    const input = document.getElementById('answer-input');
+                    if (input) {
+                        input.focus();
+                        input.addEventListener("keypress", function (event) {
+                            if (event.key === "Enter") {
+                                event.preventDefault();
+                                checkAnswer();
+                            }
+                        });
+                    }
+                }, 100);
+            }
+        }
+
+        window.updateDrawAngle = function (deg) {
+            playSound('click');
+            const rad = deg * Math.PI / 180;
+            const line = document.getElementById('dynamic-line');
+            const arc = document.getElementById('dynamic-arc');
+            const text = document.getElementById('dynamic-text');
+
+            const x = 80 * Math.cos(rad);
+            const y = -80 * Math.sin(rad);
+            line.setAttribute('x2', x);
+            line.setAttribute('y2', y);
+
+            const arcR = 30;
+            const arcX = arcR * Math.cos(rad);
+            const arcY = -arcR * Math.sin(rad);
+            const largeArc = deg > 180 ? 1 : 0;
+            arc.setAttribute('d', 'M ' + arcR + ' 0 A ' + arcR + ' ' + arcR + ' 0 ' + largeArc + ' 0 ' + arcX + ' ' + arcY);
+
+            text.textContent = deg + '°';
+        };
+
+        window.checkDrawAnswer = function (target) {
+            const slider = document.getElementById('angle-slider');
+            const val = parseInt(slider.value);
+            if (Math.abs(val - target) <= 2) {
+                showSuccess();
+            } else {
+                showFail('Aiyo, quite close but not exact leh! Try to slide to exactly ' + target + 'º.');
+            }
+        };
+
+        window.lockEstimate = function () {
+            playSound('click');
+            const estInput = document.getElementById('answer-est').value;
+
+            if (!estInput) {
+                showFail("Aiyo, must guess the Estimate first before taking out the tool loh!");
+                return;
+            }
+
+            document.getElementById('hint-text').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('animate-shake');
+
+            document.getElementById('answer-est').disabled = true;
+            document.getElementById('est-container').classList.add('opacity-70');
+
+            const actContainer = document.getElementById('act-container');
+            actContainer.classList.remove('opacity-30', 'pointer-events-none');
+            const actInput = document.getElementById('answer-act');
+            actInput.disabled = false;
+            actInput.placeholder = "???";
+
+            document.getElementById('virtual-protractor').style.opacity = '0.9';
+            document.getElementById('protractor-controls').classList.remove('hidden');
+
+            const btn = document.getElementById('measure-btn');
+            btn.innerText = "Submit Data";
+            btn.onclick = checkMeasureAnswer;
+
+            playTone(800, 'sine', 0, 0.2);
+
+            actInput.focus();
+        };
+
+        window.checkMeasureAnswer = function () {
+            playSound('click');
+            const estInput = document.getElementById('answer-est').value;
+            const actInput = document.getElementById('answer-act').value;
+            const slide = slides[currentSlide];
+
+            if (!actInput) {
+                showFail("Must enter the Actual measurement from the protractor loh!");
+                return;
+            }
+
+            const est = parseInt(estInput);
+            const act = parseInt(actInput);
+            const target = slide.target;
+
+            if (Math.abs(act - target) > 2) {
+                showFail('Aiyo, your Actual Measurement is wrong leh! Try aligning the 0° base line perfectly with the pink line.');
+                return;
+            }
+
+            if (Math.abs(est - target) > 25) {
+                showFail('Your actual measurement is correct, but your Estimate is too far off loh! Look at it carefully before measuring next time!');
+                return;
+            }
+
+            showSuccess();
+        };
+
+        window.checkAnswer = function () {
+            playSound('click');
+            const input = document.getElementById('answer-input').value.toLowerCase().trim();
+            const slide = slides[currentSlide];
+
+            if (!input) return;
+
+            if (slide.ans.includes(input)) {
+                showSuccess();
+            } else {
+                showFail(slide.hint);
+            }
+        };
+
+        function showSuccess() {
+            playSound('win');
+            xp += 10;
+            xpDisplay.innerText = xp;
+
+            const titles = ["COMBO!", "LEVEL UP!", "DIAMOND!", "STEADY LEH!"];
+            feedbackTitle.innerText = titles[Math.floor(Math.random() * titles.length)];
+            feedbackTitle.style.color = "#a4e171";
+            feedbackMessage.innerText = "+10 XP";
+
+            feedbackModal.style.display = "flex";
+        }
+
+        function showFail(hint) {
+            playSound('lose');
+            const container = document.getElementById('game-container');
+            container.classList.add('animate-shake');
+            setTimeout(() => container.classList.remove('animate-shake'), 300);
+
+            const hintEl = document.getElementById('hint-text');
+            const hintContent = document.getElementById('hint-content');
+            hintContent.innerText = "Aiyo! " + hint;
+            hintEl.classList.remove('hidden');
+        }
+
+        window.nextSlide = function () {
+            playSound('click');
+            feedbackModal.style.display = "none";
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                ProgressTracker.save({ step: currentSlide, xp: xp });
+                renderSlide();
+            }
+        };
+
+        window.prevSlide = function () {
+            playSound('click');
+            if (currentSlide > 0) {
+                currentSlide--;
+                ProgressTracker.save({ step: currentSlide, xp: xp });
+                renderSlide();
+            }
+        };
+
+        window.addEventListener('load', async () => {
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data) {
+                const p = saved.progress_data;
+                currentSlide = p.step || 0;
+                xp = p.xp || 0;
+                document.getElementById('xp-display').innerText = xp;
+            }
+            renderSlide();
+        });
+    </script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SG_Math_Y4_Ch6_Angles"
+            data-module-name="Minecraft Angle Quest - Primary 4"
+            data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter6_Angles/index.html">
+    </script>
+</body>
+
+</html>
