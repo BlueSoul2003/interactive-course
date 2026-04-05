@@ -1,10 +1,10 @@
 -- SQL Script to seed the Premium Module into Supabase
 
-INSERT INTO modules_content (module_id, title, required_tier, content_payload)
+INSERT INTO modules_content (module_id, title, required_tier, secure_data)
 VALUES (
     'english-spm-social-media',
     'Social Media Masterclass',
-    'premium',
+    2,
     '{
         "vocabData": [
             { "title": "Set 1: Basic Actions (动作)", "words": [{ "w": "Connect", "a": "Talk to friends online" }, { "w": "Upload", "a": "Post a photo/video" }, { "w": "Share", "a": "Send to others" }, { "w": "Create", "a": "Make something new" }, { "w": "Search", "a": "Look for information" }], "options": ["Talk to friends online", "Post a photo/video", "Send to others", "Make something new", "Look for information"] },
@@ -31,5 +31,5 @@ VALUES (
             { "level": "Level 3: English (Challenge)", "desc": "Topic: Fake News", "sentences": { "A": "A: People often share stories without checking if they are true.", "B": "B: Consequently, this causes panic and confusion in society.", "C": "C: Moreover, fake news spreads very fast on social media.", "D": "D: For example, believing rumours about a new virus or celebrity." }, "ans": { "P": "C", "E": "A", "Ex": "D", "L": "B" } }
         ]
     }'::jsonb
-) ON CONFLICT (module_id) DO UPDATE SET content_payload = EXCLUDED.content_payload, required_tier = EXCLUDED.required_tier;
+) ON CONFLICT (module_id) DO UPDATE SET secure_data = EXCLUDED.secure_data, required_tier = EXCLUDED.required_tier;
 

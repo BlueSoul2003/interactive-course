@@ -478,7 +478,7 @@
         </a>
     </header>
 
-    <main>
+    <main id="app-main">
         <h1>Social Media Masterclass</h1>
         <p class="subtitle">Vocabulary, Debate Logic & P.E.E.L. Writing Structure</p>
 
@@ -619,15 +619,18 @@
         let peelSets = [];
 
         async function bootSecureModule() {
-            const data = await window.AuthAccess.loadModuleContent('english-spm-social-media');
-            if (data) {
-                vocabData = data.vocabData;
-                gameQ = data.gameQ;
-                peelSets = data.peelSets;
-                
-                // Content fetched successfully! Initialize module views.
-                renderVocab();
-            }
+            await window.AuthAccess.loadModuleContent(
+                'english-spm-social-media', 
+                'app-main', 
+                (secureData) => {
+                    vocabData = secureData.vocabData;
+                    gameQ = secureData.gameQ;
+                    peelSets = secureData.peelSets;
+                    
+                    // Content fetched successfully! Initialize module views.
+                    renderVocab();
+                }
+            );
         }
 
         window.addEventListener('DOMContentLoaded', bootSecureModule);
