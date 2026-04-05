@@ -23,8 +23,8 @@
 //
 // ==============================================================
 
-const SUPABASE_URL = 'https://qfcpgqhrvegfdgvhqptw.supabase.co';   // e.g. https://xyzabc.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFmY3BncWhydmVnZmRndmhxcHR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIyNzY5NDQsImV4cCI6MjA4Nzg1Mjk0NH0.GJF3EUqqCNKkSXyWOcqlaX23KG2S_NxHA30_MsoSBrg';       // starts with "eyJ..."
+const SUPABASE_URL = 'https://ycsixsyssbdovpmmhefz.supabase.co';   // e.g. https://xyzabc.supabase.co
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljc2l4c3lzc2Jkb3ZwbW1oZWZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzOTcyNTEsImV4cCI6MjA5MDk3MzI1MX0.5Ofa771ewzMip8mZaXA09B9O2HPF3ZGoTk3qGkdTkmE';       // starts with "eyJ..."
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
 

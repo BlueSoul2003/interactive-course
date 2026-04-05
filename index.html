@@ -1904,45 +1904,32 @@
             <div class="modal-subtitle" style="margin-bottom: 25px;">Manage student profiles and resume progress across
                 modules</div>
 
-            <div
+            <div id="authFormArea"
                 style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
                 <label
-                    style="display:block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary);">Select
-                    Existing Student</label>
-                <div style="display: flex; gap: 10px;">
-                    <select id="studentSelect"
-                        style="flex-grow: 1; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
-                        <option value="">-- Choose Profile --</option>
-                    </select>
-                    <button class="tab-btn" onclick="selectExistingStudent()"
-                        style="margin: 0; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: var(--text-primary); color: var(--bg-color);">Select</button>
-                </div>
-            </div>
-
-            <div
-                style="text-align: center; color: var(--text-secondary); margin-bottom: 20px; font-size: 0.9rem; font-weight: 600;">
-                OR CREATE NEW</div>
-
-            <div
-                style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                <label
-                    style="display:block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary);">New
-                    Student Profile</label>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="newStudentName" placeholder="Enter student's name..."
-                        style="flex-grow: 1; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
-                    <button id="createStudentBtn" onclick="createNewStudent()"
-                        style="margin: 0; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: var(--sub-english); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Create</button>
+                    style="display:block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary);">Login or Register (Secure RBAC)</label>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="email" id="authEmail" placeholder="Email address..."
+                        style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                    <input type="password" id="authPassword" placeholder="Password..."
+                        style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button id="loginBtn" onclick="handleAuth('login')"
+                            style="flex-grow: 1; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: var(--sub-english); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Login</button>
+                        <button id="registerBtn" onclick="handleAuth('register')"
+                            style="flex-grow: 1; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: transparent; color: var(--text-primary); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-weight: 600; transition: all 0.2s;">Register</button>
+                    </div>
+                    <div id="authMessage" style="color: #ef4444; font-size: 0.85rem; text-align: center; margin-top: 10px; min-height: 20px;"></div>
                 </div>
             </div>
 
             <!-- Active Student Progress Area -->
-            <div id="activeStudentInfo"
+            <div id="activeAuthInfo"
                 style="display: none; margin-top: 30px; padding-top: 25px; border-top: 1px dashed rgba(255,255,255,0.15);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3 style="font-size: 1.25rem; color: #f1f5f9; font-family: var(--font-serif);">Progress: <span
+                    <h3 style="font-size: 1.25rem; color: #f1f5f9; font-family: var(--font-serif);"><span
                             id="progressStudentName" style="color: var(--sub-science);"></span></h3>
-                    <button onclick="logoutStudent()"
+                    <button onclick="handleLogout()"
                         style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; font-weight: 600; transition: all 0.2s;">Logout</button>
                 </div>
 
@@ -1954,35 +1941,71 @@
         </div>
     </div>
 
+    <!-- SDKs -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/auth-access.js"></script>
     <script src="js/progress-tracker.js"></script>
     <script>
-        // ── Student Dashboard Logic (Supabase-powered) ────────────────────────
+        // ── Auth & Dashboard Logic (Supabase-powered RBAC) ────────────────────────
 
-        async function updateStudentUI() {
-            const active = ProgressTracker.getActiveStudent();
+        async function updateAuthUI() {
+            const authInfo = await window.AuthAccess.getCurrentUser();
             const labelBtn = document.getElementById('activeStudentLabel');
 
-            if (active) {
-                labelBtn.innerText = `👤 ${active}`;
-                document.getElementById('activeStudentInfo').style.display = 'block';
-                document.getElementById('progressStudentName').innerText = active;
-                await loadProgressList(active);
+            if (authInfo && authInfo.user) {
+                labelBtn.innerText = `👤 ${authInfo.user.email.split('@')[0]} [${authInfo.tier.toUpperCase()}]`;
+                document.getElementById('authFormArea').style.display = 'none';
+                document.getElementById('activeAuthInfo').style.display = 'block';
+                document.getElementById('progressStudentName').innerText = `${authInfo.user.email} (Tier: ${authInfo.tier.toUpperCase()})`;
+                
+                // Keep compatibility with ProgressTracker
+                if(window.ProgressTracker) {
+                    ProgressTracker.setActiveStudent(authInfo.user.email);
+                    await loadProgressList(authInfo.user.email);
+                }
             } else {
-                labelBtn.innerText = 'Student: None';
-                document.getElementById('activeStudentInfo').style.display = 'none';
+                labelBtn.innerText = 'Account: Guest';
+                document.getElementById('authFormArea').style.display = 'block';
+                document.getElementById('activeAuthInfo').style.display = 'none';
+                if(window.ProgressTracker) {
+                    ProgressTracker.clearActiveStudent();
+                }
+            }
+        }
+
+        async function handleAuth(action) {
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const msgEl = document.getElementById('authMessage');
+            
+            if(!email || !password) {
+                msgEl.innerText = "Email and password are required.";
+                return;
+            }
+            
+            msgEl.innerText = "Loading...";
+            msgEl.style.color = "var(--text-secondary)";
+            
+            let result;
+            if (action === 'login') {
+                result = await window.AuthAccess.signIn(email, password);
+            } else {
+                result = await window.AuthAccess.signUp(email, password);
             }
 
-            // Populate dropdown
-            const students = await ProgressTracker.getStudents();
-            const select = document.getElementById('studentSelect');
-            select.innerHTML = '<option value="">-- Choose Profile --</option>';
-            students.forEach(s => {
-                const opt = document.createElement('option');
-                opt.value = s;
-                opt.innerText = s;
-                if (s === active) opt.selected = true;
-                select.appendChild(opt);
-            });
+            if(result.error) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = result.error.message;
+            } else {
+                msgEl.innerText = "";
+                await updateAuthUI();
+                closeStudentModal(); // close on success
+            }
+        }
+
+        async function handleLogout() {
+            await window.AuthAccess.signOut();
+            await updateAuthUI();
         }
 
         async function loadProgressList(student) {
@@ -2018,64 +2041,15 @@
 
         async function openStudentModal() {
             document.getElementById('studentModalOverlay').classList.add('open');
-            await updateStudentUI();
+            await updateAuthUI();
         }
 
         function closeStudentModal() {
             document.getElementById('studentModalOverlay').classList.remove('open');
         }
 
-        async function createNewStudent() {
-            const nameInput = document.getElementById('newStudentName');
-            const btn = document.getElementById('createStudentBtn');
-            const name = nameInput.value.trim();
-            if (!name) return;
-
-            btn.innerText = 'Saving...';
-            btn.disabled = true;
-
-            await ProgressTracker.createStudent(name);
-            ProgressTracker.setActiveStudent(name);
-            nameInput.value = '';
-            await updateStudentUI();
-
-            btn.innerText = 'Created! ✓';
-            btn.style.background = '#10b981';
-            setTimeout(() => {
-                btn.innerText = 'Create';
-                btn.style.background = 'var(--sub-english)';
-                btn.disabled = false;
-            }, 1800);
-        }
-
-        async function selectExistingStudent() {
-            const name = document.getElementById('studentSelect').value;
-            if (name) {
-                ProgressTracker.setActiveStudent(name);
-                await updateStudentUI();
-            }
-        }
-
-        function logoutStudent() {
-            ProgressTracker.clearActiveStudent();
-            const labelBtn = document.getElementById('activeStudentLabel');
-            lbl.innerText = 'Student: None';
-            document.getElementById('activeStudentInfo').style.display = 'none';
-        }
-
-        // Initialize badge on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            const active = ProgressTracker.getActiveStudent();
-            if (active) {
-                document.getElementById('activeStudentLabel').innerText = `👤 ${active}`;
-            }
-        });
-
-        // Update badge whenever active student changes
-        document.addEventListener('activeStudentChanged', (e) => {
-            const lbl = document.getElementById('activeStudentLabel');
-            lbl.innerText = e.detail.name ? `👤 ${e.detail.name}` : 'Student: None';
-        });
+        // Initialize user state on load
+        window.addEventListener('DOMContentLoaded', updateAuthUI);
     </script>
 </body>
 
