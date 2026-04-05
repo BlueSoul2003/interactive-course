@@ -15,14 +15,15 @@ const AuthAccess = {
 
         const { data: profile } = await window.supabaseClient
             .from('user_profiles')
-            .select('tier, tier_level')
+            .select('tier, tier_level, unlocked_modules')
             .eq('id', user.id)
             .single();
 
         return { 
             user, 
             tier: profile?.tier || 'free', 
-            tierLevel: profile?.tier_level || 0 
+            tierLevel: profile?.tier_level || 0,
+            unlockedModules: profile?.unlocked_modules || []
         };
     },
 
@@ -84,6 +85,75 @@ const AuthAccess = {
 
     async signOut() {
         return await window.supabaseClient.auth.signOut();
+    },
+
+    async redeemPin(pinCode) {
+        const { data: newModules, error } = await window.supabaseClient.rpc('redeem_activation_pin', {
+            p_pin_code: pinCode
+        });
+        if (error) throw error;
+        return newModules;
+    },
+
+    async renderModuleAccessibility() {
+        const authInfo = await this.getCurrentUser();
+        let unlockedModules = [];
+        let isGuest = true;
+        
+        if (authInfo && authInfo.user) {
+            isGuest = false;
+            unlockedModules = authInfo.unlockedModules;
+        }
+        
+        // Target specifically the lesson modules (which are <a> tags within view-layers)
+        const moduleCards = document.querySelectorAll('.view-layer a.card');
+        const guestSubjectTracker = new Set();
+        
+        moduleCards.forEach(card => {
+            let subject = 'unknown';
+            card.classList.forEach(cls => {
+                if(cls.startsWith('sub-')) subject = cls;
+            });
+            
+            // e.g. from "content/.../Social_Media_Masterclass/index.html", extract "Social_Media_Masterclass"
+            let moduleId = card.dataset.moduleId;
+            if(!moduleId) {
+                const parts = card.getAttribute('href').split('/');
+                moduleId = parts[parts.length - 2]; 
+            }
+            
+            let hasAccess = false;
+            
+            if (isGuest) {
+                // Guests only have access to the first module of each subject
+                if (!guestSubjectTracker.has(subject)) {
+                    guestSubjectTracker.add(subject);
+                    hasAccess = true;
+                }
+            } else {
+                // Logged in users check their DB array
+                hasAccess = unlockedModules.includes(moduleId) || unlockedModules.includes('*');
+            }
+            
+            if (hasAccess) {
+                card.classList.add('module-active');
+                card.classList.remove('module-locked');
+                card.onclick = null; // restore normal navigation
+            } else {
+                card.classList.add('module-locked');
+                card.classList.remove('module-active');
+                card.onclick = (e) => {
+                    e.preventDefault(); 
+                    e.stopPropagation();
+                    const modal = document.getElementById('pin-topup-modal');
+                    if(modal) {
+                        modal.style.display = 'flex';
+                    } else {
+                        alert("🔒 This module is locked. Enter a new PIN to unlock!");
+                    }
+                };
+            }
+        });
     }
 };
 
