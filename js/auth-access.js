@@ -109,13 +109,14 @@ const AuthAccess = {
         
         // Target specifically the lesson modules (which are <a> tags within view-layers)
         const moduleCards = document.querySelectorAll('.view-layer a.card');
-        const guestSubjectTracker = new Set();
+        const guestSyllabusTracker = new Set();
         
         moduleCards.forEach(card => {
-            let subject = 'unknown';
-            card.classList.forEach(cls => {
-                if(cls.startsWith('sub-')) subject = cls;
-            });
+            let syllabus = 'unknown';
+            const syllabusContent = card.closest('.syllabus-content');
+            if (syllabusContent) {
+                syllabus = syllabusContent.id;
+            }
             
             // e.g. from "content/.../Social_Media_Masterclass/index.html", extract "Social_Media_Masterclass"
             let moduleId = card.dataset.moduleId;
@@ -126,21 +127,17 @@ const AuthAccess = {
             
             let hasAccess = false;
             
-            // Extract syllabus ID from the parent syllabus-content div
-            const syllabusDiv = card.closest('.syllabus-content');
-            const syllabusId = syllabusDiv ? syllabusDiv.id : 'unknown';
-
             if (isAdmin) {
                 hasAccess = true;
             } else if (isGuest) {
-                // Guests only have access to the first module of each syllabus pathway (e.g. SPM, IGCSE)
-                if (!guestSubjectTracker.has(syllabusId)) {
-                    guestSubjectTracker.add(syllabusId);
+                // Guests only have access to the first module of each syllabus
+                if (!guestSyllabusTracker.has(syllabus)) {
+                    guestSyllabusTracker.add(syllabus);
                     hasAccess = true;
                 }
             } else {
                 // Logged in users check their DB array
-                hasAccess = unlockedModules.includes(moduleId) || unlockedModules.includes('*');
+                hasAccess = unlockedModules.includes(moduleId) || unlockedModules.includes('*') || unlockedModules.includes(syllabus);
             }
             
             if (hasAccess) {
