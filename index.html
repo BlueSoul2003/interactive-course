@@ -2194,6 +2194,25 @@
             }, 500); 
         });
     </script>
+    
+    <!-- Admin PIN Generator Modal/Panel -->
+    <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 400px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>⚡</span> Admin: Generate PIN</h3>
+            <button onclick="document.getElementById('admin-pin-generator').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Select modules or syllabus to include in the PIN.</p>
+        
+        <input type="text" id="admin-pin-code" placeholder="PIN Code (e.g., VIP2026)" style="width:100%; margin-bottom: 15px; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #0f172a; color: white;">
+        
+        <div id="admin-pin-modules-list" style="background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #333; margin-bottom: 15px; max-height: 250px; overflow-y: auto;">
+            <!-- Rendered via JS -->
+            Loading syllabus structure...
+        </div>
+
+        <button onclick="AdminTools.createPin()" style="background:#3b82f6; border:none; padding:12px; color:white; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold;">Generate Secure PIN</button>
+    </div>
+
 </body>
 
 </html>

@@ -160,6 +160,103 @@ const AuthAccess = {
                 };
             }
         });
+
+        if (isAdmin) {
+            this.renderAdminUI();
+            const adminPanel = document.getElementById('admin-pin-generator');
+            if (adminPanel) adminPanel.style.display = 'block';
+        }
+    },
+    
+    renderAdminUI() {
+        const listContainer = document.getElementById('admin-pin-modules-list');
+        if (!listContainer) return;
+        
+        const syllabusSections = document.querySelectorAll('.syllabus-content');
+        let html = '<div style="margin-bottom: 10px;"><strong><label style="cursor:pointer;"><input type="checkbox" value="*" class="admin-cb-module"> ✨ ALL MODULES (God Mode)</label></strong></div><hr style="border-color:#333; margin:10px 0;">';
+        
+        syllabusSections.forEach(section => {
+            const titleElement = section.querySelector('.section-title');
+            const title = titleElement ? titleElement.innerText.trim() : section.id;
+            html += `<div style="margin-bottom: 12px;">
+                <strong><label style="cursor:pointer; color:#3b82f6;"><input type="checkbox" value="${section.id}" class="admin-cb-module" onchange="window.AdminTools.toggleSyllabus('${section.id}', this.checked)"> Subject: ${title} (${section.id})</label></strong>
+                <div id="admin-group-${section.id}" style="margin-left: 20px; font-size: 0.9em; margin-top: 5px;">`;
+            
+            const cards = section.querySelectorAll('.view-layer a.card, .view-layer div.card');
+            if(cards.length === 0) {
+                html += `<div style="color:#666; font-style:italic;">No modules configured yet.</div>`;
+            } else {
+                cards.forEach(card => {
+                    let moduleId = card.dataset.moduleId;
+                    if(!moduleId) {
+                        if (card.tagName.toLowerCase() === 'a') {
+                            const parts = card.getAttribute('href').split('/');
+                            moduleId = parts[parts.length - 2] || 'unknown'; 
+                        } else {
+                            const onclickStr = card.getAttribute('onclick') || '';
+                            const match = onclickStr.match(/showLessons\('[^']+',\s*'([^']+)'\)/);
+                            moduleId = match ? match[1] : 'unknown';
+                        }
+                    }
+                    if (moduleId === 'unknown' || moduleId.includes('.html')) {
+                        // fallback matching
+                        moduleId = card.querySelector('h3') ? card.querySelector('h3').innerText.trim().replace(/\s+/g, '_') : 'unknown';
+                    }
+                    const cardTitleEl = card.querySelector('h3');
+                    const cardTitle = cardTitleEl ? cardTitleEl.innerText.trim() : moduleId;
+                    html += `<div><label style="cursor:pointer;"><input type="checkbox" value="${moduleId}" class="admin-cb-module admin-cb-${section.id}"> Module: ${cardTitle}</label></div>`;
+                });
+            }
+            html += `</div></div>`;
+        });
+        
+        listContainer.innerHTML = html;
+    }
+};
+
+window.AdminTools = {
+    toggleSyllabus(syllabusId, isChecked) {
+        const checkboxes = document.querySelectorAll(`.admin-cb-${syllabusId}`);
+        checkboxes.forEach(cb => cb.checked = isChecked);
+    },
+    async createPin() {
+        const authInfo = await AuthAccess.getCurrentUser();
+        if (!authInfo || authInfo.tier !== 'admin') {
+            alert("Unauthorized: Admin privileges required.");
+            return;
+        }
+
+        const pinCode = document.getElementById('admin-pin-code').value.trim();
+        if (!pinCode) {
+            alert("Please provide a PIN code.");
+            return;
+        }
+
+        const checkboxes = document.querySelectorAll('.admin-cb-module:checked');
+        const modulesArray = Array.from(checkboxes).map(cb => cb.value);
+
+        if (modulesArray.length === 0) {
+            alert("Please select at least one module or subject to unlock.");
+            return;
+        }
+
+        const { data, error } = await window.supabaseClient
+            .from('activation_pins')
+            .insert([{ 
+                pin_code: pinCode, 
+                modules_to_unlock: modulesArray,
+                is_used: false 
+            }]);
+
+        if (error) {
+            console.error("PIN Generation Error:", error);
+            alert("Failed to create PIN: " + error.message);
+        } else {
+            alert("✅ PIN successfully generated for:\\n" + modulesArray.join(', '));
+            document.getElementById('admin-pin-code').value = '';
+            const allBoxes = document.querySelectorAll('.admin-cb-module');
+            allBoxes.forEach(cb => cb.checked = false);
+        }
     }
 };
 
