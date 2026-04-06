@@ -99,10 +99,12 @@ const AuthAccess = {
         const authInfo = await this.getCurrentUser();
         let unlockedModules = [];
         let isGuest = true;
+        let isAdmin = false;
         
         if (authInfo && authInfo.user) {
             isGuest = false;
             unlockedModules = authInfo.unlockedModules;
+            isAdmin = authInfo.tier === 'admin';
         }
         
         // Target specifically the lesson modules (which are <a> tags within view-layers)
@@ -124,7 +126,9 @@ const AuthAccess = {
             
             let hasAccess = false;
             
-            if (isGuest) {
+            if (isAdmin) {
+                hasAccess = true;
+            } else if (isGuest) {
                 // Guests only have access to the first module of each subject
                 if (!guestSubjectTracker.has(subject)) {
                     guestSubjectTracker.add(subject);
