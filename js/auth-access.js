@@ -142,6 +142,7 @@ const AuthAccess = {
             if (hasAccess) {
                 card.classList.add('module-active');
                 card.classList.remove('module-locked');
+                card.classList.remove('card-locked'); // Handle hardcoded classes
                 card.onclick = null; // restore normal navigation
             } else {
                 card.classList.add('module-locked');
