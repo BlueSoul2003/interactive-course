@@ -2060,6 +2060,11 @@
                     ProgressTracker.clearActiveStudent();
                 }
             }
+            
+            // Re-render UI locks and Admin Panel
+            if (window.AuthAccess && window.AuthAccess.renderModuleAccessibility) {
+                await window.AuthAccess.renderModuleAccessibility();
+            }
         }
 
         async function handleAuth(action) {

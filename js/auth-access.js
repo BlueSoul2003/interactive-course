@@ -161,10 +161,12 @@ const AuthAccess = {
             }
         });
 
+        const adminPanel = document.getElementById('admin-pin-generator');
         if (isAdmin) {
             this.renderAdminUI();
-            const adminPanel = document.getElementById('admin-pin-generator');
             if (adminPanel) adminPanel.style.display = 'block';
+        } else {
+            if (adminPanel) adminPanel.style.display = 'none';
         }
     },
     
