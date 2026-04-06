@@ -126,12 +126,16 @@ const AuthAccess = {
             
             let hasAccess = false;
             
+            // Extract syllabus ID from the parent syllabus-content div
+            const syllabusDiv = card.closest('.syllabus-content');
+            const syllabusId = syllabusDiv ? syllabusDiv.id : 'unknown';
+
             if (isAdmin) {
                 hasAccess = true;
             } else if (isGuest) {
-                // Guests only have access to the first module of each subject
-                if (!guestSubjectTracker.has(subject)) {
-                    guestSubjectTracker.add(subject);
+                // Guests only have access to the first module of each syllabus pathway (e.g. SPM, IGCSE)
+                if (!guestSubjectTracker.has(syllabusId)) {
+                    guestSubjectTracker.add(syllabusId);
                     hasAccess = true;
                 }
             } else {
