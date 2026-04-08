@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SPM 词缀炼金术 - Imbuhan Alchemy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.4s ease-out forwards',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: { '0%': { transform: 'translateY(10px)', opacity: '0' }, '100%': { transform: 'translateY(0)', opacity: '1' } }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            background-image: radial-gradient(#334155 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        .trans-text {
+            display: none;
+        }
+
+        .show-trans .trans-text {
+            display: block;
+            animation: fadeInUp 0.3s ease-out forwards;
+        }
+
+        /* 打印样式优化 (白底黑字) */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+
+            .print-hidden {
+                display: none !important;
+            }
+
+            .print-break-inside-avoid {
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+
+            .print-text-black {
+                color: black !important;
+            }
+
+            .print-bg-white {
+                background: white !important;
+                border: 1px solid #e2e8f0;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-sans antialiased min-h-screen pb-12 selection:bg-indigo-500/30">
+    <a href="../../../../../index.html" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: white; padding: 10px 15px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" class="print-hidden" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#f8fafc';" onmouseout="this.style.transform='scale(1)'; this.style.background='white';">
+        <span style="font-size: 1.2rem;">🏠</span> <span>Home</span>
+    </a>
+
+    <div id="app"></div>
+
+    <script>
+        // ==========================================
+        // 🧠 状态管理 & i18n
+        // ==========================================
+        const state = {
+            lang: 'zh', // 'zh' or 'en'
+            currentMode: 'dashboard',
+            score: 0,
+            showTranslation: false,
+
+            m1Level: 0, m1Progress: {},
+            m2Level: 0, m2Progress: {},
+            m3Level: 0, m3Progress: {}
+        };
+
+        window.addEventListener('load', async () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data) {
+                    const p = saved.progress_data;
+                    if (p.score !== undefined) state.score = p.score;
+                    if (p.m1Level !== undefined) state.m1Level = p.m1Level;
+                    if (p.m1Progress) state.m1Progress = p.m1Progress;
+                    if (p.m2Level !== undefined) state.m2Level = p.m2Level;
+                    if (p.m2Progress) state.m2Progress = p.m2Progress;
+                    if (p.m3Level !== undefined) state.m3Level = p.m3Level;
+                    if (p.m3Progress) state.m3Progress = p.m3Progress;
+                    render();
+                }
+            }
+        });
+
+        function saveProgress() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({
+                    score: state.score,
+                    m1Level: state.m1Level,
+                    m1Progress: state.m1Progress,
+                    m2Level: state.m2Level,
+                    m2Progress: state.m2Progress,
+                    m3Level: state.m3Level,
+                    m3Progress: state.m3Progress
+                });
+            }
+        }
+
+        // 翻译辅助函数 (Translator Function)
+        const t = (zh, en) => state.lang === 'zh' ? zh : en;
+
+        // ==========================================
+        // 📚 数据库 (Databases)
+        // ==========================================
+
+        const allAlchemyData = [
+            {
+                id: 'a1', base: 'Baca', baseZh: '读', baseEn: 'Read',
+                combos: [
+                    { prefix: 'mem-', suffix: '', result: 'Membaca', type: '动词 (正在做)', typeEn: 'Verb (Active)', transZh: '阅读 (动作)', transEn: 'Reading' },
+                    { prefix: 'pem-', suffix: '', result: 'Pembaca', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '读者', transEn: 'Reader' },
+                    { prefix: '', suffix: '-an', result: 'Bacaan', type: '名词 (物品)', typeEn: 'Noun (Object)', transZh: '读物', transEn: 'Reading material' },
+                    { prefix: 'di-', suffix: '', result: 'Dibaca', type: '被动词', typeEn: 'Passive Verb', transZh: '被读', transEn: 'Is read' }
+                ]
+            },
+            {
+                id: 'a2', base: 'Tulis', baseZh: '写', baseEn: 'Write',
+                combos: [
+                    { prefix: 'men-', suffix: '', result: 'Menulis', type: '动词 (正在做)', typeEn: 'Verb (Active)', transZh: '书写 (动作)', transEn: 'Writing' },
+                    { prefix: 'pen-', suffix: '', result: 'Penulis', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '作家/作者', transEn: 'Writer/Author' },
+                    { prefix: '', suffix: '-an', result: 'Tulisan', type: '名词 (结果)', typeEn: 'Noun (Result)', transZh: '字迹/文章', transEn: 'Handwriting/Article' },
+                    { prefix: 'di-', suffix: '', result: 'Ditulis', type: '被动词', typeEn: 'Passive Verb', transZh: '被写', transEn: 'Is written' }
+                ]
+            },
+            {
+                id: 'a3', base: 'Ajar', baseZh: '教', baseEn: 'Teach',
+                combos: [
+                    { prefix: 'meng-', suffix: '', result: 'Mengajar', type: '动词 (正在做)', typeEn: 'Verb (Active)', transZh: '教导 (动作)', transEn: 'Teaching' },
+                    { prefix: 'peng-', suffix: '', result: 'Pengajar', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '教师/教练', transEn: 'Instructor' },
+                    { prefix: 'pel-', suffix: '', result: 'Pelajar', type: '名词 (特殊)', typeEn: 'Noun (Exception)', transZh: '学生', transEn: 'Student' },
+                    { prefix: 'pel-', suffix: '-an', result: 'Pelajaran', type: '名词 (事物)', typeEn: 'Noun (Thing)', transZh: '学业/课程', transEn: 'Studies/Lesson' }
+                ]
+            },
+            {
+                id: 'a4', base: 'Bantu', baseZh: '帮助', baseEn: 'Help',
+                combos: [
+                    { prefix: 'mem-', suffix: '', result: 'Membantu', type: '动词 (动作)', typeEn: 'Verb (Active)', transZh: '帮助 (动作)', transEn: 'Helping' },
+                    { prefix: 'pem-', suffix: '', result: 'Pembantu', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '助手', transEn: 'Assistant' },
+                    { prefix: '', suffix: '-an', result: 'Bantuan', type: '名词 (事物)', typeEn: 'Noun (Thing)', transZh: '援助/救济品', transEn: 'Assistance/Aid' }
+                ]
+            },
+            {
+                id: 'a5', base: 'Guna', baseZh: '使用', baseEn: 'Use',
+                combos: [
+                    { prefix: 'meng-', suffix: '', result: 'Mengguna', type: '动词 (动作)', typeEn: 'Verb (Active)', transZh: '使用 (动作)', transEn: 'Using' },
+                    { prefix: 'peng-', suffix: '', result: 'Pengguna', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '消费者/用户', transEn: 'Consumer/User' },
+                    { prefix: 'ke-', suffix: '-an', result: 'Kegunaan', type: '名词 (用途)', typeEn: 'Noun (Purpose)', transZh: '用途/用处', transEn: 'Usage/Function' }
+                ]
+            },
+            {
+                id: 'a6', base: 'Ubat', baseZh: '药', baseEn: 'Medicine',
+                combos: [
+                    { prefix: 'meng-', suffix: '-i', result: 'Mengubati', type: '动词 (治疗)', typeEn: 'Verb (Cure)', transZh: '医治', transEn: 'To treat' },
+                    { prefix: 'peng-', suffix: '-an', result: 'Pengubatan', type: '名词 (过程)', typeEn: 'Noun (Process)', transZh: '治疗过程', transEn: 'Medical treatment' },
+                    { prefix: 'per-', suffix: '-an', result: 'Perubatan', type: '名词 (领域)', typeEn: 'Noun (Field)', transZh: '医学界', transEn: 'Medicine' }
+                ]
+            },
+            {
+                id: 'a7', base: 'Jalan', baseZh: '走/路', baseEn: 'Walk/Road',
+                combos: [
+                    { prefix: 'ber-', suffix: '', result: 'Berjalan', type: '动词', typeEn: 'Verb', transZh: '走路', transEn: 'Walking' },
+                    { prefix: 'men-', suffix: '-kan', result: 'Menjalankan', type: '动词 (执行)', typeEn: 'Verb (Execute)', transZh: '执行/进行', transEn: 'Carry out' },
+                    { prefix: 'per-', suffix: '-an', result: 'Perjalanan', type: '名词 (过程)', typeEn: 'Noun (Process)', transZh: '旅程', transEn: 'Journey' }
+                ]
+            },
+            {
+                id: 'a8', base: 'Lari', baseZh: '跑', baseEn: 'Run',
+                combos: [
+                    { prefix: 'ber-', suffix: '', result: 'Berlari', type: '动词', typeEn: 'Verb', transZh: '跑步', transEn: 'Running' },
+                    { prefix: 'pe-', suffix: '', result: 'Pelari', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '赛跑者', transEn: 'Runner' },
+                    { prefix: '', suffix: '-an', result: 'Larian', type: '名词 (活动)', typeEn: 'Noun (Event)', transZh: '赛跑活动', transEn: 'Running event' },
+                    { prefix: 'me-', suffix: '-kan diri', result: 'Melarikan diri', type: '动词短语', typeEn: 'Verb Phrase', transZh: '逃跑', transEn: 'Escape' }
+                ]
+            },
+            {
+                id: 'a9', base: 'Tunjuk', baseZh: '指/展示', baseEn: 'Show/Point',
+                combos: [
+                    { prefix: 'men-', suffix: '-kan', result: 'Menunjukkan', type: '动词', typeEn: 'Verb', transZh: '展示/显示', transEn: 'Showing/Indicating' },
+                    { prefix: 'pe-', suffix: '', result: 'Petunjuk', type: '名词 (线索)', typeEn: 'Noun (Clue)', transZh: '线索/指示', transEn: 'Clue/Indicator' },
+                    { prefix: 'per-', suffix: '-an', result: 'Pertunjukan', type: '名词 (表演)', typeEn: 'Noun (Show)', transZh: '表演/展览', transEn: 'Exhibition' }
+                ]
+            },
+            {
+                id: 'a10', base: 'Kembang', baseZh: '膨胀/发展', baseEn: 'Expand/Develop',
+                combos: [
+                    { prefix: 'ber-', suffix: '', result: 'Berkembang', type: '动词 (自动)', typeEn: 'Verb (Intransitive)', transZh: '发展/开花', transEn: 'Developing/Blooming' },
+                    { prefix: 'meng-', suffix: '-kan', result: 'Mengembangkan', type: '动词 (使动)', typeEn: 'Verb (Transitive)', transZh: '使发展/扩展', transEn: 'To expand' },
+                    { prefix: 'per-', suffix: '-an', result: 'Perkembangan', type: '名词', typeEn: 'Noun', transZh: '发展 (进程)', transEn: 'Development' }
+                ]
+            },
+            {
+                id: 'a11', base: 'Laksana', baseZh: '执行/实行', baseEn: 'Implement',
+                combos: [
+                    { prefix: 'me-', suffix: '-kan', result: 'Melaksanakan', type: '动词', typeEn: 'Verb', transZh: '实行/落实', transEn: 'Implement/Execute' },
+                    { prefix: 'pe-', suffix: '', result: 'Pelaksana', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '执行者', transEn: 'Implementer' },
+                    { prefix: 'pe-', suffix: '-an', result: 'Pelaksanaan', type: '名词 (过程)', typeEn: 'Noun (Process)', transZh: '实行的过程', transEn: 'Implementation' }
+                ]
+            },
+            {
+                id: 'a12', base: 'Latih', baseZh: '训练', baseEn: 'Train',
+                combos: [
+                    { prefix: 'me-', suffix: '', result: 'Melatih', type: '动词', typeEn: 'Verb', transZh: '训练(别人)', transEn: 'To train' },
+                    { prefix: 'ju-', suffix: '', result: 'Jurulatih', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '教练', transEn: 'Coach' },
+                    { prefix: '', suffix: '-an', result: 'Latihan', type: '名词 (事物)', typeEn: 'Noun (Thing)', transZh: '练习题/训练', transEn: 'Exercise' }
+                ]
+            },
+            {
+                id: 'a13', base: 'Urus', baseZh: '管理', baseEn: 'Manage',
+                combos: [
+                    { prefix: 'meng-', suffix: '', result: 'Mengurus', type: '动词', typeEn: 'Verb', transZh: '管理/处理', transEn: 'Managing' },
+                    { prefix: 'peng-', suffix: '', result: 'Pengurus', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '经理/管理者', transEn: 'Manager' },
+                    { prefix: 'peng-', suffix: '-an', result: 'Pengurusan', type: '名词 (系统)', typeEn: 'Noun (System)', transZh: '管理系统/层', transEn: 'Management' }
+                ]
+            },
+            {
+                id: 'a14', base: 'Sakit', baseZh: '痛/病', baseEn: 'Sick/Pain',
+                combos: [
+                    { prefix: 'pe-', suffix: '', result: 'Pesakit', type: '名词 (人)', typeEn: 'Noun (Person)', transZh: '病人', transEn: 'Patient' },
+                    { prefix: 'me-', suffix: '-kan', result: 'Menyakitkan', type: '动词/形容', typeEn: 'Verb/Adj', transZh: '令人痛苦的', transEn: 'Painful' },
+                    { prefix: 'pe-', suffix: '-an', result: 'Penyakit', type: '名词 (事物)', typeEn: 'Noun (Thing)', transZh: '疾病', transEn: 'Disease' }
+                ]
+            },
+            {
+                id: 'a15', base: 'Laku', baseZh: '发生/行为', baseEn: 'Occur/Act',
+                combos: [
+                    { prefix: 'ber-', suffix: '', result: 'Berlaku', type: '动词 (自动)', typeEn: 'Verb', transZh: '发生', transEn: 'Happened/Occurred' },
+                    { prefix: 'me-', suffix: '-kan', result: 'Melakukan', type: '动词 (使动)', typeEn: 'Verb (Transitive)', transZh: '进行/做', transEn: 'To do/perform' },
+                    { prefix: 'ke-', suffix: '-an', result: 'Kelakuan', type: '名词', typeEn: 'Noun', transZh: '行为/品行', transEn: 'Behavior/Conduct' }
+                ]
+            }
+        ];
+
+        const allDefuseData = [
+            { id: 'd1', word: 'Kesejahteraan', root: 'sejahtera', meaningZh: '和平/安宁', meaningEn: 'Peace/Tranquility', options: ['sejahtera', 'sejah', 'teraan', 'kesah'] },
+            { id: 'd2', word: 'Memperkembangkan', root: 'kembang', meaningZh: '使...发展', meaningEn: 'To develop/expand', options: ['kembang', 'perkembang', 'bang', 'memper'] },
+            { id: 'd3', word: 'Kementerian', root: 'menteri', meaningZh: '部门/部', meaningEn: 'Ministry', options: ['menteri', 'kemen', 'rian', 'menter'] },
+            { id: 'd4', word: 'Dilaksanakan', root: 'laksana', meaningZh: '被实行', meaningEn: 'Implemented', options: ['laksana', 'sana', 'dilak', 'laks'] },
+            { id: 'd5', word: 'Kemudahan', root: 'mudah', meaningZh: '设施/便利', meaningEn: 'Facility/Convenience', options: ['mudah', 'muda', 'kemudah', 'dahan'] },
+            { id: 'd6', word: 'Penyalahgunaan', root: 'salah', meaningZh: '滥用', meaningEn: 'Misuse/Abuse', options: ['guna', 'salah', 'salah guna', 'nyalah'] },
+            { id: 'd7', word: 'Meningkatkan', root: 'tingkat', meaningZh: '提高', meaningEn: 'Increase/Upgrade', options: ['tingkat', 'meningkat', 'ting', 'angkat'] },
+            { id: 'd8', word: 'Pertandingan', root: 'tanding', meaningZh: '比赛', meaningEn: 'Competition', options: ['tanding', 'tandi', 'pertan', 'dingan'] },
+            { id: 'd9', word: 'Pelancongan', root: 'lancong', meaningZh: '旅游业', meaningEn: 'Tourism', options: ['lancong', 'pelan', 'congan', 'rancang'] },
+            { id: 'd10', word: 'Kecemerlangan', root: 'cemerlang', meaningZh: '辉煌/卓越', meaningEn: 'Excellence', options: ['cemerlang', 'cemer', 'lang', 'merlang'] },
+            { id: 'd11', word: 'Tanggungjawab', root: 'tanggung', meaningZh: '责任', meaningEn: 'Responsibility', options: ['tanggung', 'jawab', 'tanggungjawab', 'tanggong'] },
+            { id: 'd12', word: 'Persekitaran', root: 'sekitar', meaningZh: '环境', meaningEn: 'Environment', options: ['sekitar', 'kitar', 'perse', 'taran'] },
+            { id: 'd13', word: 'Penglibatan', root: 'libat', meaningZh: '参与', meaningEn: 'Involvement', options: ['libat', 'penglibat', 'batan', 'libat'] },
+            { id: 'd14', word: 'Pembangunan', root: 'bangun', meaningZh: '发展/建设', meaningEn: 'Development', options: ['bangun', 'bangunan', 'pemban', 'bang'] },
+            { id: 'd15', word: 'Keselamatan', root: 'selamat', meaningZh: '安全', meaningEn: 'Safety', options: ['selamat', 'kesela', 'lamat', 'amat'] },
+            { id: 'd16', word: 'Kesihatan', root: 'sihat', meaningZh: '健康', meaningEn: 'Health', options: ['sihat', 'kesihat', 'sih', 'hatan'] },
+            { id: 'd17', word: 'Mempersoalkan', root: 'soal', meaningZh: '提出质疑', meaningEn: 'Questioning', options: ['soal', 'persoal', 'mempersoal', 'soalan'] },
+            { id: 'd18', word: 'Ketidakpuasan', root: 'puas', meaningZh: '不满意', meaningEn: 'Dissatisfaction', options: ['puas', 'tidak', 'puasan', 'ketidak'] },
+            { id: 'd19', word: 'Perpaduan', root: 'padu', meaningZh: '团结', meaningEn: 'Unity', options: ['padu', 'perpadu', 'duan', 'paduan'] },
+            { id: 'd20', word: 'Mempertahankan', root: 'tahan', meaningZh: '保卫/维护', meaningEn: 'Defend', options: ['tahan', 'pertahan', 'hankan', 'memper'] }
+        ];
+
+        const allClozeData = [
+            { id: 'c1', sentence: "Buku rujukan itu telah _______ oleh Ali di perpustakaan.", transZh: "那本参考书已经在图书馆[被]Ali读了。", transEn: "That reference book has been [read] by Ali at the library.", options: ['membaca', 'dibaca', 'pembaca'], answer: 'dibaca', hintZh: "句子中有 'telah' (已经) 和 'oleh' (被)，所以必须用被动词 di-。", hintEn: "Sentence has 'telah' and 'oleh', requiring the passive di-." },
+            { id: 'c2', sentence: "Setiap _______ jalan raya mestilah mematuhi peraturan.", transZh: "每一个道路[使用者]都必须遵守规则。", transEn: "Every road [user] must obey the rules.", options: ['mengguna', 'digunakan', 'pengguna'], answer: 'pengguna', hintZh: "Setiap (每一个) 后面需要放'人' (名词)，所以用 peN- (pengguna = 用户)。", hintEn: "'Setiap' is followed by a noun (person), so use peN- (pengguna)." },
+            { id: 'c3', sentence: "Ibu sedang _______ kari ayam di dapur.", transZh: "妈妈正在厨房[煮]咖喱鸡。", transEn: "Mother is [cooking] chicken curry in the kitchen.", options: ['memasak', 'dimasak', 'masakan'], answer: 'memasak', hintZh: "sedang (正在) 表示主动的动作，用 meN-。", hintEn: "'sedang' indicates active action, so use meN-." },
+            { id: 'c4', sentence: "Program _______ alam sekitar itu mendapat sambutan hangat.", transZh: "那个[爱护]环境计划得到了热烈的反响。", transEn: "The environmental [conservation] program received a warm response.", options: ['pemeliharaan', 'memelihara', 'dipelihara'], answer: 'pemeliharaan', hintZh: "Program (计划) 后面需要接名词，pe-...-an 表示'过程/计划'。", hintEn: "After 'Program', a noun process is needed (pe-...-an)." },
+            { id: 'c5', sentence: "Tingkap biliknya terbuka kerana _______ angin kencang.", transZh: "他房间的窗户开了，因为[被]强风吹。", transEn: "His room window opened because it was [pushed] by strong winds.", options: ['menolak', 'ditolak', 'penolak'], answer: 'ditolak', hintZh: "窗户是被风推开的，属于被动 (Passive)，用 di-。", hintEn: "The window was pushed, so it's passive (di-)." },
+            { id: 'c6', sentence: "Sikap suka _______ rakan tidak patut diamalkan.", transZh: "喜欢[嘲笑]朋友的态度是不应该实践的。", transEn: "The attitude of liking to [mock] friends should not be practiced.", options: ['mengejek', 'ejekan', 'diejek'], answer: 'mengejek', hintZh: "suka (喜欢) 后面接主动的动词，用 meN-。", hintEn: "'suka' is followed by an active verb (meN-)." },
+            { id: 'c7', sentence: "Kerajaan telah membina pelbagai _______ awam untuk rakyat.", transZh: "政府已经为人民建造了各种公共[设施]。", transEn: "The government has built various public [facilities] for the people.", options: ['memudahkan', 'kemudahan', 'dimudahkan'], answer: 'kemudahan', hintZh: "pelbagai (各种) 后面接名词，ke-...-an 表示事物 (设施)。", hintEn: "'pelbagai' needs a noun representing things/facilities (ke-...-an)." },
+            { id: 'c8', sentence: "Ahmad telah memenangi _______ syarahan peringkat daerah.", transZh: "Ahmad 赢得了县级的演讲[比赛]。", transEn: "Ahmad won the district level speech [competition].", options: ['bertanding', 'pertandingan', 'ditandingi'], answer: 'pertandingan', hintZh: "memenangi (赢得) 后面接名词，per-...-an 表示比赛/活动。", hintEn: "'memenangi' needs a noun for the event (per-...-an)." },
+            { id: 'c9', sentence: "Pasu antik itu _______ dari atas meja lalu pecah.", transZh: "那个古董花瓶从桌子上[不小心跌落]然后碎了。", transEn: "The antique vase [accidentally fell] from the table and broke.", options: ['menjatuhkan', 'dijatuhkan', 'terjatuh'], answer: 'terjatuh', hintZh: "表示不小心的动作，用 ter-。", hintEn: "Accidental action uses ter-." },
+            { id: 'c10', sentence: "Doktor menasihati pesakitnya agar mengambil _______ mengikut masa.", transZh: "医生建议他的病人按时吃[药]。", transEn: "The doctor advised his patient to take [medicine] on time.", options: ['mengubati', 'ubatan', 'pengubat'], answer: 'ubatan', hintZh: "mengambil (拿/吃) 后面接物品名词，-an 表示物品 (药物)。", hintEn: "'mengambil' takes an object noun (-an)." },
+            { id: 'c11', sentence: "Kita mestilah _______ peraturan sekolah pada setiap masa.", transZh: "我们必须时刻[遵守]学校规则。", transEn: "We must [obey] school rules at all times.", options: ['mematuhi', 'dipatuhi', 'kepatuhan'], answer: 'mematuhi', hintZh: "mestilah (必须) 后面接主动动词，用 meN-。", hintEn: "'mestilah' takes an active verb (meN-)." },
+            { id: 'c12', sentence: "Aktiviti kokurikulum dapat _______ masa lapang pelajar.", transZh: "课外活动能够[填补]学生的空闲时间。", transEn: "Co-curricular activities can [fill] students' free time.", options: ['mengisi', 'diisi', 'pengisian'], answer: 'mengisi', hintZh: "dapat (能够) 后面接主动动词，用 meN-。", hintEn: "'dapat' takes an active verb (meN-)." },
+            { id: 'c13', sentence: "Kawasan _______ itu dipenuhi dengan kilang-kilang gergasi.", transZh: "那个[工业]区挤满了巨型工厂。", transEn: "That [industrial] area is filled with giant factories.", options: ['perindustrian', 'mengindustrikan', 'industri'], answer: 'perindustrian', hintZh: "Kawasan (区域) 后面需要名词修饰，per-...-an 表示领域/界。", hintEn: "'Kawasan' needs a field noun (per-...-an)." },
+            { id: 'c14', sentence: "Lukisan yang tergantung di dinding itu sangat _______.", transZh: "挂在墙上的那幅画非常[迷人]。", transEn: "The painting hanging on the wall is very [amazing].", options: ['mengkagumkan', 'mengagumkan', 'dikagumi'], answer: 'mengagumkan', hintZh: "原字 kagum (k 遇 meN 变消失/融化为 ng)。mengagumkan 才是对的。", hintEn: "Root 'kagum': 'k' drops and becomes 'ng' with meN-." },
+            { id: 'c15', sentence: "Banyak pelancong _______ di hotel mewah tersebut.", transZh: "许多游客留宿在那家豪华酒店。", transEn: "Many tourists [stay] at the luxury hotel.", options: ['menginap', 'penginapan', 'diinap'], answer: 'menginap', hintZh: "pelancong (游客) 在做动作，用主动词 meN-。", hintEn: "Tourists perform the action, so active verb meN-." }
+        ];
+
+        const config = {
+            totalM1: allAlchemyData.length,
+            totalM2: allDefuseData.length,
+            totalM3: allClozeData.length
+        };
+
+        // ==========================================
+        // 🛠 工具函数
+        // ==========================================
+        window.toggleLang = () => {
+            state.lang = state.lang === 'zh' ? 'en' : 'zh';
+            render();
+        }
+
+        function showToast(msg, isSuccess = true) {
+            const toast = document.createElement('div');
+            toast.className = `fixed top-6 left-1/2 transform -translate-x-1/2 px-5 py-3 rounded-full text-sm font-semibold shadow-lg z-[100] animate-fade-in-up flex items-center print-hidden backdrop-blur-md border ${isSuccess ? 'bg-indigo-500/90 border-indigo-400 text-white' : 'bg-rose-500/90 border-rose-400 text-white'}`;
+            toast.innerHTML = isSuccess
+                ? `<i class="ph-bold ph-check-circle text-xl mr-2"></i> <span>${msg}</span>`
+                : `<i class="ph-bold ph-warning-circle text-xl mr-2"></i> <span>${msg}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translate(-50%, -10px)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        window.toggleTranslation = () => {
+            state.showTranslation = !state.showTranslation;
+            render();
+        }
+
+        window.changeMode = (mode) => {
+            state.currentMode = mode;
+            if (mode === 'dashboard' || mode === 'notes') state.showTranslation = false;
+            render();
+            window.scrollTo(0, 0);
+        }
+
+        window.clearData = () => {
+            state.score = 0;
+            state.m1Level = 0; state.m1Progress = {};
+            state.m2Level = 0; state.m2Progress = {};
+            state.m3Level = 0; state.m3Progress = {};
+            render();
+            showToast(t("实验室数据已重置", "Lab data reset"), true);
+        }
+
+        // --- Mod 1: Alchemy Handlers ---
+        window.handleAlchemyClick = (comboIndex) => {
+            const currentLvl = state.m1Level;
+            if (!state.m1Progress[currentLvl]) state.m1Progress[currentLvl] = [];
+
+            if (state.m1Progress[currentLvl].includes(comboIndex)) return;
+
+            state.m1Progress[currentLvl].push(comboIndex);
+            state.score += 10;
+
+            const currentItem = allAlchemyData[currentLvl];
+            const isComplete = state.m1Progress[currentLvl].length === currentItem.combos.length;
+
+            if (isComplete) {
+                showToast(t('配方全解密！可以进入下一元素。', 'Recipe fully decrypted! You can proceed.'), true);
+            } else {
+                showToast(t('成功合成新词汇！', 'Successfully synthesized new word!'), true);
+            }
+            render();
+            saveProgress();
+        };
+
+        window.navM1 = (dir) => {
+            if (dir === 'prev' && state.m1Level > 0) state.m1Level--;
+            if (dir === 'next' && state.m1Level < config.totalM1 - 1) state.m1Level++;
+            state.showTranslation = false;
+            render();
+        };
+
+        // --- Mod 2: Defuse Handlers ---
+        window.handleDefuseClick = (selectedOption) => {
+            const currentLvl = state.m2Level;
+            const item = allDefuseData[currentLvl];
+
+            if (state.m2Progress[currentLvl]) return;
+
+            if (selectedOption === item.root) {
+                state.m2Progress[currentLvl] = selectedOption;
+                state.score += 15;
+                showToast(t('拆解成功！引线安全解除。', 'Defusal successful! Wire cut.'), true);
+                render();
+                saveProgress();
+
+                setTimeout(() => {
+                    if (state.m2Level < config.totalM2 - 1) window.navM2('next');
+                }, 1500);
+            } else {
+                showToast(t('错误！这不是原字 (Kata Dasar)。', 'Error! This is not the Kata Dasar.'), false);
+            }
+        };
+
+        window.navM2 = (dir) => {
+            if (dir === 'prev' && state.m2Level > 0) state.m2Level--;
+            if (dir === 'next' && state.m2Level < config.totalM2 - 1) state.m2Level++;
+            state.showTranslation = false;
+            render();
+        };
+
+        // --- Mod 3: Cloze Handlers ---
+        window.handleClozeClick = (selectedOption) => {
+            const currentLvl = state.m3Level;
+            const item = allClozeData[currentLvl];
+
+            if (state.m3Progress[currentLvl]) return;
+
+            if (selectedOption === item.answer) {
+                state.m3Progress[currentLvl] = selectedOption;
+                state.score += 20;
+                showToast(t('语法匹配正确！', 'Grammar match correct!'), true);
+                render();
+                saveProgress();
+
+                setTimeout(() => {
+                    if (state.m3Level < config.totalM3 - 1) window.navM3('next');
+                }, 2000);
+            } else {
+                showToast(t('语法错误！提示：', 'Grammar error! Hint: ') + (state.lang === 'zh' ? item.hintZh : item.hintEn), false);
+            }
+        };
+
+        window.navM3 = (dir) => {
+            if (dir === 'prev' && state.m3Level > 0) state.m3Level--;
+            if (dir === 'next' && state.m3Level < config.totalM3 - 1) state.m3Level++;
+            state.showTranslation = false;
+            render();
+        };
+
+        window.printNotes = () => { window.print(); };
+
+        // ==========================================
+        // 🎨 渲染引擎 (Render Engine)
+        // ==========================================
+        function render() {
+            const app = document.getElementById('app');
+
+            let html = `
+                <div class="fixed top-0 left-0 w-full bg-[#0f172a]/90 backdrop-blur-md border-b border-slate-800 z-50 print-hidden h-14 flex items-center px-4 sm:px-6 justify-between">
+                    <div class="flex items-center text-slate-100 font-bold text-lg cursor-pointer" onclick="changeMode('dashboard')">
+                        <i class="ph-duotone ph-flask text-indigo-400 text-2xl mr-2"></i> 
+                        <span class="tracking-tight">Imbuhan<span class="text-indigo-400 font-light">Alchemy</span></span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <button onclick="toggleLang()" class="bg-slate-800 text-indigo-300 hover:text-white px-2 py-1 rounded text-xs font-bold border border-slate-700 transition-colors">
+                            🌐 ${state.lang === 'zh' ? 'EN' : '中文'}
+                        </button>
+                        <div class="flex items-center bg-slate-800 rounded-full px-3 py-1 border border-slate-700 shadow-sm text-sm font-semibold text-slate-300">
+                            <i class="ph-fill ph-lightning text-yellow-400 mr-1.5 text-base"></i> 
+                            <span id="global-score" class="text-white">${state.score}</span> XP
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-20"> 
+            `;
+
+            // ==========================================
+            // DASHBOARD
+            // ==========================================
+            if (state.currentMode === 'dashboard') {
+                const m1Done = Object.keys(state.m1Progress).length;
+                const m2Done = Object.keys(state.m2Progress).length;
+                const m3Done = Object.keys(state.m3Progress).length;
+                const totalCompleted = m1Done + m2Done + m3Done;
+                const totalQuests = config.totalM1 + config.totalM2 + config.totalM3;
+                const progressPercent = Math.round((totalCompleted / totalQuests) * 100) || 0;
+
+                html += `
+                <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 animate-fade-in-up">
+                    <div class="mb-10 text-center mt-8">
+                        <h1 class="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-3">
+                            ${t('词缀', 'Affix')} <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">${t('炼金术', 'Alchemy')}</span>
+                        </h1>
+                        <p class="text-slate-400 text-lg max-w-2xl mx-auto">${t('放弃死记硬背。用理科逻辑拆解 Kata Terbitan。原字是变量，词缀是函数。100+ 次沉浸式互动带你打通底层逻辑。', 'Abandon rote memorization. Deconstruct Kata Terbitan with scientific logic. Base words are variables, affixes are functions. 100+ interactions to master the underlying logic.')}</p>
+                    </div>
+
+                    <div class="bg-slate-800/50 rounded-2xl border border-slate-700 p-6 mb-8 flex justify-between items-center max-w-2xl mx-auto">
+                        <div class="text-slate-300">${t('实验进度', 'Experiment Progress')}</div>
+                        <div class="flex items-center">
+                            <div class="w-48 h-3 bg-slate-900 rounded-full overflow-hidden mr-4 border border-slate-700">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400" style="width: ${progressPercent}%"></div>
+                            </div>
+                            <span class="text-white font-bold">${progressPercent}%</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Module 1 -->
+                        <div class="bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-700 shadow-lg hover:border-indigo-500 transition-all duration-300 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 bg-indigo-500/20 rounded-xl flex items-center justify-center mb-5 text-indigo-400 group-hover:scale-110 transition-transform">
+                                    <i class="ph-duotone ph-flask text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">${t('炼金合成台', 'Alchemy Synthesizer')}</h3>
+                                <p class="text-slate-400 mb-8 leading-relaxed text-sm">${t('顺向思维。提供 15 个高频原字，亲手拖拽词缀合成衍生词，观察词性与词义的突变。', 'Forward Engineering. 15 base words. Combine affixes to synthesize derivatives and observe POS/meaning mutations.')}</p>
+                                <div class="text-xs text-indigo-400 font-mono mb-4 bg-indigo-900/30 px-2 py-1 rounded inline-block">M1_SYNTHESIZER</div>
+                            </div>
+                            <button onclick="changeMode('mod1')" class="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl font-semibold text-sm transition-colors flex justify-center items-center">
+                                ${t('进入实验室', 'Enter Lab')} (${m1Done}/${config.totalM1}) <i class="ph-bold ph-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Module 2 -->
+                        <div class="bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-700 shadow-lg hover:border-rose-500 transition-all duration-300 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 bg-rose-500/20 rounded-xl flex items-center justify-center mb-5 text-rose-400 group-hover:scale-110 transition-transform">
+                                    <i class="ph-duotone ph-scissors text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">${t('拆弹专家', 'Bomb Defusal')}</h3>
+                                <p class="text-slate-400 mb-8 leading-relaxed text-sm">${t('逆向工程。面对 20 个超长的 SPM 复杂词汇，像拆炸弹一样剥除前后缀，找出真正的核心原字。', 'Reverse Engineering. Strip affixes off 20 complex SPM words to find the core Kata Dasar.')}</p>
+                                <div class="text-xs text-rose-400 font-mono mb-4 bg-rose-900/30 px-2 py-1 rounded inline-block">M2_DECONSTRUCTOR</div>
+                            </div>
+                            <button onclick="changeMode('mod2')" class="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white rounded-xl font-semibold text-sm transition-colors flex justify-center items-center">
+                                ${t('执行拆除', 'Execute Defusal')} (${m2Done}/${config.totalM2}) <i class="ph-bold ph-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+
+                        <!-- Module 3 -->
+                        <div class="bg-slate-800 rounded-2xl p-6 md:p-8 border border-slate-700 shadow-lg hover:border-emerald-500 transition-all duration-300 flex flex-col justify-between group">
+                            <div>
+                                <div class="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center mb-5 text-emerald-400 group-hover:scale-110 transition-transform">
+                                    <i class="ph-duotone ph-crosshair text-2xl"></i>
+                                </div>
+                                <h3 class="text-2xl font-bold text-white mb-2">${t('语境实战', 'Context Combat')}</h3>
+                                <p class="text-slate-400 mb-8 leading-relaxed text-sm">${t('系统集成。15 道真实 SPM 填空题，利用语法线索 (如 oleh, untuk) 选出正确的派生词。', 'System Integration. 15 real SPM cloze tests. Use grammar clues to select the correct derivative.')}</p>
+                                <div class="text-xs text-emerald-400 font-mono mb-4 bg-emerald-900/30 px-2 py-1 rounded inline-block">M3_INTEGRATION</div>
+                            </div>
+                            <button onclick="changeMode('mod3')" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl font-semibold text-sm transition-colors flex justify-center items-center">
+                                ${t('考场演练', 'Exam Drill')} (${m3Done}/${config.totalM3}) <i class="ph-bold ph-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Buku Nota -->
+                        <div class="md:col-span-3 mt-4">
+                            <button onclick="changeMode('notes')" class="w-full bg-slate-900 border border-slate-700 rounded-2xl p-5 flex items-center justify-between transition-all hover:bg-slate-800 hover:border-slate-500 group shadow-lg">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-slate-800 rounded-xl flex items-center justify-center mr-5 text-slate-400 group-hover:text-cyan-400 transition-colors">
+                                        <i class="ph-duotone ph-printer text-2xl"></i>
+                                    </div>
+                                    <div class="text-left">
+                                        <h3 class="text-lg font-bold text-white">${t('词缀操作符手册 (Cheat Sheet)', 'Affix Operator Cheat Sheet')}</h3>
+                                        <p class="text-slate-400 text-sm mt-0.5">${t('打印所有词缀的基础逻辑与合成表格，建立实体复习库。', 'Print base logic and synthesis tables to build a physical review bank.')}</p>
+                                    </div>
+                                </div>
+                                <i class="ph-bold ph-arrow-right text-slate-500 group-hover:text-cyan-400 transition-colors"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center pt-8 mt-8 border-t border-slate-800 mb-8">
+                        <button onclick="clearData()" class="text-slate-500 hover:text-rose-500 font-bold text-xs flex items-center justify-center mx-auto transition-colors z-20 relative">
+                            <i class="ph-bold ph-arrows-clockwise mr-1"></i> ${t('格式化实验室数据', 'Format Lab Data')}
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // MODULE 1: ALCHEMY
+            // ==========================================
+            else if (state.currentMode === 'mod1') {
+                const item = allAlchemyData[state.m1Level];
+                const foundItems = state.m1Progress[state.m1Level] || [];
+                const isLevelComplete = foundItems.length === item.combos.length;
+
+                html += `
+                <div class="max-w-4xl mx-auto px-4 animate-fade-in-up">
+                    <div class="mb-6 flex justify-between items-center">
+                        <button onclick="changeMode('dashboard')" class="text-slate-400 hover:text-white font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> ${t('退出实验室', 'Exit Lab')}
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-[2rem] shadow-2xl border border-slate-700 overflow-hidden relative">
+                        <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                            <div class="flex items-center text-slate-300 text-sm font-bold">
+                                <i class="ph-duotone ph-flask mr-2 text-indigo-500 text-lg"></i> ${t('基础元素提取:', 'Base Element Extraction:')} <span class="text-white ml-2 text-lg">${item.base}</span>
+                            </div>
+                            <div class="text-xs font-bold bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg shadow-sm">
+                                ${t('进度:', 'Progress:')} <span class="text-indigo-400">${foundItems.length} / ${item.combos.length}</span>
+                            </div>
+                        </div>
+
+                        <div class="p-8 sm:p-12">
+                            <div class="text-center mb-10">
+                                <p class="text-slate-500 text-xs font-bold tracking-widest uppercase mb-3">${t('Kata Dasar (原字变量)', 'Kata Dasar (Base Variable)')}</p>
+                                <div class="inline-block bg-slate-900 border border-slate-700 rounded-2xl px-10 py-6 relative group">
+                                    <div class="absolute inset-0 bg-indigo-500/10 rounded-2xl blur-md group-hover:bg-indigo-500/20 transition-all pointer-events-none"></div>
+                                    <h2 class="text-5xl font-black text-white tracking-tight relative z-10">${item.base}</h2>
+                                    <p class="text-indigo-400 font-bold mt-2 relative z-10">${t(item.baseZh, item.baseEn)}</p>
+                                </div>
+                            </div>
+
+                            <p class="text-center text-slate-400 text-sm font-semibold mb-6"><i class="ph-bold ph-arrow-down mr-1"></i> ${t('点击下方试剂，注入词缀并观察突变', 'Click reagents below to inject affixes and observe mutations')}</p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                                ${item.combos.map((combo, idx) => {
+                    const isFound = foundItems.includes(idx);
+                    if (!isFound) {
+                        return `
+                                        <button onclick="handleAlchemyClick(${idx})" class="bg-slate-700 border border-slate-600 hover:border-indigo-500 hover:bg-slate-600 rounded-xl p-4 transition-all text-center group flex flex-col justify-center min-h-[100px]">
+                                            <div class="text-slate-300 font-mono text-lg font-bold group-hover:text-indigo-300">
+                                                ${combo.prefix ? `<span class="text-rose-400">${combo.prefix}</span>` : ''} 
+                                                + 
+                                                ${combo.suffix ? `<span class="text-emerald-400">${combo.suffix}</span>` : ''}
+                                                ${!combo.prefix && !combo.suffix ? '(N/A)' : ''}
+                                            </div>
+                                        </button>`;
+                    } else {
+                        return `
+                                        <div class="bg-indigo-900/40 border border-indigo-500/50 rounded-xl p-4 transition-all text-center flex flex-col justify-center min-h-[100px] animate-fade-in-up">
+                                            <h3 class="text-2xl font-black text-white mb-1 tracking-wide">${combo.result}</h3>
+                                            <div class="flex items-center justify-center gap-2 text-xs">
+                                                <span class="bg-indigo-500/30 text-indigo-300 px-2 py-0.5 rounded font-bold">${t(combo.type, combo.typeEn)}</span>
+                                                <span class="text-slate-300 font-medium">${t(combo.transZh, combo.transEn)}</span>
+                                            </div>
+                                        </div>`;
+                    }
+                }).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-700">
+                        <button onclick="navM1('prev')" class="px-5 py-2.5 rounded-xl font-bold text-slate-300 bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center" ${state.m1Level === 0 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-left mr-2"></i> ${t('上一元素', 'Prev Element')}
+                        </button>
+                        <div class="text-slate-500 font-bold text-sm tracking-widest font-mono">${state.m1Level + 1} / ${config.totalM1}</div>
+                        <button onclick="navM1('next')" class="px-5 py-2.5 rounded-xl font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center ${isLevelComplete ? 'bg-indigo-500 hover:bg-indigo-400 shadow-[0_4px_0_rgb(67,56,202)] active:translate-y-1 active:shadow-none' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}" ${state.m1Level === config.totalM1 - 1 ? 'disabled' : ''}>
+                            ${t('下一元素', 'Next Element')} <i class="ph-bold ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // MODULE 2: DECONSTRUCTOR
+            // ==========================================
+            else if (state.currentMode === 'mod2') {
+                const item = allDefuseData[state.m2Level];
+                const isComplete = state.m2Progress[state.m2Level];
+
+                html += `
+                <div class="max-w-4xl mx-auto px-4 animate-fade-in-up pb-8 ${state.showTranslation ? 'show-trans' : ''}">
+                    <div class="mb-6 flex justify-between items-center">
+                        <button onclick="changeMode('dashboard')" class="text-slate-400 hover:text-white font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> ${t('中止拆除', 'Abort Defusal')}
+                        </button>
+                        <button onclick="toggleTranslation()" class="text-rose-400 bg-rose-500/10 hover:bg-rose-500/20 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-rose-500/30 flex items-center">
+                            ${state.showTranslation ? '<i class="ph-fill ph-eye-slash mr-1.5"></i> ' + t('隐藏线索', 'Hide Clues') : '<i class="ph-fill ph-translate mr-1.5"></i> ' + t('显示含义', 'Show Meaning')}
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-[2rem] shadow-2xl border border-slate-700 overflow-hidden relative">
+                        <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                            <div class="flex items-center text-slate-300 text-sm font-bold">
+                                <i class="ph-duotone ph-scissors mr-2 text-rose-500 text-lg"></i> ${t('拆弹作业区', 'Defusal Zone')}
+                            </div>
+                        </div>
+
+                        <div class="p-8 md:p-16 text-center">
+                            <p class="text-slate-500 text-xs font-bold tracking-widest uppercase mb-4">${t('目标衍生词', 'Target Derivative Word')} (Kata Terbitan)</p>
+                            
+                            <div class="inline-block relative">
+                                <div class="absolute inset-0 bg-rose-500/10 blur-xl rounded-full"></div>
+                                <h2 class="text-4xl md:text-5xl font-black text-white tracking-wide mb-2 relative z-10 font-mono">${item.word}</h2>
+                            </div>
+                            
+                            <div class="trans-text mt-3 mb-2">
+                                <span class="bg-rose-900/50 text-rose-300 px-3 py-1 rounded text-sm font-bold border border-rose-800/50">${t('含义: ', 'Meaning: ')}${t(item.meaningZh, item.meaningEn)}</span>
+                            </div>
+
+                            <div class="mt-12 bg-slate-900/50 border border-slate-700 p-8 rounded-2xl">
+                                <p class="text-slate-400 text-sm font-medium mb-6">${t('剥除外壳，选择最核心的', 'Strip the shell, select the core')} <span class="text-white font-bold mx-1">${t('原字', 'Base Word')}</span>：</p>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    ${item.options.map(opt => {
+                    let btnClass = "border border-slate-600 bg-slate-700 hover:bg-slate-600 hover:border-rose-400 text-white py-4 rounded-xl font-bold text-xl transition-all";
+                    let icon = "";
+
+                    if (isComplete) {
+                        if (opt === item.root) {
+                            btnClass = "border border-emerald-500 bg-emerald-500/20 text-emerald-400 py-4 rounded-xl font-bold text-xl cursor-default";
+                            icon = `<i class="ph-bold ph-check-circle mr-2"></i>`;
+                        } else {
+                            btnClass = "border border-slate-700 bg-slate-800 text-slate-500 py-4 rounded-xl font-bold text-xl opacity-50 cursor-default";
+                        }
+                    }
+
+                    return `
+                                        <button onclick="handleDefuseClick('${opt}')" class="${btnClass}">
+                                            ${icon}${opt}
+                                        </button>`;
+                }).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-700">
+                        <button onclick="navM2('prev')" class="px-5 py-2.5 rounded-xl font-bold text-slate-300 bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center" ${state.m2Level === 0 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-left mr-2"></i> ${t('上一题', 'Prev')}
+                        </button>
+                        <div class="text-slate-500 font-bold text-sm tracking-widest font-mono">${state.m2Level + 1} / ${config.totalM2}</div>
+                        <button onclick="navM2('next')" class="px-5 py-2.5 rounded-xl font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center ${isComplete ? 'bg-rose-600 hover:bg-rose-500 shadow-[0_4px_0_rgb(225,29,72)] active:translate-y-1 active:shadow-none' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}" ${state.m2Level === config.totalM2 - 1 ? 'disabled' : ''}>
+                            ${t('下一题', 'Next')} <i class="ph-bold ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // MODULE 3: CLOZE (语境实战)
+            // ==========================================
+            else if (state.currentMode === 'mod3') {
+                const item = allClozeData[state.m3Level];
+                const isComplete = state.m3Progress[state.m3Level];
+
+                const sentenceHtml = item.sentence.replace('_______', isComplete
+                    ? `<span class="text-emerald-400 font-black underline underline-offset-4">${isComplete}</span>`
+                    : `<span class="inline-block w-24 border-b-4 border-slate-500 mx-2"></span>`);
+
+                html += `
+                <div class="max-w-4xl mx-auto px-4 animate-fade-in-up pb-8 ${state.showTranslation ? 'show-trans' : ''}">
+                    <div class="mb-6 flex justify-between items-center">
+                        <button onclick="changeMode('dashboard')" class="text-slate-400 hover:text-white font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> ${t('中止任务', 'Abort Mission')}
+                        </button>
+                        <button onclick="toggleTranslation()" class="text-emerald-400 bg-emerald-500/10 hover:bg-emerald-500/20 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors border border-emerald-500/30 flex items-center">
+                            ${state.showTranslation ? '<i class="ph-fill ph-eye-slash mr-1.5"></i> ' + t('隐藏翻译', 'Hide Trans') : '<i class="ph-fill ph-translate mr-1.5"></i> ' + t('语法辅助 (翻译)', 'Grammar Assist (Trans)')}
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-[2rem] shadow-2xl border border-slate-700 overflow-hidden relative">
+                        <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex justify-between items-center">
+                            <div class="flex items-center text-slate-300 text-sm font-bold">
+                                <i class="ph-duotone ph-crosshair mr-2 text-emerald-500 text-lg"></i> ${t('语境匹配', 'Context Matching')}
+                            </div>
+                        </div>
+
+                        <div class="p-8 md:p-14">
+                            <div class="bg-slate-900/50 p-8 rounded-3xl border border-slate-700 shadow-inner mb-10 text-center">
+                                <p class="text-2xl sm:text-3xl text-white font-medium leading-relaxed mb-6">
+                                    ${sentenceHtml}
+                                </p>
+                                <div class="trans-text">
+                                    <p class="text-emerald-400/80 text-base font-medium border-t border-slate-700 pt-4">${t(item.transZh, item.transEn).replace('[', '<span class="text-emerald-300 font-bold border-b border-emerald-500/50">').replace(']', '</span>')}</p>
+                                </div>
+                            </div>
+
+                            <p class="text-center text-slate-400 text-sm font-bold uppercase tracking-wider mb-6">${t('根据语法线索选择对应的词缀：', 'Select the correct affix based on grammar clues:')}</p>
+
+                            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                                ${item.options.map(opt => {
+                    let btnClass = "flex-1 border border-slate-600 bg-slate-700 hover:bg-slate-600 hover:border-emerald-400 text-white py-4 rounded-xl font-bold text-xl transition-all";
+                    let icon = "";
+
+                    if (isComplete) {
+                        if (opt === item.answer) {
+                            btnClass = "flex-1 border border-emerald-500 bg-emerald-500/20 text-emerald-400 py-4 rounded-xl font-bold text-xl cursor-default";
+                            icon = `<i class="ph-bold ph-check-circle mr-2"></i>`;
+                        } else {
+                            btnClass = "flex-1 border border-slate-700 bg-slate-800 text-slate-500 py-4 rounded-xl font-bold text-xl opacity-50 cursor-default";
+                        }
+                    }
+
+                    return `
+                                    <button onclick="handleClozeClick('${opt}')" class="${btnClass}">
+                                        ${icon}${opt}
+                                    </button>`;
+                }).join('')}
+                            </div>
+                            
+                            ${isComplete ? `
+                                <div class="mt-8 bg-emerald-900/30 border border-emerald-500/30 p-4 rounded-xl text-center animate-fade-in-up">
+                                    <p class="text-emerald-300 text-sm font-bold"><i class="ph-fill ph-lightbulb mr-1"></i> ${t('解析', 'Analysis')}: ${t(item.hintZh, item.hintEn)}</p>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-between items-center bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-700">
+                        <button onclick="navM3('prev')" class="px-5 py-2.5 rounded-xl font-bold text-slate-300 bg-slate-700 hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center" ${state.m3Level === 0 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-left mr-2"></i> ${t('上一题', 'Prev')}
+                        </button>
+                        <div class="text-slate-500 font-bold text-sm tracking-widest font-mono">${state.m3Level + 1} / ${config.totalM3}</div>
+                        <button onclick="navM3('next')" class="px-5 py-2.5 rounded-xl font-bold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center ${isComplete ? 'bg-emerald-600 hover:bg-emerald-500 shadow-[0_4px_0_rgb(5,150,105)] active:translate-y-1 active:shadow-none' : 'bg-slate-700 hover:bg-slate-600 text-slate-300'}" ${state.m3Level === config.totalM3 - 1 ? 'disabled' : ''}>
+                            ${t('下一题', 'Next')} <i class="ph-bold ph-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>`;
+            }
+
+            // ==========================================
+            // NOTES MODE (BUKU NOTA)
+            // ==========================================
+            else if (state.currentMode === 'notes') {
+                html += `
+                <div class="max-w-4xl mx-auto px-4 py-8 animate-fade-in-up bg-white print:bg-white text-slate-800">
+                    <div class="flex justify-between items-center mb-8 print-hidden">
+                        <button onclick="changeMode('dashboard')" class="text-slate-500 hover:text-slate-800 font-medium text-sm flex items-center transition-colors">
+                            <i class="ph-bold ph-arrow-left mr-1.5"></i> ${t('返回大厅', 'Back to Lobby')}
+                        </button>
+                        <button onclick="printNotes()" class="bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-5 rounded-xl text-sm font-bold flex items-center shadow-md active:scale-95 transition-all">
+                            <i class="ph-bold ph-printer mr-2"></i> ${t('打印实体讲义', 'Print Physical Notes')}
+                        </button>
+                    </div>
+
+                    <div class="p-8 md:p-14 rounded-2xl border border-slate-200 print:shadow-none print:border-none print:p-0 text-slate-800">
+                        <div class="text-center mb-12 border-b border-slate-200 pb-8 print-border-black">
+                            <h1 class="text-3xl font-extrabold text-slate-900 mb-3 print-text-black">${t('词缀操作符手册 (Imbuhan Cheat Sheet)', 'Affix Operator Cheat Sheet')}</h1>
+                            <p class="text-slate-500 text-sm">${t('理解底层规则，告别死记硬背。考前必读。', 'Understand the underlying rules. A must-read before exams.')}</p>
+                        </div>
+
+                        <!-- 基础规则表 -->
+                        <div class="mb-14 print-break-inside-avoid">
+                            <h2 class="text-xl font-bold text-slate-800 border-l-4 border-indigo-500 pl-3 mb-6 print-text-black print-border-black flex items-center"><i class="ph-fill ph-code mr-2 text-indigo-500"></i> ${t('1. 核心操作符解析', '1. Core Operator Analysis')} (Imbuhan Utama)</h2>
+                            
+                            <div class="overflow-x-auto border border-slate-200 rounded-xl print-border-black">
+                                <table class="w-full text-left border-collapse text-sm">
+                                    <thead>
+                                        <tr class="bg-slate-50 print-bg-transparent text-slate-600 border-b border-slate-200 print-text-black print-border-black">
+                                            <th class="p-4 font-bold">${t('词缀', 'Affix')} (Imbuhan)</th>
+                                            <th class="p-4 font-bold">${t('词性转换', 'POS Change')}</th>
+                                            <th class="p-4 font-bold">${t('含义逻辑', 'Logic')}</th>
+                                            <th class="p-4 font-bold">${t('示例', 'Example')} (Contoh)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="border-b border-slate-100 print-border-black">
+                                            <td class="p-4 font-black text-indigo-600 print-text-black">meN-</td>
+                                            <td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">${t('动词', 'Verb')}</span></td>
+                                            <td class="p-4 text-slate-600">${t('表示正在做/主动执行某个动作', 'Indicates an active/ongoing action')}</td>
+                                            <td class="p-4">Tulis ➔ <span class="font-bold">Menulis</span></td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100 print-border-black">
+                                            <td class="p-4 font-black text-rose-600 print-text-black">peN-</td>
+                                            <td class="p-4"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs font-bold">${t('名词', 'Noun')}</span></td>
+                                            <td class="p-4 text-slate-600">${t('表示执行该动作的“人”或“工具”', 'Indicates the "doer" or "tool"')}</td>
+                                            <td class="p-4">Tulis ➔ <span class="font-bold">Penulis</span></td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100 print-border-black">
+                                            <td class="p-4 font-black text-emerald-600 print-text-black">-an</td>
+                                            <td class="p-4"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs font-bold">${t('名词', 'Noun')}</span></td>
+                                            <td class="p-4 text-slate-600">${t('表示动作产生的“结果”或“物品”', 'Indicates "result" or "object"')}</td>
+                                            <td class="p-4">Tulis ➔ <span class="font-bold">Tulisan</span></td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100 print-border-black">
+                                            <td class="p-4 font-black text-purple-600 print-text-black">di-</td>
+                                            <td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">${t('被动词', 'Passive Verb')}</span></td>
+                                            <td class="p-4 text-slate-600">${t('表示“被”别人执行 (通常有 oleh)', 'Indicates passive action (with "oleh")')}</td>
+                                            <td class="p-4">Tulis ➔ <span class="font-bold">Ditulis</span></td>
+                                        </tr>
+                                        <tr class="border-b border-slate-100 print-border-black">
+                                            <td class="p-4 font-black text-amber-600 print-text-black">ter-</td>
+                                            <td class="p-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs font-bold">${t('动词/形容词', 'Verb/Adj')}</span></td>
+                                            <td class="p-4 text-slate-600">${t('表示“不小心发生”或“最...”', 'Indicates "accidental" or "most..."')}</td>
+                                            <td class="p-4">Jatuh ➔ <span class="font-bold">Terjatuh</span></td>
+                                        </tr>
+                                        <tr class="print-border-black">
+                                            <td class="p-4 font-black text-cyan-600 print-text-black">ke-...-an</td>
+                                            <td class="p-4"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded text-xs font-bold">${t('名词', 'Noun')}</span></td>
+                                            <td class="p-4 text-slate-600">${t('将形容词/动词包裹为“抽象名词”', 'Wraps adj/verb into abstract noun')}</td>
+                                            <td class="p-4">Cantik ➔ <span class="font-bold">Kecantikan</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- 炼金变身表 -->
+                        <div class="print-break-inside-avoid pt-8 border-t border-slate-200 print-border-black">
+                            <h2 class="text-xl font-bold text-slate-800 border-l-4 border-rose-500 pl-3 mb-6 print-text-black print-border-black flex items-center"><i class="ph-fill ph-flask mr-2 text-rose-500"></i> ${t('2. 核心原字变身图鉴', '2. Core Base Word Transformations')} (Kata Dasar)</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                ${allAlchemyData.map(item => `
+                                    <div class="border border-slate-200 p-5 rounded-xl print-border-black bg-slate-50 print-bg-white">
+                                        <div class="flex items-center justify-between mb-4 border-b border-slate-200 pb-2 print-border-black">
+                                            <h3 class="text-xl font-black text-slate-800 print-text-black">${item.base}</h3>
+                                            <span class="text-sm font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded print-bg-transparent">${t(item.baseZh, item.baseEn)}</span>
+                                        </div>
+                                        <div class="space-y-2">
+                                            ${item.combos.map(combo => `
+                                                <div class="flex justify-between items-center text-sm border-b border-slate-100 last:border-0 pb-1 last:pb-0">
+                                                    <span class="font-bold text-indigo-700 print-text-black w-24">${combo.result}</span>
+                                                    <span class="text-slate-500 text-xs w-28">${t(combo.type, combo.typeEn).split(' ')[0]}</span>
+                                                    <span class="text-slate-700 font-medium text-right flex-1">${t(combo.transZh, combo.transEn)}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            html += `</div>`;
+            app.innerHTML = html;
+        }
+
+        // Init
+        render();
+    </script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="SPM_Imbuhan_Alchemy"
+            data-module-name="Imbuhan Alchemy (词缀炼金术)"
+            data-module-url="content/SPM_Syllabus/Form5/BM/Imbuhan_Alchemy/index.html">
+    </script>
+</body>
+
+</html>
