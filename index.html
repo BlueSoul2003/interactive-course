@@ -1987,11 +1987,14 @@
     =========================================== -->
     <div id="studentModalOverlay" class="modal-overlay">
         <div class="modal-box" style="animation-duration: 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <select id="authLangSelect" onchange="changeAuthLanguage(this.value)" style="position: absolute; top: 16px; left: 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 4px 8px; font-size: 0.85rem; outline: none; cursor:pointer; z-index:10;">
+                <option value="en" style="color: black;">EN</option>
+                <option value="ms" style="color: black;">MS</option>
+                <option value="zh" style="color: black;">中文</option>
+            </select>
             <button class="modal-close" onclick="closeStudentModal()">&times;</button>
-            <h2 style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px;">Student
-                Dashboard</h2>
-            <div class="modal-subtitle" style="margin-bottom: 25px;">Manage student profiles and resume progress across
-                modules</div>
+            <h2 id="authTitle" style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px; margin-top: 25px;">Student Dashboard</h2>
+            <div id="authSubtitle" class="modal-subtitle" style="margin-bottom: 25px;">Manage student profiles and resume progress across modules</div>
 
             <div id="authFormArea"
                 style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
@@ -2007,18 +2010,18 @@
                     
                     <div id="registerFields" style="display: none; flex-direction: column; gap: 10px;">
                         <select id="authRole" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
-                            <option value="">Account Role...</option>
-                            <option value="Student">Student</option>
-                            <option value="Teacher">Teacher</option>
-                            <option value="Parent">Parent</option>
-                            <option value="Admin">Admin</option>
+                            <option value="" id="optRolePlaceholder">Account Role...</option>
+                            <option value="Student" id="optRoleStudent">Student</option>
+                            <option value="Teacher" id="optRoleTeacher">Teacher</option>
+                            <option value="Parent" id="optRoleParent">Parent</option>
+                            <option value="Admin" id="optRoleAdmin">Admin</option>
                         </select>
                         <input type="text" id="authFullName" placeholder="Full Name..."
                             style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
                         <input type="tel" id="authPhone" placeholder="Phone Number..."
                             style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
                         <select id="authSyllabus" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
-                            <option value="">Select Syllabus...</option>
+                            <option value="" id="optSyllabusPlaceholder">Select Syllabus...</option>
                             <option value="SPM">SPM</option>
                             <option value="UEC">UEC</option>
                             <option value="IGCSE">IGCSE</option>
@@ -2028,10 +2031,10 @@
                             <input type="number" id="authAge" placeholder="Age..." min="5" max="100"
                                 style="width: 40%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
                             <select id="authGender" style="width: 60%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
-                                <option value="">Gender...</option>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
+                                <option value="" id="optGenderPlaceholder">Gender...</option>
+                                <option value="Male" id="optGenderMale">Male</option>
+                                <option value="Female" id="optGenderFemale">Female</option>
+                                <option value="Other" id="optGenderOther">Other</option>
                             </select>
                         </div>
                     </div>
@@ -2067,6 +2070,68 @@
     <script src="js/auth-access.js"></script>
     <script src="js/progress-tracker.js"></script>
     <script>
+        // ── i18n Translations ────────────────────────
+        const authTranslations = {
+            en: {
+                title: "Student Dashboard", subtitle: "Manage student profiles and resume progress across modules",
+                tabLogin: "Login", tabRegister: "Register",
+                emailPlaceholder: "Email address...", passwordPlaceholder: "Password...",
+                rolePlaceholder: "Account Role...", roleStudent: "Student", roleTeacher: "Teacher", roleParent: "Parent", roleAdmin: "Admin",
+                namePlaceholder: "Full Name...", phonePlaceholder: "Phone Number...", syllabusPlaceholder: "Select Syllabus...",
+                agePlaceholder: "Age...", genderPlaceholder: "Gender...", genderMale: "Male", genderFemale: "Female", genderOther: "Other",
+                btnSubmitLogin: "Login", btnSubmitRegister: "Create Account"
+            },
+            ms: {
+                title: "Papan Pemuka", subtitle: "Urus profil dan teruskan pembelajaran untuk modul",
+                tabLogin: "Log Masuk", tabRegister: "Daftar",
+                emailPlaceholder: "Alamat emel...", passwordPlaceholder: "Kata laluan...",
+                rolePlaceholder: "Peranan Akaun...", roleStudent: "Pelajar", roleTeacher: "Guru", roleParent: "Ibu Bapa", roleAdmin: "Pentadbir",
+                namePlaceholder: "Nama Penuh...", phonePlaceholder: "Nombor Telefon...", syllabusPlaceholder: "Pilih Silibus...",
+                agePlaceholder: "Umur...", genderPlaceholder: "Jantina...", genderMale: "Lelaki", genderFemale: "Perempuan", genderOther: "Lain-lain",
+                btnSubmitLogin: "Log Masuk", btnSubmitRegister: "Buat Akaun"
+            },
+            zh: {
+                title: "账户主页", subtitle: "管理您的个人资料并继续学习进度",
+                tabLogin: "登录", tabRegister: "注册",
+                emailPlaceholder: "电子邮箱...", passwordPlaceholder: "密码...",
+                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理员",
+                namePlaceholder: "全名...", phonePlaceholder: "电话号码...", syllabusPlaceholder: "选择课程大纲...",
+                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "男", genderFemale: "女", genderOther: "其他",
+                btnSubmitLogin: "登录", btnSubmitRegister: "创建账户"
+            }
+        };
+
+        function changeAuthLanguage(lang) {
+            const t = authTranslations[lang];
+            if(!t) return;
+            document.getElementById('authTitle').innerText = t.title;
+            document.getElementById('authSubtitle').innerText = t.subtitle;
+            document.getElementById('tabLogin').innerText = t.tabLogin;
+            document.getElementById('tabRegister').innerText = t.tabRegister;
+            document.getElementById('authEmail').placeholder = t.emailPlaceholder;
+            document.getElementById('authPassword').placeholder = t.passwordPlaceholder;
+            document.getElementById('optRolePlaceholder').innerText = t.rolePlaceholder;
+            document.getElementById('optRoleStudent').innerText = t.roleStudent;
+            document.getElementById('optRoleTeacher').innerText = t.roleTeacher;
+            document.getElementById('optRoleParent').innerText = t.roleParent;
+            document.getElementById('optRoleAdmin').innerText = t.roleAdmin;
+            document.getElementById('authFullName').placeholder = t.namePlaceholder;
+            document.getElementById('authPhone').placeholder = t.phonePlaceholder;
+            document.getElementById('optSyllabusPlaceholder').innerText = t.syllabusPlaceholder;
+            document.getElementById('authAge').placeholder = t.agePlaceholder;
+            document.getElementById('optGenderPlaceholder').innerText = t.genderPlaceholder;
+            document.getElementById('optGenderMale').innerText = t.genderMale;
+            document.getElementById('optGenderFemale').innerText = t.genderFemale;
+            document.getElementById('optGenderOther').innerText = t.genderOther;
+            
+            const submitBtn = document.getElementById('submitAuthBtn');
+            if(window.currentAuthMode === 'login') {
+                submitBtn.innerText = t.btnSubmitLogin;
+            } else {
+                submitBtn.innerText = t.btnSubmitRegister;
+            }
+        }
+
         // ── Auth & Dashboard Logic (Supabase-powered RBAC) ────────────────────────
 
         async function updateAuthUI() {
@@ -2111,20 +2176,21 @@
             
             msgEl.innerText = "";
             
+            const curLang = document.getElementById('authLangSelect').value || 'en';
             if(mode === 'login') {
                 tabLogin.style.color = "white";
                 tabLogin.style.borderBottomColor = "var(--sub-english)";
                 tabRegister.style.color = "var(--text-secondary)";
                 tabRegister.style.borderBottomColor = "transparent";
                 registerFields.style.display = "none";
-                submitBtn.innerText = "Login";
+                submitBtn.innerText = authTranslations[curLang].btnSubmitLogin;
             } else {
                 tabRegister.style.color = "white";
                 tabRegister.style.borderBottomColor = "var(--sub-english)";
                 tabLogin.style.color = "var(--text-secondary)";
                 tabLogin.style.borderBottomColor = "transparent";
                 registerFields.style.display = "flex";
-                submitBtn.innerText = "Create Account";
+                submitBtn.innerText = authTranslations[curLang].btnSubmitRegister;
             }
         }
 
