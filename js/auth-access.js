@@ -69,16 +69,25 @@ const AuthAccess = {
         return result;
     },
 
-    async signUp(email, password) {
+    async signUp(email, password, profileData = null) {
         const result = await window.supabaseClient.auth.signUp({ email, password });
         // Create initial profile profile row on signup
         if (result.data?.user) {
-             await window.supabaseClient.from('user_profiles').upsert([{ 
+             const profileRecord = { 
                   id: result.data.user.id, 
                   email: email, 
                   tier: 'free', 
                   tier_level: 0 
-             }]);
+             };
+             if (profileData) {
+                  profileRecord.fullname = profileData.fullname;
+                  profileRecord.phone = profileData.phone;
+                  profileRecord.syllabus = profileData.syllabus;
+                  profileRecord.age = profileData.age;
+                  profileRecord.gender = profileData.gender;
+                  profileRecord.role = profileData.role;
+             }
+             await window.supabaseClient.from('user_profiles').upsert([profileRecord]);
         }
         return result;
     },

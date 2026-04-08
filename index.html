@@ -1995,18 +1995,50 @@
 
             <div id="authFormArea"
                 style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
-                <label
-                    style="display:block; margin-bottom: 10px; font-size: 0.95rem; font-weight: 600; color: var(--text-secondary);">Login or Register (Secure RBAC)</label>
+                <div style="display:flex; justify-content:center; gap:30px; margin-bottom:20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+                    <button id="tabLogin" onclick="toggleAuthMode('login')" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold; border-bottom: 2px solid var(--sub-english);">Login</button>
+                    <button id="tabRegister" onclick="toggleAuthMode('register')" style="background:none; border:none; color:var(--text-secondary); font-size:1.1rem; cursor:pointer; font-weight:bold; border-bottom: 2px solid transparent;">Register</button>
+                </div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <input type="email" id="authEmail" placeholder="Email address..."
                         style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
                     <input type="password" id="authPassword" placeholder="Password..."
                         style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                    
+                    <div id="registerFields" style="display: none; flex-direction: column; gap: 10px;">
+                        <select id="authRole" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
+                            <option value="">Account Role...</option>
+                            <option value="Student">Student</option>
+                            <option value="Teacher">Teacher</option>
+                            <option value="Parent">Parent</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <input type="text" id="authFullName" placeholder="Full Name..."
+                            style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <input type="tel" id="authPhone" placeholder="Phone Number..."
+                            style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <select id="authSyllabus" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
+                            <option value="">Select Syllabus...</option>
+                            <option value="SPM">SPM</option>
+                            <option value="UEC">UEC</option>
+                            <option value="IGCSE">IGCSE</option>
+                            <option value="Singapore Syllabus">Singapore Syllabus</option>
+                        </select>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="authAge" placeholder="Age..." min="5" max="100"
+                                style="width: 40%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                            <select id="authGender" style="width: 60%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
+                                <option value="">Gender...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
                     <div style="display: flex; gap: 10px; margin-top: 10px;">
-                        <button id="loginBtn" onclick="handleAuth('login')"
-                            style="flex-grow: 1; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: var(--sub-english); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Login</button>
-                        <button id="registerBtn" onclick="handleAuth('register')"
-                            style="flex-grow: 1; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; background: transparent; color: var(--text-primary); border: 1px solid rgba(255,255,255,0.2); cursor: pointer; font-weight: 600; transition: all 0.2s;">Register</button>
+                        <button id="submitAuthBtn" onclick="handleAuth()"
+                            style="flex-grow: 1; padding: 12px 20px; border-radius: 8px; font-size: 1rem; background: var(--sub-english); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Login</button>
                     </div>
                     <div id="authMessage" style="color: #ef4444; font-size: 0.85rem; text-align: center; margin-top: 10px; min-height: 20px;"></div>
                 </div>
@@ -2067,7 +2099,36 @@
             }
         }
 
-        async function handleAuth(action) {
+        let currentAuthMode = 'login';
+        
+        function toggleAuthMode(mode) {
+            currentAuthMode = mode;
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const registerFields = document.getElementById('registerFields');
+            const submitBtn = document.getElementById('submitAuthBtn');
+            const msgEl = document.getElementById('authMessage');
+            
+            msgEl.innerText = "";
+            
+            if(mode === 'login') {
+                tabLogin.style.color = "white";
+                tabLogin.style.borderBottomColor = "var(--sub-english)";
+                tabRegister.style.color = "var(--text-secondary)";
+                tabRegister.style.borderBottomColor = "transparent";
+                registerFields.style.display = "none";
+                submitBtn.innerText = "Login";
+            } else {
+                tabRegister.style.color = "white";
+                tabRegister.style.borderBottomColor = "var(--sub-english)";
+                tabLogin.style.color = "var(--text-secondary)";
+                tabLogin.style.borderBottomColor = "transparent";
+                registerFields.style.display = "flex";
+                submitBtn.innerText = "Create Account";
+            }
+        }
+
+        async function handleAuth() {
             const email = document.getElementById('authEmail').value.trim();
             const password = document.getElementById('authPassword').value.trim();
             const msgEl = document.getElementById('authMessage');
@@ -2077,14 +2138,30 @@
                 return;
             }
             
-            msgEl.innerText = "Loading...";
+            let profileData = null;
+            if (currentAuthMode === 'register') {
+                const fullname = document.getElementById('authFullName').value.trim();
+                const phone = document.getElementById('authPhone').value.trim();
+                const syllabus = document.getElementById('authSyllabus').value;
+                const age = document.getElementById('authAge').value;
+                const gender = document.getElementById('authGender').value;
+                const role = document.getElementById('authRole').value;
+                
+                if(!fullname || !phone || !syllabus || !age || !gender || !role) {
+                    msgEl.innerText = "All demographic fields and role are required.";
+                    return;
+                }
+                profileData = { fullname, phone, syllabus, age: parseInt(age), gender, role };
+            }
+            
+            msgEl.innerText = currentAuthMode === 'login' ? "Logging in..." : "Creating account...";
             msgEl.style.color = "var(--text-secondary)";
             
             let result;
-            if (action === 'login') {
+            if (currentAuthMode === 'login') {
                 result = await window.AuthAccess.signIn(email, password);
             } else {
-                result = await window.AuthAccess.signUp(email, password);
+                result = await window.AuthAccess.signUp(email, password, profileData);
             }
 
             if(result.error) {
