@@ -71,13 +71,13 @@ const AuthAccess = {
 
     async signUp(email, password, profileData = null) {
         const result = await window.supabaseClient.auth.signUp({ email, password });
-        // Create initial profile profile row on signup
+        // Create initial profile record on signup
         if (result.data?.user) {
              const profileRecord = { 
                   id: result.data.user.id, 
                   email: email, 
-                  tier: 'free', 
-                  tier_level: 0 
+                  tier: 'member', 
+                  tier_level: 1 
              };
              if (profileData) {
                   profileRecord.fullname = profileData.fullname;
@@ -86,6 +86,12 @@ const AuthAccess = {
                   profileRecord.age = profileData.age;
                   profileRecord.gender = profileData.gender;
                   profileRecord.role = profileData.role;
+                  
+                  // Assign starting bundle based on their signed-up syllabus/year
+                  if (profileData.syllabus) {
+                      // Ensure it's formatted as an array for the DB
+                      profileRecord.unlocked_modules = [profileData.syllabus];
+                  }
              }
              await window.supabaseClient.from('user_profiles').upsert([profileRecord]);
         }
@@ -134,6 +140,7 @@ const AuthAccess = {
                 moduleId = parts[parts.length - 2]; 
             }
             
+            let bundle = card.dataset.bundle;
             let hasAccess = false;
             
             if (isAdmin) {
@@ -145,8 +152,11 @@ const AuthAccess = {
                     hasAccess = true;
                 }
             } else {
-                // Logged in users check their DB array
-                hasAccess = unlockedModules.includes(moduleId) || unlockedModules.includes('*') || unlockedModules.includes(syllabus);
+                // Logged in users check their DB array for moduleId, full-admin '*', general syllabus, or specific bundle
+                hasAccess = unlockedModules.includes(moduleId) || 
+                            unlockedModules.includes('*') || 
+                            unlockedModules.includes(syllabus) || 
+                            (bundle && unlockedModules.includes(bundle));
             }
             
             if (hasAccess) {
