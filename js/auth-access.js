@@ -114,9 +114,10 @@ const AuthAccess = {
 
     // ── PIN Redemption ────────────────────────────────────────────────────────
     // Returns: { success, newly_unlocked: string[], all_unlocked: string[] }
-    async redeemPin(pinCode) {
+    async redeemPin(pinCode, targetModule = null) {
         const { data, error } = await window.supabaseClient.rpc('redeem_activation_pin', {
-            p_pin_code: pinCode
+            p_pin_code: pinCode,
+            p_target_module: targetModule
         });
         if (error) throw error;
         return data; // JSONB from the upgraded stored procedure
@@ -194,6 +195,7 @@ const AuthAccess = {
                     e.stopPropagation();
                     const modal = document.getElementById('pin-topup-modal');
                     if (modal) {
+                        modal.setAttribute('data-target-module', moduleId || '');
                         modal.style.display = 'flex';
                     } else {
                         alert('🔒 This module is locked. Enter your activation PIN to unlock!');

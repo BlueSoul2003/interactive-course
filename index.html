@@ -2325,7 +2325,8 @@
                     throw new Error("Auth system not loaded or connected.");
                 }
                 
-                await window.AuthAccess.redeemPin(pinCode);
+                const targetModule = document.getElementById('pin-topup-modal').getAttribute('data-target-module');
+                await window.AuthAccess.redeemPin(pinCode, targetModule);
                 
                 alert("Success! Module Unlocked.");
                 document.getElementById('pin-topup-modal').style.display='none';
