@@ -24,6 +24,23 @@ CREATE TABLE IF NOT EXISTS public.activation_pins (
 
 ALTER TABLE public.activation_pins ENABLE ROW LEVEL SECURITY;
 
+-- 2b. Make sure Admins can create and view PINs
+CREATE POLICY "Admins can insert PINs" ON public.activation_pins
+FOR INSERT WITH CHECK (
+  EXISTS (
+    SELECT 1 FROM public.user_profiles
+    WHERE id = auth.uid() AND tier = 'admin'
+  )
+);
+
+CREATE POLICY "Admins can view PINs" ON public.activation_pins
+FOR SELECT USING (
+  EXISTS (
+    SELECT 1 FROM public.user_profiles
+    WHERE id = auth.uid() AND tier = 'admin'
+  )
+);
+
 -- 3. Stored Procedure (RPC) to atomically redeem a PIN
 CREATE OR REPLACE FUNCTION redeem_activation_pin(p_pin_code VARCHAR)
 RETURNS TEXT[]
