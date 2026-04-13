@@ -71,7 +71,8 @@ const AuthAccess = {
             return false;
         }
 
-        container.innerHTML = '';
+        // Do not clear the container here, as the module might have raw static HTML layouts 
+        // that depend on the data returned. The callback handles the injection.
         renderCallback(moduleData.secure_data);
         return true;
     },
