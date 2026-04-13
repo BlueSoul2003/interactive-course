@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosystems: Core Concepts & Assessment</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Hide scrollbar for a cleaner app-like feel */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        body {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        canvas {
+            background: radial-gradient(circle, #1f2937 0%, #111827 100%);
+        }
+
+        /* Custom radio button styling */
+        input[type="radio"] {
+            accent-color: #3b82f6;
+        }
+        
+        .home-btn-fixed { position: fixed; bottom: 24px; left: 24px; z-index: 99999; background: rgba(30, 41, 59, 0.9); color: white; padding: 10px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px); display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); transition: all 0.3s; }
+        .home-btn-fixed:hover { background: rgba(15, 23, 42, 1); border-color: rgba(99, 102, 241, 0.7); transform: scale(1.05); }
+    </style>
+</head>
+
+<body
+    class="bg-gray-900 text-gray-100 font-sans h-screen flex flex-col overflow-hidden selection:bg-blue-500 selection:text-white">
+
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+    <!-- Global Header & Controls -->
+    <header
+        class="bg-gray-800 border-b border-gray-700 p-4 flex flex-col md:flex-row justify-between items-center shadow-lg z-20">
+        <div class="flex items-center gap-3 mb-4 md:mb-0">
+            <div
+                class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/30">
+                E</div>
+            <h1 class="text-xl font-bold tracking-wider text-gray-100">IGCSE <span
+                    class="text-blue-400">ECOSYSTEMS</span></h1>
+        </div>
+
+        <!-- Tri-Mode Switcher -->
+        <div class="flex bg-gray-900 rounded-lg p-1 border border-gray-700 shadow-inner">
+            <button onclick="switchMode('notes')" id="btn-notes"
+                class="px-4 py-2 rounded-md text-sm font-medium transition-all bg-gray-700 text-white shadow">📖 Lesson
+                Notes</button>
+            <button onclick="switchMode('lab')" id="btn-lab"
+                class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 hover:text-gray-200 transition-all">🔬
+                Interactive Lab</button>
+            <button onclick="switchMode('quiz')" id="btn-quiz"
+                class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 hover:text-gray-200 transition-all">📝
+                Concept Quiz</button>
+        </div>
+
+        <!-- Global Controls -->
+        <div class="flex items-center gap-3 mt-4 md:mt-0">
+            <label class="flex items-center cursor-pointer gap-2 mr-2 group"
+                title="Visualize invisible energy and mass flow">
+                <span class="text-sm font-medium text-gray-300 group-hover:text-cyan-400 transition-colors">Vector
+                    Vision</span>
+                <div class="relative">
+                    <input type="checkbox" id="vector-toggle" class="sr-only" onchange="toggleVectorVision()" checked>
+                    <div class="block bg-gray-700 w-10 h-6 rounded-full border border-gray-600 transition-colors"
+                        id="vector-bg"></div>
+                    <div class="dot absolute left-1 top-1 bg-cyan-400 w-4 h-4 rounded-full transition-transform transform translate-x-4 shadow-[0_0_8px_rgba(34,211,238,0.8)]"
+                        id="vector-dot"></div>
+                </div>
+            </label>
+            <button onclick="togglePlayPause()" id="btn-play"
+                class="bg-gray-700 hover:bg-gray-600 text-white p-2 rounded-lg transition border border-gray-600">
+                ⏸ Pause
+            </button>
+            <button onclick="resetSimulation()"
+                class="bg-red-900/50 hover:bg-red-800 text-red-300 hover:text-red-100 p-2 rounded-lg transition border border-red-800/50">
+                ↺ Reset
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow relative flex overflow-hidden">
+
+        <!-- 1. Lesson Notes Mode -->
+        <section id="view-notes" class="w-full h-full p-8 overflow-hidden max-w-5xl mx-auto flex flex-col">
+            <h2 class="text-3xl font-bold mb-6 text-blue-400 border-b border-gray-700 pb-2 shrink-0">Chapter 4:
+                Ecosystems (Complete Notes)</h2>
+
+            <!-- Notes Sub-Navigation (Tabs) -->
+            <div class="flex flex-wrap gap-2 mb-6 shrink-0 border-b border-gray-700 pb-4">
+                <button onclick="switchNoteTab('4.1')" id="note-btn-4.1"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-blue-600 text-white shadow-md transition">4.1:
+                    Sonoran Desert</button>
+                <button onclick="switchNoteTab('4.2')" id="note-btn-4.2"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-gray-800 text-gray-400 hover:bg-gray-700 transition">4.2:
+                    Different Ecosystems</button>
+                <button onclick="switchNoteTab('4.3')" id="note-btn-4.3"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-gray-800 text-gray-400 hover:bg-gray-700 transition">4.3:
+                    Intruders</button>
+                <button onclick="switchNoteTab('4.4')" id="note-btn-4.4"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-gray-800 text-gray-400 hover:bg-gray-700 transition">4.4:
+                    Bioaccumulation</button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="overflow-y-auto flex-grow pr-4 space-y-6 pb-20">
+
+                <!-- Tab 4.1 -->
+                <div id="note-content-4.1" class="bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg block">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="w-4 h-4 rounded-full bg-green-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]"></span>
+                        4.1: Habitats, Interactions & The Sonoran Desert
+                    </h3>
+                    <div class="space-y-6 text-gray-300 text-lg leading-relaxed">
+                        <p><strong class="text-blue-300 font-semibold uppercase tracking-wide">Core Concept:</strong>
+                            Understanding the fundamental building blocks of an ecosystem, focusing on habitats and the
+                            interactions between organisms.</p>
+
+                        <div class="p-5 bg-gray-900/50 rounded-lg border border-gray-700">
+                            <h4 class="text-white font-bold mb-3 border-b border-gray-700 pb-2">IGCSE Key Definitions
+                                (Memorize these!):</h4>
+                            <ul class="space-y-3">
+                                <li><span class="text-green-400 font-bold">Species:</span> A group of organisms with
+                                    similar characteristics that can interbreed to produce fertile offspring.</li>
+                                <li><span class="text-green-400 font-bold">Population:</span> All the organisms of
+                                    <em>one specific species</em> living in the same area at the same time.</li>
+                                <li><span class="text-green-400 font-bold">Community:</span> All the different
+                                    populations of <em>different species</em> living and interacting in the same area.
+                                </li>
+                                <li><span class="text-green-400 font-bold">Habitat:</span> The specific physical
+                                    environment or place where an organism lives.</li>
+                                <li><span class="text-green-400 font-bold">Ecosystem:</span> A self-contained,
+                                    interacting system made up of a community of living organisms (biotic) and their
+                                    non-living physical environment (abiotic).</li>
+                            </ul>
+                        </div>
+
+                        <p><strong class="text-blue-300 font-semibold uppercase tracking-wide">System
+                                Variables:</strong> Ecosystems are governed by two main factors:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><strong>Biotic Factors (Living):</strong> Predation, competition for mates/food,
+                                disease, and grazing.</li>
+                            <li><strong>Abiotic Factors (Non-living):</strong> Light intensity, temperature, water
+                                availability, soil pH, and oxygen concentration.</li>
+                        </ul>
+
+                        <p class="p-4 bg-gray-900 rounded-lg border-l-4 border-blue-500"><strong
+                                class="text-blue-400 font-semibold uppercase tracking-wide">Case Study: The Sonoran
+                                Desert.</strong> This is a classic example of a unique, fragile ecosystem. Due to
+                            extreme abiotic factors (low water, high heat), species are highly specialized. By looking
+                            at the interactions, scientists can predict how the loss of just one node in this network
+                            (e.g., a specific pollinating bat) could negatively cause a cascade failure affecting many
+                            other native cactus species.</p>
+                    </div>
+                </div>
+
+                <!-- Tab 4.2 -->
+                <div id="note-content-4.2" class="bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg hidden">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="w-4 h-4 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)]"></span>
+                        4.2: Ecosystem Diversity & Energy Flow
+                    </h3>
+                    <div class="space-y-6 text-gray-300 text-lg leading-relaxed">
+                        <p><strong class="text-cyan-300 font-semibold uppercase tracking-wide">Core Concept:</strong>
+                            Recognizing how energy is captured and transferred through highly complex networks (Food
+                            Webs).</p>
+
+                        <div class="p-5 bg-gray-900/50 rounded-lg border border-gray-700">
+                            <h4 class="text-white font-bold mb-3 border-b border-gray-700 pb-2">Trophic Levels (Feeding
+                                Positions):</h4>
+                            <ul class="space-y-3">
+                                <li><span class="text-cyan-400 font-bold">1. Producers:</span> Usually plants. They
+                                    convert light energy into chemical energy via photosynthesis. They are the energy
+                                    source for the whole system.</li>
+                                <li><span class="text-cyan-400 font-bold">2. Primary Consumers:</span> Herbivores that
+                                    eat the producers.</li>
+                                <li><span class="text-cyan-400 font-bold">3. Secondary/Tertiary Consumers:</span>
+                                    Carnivores/Predators that eat other consumers.</li>
+                                <li><span class="text-cyan-400 font-bold">4. Decomposers:</span> Bacteria and fungi that
+                                    break down dead organic matter, recycling nutrients (but not energy) back into the
+                                    soil.</li>
+                            </ul>
+                        </div>
+
+                        <p><strong class="text-cyan-300 font-semibold uppercase tracking-wide">Food Chains vs. Food
+                                Webs:</strong> A food chain is a simple linear diagram showing energy flow (arrows mean
+                            "is eaten by" or "energy transfers to"). A food web is a network of interconnected food
+                            chains, showing the complex reality of an ecosystem.</p>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="p-4 bg-gray-900 rounded-lg border-l-4 border-cyan-500">
+                                <strong class="text-cyan-400 font-semibold uppercase tracking-wide">Pyramid of
+                                    Numbers:</strong>
+                                <p class="text-sm mt-2">Shows the total number of individual organisms at each trophic
+                                    level. (Note: Can be inverted! E.g., 1 giant Oak Tree feeds 10,000 tiny
+                                    caterpillars).</p>
+                            </div>
+                            <div class="p-4 bg-gray-900 rounded-lg border-l-4 border-teal-500">
+                                <strong class="text-teal-400 font-semibold uppercase tracking-wide">Pyramid of
+                                    Biomass:</strong>
+                                <p class="text-sm mt-2">Shows the total dry mass of organisms at each level. This is
+                                    <em>always</em> a true pyramid shape because mass/energy is always lost as you go
+                                    up.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4.3 -->
+                <div id="note-content-4.3" class="bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg hidden">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="w-4 h-4 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span> 4.3:
+                        Intruders & Competition Dynamics
+                    </h3>
+                    <div class="space-y-6 text-gray-300 text-lg leading-relaxed">
+                        <p><strong class="text-red-300 font-semibold uppercase tracking-wide">Core Concept:</strong>
+                            Understanding the severe impact of introducing new variables (invasive species) into a
+                            naturally balanced system.</p>
+
+                        <p><strong class="text-red-300 font-semibold uppercase tracking-wide">The Physics of
+                                Competition:</strong> Ecosystems have a limited carrying capacity (limited resources).
+                            When an intruder arrives, it alters the dynamic equilibrium. This leads to intense
+                            competition:</p>
+                        <ul
+                            class="list-disc list-inside ml-4 space-y-1 bg-gray-900/50 p-4 rounded-lg border border-gray-700">
+                            <li><strong>Intraspecific Competition:</strong> Competition between individuals of the
+                                <em>same</em> species (e.g., two lions fighting for territory).</li>
+                            <li><strong>Interspecific Competition:</strong> Competition between <em>different</em>
+                                species (e.g., invasive Buffelgrass competing with native desert shrubs for water).
+                                Invasive species usually win because they lack natural predators in the new environment.
+                            </li>
+                        </ul>
+
+                        <div class="p-4 bg-gray-900 rounded-lg border-l-4 border-red-500 space-y-3 mt-4">
+                            <strong class="text-red-400 font-semibold uppercase tracking-wide">Classic Exam
+                                Examples:</strong>
+                            <ul class="list-disc list-inside space-y-3 ml-2">
+                                <li><strong>Resource Short-Circuit (Buffelgrass):</strong> An invasive plant that grows
+                                    in dense patches. It has a structurally lower "resistance" to resource absorption,
+                                    aggressively taking water and nutrients from the soil. This effectively starves the
+                                    native desert plants.</li>
+                                <li><strong>Toxic Perturbation (Cane Toads):</strong> Introduced to Australia to eat
+                                    beetles, they became a highly toxic invasive pest. Native predators (like the
+                                    northern quoll) had no evolutionary immunity. Conservationists must feed quolls
+                                    "cane toad sausages" to condition them to avoid eating the real, deadly toads.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 4.4 -->
+                <div id="note-content-4.4" class="bg-gray-800 p-8 rounded-xl border border-gray-700 shadow-lg hidden">
+                    <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="w-4 h-4 rounded-full bg-purple-500 shadow-[0_0_10px_rgba(168,85,247,0.8)]"></span>
+                        4.4: Bioaccumulation & Energy Inefficiency
+                    </h3>
+                    <div class="space-y-6 text-gray-300 text-lg leading-relaxed">
+                        <p><strong class="text-purple-300 font-semibold uppercase tracking-wide">Core Concept:</strong>
+                            The thermodynamic inefficiency of ecosystems and how it leads to the dangerous magnification
+                            of indestructible toxins.</p>
+
+                        <div class="p-5 bg-gray-900/50 rounded-lg border border-gray-700">
+                            <h4 class="text-white font-bold mb-3 border-b border-gray-700 pb-2">The 10% Rule (Why Energy
+                                is Lost):</h4>
+                            <p class="mb-3 text-sm">As energy moves up the food chain, approximately <strong>90% of the
+                                    energy is lost</strong> at each stage. Only about 10% is stored as flesh/biomass for
+                                the next predator. This happens because:</p>
+                            <ul class="list-disc list-inside space-y-1 text-sm text-gray-400">
+                                <li>Energy is dissipated as <strong>heat</strong> during cellular respiration.</li>
+                                <li>Energy is used for life processes (movement, hunting, keeping warm).</li>
+                                <li>Not all of the organism is eaten (bones, fur, roots).</li>
+                                <li>Energy is lost through excretion (urine/feces).</li>
+                            </ul>
+                            <p class="mt-3 text-sm italic text-purple-300">This is why food chains rarely exceed 4 or 5
+                                trophic levels—there simply isn't enough energy left to sustain another top predator!
+                            </p>
+                        </div>
+
+                        <p><strong class="text-purple-300 font-semibold uppercase tracking-wide">Bioaccumulation vs
+                                Biomagnification:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><strong>Bioaccumulation:</strong> The build-up of a toxin in a <em>single organism</em>
+                                over its lifetime because the chemical cannot be broken down or excreted.</li>
+                            <li><strong>Biomagnification:</strong> Because energy/biomass shrinks by 90% at each level
+                                (due to the 10% rule), but the indestructible toxin mass remains constant, the
+                                <em>concentration density</em> of the toxin spikes drastically at the top of the food
+                                chain.</li>
+                        </ul>
+
+                        <div class="p-4 bg-gray-900 rounded-lg border-l-4 border-purple-500 space-y-3 mt-4">
+                            <strong class="text-purple-400 font-semibold uppercase tracking-wide">Pollutant Case
+                                Studies:</strong>
+                            <ul class="list-disc list-inside space-y-2 ml-2">
+                                <li><strong>DDT:</strong> A pesticide that enters the water, is absorbed by plankton,
+                                    eaten by fish, and magnifies in eagles, causing their eggshells to thin and break
+                                    before hatching.</li>
+                                <li><strong>Microplastics:</strong> Pieces of plastic &lt; 5mm. They enter the food web
+                                    at the base and cannot be digested, filling up the stomachs of top predators.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 2. Interactive Lab Mode -->
+        <section id="view-lab" class="w-full h-full relative hidden">
+            <!-- Lab Sub-Navigation -->
+            <div
+                class="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 flex gap-2 bg-gray-800/80 backdrop-blur-sm p-1 rounded-full border border-gray-700">
+                <button onclick="setLabModule(1)" id="mod-1-btn"
+                    class="px-4 py-1.5 rounded-full text-sm font-bold bg-blue-600 text-white shadow-md transition">1.
+                    The Web</button>
+                <button onclick="setLabModule(2)" id="mod-2-btn"
+                    class="px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition">2. The
+                    Short-Circuit</button>
+                <button onclick="setLabModule(3)" id="mod-3-btn"
+                    class="px-4 py-1.5 rounded-full text-sm font-bold text-gray-400 hover:text-white transition">3. The
+                    Funnel</button>
+            </div>
+
+            <!-- Canvas Container -->
+            <canvas id="sim-canvas" class="w-full h-full block"></canvas>
+
+            <!-- Live HUD overlay -->
+            <div
+                class="absolute top-6 right-6 w-72 bg-gray-900/90 backdrop-blur-md border border-gray-700 rounded-xl p-4 shadow-2xl pointer-events-none z-10">
+                <div class="flex items-center justify-between mb-2 border-b border-gray-700 pb-2">
+                    <h4 class="text-blue-400 font-bold uppercase tracking-wider text-xs">Live Telemetry</h4>
+                    <span id="hud-status"
+                        class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-500/20 text-green-400 border border-green-500/30">STABLE</span>
+                </div>
+                <div id="hud-content" class="text-xs font-mono text-gray-300 space-y-1.5">
+                    <!-- HUD injected via JS -->
+                </div>
+            </div>
+
+            <!-- Interactive UI overlay (Buttons for specific modules) -->
+            <div id="module-ui" class="absolute bottom-6 right-6 flex flex-col gap-3">
+                <!-- UI injected via JS -->
+            </div>
+        </section>
+
+        <!-- 3. Concept Quiz Mode -->
+        <section id="view-quiz" class="w-full h-full p-8 overflow-hidden max-w-5xl mx-auto flex flex-col hidden">
+            <h2 class="text-3xl font-bold mb-6 text-yellow-400 border-b border-gray-700 pb-2 shrink-0">Concept
+                Assessment</h2>
+
+            <!-- Quiz Sub-Navigation (Tabs) -->
+            <div class="flex flex-wrap gap-2 mb-6 shrink-0 border-b border-gray-700 pb-4">
+                <button onclick="switchQuizTab('4.1')" id="quiz-btn-4.1"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-yellow-600 text-white shadow-md transition">Set 1:
+                    4.1 Sonoran</button>
+                <button onclick="switchQuizTab('4.2')" id="quiz-btn-4.2"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-gray-800 text-gray-400 hover:bg-gray-700 transition">Set
+                    2: 4.2 Ecosystems</button>
+                <button onclick="switchQuizTab('4.3')" id="quiz-btn-4.3"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-gray-800 text-gray-400 hover:bg-gray-700 transition">Set
+                    3: 4.3 Intruders</button>
+                <button onclick="switchQuizTab('4.4')" id="quiz-btn-4.4"
+                    class="px-5 py-2 rounded-lg text-sm font-bold bg-gray-800 text-gray-400 hover:bg-gray-700 transition">Set
+                    4: 4.4 Bioaccumulation</button>
+            </div>
+
+            <!-- Quiz Container (Dynamic) -->
+            <div id="quiz-container" class="overflow-y-auto flex-grow pr-4 space-y-8 pb-20">
+                <!-- Content injected via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Application Logic -->
+    <script>
+        // --- GLOBAL STATE ---
+        let currentMode = 'notes';
+        let currentLabModule = 1;
+        let currentQuizSet = '4.1';
+        let isPlaying = true;
+        let vectorVision = true;
+
+        // --- DOM ELEMENTS ---
+        const views = {
+            notes: document.getElementById('view-notes'),
+            lab: document.getElementById('view-lab'),
+            quiz: document.getElementById('view-quiz')
+        };
+        const btns = {
+            notes: document.getElementById('btn-notes'),
+            lab: document.getElementById('btn-lab'),
+            quiz: document.getElementById('btn-quiz')
+        };
+        const canvas = document.getElementById('sim-canvas');
+        const ctx = canvas.getContext('2d');
+        const hudContent = document.getElementById('hud-content');
+        const hudStatus = document.getElementById('hud-status');
+        const moduleUI = document.getElementById('module-ui');
+
+        // --- UI CONTROLS ---
+        function switchNoteTab(tabId) {
+            const tabs = ['4.1', '4.2', '4.3', '4.4'];
+            tabs.forEach(id => {
+                document.getElementById('note-content-' + id).classList.add('hidden');
+                document.getElementById('note-content-' + id).classList.remove('block');
+                const btn = document.getElementById('note-btn-' + id);
+                btn.classList.remove('bg-blue-600', 'text-white');
+                btn.classList.add('bg-gray-800', 'text-gray-400');
+            });
+            document.getElementById('note-content-' + tabId).classList.remove('hidden');
+            document.getElementById('note-content-' + tabId).classList.add('block');
+            const activeBtn = document.getElementById('note-btn-' + tabId);
+            activeBtn.classList.remove('bg-gray-800', 'text-gray-400');
+            activeBtn.classList.add('bg-blue-600', 'text-white');
+        }
+
+        function switchMode(mode) {
+            currentMode = mode;
+            // Hide all
+            Object.values(views).forEach(v => v.classList.add('hidden'));
+            Object.values(btns).forEach(b => {
+                b.classList.remove('bg-gray-700', 'text-white', 'shadow');
+                b.classList.add('text-gray-400');
+            });
+            // Show selected
+            views[mode].classList.remove('hidden');
+            btns[mode].classList.add('bg-gray-700', 'text-white', 'shadow');
+            btns[mode].classList.remove('text-gray-400');
+
+            if (mode === 'lab') resizeCanvas();
+            if (mode === 'quiz') renderQuiz(currentQuizSet);
+        }
+
+        // --- QUIZ DATA & LOGIC ---
+        const quizData = {
+            '4.1': [
+                { type: 'mcq', q: '1. Which of the following describes the network of interactions between all living organisms and their non-living environment?', options: ['Habitat', 'Ecology', 'Ecosystem', 'Food web'], ans: 2 },
+                { type: 'mcq', q: '2. How is the saguaro cactus adapted to reduce water loss by evaporation?', options: ['It has very deep roots.', 'It does not have any leaves.', 'It grows on high mountains.', 'It is nocturnal.'], ans: 1 },
+                { type: 'mcq', q: '3. Which desert animal is active at night and must be wary of predators like rattlesnakes and coyotes?', options: ['Kangaroo rat', 'Gila woodpecker', 'Saguaro cactus', 'Elf owl'], ans: 0 },
+                { type: 'mcq', q: '4. Why can saguaro cacti NOT survive in areas where the temperature drops below 0°C?', options: ['Their roots cannot penetrate frozen soil.', 'There is not enough sunlight.', 'Their cells are killed if they freeze.', 'There are no bats to pollinate them.'], ans: 2 },
+                { type: 'fib', q: '5. The specific place where an organism naturally lives, such as a Gila woodpecker\'s nest hole, is called its [blank].', ans: 'Habitat' },
+                { type: 'fib', q: '6. Because it is much cooler at night, many desert animals are [blank] to avoid overheating or drying out.', ans: 'Nocturnal' },
+                { type: 'fib', q: '7. In a food web, plants are known as the [blank] because they use energy from sunlight to make food.', ans: 'Producers' },
+                { type: 'fib', q: '8. Saguaro cacti use their green [blank] to make food by photosynthesis.', ans: 'Stems' },
+                { type: 'tf', q: '9. True or False: The saguaro cactus has wide-spreading, shallow roots to capture water quickly when it rains.', ans: 'True' },
+                { type: 'tf', q: '10. True or False: An ecosystem only includes the living animals and plants in an area, not the soil or light.', ans: 'False' },
+                { type: 'tf', q: '11. True or False: Bats feed on the nectar from agave flowers in the Sonoran desert.', ans: 'True' },
+                { type: 'tf', q: '12. True or False: Tarantulas build nests out of sticks in the branches of the saguaro cactus.', ans: 'False' },
+                { type: 'sa', q: '13. Explain the difference between an ecosystem and a habitat.', ans: 'A habitat is the specific place where an organism naturally lives. An ecosystem is the entire network of interactions between all living organisms and their non-living environment.' },
+                { type: 'sa', q: '14. Describe two interactions between organisms in the Sonoran Desert that do not involve feeding (predation).', ans: 'Examples include: Gila woodpeckers making nest holes in cacti, bats pollinating flowers, or plants using bright sunlight to photosynthesise.' },
+                { type: 'sa', q: '15. Why do animals like tarantulas dig burrows in the desert soil?', ans: 'They dig burrows to shelter from the sun because it is cooler underneath the soil during the hot day.' }
+            ],
+            '4.2': [
+                { type: 'mcq', q: '1. Which trees have unusual roots that can grow covered by sea water at high tide?', options: ['Saguaro cacti', 'Bromeliads', 'Mangroves', 'Sea anemones'], ans: 2 },
+                { type: 'mcq', q: '2. In a tropical rainforest, what role do fungi play on the forest floor?', options: ['They are producers.', 'They are predators.', 'They are decomposers.', 'They are herbivores.'], ans: 2 },
+                { type: 'mcq', q: '3. What small animal climbs out onto the mud of mangrove forests when the tide goes out?', options: ['Crab-eating macaque', 'Mud skipper', 'Zooplankton', 'Coral polyp'], ans: 1 },
+                { type: 'mcq', q: '4. What creates the hard skeletons that provide habitats for thousands of species on a reef?', options: ['Coral polyps', 'Mangrove roots', 'Sponges', 'Carnivorous fish'], ans: 0 },
+                { type: 'fib', q: '5. Small animals often live in the tiny ponds created by rainwater trapped in the spiky, circular leaves of [blank] plants.', ans: 'Bromeliad' },
+                { type: 'fib', q: '6. In a mangrove forest, monkeys called crab-eating [blank] climb through the trees to catch crabs.', ans: 'Macaques' },
+                { type: 'fib', q: '7. The base of the food chain around a hydrothermal vent consists of [blank] that live in the hot water.', ans: 'Bacteria' },
+                { type: 'fib', q: '8. Decomposers release [blank] from dead leaves and waste, which helps plants to grow.', ans: 'Nutrients' },
+                { type: 'tf', q: '9. True or False: Mangrove forests provide a safe habitat for young fish to hide from larger predators.', ans: 'True' },
+                { type: 'tf', q: '10. True or False: Hydrothermal vents rely on sunlight for plants to act as producers.', ans: 'False' },
+                { type: 'tf', q: '11. True or False: Ciguatoxin is a toxic substance made by a single-celled alga on coral reefs.', ans: 'True' },
+                { type: 'tf', q: '12. True or False: Prawns and crabs in the mangrove ecosystem eat partly decomposed leaves.', ans: 'True' },
+                { type: 'sa', q: '13. Construct a 4-step food chain for a hydrothermal vent ecosystem.', ans: 'Bacteria -> zooplankton -> sea anemones -> octopus (or crab).' },
+                { type: 'sa', q: '14. Why do coral reefs have such a large variety of species living there?', ans: 'The hard skeletons of coral polyps form the reef, which provides many different complex habitats for other species to live in.' },
+                { type: 'sa', q: '15. Explain how removing mangroves from a shoreline affects the adult fish population on nearby coral reefs.', ans: 'Mangroves provide a safe nursery habitat for young fish. Without them, fewer baby fish survive predators to grow into adults, leading to fewer adult fish on the reef.' }
+            ],
+            '4.3': [
+                { type: 'mcq', q: '1. What term describes a species that is introduced to a new ecosystem and spreads widely, causing harm?', options: ['Native species', 'Aquatic species', 'Invasive species', 'Endangered species'], ans: 2 },
+                { type: 'mcq', q: '2. Which invasive plant species harms the Sonoran Desert by taking water and nutrients in dense patches?', options: ['Water hyacinth', 'Bromeliad', 'Buffelgrass', 'Purple loosestrife'], ans: 2 },
+                { type: 'mcq', q: '3. Why were cane toads initially introduced to Australia?', options: ['To provide food for northern quolls', 'To control pest/insect numbers', 'Their native predators were wiped out', 'Because they are completely harmless'], ans: 1 },
+                { type: 'mcq', q: '4. Which invasive mammal is responsible for native bird extinctions in New Zealand?', options: ['Beaver', 'Stoat', 'Crab-eating macaque', 'Brown bear'], ans: 1 },
+                { type: 'fib', q: '5. Scientists in Australia are feeding cane toad [blank] to northern quolls to teach them to avoid eating the real toads.', ans: 'Sausages' },
+                { type: 'fib', q: '6. A species that naturally lives and belongs in an ecosystem is called a [blank] species.', ans: 'Native' },
+                { type: 'fib', q: '7. When humans try to completely get rid of an invasive species, they are trying to [blank] it.', ans: 'Eradicate' },
+                { type: 'fib', q: '8. [blank] are invasive mammals in South America that alter streams and rivers by building dams.', ans: 'Beavers' },
+                { type: 'tf', q: '9. True or False: Stoats are an invasive species in Europe where they normally live.', ans: 'False' },
+                { type: 'tf', q: '10. True or False: Water hyacinths are aquatic plants native to South America that have become invasive elsewhere.', ans: 'True' },
+                { type: 'tf', q: '11. True or False: It is usually very easy to eradicate an invasive species once it has settled.', ans: 'False' },
+                { type: 'tf', q: '12. True or False: In Australia, cane toad numbers are kept constant by their natural predators.', ans: 'False' },
+                { type: 'sa', q: '13. Explain why stoats are a major problem in New Zealand but not in their native Europe.', ans: 'In Europe, native predators keep stoat numbers controlled. In New Zealand, stoats have no natural predators, allowing them to rapidly multiply and hunt native birds that have no defenses.' },
+                { type: 'sa', q: '14. Give two specific reasons why the water hyacinth causes problems in Lake Victoria.', ans: '1) They grow into thick mats that block sunlight, stopping underwater plants from photosynthesising. 2) The mats are so thick that boats cannot sail through them.' },
+                { type: 'sa', q: '15. Why do scientists want to prevent northern quolls from eating cane toads?', ans: 'Cane toads are toxic/poisonous. If the northern quoll eats them, the quoll will die, reducing the native predator population.' }
+            ],
+            '4.4': [
+                { type: 'mcq', q: '1. What does the chemical abbreviation DDT stand for in ecological terms?', options: ['An invasive plant', 'A toxic insecticide', 'A biodegradable fertilizer', 'A type of microplastic'], ans: 1 },
+                { type: 'mcq', q: '2. Tiny pieces of plastic that measure less than 5 mm long are known as:', options: ['Zooplankton', 'Algae', 'Macroplastics', 'Microplastics'], ans: 3 },
+                { type: 'mcq', q: '3. In a food chain, which organism will have the highest concentration of a persistent toxin?', options: ['The producer', 'The primary consumer', 'The top predator', 'The decomposer'], ans: 2 },
+                { type: 'mcq', q: '4. What unit is used by scientists to measure the concentration of DDT in an organism?', options: ['kg/km²', 'Parts per million (ppm)', 'Degrees Celsius (°C)', 'Newtons (N)'], ans: 1 },
+                { type: 'fib', q: '5. DDT was historically used to kill mosquitoes that transmit [blank].', ans: 'Malaria' },
+                { type: 'fib', q: '6. The process where a toxin builds up in an individual organism\'s body over its lifetime is called [blank].', ans: 'Bioaccumulation' },
+                { type: 'fib', q: '7. The process where the concentration of a toxin increases as you move up the food chain is called [blank].', ans: 'Biomagnification' },
+                { type: 'fib', q: '8. An insecticide that can be safely broken down by microorganisms in the environment is called a [blank] insecticide.', ans: 'Biodegradable' },
+                { type: 'tf', q: '9. True or False: Microplastics can be easily broken down by living things.', ans: 'False' },
+                { type: 'tf', q: '10. True or False: DDT makes the eggshells of birds, like the ibis, very thin and easy to break.', ans: 'True' },
+                { type: 'tf', q: '11. True or False: Decomposers are highly effective at breaking down DDT into harmless substances.', ans: 'False' },
+                { type: 'tf', q: '12. True or False: In a polluted lake, a fish will contain a higher concentration of DDT than the algae it eats.', ans: 'True' },
+                { type: 'sa', q: '13. Explain the difference between bioaccumulation and biomagnification.', ans: 'Bioaccumulation is the build-up of a substance in a single organism\'s body over its lifetime. Biomagnification is the increase in the concentration of that substance as it passes from one organism to another up a food chain.' },
+                { type: 'sa', q: '14. A food chain is: Algae -> Shrimp -> Minnow -> Cormorant. Explain why the cormorant ends up with the most DDT in its body.', ans: 'Because DDT does not break down. The cormorant eats many minnows over its lifetime, absorbing all the accumulated DDT that those minnows took from eating thousands of shrimp.' },
+                { type: 'sa', q: '15. Why do filter-feeding fish end up with microplastics inside them?', ans: 'Filter-feeding fish suck in large amounts of sea water to filter out tiny zooplankton. They accidentally filter out and swallow the floating microplastics as well.' }
+            ]
+        };
+
+        function switchQuizTab(setId) {
+            currentQuizSet = setId;
+            const tabs = ['4.1', '4.2', '4.3', '4.4'];
+            tabs.forEach(id => {
+                const btn = document.getElementById('quiz-btn-' + id);
+                btn.classList.remove('bg-yellow-600', 'text-white');
+                btn.classList.add('bg-gray-800', 'text-gray-400');
+            });
+            const activeBtn = document.getElementById('quiz-btn-' + setId);
+            activeBtn.classList.remove('bg-gray-800', 'text-gray-400');
+            activeBtn.classList.add('bg-yellow-600', 'text-white');
+
+            renderQuiz(setId);
+        }
+
+        function renderQuiz(setId) {
+            const container = document.getElementById('quiz-container');
+            const data = quizData[setId];
+            let html = '';
+
+            data.forEach((item, index) => {
+                html += `<div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-md relative" id="q-container-${setId}-${index}">`;
+
+                // Question text
+                if (item.type === 'fib') {
+                    // Replace [blank] with an input box
+                    let text = item.q.replace('[blank]', `<input type="text" id="q-${setId}-${index}" class="bg-gray-900 border border-gray-600 rounded px-3 py-1 text-white focus:outline-none focus:border-yellow-500 w-40 inline-block text-center mx-1 transition-colors" autocomplete="off" placeholder="...">`);
+                    html += `<p class="text-lg text-gray-200 mb-4 leading-relaxed">${text}</p>`;
+                } else {
+                    html += `<p class="text-lg text-gray-200 font-medium mb-4">${item.q}</p>`;
+                }
+
+                // Inputs based on type
+                if (item.type === 'mcq') {
+                    html += `<div class="space-y-2">`;
+                    item.options.forEach((opt, optIndex) => {
+                        html += `
+                            <label class="flex items-center space-x-3 p-3 rounded-lg border border-gray-700 hover:bg-gray-700 cursor-pointer transition-colors">
+                                <input type="radio" name="q-${setId}-${index}" value="${optIndex}" class="w-4 h-4">
+                                <span class="text-gray-300">${opt}</span>
+                            </label>
+                        `;
+                    });
+                    html += `</div>`;
+                }
+                else if (item.type === 'tf') {
+                    html += `
+                        <div class="flex space-x-4">
+                            <label class="flex items-center space-x-2 p-2 px-4 rounded border border-gray-700 hover:bg-gray-700 cursor-pointer">
+                                <input type="radio" name="q-${setId}-${index}" value="True" class="w-4 h-4">
+                                <span class="text-gray-300 font-bold">True</span>
+                            </label>
+                            <label class="flex items-center space-x-2 p-2 px-4 rounded border border-gray-700 hover:bg-gray-700 cursor-pointer">
+                                <input type="radio" name="q-${setId}-${index}" value="False" class="w-4 h-4">
+                                <span class="text-gray-300 font-bold">False</span>
+                            </label>
+                        </div>
+                    `;
+                }
+                else if (item.type === 'sa') {
+                    html += `
+                        <textarea id="q-${setId}-${index}" rows="3" class="w-full bg-gray-900 border border-gray-600 rounded-lg p-3 text-white focus:outline-none focus:border-yellow-500 transition-colors resize-none placeholder-gray-500" placeholder="Type your answer here..."></textarea>
+                        <div class="mt-3 hidden" id="ans-${setId}-${index}">
+                            <div class="p-4 bg-yellow-900/30 border-l-4 border-yellow-500 rounded text-gray-300 text-sm">
+                                <strong class="text-yellow-400 block mb-1">Suggested Answer:</strong>
+                                ${item.ans}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Individual Check Button for each question
+                html += `
+                    <div class="mt-4 flex justify-between items-center border-t border-gray-700 pt-4">
+                        <span id="feedback-${setId}-${index}" class="text-sm font-bold hidden"></span>
+                        <button onclick="checkQuestion('${setId}', ${index})" id="btn-check-${setId}-${index}" class="bg-gray-700 hover:bg-gray-600 text-yellow-400 font-bold py-2 px-5 rounded-lg shadow transition border border-gray-600 text-sm ml-auto">
+                            Check Answer
+                        </button>
+                    </div>
+                </div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function checkQuestion(setId, index) {
+            const data = quizData[setId];
+            const item = data[index];
+            const qContainer = document.getElementById(`q-container-${setId}-${index}`);
+            const feedbackBox = document.getElementById(`feedback-${setId}-${index}`);
+            const checkBtn = document.getElementById(`btn-check-${setId}-${index}`);
+
+            // reset styling
+            qContainer.classList.remove('border-green-500', 'border-red-500', 'bg-green-900/20', 'bg-red-900/20', 'border-yellow-500');
+            feedbackBox.classList.remove('hidden', 'text-green-400', 'text-red-400', 'text-yellow-400');
+
+            if (item.type === 'mcq' || item.type === 'tf') {
+                const selected = document.querySelector(`input[name="q-${setId}-${index}"]:checked`);
+                if (!selected) {
+                    feedbackBox.classList.remove('hidden');
+                    feedbackBox.classList.add('text-yellow-400');
+                    feedbackBox.innerText = '⚠️ Please select an answer first loh!';
+                    return;
+                }
+                if (selected.value == item.ans) {
+                    qContainer.classList.add('border-green-500', 'bg-green-900/20');
+                    feedbackBox.classList.add('text-green-400');
+                    feedbackBox.innerText = '✅ Correct!';
+                } else {
+                    qContainer.classList.add('border-red-500', 'bg-red-900/20');
+                    feedbackBox.classList.add('text-red-400');
+                    // Get the correct answer text to show to the student
+                    let correctText = item.type === 'mcq' ? item.options[item.ans] : item.ans;
+                    feedbackBox.innerText = `❌ Incorrect! Correct answer: ${correctText}`;
+                }
+            }
+            else if (item.type === 'fib') {
+                const input = document.getElementById(`q-${setId}-${index}`);
+                const userAns = input.value.trim().toLowerCase();
+                const correctAns = item.ans.toLowerCase();
+                if (!userAns) {
+                    feedbackBox.classList.remove('hidden');
+                    feedbackBox.classList.add('text-yellow-400');
+                    feedbackBox.innerText = '⚠️ Please fill in the blank leh!';
+                    return;
+                }
+                if (userAns === correctAns) {
+                    input.classList.remove('border-gray-600', 'border-red-500');
+                    input.classList.add('border-green-500', 'text-green-400');
+                    qContainer.classList.add('border-green-500', 'bg-green-900/20');
+                    feedbackBox.classList.add('text-green-400');
+                    feedbackBox.innerText = '✅ Correct!';
+                } else {
+                    input.classList.remove('border-gray-600', 'border-green-500');
+                    input.classList.add('border-red-500', 'text-red-400');
+                    qContainer.classList.add('border-red-500', 'bg-red-900/20');
+                    feedbackBox.classList.add('text-red-400');
+                    feedbackBox.innerText = '❌ Incorrect!';
+                    // Show correct answer inline
+                    if (!document.getElementById(`fib-ans-${setId}-${index}`)) {
+                        const span = document.createElement('span');
+                        span.id = `fib-ans-${setId}-${index}`;
+                        span.className = 'text-green-400 text-sm ml-2 font-bold';
+                        span.innerText = `(Answer: ${item.ans})`;
+                        input.parentNode.appendChild(span);
+                    }
+                }
+            }
+            else if (item.type === 'sa') {
+                const input = document.getElementById(`q-${setId}-${index}`);
+                if (!input.value.trim()) {
+                    feedbackBox.classList.remove('hidden');
+                    feedbackBox.classList.add('text-yellow-400');
+                    feedbackBox.innerText = '⚠️ Please type your answer first lah!';
+                    return;
+                }
+                document.getElementById(`ans-${setId}-${index}`).classList.remove('hidden');
+                qContainer.classList.add('border-yellow-500');
+                feedbackBox.classList.add('text-yellow-400');
+                feedbackBox.innerText = '🔍 Please self-evaluate with the suggested answer.';
+            }
+
+            // Disable button after checking
+            checkBtn.disabled = true;
+            checkBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-gray-800');
+            checkBtn.classList.remove('hover:bg-gray-600');
+            checkBtn.innerText = 'Checked';
+            
+            if (typeof saveProgressRecord === 'function') {
+                saveProgressRecord("completed_question_" + setId + "_" + index);
+            }
+        }
+
+        // --- SIMULATION ENGINE DATA ---
+        function setLabModule(num) {
+            currentLabModule = num;
+            // Update buttons
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`mod-${i}-btn`);
+                if (i === num) {
+                    btn.classList.add('bg-blue-600', 'text-white');
+                    btn.classList.remove('text-gray-400');
+                } else {
+                    btn.classList.remove('bg-blue-600', 'text-white');
+                    btn.classList.add('text-gray-400');
+                }
+            }
+            resetSimulation();
+        }
+
+        function toggleVectorVision() {
+            vectorVision = !vectorVision;
+            const dot = document.getElementById('vector-dot');
+            if (vectorVision) {
+                dot.classList.add('translate-x-4', 'bg-cyan-400', 'shadow-[0_0_8px_rgba(34,211,238,0.8)]');
+                dot.classList.remove('translate-x-0', 'bg-gray-400', 'shadow-none');
+            } else {
+                dot.classList.remove('translate-x-4', 'bg-cyan-400', 'shadow-[0_0_8px_rgba(34,211,238,0.8)]');
+                dot.classList.add('translate-x-0', 'bg-gray-400', 'shadow-none');
+            }
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            document.getElementById('btn-play').innerHTML = isPlaying ? '⏸ Pause' : '▶ Play';
+        }
+
+        function resetSimulation() {
+            initLabEngine();
+        }
+
+        function resizeCanvas() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+            initLabEngine();
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        let particles = [];
+        let nodes = []; let edges = []; let networkCollapsed = false;
+        let invasivePlanted = false; let soilWater = []; let rootNative = {}; let rootInvasive = {}; let nativeUptake = 0; let invasiveUptake = 0;
+        let pyramidTiers = []; let currentTier = 0; let toxinParticles = []; let energyParticles = []; let animationProgress = 0;
+
+        function initLabEngine() {
+            particles = [];
+            moduleUI.innerHTML = '';
+            const w = canvas.width;
+            const h = canvas.height;
+
+            if (currentLabModule === 1) {
+                networkCollapsed = false;
+                nodes = [
+                    { id: 'sun', x: w * 0.5, y: h * 0.12, type: 'source', alive: true, label: 'Sun', r: 35, emoji: '🌞' },
+                    { id: 'grass', x: w * 0.2, y: h * 0.3, type: 'producer', alive: true, label: 'Grass', r: 25, emoji: '🌾' },
+                    { id: 'cactus', x: w * 0.5, y: h * 0.3, type: 'producer', alive: true, label: 'Cactus', r: 25, emoji: '🌵' },
+                    { id: 'shrub', x: w * 0.8, y: h * 0.3, type: 'producer', alive: true, label: 'Shrub', r: 25, emoji: '🌿' },
+                    { id: 'hopper', x: w * 0.2, y: h * 0.5, type: 'consumer', alive: true, label: 'Insect', r: 25, emoji: '🦗' },
+                    { id: 'mouse', x: w * 0.5, y: h * 0.5, type: 'consumer', alive: true, label: 'Mouse', r: 25, emoji: '🐁' },
+                    { id: 'rabbit', x: w * 0.8, y: h * 0.5, type: 'consumer', alive: true, label: 'Rabbit', r: 25, emoji: '🐇' },
+                    { id: 'lizard', x: w * 0.3, y: h * 0.7, type: 'predator', alive: true, label: 'Lizard', r: 25, emoji: '🦎' },
+                    { id: 'snake', x: w * 0.7, y: h * 0.7, type: 'predator', alive: true, label: 'Snake', r: 25, emoji: '🐍' },
+                    { id: 'hawk', x: w * 0.35, y: h * 0.88, type: 'apex', alive: true, label: 'Hawk', r: 30, emoji: '🦅' },
+                    { id: 'fox', x: w * 0.65, y: h * 0.88, type: 'apex', alive: true, label: 'Fox', r: 30, emoji: '🦊' }
+                ];
+                edges = [
+                    { from: 'sun', to: 'grass', active: true }, { from: 'sun', to: 'cactus', active: true }, { from: 'sun', to: 'shrub', active: true },
+                    { from: 'grass', to: 'hopper', active: true }, { from: 'grass', to: 'mouse', active: true }, { from: 'cactus', to: 'mouse', active: true },
+                    { from: 'shrub', to: 'rabbit', active: true }, { from: 'shrub', to: 'mouse', active: true },
+                    { from: 'hopper', to: 'lizard', active: true }, { from: 'mouse', to: 'snake', active: true }, { from: 'mouse', to: 'fox', active: true },
+                    { from: 'rabbit', to: 'fox', active: true },
+                    { from: 'lizard', to: 'snake', active: true }, { from: 'lizard', to: 'hawk', active: true }, { from: 'snake', to: 'hawk', active: true },
+                    { from: 'rabbit', to: 'hawk', active: true }
+                ];
+                hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30";
+                hudStatus.innerText = "BALANCED";
+
+            } else if (currentLabModule === 2) {
+                invasivePlanted = false; soilWater = []; nativeUptake = 0; invasiveUptake = 0;
+                rootNative = { x: w * 0.3, y: h * 0.5, power: 1.5, r: 40 };
+                rootInvasive = { x: w * 0.7, y: h * 0.5, power: 12, r: 60, active: false };
+                moduleUI.innerHTML = `
+                    <button onclick="plantInvasive()" class="bg-red-600 hover:bg-red-500 text-white font-bold py-3 px-6 rounded-lg shadow-[0_0_15px_rgba(220,38,38,0.5)] transition border border-red-400">
+                        ⚠️ Introduce Invasive Species
+                    </button>
+                `;
+                hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30";
+                hudStatus.innerText = "EQUILIBRIUM";
+
+            } else if (currentLabModule === 3) {
+                currentTier = 0; animationProgress = 0; toxinParticles = []; energyParticles = [];
+                for (let i = 0; i < 300; i++) {
+                    energyParticles.push({ x: w / 2 + (Math.random() - 0.5) * 400, y: h * 0.8 + (Math.random() - 0.5) * 60, vx: 0, vy: 0, active: true });
+                }
+                for (let i = 0; i < 15; i++) {
+                    toxinParticles.push({ x: w / 2 + (Math.random() - 0.5) * 400, y: h * 0.8 + (Math.random() - 0.5) * 60, vx: 0, vy: 0 });
+                }
+                moduleUI.innerHTML = `
+                    <button onclick="stepTrophicLevel()" id="btn-step" class="bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 px-6 rounded-lg shadow-[0_0_15px_rgba(147,51,234,0.5)] transition border border-purple-400">
+                        ⬆️ Next Trophic Level
+                    </button>
+                `;
+                hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30";
+                hudStatus.innerText = "TIER 1 / 4";
+            }
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (currentLabModule !== 1) return;
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+
+            nodes.forEach(node => {
+                if (node.id !== 'sun' && node.alive) {
+                    const dist = Math.hypot(mouseX - node.x, mouseY - node.y);
+                    if (dist < node.r * 1.5) {
+                        node.alive = false;
+                        updateNetworkEdges();
+                    }
+                }
+            });
+        });
+
+        function updateNetworkEdges() {
+            edges.forEach(edge => {
+                const fromNode = nodes.find(n => n.id === edge.from);
+                const toNode = nodes.find(n => n.id === edge.to);
+                if (!fromNode.alive || !toNode.alive) edge.active = false;
+            });
+
+            let newlyStarved = false;
+            nodes.forEach(n => {
+                if (n.type !== 'source' && n.type !== 'producer' && n.alive) {
+                    const activeInputs = edges.filter(e => e.to === n.id && e.active);
+                    if (activeInputs.length === 0) {
+                        n.alive = false;
+                        newlyStarved = true;
+                    }
+                }
+            });
+
+            if (newlyStarved) updateNetworkEdges();
+
+            const apexAlive = nodes.filter(n => n.type === 'apex' && n.alive).length;
+            const producersAlive = nodes.filter(n => n.type === 'producer' && n.alive).length;
+
+            if (producersAlive === 0 || apexAlive === 0) {
+                networkCollapsed = true;
+                hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30";
+                hudStatus.innerText = "ECOSYSTEM COLLAPSE";
+            } else if (nodes.some(n => !n.alive)) {
+                hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-yellow-500/20 text-yellow-400 border border-yellow-500/30";
+                hudStatus.innerText = "IMBALANCED";
+            }
+        }
+
+        function plantInvasive() {
+            invasivePlanted = true;
+            rootInvasive.active = true;
+            document.querySelector('#module-ui button').disabled = true;
+            document.querySelector('#module-ui button').classList.add('opacity-50', 'cursor-not-allowed');
+            hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30";
+            hudStatus.innerText = "SHORT-CIRCUIT DETECTED";
+        }
+
+        function stepTrophicLevel() {
+            if (currentTier >= 3 || animationProgress > 0) return;
+            currentTier++;
+            animationProgress = 0.01;
+
+            hudStatus.innerText = `TIER ${currentTier + 1} / 4`;
+
+            if (currentTier >= 3) {
+                document.getElementById('btn-step').classList.add('opacity-50', 'cursor-not-allowed');
+                hudStatus.className = "px-2 py-0.5 rounded text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30";
+                hudStatus.innerText = "DANGER: LETHAL DOSAGE";
+            }
+        }
+
+        function animate() {
+            if (isPlaying && views.lab.classList.contains('hidden') === false) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (currentLabModule === 1) renderMod1();
+                else if (currentLabModule === 2) renderMod2();
+                else if (currentLabModule === 3) renderMod3();
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function renderMod1() {
+            const w = canvas.width; const h = canvas.height; const time = Date.now() / 200;
+
+            edges.forEach(edge => {
+                const start = nodes.find(n => n.id === edge.from);
+                const end = nodes.find(n => n.id === edge.to);
+
+                ctx.beginPath(); ctx.moveTo(start.x, start.y); ctx.lineTo(end.x, end.y);
+                ctx.strokeStyle = edge.active ? (vectorVision ? 'rgba(34, 211, 238, 0.2)' : 'rgba(100, 116, 139, 0.3)') : 'rgba(239, 68, 68, 0.1)';
+                ctx.lineWidth = 2; ctx.stroke();
+
+                if (edge.active && vectorVision && Math.random() < 0.1) {
+                    particles.push({ x: start.x, y: start.y, tx: end.x, ty: end.y, progress: 0, speed: 0.01 + Math.random() * 0.01 });
+                }
+            });
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.progress += p.speed;
+                if (p.progress >= 1) { particles.splice(i, 1); continue; }
+                const px = p.x + (p.tx - p.x) * p.progress; const py = p.y + (p.ty - p.y) * p.progress;
+                ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(34, 211, 238, 0.8)'; ctx.shadowBlur = 10; ctx.shadowColor = 'rgba(34, 211, 238, 1)';
+                ctx.fill(); ctx.shadowBlur = 0;
+            }
+
+            nodes.forEach((node, index) => {
+                let bounceY = node.alive ? Math.sin(time + index) * 6 : 0;
+
+                ctx.beginPath(); ctx.arc(node.x, node.y + bounceY, node.r, 0, Math.PI * 2);
+                if (node.id === 'sun') {
+                    ctx.fillStyle = 'rgba(254, 240, 138, 0.2)'; ctx.shadowBlur = 30; ctx.shadowColor = '#facc15';
+                } else {
+                    ctx.fillStyle = node.alive ? 'rgba(55, 65, 81, 0.5)' : '#1f2937';
+                    ctx.strokeStyle = node.alive ? (vectorVision ? '#2dd4bf' : '#94a3b8') : '#7f1d1d';
+                    ctx.lineWidth = 3; ctx.shadowBlur = 0; ctx.stroke();
+                }
+                ctx.fill();
+
+                ctx.font = `${node.r * 1.5}px Arial`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.globalAlpha = node.alive ? 1 : 0.4;
+                ctx.fillText(node.alive ? node.emoji : '💀', node.x, node.y + bounceY); ctx.globalAlpha = 1.0;
+
+                ctx.fillStyle = node.alive ? '#e2e8f0' : '#475569'; ctx.font = '12px sans-serif';
+                ctx.fillText(node.label, node.x, node.y + bounceY - node.r - 10);
+                if (!node.alive) {
+                    ctx.fillStyle = '#ef4444'; ctx.font = 'bold 10px sans-serif';
+                    ctx.fillText('EXTINCT', node.x, node.y + bounceY + node.r + 15);
+                }
+            });
+
+            hudContent.innerHTML = `
+                <div class="flex justify-between"><span>Solar Energy Input:</span> <span class="text-yellow-400">Continuous</span></div>
+                <div class="flex justify-between"><span>Surviving Species:</span> <span>${nodes.filter(n => n.id !== 'sun' && n.alive).length} / ${nodes.length - 1}</span></div>
+                <div class="flex justify-between"><span>Ecosystem Status:</span> <span class="${networkCollapsed ? 'text-red-400' : 'text-green-400'}">${networkCollapsed ? 'Collapsed' : 'Balanced'}</span></div>
+                ${!vectorVision ? '<div class="text-xs text-gray-500 mt-2 italic">Enable Vector Vision to see energy transfer paths.</div>' : ''}
+            `;
+        }
+
+        function renderMod2() {
+            const w = canvas.width; const h = canvas.height; const time = Date.now() / 150;
+
+            if (vectorVision && Math.random() < 0.4) {
+                soilWater.push({ x: Math.random() * w, y: h, vx: 0, vy: -1 - Math.random() });
+            }
+
+            let nativeBounce = Math.sin(time) * 3;
+            ctx.font = '60px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+            ctx.fillText('🌻', rootNative.x, h * 0.45 + nativeBounce);
+            ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2;
+            for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.moveTo(rootNative.x, h * 0.45); ctx.lineTo(rootNative.x + i * 15, h * 0.7); ctx.stroke(); }
+
+            if (rootInvasive.active) {
+                let invBounce = Math.cos(time) * 5;
+                ctx.font = '80px Arial'; ctx.fillText('👾', rootInvasive.x, h * 0.4 + invBounce);
+                ctx.strokeStyle = '#f87171'; ctx.lineWidth = 4;
+                for (let i = -4; i <= 4; i++) { ctx.beginPath(); ctx.moveTo(rootInvasive.x, h * 0.4); ctx.lineTo(rootInvasive.x + i * 30, h * 0.9); ctx.stroke(); }
+            } else {
+                ctx.strokeStyle = '#334155'; ctx.lineWidth = 2; ctx.setLineDash([5, 5]);
+                ctx.beginPath(); ctx.arc(rootInvasive.x, h * 0.5, 40, 0, Math.PI * 2); ctx.stroke();
+                ctx.setLineDash([]); ctx.fillStyle = '#475569'; ctx.font = '12px sans-serif'; ctx.fillText('Empty Niche', rootInvasive.x, h * 0.4);
+            }
+
+            for (let i = soilWater.length - 1; i >= 0; i--) {
+                let p = soilWater[i];
+                let dNative = Math.hypot(rootNative.x - p.x, rootNative.y - p.y);
+                let fNativeX = (rootNative.x - p.x) / (dNative * dNative) * rootNative.power * 200;
+                let fNativeY = (rootNative.y - p.y) / (dNative * dNative) * rootNative.power * 200;
+
+                let fInvX = 0, fInvY = 0;
+                if (rootInvasive.active) {
+                    let dInv = Math.hypot(rootInvasive.x - p.x, rootInvasive.y - p.y);
+                    fInvX = (rootInvasive.x - p.x) / (dInv * dInv) * rootInvasive.power * 200;
+                    fInvY = (rootInvasive.y - p.y) / (dInv * dInv) * rootInvasive.power * 200;
+                }
+
+                p.vx += fNativeX + fInvX; p.vy += fNativeY + fInvY;
+                p.vx *= 0.95; p.vy *= 0.95;
+                p.x += p.vx; p.y += p.vy;
+
+                if (Math.hypot(rootNative.x - p.x, rootNative.y - p.y) < 30) { nativeUptake++; soilWater.splice(i, 1); continue; }
+                if (rootInvasive.active && Math.hypot(rootInvasive.x - p.x, rootInvasive.y - p.y) < 50) { invasiveUptake++; soilWater.splice(i, 1); continue; }
+                if (p.y < h * 0.4) { soilWater.splice(i, 1); continue; }
+
+                if (vectorVision) { ctx.font = '12px Arial'; ctx.fillText('💧', p.x, p.y); }
+            }
+
+            let total = Math.max(1, nativeUptake + invasiveUptake);
+            let nPct = Math.round((nativeUptake / total) * 100); let iPct = Math.round((invasiveUptake / total) * 100);
+            hudContent.innerHTML = `
+                <div class="flex justify-between text-green-400"><span>Native Resource Uptake:</span> <span>Normal</span></div>
+                <div class="flex justify-between ${invasivePlanted ? 'text-red-400' : 'text-gray-500'}"><span>Invasive Uptake:</span> <span>${invasivePlanted ? 'Aggressive!' : 'N/A'}</span></div>
+                <div class="h-px bg-gray-700 my-2"></div>
+                <div class="flex justify-between"><span>Native Water Share:</span> <span>${nPct}%</span></div>
+                <div class="flex justify-between"><span>Invasive Water Share:</span> <span>${invasivePlanted ? iPct : 0}%</span></div>
+            `;
+        }
+
+        function renderMod3() {
+            const w = canvas.width; const h = canvas.height; const baseY = h * 0.8; const stepY = h * 0.18;
+
+            ctx.strokeStyle = '#475569'; ctx.lineWidth = 2; ctx.beginPath();
+            ctx.moveTo(w / 2, h * 0.2); ctx.lineTo(w * 0.2, baseY + 30); ctx.lineTo(w * 0.8, baseY + 30); ctx.closePath(); ctx.stroke();
+            for (let i = 1; i < 4; i++) {
+                let ty = baseY - i * stepY; let width = (w * 0.6) * (1 - (i / 4));
+                ctx.beginPath(); ctx.moveTo(w / 2 - width / 2, ty); ctx.lineTo(w / 2 + width / 2, ty); ctx.strokeStyle = '#334155'; ctx.stroke();
+            }
+
+            if (animationProgress > 0 && animationProgress < 1) {
+                animationProgress += 0.02;
+                if (animationProgress >= 1) {
+                    animationProgress = 0;
+                    energyParticles = energyParticles.filter(() => Math.random() < 0.1);
+                    let targetY = baseY - currentTier * stepY; let targetW = (w * 0.6) * (1 - (currentTier / 4));
+                    energyParticles.forEach(p => { p.x = w / 2 + (Math.random() - 0.5) * targetW * 0.8; p.y = targetY + (Math.random() - 0.5) * 20; p.active = true; });
+                    toxinParticles.forEach(p => { p.x = w / 2 + (Math.random() - 0.5) * targetW * 0.8; p.y = targetY + (Math.random() - 0.5) * 20; });
+                }
+            }
+
+            let targetY = baseY - currentTier * stepY; let targetW = (w * 0.6) * (1 - (currentTier / 4));
+            let prevY = baseY - (currentTier - 1) * stepY; let prevW = (w * 0.6) * (1 - ((currentTier - 1) / 4));
+
+            if (vectorVision && animationProgress > 0) {
+                ctx.fillStyle = 'rgba(251, 146, 60, 0.5)';
+                for (let i = 0; i < 10; i++) {
+                    let hy = prevY - animationProgress * 100;
+                    let hx = w / 2 + (Math.random() < 0.5 ? -1 : 1) * (prevW / 2 + animationProgress * 100);
+                    ctx.beginPath(); ctx.arc(hx, hy, 2, 0, Math.PI * 2); ctx.fill();
+                }
+            }
+
+            ctx.fillStyle = vectorVision ? '#4ade80' : '#22c55e';
+            energyParticles.forEach(p => {
+                if (!p.active) return;
+                let currX = p.x; let currY = p.y;
+                if (animationProgress > 0) {
+                    let destY = targetY + (Math.random() - 0.5) * 20; currY = prevY + (destY - prevY) * animationProgress;
+                }
+                ctx.beginPath(); ctx.arc(currX, currY, 3, 0, Math.PI * 2); ctx.fill();
+            });
+
+            ctx.fillStyle = '#ef4444'; ctx.shadowBlur = 8; ctx.shadowColor = '#b91c1c';
+            toxinParticles.forEach(p => {
+                let currX = p.x; let currY = p.y;
+                if (animationProgress > 0) {
+                    let destY = targetY + (Math.random() - 0.5) * 20; let destX = w / 2 + (Math.random() - 0.5) * targetW * 0.8;
+                    currY = prevY + (destY - prevY) * animationProgress; currX = p.x + (destX - p.x) * animationProgress;
+                }
+                ctx.font = '10px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('☠️', currX, currY);
+            });
+            ctx.shadowBlur = 0;
+
+            ctx.fillStyle = '#94a3b8'; ctx.font = '14px sans-serif'; ctx.textAlign = 'right';
+            ctx.fillText('🦅 Apex Predator', w * 0.2, h * 0.25); ctx.fillText('🐟 Consumers', w * 0.2, h * 0.45);
+            ctx.fillText('🦐 Herbivores', w * 0.2, h * 0.65); ctx.fillText('🌿 Producers', w * 0.2, h * 0.85);
+
+            let v = Math.pow(0.1, currentTier) * 1000; let m = 15; let density = m / v;
+            hudContent.innerHTML = `
+                <div class="flex justify-between text-green-400"><span>Total Biomass (V):</span> <span>${v.toFixed(1)} kg</span></div>
+                <div class="flex justify-between text-red-400"><span>Toxin Mass (m):</span> <span>${m} mg (Trapped)</span></div>
+                <div class="h-px bg-gray-700 my-2"></div>
+                <div class="flex justify-between font-bold ${currentTier === 3 ? 'text-red-500 animate-pulse' : 'text-gray-200'}">
+                    <span>Toxin Concentration:</span> <span>${density.toFixed(4)} mg/kg</span>
+                </div>
+                <div class="text-xs text-gray-500 mt-2 italic">Biomass drops 90% (Heat loss). Toxins cannot be digested.</div>
+            `;
+        }
+
+        // --- STARTUP ---
+        window.onload = async () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                const saved = await ProgressTracker.load();
+                if (saved && saved.progress_data) {
+                    // Optional: restore state here if needed
+                }
+            }
+            resizeCanvas();
+            initLabEngine();
+            renderQuiz('4.1'); // Pre-render the first quiz set
+            requestAnimationFrame(animate);
+        }
+
+        function saveProgressRecord(actionDetails) {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({
+                    lastAction: actionDetails,
+                    lastMode: currentMode,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+
+    </script>
+    
+    <footer class="bg-gray-800 border-t border-gray-700 py-3 text-center shrink-0 z-20 shadow-[0_-4px_6px_rgba(0,0,0,0.2)]" style="padding-bottom:12px;">
+        <div class="flex justify-center items-center gap-6">
+            <span class="text-gray-400 text-sm font-medium">Hardcopy Downloads:</span>
+            <a href="worksheet.pdf" download class="text-blue-400 hover:text-blue-300 font-bold transition-colors flex items-center gap-2"><span>📥</span> Ecosystems Worksheet.pdf</a>
+            <a href="answer_worksheet.pdf" download class="text-green-400 hover:text-green-300 font-bold transition-colors flex items-center gap-2"><span>📥</span> Answer Key.pdf</a>
+        </div>
+    </footer>
+
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="igcse-y8-sci-ch4"
+            data-module-name="Chapter 4: Ecosystems"
+            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/index.html">
+    </script>
+</body>
+
+</html>

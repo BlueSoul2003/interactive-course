@@ -82,6 +82,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y8-sci-ch1',          'Chapter 1: Respiration & Breathing',         'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch2',          'Chapter 2: Properties of Materials',         'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch3',          'Chapter 3: Forces and Energy',               'igcse', 'science', 'igcse_y8_science', 'Year8'),
+('igcse-y8-sci-ch4',          'Chapter 4: Ecosystems',                      'igcse', 'science', 'igcse_y8_science', 'Year8'),
 
 -- ── Singapore Math Year 4 ─────────────────────────────────────────
 ('sg-y4-math-whole-number',   'Chapter 2: Whole Numbers (Part 2)',  'sg', 'math', 'sg_y4_math', 'Year4'),
