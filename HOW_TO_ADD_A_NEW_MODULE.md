@@ -153,7 +153,16 @@ If your module includes extra resources like PDF slides, exercises, or teacher c
 2. Move your PDF or slide files (e.g., from `_drafts`) directly into this same directory.
 3. **Rename them professionally:** Keep filenames lowercase and use underscores instead of spaces (e.g., `teacher_copy.pdf`, `exercise_questions.pdf`, `slides.pdf`).
 
-Go back to the main root `index.html` (the Grand Landing Page), and find the card you created for this module. 
+### Step 10: Register PDFs in the Global Footer Menu
+To maintain platform consistency, any downloadable PDF **MUST** be added to the centralized "Download PDF Notes" footer menu so students can quickly find materials organized by subject and grade.
+
+1. Open `index.html` and search for the `const pdfResources = [` array (located near the bottom in the `<script>` section).
+2. Append a new JSON object for your files into the appropriate syllabus list:
+```javascript
+{ syllabus: "SPM", subject: "Bahasa Melayu", label: "Module Exercises", file: "content/SPM_Syllabus/Form5/BM/Module/worksheet.pdf" },
+```
+
+### Step 11: Add Inline Download Links to the Module Card (Optional) 
 
 To avoid breaking the browser with nested `<a download>` tags inside `<a href="module">`, wrap the entire block in a parent `<div style="display: flex; flex-direction: column;">`. You must ensure the **inner** `a.card` holds the canonical `data-module-id` so the security script correctly recognizes and locks it.
 
@@ -178,7 +187,7 @@ To avoid breaking the browser with nested `<a download>` tags inside `<a href="m
 
 ## Pillar 5: Supabase Security Registry (The Lock)
 
-### Step 11: Register Canonical ID in Supabase
+### Step 12: Register Canonical ID in Supabase
 Your module card correctly assigns a `data-module-id` string, but you MUST formally register this canonical ID within the Supabase database. If it's not strictly registered here, admins cannot generate PINs for it!
 
 1. Open `modules_registry.sql` in your project folder.
@@ -186,7 +195,7 @@ Your module card correctly assigns a `data-module-id` string, but you MUST forma
 3. Append a new row mapping your module ID exactly as typed in the `index.html` file into the `public.modules` table.
 4. **CRITICAL:** Copy the entire updated `modules_registry.sql` script text and execute it in your **Supabase Dashboard > SQL Editor**. This rebuilds the security registry. (The script is natively idempotent; running it multiple times is perfectly safe).
 
-### Step 12: Upload to GitHub (Final Deployment)
+### Step 13: Upload to GitHub (Final Deployment)
 To make your new module and its downloadable files securely live for everybody, push your local changes to GitHub.
 ```bash
 git add .
@@ -197,7 +206,7 @@ git push origin main
 ---
 
 ## Summary Checklist
-Every time you add a new module, verify you have hit all 4 pillars:
+Every time you add a new module, verify you have hit all 5 pillars:
 
 - [ ] **Pillar 1:** File moved from `_drafts` to `content/...` and renamed to `index.html`.
 - [ ] **Pillar 2:** Card added to the Grand Landing Page (using grid wrapper if adding downloads).
@@ -207,6 +216,7 @@ Every time you add a new module, verify you have hit all 4 pillars:
 - [ ] **Pillar 4:** `ProgressTracker.save()` implemented on student action.
 - [ ] **Pillar 5:** Canonical `data-module-id` added to `modules_registry.sql`.
 - [ ] **Pillar 5:** `modules_registry.sql` executed in Supabase SQL Editor.
+- [ ] **Optional:** Auxiliary PDFs registered in the global `pdfResources` array (Step 10).
 - [ ] **Final:** Pushed all changes to GitHub.
 
 ---
