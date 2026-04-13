@@ -137,8 +137,8 @@ const AuthAccess = {
             isAdmin = authInfo.tier === 'admin';
         }
         
-        // Only target anchor cards inside view-layers (real lesson links)
-        const moduleCards = document.querySelectorAll('.view-layer a.card');
+        // Only target element cards inside view-layers
+        const moduleCards = document.querySelectorAll('.view-layer .card');
         const guestSyllabusTracker = new Set();
         
         moduleCards.forEach(card => {
@@ -235,7 +235,7 @@ const AuthAccess = {
         const syllabusSections = document.querySelectorAll('.syllabus-content');
 
         syllabusSections.forEach(section => {
-            const cards = section.querySelectorAll('.view-layer a.card');
+            const cards = section.querySelectorAll('.view-layer .card');
             if (cards.length === 0) return;
 
             const titleEl = section.querySelector('.section-title');
