@@ -137,22 +137,14 @@ const AuthAccess = {
             isAdmin = authInfo.tier === 'admin';
         }
         
-        // Only target element cards inside view-layers
-        const moduleCards = document.querySelectorAll('.view-layer .card');
+        // Only target element cards inside view-layers that have a module ID
+        const moduleCards = document.querySelectorAll('.view-layer .card[data-module-id]');
         const guestSyllabusTracker = new Set();
         
         moduleCards.forEach(card => {
 
             // ── Read canonical ID (must come from data-module-id) ─────────────
             const moduleId = card.dataset.moduleId;
-
-            if (!moduleId) {
-                // Flag missing attribute to developers — safe default: show unlocked
-                console.warn(
-                    '[AuthAccess] ⚠️  Card is missing data-module-id — cannot enforce PIN lock.\n' +
-                    '  Fix: add data-module-id="<canonical-id>" to this card in index.html.\n', card
-                );
-            }
 
             // ── Determine syllabus & bundle ───────────────────────────────────
             const syllabusContent = card.closest('.syllabus-content');
@@ -235,7 +227,7 @@ const AuthAccess = {
         const syllabusSections = document.querySelectorAll('.syllabus-content');
 
         syllabusSections.forEach(section => {
-            const cards = section.querySelectorAll('.view-layer .card');
+            const cards = section.querySelectorAll('.view-layer .card[data-module-id]');
             if (cards.length === 0) return;
 
             const titleEl = section.querySelector('.section-title');
