@@ -7,7 +7,15 @@ At its core, a learning module on this platform is simply an interactive web pag
 3. **Local Navigation (Exit):** The student needs a "door" to return home from inside the module.
 4. **State Management (Memory):** The module must remember what the student has accomplished (Progress Tracking) using our cloud database.
 
-By following these four pillars step-by-step, you can add any module completely independently.
+By following these steps, you can add any module completely independently and securely hook it into our backend.
+
+---
+
+## The Access Model (Authentication & Authorization)
+Our platform is secured using a Supabase-backed PIN registry system (`auth-access.js`).
+1. **Admins:** Have "God Mode." They can open and view all modules without restriction. Admins can generate PINs for bundles or individual modules.
+2. **Guests & Members:** By default, all newly added modules are strictly **locked** behind a PIN-wall.
+3. **Free Preview:** The system automatically identifies the very first module in any syllabus category and grants it as a **free preview** to everyone (guests and members). All subsequent modules require specific PIN redemption to unlock.
 
 ---
 
@@ -36,14 +44,12 @@ Find the correct place to store your module permanently by navigating through th
 Your module exists, but students need a button to click it from the main menu.
 1. Open the main root `index.html` file (located in the main `interactive-course-main` folder).
 2. Search for the section where similar syllabus cards exist (e.g., `SPM BM` or `UEC Senior English`).
-3. Copy an existing card's code snippet. It usually looks like this:
-   ```html
-   <a href="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html" class="module-card">
-      <h3>Module Title</h3>
-      <p>Module Description</p>
-   </a>
-   ```
+3. Copy an existing card's code snippet.
 4. Paste the snippet where you want it to appear, and update the `href` path, `<h3>` title, and `<p>` description to match your new module.
+
+**⚠️ CRITICAL HTML RULE:** If your module is just a simple link, use the standard `a.card` structure. However, if your module will include auxiliary download links (like `.pdf` worksheets), you **CANNOT** use a master `<a>` tag because HTML strictly forbids nesting `<a>` tags inside other `<a>` tags. 
+
+*Instead, use a `<div class="sub-[subject]">` grid wrapper layout as shown below in Pillar 5.*
 
 ---
 
@@ -107,9 +113,9 @@ Before the closing `</body>` tag of your module, link the Supabase progress trac
         data-module-url="content/your/path/index.html">
 </script>
 ```
-- `data-module-id`: Unique key, e.g., `SPM_Kesalahan_Ejaan`. Never reuse an ID.
+- `data-module-id`: Unique canonical key, e.g., `spm-bm-kesalahan`. This is the exact key the PIN authentication system uses to lock/unlock your module.
 - `data-module-name`: What appears in the Student Dashboard.
-- `data-module-url`: The exact path from the root, used by the "Resume" button. *(Note: Adjust the `src` path to ensure it correctly points to the `js/` folder).*
+- `data-module-url`: The exact path from the root, used by the "Resume" button.
 
 ### Step 7: Load Saved Progress on Start
 Inside your module's own `<script>` tag, add logic to load progress when the page opens:
@@ -147,32 +153,44 @@ If your module includes extra resources like PDF slides, exercises, or teacher c
 2. Move your PDF or slide files (e.g., from `_drafts`) directly into this same directory.
 3. **Rename them professionally:** Keep filenames lowercase and use underscores instead of spaces (e.g., `teacher_copy.pdf`, `exercise_questions.pdf`, `slides.pdf`).
 
-### Step 10: Add Download Links to the Grand Landing Page
-Go back to the main root `index.html` (the Grand Landing Page), and find the card you created for this module in Step 4. Add download links inside or below the card so students can access the files without entering the interactive module.
+Go back to the main root `index.html` (the Grand Landing Page), and find the card you created for this module. 
 
-Modify your card snippet to include new `<a>` tags with the `download` attribute, pointing strictly to those PDFs:
+To avoid breaking the browser with nested `<a download>` tags inside `<a href="module">`, wrap the entire block in a parent `<div style="display: flex; flex-direction: column;">`. You must ensure the **inner** `a.card` holds the canonical `data-module-id` so the security script correctly recognizes and locks it.
 
 ```html
-<div class="module-card">
-   <!-- Link to enter the Interactive Module -->
-   <a href="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html">
-      <h3>Module Title</h3>
-   </a>
-   <p>Module Description</p>
-   
-   <!-- Download links for extra PDF materials -->
-   <div class="resource-links" style="margin-top: 10px;">
-      <a href="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/slides.pdf" download>📥 Download Slides</a>
-      <a href="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/teacher_copy.pdf" download>📥 Teacher Copy</a>
-   </div>
+<!-- Proper Grid Wrapper Layout -->
+<div class="sub-bm" style="display: flex; flex-direction: column; height: 100%;">
+    <!-- Main Interactive Module Link (Holds the ID!) -->
+    <a href="content/SPM_Syllabus/Form5/BM/Kesalahan/index.html" class="card" data-module-id="spm-bm-kesalahan" style="flex-grow: 1; text-decoration: none;">
+        <div class="card-tag">SPM Core</div>
+        <h3>Module Title</h3>
+        <p>Interactive web module description</p>
+    </a>
+    
+    <!-- Hardcopy Downloads (Siblings to the card link) -->
+    <div class="resource-links" style="margin-top: 12px; display: flex; gap: 10px;">
+        <a href="content/SPM_Syllabus/Form5/BM/Kesalahan/worksheet.pdf" download style="color: var(--accent-color); flex: 1; text-align: center; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 6px;">📥 Download Slides</a>
+    </div>
 </div>
 ```
 
-### Step 11: Upload to GitHub (Final Deployment)
-To make your new module and its downloadable files live for everyone, you must push your changes to GitHub. Open your terminal (or GitHub Desktop) in your `interactive-course-main` folder and run:
+---
+
+## Pillar 5: Supabase Security Registry (The Lock)
+
+### Step 11: Register Canonical ID in Supabase
+Your module card correctly assigns a `data-module-id` string, but you MUST formally register this canonical ID within the Supabase database. If it's not strictly registered here, admins cannot generate PINs for it!
+
+1. Open `modules_registry.sql` in your project folder.
+2. Locate the database insertion block: `INSERT INTO public.modules ...`
+3. Append a new row mapping your module ID exactly as typed in the `index.html` file into the `public.modules` table.
+4. **CRITICAL:** Copy the entire updated `modules_registry.sql` script text and execute it in your **Supabase Dashboard > SQL Editor**. This rebuilds the security registry. (The script is natively idempotent; running it multiple times is perfectly safe).
+
+### Step 12: Upload to GitHub (Final Deployment)
+To make your new module and its downloadable files securely live for everybody, push your local changes to GitHub.
 ```bash
 git add .
-git commit -m "Add new module and resources for [Topic Name]"
+git commit -m "Add new module and register IDs"
 git push origin main
 ```
 
@@ -182,13 +200,14 @@ git push origin main
 Every time you add a new module, verify you have hit all 4 pillars:
 
 - [ ] **Pillar 1:** File moved from `_drafts` to `content/...` and renamed to `index.html`.
-- [ ] **Pillar 2:** Card added to the Grand Landing Page with correct `href`.
-- [ ] **Pillar 3:** Home button added to the module with correct `../../../` path.
+- [ ] **Pillar 2:** Card added to the Grand Landing Page (using grid wrapper if adding downloads).
+- [ ] **Pillar 3:** Home button added to the module with correct `../../../` relative path.
 - [ ] **Pillar 4:** `progress-tracker.js` script tag added with unique `data-module-id`.
 - [ ] **Pillar 4:** `ProgressTracker.load()` implemented on page load.
 - [ ] **Pillar 4:** `ProgressTracker.save()` implemented on student action.
-- [ ] **Optional:** Auxiliary PDFs moved to module folder and download links added to main `index.html`.
-- [ ] **Final:** Pushed all changes to GitHub (`git add .`, `git commit`, `git push`).
+- [ ] **Pillar 5:** Canonical `data-module-id` added to `modules_registry.sql`.
+- [ ] **Pillar 5:** `modules_registry.sql` executed in Supabase SQL Editor.
+- [ ] **Final:** Pushed all changes to GitHub.
 
 ---
 
