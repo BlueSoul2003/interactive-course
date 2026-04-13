@@ -22,10 +22,12 @@ CREATE TABLE IF NOT EXISTS public.modules (
 ALTER TABLE public.modules ENABLE ROW LEVEL SECURITY;
 
 -- RLS: Any authenticated user can read the module list
+DROP POLICY IF EXISTS "Anyone can view modules" ON public.modules;
 CREATE POLICY "Anyone can view modules" ON public.modules
   FOR SELECT USING (TRUE);
 
 -- RLS: Only admins can modify the registry
+DROP POLICY IF EXISTS "Admins can manage modules" ON public.modules;
 CREATE POLICY "Admins can manage modules" ON public.modules
   FOR ALL USING (
     (SELECT tier FROM public.user_profiles WHERE id = auth.uid()) = 'admin'
