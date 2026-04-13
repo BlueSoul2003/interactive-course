@@ -158,6 +158,12 @@ const AuthAccess = {
             const syllabusContent = card.closest('.syllabus-content');
             const syllabus = syllabusContent ? syllabusContent.id : 'unknown';
             const bundle   = card.dataset.bundle;
+            
+            // Mark the first module seen for this syllabus section as free
+            const isFirstModule = !guestSyllabusTracker.has(syllabus);
+            if (isFirstModule) {
+                guestSyllabusTracker.add(syllabus);
+            }
 
             // ── Compute access ────────────────────────────────────────────────
             let hasAccess = false;
@@ -165,18 +171,12 @@ const AuthAccess = {
             if (isAdmin) {
                 hasAccess = true;
 
-            } else if (isGuest) {
-                // One free module per syllabus section
-                if (!guestSyllabusTracker.has(syllabus)) {
-                    guestSyllabusTracker.add(syllabus);
-                    hasAccess = true;
-                }
-
             } else if (!moduleId) {
                 hasAccess = true; // can't lock what has no ID
 
             } else {
                 hasAccess =
+                    isFirstModule                         ||  // free first module
                     unlockedModules.includes('*')         ||  // god mode
                     unlockedModules.includes(moduleId)    ||  // exact canonical ID
                     unlockedModules.includes(syllabus)    ||  // whole syllabus
