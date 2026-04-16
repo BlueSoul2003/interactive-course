@@ -1067,12 +1067,12 @@
         }
 
         // --- STARTUP ---
-        window.onload = async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved) {
                     // Optional: restore state here if needed
-                }
+                });
             }
             resizeCanvas();
             initLabEngine();
@@ -1082,7 +1082,7 @@
 
         function saveProgressRecord(actionDetails) {
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({
+                ProgressTracker.autoSave({
                     lastAction: actionDetails,
                     lastMode: currentMode,
                     timestamp: new Date().toISOString()

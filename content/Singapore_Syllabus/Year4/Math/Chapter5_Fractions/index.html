@@ -1605,7 +1605,7 @@
             if (viewName === 'pokedex') renderPokedex();
 
             if (window.ProgressTracker) {
-                window.ProgressTracker.save({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
+                window.ProgressTracker.autoSave({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
             }
         }
 
@@ -2162,7 +2162,7 @@
             }
 
             if (window.ProgressTracker) {
-                window.ProgressTracker.save({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
+                window.ProgressTracker.autoSave({ unlocked: state.unlocked, completed: state.completed, pokedex: state.pokedex });
             }
 
             showModal(
@@ -2379,17 +2379,17 @@
         }
 
         // Initialize Map on load
-        window.onload = () => {
-            if (window.ProgressTracker) {
-                const saved = window.ProgressTracker.load();
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
                 if (saved) {
                     if (saved.unlocked) state.unlocked = saved.unlocked;
                     if (saved.completed) state.completed = saved.completed;
                     if (saved.pokedex) state.pokedex = saved.pokedex;
                 }
-            }
+            });
             switchView('map');
-        };
+        });
 
     </script>
 

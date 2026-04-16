@@ -996,7 +996,7 @@
     window.addEventListener('load', async () => {
         if (!window.ProgressTracker) return;
         await ProgressTracker.load();
-        if (window.ProgressTracker) ProgressTracker.save({ visited: true });
+        if (window.ProgressTracker) ProgressTracker.autoSave({ visited: true });
     });
 </script>
 

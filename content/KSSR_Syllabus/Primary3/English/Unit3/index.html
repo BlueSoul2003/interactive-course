@@ -1159,9 +1159,9 @@
 
         // --- PILLAR 4: PROGRESS TRACKING ---
         window.addEventListener('load', async () => {
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                const p = saved.progress_data;
+            const saved = await tracker.load();
+            if (saved && saved) {
+                const p = saved;
                 // Restore score if saved
                 if (p.score) {
                     score = p.score;
@@ -1174,7 +1174,7 @@
         const _origAddScore = addScore;
         function addScore() {
             _origAddScore();
-            ProgressTracker.save({ score: score });
+            ProgressTracker.autoSave({ score: score });
         }
     </script>
 

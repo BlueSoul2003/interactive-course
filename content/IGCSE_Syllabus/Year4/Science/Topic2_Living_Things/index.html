@@ -1167,14 +1167,14 @@
         buildMcq(); buildTf(); buildFill(); buildShort();
 
         // ── UNIVERSAL PROGRESS TRACKING ───────────────────────────
-        // Uses ProgressTracker.save() / .load() from js/progress-tracker.js
+        // Uses ProgressTracker.autoSave() / .load() from js/progress-tracker.js
         // The script tag data-* attributes above identify this module.
 
         let _tracking = { tab: 'ppt', mcq: {}, tf: {}, fill: {}, short: {} };
 
         function _saveProgress() {
             if (window.ProgressTracker && ProgressTracker.getActiveStudent()) {
-                ProgressTracker.save(_tracking);
+                ProgressTracker.autoSave(_tracking);
             }
         }
 
@@ -1190,10 +1190,10 @@
                 if (nameEl) nameEl.innerText = student;
             }
 
-            const saved = await ProgressTracker.load();
-            if (!saved || !saved.progress_data) return;
+            const saved = await tracker.load();
+            if (!saved || !saved) return;
 
-            const p = saved.progress_data;
+            const p = saved;
             _tracking = { tab: p.tab || 'ppt', mcq: p.mcq || {}, tf: p.tf || {}, fill: p.fill || {}, short: p.short || {} };
 
             // Restore tab

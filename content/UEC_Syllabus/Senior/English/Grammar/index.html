@@ -808,9 +808,9 @@
     <script>
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data && saved.progress_data.part) {
-                const pt = saved.progress_data.part;
+            const saved = await tracker.load();
+            if (saved && saved && saved.part) {
+                const pt = saved.part;
                 if (pt === 2 && typeof renderErrors === 'function') renderErrors();
             }
         });
@@ -818,10 +818,10 @@
         const _origRenderPart1 = (typeof renderPart1 !== 'undefined') ? renderPart1 : null;
         const _origRenderErrors = (typeof renderErrors !== 'undefined') ? renderErrors : null;
         if (_origRenderPart1) {
-            renderPart1 = function() { _origRenderPart1(); if (window.ProgressTracker) ProgressTracker.save({ part: 1 }); };
+            renderPart1 = function() { _origRenderPart1(); if (window.ProgressTracker) ProgressTracker.autoSave({ part: 1 }); };
         }
         if (_origRenderErrors) {
-            renderErrors = function() { _origRenderErrors(); if (window.ProgressTracker) ProgressTracker.save({ part: 2 }); };
+            renderErrors = function() { _origRenderErrors(); if (window.ProgressTracker) ProgressTracker.autoSave({ part: 2 }); };
         }
     </script>
 </html>

@@ -1165,18 +1165,18 @@
     <script>
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                const p = saved.progress_data;
+            const saved = await tracker.load();
+            if (saved && saved) {
+                const p = saved;
                 if (p.questionIndex !== undefined && typeof currentQuestion !== 'undefined') {
                     currentQuestion = p.questionIndex;
                 }
             }
-            if (window.ProgressTracker) ProgressTracker.save({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) });
+            if (window.ProgressTracker) ProgressTracker.autoSave({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) });
         });
         if (typeof nextQuestion === 'function') {
             const _oNQ = nextQuestion;
-            nextQuestion = function() { _oNQ(); if (window.ProgressTracker) ProgressTracker.save({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) }); };
+            nextQuestion = function() { _oNQ(); if (window.ProgressTracker) ProgressTracker.autoSave({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) }); };
         }
     </script>
 </html>

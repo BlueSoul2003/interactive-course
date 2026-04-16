@@ -1165,7 +1165,7 @@
             if (tabId === 'tab-m3' && !chartsRendered.m3) { renderM3Chart(); chartsRendered.m3 = true; }
             if (tabId === 'tab-m4' && !chartsRendered.m4) { renderM4Chart(); chartsRendered.m4 = true; }
             if (tabId === 'tab-m5' && !chartsRendered.m5) { renderM5Chart(); chartsRendered.m5 = true; }
-            if (window.ProgressTracker) window.ProgressTracker.save({ tab: tabId });
+            if (window.ProgressTracker) window.ProgressTracker.autoSave({ tab: tabId });
         }
 
         // --- 4. Teacher's Guide / Calculation Logic ---
@@ -1401,18 +1401,15 @@
         }
 
         // --- Init Function ---
-        window.onload = () => {
-            let initialTab = 'tab-tut';
-            if (window.ProgressTracker) {
-                const state = window.ProgressTracker.load();
-                if (state && state.tab) {
-                    initialTab = state.tab;
-                }
-            }
-            switchTab(initialTab);
+        window.addEventListener('load', function() {
             initTeacherGuides();
             initPartySlots();
-        };
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                const initialTab = (saved && saved.tab) ? saved.tab : 'tab-tut';
+                switchTab(initialTab);
+            });
+        });
 
         // --- 7. Gamification Reward System (Roulette Catch Mechanic) ---
         const pokeList = [

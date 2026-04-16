@@ -526,8 +526,9 @@
         data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html"></script>
 <script>
 window.addEventListener('load', function() {
-    if (!window.ProgressTracker) return;
-    ProgressTracker.load().then(function() { ProgressTracker.save({ visited: true }); });
+    ProgressTracker.init(async function(tracker) {
+        await tracker.load(); // marks visit, no stage state for this module
+    });
 });
 </script>
 

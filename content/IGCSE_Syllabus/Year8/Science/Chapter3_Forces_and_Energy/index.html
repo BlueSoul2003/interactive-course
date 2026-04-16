@@ -1190,7 +1190,7 @@
                 result.innerHTML = "✅ Correct!";
                 result.className = "font-bold text-lg text-emerald-400";
                 if (typeof ProgressTracker !== 'undefined') {
-                    ProgressTracker.save({ timestamp: Date.now(), quiz: `${tabId}-${qIndex}` });
+                    ProgressTracker.autoSave({ timestamp: Date.now(), quiz: `${tabId}-${qIndex}` });
                 }
             } else {
                 result.innerHTML = "❌ Incorrect";
@@ -2145,12 +2145,12 @@
             else if (activeTab === 'diffusion') resetDiffusion();
         });
 
-        window.onload = async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved) {
                     // Restore state if needed based on the progress data
-                }
+                });
             }
             initSpace(); initDTGraph(); initMoments(); initPressure(); initFluid(); initDiffusion();
 

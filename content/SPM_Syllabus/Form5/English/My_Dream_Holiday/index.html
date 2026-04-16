@@ -809,14 +809,14 @@
     <script>
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data && saved.progress_data.section && typeof showSection === 'function') {
-                showSection(saved.progress_data.section);
+            const saved = await tracker.load();
+            if (saved && saved && saved.section && typeof showSection === 'function') {
+                showSection(saved.section);
             }
         });
         if (typeof showSection === 'function') {
             const _oSS2 = showSection;
-            showSection = function(n) { _oSS2(n); if (window.ProgressTracker) ProgressTracker.save({ section: n }); };
+            showSection = function(n) { _oSS2(n); if (window.ProgressTracker) ProgressTracker.autoSave({ section: n }); };
         }
     </script>
 </html>

@@ -492,9 +492,9 @@
                     const n = document.getElementById('activeStudentName');
                     if (n) n.innerText = student;
                 }
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
-                    const p = saved.progress_data;
+                const saved = await tracker.load();
+                if (saved && saved) {
+                    const p = saved;
                     if (p.vIndex !== undefined) { vIndex = p.vIndex; renderVocabSet(); }
                     if (p.mIndex !== undefined) { mIndex = p.mIndex; renderMagicQ(); }
                     if (p.section) { currentSection = p.section; showSection(currentSection, false); }
@@ -503,7 +503,7 @@
         });
         function saveProgress() {
             if (typeof ProgressTracker !== 'undefined' && ProgressTracker.save) {
-                ProgressTracker.save({ section: currentSection, vIndex: vIndex, mIndex: mIndex });
+                ProgressTracker.autoSave({ section: currentSection, vIndex: vIndex, mIndex: mIndex });
             }
         }
         

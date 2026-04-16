@@ -2806,7 +2806,7 @@
 
             // Pillar 4: Save current tab on every switch
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({ activeTab: tabId, clozeCorrect: clozeCorrect });
+                ProgressTracker.autoSave({ activeTab: tabId, clozeCorrect: clozeCorrect });
             }
         }
 
@@ -3070,12 +3070,12 @@
         }
         // Pillar 4: Load saved progress on page start
         window.addEventListener('load', async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data && saved.progress_data.activeTab) {
-                    switchTab(saved.progress_data.activeTab);
-                    console.log('Year 6 Unit 2 progress loaded:', saved.progress_data);
-                }
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved && saved.activeTab) {
+                    switchTab(saved.activeTab);
+                    console.log('Year 6 Unit 2 progress loaded:', saved);
+                });
             }
         });
     </script>

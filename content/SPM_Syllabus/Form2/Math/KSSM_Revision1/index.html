@@ -381,19 +381,20 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             applyKaTeX(document.getElementById('start-screen'));
-            // Load saved progress
-            if (window.ProgressTracker) {
-                ProgressTracker.load().then(saved => {
-                    if (saved && saved.progress_data && saved.progress_data.questionIndex !== undefined) {
-                        currentIndex = saved.progress_data.questionIndex;
-                    }
-                });
-            }
+        });
+
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved.questionIndex !== undefined) {
+                    currentIndex = saved.questionIndex;
+                }
+            });
         });
 
         function _saveProgress() {
             if (window.ProgressTracker) {
-                ProgressTracker.save({ questionIndex: currentIndex, screen: 'quiz' });
+                ProgressTracker.autoSave({ questionIndex: currentIndex, screen: 'quiz' });
             }
         }
 

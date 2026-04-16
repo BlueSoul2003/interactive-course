@@ -574,7 +574,7 @@
 
             // Pillar 4: Save progress on every render
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({ step: currentStep, subLevel: subLevel, score: myCurrentScore });
+                ProgressTracker.autoSave({ step: currentStep, subLevel: subLevel, score: myCurrentScore });
             }
         }
 
@@ -1003,20 +1003,20 @@
         }
 
         // Initialize App
-        window.onload = async () => {
+        window.addEventListener('load', function() {
             goToPhase(1);
 
             // Pillar 4: State Management (Load saved progress on start)
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
-                    const p = saved.progress_data;
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved) {
+                    const p = saved;
                     currentStep = p.step || 1;
                     subLevel = p.subLevel || 0;
                     myCurrentScore = p.score || 0;
                     renderCurrentPhase();
                     console.log('Unit 2 progress loaded:', p);
-                }
+                });
             }
         };
 

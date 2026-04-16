@@ -435,7 +435,7 @@
             }
 
             // Save tab in progress
-            if (window.ProgressTracker) ProgressTracker.save({ tab: name, questionIndex: window._quizIdx || 0 });
+            if (window.ProgressTracker) ProgressTracker.autoSave({ tab: name, questionIndex: window._quizIdx || 0 });
         }
     </script>
 

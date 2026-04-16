@@ -767,9 +767,9 @@
     <script>
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
+            const saved = await tracker.load();
             // Summary module - just record that student was here
-            if (window.ProgressTracker) ProgressTracker.save({ visited: true });
+            if (window.ProgressTracker) ProgressTracker.autoSave({ visited: true });
         });
     </script>
 </html>

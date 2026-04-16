@@ -821,7 +821,7 @@
         function _saveSMMProgress() {
             const active = document.querySelector('.lesson-section.active');
             const sectionNum = active ? active.id.replace('section-', '') : '1';
-            if (window.ProgressTracker) ProgressTracker.save({ section: sectionNum, vocabIndex: vIndex, peelIndex: pIndex });
+            if (window.ProgressTracker) ProgressTracker.autoSave({ section: sectionNum, vocabIndex: vIndex, peelIndex: pIndex });
         }
         const _origShowSection = showSection;
         showSection = function(num) { _origShowSection(num); _saveSMMProgress(); };
@@ -832,9 +832,9 @@
         // -- RESTORE ON LOAD
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                const p = saved.progress_data;
+            const saved = await tracker.load();
+            if (saved && saved) {
+                const p = saved;
                 if (p.vocabIndex) { vIndex = p.vocabIndex; renderVocab(); }
                 if (p.peelIndex) { pIndex = p.peelIndex; renderPeel(); }
                 if (p.section) showSection(parseInt(p.section));

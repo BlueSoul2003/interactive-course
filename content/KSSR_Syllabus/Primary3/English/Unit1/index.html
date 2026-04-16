@@ -941,17 +941,17 @@
 
             // Pillar 4: State Management (Save progress when checking answers)
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({ completed_vocab: true });
+                ProgressTracker.autoSave({ completed_vocab: true });
             }
         }
 
         // Pillar 4: State Management (Load progress on start)
         window.addEventListener('load', async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
                 if (saved) {
-                    console.log("P3 English Progress loaded:", saved.progress_data);
-                }
+                    console.log("P3 English Progress loaded:", saved);
+                });
             }
         });
     </script>

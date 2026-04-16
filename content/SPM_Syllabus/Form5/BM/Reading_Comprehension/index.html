@@ -1259,17 +1259,17 @@
         render();
 
         window.addEventListener('load', async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
-                    const p = saved.progress_data;
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved) {
+                    const p = saved;
                     if (p.score !== undefined) state.score = p.score;
                     if (p.m1Level !== undefined) state.m1Level = p.m1Level;
                     if (p.m1Progress) state.m1Progress = p.m1Progress;
                     if (p.bossLevel !== undefined) state.bossLevel = p.bossLevel;
                     if (p.bossProgress) state.bossProgress = p.bossProgress;
                     render();
-                }
+                });
             }
         });
 
@@ -1277,7 +1277,7 @@
         showToast = function (msg, isSuccess = true) {
             originalShowToast(msg, isSuccess);
             if (isSuccess && typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({
+                ProgressTracker.autoSave({
                     score: state.score,
                     m1Level: state.m1Level,
                     m1Progress: state.m1Progress,
@@ -1291,7 +1291,7 @@
         window.clearData = function () {
             originalClearData();
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({
+                ProgressTracker.autoSave({
                     score: 0,
                     m1Level: 0,
                     m1Progress: {},

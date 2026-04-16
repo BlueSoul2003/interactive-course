@@ -278,7 +278,7 @@
         function saveProgress() {
             if (typeof ProgressTracker !== 'undefined') {
                 // Save a light version of the state (avoid saving huge UI queues if possible, but state is small enough)
-                ProgressTracker.save({
+                ProgressTracker.autoSave({
                     score: state.score,
                     masteredSwipes: state.masteredSwipes,
                     masteredEjaan: state.masteredEjaan,
@@ -1125,26 +1125,24 @@
         render();
 
         // Pillar 4: Load saved progress on page start
-        window.addEventListener('load', async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
-                    // Restore data
-                    if (saved.progress_data.score !== undefined) state.score = saved.progress_data.score;
-                    if (saved.progress_data.masteredSwipes) state.masteredSwipes = saved.progress_data.masteredSwipes;
-                    if (saved.progress_data.masteredEjaan) state.masteredEjaan = saved.progress_data.masteredEjaan;
-                    if (saved.progress_data.masteredGrammar) state.masteredGrammar = saved.progress_data.masteredGrammar;
-                    if (saved.progress_data.seenSwipes) state.seenSwipes = saved.progress_data.seenSwipes;
-                    if (saved.progress_data.seenEjaan) state.seenEjaan = saved.progress_data.seenEjaan;
-                    if (saved.progress_data.seenGrammar) state.seenGrammar = saved.progress_data.seenGrammar;
-                    if (saved.progress_data.seenBoss) state.seenBoss = saved.progress_data.seenBoss;
-                    if (saved.progress_data.historyLog) state.historyLog = saved.progress_data.historyLog;
-                    if (saved.progress_data.foundBugs) state.foundBugs = saved.progress_data.foundBugs;
-                    
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved) {
+                    if (saved.score !== undefined) state.score = saved.score;
+                    if (saved.masteredSwipes) state.masteredSwipes = saved.masteredSwipes;
+                    if (saved.masteredEjaan) state.masteredEjaan = saved.masteredEjaan;
+                    if (saved.masteredGrammar) state.masteredGrammar = saved.masteredGrammar;
+                    if (saved.seenSwipes) state.seenSwipes = saved.seenSwipes;
+                    if (saved.seenEjaan) state.seenEjaan = saved.seenEjaan;
+                    if (saved.seenGrammar) state.seenGrammar = saved.seenGrammar;
+                    if (saved.seenBoss) state.seenBoss = saved.seenBoss;
+                    if (saved.historyLog) state.historyLog = saved.historyLog;
+                    if (saved.foundBugs) state.foundBugs = saved.foundBugs;
                     render();
-                    console.log('SPM Form 5 BM Kesalahan Ejaan progress loaded:', saved.progress_data);
+                    console.log('Kesalahan Ejaan progress loaded:', saved);
                 }
-            }
+            });
         });
 
     </script>

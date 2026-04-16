@@ -1148,7 +1148,7 @@
         // --- PROGRESS TRACKING ---
         function _saveProgress() {
             if (window.ProgressTracker) {
-                ProgressTracker.save({
+                ProgressTracker.autoSave({
                     stage: currentStageNum,
                     userAnswers: userAnswers,
                     finalMBTI: finalMBTI,
@@ -1162,15 +1162,15 @@
             }
         }
 
-        window.onload = async function () {
+        window.addEventListener('load', function() {
             renderQuiz();
             renderDilemma();
             renderVocab();
 
             if (window.ProgressTracker) {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
-                    const p = saved.progress_data;
+                const saved = await tracker.load();
+                if (saved && saved) {
+                    const p = saved;
                     if (p.stage) nextStage(1, p.stage);
                     if (p.userAnswers) {
                         userAnswers = p.userAnswers;

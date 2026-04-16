@@ -392,10 +392,9 @@
         data-module-name="IGCSE Y4 Science – States of Matter"
         data-module-url="content/IGCSE_Syllabus/Year4/Science/Chapter3_States_of_Matter/index.html"></script>
     <script>
-        window.addEventListener('load', () => {
-            if (!window.ProgressTracker) return;
-            ProgressTracker.load().then(() => {
-                ProgressTracker.save({ visited: true });
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                await tracker.load(); // marks visit, no stage state for this module
             });
         });
     </script>

@@ -854,18 +854,18 @@
     <script>
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data && saved.progress_data.part === 2 && typeof renderPart2 === 'function') {
+            const saved = await tracker.load();
+            if (saved && saved && saved.part === 2 && typeof renderPart2 === 'function') {
                 renderPart2();
             }
         });
         if (typeof renderPart1 === 'function') {
             const _o1 = renderPart1;
-            renderPart1 = function() { _o1(); if (window.ProgressTracker) ProgressTracker.save({ part: 1 }); };
+            renderPart1 = function() { _o1(); if (window.ProgressTracker) ProgressTracker.autoSave({ part: 1 }); };
         }
         if (typeof renderPart2 === 'function') {
             const _o2 = renderPart2;
-            renderPart2 = function() { _o2(); if (window.ProgressTracker) ProgressTracker.save({ part: 2 }); };
+            renderPart2 = function() { _o2(); if (window.ProgressTracker) ProgressTracker.autoSave({ part: 2 }); };
         }
     </script>
 </html>

@@ -1103,7 +1103,7 @@
 
                 // Pillar 4: Save progress
                 if (typeof ProgressTracker !== 'undefined') {
-                    ProgressTracker.save({ email_completed: true });
+                    ProgressTracker.autoSave({ email_completed: true });
                 }
             } else {
                 feedback.innerHTML = '❌ Some choices were wrong. The red ones are incorrect, and those choices have been crossed out. Try another option! <span class="zh block text-sm font-normal text-red-700">有些选择错了。红色的选项是不正确的，且错误选项已被划掉。请尝试其他的！</span>';
@@ -1176,7 +1176,7 @@
 
                 // Pillar 4: Save progress
                 if (typeof ProgressTracker !== 'undefined') {
-                    ProgressTracker.save({ [zoneId]: 'correct' });
+                    ProgressTracker.autoSave({ [zoneId]: 'correct' });
                 }
             } else {
                 feedback.innerHTML = '❌ Not quite right. Try moving the words again! <span class="zh block text-sm font-normal text-red-700">不太对哦，尝试重新排列单词！</span>';
@@ -1204,7 +1204,7 @@
 
                 // Pillar 4: Save progress
                 if (typeof ProgressTracker !== 'undefined') {
-                    ProgressTracker.save({ [feedbackId]: 'correct' });
+                    ProgressTracker.autoSave({ [feedbackId]: 'correct' });
                 }
             } else {
                 button.classList.remove('border-gray-200');
@@ -1215,12 +1215,12 @@
         }
         // Pillar 4: Load saved progress
         window.addEventListener('load', async () => {
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data) {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved) {
                     // Logic to restore state could be added here (e.g. marking questions as green)
-                    console.log("Loaded student progress:", saved.progress_data);
-                }
+                    console.log("Loaded student progress:", saved);
+                });
             }
         });
     </script>

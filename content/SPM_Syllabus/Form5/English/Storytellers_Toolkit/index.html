@@ -889,9 +889,9 @@
     <script>
         window.addEventListener('load', async () => {
             if (!window.ProgressTracker) return;
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                const p = saved.progress_data;
+            const saved = await tracker.load();
+            if (saved && saved) {
+                const p = saved;
                 if (typeof state !== 'undefined') {
                     state.view = p.view || state.view;
                     if (p.currentQ !== undefined) state.currentQ = p.currentQ;
@@ -908,12 +908,12 @@
             setView = function(v) {
                 _oSV(v);
                 const snap = typeof state !== 'undefined' ? { view: state.view, currentQ: state.currentQ, score: state.score } : { view: v };
-                if (window.ProgressTracker) ProgressTracker.save(snap);
+                if (window.ProgressTracker) ProgressTracker.autoSave(snap);
             };
         }
         if (typeof showSection === 'function') {
             const _oSS3 = showSection;
-            showSection = function(n) { _oSS3(n); if (window.ProgressTracker) ProgressTracker.save({ section: n }); };
+            showSection = function(n) { _oSS3(n); if (window.ProgressTracker) ProgressTracker.autoSave({ section: n }); };
         }
     </script>
 </html>
