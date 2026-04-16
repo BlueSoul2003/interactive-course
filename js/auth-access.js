@@ -38,44 +38,6 @@ const AuthAccess = {
         };
     },
 
-    // ── Secure content loader (for modules stored in modules_content table) ───
-    async loadModuleContent(moduleId, containerId, renderCallback) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        
-        container.innerHTML = '<div style="text-align:center; padding:50px;">Loading secure content...</div>';
-
-        const { data: moduleData, error } = await window.supabaseClient
-            .from('modules_content')
-            .select('*')
-            .eq('module_id', moduleId)
-            .single();
-
-        if (error || !moduleData) {
-            console.warn('[AuthAccess] loadModuleContent — access denied or not found:', error?.message);
-            let depth = (window.location.pathname.match(/\//g) || []).length;
-            let rootPath = '../'.repeat(Math.max(0, depth - 2)) + 'index.html';
-
-            container.innerHTML = `
-                <div style="background:#1e293b;padding:40px;border-radius:16px;text-align:center;border:1px solid rgba(255,100,100,0.3);max-width:600px;margin:40px auto;font-family:sans-serif;">
-                    <div style="font-size:4rem;margin-bottom:20px;">🔒</div>
-                    <h2 style="color:#f8fafc;margin-bottom:10px;font-size:1.5rem;">Premium Module Locked</h2>
-                    <p style="color:#94a3b8;margin-bottom:25px;line-height:1.6;">
-                        This module requires a higher access tier. Please login or upgrade your account.
-                    </p>
-                    <button onclick="window.location.href='${rootPath}'"
-                        style="background:#3b82f6;color:white;border:none;padding:12px 24px;border-radius:30px;font-weight:bold;cursor:pointer;font-size:1rem;">
-                        Back to Home / Login
-                    </button>
-                </div>`;
-            return false;
-        }
-
-        // Do not clear the container here, as the module might have raw static HTML layouts 
-        // that depend on the data returned. The callback handles the injection.
-        renderCallback(moduleData.secure_data);
-        return true;
-    },
 
     // ── Auth ──────────────────────────────────────────────────────────────────
     async signIn(email, password) {
