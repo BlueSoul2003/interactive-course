@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Master Negotiator</title>
+    <style>
+        /* --- FBI/Hacker 暗黑特工風格 (Dark Mode Aesthetic) --- */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #e2e8f0;
+            padding: 20px;
+            max-width: 850px;
+            margin: 0 auto;
+            padding-top: 60px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #00ffcc;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+        }
+
+        /* --- 雙語翻譯控制器 --- */
+        .translate-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00ffcc;
+            color: #0f2027;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 10px rgba(0, 255, 204, 0.3);
+        }
+
+        .lang-cn {
+            display: none;
+        }
+
+        body.show-cn .lang-cn {
+            display: block;
+            color: #00d2ff;
+            font-size: 0.9em;
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        body.show-cn span.lang-cn {
+            display: inline;
+            margin-left: 5px;
+        }
+
+        /* --- 螢幕容器 --- */
+        .simulator-screen {
+            background: rgba(15, 32, 39, 0.8);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .scenario-badge {
+            background: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: bold;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: 1px dashed #00ffcc;
+        }
+
+        .btn {
+            background: linear-gradient(to right, #00b4db 0%, #0083b0 100%);
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto;
+            transition: 0.3s;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 180, 219, 0.4);
+        }
+
+        /* --- Stage 1: Ultimatum & Intuition --- */
+        .s1-container {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .s1-container.active {
+            display: block;
+        }
+
+        .ultimatum-box {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 2px dashed #e74c3c;
+        }
+
+        .ult-money {
+            font-size: 3em;
+            font-weight: bold;
+            color: #2ecc71;
+            margin: 15px 0;
+        }
+
+        .ult-split {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .ult-split div {
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            width: 40%;
+        }
+
+        .ult-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn-accept {
+            background: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 1.1em;
+        }
+
+        .btn-reject {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            font-size: 1.1em;
+        }
+
+        .intuition-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .intuition-opt {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .intuition-opt:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00ffcc;
+        }
+
+        .intuition-opt.fail {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+            color: #ffcccc;
+        }
+
+        .intuition-opt.locked {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* --- Stage 2 & 3: Mixed (MCQ + Reorder) --- */
+        .tactic-box {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #00ffcc;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .tactic-dialogue {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-style: italic;
+            border: 1px solid #2a2a4a;
+        }
+
+        .q-container {
+            display: none;
+            animation: fadeIn 0.5s;
+            margin-bottom: 20px;
+        }
+
+        .q-container.active {
+            display: block;
+        }
+
+        .tactic-opt {
+            display: block;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tactic-opt:hover {
+            background: rgba(0, 255, 204, 0.1);
+            border-color: #00ffcc;
+        }
+
+        .tactic-opt.correct {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: #27ae60;
+            color: #2ecc71;
+        }
+
+        .tactic-opt.wrong {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: #e74c3c;
+            color: #e74c3c;
+        }
+
+        .tactic-opt.locked {
+            pointer-events: none;
+        }
+
+        .answer-box {
+            min-height: 60px;
+            background: rgba(0, 255, 204, 0.05);
+            border: 2px dashed #00ffcc;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+
+        .word-bank {
+            min-height: 80px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .word-chip {
+            background: #203a43;
+            border: 1px solid #00b4db;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .word-chip:hover {
+            background: #00b4db;
+            color: #0f2027;
+            transform: translateY(-2px);
+        }
+
+        .tactic-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            display: none;
+            font-size: 1em;
+            font-weight: bold;
+        }
+
+        /* --- Stage 4: WhatsApp Boss Fight --- */
+        .boss-select {
+            text-align: center;
+            margin-bottom: 15px;
+            color: #00ffcc;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .wa-container {
+            background: #0b141a;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid #202c33;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .wa-header {
+            background: #202c33;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #111b21;
+            justify-content: space-between;
+        }
+
+        .wa-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .wa-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .rapport-bar-bg {
+            width: 100px;
+            height: 10px;
+            background: #111b21;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .rapport-fill {
+            height: 100%;
+            background: #00ffcc;
+            width: 50%;
+            transition: width 0.5s ease, background-color 0.5s;
+        }
+
+        .wa-chat {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #0b141a;
+            background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+        }
+
+        .wa-bubble {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-size: 15px;
+            line-height: 1.4;
+            position: relative;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .wa-bubble.left {
+            background: #202c33;
+            color: #e9edef;
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        .wa-bubble.right {
+            background: #005c4b;
+            color: #e9edef;
+            align-self: flex-end;
+            border-top-right-radius: 0;
+        }
+
+        .wa-inputs {
+            background: #202c33;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-top: 1px solid #111b21;
+        }
+
+        .wa-opt {
+            background: #2a3942;
+            color: #d1d7db;
+            border: 1px solid #3b4a54;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: left;
+            font-size: 0.95em;
+        }
+
+        .wa-opt:hover {
+            background: #3b4a54;
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* --- 新增：跳題箭頭樣式 --- */
+        .skip-arrow {
+            background: transparent;
+            border: none;
+            color: #00ffcc;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 0 8px;
+            transition: 0.2s;
+            user-select: none;
+        }
+
+        .skip-arrow:hover {
+            color: #fff;
+            transform: scale(1.2);
+        }
+
+        .skip-arrow:disabled {
+            color: #555;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* --- General Utils --- */
+        .stage {
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #00ffcc;
+            width: 25%;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .mini-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            background: rgba(0, 255, 204, 0.2);
+            border-color: #00ffcc;
+            color: #00ffcc;
+        }
+
+        .home-btn-fixed { position: fixed; top: 20px; left: 20px; z-index: 99999; text-decoration: none; background: rgba(0, 255, 204, 0.1); color: #fff; border: 1px solid rgba(0, 255, 204, 0.2); padding: 8px 15px; border-radius: 15px; font-weight: bold; font-size: 0.9em; transition: 0.3s; }
+        .home-btn-fixed:hover { background: rgba(0, 255, 204, 0.2); transform: translateY(-2px); border-color: #00ffcc; color: #00ffcc; }
+    </style>
+</head>
+
+<body>
+
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+    <button class="translate-btn" onclick="toggleLanguage()">🇨🇳 EN/中</button>
+
+    <h1>
+        <span class="lang-en">🕶️ The Master Negotiator</span>
+        <span class="lang-cn">🕶️ 談判大師 (FBI 心理學)</span>
+    </h1>
+    <div class="progress-bar">
+        <div class="progress-fill" id="mainProgress"></div>
+    </div>
+
+    <!-- ================= STAGE 1: Ultimatum & Intuition ================= -->
+    <div id="stage1" class="stage active simulator-screen">
+        <div class="scenario-badge">
+            <button class="skip-arrow" onclick="navS1(-1)">◀</button>
+            <span id="s1-badge">Game 0/5</span>
+            <button class="skip-arrow" onclick="navS1(1)">▶</button>
+        </div>
+        <h2><span class="lang-en">Stage 1: The Rationality Trap 🧠</span><span class="lang-cn">階段 1：你以為你是理性的嗎？</span>
+        </h2>
+        <p style="color:#aaa;" id="s1-desc">
+            <span class="lang-en">Let's test your intuition. In business, is logic always the winner?</span>
+            <span class="lang-cn">讓我們來測試妳的直覺。在商界，講邏輯就一定會贏嗎？</span>
+        </p>
+
+        <div id="s1-dynamic-container">
+            <!-- Injected by JS (Ultimatum Game + 5 Intuition Tests) -->
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" id="btn-prev-s1" onclick="navS1(-1)" style="visibility:hidden;">◀ <span
+                    class="lang-en">Prev</span><span class="lang-cn">上一題</span></button>
+            <button class="nav-btn" id="btn-next-s1" style="background:#00ffcc; color:#111; display:none;"
+                onclick="navS1(1)">🔄 <span class="lang-en">Next</span><span class="lang-cn">下一題</span></button>
+            <button class="nav-btn" id="btn-stage2" style="display:none;" onclick="goToStage(2)">▶ <span
+                    class="lang-en">Next Stage</span><span class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 2: Mirroring & Labeling ================= -->
+    <div id="stage2" class="stage simulator-screen">
+        <div class="scenario-badge">
+            <button class="skip-arrow" onclick="navS2(-1)">◀</button>
+            <span id="s2-badge">Question 1/10</span>
+            <button class="skip-arrow" onclick="navS2(1)">▶</button>
+        </div>
+        <h2><span class="lang-en">Stage 2: Tactical Empathy 🪞</span><span class="lang-cn">階段 2：戰術性同理心 (鏡像與標籤)</span>
+        </h2>
+        <p style="color:#aaa;">
+            <span class="lang-en">Use <b>Mirroring</b> or <b>Labeling</b> to calm the other party. First 5: Multiple
+                Choice. Last 5: Sentence Reordering.</span>
+            <span class="lang-cn">使用<b>鏡像 (Mirroring)</b> 或 <b>情緒標籤 (Labeling)</b>。前 5 題為選擇題，後 5 題為句子重組挑戰！(注意 UEC
+                情態動詞)</span>
+        </p>
+
+        <div id="s2-dynamic-container">
+            <!-- Injected by JS -->
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" id="btn-prev-s2" onclick="navS2(-1)" style="visibility:hidden;">◀ <span
+                    class="lang-en">Prev</span><span class="lang-cn">上一題</span></button>
+            <button class="nav-btn" id="btn-check-s2" style="background:#00ffcc; color:#111; display:none;"
+                onclick="checkReorder(2)">✔️ <span class="lang-en">Check Answer</span><span
+                    class="lang-cn">檢查</span></button>
+            <button class="nav-btn" id="btn-next-s2" style="background:#00ffcc; color:#111; display:none;"
+                onclick="navS2(1)">🔄 <span class="lang-en">Next</span><span class="lang-cn">下一題</span></button>
+            <button class="nav-btn" id="btn-stage3" style="display:none;" onclick="goToStage(3)">▶ <span
+                    class="lang-en">Next Stage</span><span class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 3: Calibrated Questions ================= -->
+    <div id="stage3" class="stage simulator-screen">
+        <div class="scenario-badge">
+            <button class="skip-arrow" onclick="navS3(-1)">◀</button>
+            <span id="s3-badge">Question 1/10</span>
+            <button class="skip-arrow" onclick="navS3(1)">▶</button>
+        </div>
+        <h2><span class="lang-en">Stage 3: Calibrated Questions ❓</span><span class="lang-cn">階段 3：校準型問題 (拒絕的藝術)</span>
+        </h2>
+        <p style="color:#aaa;">
+            <span class="lang-en">Never say "No". Construct a <b>"How"</b> or <b>"What"</b> question. First 5: Multiple
+                Choice. Last 5: Sentence Reordering.</span>
+            <span class="lang-cn">永遠不要直接說「不」。構造 <b>"How"</b> 或 <b>"What"</b> 問句。前 5 題為選擇題，後 5 題為重組挑戰！</span>
+        </p>
+
+        <div id="s3-dynamic-container">
+            <!-- Injected by JS -->
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" id="btn-prev-s3" onclick="navS3(-1)" style="visibility:hidden;">◀ <span
+                    class="lang-en">Prev</span><span class="lang-cn">上一題</span></button>
+            <button class="nav-btn" id="btn-check-s3" style="background:#00ffcc; color:#111; display:none;"
+                onclick="checkReorder(3)">✔️ <span class="lang-en">Check Answer</span><span
+                    class="lang-cn">檢查</span></button>
+            <button class="nav-btn" id="btn-next-s3" style="background:#00ffcc; color:#111; display:none;"
+                onclick="navS3(1)">🔄 <span class="lang-en">Next</span><span class="lang-cn">下一題</span></button>
+            <button class="nav-btn" id="btn-stage4" style="display:none;" onclick="goToStage(4)">▶ <span
+                    class="lang-en">Next Stage</span><span class="lang-cn">下一關</span></button>
+        </div>
+    </div>
+
+    <!-- ================= STAGE 4: WhatsApp Boss Fights (3 Bosses) ================= -->
+    <div id="stage4" class="stage simulator-screen">
+        <div class="boss-select">
+            <button class="skip-arrow" onclick="navBoss(-1)">◀</button>
+            <span id="boss-title">Boss 1: The Influencer Agency</span>
+            <button class="skip-arrow" onclick="navBoss(1)">▶</button>
+        </div>
+        <h2><span class="lang-en">Stage 4: The CEO Boss Fights 📱</span><span class="lang-cn">階段 4：CEO 實戰談判</span></h2>
+        <p style="color:#aaa;">
+            <span class="lang-en">Use the techniques you learned. Watch the Rapport Meter! If it drops too low, the deal
+                is dead.</span>
+            <span class="lang-cn">運用妳剛學到的技巧（鏡像、標籤、How問句）。注意上方的好感度條！如果太低，談判就會破裂。</span>
+        </p>
+
+        <div class="wa-container">
+            <div class="wa-header">
+                <div class="wa-profile">
+                    <div class="wa-avatar" id="wa-avatar-icon" style="background:#00a884;">C</div>
+                    <div><b style="color:#fff;" id="wa-boss-name">Ms. Chloe</b><br><span
+                            style="color:#00ffcc; font-size:0.8em;" id="wa-boss-role">Influencer Agency</span></div>
+                </div>
+                <div>
+                    <span style="color:#aaa; font-size:0.8em; margin-right:5px;">Rapport</span>
+                    <div class="rapport-bar-bg">
+                        <div class="rapport-fill" id="rapport-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wa-chat" id="wa-chat"></div>
+            <div class="wa-inputs" id="wa-inputs"></div>
+        </div>
+
+        <div class="mini-nav">
+            <button class="nav-btn" onclick="goToStage(3)">◀ <span class="lang-en">Prev Stage</span><span
+                    class="lang-cn">上一關</span></button>
+            <button class="nav-btn" style="background:#e74c3c; color:#fff; display:none;" id="btn-restart-wa"
+                onclick="startCurrentBoss()">🔄 <span class="lang-en">Retry Boss</span><span
+                    class="lang-cn">重新挑戰</span></button>
+            <button class="nav-btn" style="background:#f1c40f; color:#111; display:none;" id="btn-next-boss"
+                onclick="nextBoss()">▶ <span class="lang-en">Next Boss</span><span
+                    class="lang-cn">下一個Boss</span></button>
+            <div><span style="color:#2ecc71; font-weight:bold; display:none; font-size:1.2em;" id="finish-msg">🎉 ALL
+                    DEALS CLOSED! CEO MASTER!</span></div>
+        </div>
+    </div>
+
+    <script>
+        /* ================= UTILS ================= */
+        function toggleLanguage() { document.body.classList.toggle('show-cn'); }
+        function goToStage(target) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage' + target).classList.add('active');
+            document.getElementById('mainProgress').style.width = (target * 25) + '%';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (target === 4 && currentBossIndex === 0 && waStep === 0) startCurrentBoss();
+            try { ProgressTracker.save({ stage: target }); } catch(e) {}
+        }
+        
+        window.addEventListener('load', async () => {
+            try {
+                if (typeof ProgressTracker !== 'undefined') {
+                    const saved = await ProgressTracker.load();
+                    if (saved && saved.progress_data && saved.progress_data.stage) {
+                        goToStage(saved.progress_data.stage);
+                    }
+                }
+            } catch (e) {}
+        });
+
+        /* ================= STAGE 1: Intuition Test & Ultimatum ================= */
+        const s1Data = [
+            {
+                type: 'ultimatum',
+                descEn: "The Ultimatum Game. I have RM100. I offer you RM10, and I keep RM90. You can ACCEPT or REJECT. If you reject, we BOTH get nothing. What is your choice?",
+                descCn: "最後通牒賽局。老師有 RM100。我分給妳 RM10，我拿 RM90。妳可以接受或拒絕。如果拒絕，我們兩人都拿不到錢。妳的選擇是？"
+            },
+            {
+                type: 'intuition',
+                scEn: "Scenario: Merch Factory. Supplier quotes RM20 per shirt. Your budget is RM10.",
+                scCn: "場景：衣服加工廠。供應商報價一件 RM20。妳的預算只有 RM10。",
+                opts: [
+                    { t: "Can you give me a cheaper price? RM10 ok?", rEn: "❌ Failed. The supplier feels you don't know the market value and ignores you.", rCn: "❌ 談判破裂。老闆覺得妳不懂行情，直接已讀不回。" },
+                    { t: "Your price is too high. Other suppliers offer RM12.", rEn: "❌ Failed. Threatening them makes them say 'Then go buy from them'.", rCn: "❌ 談判破裂。威脅對方只會讓他回妳『那妳去找別人買』。" },
+                    { t: "Wow, RM20 is way out of my budget.", rEn: "❌ Failed. Complaining just gets you a 'Sorry we can't help'.", rCn: "❌ 談判破裂。直接抱怨只會換來一句『抱歉幫不到妳』。" }
+                ]
+            },
+            {
+                type: 'intuition',
+                scEn: "Scenario: Product Photography. The photographer quotes RM1,000/hour.",
+                scCn: "場景：產品攝影。攝影師開價 RM1000/小時。",
+                opts: [
+                    { t: "Can we do RM800?", rEn: "❌ Failed. You anchored yourself. They will say RM900 and you lose.", rCn: "❌ 失敗。太生硬的討價還價，對方只會降一點點敷衍妳。" },
+                    { t: "I'm just a student startup. Any discount?", rEn: "❌ Failed. Amateurs beg for sympathy. Business doesn't care.", rCn: "❌ 失敗。商界不相信眼淚，裝可憐顯得很不專業。" },
+                    { t: "Let's meet in the middle at RM750.", rEn: "❌ Failed. FBI Rule: NEVER split the difference! It leaves money on the table.", rCn: "❌ 失敗。FBI 鐵律：永遠不要『折中妥協』！這會讓妳損失利潤。" }
+                ]
+            },
+            {
+                type: 'intuition',
+                scEn: "Scenario: Pop-up Booth Rent. The mall manager asks for RM500/day.",
+                scCn: "場景：快閃攤位租金。商場經理開價一天 RM500。",
+                opts: [
+                    { t: "I'll sign right now if you do RM300.", rEn: "❌ Failed. Aggressive closing makes them defensive.", rCn: "❌ 失敗。過於激進的逼單會讓對方產生防備心。" },
+                    { t: "What's the best price you can offer?", rEn: "❌ Failed. Lazy negotiation. They will say RM480.", rCn: "❌ 失敗。這是最懶惰的談判，對方只會給妳 RM480。" },
+                    { t: "I have a strict budget of RM350.", rEn: "❌ Failed. You set a hard line too early and killed the negotiation.", rCn: "❌ 失敗。太早亮出底牌和死線，直接把天聊死了。" }
+                ]
+            },
+            {
+                type: 'intuition',
+                scEn: "Scenario: Logo Design. A freelance designer quotes RM400.",
+                scCn: "場景：Logo 設計。自由設計師報價 RM400。",
+                opts: [
+                    { t: "Can we remove some revisions to lower the price?", rEn: "❌ Failed. Logical, but you are compromising your own product quality.", rCn: "❌ 失敗。雖然合邏輯，但妳犧牲了自己品牌的品質。" },
+                    { t: "If I give you more projects in the future, can you do RM200 now?", rEn: "❌ Failed. Designers hate the 'future promise' trap. It's a red flag.", rCn: "❌ 失敗。設計師最討厭『畫大餅』的客戶，這是一個大忌。" },
+                    { t: "It's just a 5-minute drawing, why so expensive?", rEn: "❌ Failed. You insulted their profession. You are blocked.", rCn: "❌ 失敗。極度不尊重專業，對方直接封鎖妳。" }
+                ]
+            },
+            {
+                type: 'intuition',
+                scEn: "Scenario: Used iPad Pro. Seller wants RM3,000.",
+                scCn: "場景：購買二手 iPad Pro 用於設計。賣家開價 RM3000。",
+                opts: [
+                    { t: "It has scratches, RM2000 take it or leave it.", rEn: "❌ Failed. Pointing out flaws aggressively makes the seller defensive.", rCn: "❌ 失敗。具攻擊性地挑骨頭會讓賣家感到被冒犯。" },
+                    { t: "RM3000 is too much for a used item.", rEn: "❌ Failed. You insulted the value of their property.", rCn: "❌ 失敗。妳貶低了對方財產的價值。" },
+                    { t: "I can pay cash today if you drop it to RM2500.", rEn: "❌ Failed. Everyone pays cash today. It's not a real negotiation leverage.", rCn: "❌ 失敗。現在每個人都是付現（轉帳），這根本不是談判籌碼。" }
+                ]
+            }
+        ];
+
+        let currS1 = 0;
+        let s1Answers = new Array(s1Data.length).fill(null);
+
+        function renderS1() {
+            let container = document.getElementById('s1-dynamic-container');
+            container.innerHTML = "";
+
+            s1Data.forEach((d, i) => {
+                let qDiv = document.createElement('div');
+                qDiv.className = `s1-container ${i === currS1 ? 'active' : ''}`;
+
+                if (d.type === 'ultimatum') {
+                    let fbHtml = s1Answers[i] ? (s1Answers[i] === 'accept' ?
+                        `<div class="tactic-feedback" style="display:block; border-left:4px solid #e74c3c;">
+           <span class="lang-en"><b>Highly Rational!</b> But in real life, 90% of people reject this. Why? Because it feels "unfair".</span>
+           <span class="lang-cn"><b>妳極度理性！</b> 但在現實中，90% 的人都會拒絕。為什麼？因為覺得「不公平」。</span>
+           <br><br><span style="color:#e2e8f0;"><span class="lang-en"><b>Lesson:</b> In business, humans are emotional, not rational. If they don't like you, they won't do business with you. Now let's test your intuition.</span>
+           <span class="lang-cn"><b>第一性原理：</b> 在商界，人類是情緒動物。如果對方不爽，他寧願不賺錢也不賣給妳。現在來測試妳的直覺。</span></span></div>`
+                        :
+                        `<div class="tactic-feedback" style="display:block; border-left:4px solid #e74c3c;">
+           <span class="lang-en"><b>Boom! We both get nothing.</b> Why did you reject free RM10? Because it felt "unfair". You sacrificed money just to punish me!</span>
+           <span class="lang-cn"><b>Boom! 我們都拿不到錢。</b> 為什麼妳拒絕免費的 RM10？因為感覺「不爽」。妳寧願犧牲錢也要懲罰我！</span>
+           <br><br><span style="color:#e2e8f0;"><span class="lang-en"><b>Lesson:</b> In business, humans are emotional, not rational. If they don't like you, they won't do business with you. Now let's test your intuition.</span>
+           <span class="lang-cn"><b>第一性原理：</b> 在商界，人類是情緒動物。如果對方不爽，他寧願不賺錢也不賣給妳。現在來測試妳的直覺。</span></span></div>`
+                    ) : "";
+
+                    qDiv.innerHTML = `
+          <div class="ultimatum-box" ${s1Answers[i] ? 'style="display:none;"' : ''}>
+            <div class="ult-money">RM 100</div>
+            <div class="ult-split">
+              <div><span style="color:#aaa; font-size:0.8em;">Teacher Keeps</span><br><b>RM 90</b></div>
+              <div><span style="color:#aaa; font-size:0.8em;">You Get</span><br><b style="color:#00ffcc;">RM 10</b></div>
+            </div>
+            <div class="ult-actions">
+              <button class="btn-accept" onclick="playUltimatum(${i}, 'accept')">Accept (接受)</button>
+              <button class="btn-reject" onclick="playUltimatum(${i}, 'reject')">Reject (拒絕)</button>
+            </div>
+          </div>
+          ${fbHtml}
+        `;
+                } else {
+                    let optsHtml = "";
+                    d.opts.forEach((o, optIdx) => {
+                        let stateClass = "";
+                        if (s1Answers[i] !== null) {
+                            stateClass = "locked ";
+                            if (s1Answers[i] === optIdx) stateClass += "fail";
+                        }
+                        optsHtml += `<div class="intuition-opt ${stateClass}" onclick="checkIntuition(${i}, ${optIdx})">${o.t}</div>`;
+                    });
+
+                    let fbHtml = s1Answers[i] !== null ? `
+          <div class="tactic-feedback" style="display:block; border-left:4px solid #e74c3c;">
+            <span class="lang-en">${d.opts[s1Answers[i]].rEn}</span><span class="lang-cn">${d.opts[s1Answers[i]].rCn}</span>
+          </div>` : "";
+
+                    if (i === s1Data.length - 1 && s1Answers[i] !== null) {
+                        fbHtml += `<div class="tactic-feedback" style="display:block; border-left:4px solid #27ae60; margin-top:10px;">
+            <span class="lang-en"><b>Conclusion:</b> Your natural intuition (haggling, complaining, threatening) triggers the other person's defense mechanism. Let's learn the FBI way in Stage 2!</span><span class="lang-cn"><b>總結：</b> 妳的直覺（殺價、抱怨、威脅）只會觸發對方的防禦機制，導致談判破裂。去 Stage 2 學習 FBI 的心理學神技吧！</span>
+          </div>`;
+                    }
+
+                    qDiv.innerHTML = `
+          <div class="intuition-grid" style="display:flex;">
+            <div class="tactic-dialogue"><span class="lang-en">${d.scEn}</span><span class="lang-cn">${d.scCn}</span></div>
+            <div>${optsHtml}</div>
+          </div>
+          ${fbHtml}
+        `;
+                }
+                container.appendChild(qDiv);
+            });
+
+            document.getElementById('s1-badge').innerText = `Game ${currS1}/5`;
+
+            // Update nav buttons
+            document.getElementById('btn-prev-s1').style.visibility = currS1 > 0 ? 'visible' : 'hidden';
+            document.getElementById('btn-next-s1').style.display = currS1 < s1Data.length - 1 ? 'block' : 'none';
+            document.getElementById('btn-stage2').style.display = currS1 === s1Data.length - 1 ? 'block' : 'none';
+        }
+
+        function playUltimatum(qIdx, choice) {
+            s1Answers[qIdx] = choice;
+            renderS1();
+        }
+
+        function checkIntuition(qIdx, optIdx) {
+            if (s1Answers[qIdx] !== null) return;
+            s1Answers[qIdx] = optIdx;
+            renderS1();
+        }
+
+        function navS1(dir) {
+            currS1 += dir;
+            if (currS1 < 0) currS1 = 0;
+            if (currS1 >= s1Data.length) currS1 = s1Data.length - 1;
+            renderS1();
+        }
+
+        /* ================= STAGE 2: Mirroring & Labeling (MCQ + Reorder) ================= */
+        const dataS2 = [
+            // 1-5 MCQ
+            { type: 'mcq', dialEn: "Logistics: 'The shipping from China is very unpredictable lately.'", dialCn: "物流：『最近從中國發貨非常難以預測。』", opts: [{ t: "I understand, but we have a deadline.", a: false, fEn: "Wrong. Using 'but' negates your empathy.", fCn: "❌ 錯。使用 'but' 會抵消妳的同理心。" }, { t: "Unpredictable lately?", a: true, fEn: "Correct! (Mirroring) They will naturally explain *why*.", fCn: "✅ 對！(鏡像) 對方會不自覺地解釋原因。" }, { t: "What is the exact delay time?", a: false, fEn: "Wrong. Too aggressive.", fCn: "❌ 錯。太具攻擊性。" }] },
+            { type: 'mcq', dialEn: "Photographer: 'I haven't slept in two days editing photos.'", dialCn: "攝影師：『我已經兩天沒睡在修圖了。』", opts: [{ t: "I appreciate it. Can I get mine soon?", a: false, fEn: "Wrong. Too self-centered.", fCn: "❌ 錯。太以自我為中心。" }, { t: "You should take a break.", a: false, fEn: "Wrong. Never give unasked advice.", fCn: "❌ 錯。不要給沒要求的建議。" }, { t: "It sounds like you must be completely exhausted.", a: true, fEn: "Correct! (Labeling).", fCn: "✅ 對！(情緒標籤)。同理他的疲憊。" }] },
+            { type: 'mcq', dialEn: "Supplier: 'This new gel polish formula requires a highly specific curing process.'", dialCn: "供應商：『這款新凝膠配方需要非常特定的光療過程。』", opts: [{ t: "Highly specific curing process?", a: true, fEn: "Correct! (Mirroring).", fCn: "✅ 對！(鏡像)。讓他主動解釋細節。" }, { t: "Please explain the process.", a: false, fEn: "Wrong. Sounds like a demand.", fCn: "❌ 錯。聽起來像老闆在下指令。" }, { t: "Does that mean it will cost more?", a: false, fEn: "Wrong. Shows anxiety.", fCn: "❌ 錯。急著下結論會暴露出焦慮。" }] },
+            { type: 'mcq', dialEn: "App Developer: 'Apple keeps changing their App Store policies, it's driving me crazy!'", dialCn: "APP 開發者：『蘋果一直改政策，快把我逼瘋了！』", opts: [{ t: "We can just adapt.", a: false, fEn: "Wrong. Dismissive of his frustration.", fCn: "❌ 錯。妳貶低了他的挫折感。" }, { t: "Why are they changing it so often?", a: false, fEn: "Wrong. 'Why' questions make people defensive.", fCn: "❌ 錯。用 'Why' 提問會讓人產生防備心。" }, { t: "It seems like Apple's rules must be a huge headache for you.", a: true, fEn: "Correct! (Labeling).", fCn: "✅ 對！(情緒標籤)。他會把妳當成盟友。" }] },
+            { type: 'mcq', dialEn: "Angry Customer: 'I waited 3 weeks for these items, and the box arrived crushed!'", dialCn: "奧客：『我等了 3 個星期，結果盒子被壓扁了！』", opts: [{ t: "I will send you a new one.", a: false, fEn: "Wrong. Fix the emotion BEFORE the problem.", fCn: "❌ 錯。在解決問題前，必須先解決情緒。" }, { t: "It sounds like you must be incredibly disappointed after waiting so long.", a: true, fEn: "Correct! Labeling her anger defuses it.", fCn: "✅ 對！標籤她的憤怒能有效降溫。" }, { t: "I sincerely apologize.", a: false, fEn: "Wrong. Boring PR talk.", fCn: "❌ 錯。標準的官方廢話。" }] },
+            // 6-10 Reorder
+            { type: 'reorder', dialEn: "Freelance Writer: 'I have to rewrite this article 5 times because the client keeps changing their mind.'", dialCn: "自由撰稿人：『我得重寫這篇文章 5 次，因為客戶一直改變主意。』", target: "It seems like the client must be very indecisive", words: ["It", "seems", "like", "the", "client", "must", "be", "very", "indecisive"], fEn: "Correct! Building rapport by acknowledging his pain.", fCn: "✅ 對！透過承認他的難搞客戶來建立信任感。" },
+            { type: 'reorder', dialEn: "Event Planner: 'The catering company canceled on us 2 hours before the event!'", dialCn: "活動策劃：『餐飲公司在活動前 2 小時放我們鴿子！』", target: "It sounds like you must be extremely panicked", words: ["It", "sounds", "like", "you", "must", "be", "extremely", "panicked"], fEn: "Correct! You label the panic so they feel heard.", fCn: "✅ 對！妳標籤了他的恐慌，讓他在妳提方案前感覺被傾聽了。" },
+            { type: 'reorder', dialEn: "Software Engineer: 'There is a bug in the server and the whole system is crashing.'", dialCn: "軟體工程師：『伺服器有 Bug，整個系統正在崩潰。』", target: "It seems like you must be under immense pressure", words: ["It", "seems", "like", "you", "must", "be", "under", "immense", "pressure"], fEn: "Correct! Empathy wins over pushing them to fix it.", fCn: "✅ 對！同理心比逼迫他們快點修復更有用。" },
+            { type: 'reorder', dialEn: "Makeup Artist: 'The bride's mother hates the makeup and wants me to redo everything.'", dialCn: "化妝師：『新娘的媽媽討厭這個妝容，要我全部重畫。』", target: "It sounds like the situation must be very frustrating", words: ["It", "sounds", "like", "the", "situation", "must", "be", "very", "frustrating"], fEn: "Correct! You validate her frustration without blaming others.", fCn: "✅ 對！妳同理了她的挫折，又沒有直接指責對方母親。" },
+            { type: 'reorder', dialEn: "Landlord: 'The property taxes have gone up so much this year.'", dialCn: "房東：『今年的房產稅漲得太誇張了。』", target: "It seems like the taxes must be eating into your profits", words: ["It", "seems", "like", "the", "taxes", "must", "be", "eating", "into", "your", "profits"], fEn: "Correct! Acknowledge their loss before negotiating rent.", fCn: "✅ 對！在談判租金前，先承認他們的損失。" }
+        ];
+
+        let currS2 = 0;
+        let s2Answers = new Array(dataS2.length).fill(null);
+
+        /* ================= REORDERING ENGINE ================= */
+        let reorderStates = {};
+
+        function initReorderGame(qId, words) {
+            if (!reorderStates[qId]) {
+                reorderStates[qId] = { ansArr: [], bankArr: [...words].sort(() => Math.random() - 0.5), mistakes: 0 };
+            }
+            renderReorderUI(qId);
+        }
+
+        function renderReorderUI(qId) {
+            let container = document.getElementById(qId);
+            if (!container) return;
+            let state = reorderStates[qId];
+
+            let ansHtml = state.ansArr.map((w, i) => `<div class="word-chip" onclick="moveWord('${qId}', ${i}, 'ans')">${w}</div>`).join('');
+            let bankHtml = state.bankArr.map((w, i) => `<div class="word-chip" onclick="moveWord('${qId}', ${i}, 'bank')">${w}</div>`).join('');
+
+            let dyn = container.querySelector('.reorder-dynamic');
+            if (dyn) {
+                dyn.innerHTML = `
+        <div style="color:#aaa; margin-bottom:5px; font-size:0.9em;">Your Sentence (Click to remove):</div>
+        <div class="answer-box">${ansHtml}</div>
+        <div style="color:#aaa; margin-bottom:5px; font-size:0.9em;">Word Bank (Click to add):</div>
+        <div class="word-bank">${bankHtml}</div>
+      `;
+            }
+        }
+
+        function moveWord(qId, index, from) {
+            let state = reorderStates[qId];
+            if (from === 'bank') {
+                state.ansArr.push(state.bankArr.splice(index, 1)[0]);
+            } else {
+                state.bankArr.push(state.ansArr.splice(index, 1)[0]);
+            }
+            renderReorderUI(qId);
+        }
+
+        function renderS2() {
+            let container = document.getElementById('s2-dynamic-container');
+            container.innerHTML = "";
+
+            dataS2.forEach((d, i) => {
+                let qDiv = document.createElement('div');
+                qDiv.className = `q-container ${i === currS2 ? 'active' : ''}`;
+                qDiv.id = `s2-q-${i}`;
+
+                let html = `<div class="tactic-dialogue"><span class="lang-en">${d.dialEn}</span><span class="lang-cn">${d.dialCn}</span></div>`;
+
+                if (d.type === 'mcq') {
+                    d.opts.forEach((o, optIdx) => {
+                        let locked = s2Answers[i] ? "locked " : "";
+                        let correctClass = (s2Answers[i] && o.a) ? "correct" : "";
+                        html += `<div class="tactic-opt ${locked}${correctClass}" onclick="checkS2MCQ(${i}, ${optIdx})">${o.t}</div>`;
+                    });
+
+                    let fbHtml = s2Answers[i] ? `<div class="tactic-feedback" style="display:block; border-left:4px solid #27ae60; color:#2ecc71;">
+            <span class="lang-en">${d.opts.find(x => x.a).fEn}</span><span class="lang-cn">${d.opts.find(x => x.a).fCn}</span>
+          </div>` : `<div class="tactic-feedback" id="s2-fb-${i}"></div>`;
+                    html += fbHtml;
+                } else {
+                    html += `<div class="reorder-dynamic"></div><div class="tactic-feedback" id="s2-fb-${i}"></div>`;
+                }
+
+                qDiv.innerHTML = html;
+                container.appendChild(qDiv);
+
+                if (d.type === 'reorder') {
+                    initReorderGame(`s2-q-${i}`, d.words);
+                    if (s2Answers[i]) {
+                        let dyn = qDiv.querySelector('.reorder-dynamic');
+                        if (dyn) dyn.style.pointerEvents = 'none';
+                        qDiv.querySelector(`#s2-fb-${i}`).innerHTML = `<span class="lang-en">${d.fEn}</span><span class="lang-cn">${d.fCn}</span>`;
+                        qDiv.querySelector(`#s2-fb-${i}`).style.display = 'block';
+                        qDiv.querySelector(`#s2-fb-${i}`).style.borderColor = '#27ae60';
+                        qDiv.querySelector(`#s2-fb-${i}`).style.color = '#2ecc71';
+                    }
+                }
+            });
+
+            document.getElementById('s2-badge').innerText = `Question ${currS2 + 1}/10`;
+
+            document.getElementById('btn-prev-s2').style.visibility = currS2 > 0 ? 'visible' : 'hidden';
+            document.getElementById('btn-next-s2').style.display = currS2 < dataS2.length - 1 ? 'block' : 'none';
+            document.getElementById('btn-stage3').style.display = currS2 === dataS2.length - 1 ? 'block' : 'none';
+
+            let isReorder = dataS2[currS2].type === 'reorder';
+            let isAnswered = s2Answers[currS2];
+
+            document.getElementById('btn-check-s2').style.display = (!isAnswered && isReorder) ? 'block' : 'none';
+        }
+
+        function checkS2MCQ(qIdx, optIdx) {
+            if (s2Answers[qIdx]) return;
+            let o = dataS2[qIdx].opts[optIdx];
+            let isCorrect = o.a;
+
+            let fb = document.getElementById(`s2-fb-${qIdx}`);
+            fb.innerHTML = `<span class="lang-en">${o.fEn}</span><span class="lang-cn">${o.fCn}</span>`;
+            fb.style.display = 'block';
+
+            if (isCorrect) {
+                fb.style.borderColor = '#27ae60'; fb.style.color = '#2ecc71';
+                s2Answers[qIdx] = true;
+                renderS2();
+            } else {
+                fb.style.borderColor = '#e74c3c'; fb.style.color = '#e74c3c';
+                setTimeout(() => { fb.style.display = 'none'; }, 2000);
+            }
+        }
+
+        function navS2(dir) {
+            currS2 += dir;
+            if (currS2 < 0) currS2 = 0;
+            if (currS2 >= dataS2.length) currS2 = dataS2.length - 1;
+            renderS2();
+        }
+
+        /* ================= STAGE 3: Calibrated Questions (MCQ + Reorder) ================= */
+        const dataS3 = [
+            // 1-5 MCQ
+            { type: 'mcq', dialEn: "Supplier: 'The minimum order quantity is 2,000 pieces.' (You want 300).", dialCn: "工廠老闆：『最低起定量絕對是 2000 個。』 (但妳只想買 300 個)。", opts: [{ t: "Can we start with 300 pieces as a trial?", a: false, fEn: "Wrong. A Yes/No question invites 'No'.", fCn: "❌ 錯。Yes/No 問句很容易被拒絕。" }, { t: "What if I pay a higher price for 300 pieces?", a: false, fEn: "Wrong. Giving away profit too early.", fCn: "❌ 錯。太早放棄利潤底線。" }, { t: "How am I supposed to order 2000 when I'm just testing the market?", a: true, fEn: "Correct! Throw the problem back to him.", fCn: "✅ 對！用 How 把難題丟給他。" }] },
+            { type: 'mcq', dialEn: "Influencer: 'I need 100% full payment upfront before I sketch.'", dialCn: "網紅：『在構思影片前，我需要妳全額付清。』", opts: [{ t: "I usually don't pay 100% upfront.", a: false, fEn: "Wrong. Combative.", fCn: "❌ 錯。充滿敵意。" }, { t: "How can we proceed with full payment without a draft?", a: true, fEn: "Correct! A respectful but firm pushback.", fCn: "✅ 對！尊重但堅定的反擊。" }, { t: "Is it possible to do 50% now?", a: false, fEn: "Wrong. Yes/No question.", fCn: "❌ 錯。又是 Yes/No 問句。" }] },
+            { type: 'mcq', dialEn: "Mall Manager: 'You must sign a 2-year lease for this kiosk.' (You want 6 months).", dialCn: "商場經理：『妳必須簽兩年的檔口合約。』 (但妳只想簽半年)。", opts: [{ t: "Why do I have to sign for 2 years?", a: false, fEn: "Wrong. 'Why' triggers defense.", fCn: "❌ 錯。'Why' 會激發防備心。" }, { t: "I can only commit to 6 months.", a: false, fEn: "Wrong. Hard line kills negotiation.", fCn: "❌ 錯。畫下死線直接結束談判。" }, { t: "How am I supposed to commit to two years for a brand-new concept?", a: true, fEn: "Correct! Makes them realize their demand is unreasonable.", fCn: "✅ 對！讓經理意識到要求不合理。" }] },
+            { type: 'mcq', dialEn: "Factory: 'We can't add your custom brand logo for free, it costs extra.'", dialCn: "工廠：『我們不能免費加妳的 Logo，要加錢。』", opts: [{ t: "How much extra will it cost?", a: false, fEn: "Wrong. You lose leverage immediately.", fCn: "❌ 錯。立刻失去談判籌碼。" }, { t: "What can we do to include the logo within my budget?", a: true, fEn: "Correct! Invite them to brainstorm.", fCn: "✅ 對！邀請他們一起腦力激盪。" }, { t: "Other factories include it for free.", a: false, fEn: "Wrong. Combative comparison.", fCn: "❌ 錯。具攻擊性的比較。" }] },
+            { type: 'mcq', dialEn: "Angry Customer: 'The delivery was 1 day late. I want a refund right now!'", dialCn: "奧客：『快遞晚了一天，我現在就要全額退款！』", opts: [{ t: "How am I supposed to control the courier's schedule?", a: true, fEn: "Correct! Firm boundary on what you control.", fCn: "✅ 對！溫和堅定地設立底線。" }, { t: "I can't give a full refund for a 1-day delay.", a: false, fEn: "Wrong. A direct 'No' escalates anger.", fCn: "❌ 錯。直接說「不」會讓怒火升級。" }, { t: "What compensation do you want?", a: false, fEn: "Wrong. Negotiating against yourself.", fCn: "❌ 錯。在跟自己砍價。" }] },
+            // 6-10 Reorder
+            { type: 'reorder', dialEn: "Web Designer: 'I can do 1 revision, but you want 10 changes.'", dialCn: "網頁設計師：『我只能修改 1 次，但妳要我改 10 個地方。』", target: "How am I supposed to accept the design with errors", words: ["How", "am", "I", "supposed", "to", "accept", "the", "design", "with", "errors"], fEn: "Correct! Highlight flaws without attacking the limit.", fCn: "✅ 對！強調缺陷而不是直接攻擊修改次數。" },
+            { type: 'reorder', dialEn: "B2B Sales: 'Our software is RM500/month, take it or leave it.'", dialCn: "B2B 銷售：『我們的軟體是 RM500/月，要嘛買要嘛拉倒。』", target: "How can I justify that cost to my investors", words: ["How", "can", "I", "justify", "that", "cost", "to", "my", "investors"], fEn: "Correct! Blame a 'third party' to force lower price.", fCn: "✅ 對！把責任推給第三方（投資人）迫使降價。" },
+            { type: 'reorder', dialEn: "Catering: 'Wagyu beef is premium, we can't fit it in your budget.'", dialCn: "餐飲：『和牛是高級品，無法符合妳的預算。』", target: "What can we do to match the budget with standard beef", words: ["What", "can", "we", "do", "to", "match", "the", "budget", "with", "standard", "beef"], fEn: "Correct! Pivot to a workable alternative.", fCn: "✅ 對！將談判轉移到可行的替代方案。" },
+            { type: 'reorder', dialEn: "Investor: 'I will give you RM10,000, but I want 60% equity.'", dialCn: "投資人：『我給妳一萬塊，但我想要妳公司 60% 的股份。』", target: "How am I supposed to give up control of my company", words: ["How", "am", "I", "supposed", "to", "give", "up", "control", "of", "my", "company"], fEn: "Correct! Powerful pushback against predatory offer.", fCn: "✅ 對！對抗惡意收購的強力反擊。" },
+            { type: 'reorder', dialEn: "Gym Client: 'I want a six-pack in exactly one week.'", dialCn: "健身房客戶：『我想要在一個星期內練出六塊腹肌。』", target: "How am I supposed to guarantee results in one week", words: ["How", "am", "I", "supposed", "to", "guarantee", "results", "in", "one", "week"], fEn: "Correct! Expose the absurdity politely.", fCn: "✅ 對！禮貌地指出對方要求的荒謬之處。" }
+        ];
+
+        let currS3 = 0;
+        let s3Answers = new Array(dataS3.length).fill(null);
+
+        function renderS3() {
+            let container = document.getElementById('s3-dynamic-container');
+            container.innerHTML = "";
+
+            dataS3.forEach((d, i) => {
+                let qDiv = document.createElement('div');
+                qDiv.className = `q-container ${i === currS3 ? 'active' : ''}`;
+                qDiv.id = `s3-q-${i}`;
+
+                let html = `<div class="tactic-dialogue"><span class="lang-en">${d.dialEn}</span><span class="lang-cn">${d.dialCn}</span></div>`;
+
+                if (d.type === 'mcq') {
+                    d.opts.forEach((o, optIdx) => {
+                        let locked = s3Answers[i] ? "locked " : "";
+                        let correctClass = (s3Answers[i] && o.a) ? "correct" : "";
+                        html += `<div class="tactic-opt ${locked}${correctClass}" onclick="checkS3MCQ(${i}, ${optIdx})">${o.t}</div>`;
+                    });
+
+                    let fbHtml = s3Answers[i] ? `<div class="tactic-feedback" style="display:block; border-left:4px solid #27ae60; color:#2ecc71;">
+            <span class="lang-en">${d.opts.find(x => x.a).fEn}</span><span class="lang-cn">${d.opts.find(x => x.a).fCn}</span>
+          </div>` : `<div class="tactic-feedback" id="s3-fb-${i}"></div>`;
+                    html += fbHtml;
+                } else {
+                    html += `<div class="reorder-dynamic"></div><div class="tactic-feedback" id="s3-fb-${i}"></div>`;
+                }
+
+                qDiv.innerHTML = html;
+                container.appendChild(qDiv);
+
+                if (d.type === 'reorder') {
+                    initReorderGame(`s3-q-${i}`, d.words);
+                    if (s3Answers[i]) {
+                        let dyn = qDiv.querySelector('.reorder-dynamic');
+                        if (dyn) dyn.style.pointerEvents = 'none';
+                        qDiv.querySelector(`#s3-fb-${i}`).innerHTML = `<span class="lang-en">${d.fEn}</span><span class="lang-cn">${d.fCn}</span>`;
+                        qDiv.querySelector(`#s3-fb-${i}`).style.display = 'block';
+                        qDiv.querySelector(`#s3-fb-${i}`).style.borderColor = '#27ae60';
+                        qDiv.querySelector(`#s3-fb-${i}`).style.color = '#2ecc71';
+                    }
+                }
+            });
+
+            document.getElementById('s3-badge').innerText = `Question ${currS3 + 1}/10`;
+
+            document.getElementById('btn-prev-s3').style.visibility = currS3 > 0 ? 'visible' : 'hidden';
+            document.getElementById('btn-next-s3').style.display = currS3 < dataS3.length - 1 ? 'block' : 'none';
+            document.getElementById('btn-stage4').style.display = currS3 === dataS3.length - 1 ? 'block' : 'none';
+
+            let isReorder = dataS3[currS3].type === 'reorder';
+            let isAnswered = s3Answers[currS3];
+
+            document.getElementById('btn-check-s3').style.display = (!isAnswered && isReorder) ? 'block' : 'none';
+        }
+
+        function checkS3MCQ(qIdx, optIdx) {
+            if (s3Answers[qIdx]) return;
+            let o = dataS3[qIdx].opts[optIdx];
+            let isCorrect = o.a;
+
+            let fb = document.getElementById(`s3-fb-${qIdx}`);
+            fb.innerHTML = `<span class="lang-en">${o.fEn}</span><span class="lang-cn">${o.fCn}</span>`;
+            fb.style.display = 'block';
+
+            if (isCorrect) {
+                fb.style.borderColor = '#27ae60'; fb.style.color = '#2ecc71';
+                s3Answers[qIdx] = true;
+                renderS3();
+            } else {
+                fb.style.borderColor = '#e74c3c'; fb.style.color = '#e74c3c';
+                setTimeout(() => { fb.style.display = 'none'; }, 2000);
+            }
+        }
+
+        function navS3(dir) {
+            currS3 += dir;
+            if (currS3 < 0) currS3 = 0;
+            if (currS3 >= dataS3.length) currS3 = dataS3.length - 1;
+            renderS3();
+        }
+
+        /* ================= COMMON REORDER CHECK ================= */
+        function checkReorder(stage) {
+            let qIdx = stage === 2 ? currS2 : currS3;
+            let data = stage === 2 ? dataS2[qIdx] : dataS3[qIdx];
+            let state = reorderStates[`s${stage}-q-${qIdx}`];
+            let userSentence = state.ansArr.join(" ");
+
+            let fb = document.getElementById(`s${stage}-fb-${qIdx}`);
+
+            if (userSentence === data.target) {
+                fb.innerHTML = `<span class="lang-en">${data.fEn}</span><span class="lang-cn">${data.fCn}</span>`;
+                fb.style.borderColor = '#27ae60'; fb.style.color = '#2ecc71';
+                fb.style.display = 'block';
+
+                if (stage === 2) { s2Answers[qIdx] = true; renderS2(); }
+                else { s3Answers[qIdx] = true; renderS3(); }
+
+            } else {
+                state.mistakes = (state.mistakes || 0) + 1;
+
+                if (state.mistakes >= 3) {
+                    fb.innerHTML = `💡 <span class="lang-en">Hint: <b>${data.target}</b></span><span class="lang-cn">提示：<b>${data.target}</b></span>`;
+                    fb.style.borderColor = '#f39c12'; fb.style.color = '#f1c40f';
+                    fb.style.display = 'block';
+                    setTimeout(() => { fb.style.display = 'none'; }, 4000);
+                } else {
+                    fb.innerHTML = `❌ <span class="lang-en">Incorrect grammar/order. Try again! (${state.mistakes}/3)</span><span class="lang-cn">文法或順序不對。再試一次！(${state.mistakes}/3)</span>`;
+                    fb.style.borderColor = '#e74c3c'; fb.style.color = '#e74c3c';
+                    fb.style.display = 'block';
+                    setTimeout(() => { fb.style.display = 'none'; }, 2000);
+                }
+            }
+        }
+
+        /* ================= STAGE 4: WhatsApp Boss Fight (3 Bosses) ================= */
+        let currentBossIndex = 0;
+        let rapport = 50;
+        let waStep = 0;
+
+        const bossData = [
+            { // Boss 1: Influencer Agency
+                title: "Boss 1: The Influencer Agency",
+                name: "Ms. Chloe", role: "Influencer Agency", avatar: "C", color: "#e84393",
+                script: [
+                    {
+                        bot: "Hi! For 3 of our TikTokers to post about your brand, our standard package is RM3,000.",
+                        opts: [
+                            { t: "RM3,000 for 3 posts?", r: 20, nextBot: "Yes, because the algorithm changes make it so hard for creators to get views, so we have to charge a premium." },
+                            { t: "That's above my RM1500 budget, what can we do?", r: -20, nextBot: "Well, we can't do much if you don't have the budget. Algorithm changes make our work very hard." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "It sounds like the algorithm must be putting a lot of pressure on your creators.", r: 20, nextBot: "Exactly! It's so stressful. So the price is firm at RM3,000." },
+                            { t: "So you are charging more for the same amount of views?", r: -20, nextBot: "It's not about the views, it's the effort. The price is firm at RM3,000." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "How am I supposed to pay RM3,000 when my entire marketing budget is only RM1,500?", r: 20, nextBot: "I understand... Well, what if we just use 1 TikToker instead of 3?" },
+                            { t: "Let's meet in the middle at RM2,250.", r: -20, nextBot: "We don't do discounts like that. What if we just use 1 TikToker?" }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "It seems like 3 creators is too much work for that budget.", r: 20, nextBot: "Yeah. Since you're a startup, what if you provide premium nail sets for 10 of our influencers for free, and we give you the 3 shoutouts for RM1,500?" },
+                            { t: "1 TikToker for RM1500 is still too expensive.", r: -20, nextBot: "Look, this is our final offer. What if you sponsor 10 nail sets, and we do 3 posts for RM1,500?" }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "Deal! That’s a win-win.", r: 20, nextBot: "Great! Send the products over." },
+                            { t: "How about 5 free nail sets instead of 10?", r: -20, nextBot: "No. Take it or leave it." }
+                        ]
+                    }
+                ]
+            },
+            { // Boss 2: Hardware Supplier
+                title: "Boss 2: The Hardware Supplier",
+                name: "Mr. Tan", role: "Electronics Factory", avatar: "T", color: "#f39c12",
+                script: [
+                    {
+                        bot: "For this custom electronics order, I need 100% payment upfront (RM5000) before production begins.",
+                        opts: [
+                            { t: "100% payment upfront?", r: 20, nextBot: "Yes, because I've had clients cancel orders right after I bought all the raw materials." },
+                            { t: "I can only pay 50% deposit. Take it or leave it.", r: -20, nextBot: "I will leave it then. Too risky for me." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "It sounds like you must be worried about losing money on canceled orders.", r: 20, nextBot: "Exactly. The materials are very expensive right now. So I need the full RM5000 now." },
+                            { t: "That's your business risk, not mine.", r: -30, nextBot: "Excuse me? Then find another factory." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "How am I supposed to pay 100% upfront when this is our first time working together?", r: 20, nextBot: "I understand your concern, but it's our strict company policy for new clients." },
+                            { t: "If I pay 100%, you might run away with my money.", r: -20, nextBot: "We are a legitimate factory! It's our policy." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "It seems like your policy must be very strict to protect your cash flow.", r: 20, nextBot: "Yeah. Look, since you are sincere, how about you pay a 50% deposit, and the rest before I ship the items?" },
+                            { t: "Can you ask your boss to change the policy?", r: -20, nextBot: "I AM the boss. How about 50% deposit, and the rest before shipping?" }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "Deal. 50% now and 50% before shipping reduces risk for both of us.", r: 20, nextBot: "Perfect. I'll send the invoice." },
+                            { t: "I want to pay the rest AFTER I receive the items.", r: -20, nextBot: "No way. 50% before shipping is my final offer." }
+                        ]
+                    }
+                ]
+            },
+            { // Boss 3: The 'Karen' Client
+                title: "Boss 3: The Unreasonable Client",
+                name: "Mrs. Lee", role: "Angry Customer", avatar: "L", color: "#c0392b",
+                script: [
+                    {
+                        bot: "This product has a tiny scratch! I want a full refund immediately, and I'm not paying to ship it back to you!",
+                        opts: [
+                            { t: "A full refund and you keep the product?", r: 20, nextBot: "Yes! It's defective! I am extremely angry and I will post this on Facebook!" },
+                            { t: "The scratch is so small, it doesn't affect the usage.", r: -30, nextBot: "Are you calling me a liar?! I am posting this on Facebook right now!" }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "It sounds like you must be incredibly frustrated with the quality.", r: 20, nextBot: "I am! I expected premium quality. So process my refund now." },
+                            { t: "Please don't post on Facebook, let's solve this.", r: -20, nextBot: "Then give me my refund now!" }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "How am I supposed to issue a full refund without receiving the item back in my inventory?", r: 20, nextBot: "I don't know, that's your problem! I'm not driving all the way to the post office." },
+                            { t: "Our policy clearly states you must return the item for a refund.", r: -20, nextBot: "I don't care about your policy! I'm not going to the post office." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "It seems like going to the post office must be very inconvenient for you.", r: 20, nextBot: "It is! I don't have time. Look, what if you just give me a 30% partial refund and I keep the item?" },
+                            { t: "You have to go to the post office if you want the money.", r: -20, nextBot: "Fine! I'll go, but I'm leaving a 1-star review. Or you just give me 30% refund now and I keep it." }
+                        ]
+                    },
+                    {
+                        opts: [
+                            { t: "Deal. I will process the 30% partial refund to your account right now.", r: 20, nextBot: "Fine. That's acceptable. Thank you." },
+                            { t: "How about 10% refund?", r: -30, nextBot: "Don't push your luck. I'll just write the bad review." }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        function startCurrentBoss() {
+            let b = bossData[currentBossIndex];
+            document.getElementById('boss-title').innerText = b.title;
+            document.getElementById('wa-boss-name').innerText = b.name;
+            document.getElementById('wa-boss-role').innerText = b.role;
+            document.getElementById('wa-avatar-icon').innerText = b.avatar;
+            document.getElementById('wa-avatar-icon').style.backgroundColor = b.color;
+
+            rapport = 50; waStep = 0;
+            updateRapport();
+            document.getElementById('wa-chat').innerHTML = "";
+            document.getElementById('btn-restart-wa').style.display = 'none';
+            document.getElementById('btn-next-boss').style.display = 'none';
+            document.getElementById('finish-msg').style.display = 'none';
+
+            appendWaBubble('left', b.script[0].bot);
+            renderWaOpts();
+        }
+
+        function navBoss(dir) {
+            currentBossIndex += dir;
+            if (currentBossIndex < 0) currentBossIndex = 0;
+            if (currentBossIndex >= bossData.length) currentBossIndex = bossData.length - 1;
+            startCurrentBoss();
+        }
+
+        function updateRapport() {
+            let bar = document.getElementById('rapport-bar');
+            bar.style.width = rapport + '%';
+            if (rapport < 40) bar.style.backgroundColor = '#e74c3c';
+            else if (rapport > 70) bar.style.backgroundColor = '#2ecc71';
+            else bar.style.backgroundColor = '#00ffcc';
+        }
+
+        function appendWaBubble(side, text) {
+            let chat = document.getElementById('wa-chat');
+            let div = document.createElement('div');
+            div.className = `wa-bubble ${side}`;
+            div.innerText = text;
+            chat.appendChild(div);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        function renderWaOpts() {
+            let inputs = document.getElementById('wa-inputs');
+            inputs.innerHTML = "";
+            let b = bossData[currentBossIndex];
+
+            if (waStep >= b.script.length) {
+                endWhatsApp(); return;
+            }
+
+            let optsWithIndex = b.script[waStep].opts.map((o, idx) => ({ ...o, originalIdx: idx }));
+            optsWithIndex.sort(() => Math.random() - 0.5);
+
+            optsWithIndex.forEach((item) => {
+                let btn = document.createElement('div');
+                btn.className = 'wa-opt';
+                btn.innerText = item.t;
+                btn.onclick = () => handleWaChoice(item.originalIdx);
+                inputs.appendChild(btn);
+            });
+        }
+
+        function handleWaChoice(optIdx) {
+            let b = bossData[currentBossIndex];
+            let choice = b.script[waStep].opts[optIdx];
+            appendWaBubble('right', choice.t);
+            rapport += choice.r;
+            rapport = Math.max(0, Math.min(100, rapport));
+            updateRapport();
+
+            document.getElementById('wa-inputs').innerHTML = "<div style='color:#aaa; text-align:center; font-size:0.9em;'>typing...</div>";
+
+            setTimeout(() => {
+                if (rapport <= 10) {
+                    appendWaBubble('left', "You know what, I don't think we can reach an agreement. Goodbye.");
+                    endWhatsApp(false);
+                } else {
+                    appendWaBubble('left', choice.nextBot);
+                    waStep++;
+                    renderWaOpts();
+                }
+            }, 1500);
+        }
+
+        function endWhatsApp(success = true) {
+            document.getElementById('wa-inputs').innerHTML = "";
+            document.getElementById('btn-restart-wa').style.display = 'block';
+
+            if (success && rapport >= 70) {
+                document.getElementById('finish-msg').style.display = 'inline';
+                if (currentBossIndex === bossData.length - 1) {
+                    document.getElementById('finish-msg').innerHTML = "🎉 ALL DEALS CLOSED! CEO MASTER!";
+                } else {
+                    document.getElementById('btn-next-boss').style.display = 'block';
+                    document.getElementById('finish-msg').innerHTML = "🎉 Deal Closed! Ready for the next boss?";
+                }
+            } else {
+                let msg = document.createElement('div');
+                msg.style.color = '#e74c3c'; msg.style.textAlign = 'center'; msg.style.marginTop = '10px';
+                msg.innerText = "❌ Negotiation Failed. Rapport was too low.";
+                document.getElementById('wa-inputs').appendChild(msg);
+            }
+        }
+
+        window.onload = function () {
+            renderS1();
+            renderS2();
+            renderS3();
+        };
+    </script>
+
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="uec-en-master-negotiator"
+            data-module-name="The Master Negotiator"
+            data-module-url="content/UEC_Syllabus/Senior/English/The_Master_Negotiator/index.html">
+    </script>
+</body>
+
+</html>

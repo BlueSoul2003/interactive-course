@@ -70,6 +70,8 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('uec-en-teen-ceo',           'Teen CEO Simulator Pro',          'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-ai-cofounder',       'The AI Co-Founder Simulator',     'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-pricing-strategy',   'The Profit Playbook Pro',         'uec', 'english', 'uec_senior', 'Senior'),
+('uec-en-master-negotiator',  'The Master Negotiator',           'uec', 'english', 'uec_senior', 'Senior'),
+('uec-en-rich-teen-simulator','Rich Teen Simulator',             'uec', 'english', 'uec_senior', 'Senior'),
 
 -- ── IGCSE Science Year 4 ──────────────────────────────────────────
 ('igcse-y4-sci-topic1',       'Topic 1: Life Processes & Ecosystems',       'igcse', 'science', 'igcse_y4_science', 'Year4'),

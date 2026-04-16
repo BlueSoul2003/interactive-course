@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rich Teen Simulator</title>
+<style>
+  /* --- 財富與黑金高級感配色 (Old Money Aesthetic) --- */
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(135deg, #13151a 0%, #2d3436 100%);
+    color: #e2e8f0; padding: 20px; max-width: 850px; margin: 0 auto; padding-top: 60px;
+  }
+  h1, h2, h3 { color: #f1c40f; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+
+  /* --- 雙語翻譯控制器 --- */
+  .translate-btn {
+    position: fixed; top: 20px; right: 20px; background: #f1c40f; color: #13151a;
+    border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer;
+    font-weight: bold; z-index: 1000; box-shadow: 0 4px 10px rgba(241, 196, 15, 0.3);
+  }
+  .lang-cn { display: none; }
+  body.show-cn .lang-cn { display: block; color: #f39c12; font-size: 0.9em; margin-top: 4px; font-style: italic; }
+  body.show-cn span.lang-cn { display: inline; margin-left: 5px; }
+
+  /* --- 螢幕容器 --- */
+  .simulator-screen {
+    background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 25px; margin-bottom: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); position: relative;
+    backdrop-filter: blur(10px);
+  }
+  .scenario-badge {
+    background: rgba(241, 196, 15, 0.2); color: #f1c40f; padding: 5px 12px; border-radius: 15px;
+    font-size: 0.85em; font-weight: bold; position: absolute; top: 20px; right: 20px; border: 1px dashed #f1c40f;
+  }
+
+  .btn {
+    background: linear-gradient(to right, #f1c40f 0%, #d35400 100%); color: #111;
+    border: none; padding: 12px 25px; border-radius: 25px; cursor: pointer; font-weight: bold;
+    display: block; margin: 20px auto; transition: 0.3s; font-size: 16px; text-align: center;
+  }
+  .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(241, 196, 15, 0.4); color:#fff;}
+  
+  /* --- Stage 1: Asset vs Liability Swipe --- */
+  .card-container { display: flex; justify-content: center; margin: 30px 0; perspective: 1000px;}
+  .finance-card {
+    background: #fff; color: #333; width: 300px; height: 250px; border-radius: 15px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; padding: 20px; transition: transform 0.5s;
+  }
+  .finance-icon { font-size: 4em; margin-bottom: 15px; }
+  .finance-title { font-size: 1.3em; font-weight: bold; color: #2c3e50; }
+  .action-btns { display: flex; justify-content: center; gap: 20px; margin-top: 20px;}
+  .btn-asset { background: #27ae60; color: white; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; border:none; transition: 0.2s;}
+  .btn-liability { background: #e74c3c; color: white; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; border:none; transition: 0.2s;}
+  .btn-asset:hover { background: #2ecc71; transform: scale(1.05); }
+  .btn-liability:hover { background: #c0392b; transform: scale(1.05); }
+  .feedback-box { margin-top: 20px; padding: 15px; border-radius: 10px; display: none; text-align: center; font-weight: bold;}
+
+  /* --- Stage 2: Story Game (RPG Engine) --- */
+  .stats-bar { display: flex; justify-content: space-around; background: rgba(0,0,0,0.4); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.2); font-weight: bold;}
+  .stat-item { display: flex; align-items: center; gap: 8px; font-size: 1.1em;}
+  .story-box { background: rgba(0,0,0,0.3); border-left: 4px solid #f1c40f; padding: 20px; border-radius: 10px; font-size: 1.1em; line-height: 1.6; min-height: 100px; margin-bottom: 20px;}
+  .story-choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.2s; text-align: left; font-size: 1em; display:flex; justify-content: space-between; align-items: center;}
+  .choice-btn:hover { background: rgba(241, 196, 15, 0.2); border-color: #f1c40f; }
+  .grammar-highlight { color: #f1c40f; font-weight: bold; text-decoration: underline; }
+  
+  .ending-box { display: none; background: rgba(0,0,0,0.5); padding: 25px; border-radius: 15px; border: 2px solid #f1c40f; margin-top: 20px; animation: fadeIn 1s;}
+  .ending-title { font-size: 1.8em; color: #f1c40f; text-align: center; margin-bottom: 15px; font-weight: bold;}
+  .ending-section { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed rgba(255,255,255,0.2);}
+
+  /* --- Stage 3: Compound Calculator --- */
+  .calc-panel { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;}
+  .calc-controls { flex: 1; min-width: 250px; background: rgba(0,0,0,0.2); padding: 20px; border-radius: 15px;}
+  .calc-group { margin-bottom: 15px; }
+  .calc-group label { display: block; margin-bottom: 5px; color: #f1c40f; font-weight: bold;}
+  .calc-input { width: 100%; padding: 10px; border-radius: 8px; border: none; outline: none; box-sizing: border-box; font-size: 1.1em; font-weight:bold; color: #333;}
+  .chart-area { flex: 2; min-width: 300px; height: 250px; display: flex; align-items: flex-end; justify-content: space-between; padding: 10px 0; border-bottom: 2px solid #555;}
+  .chart-bar-container { width: 8%; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative;}
+  
+  /* 更新: Fancy 柱状图动画与光影效果 */
+  .chart-bar { width: 100%; border-radius: 4px 4px 0 0; transition: height 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); height: 0%; position: relative; overflow: hidden;}
+  .chart-bar.good { background: linear-gradient(to top, #27ae60, #2ecc71); box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
+  .chart-bar.bad { background: linear-gradient(to top, #e74c3c, #c0392b); box-shadow: 0 0 15px rgba(231, 76, 60, 0.5); }
+  .chart-bar::after { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); animation: shine 2s infinite; }
+  @keyframes shine { 100% { left: 200%; } }
+  
+  .bar-label { font-size: 0.7em; margin-top: 5px; color: #aaa; }
+  .result-text { font-size: 1.2em; text-align: center; margin-top: 20px; font-weight: bold; color: #2ecc71;}
+
+  /* --- Stage 4: Capital Allocation --- */
+  .slider-group { margin-bottom: 25px; }
+  .slider-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 10px;}
+  .slider-header span:nth-child(1) { color: #f1c40f; }
+  input[type=range] { width: 100%; cursor: pointer; accent-color: #f1c40f; }
+  .report-box { background: rgba(255,255,255,0.9); color: #111; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 5px solid #27ae60; line-height: 1.6; display: none;}
+  .cloze-input { border: none; border-bottom: 2px solid #555; background: transparent; width: 100px; text-align: center; font-weight: bold; color: #27ae60; outline: none; font-size: 1em;}
+
+  .stage { display: none; }
+  .active { display: block; animation: fadeIn 0.5s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .progress-bar { height: 8px; background: rgba(255,255,255,0.1); margin-bottom: 20px; border-radius: 4px; }
+  .progress-fill { height: 100%; background: #f1c40f; width: 25%; border-radius: 4px; transition: 0.3s; }
+
+  .mini-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 15px; border-top: 1px dashed rgba(255,255,255,0.2); }
+  .nav-btn { background: rgba(255,255,255,0.1); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 15px; cursor: pointer; font-size: 0.9em; transition: 0.3s; font-weight: bold;}
+  .nav-btn:hover { background: rgba(241, 196, 15, 0.2); border-color: #f1c40f; color: #f1c40f;}
+
+  .home-btn-fixed { position: fixed; top: 20px; left: 20px; z-index: 99999; text-decoration: none; background: rgba(241, 196, 15, 0.1); color: #fff; border: 1px solid rgba(241, 196, 15, 0.2); padding: 8px 15px; border-radius: 15px; font-weight: bold; font-size: 0.9em; transition: 0.3s; }
+  .home-btn-fixed:hover { background: rgba(241, 196, 15, 0.2); transform: translateY(-2px); border-color: #f1c40f; color: #f1c40f; }
+</style>
+</head>
+<body>
+
+  <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+  <button class="translate-btn" onclick="toggleLanguage()">🇨🇳 EN/中</button>
+
+  <h1>
+    <span class="lang-en">💸 Rich Teen Simulator</span>
+    <span class="lang-cn">💸 富女孩養成模擬器</span>
+  </h1>
+  <div class="progress-bar"><div class="progress-fill" id="mainProgress"></div></div>
+
+  <!-- ================= STAGE 1: Asset vs Liability ================= -->
+  <div id="stage1" class="stage active simulator-screen">
+    <div class="scenario-badge" id="s1-badge">Level 1/20</div>
+    <h2><span class="lang-en">Stage 1: The Wealth Test 💳</span><span class="lang-cn">階段 1：資產還是負債？</span></h2>
+    <p style="color:#aaa;">
+      <span class="lang-en">First Principles of Money: <b>Assets</b> put money IN your pocket. <b>Liabilities</b> take money OUT. Classify the item below!</span>
+      <span class="lang-cn">金錢的第一性原理：<b>資產 (Assets)</b> 把錢放進你口袋，<b>負債 (Liabilities)</b> 把錢拿走。請分類下方的物品！</span>
+    </p>
+
+    <div class="card-container">
+      <div class="finance-card" id="finance-card">
+        <div class="finance-icon" id="fc-icon">📱</div>
+        <div class="finance-title" id="fc-title">iPhone 15 Pro Max</div>
+      </div>
+    </div>
+
+    <div class="action-btns" id="fc-actions">
+      <button class="btn-liability" onclick="checkFinance('liability')">📉 Liability</button>
+      <button class="btn-asset" onclick="checkFinance('asset')">📈 Asset</button>
+    </div>
+
+    <div class="feedback-box" id="fc-feedback"></div>
+
+    <div class="mini-nav">
+      <div></div>
+      <button class="nav-btn" style="background:#f1c40f; color:#111; display:none;" id="btn-next-s1" onclick="nextCard()">🔄 <span class="lang-en">Next Item</span><span class="lang-cn">下一個物品</span></button>
+      <button class="nav-btn" onclick="goToStage(2)">▶ <span class="lang-en">Next Stage</span><span class="lang-cn">下一關</span></button>
+    </div>
+  </div>
+
+  <!-- ================= STAGE 2: Story Game (64 Endings) ================= -->
+  <div id="stage2" class="stage simulator-screen">
+    <div class="scenario-badge" id="s2-badge">Event 1/5</div>
+    <h2><span class="lang-en">Stage 2: The 64 Multiverses 📖</span><span class="lang-cn">階段 2：64重平行宇宙 (互動劇情)</span></h2>
+    <p style="color:#aaa;">
+      <span class="lang-en">Your choices shape your stats. 5 events will lead to <b>64 different endings</b>. Pay attention to the <span class="grammar-highlight">If Conditionals</span>!</span>
+      <span class="lang-cn">你的選擇會改變你的隱藏數值。5 個事件將衍生出 <b>64 種不同的動態結局</b>。注意劇情中的 <span class="grammar-highlight">If 條件句</span> 考點！</span>
+    </p>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-item" id="stat-cash">💰 Cash: 500</div>
+      <div class="stat-item" id="stat-brand">✨ Brand: 50</div>
+      <div class="stat-item" id="stat-brain">🧠 Brain: 10</div>
+    </div>
+
+    <div class="story-box" id="story-text">
+      <!-- Injected by JS -->
+    </div>
+
+    <div class="story-choices" id="story-choices">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- Final Ending Box -->
+    <div class="ending-box" id="ending-box">
+      <div class="ending-title" id="end-title">The CEO</div>
+      <div class="ending-section" id="end-cash"></div>
+      <div class="ending-section" id="end-brand"></div>
+      <div class="ending-section" id="end-brain" style="border:none;"></div>
+      <button class="btn" style="margin-top:20px; width:100%;" onclick="startStory()">🔄 <span class="lang-en">Play Another Timeline</span><span class="lang-cn">挑戰另一個平行宇宙</span></button>
+    </div>
+
+    <div class="mini-nav">
+      <button class="nav-btn" onclick="goToStage(1)">◀ <span class="lang-en">Prev</span><span class="lang-cn">上一關</span></button>
+      <div></div>
+      <button class="nav-btn" onclick="goToStage(3)">▶ <span class="lang-en">Next Stage</span><span class="lang-cn">下一關</span></button>
+    </div>
+  </div>
+
+  <!-- ================= STAGE 3: Compound Calculator ================= -->
+  <div id="stage3" class="stage simulator-screen">
+    <h2><span class="lang-en">Stage 3: The 8th Wonder 🚀</span><span class="lang-cn">階段 3：第八大奇蹟 (複利)</span></h2>
+    <p style="color:#aaa;">
+      <span class="lang-en">Albert Einstein called Compound Interest the 8th wonder of the world. See how your money grows over 10 years!</span>
+      <span class="lang-cn">愛因斯坦稱複利為世界第八大奇蹟。看看你的錢在 10 年內如何暴增！(UEC 圖表描述考點)</span>
+    </p>
+
+    <div class="calc-panel">
+      <div class="calc-controls">
+        <div class="calc-group">
+          <label><span class="lang-en">Monthly Savings (RM):</span><span class="lang-cn">每月存入金額 (RM):</span></label>
+          <input type="number" id="calc-pmt" class="calc-input" value="200" onchange="calculateCompound()">
+        </div>
+        <div class="calc-group">
+          <label><span class="lang-en">Investment Vehicle:</span><span class="lang-cn">投資工具:</span></label>
+          <select id="calc-rate" class="calc-input" onchange="calculateCompound()">
+            <option value="0">Piggy Bank / Cash (0% Return)</option>
+            <option value="3">Fixed Deposit in Bank (3% Return)</option>
+            <option value="8" selected>S&P 500 ETF Stocks (8% Return)</option>
+            <option value="15">Nail Business Reinvestment (15% Return)</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Chart Area -->
+      <div class="chart-area" id="chart-area">
+        <!-- Bars injected by JS -->
+      </div>
+    </div>
+
+    <div class="result-text" id="calc-result"></div>
+
+    <div class="story-box" style="margin-top:20px; font-size:1em; border-color:#27ae60;">
+      <span class="lang-en"><b>UEC Vocab Check:</b> If you invest in the business, your wealth will <span class="grammar-highlight">skyrocket</span>. However, if you keep cash in a piggy bank, your wealth will <span class="grammar-highlight">stagnate</span> due to inflation.</span>
+      <span class="lang-cn"><b>UEC 單字挑戰：</b> 如果你投資生意，你的財富將會 <span class="grammar-highlight">skyrocket</span> (暴增)。然而，如果你把現金放在撲滿，你的財富將會因為通貨膨脹而 <span class="grammar-highlight">stagnate</span> (停滯)。</span>
+    </div>
+
+    <div class="mini-nav">
+      <button class="nav-btn" onclick="goToStage(2)">◀ <span class="lang-en">Prev</span><span class="lang-cn">上一關</span></button>
+      <button class="nav-btn" onclick="goToStage(4)">▶ <span class="lang-en">Next Stage</span><span class="lang-cn">下一關</span></button>
+    </div>
+  </div>
+
+  <!-- ================= STAGE 4: Capital Allocation ================= -->
+  <div id="stage4" class="stage simulator-screen">
+    <h2><span class="lang-en">Stage 4: CEO Allocation Pitch 📊</span><span class="lang-cn">階段 4：資本分配匯報</span></h2>
+    <p style="color:#aaa;">
+      <span class="lang-en">You have <b>RM 1,000</b> profit. Allocate your capital wisely. The total must be 100%.</span>
+      <span class="lang-cn">你有 <b>RM 1,000</b> 的利潤。明智地分配你的資本，總和必須是 100%。</span>
+    </p>
+
+    <div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Reinvest in Business (材料/廣告)</span><span id="val-biz">50%</span></div>
+        <input type="range" id="slide-biz" value="50" min="0" max="100" oninput="adjustSliders('biz')">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Invest in Assets (ETF/股票)</span><span id="val-etf">30%</span></div>
+        <input type="range" id="slide-etf" value="30" min="0" max="100" oninput="adjustSliders('etf')">
+      </div>
+      <div class="slider-group">
+        <div class="slider-header"><span>Reward Yourself (購物/玩樂)</span><span id="val-fun">20%</span></div>
+        <input type="range" id="slide-fun" value="20" min="0" max="100" oninput="adjustSliders('fun')">
+      </div>
+    </div>
+
+    <button class="btn" onclick="generateReport()">
+      <span class="lang-en">Generate Allocation Report 📝</span><span class="lang-cn">生成英文分配報告 📝</span>
+    </button>
+
+    <div class="report-box" id="final-report">
+      <!-- Generated by JS -->
+    </div>
+
+    <div class="mini-nav">
+      <button class="nav-btn" onclick="goToStage(3)">◀ <span class="lang-en">Prev</span><span class="lang-cn">上一關</span></button>
+      <div><span style="color:#2ecc71; font-weight:bold; display:none;" id="finish-msg">🎉 Financial Literacy Mastered!</span></div>
+    </div>
+  </div>
+
+<script>
+  function toggleLanguage() { document.body.classList.toggle('show-cn'); }
+  function goToStage(target) {
+    document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+    document.getElementById('stage' + target).classList.add('active');
+    document.getElementById('mainProgress').style.width = (target * 25) + '%';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    if(target === 3) calculateCompound(); // 觸發圖表動畫
+    try { ProgressTracker.save({ stage: target }); } catch(e) {}
+  }
+
+  /* ================= STAGE 1: ASSET VS LIABILITY (20 Items) ================= */
+  const cards = [
+    { icon: "📱", item: "iPhone 15 Pro Max", type: "liability", en: "Phones depreciate (lose value) the moment you buy them. They take money out of your pocket.", cn: "手機一買就貶值，還會引誘你花錢買App，是標準的負債。" },
+    { icon: "🐷", item: "Piggy Bank Cash", type: "liability", en: "Surprise! Inflation eats your cash. RM500 today buys less next year. Stagnant cash is a liability.", cn: "陷阱題！通貨膨脹會吃掉現金。放著不漲的錢其實是在虧錢，是一種隱性負債。" },
+    { icon: "💡", item: "UV Nail Lamp", type: "asset", en: "Equipment generates income. It pays for itself after 5 customers, then brings pure profit!", cn: "生財工具。做5個客人就回本，之後為你帶來的都是純利潤！" },
+    { icon: "🚗", item: "A New Car (Loan)", type: "liability", en: "Cars lose 20% value immediately, plus you pay interest, gas, and maintenance. Huge liability.", cn: "買車落地打八折，還要付利息、油錢和保養費，是年輕人最大的負債。" },
+    { icon: "📈", item: "S&P 500 ETF", type: "asset", en: "Stocks represent ownership in profitable companies. They compound and grow your wealth over time.", cn: "ETF 代表你擁有了賺錢公司的股份，時間久了會產生強大的複利效應。" },
+    { icon: "📢", item: "Paid IG Ads", type: "asset", en: "If RM10 in ads brings RM50 in sales, it's an asset with high ROI (Return on Investment).", cn: "如果 RM10 的廣告能帶來 RM50 的業績，這就是高投資報酬率 (ROI) 的虛擬資產！" },
+    { icon: "🖨️", item: "Bambu Lab 3D Printer", type: "asset", en: "A tool that prints functional products to sell. It actively prints money for your business!", cn: "能印出產品來賣的工具。它本質上就是在為你的生意印鈔票！" },
+    { icon: "👜", item: "RM5,000 Designer Bag", type: "liability", en: "It looks nice, but it doesn't generate income. It just sits in your closet and traps your capital.", cn: "好看但不能產生收入。它只會躺在衣櫃裡鎖死你的資本。" },
+    { icon: "📚", item: "Books on Investing", type: "asset", en: "Knowledge is the ultimate asset. RM50 spent on a book can yield millions in future returns.", cn: "知識是終極資產。花 RM50 買書可能在未來帶來百萬回報。" },
+    { icon: "☕", item: "Daily Starbucks", type: "liability", en: "The 'Latte Factor'. RM15 a day becomes RM5,400 a year. That's capital you could have invested.", cn: "「拿鐵因子」。每天 RM15，一年就是 RM5400。這是你本可以投資的資本。" },
+    { icon: "🌐", item: "Domain Name (.com)", type: "asset", en: "Digital real estate. It builds your brand equity and can appreciate in value over time.", cn: "數位房地產。它能建立你的品牌資產，而且本身可能會增值。" },
+    { icon: "💳", item: "Credit Card Debt", type: "liability", en: "The ultimate wealth destroyer. Compound interest working AGAINST you at 18% a year.", cn: "終極財富毀滅者。18% 的循環利息是複利在「對付」你。" },
+    { icon: "🎥", item: "Professional Camera", type: "asset", en: "If used to film high-quality YouTube/IG content that brings sponsorships, it's a cash-generating asset.", cn: "如果用來拍高品質的 YouTube 影片並接業配，它就是一台提款機。" },
+    { icon: "👗", item: "Fast Fashion Clothes", type: "liability", en: "Cheap clothes wear out quickly and have zero resale value. Pure consumption.", cn: "廉價衣服很快就穿壞，且二手價值為零。純粹的消耗品。" },
+    { icon: "🏦", item: "Fixed Deposit (FD)", type: "asset", en: "Low risk, guaranteed return. It fights inflation and pays you passively while you sleep.", cn: "低風險、保證回報。它能對抗通膨，並在你睡覺時被動地付錢給你。" },
+    { icon: "🎟️", item: "VIP Concert Tickets", type: "liability", en: "A great memory, but strictly an expense. It will not put money back into your pocket.", cn: "美好的回憶，但純粹是開銷。它不會把錢放回你的口袋。" },
+    { icon: "🤖", item: "ChatGPT Plus Subs", type: "asset", en: "If it helps you write better copy and saves 10 hours a week, the ROI is massive.", cn: "如果它能幫你寫更好的文案、每週省下 10 小時，這投資報酬率極高。" },
+    { icon: "📺", item: "5 Streaming Subs", type: "liability", en: "Monthly recurring expenses that bleed your bank account quietly while you sleep.", cn: "每個月持續扣款的開銷，在你睡覺時悄悄讓你的銀行帳戶失血。" },
+    { icon: "🍬", item: "Vending Machine", type: "asset", en: "A classic passive income generator. It works 24/7 without demanding a salary.", cn: "經典的被動收入產生器。它 24 小時為你工作，而且不用發薪水。" },
+    { icon: "✨", item: "Aesthetic Room Decor", type: "liability", en: "Aesthetic but non-functional. It drains your startup capital for purely visual reasons.", cn: "好看但不實用。純粹為了視覺效果而消耗你的創業資本。" }
+  ];
+  let currCard = 0;
+
+  function renderCard() {
+    let d = cards[currCard];
+    document.getElementById('s1-badge').innerText = `Level ${currCard+1}/${cards.length}`;
+    document.getElementById('fc-icon').innerText = d.icon;
+    document.getElementById('fc-title').innerText = d.item;
+    document.getElementById('finance-card').style.transform = "rotateY(0deg)";
+    document.getElementById('fc-feedback').style.display = 'none';
+    document.getElementById('fc-actions').style.display = 'flex';
+    document.getElementById('btn-next-s1').style.display = 'none';
+  }
+
+  function checkFinance(guess) {
+    let d = cards[currCard];
+    let fb = document.getElementById('fc-feedback');
+    document.getElementById('fc-actions').style.display = 'none';
+    
+    if(guess === d.type) {
+      fb.style.backgroundColor = 'rgba(39, 174, 96, 0.2)';
+      fb.style.border = '1px solid #27ae60';
+      fb.style.color = '#2ecc71';
+      fb.innerHTML = `✅ Correct!<br><br><span style="color:#e2e8f0; font-weight:normal; font-size:0.9em;"><span class="lang-en">${d.en}</span><span class="lang-cn">${d.cn}</span></span>`;
+    } else {
+      fb.style.backgroundColor = 'rgba(231, 76, 60, 0.2)';
+      fb.style.border = '1px solid #e74c3c';
+      fb.style.color = '#e74c3c';
+      fb.innerHTML = `❌ Think Again (First Principles!)<br><br><span style="color:#e2e8f0; font-weight:normal; font-size:0.9em;"><span class="lang-en">${d.en}</span><span class="lang-cn">${d.cn}</span></span>`;
+      document.getElementById('finance-card').style.transform = "rotateZ(5deg)"; 
+    }
+    fb.style.display = 'block';
+    document.getElementById('btn-next-s1').style.display = 'block';
+  }
+
+  function nextCard() {
+    currCard++;
+    if(currCard >= cards.length) currCard = 0;
+    renderCard();
+  }
+
+  /* ================= STAGE 2: RPG STORY ENGINE (64 Endings) ================= */
+  let s_cash = 500, s_brand = 50, s_brain = 10;
+  let currEventIndex = 0;
+
+  const events = [
+    {
+      en: "Event 1: You made RM500 profit this month! <span class='grammar-highlight'>If you spend it on luxury</span>, you look rich but stay poor. What is your next move?",
+      cn: "事件 1：你這個月賺了 RM500 利潤！<span class='grammar-highlight'>如果你把它花在奢侈品上</span>，你看起來很有錢但其實很窮。你的下一步是？",
+      opts: [
+        { textEn: "Buy a RM400 Balenciaga Wallet.", textCn: "買一個 RM400 的名牌錢包。", dc: -400, db: +20, dk: -10 },
+        { textEn: "Buy RM200 ETF and RM100 Business Books.", textCn: "買 RM200 ETF 和 RM100 商業書籍。", dc: -300, db: 0, dk: +30 }
+      ]
+    },
+    {
+      en: "Event 2: A famous TikToker wants a free nail set and RM200 for a shoutout. <span class='grammar-highlight'>If she posts it</span>, you might go viral.",
+      cn: "事件 2：一個知名 TikToker 想要一套免費美甲加 RM200 業配費。<span class='grammar-highlight'>如果她發文</span>，你可能會爆紅。",
+      opts: [
+        { textEn: "Pay her. Focus on quick fame.", textCn: "付錢給她。專注於快速出名。", dc: -200, db: +40, dk: 0 },
+        { textEn: "Reject. Learn Facebook Ads yourself (RM50).", textCn: "拒絕。自己花 RM50 學習下 FB 廣告。", dc: -50, db: +10, dk: +20 }
+      ]
+    },
+    {
+      en: "Event 3: Supply chain disaster! Taobao shipping is delayed. <span class='grammar-highlight'>If you ignore customers</span>, they will leave.",
+      cn: "事件 3：供應鏈災難！淘寶物流延遲了。<span class='grammar-highlight'>如果你不理會客戶</span>，他們會跑掉。",
+      opts: [
+        { textEn: "Panic and do nothing. Apologize later.", textCn: "驚慌失措什麼都不做。之後再道歉。", dc: 0, db: -30, dk: -10 },
+        { textEn: "Find a local supplier even if it costs RM100 more.", textCn: "尋找本地供應商，即使成本貴了 RM100。", dc: -100, db: +20, dk: +15 }
+      ]
+    },
+    {
+      en: "Event 4: An angry customer demands a refund for a broken nail. <span class='grammar-highlight'>If you argue with her</span>, you lose a customer.",
+      cn: "事件 4：一個憤怒的顧客因為指甲斷了要求退款。<span class='grammar-highlight'>如果你跟她吵架</span>，你會失去一個客戶。",
+      opts: [
+        { textEn: "Argue online to protect your ego.", textCn: "在網上跟她吵架以保護自尊心。", dc: 0, db: -40, dk: -10 },
+        { textEn: "Refund RM50 and send a free gift.", textCn: "退款 RM50 並送一個免費小禮物。", dc: -50, db: +20, dk: +10 }
+      ]
+    },
+    {
+      en: "Event 5: A competitor copies your exact designs and sells them cheaper. <span class='grammar-highlight'>If you start a price war</span>, your profit margins will collapse.",
+      cn: "事件 5：競爭對手抄襲了你的設計並賣得更便宜。<span class='grammar-highlight'>如果你打價格戰</span>，你的利潤空間會崩潰。",
+      opts: [
+        { textEn: "Lower your prices to beat them.", textCn: "降低你的價格來打敗他們。", dc: -100, db: -10, dk: -20 },
+        { textEn: "Rebrand as 'Premium' and improve packaging.", textCn: "重新定位為「高級品牌」並改善包裝。", dc: -50, db: +30, dk: +20 }
+      ]
+    },
+    {
+      en: "Event 6: School exams are coming up, but you have 20 pending nail orders! <span class='grammar-highlight'>If you skip studying</span>, your grades will suffer.",
+      cn: "事件 6：學校期考要到了，但你有 20 個未出貨的訂單！<span class='grammar-highlight'>如果你翹掉溫習</span>，你的成績會完蛋。",
+      opts: [
+        { textEn: "Skip studying to pack orders. Cash is king!", textCn: "不讀書了去包貨。現金為王！", dc: +200, db: 0, dk: -30 },
+        { textEn: "Pay a friend RM50 to help pack so you can study.", textCn: "付 RM50 請朋友幫忙包貨，自己去讀書。", dc: -50, db: +10, dk: +20 }
+      ]
+    },
+    {
+      en: "Event 7: Your ETF investment just paid out a RM100 dividend! <span class='grammar-highlight'>If you reinvest it</span>, compound interest will work its magic.",
+      cn: "事件 7：你的 ETF 投資剛剛發了 RM100 股息！<span class='grammar-highlight'>如果你把它再投資</span>，複利就會發揮魔法。",
+      opts: [
+        { textEn: "Buy an expensive dinner to celebrate.", textCn: "去吃一頓昂貴的晚餐慶祝。", dc: +100, db: +10, dk: -10 },
+        { textEn: "Reinvest the RM100 back into the ETF.", textCn: "把 RM100 股息重新投入 ETF。", dc: 0, db: 0, dk: +25 }
+      ]
+    },
+    {
+      en: "Event 8: You discover ChatGPT Plus (RM100/month) can write your IG ads. <span class='grammar-highlight'>If you use AI</span>, you will save 10 hours a week.",
+      cn: "事件 8：你發現 ChatGPT Plus (RM100/月) 可以幫你寫 IG 廣告。<span class='grammar-highlight'>如果你使用 AI</span>，你每週能省下 10 小時。",
+      opts: [
+        { textEn: "'AI is a scam.' Keep writing ads manually.", textCn: "「AI 是騙局。」繼續手動寫廣告。", dc: 0, db: 0, dk: -15 },
+        { textEn: "Subscribe to AI. Time is your most valuable asset.", textCn: "訂閱 AI。時間是你最寶貴的資產。", dc: -100, db: +20, dk: +30 }
+      ]
+    },
+    {
+      en: "Event 9: You are invited to a local Teen Entrepreneur Meetup (Ticket: RM50). <span class='grammar-highlight'>If you network with others</span>, you might find new opportunities.",
+      cn: "事件 9：你受邀參加本地青少年創業家聚會 (門票: RM50)。<span class='grammar-highlight'>如果你去拓展人脈</span>，你可能會發現新機會。",
+      opts: [
+        { textEn: "Stay home and watch Netflix. Too tired.", textCn: "留在家看 Netflix。太累了。", dc: 0, db: -10, dk: -10 },
+        { textEn: "Buy the ticket and bring your business cards.", textCn: "買門票並帶上你的名片去交流。", dc: -50, db: +20, dk: +20 }
+      ]
+    },
+    {
+      en: "Event 10: Someone warns you to register your business legally (SSM). <span class='grammar-highlight'>If you ignore the law</span>, you could be fined.",
+      cn: "事件 10：有人警告你必須合法註冊你的生意 (SSM)。<span class='grammar-highlight'>如果你無視法律</span>，你可能會被罰款。",
+      opts: [
+        { textEn: "Ignore it. 'I am just a teen!'", textCn: "無視它。「我只個中學生！」", dc: 0, db: -20, dk: -20 },
+        { textEn: "Pay RM60 to register and protect your brand.", textCn: "支付 RM60 註冊並保護你的品牌。", dc: -60, db: +20, dk: +20 }
+      ]
+    },
+    {
+      en: "Event 11: Customers are asking for toe-nail press-ons. <span class='grammar-highlight'>If you launch blindly</span>, the product might fail.",
+      cn: "事件 11：客戶開始詢問有沒有「腳趾穿戴甲」。<span class='grammar-highlight'>如果你盲目推出</span>，產品可能會失敗。",
+      opts: [
+        { textEn: "Launch a cheap, half-baked toe-nail line quickly.", textCn: "迅速推出廉價、半成品的腳趾美甲。", dc: +150, db: -30, dk: -15 },
+        { textEn: "Do R&D first and survey your IG followers.", textCn: "先做研發，並在 IG 調查粉絲的需求。", dc: -30, db: +15, dk: +20 }
+      ]
+    },
+    {
+      en: "Event 12: You have RM2000 cash. A friend asks to borrow RM500 for a new iPhone. <span class='grammar-highlight'>If you lend capital to a friend</span>, it becomes a liability.",
+      cn: "事件 12：你有 RM2000 現金。朋友想借 RM500 買新 iPhone。<span class='grammar-highlight'>如果你把資本借給朋友</span>，這筆錢就變成了負債。",
+      opts: [
+        { textEn: "Lend it to maintain the friendship.", textCn: "借給她以維持友誼。", dc: -500, db: 0, dk: -30 },
+        { textEn: "Decline politely. 'My capital is tied up in assets.'", textCn: "婉拒。「我的資金都綁定在資產裡了。」", dc: 0, db: 0, dk: +25 }
+      ]
+    },
+    {
+      en: "Event 13: Your school is hosting a pop-up market. Booth rental is RM100. <span class='grammar-highlight'>If you sell in person</span>, you can build loyal local fans.",
+      cn: "事件 13：學校舉辦快閃市集。攤位租金 RM100。<span class='grammar-highlight'>如果你去線下銷售</span>，你可以建立忠實的本地粉絲。",
+      opts: [
+        { textEn: "Rent it and prepare an elevator pitch!", textCn: "租下來並準備好你的電梯路演！", dc: -100, db: +40, dk: +20 },
+        { textEn: "Skip it. Too shy to sell face-to-face.", textCn: "跳過。太害羞不敢面對面推銷。", dc: 0, db: -10, dk: -10 }
+      ]
+    },
+    {
+      en: "Event 14: A cool '3D Printing Lab' offers to print custom accessory boxes for your nails. <span class='grammar-highlight'>If you collaborate</span>, your product looks premium.",
+      cn: "事件 14：一家酷炫的『3D打印實驗室』提議幫你的美甲印製客製化收納盒。<span class='grammar-highlight'>如果你們合作</span>，你的產品會看起來很高級。",
+      opts: [
+        { textEn: "Partner up! Pay RM150 for the 3D printed boxes.", textCn: "合作！支付 RM150 購買 3D 列印盒。", dc: -150, db: +50, dk: +25 },
+        { textEn: "Too expensive. Keep using cheap plastic bags.", textCn: "太貴了。繼續用便宜的塑膠袋裝。", dc: 0, db: -20, dk: -10 }
+      ]
+    },
+    {
+      en: "Event 15: The Ultimate Test. A big boutique offers to buy your entire business for RM5,000. <span class='grammar-highlight'>If you sell it</span>, you get quick cash but lose the empire.",
+      cn: "事件 15：終極考驗。一家大精品店提議用 RM5,000 收購你的整個生意。<span class='grammar-highlight'>如果你賣掉它</span>，你獲得快錢但失去了整個帝國。",
+      opts: [
+        { textEn: "Sell it! I want RM5,000 right now!", textCn: "賣掉！我現在就要 5000 塊！", dc: +5000, db: -100, dk: -30 },
+        { textEn: "Reject. My cash-flow machine is worth way more.", textCn: "拒絕。我的現金流機器未來的價值遠超於此。", dc: 0, db: +50, dk: +50 }
+      ]
+    }
+  ];
+
+  function startStory() {
+    s_cash = 500; s_brand = 50; s_brain = 10;
+    currEventIndex = 0;
+    document.getElementById('ending-box').style.display = 'none';
+    document.getElementById('story-text').style.display = 'block';
+    document.getElementById('story-choices').style.display = 'flex';
+    updateStatsUI();
+    renderStoryEvent();
+  }
+
+  function updateStatsUI() {
+    let cColor = s_cash < 0 ? '#e74c3c' : '#e2e8f0';
+    document.getElementById('stat-cash').innerHTML = `💰 Cash: <span style="color:${cColor}">RM ${s_cash}</span>`;
+    document.getElementById('stat-brand').innerHTML = `✨ Brand: ${s_brand}`;
+    document.getElementById('stat-brain').innerHTML = `🧠 Brain: ${s_brain}`;
+  }
+
+  function renderStoryEvent() {
+    document.getElementById('s2-badge').innerText = `Event ${currEventIndex+1}/15`;
+    let ev = events[currEventIndex];
+    document.getElementById('story-text').innerHTML = `<span class="lang-en">${ev.en}</span><span class="lang-cn">${ev.cn}</span>`;
+    
+    let html = "";
+    ev.opts.forEach(o => {
+      // 隱藏了數值提示，讓她靠直覺思考！
+      html += `<button class="choice-btn" onclick="makeChoice(${o.dc}, ${o.db}, ${o.dk})">
+                <span><span class="lang-en">${o.textEn}</span><span class="lang-cn">${o.textCn}</span></span>
+               </button>`;
+    });
+    document.getElementById('story-choices').innerHTML = html;
+  }
+
+  function makeChoice(dc, db, dk) {
+    s_cash += dc; s_brand += db; s_brain += dk;
+    updateStatsUI();
+    currEventIndex++;
+    
+    if(currEventIndex >= 15) { generateEnding(); } 
+    else { renderStoryEvent(); }
+  }
+
+  function generateEnding() {
+    document.getElementById('story-text').style.display = 'none';
+    document.getElementById('story-choices').style.display = 'none';
+    document.getElementById('s2-badge').innerText = "Timeline Completed";
+
+    // Dynamic Ending Logic (Adjusted for 15 events)
+    let titleStr = "", cashStr = "", brandStr = "", brainStr = "";
+
+    // 1. Mindset (Brain) -> Defines Title & Base Text
+    // Max brain ~330, Min ~ -240
+    if (s_brain < 30) {
+      titleStr = "The Clueless Consumer";
+      brainStr = "🧠 <b>Mindset:</b> You still think like a consumer. You buy liabilities instead of assets and lack First Principles thinking.";
+    } else if (s_brain < 100) {
+      titleStr = "The Tired Employee";
+      brainStr = "🛠️ <b>Mindset:</b> You think like an employee. You work IN your business 14 hours a day, but you don't know how to scale it.";
+    } else if (s_brain < 200) {
+      titleStr = "The Smart Manager";
+      brainStr = "📊 <b>Mindset:</b> You think like a manager. You know how to delegate tasks, handle crises, and optimize costs efficiently.";
+    } else {
+      titleStr = "The Visionary CEO";
+      brainStr = "🚀 <b>Mindset:</b> You are a true visionary. You use First Principles to automate workflows, build supply chains, and compound wealth.";
+    }
+
+    // 2. Wealth (Cash)
+    // Starting 500. Max ~ +5500 (if sell business), or ~ +1000 if keep. Min ~ -1000.
+    if (s_cash < 0) {
+      titleStr = "Bankrupt " + titleStr.replace("The ", "");
+      cashStr = "💸 <b>Financial Status:</b> You are deeply in debt. Taking loans without a proper ROI strategy ruined your cash flow.";
+    } else if (s_cash < 300) {
+      titleStr = "Struggling " + titleStr.replace("The ", "");
+      cashStr = "💵 <b>Financial Status:</b> You are barely surviving paycheck to paycheck. Cash flow is extremely tight.";
+    } else if (s_cash < 1000) {
+      titleStr = "Stable " + titleStr.replace("The ", "");
+      cashStr = "💰 <b>Financial Status:</b> You have a stable income and a very healthy business cash flow.";
+    } else {
+      titleStr = "Wealthy " + titleStr.replace("The ", "");
+      cashStr = "💎 <b>Financial Status:</b> You are cash-rich and financially free! You mastered capital allocation.";
+    }
+
+    // 3. Reputation (Brand)
+    // Max brand ~ +300, Min ~ -200
+    if (s_brand < 30) {
+      brandStr = "📉 <b>Brand Reputation:</b> You are cancelled online. Bad customer service and poor quality control destroyed your name.";
+    } else if (s_brand < 100) {
+      brandStr = "👻 <b>Brand Reputation:</b> Your brand is practically a ghost. Nobody remembers your name or searches for your products.";
+    } else if (s_brand < 180) {
+      brandStr = "⭐ <b>Brand Reputation:</b> You have a solid group of loyal local customers who love your nails and recommend you to friends.";
+    } else {
+      brandStr = "🔥 <b>Brand Reputation:</b> You are a viral sensation! Teenagers queue up for your designs and TikTok loves you.";
+    }
+
+    document.getElementById('end-title').innerText = titleStr;
+    document.getElementById('end-cash').innerHTML = cashStr;
+    document.getElementById('end-brand').innerHTML = brandStr;
+    document.getElementById('end-brain').innerHTML = brainStr;
+    document.getElementById('ending-box').style.display = 'block';
+  }
+
+  /* ================= STAGE 3: Compound Calculator ================= */
+  let calcAnimFrame = null; // 用于追踪数字动画，防止重叠
+
+  function calculateCompound() {
+    let pmt = parseFloat(document.getElementById('calc-pmt').value) || 0;
+    let rateStr = document.getElementById('calc-rate').value;
+    let r = parseFloat(rateStr) / 100;
+    
+    let years = 10;
+    let totals = [];
+    let currentTotal = 0;
+    let maxTotal = 0;
+
+    for(let i=1; i<=years; i++) {
+      for(let m=1; m<=12; m++) {
+        currentTotal = currentTotal * (1 + r/12) + pmt;
+      }
+      totals.push(currentTotal);
+    }
+    
+    maxTotal = totals[years-1];
+
+    // Render Bars with Waterfall Staggered Delay
+    let chartHtml = "";
+    let bgClass = r === 0 ? 'bad' : 'good';
+    
+    totals.forEach((val, index) => {
+      let delay = index * 0.08; // 产生阶梯式的动画延迟 (80ms each)
+      chartHtml += `
+        <div class="chart-bar-container">
+          <div class="chart-bar ${bgClass}" id="bar-${index}" style="height: 0%; transition-delay: ${delay}s;"></div>
+          <div class="bar-label">Yr${index+1}</div>
+        </div>
+      `;
+    });
+    
+    document.getElementById('chart-area').innerHTML = chartHtml;
+
+    // Trigger reflow to apply heights smoothly
+    setTimeout(() => {
+      totals.forEach((val, index) => {
+        let heightPct = (val / maxTotal) * 100;
+        let barEl = document.getElementById(`bar-${index}`);
+        if(barEl) barEl.style.height = heightPct + '%';
+      });
+    }, 50);
+
+    // Trigger Number Rolling Animation
+    let resultDiv = document.getElementById('calc-result');
+    animateValue(resultDiv, 0, maxTotal, 1500, r); // 动画持续 1.5秒
+  }
+
+  // 炫酷的吃角子老虎机跳号动画
+  function animateValue(obj, start, end, duration, rate) {
+    if (calcAnimFrame) window.cancelAnimationFrame(calcAnimFrame);
+    
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      
+      // 使用 easeOutQuart 缓动函数，让数字跳动有“减速煞车”的高级感
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4); 
+      let currentVal = easeOutQuart * (end - start) + start;
+      
+      let displayAmt = currentVal.toLocaleString('en-US', { style: 'currency', currency: 'MYR' });
+      
+      let resultEn = rate === 0 ? `After 10 years, you only saved ${displayAmt}. Your wealth <span class="grammar-highlight">stagnated</span>.` : `After 10 years, your money <span class="grammar-highlight">skyrocketed</span> to ${displayAmt}!`;
+      let resultCn = rate === 0 ? `10年後，你只存了 ${displayAmt}。你的財富 <span class="grammar-highlight">停滯不前</span>。` : `10年後，你的資金 <span class="grammar-highlight">暴增</span> 到了 ${displayAmt}！`;
+
+      obj.innerHTML = `<span class="lang-en">${resultEn}</span><span class="lang-cn">${resultCn}</span>`;
+      
+      if (progress < 1) {
+        calcAnimFrame = window.requestAnimationFrame(step);
+      }
+    };
+    calcAnimFrame = window.requestAnimationFrame(step);
+  }
+
+  /* ================= STAGE 4: Allocation Sliders ================= */
+  let sBiz = 50, sEtf = 30, sFun = 20;
+  
+  function adjustSliders(changed) {
+    let biz = parseInt(document.getElementById('slide-biz').value);
+    let etf = parseInt(document.getElementById('slide-etf').value);
+    let fun = parseInt(document.getElementById('slide-fun').value);
+    
+    let total = biz + etf + fun;
+    let diff = total - 100;
+
+    if (diff !== 0) {
+      if (changed === 'biz') {
+        if (etf >= diff && etf - diff >= 0) { etf -= diff; } else { fun -= diff; }
+      } else if (changed === 'etf') {
+        if (biz >= diff && biz - diff >= 0) { biz -= diff; } else { fun -= diff; }
+      } else {
+        if (etf >= diff && etf - diff >= 0) { etf -= diff; } else { biz -= diff; }
+      }
+    }
+
+    biz = Math.max(0, Math.min(100, biz));
+    etf = Math.max(0, Math.min(100, etf));
+    fun = 100 - biz - etf;
+
+    document.getElementById('slide-biz').value = biz;
+    document.getElementById('slide-etf').value = etf;
+    document.getElementById('slide-fun').value = fun;
+    document.getElementById('val-biz').innerText = biz + '%';
+    document.getElementById('val-etf').innerText = etf + '%';
+    document.getElementById('val-fun').innerText = fun + '%';
+  }
+
+  function generateReport() {
+    let biz = document.getElementById('slide-biz').value;
+    let etf = document.getElementById('slide-etf').value;
+    let fun = document.getElementById('slide-fun').value;
+    
+    let report = `
+      <p style="text-align:center; font-weight:bold; font-size:1.2em; color:#27ae60; margin-bottom:20px;">CAPITAL ALLOCATION REPORT</p>
+      "Based on my RM1,000 profit, I have formulated a strategic allocation plan. 
+      <br><br>
+      First, I will reinvest <b>${biz}% (RM${biz*10})</b> back into my business as <span style="color:#d35400; font-weight:bold;">capital</span> to purchase better materials and run IG ads. <span style="text-decoration:underline;">If I reinvest this amount, my business revenue will <input type="text" class="cloze-input" value="increase"></span>.
+      <br><br>
+      Secondly, I will allocate <b>${etf}% (RM${etf*10})</b> into an S&P 500 ETF. Because of <span style="color:#d35400; font-weight:bold;">compound interest</span>, this asset will <input type="text" class="cloze-input" value="skyrocket"> over the next 10 years, generating <span style="color:#d35400; font-weight:bold;">passive income</span>.
+      <br><br>
+      Finally, I will use the remaining <b>${fun}% (RM${fun*10})</b> to reward myself, ensuring I avoid burnout while maintaining a healthy cash flow. <span style="text-decoration:underline;">Consequently, I am building long-term wealth rather than accumulating <input type="text" class="cloze-input" value="liabilities"></span>."
+    `;
+
+    document.getElementById('final-report').innerHTML = report;
+    document.getElementById('final-report').style.display = 'block';
+    document.getElementById('finish-msg').style.display = 'inline';
+  }
+
+  /* --- Init --- */
+  window.onload = async function() { 
+    renderCard(); 
+    startStory();
+    calculateCompound(); 
+    try {
+        if (typeof ProgressTracker !== 'undefined') {
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data && saved.progress_data.stage) {
+                goToStage(saved.progress_data.stage);
+            }
+        }
+    } catch (e) {}
+  };
+</script>
+
+<script src="../../../../../js/progress-tracker.js"
+        data-module-id="uec-en-rich-teen-simulator"
+        data-module-name="Rich Teen Simulator"
+        data-module-url="content/UEC_Syllabus/Senior/English/Rich_Teen_Simulator/index.html">
+</script>
+
+</body>
+</html>
