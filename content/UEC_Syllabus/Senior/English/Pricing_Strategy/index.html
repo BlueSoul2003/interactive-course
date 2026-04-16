@@ -793,7 +793,7 @@
                 }, 300);
             }
             if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.save({ stage: target });
+                ProgressTracker.autoSave({ stage: target });
             }
         }
 
@@ -1059,15 +1059,13 @@
             document.getElementById('finish-msg').style.display = 'inline';
         }
 
-        window.onload = async function () { 
-            renderS1(); renderS2(); renderS3(); 
-            if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data && saved.progress_data.stage) {
-                    goToStage(saved.progress_data.stage);
-                }
-            }
-        };
+        window.addEventListener('load', function() {
+            renderS1(); renderS2(); renderS3();
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved.stage) goToStage(saved.stage);
+            });
+        });
     </script>
     <script src="../../../../../js/progress-tracker.js"
             data-module-id="uec-sen-eng-pricing"

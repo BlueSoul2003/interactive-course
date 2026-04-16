@@ -339,3 +339,39 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 --   SELECT id FROM public.modules ORDER BY id;   -- full alphabetical list
 --   SELECT COUNT(*) FROM public.activation_pins; -- 0 if you wiped old PINs
 -- ──────────────────────────────────────────────────────────────────
+
+
+-- ──────────────────────────────────────────────────────────────────
+-- SECTION 7: student_progress table
+--
+-- Stores per-user, per-module progress as a JSONB blob.
+-- One row per (user_id, module_id) pair — upserted on every save.
+-- RLS ensures users can only read/write their own rows.
+-- Safe to re-run (idempotent).
+-- ──────────────────────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS public.student_progress (
+  id            UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id       UUID        NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  module_id     TEXT        NOT NULL,
+  module_name   TEXT,
+  module_url    TEXT,
+  progress_data JSONB       NOT NULL DEFAULT '{}',
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (user_id, module_id)
+);
+
+ALTER TABLE public.student_progress ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users manage own progress" ON public.student_progress;
+CREATE POLICY "Users manage own progress"
+ON public.student_progress
+FOR ALL
+USING     (auth.uid() = user_id)
+WITH CHECK (auth.uid() = user_id);
+
+-- ──────────────────────────────────────────────────────────────────
+-- VERIFICATION QUERIES for Section 7:
+--   SELECT COUNT(*) FROM public.student_progress; -- 0 initially
+--   \d public.student_progress                    -- check columns
+-- ──────────────────────────────────────────────────────────────────

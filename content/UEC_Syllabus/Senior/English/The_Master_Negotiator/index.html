@@ -705,18 +705,14 @@
             document.getElementById('mainProgress').style.width = (target * 25) + '%';
             window.scrollTo({ top: 0, behavior: 'smooth' });
             if (target === 4 && currentBossIndex === 0 && waStep === 0) startCurrentBoss();
-            try { ProgressTracker.save({ stage: target }); } catch(e) {}
+            ProgressTracker.autoSave({ stage: target });
         }
         
-        window.addEventListener('load', async () => {
-            try {
-                if (typeof ProgressTracker !== 'undefined') {
-                    const saved = await ProgressTracker.load();
-                    if (saved && saved.progress_data && saved.progress_data.stage) {
-                        goToStage(saved.progress_data.stage);
-                    }
-                }
-            } catch (e) {}
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved.stage) goToStage(saved.stage);
+            });
         });
 
         /* ================= STAGE 1: Intuition Test & Ultimatum ================= */

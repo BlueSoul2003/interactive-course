@@ -864,7 +864,7 @@
             document.getElementById('stage' + target).classList.add('active');
             document.getElementById('mainProgress').style.width = (target * 25) + '%';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (window.ProgressTracker) window.ProgressTracker.save({ stage: target });
+            if (window.ProgressTracker) window.ProgressTracker.autoSave({ stage: target });
         }
         let currT1 = 0, currT2 = 0, currT3 = 0, currT4 = 0;
         function nextScenario(stageNum) {
@@ -1159,15 +1159,17 @@
         window.onload = function () { renderT1(); renderT2(); renderT3(); renderT4(); };
     </script>
 
-    <!-- ── Progress Tracker ──────────────────────────────────────────────── -->
+    <!-- Progress Tracker -->
     <script src="../../../../../js/progress-tracker.js"
-        data-module-id="UEC_Senior_Eng_AI_CoFounder"
+        data-module-id="uec-en-ai-cofounder"
         data-module-name="UEC English – The AI Co-Founder Simulator"
         data-module-url="content/UEC_Syllabus/Senior/English/AI_CoFounder_Simulator/index.html"></script>
     <script>
-        window.addEventListener('load', function () {
-            if (!window.ProgressTracker) return;
-            ProgressTracker.load().then(function () { ProgressTracker.save({ visited: true }); });
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved.stage) goToStage(saved.stage);
+            });
         });
     </script>
 

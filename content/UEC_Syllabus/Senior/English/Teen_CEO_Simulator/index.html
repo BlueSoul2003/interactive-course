@@ -741,8 +741,12 @@
             document.getElementById('stage' + target).classList.add('active');
             document.getElementById('mainProgress').style.width = (target * 25) + '%';
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            if (audioCtx.state === 'suspended') audioCtx.resume(); // Ensure audio activates on click
-            if (window.ProgressTracker) window.ProgressTracker.save({ stage: target });
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            // Save richer state: stage + current scenario index for all 4 tasks
+            ProgressTracker.autoSave({
+                stage: target,
+                t1: currTask1, t2: currTask2, t3: currTask3, t4: currTask4
+            });
         }
 
         let currTask1 = 0, currTask2 = 0, currTask3 = 0, currTask4 = 0;
@@ -1009,19 +1013,24 @@
         }
 
         /* --- Init --- */
-        window.onload = function () {
+        window.addEventListener('load', function () {
             renderT1(); renderT2(); renderT3(); renderT4();
-            if (window.ProgressTracker) {
-                const state = window.ProgressTracker.load();
-                if (state && state.stage) {
-                    goToStage(state.stage);
+            // Restore saved state after auth is ready
+            ProgressTracker.init(async function (tracker) {
+                const saved = await tracker.load();
+                if (saved) {
+                    if (saved.t1 !== undefined) { currTask1 = saved.t1; renderT1(); }
+                    if (saved.t2 !== undefined) { currTask2 = saved.t2; renderT2(); }
+                    if (saved.t3 !== undefined) { currTask3 = saved.t3; renderT3(); }
+                    if (saved.t4 !== undefined) { currTask4 = saved.t4; renderT4(); }
+                    if (saved.stage) goToStage(saved.stage);
                 }
-            }
-        };
+            });
+        });
     </script>
 
-    <!-- Progress Tracker -->
-    <script src="../../../../../js/progress-tracker.js" data-module-id="UEC_Senior_English_TeenCEO"
+    <!-- Progress Tracker (must be before </body>, after supabase CDN if any) -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="uec-en-teen-ceo"
         data-module-name="UEC English: Teen CEO Simulator Pro"
         data-module-url="content/UEC_Syllabus/Senior/English/Teen_CEO_Simulator/index.html"></script>
 

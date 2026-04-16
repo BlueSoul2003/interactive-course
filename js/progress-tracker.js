@@ -1,170 +1,264 @@
 // ==============================================================
-// progress-tracker.js  — Universal Student Progress SDK
-// Powered by Supabase (https://supabase.com)
+// js/progress-tracker.js  — Universal Student Progress SDK v2
+// Powered by Supabase Auth (https://supabase.com)
 // ==============================================================
 //
-// HOW TO CONFIGURE:
-//   1. Create a free project at supabase.com
-//   2. Go to Project Settings → API
-//   3. Replace the two values below with your project's values
+// WHAT CHANGED FROM v1:
+//   • Identity is now the logged-in Supabase Auth user (UUID),
+//     NOT a name string stored in localStorage. Progress persists
+//     across logout/re-login and across devices.
+//   • Reads/writes public.student_progress via the official
+//     supabase-js client (proper RLS + auth token forwarding).
+//   • Adds autoSave(data, delayMs) — debounced save, safe to call
+//     on every keypress for tracking typed answers.
+//   • Adds init(callback) — waits for auth to be ready then fires
+//     the callback with the tracker instance. Use this in modules
+//     instead of window.onload + manual checks.
+//   • Backward-compatible: if user is not logged in, save/load are
+//     silent no-ops so the module still works as a guest.
 //
-// HOW TO USE IN ANY MODULE (3 lines):
-//   <script src="[path-to-root]/js/progress-tracker.js"
-//           data-module-id="UNIQUE_ID"
+// HOW TO USE IN A MODULE (copy-paste this at the bottom of <body>):
+//
+//   <script src="[root]/js/progress-tracker.js"
+//           data-module-id="unique-canonical-id"
 //           data-module-name="Human Readable Name"
-//           data-module-url="[path-to-root]/content/.../index.html"></script>
+//           data-module-url="content/.../index.html"></script>
 //   <script>
-//     window.addEventListener('load', async () => {
-//       const saved = await ProgressTracker.load();
-//       if (saved) { /* restore from saved.progress_data */ }
+//     ProgressTracker.init(async (tracker) => {
+//       // Restore state on page load:
+//       const saved = await tracker.load();
+//       if (saved?.stage) goToStage(saved.stage);
+//       if (saved?.answers) restoreAnswers(saved.answers);
 //     });
-//     // Call ProgressTracker.save({...}) whenever student makes progress
+//
+//     // Call anywhere to save (e.g., on stage change):
+//     ProgressTracker.save({ stage: 2, answers: {...} });
+//
+//     // Call on every keypress/input (debounced 2s):
+//     ProgressTracker.autoSave({ stage: 2, answers: {...} });
 //   </script>
 //
 // ==============================================================
 
-const SUPABASE_URL = 'https://ycsixsyssbdovpmmhefz.supabase.co';   // e.g. https://xyzabc.supabase.co
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljc2l4c3lzc2Jkb3ZwbW1oZWZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzOTcyNTEsImV4cCI6MjA5MDk3MzI1MX0.5Ofa771ewzMip8mZaXA09B9O2HPF3ZGoTk3qGkdTkmE';       // starts with "eyJ..."
+(function () {
+    'use strict';
 
-// ── Internal helpers ─────────────────────────────────────────────────────────
+    // ── Supabase credentials (same project as auth-access.js) ────────────────
+    const SUPABASE_URL = 'https://ycsixsyssbdovpmmhefz.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljc2l4c3lzc2Jkb3ZwbW1oZWZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzOTcyNTEsImV4cCI6MjA5MDk3MzI1MX0.5Ofa771ewzMip8mZaXA09B9O2HPF3ZGoTk3qGkdTkmE';
+    const PROGRESS_TABLE = 'student_progress';
 
-const _headers = () => ({
-    'Content-Type': 'application/json',
-    'apikey': SUPABASE_KEY,
-    'Authorization': `Bearer ${SUPABASE_KEY}`,
-    'Prefer': 'return=representation'
-});
-
-async function _query(path, method = 'GET', body = null) {
-    const opts = { method, headers: _headers() };
-    if (body) opts.body = JSON.stringify(body);
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, opts);
-    if (!res.ok) {
-        const err = await res.text();
-        console.error('[ProgressTracker] API error:', err);
+    // ── Get or create the Supabase client ────────────────────────────────────
+    // Reuse the client from auth-access.js if already loaded, otherwise
+    // create our own so this file can work standalone.
+    function _getClient() {
+        if (window.supabaseClient) return window.supabaseClient;
+        if (window.supabase && window.supabase.createClient) {
+            // Self-initialize if supabase-js CDN is loaded but client wasn't created yet
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            return window.supabaseClient;
+        }
         return null;
     }
-    const text = await res.text();
-    return text ? JSON.parse(text) : null;
-}
 
-// ── Active student session ────────────────────────────────────────────────────
-
-const _SESSION_KEY = 'mastery_active_student';
-
-function _getActiveStudent() {
-    return sessionStorage.getItem(_SESSION_KEY) || localStorage.getItem(_SESSION_KEY);
-}
-
-// ── Read module config from the script tag ────────────────────────────────────
-
-function _getModuleConfig() {
-    const tag = document.currentScript ||
-        document.querySelector('script[data-module-id]');
-    if (!tag) return null;
-    return {
-        id: tag.dataset.moduleId,
-        name: tag.dataset.moduleName || tag.dataset.moduleId,
-        url: tag.dataset.moduleUrl || location.pathname
-    };
-}
-
-// ── Public API ────────────────────────────────────────────────────────────────
-
-const ProgressTracker = {
-
-    // ── Student management ────────────────────────────────────────────────────
-
-    /** Returns array of all student name strings */
-    async getStudents() {
-        const rows = await _query('students?select=name&order=name');
-        return rows ? rows.map(r => r.name) : [];
-    },
-
-    /** Creates a student; silently ignores if already exists */
-    async createStudent(name) {
-        await _query('students', 'POST', { name });
-    },
-
-    /** Sets the active student for this browser session */
-    setActiveStudent(name) {
-        localStorage.setItem(_SESSION_KEY, name);
-        sessionStorage.setItem(_SESSION_KEY, name);
-        document.dispatchEvent(new CustomEvent('activeStudentChanged', { detail: { name } }));
-    },
-
-    getActiveStudent() {
-        return _getActiveStudent();
-    },
-
-    clearActiveStudent() {
-        localStorage.removeItem(_SESSION_KEY);
-        sessionStorage.removeItem(_SESSION_KEY);
-        document.dispatchEvent(new CustomEvent('activeStudentChanged', { detail: { name: null } }));
-    },
-
-    // ── Progress management ───────────────────────────────────────────────────
-
-    /**
-     * Saves progress for active student in current module.
-     * @param {object} data - Any JSON-serialisable state to save
-     */
-    async save(data) {
-        const student = _getActiveStudent();
-        if (!student) return;
-
-        const cfg = _getModuleConfig();
-        if (!cfg || !cfg.id) {
-            console.warn('[ProgressTracker] No data-module-id found on <script> tag. Progress not saved.');
-            return;
-        }
-
-        const payload = {
-            student_name: student,
-            module_id: cfg.id,
-            module_name: cfg.name,
-            module_url: cfg.url,
-            progress_data: data,
-            last_updated: new Date().toISOString()
+    // ── Read module config from the <script> tag ─────────────────────────────
+    function _getModuleConfig() {
+        // currentScript works during synchronous execution; fall back to data attr
+        const tag = document.currentScript ||
+            document.querySelector('script[data-module-id]');
+        if (!tag) return null;
+        return {
+            id:   tag.dataset.moduleId   || null,
+            name: tag.dataset.moduleName || tag.dataset.moduleId || 'Unknown Module',
+            url:  tag.dataset.moduleUrl  || location.pathname
         };
-
-        // Upsert (insert or update) — relies on UNIQUE(student_name, module_id)
-        await _query(
-            'progress?on_conflict=student_name,module_id',
-            'POST',
-            payload
-        );
-    },
-
-    /**
-     * Loads saved progress for the active student in the current module.
-     * @returns {object|null} The saved row, or null if none exists
-     */
-    async load() {
-        const student = _getActiveStudent();
-        if (!student) return null;
-
-        const cfg = _getModuleConfig();
-        if (!cfg || !cfg.id) return null;
-
-        const rows = await _query(
-            `progress?student_name=eq.${encodeURIComponent(student)}&module_id=eq.${encodeURIComponent(cfg.id)}&select=*`
-        );
-        return rows && rows.length > 0 ? rows[0] : null;
-    },
-
-    /**
-     * Gets all saved progress rows for a named student.
-     * Used by the Student Dashboard.
-     */
-    async getAllProgressForStudent(student) {
-        if (!student) return [];
-        const rows = await _query(
-            `progress?student_name=eq.${encodeURIComponent(student)}&select=*&order=last_updated.desc`
-        );
-        return rows || [];
     }
-};
 
-// Expose globally
-window.ProgressTracker = ProgressTracker;
+    // Cache the module config at parse time (currentScript only works here)
+    const _moduleConfig = _getModuleConfig();
+
+    // ── Get authenticated user ID ─────────────────────────────────────────────
+    async function _getUserId() {
+        const client = _getClient();
+        if (!client) return null;
+        try {
+            const { data: { user }, error } = await client.auth.getUser();
+            if (error || !user) return null;
+            return user.id;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // ── Auto-save debouncer ───────────────────────────────────────────────────
+    let _autoSaveTimer = null;
+
+    // ── Public API ────────────────────────────────────────────────────────────
+    const ProgressTracker = {
+
+        /**
+         * Waits for Supabase auth to be ready, then fires callback(tracker).
+         * Use this in modules instead of window.onload + manual ProgressTracker checks.
+         *
+         * @param {function} callback - async (tracker) => { ... }
+         */
+        init(callback) {
+            if (typeof callback !== 'function') return;
+            const client = _getClient();
+            if (!client) {
+                // No Supabase client available (CDN not loaded) — call callback
+                // with the tracker anyway so module logic still runs without persistence.
+                console.warn('[ProgressTracker] Supabase client not found. Running without persistence.');
+                try { callback(this); } catch (e) { console.error('[ProgressTracker] init callback error:', e); }
+                return;
+            }
+
+            // onAuthStateChange fires immediately with the current session,
+            // then again on future sign-in/sign-out events.
+            const { data: { subscription } } = client.auth.onAuthStateChange((_event, _session) => {
+                // Only call the restore callback once (on initial load).
+                // Unsubscribe so we don't re-run on subsequent sign-in/out.
+                subscription.unsubscribe();
+                try { callback(this); } catch (e) { console.error('[ProgressTracker] init callback error:', e); }
+            });
+        },
+
+        /**
+         * Saves progress for the current logged-in user in the current module.
+         * Silent no-op if user is not logged in or module config is missing.
+         *
+         * @param {object} data - Any JSON-serialisable state to save
+         * @returns {Promise<void>}
+         */
+        async save(data) {
+            const userId = await _getUserId();
+            if (!userId) return; // guest — no-op
+
+            const cfg = _moduleConfig;
+            if (!cfg || !cfg.id) {
+                console.warn('[ProgressTracker] No data-module-id on <script> tag. Progress not saved.');
+                return;
+            }
+
+            const client = _getClient();
+            if (!client) return;
+
+            const { error } = await client
+                .from(PROGRESS_TABLE)
+                .upsert({
+                    user_id:       userId,
+                    module_id:     cfg.id,
+                    module_name:   cfg.name,
+                    module_url:    cfg.url,
+                    progress_data: data,
+                    updated_at:    new Date().toISOString()
+                }, { onConflict: 'user_id,module_id' });
+
+            if (error) {
+                console.error('[ProgressTracker] save error:', error.message);
+            }
+        },
+
+        /**
+         * Debounced save — safe to call on every keypress.
+         * Waits `delayMs` (default 2000ms) after the last call before saving.
+         *
+         * @param {object} data - State to save
+         * @param {number} [delayMs=2000] - Debounce delay in milliseconds
+         */
+        autoSave(data, delayMs = 2000) {
+            if (_autoSaveTimer) clearTimeout(_autoSaveTimer);
+            _autoSaveTimer = setTimeout(() => {
+                this.save(data).catch(e => console.error('[ProgressTracker] autoSave error:', e));
+            }, delayMs);
+        },
+
+        /**
+         * Loads saved progress for the current user in the current module.
+         * Returns the progress_data object, or null if none exists.
+         *
+         * @returns {Promise<object|null>}
+         */
+        async load() {
+            const userId = await _getUserId();
+            if (!userId) return null;
+
+            const cfg = _moduleConfig;
+            if (!cfg || !cfg.id) return null;
+
+            const client = _getClient();
+            if (!client) return null;
+
+            const { data, error } = await client
+                .from(PROGRESS_TABLE)
+                .select('progress_data')
+                .eq('user_id', userId)
+                .eq('module_id', cfg.id)
+                .maybeSingle();
+
+            if (error) {
+                console.error('[ProgressTracker] load error:', error.message);
+                return null;
+            }
+
+            // Return just the inner progress_data blob (what the module cares about)
+            return data?.progress_data ?? null;
+        },
+
+        /**
+         * Gets all saved progress rows for the currently logged-in user.
+         * Used by admin dashboards or student portfolio views.
+         *
+         * @returns {Promise<Array>}
+         */
+        async getAllProgress() {
+            const userId = await _getUserId();
+            if (!userId) return [];
+
+            const client = _getClient();
+            if (!client) return [];
+
+            const { data, error } = await client
+                .from(PROGRESS_TABLE)
+                .select('module_id, module_name, module_url, progress_data, updated_at')
+                .eq('user_id', userId)
+                .order('updated_at', { ascending: false });
+
+            if (error) {
+                console.error('[ProgressTracker] getAllProgress error:', error.message);
+                return [];
+            }
+
+            return data || [];
+        },
+
+        // ── Legacy compatibility stubs (v1 API — no longer functional) ────────
+        // These prevent errors in any code that still calls the old student-name API.
+
+        /** @deprecated Use Supabase Auth — this is now a no-op */
+        setActiveStudent(name) {
+            console.warn('[ProgressTracker] setActiveStudent() is deprecated. Use Supabase Auth login instead.');
+        },
+
+        /** @deprecated Returns null — identity comes from Supabase Auth */
+        getActiveStudent() {
+            console.warn('[ProgressTracker] getActiveStudent() is deprecated. Identity is now from Supabase Auth.');
+            return null;
+        },
+
+        /** @deprecated */
+        clearActiveStudent() {
+            console.warn('[ProgressTracker] clearActiveStudent() is deprecated. Use supabaseClient.auth.signOut() instead.');
+        },
+
+        /** @deprecated Use getAllProgress() */
+        async getAllProgressForStudent(_name) {
+            console.warn('[ProgressTracker] getAllProgressForStudent() is deprecated. Use getAllProgress() instead.');
+            return this.getAllProgress();
+        }
+    };
+
+    // Expose globally
+    window.ProgressTracker = ProgressTracker;
+
+})();

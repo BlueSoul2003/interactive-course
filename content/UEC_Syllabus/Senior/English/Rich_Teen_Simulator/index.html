@@ -282,8 +282,8 @@
     document.getElementById('mainProgress').style.width = (target * 25) + '%';
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    if(target === 3) calculateCompound(); // 觸發圖表動畫
-    try { ProgressTracker.save({ stage: target }); } catch(e) {}
+    if(target === 3) calculateCompound();
+    ProgressTracker.autoSave({ stage: target });
   }
 
   /* ================= STAGE 1: ASSET VS LIABILITY (20 Items) ================= */
@@ -710,19 +710,15 @@
   }
 
   /* --- Init --- */
-  window.onload = async function() { 
-    renderCard(); 
+  window.addEventListener('load', function() {
+    renderCard();
     startStory();
-    calculateCompound(); 
-    try {
-        if (typeof ProgressTracker !== 'undefined') {
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data && saved.progress_data.stage) {
-                goToStage(saved.progress_data.stage);
-            }
-        }
-    } catch (e) {}
-  };
+    calculateCompound();
+    ProgressTracker.init(async function(tracker) {
+      const saved = await tracker.load();
+      if (saved && saved.stage) goToStage(saved.stage);
+    });
+  });
 </script>
 
 <script src="../../../../../js/progress-tracker.js"
