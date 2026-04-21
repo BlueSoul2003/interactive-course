@@ -1068,17 +1068,17 @@
 
         // --- STARTUP ---
         window.addEventListener('load', function() {
-            ProgressTracker.init(async function(tracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
-                    // Optional: restore state here if needed
-                });
-            }
             resizeCanvas();
             initLabEngine();
             renderQuiz('4.1'); // Pre-render the first quiz set
             requestAnimationFrame(animate);
-        }
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    // Optional: restore state here if needed
+                });
+            }
+        });
 
         function saveProgressRecord(actionDetails) {
             if (typeof ProgressTracker !== 'undefined') {
