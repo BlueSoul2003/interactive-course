@@ -128,9 +128,11 @@
                         if (p.m2Progress) state.m2Progress = p.m2Progress;
                         if (p.m3Level !== undefined) state.m3Level = p.m3Level;
                         if (p.m3Progress) state.m3Progress = p.m3Progress;
-                        render();
                     }
+                    render();
                 });
+            } else {
+                render();
             }
         });
 
@@ -144,6 +146,9 @@
                     m2Progress: state.m2Progress,
                     m3Level: state.m3Level,
                     m3Progress: state.m3Progress
+                });
+            }
+        }
 
         // 翻译辅助函数 (Translator Function)
         const t = (zh, en) => state.lang === 'zh' ? zh : en;

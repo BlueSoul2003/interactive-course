@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -476,28 +476,31 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                    const p = saved;
-                    state.view = p.view || 'menu';
-                    state.currentQ = p.currentQ || 0;
-                    state.score = p.score || 0;
-                    state.answers = p.answers || new Array(quizData.length).fill(null);
-                    state.quizLang = p.quizLang || 'en';
-            render();
+                    if (saved) {
+                        const p = saved;
+                        state.view = p.view || 'menu';
+                        state.currentQ = p.currentQ || 0;
+                        state.score = p.score || 0;
+                        state.answers = p.answers || new Array(quizData.length).fill(null);
+                        state.quizLang = p.quizLang || 'en';
+                    }
+                    render();
+                });
+            } else {
+                render();
+            }
+        });
 
         // --- PROGRESS HOOKS ---
         const _origSetView = setView;
         setView = function (viewName) {
             _origSetView(viewName);
             if (window.ProgressTracker) ProgressTracker.autoSave({ view: state.view, currentQ: state.currentQ, score: state.score, answers: state.answers, quizLang: state.quizLang });
+        };
         const _origHandleAnswer = handleAnswer;
         handleAnswer = function (choice) {
             _origHandleAnswer(choice);
             if (window.ProgressTracker) ProgressTracker.autoSave({ view: state.view, currentQ: state.currentQ, score: state.score, answers: state.answers, quizLang: state.quizLang });
-                    }
-                }
-            });
-        });
+        };
 
     </script>

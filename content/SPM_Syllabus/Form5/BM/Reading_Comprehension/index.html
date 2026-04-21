@@ -1262,15 +1262,20 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                    const p = saved;
-                    if (p.score !== undefined) state.score = p.score;
-                    if (p.m1Level !== undefined) state.m1Level = p.m1Level;
-                    if (p.m1Progress) state.m1Progress = p.m1Progress;
-                    if (p.bossLevel !== undefined) state.bossLevel = p.bossLevel;
-                    if (p.bossProgress) state.bossProgress = p.bossProgress;
+                    if (saved) {
+                        const p = saved;
+                        if (p.score !== undefined) state.score = p.score;
+                        if (p.m1Level !== undefined) state.m1Level = p.m1Level;
+                        if (p.m1Progress) state.m1Progress = p.m1Progress;
+                        if (p.bossLevel !== undefined) state.bossLevel = p.bossLevel;
+                        if (p.bossProgress) state.bossProgress = p.bossProgress;
+                    }
                     render();
+                });
+            } else {
+                render();
+            }
+        });
 
         const originalShowToast = showToast;
         showToast = function (msg, isSuccess = true) {
@@ -1282,6 +1287,9 @@
                     m1Progress: state.m1Progress,
                     bossLevel: state.bossLevel,
                     bossProgress: state.bossProgress
+                });
+            }
+        };
 
         const originalClearData = window.clearData;
         window.clearData = function () {
@@ -1295,8 +1303,7 @@
                     m2SelectedIsi: [],
                     bossLevel: 0,
                     bossProgress: {}
-                    }
                 });
             }
-        });
+        };
     </script>
