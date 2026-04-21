@@ -2146,19 +2146,19 @@
         });
 
         window.addEventListener('load', function() {
+            // ALWAYS initialize the main UI structure
+            initSpace(); initDTGraph(); initMoments(); initPressure(); initFluid(); initDiffusion();
+            ['space', 'dtgraph', 'moments', 'pressure', 'fluidpressure', 'diffusion'].forEach(renderQuiz);
+            switchMode('theory'); // Start in Theory mode
+            requestAnimationFrame(loop);
+
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
                     if (saved && saved) {
-
-                    // Restore state if needed based on the progress data
-            initSpace(); initDTGraph(); initMoments(); initPressure(); initFluid(); initDiffusion();
-
-            // Render all quizzes
-            ['space', 'dtgraph', 'moments', 'pressure', 'fluidpressure', 'diffusion'].forEach(renderQuiz);
-
-            switchMode('theory'); // Start in Theory mode
-            requestAnimationFrame(loop);
+                        // Restore state if needed based on the progress data
+                        if (saved.tab) switchTab(saved.tab);
+                        if (saved.mode) switchMode(saved.mode);
                     }
                 });
             }

@@ -1158,34 +1158,32 @@
 <a href="../../../../../index.html" class="home-btn-fixed"> Home</a>
 </body>
 
-    <script src="../../../../../js/progress-tracker.js"
+        <script src="../../../../../js/progress-tracker.js"
             data-module-id="SG_Math_Y4C2"
             data-module-name="Singapore Math Y4 Ch. 2: Whole Numbers"
             data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter2_Whole_Number/index.html"></script>
     <script>
         window.addEventListener('load', function() {
-            if (!window.ProgressTracker) return;
-            const saved = await tracker.load();
-            if (saved && saved) {
-            const p = saved;
-            if (p.questionIndex !== undefined && typeof currentQuestion !== 'undefined') {
-            currentQuestion = p.questionIndex;
-            }
-            }
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                const p = saved;
-                if (p.questionIndex !== undefined && typeof currentQuestion !== 'undefined') {
-                    currentQuestion = p.questionIndex;
-            if (window.ProgressTracker) ProgressTracker.autoSave({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) });
-        if (typeof nextQuestion === 'function') {
-            const _oNQ = nextQuestion;
-            nextQuestion = function() { _oNQ(); if (window.ProgressTracker) ProgressTracker.autoSave({ questionIndex: (typeof currentQuestion !== 'undefined' ? currentQuestion : 0) }); };
+                    if (saved) {
+                        if (saved.questionIndex !== undefined) {
+                            currentQuestion = saved.questionIndex;
+                        }
                     }
                 });
             }
         });
+        
+        // Auto-save logic
+        if (typeof nextQuestion === 'function') {
+            const _oNQ = nextQuestion;
+            nextQuestion = function() {
+                _oNQ.apply(this, arguments);
+                if (window.ProgressTracker) ProgressTracker.autoSave({ questionIndex: currentQuestion });
+            };
+        }
     </script>
+</body>
+</html>

@@ -1169,7 +1169,7 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
+                    if (saved) {
 
                     const p = saved;
                     if (p.stage) nextStage(1, p.stage);
@@ -1187,7 +1187,6 @@
                     if (p.bud) document.getElementById('budInput').value = p.bud;
                     if (p.lifeGoal) document.getElementById('lifeGoal').value = p.lifeGoal;
                     if (p.engGoal) document.getElementById('engGoal').value = p.engGoal;
-                    }
                 });
             }
         });

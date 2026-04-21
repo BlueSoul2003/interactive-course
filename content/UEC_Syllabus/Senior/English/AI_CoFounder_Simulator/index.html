@@ -1169,6 +1169,7 @@
             ProgressTracker.init(async function(tracker) {
                 const saved = await tracker.load();
                 if (saved && saved.stage) goToStage(saved.stage);
+                else goToStage(1);
             });
         });
     </script>

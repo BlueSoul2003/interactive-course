@@ -119,17 +119,20 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                    const p = saved;
-                    if (p.score !== undefined) state.score = p.score;
-                    if (p.m1Level !== undefined) state.m1Level = p.m1Level;
-                    if (p.m1Progress) state.m1Progress = p.m1Progress;
-                    if (p.m2Level !== undefined) state.m2Level = p.m2Level;
-                    if (p.m2Progress) state.m2Progress = p.m2Progress;
-                    if (p.m3Level !== undefined) state.m3Level = p.m3Level;
-                    if (p.m3Progress) state.m3Progress = p.m3Progress;
-                    render();
+                    if (saved) {
+                        const p = saved;
+                        if (p.score !== undefined) state.score = p.score;
+                        if (p.m1Level !== undefined) state.m1Level = p.m1Level;
+                        if (p.m1Progress) state.m1Progress = p.m1Progress;
+                        if (p.m2Level !== undefined) state.m2Level = p.m2Level;
+                        if (p.m2Progress) state.m2Progress = p.m2Progress;
+                        if (p.m3Level !== undefined) state.m3Level = p.m3Level;
+                        if (p.m3Progress) state.m3Progress = p.m3Progress;
+                        render();
+                    }
+                });
+            }
+        });
 
         function saveProgress() {
             if (typeof ProgressTracker !== 'undefined') {
@@ -902,8 +905,4 @@
 
         // Init
         render();
-                    }
-                });
-            }
-        });
     </script>
