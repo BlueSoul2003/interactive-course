@@ -1166,56 +1166,29 @@
             renderQuiz();
             renderDilemma();
             renderVocab();
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
 
-            if (window.ProgressTracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
                     const p = saved;
                     if (p.stage) nextStage(1, p.stage);
                     if (p.userAnswers) {
                         userAnswers = p.userAnswers;
                         renderQuiz();
-                    }
                     if (p.finalMBTI) {
                         finalMBTI = p.finalMBTI;
                         revealPersonality();
-                    }
                     if (p.currentDilemma) {
                         currentDilemma = p.currentDilemma;
                         renderDilemma();
-                    }
                     if (p.rose) document.getElementById('roseInput').value = p.rose;
                     if (p.thorn) document.getElementById('thornInput').value = p.thorn;
                     if (p.bud) document.getElementById('budInput').value = p.bud;
                     if (p.lifeGoal) document.getElementById('lifeGoal').value = p.lifeGoal;
                     if (p.engGoal) document.getElementById('engGoal').value = p.engGoal;
-                }
+                    }
+                });
             }
-        };
+        });
     </script>
-
-    <script src="../../../../../js/progress-tracker.js" data-module-id="UEC_Discovery_Journey"
-        data-module-name="UEC English: The Discovery Journey"
-        data-module-url="content/UEC_Syllabus/Senior/English/Discovery_Journey/index.html"></script>
-
-<!--  Home Button  -->
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-  letter-spacing: 0.5px;
-}
-.home-btn-fixed:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  color: #fff;
-}
-</style>
-<a href="../../../../../index.html" class="home-btn-fixed"> Home</a>
-</body>
-
-</html>

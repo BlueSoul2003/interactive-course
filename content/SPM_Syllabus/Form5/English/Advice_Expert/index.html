@@ -967,12 +967,14 @@
             data-module-name="SPM Advice Expert (English)"
             data-module-url="content/SPM_Syllabus/Form5/English/Advice_Expert/index.html"></script>
     <script>
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (!window.ProgressTracker) return;
-            const saved = await tracker.load();
-            if (saved && saved && saved.section && typeof showSection === 'function') {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved && saved.section && typeof showSection === 'function') {
                 showSection(saved.section);
             }
+            });
         });
         if (typeof showSection === 'function') {
             const _oSS = showSection;

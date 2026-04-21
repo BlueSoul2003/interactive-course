@@ -887,10 +887,32 @@
             data-module-name="SPM Storyteller's Toolkit (English)"
             data-module-url="content/SPM_Syllabus/Form5/English/Storytellers_Toolkit/index.html"></script>
     <script>
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (!window.ProgressTracker) return;
             const saved = await tracker.load();
             if (saved && saved) {
+            const p = saved;
+            if (typeof state !== 'undefined') {
+            state.view = p.view || state.view;
+            if (p.currentQ !== undefined) state.currentQ = p.currentQ;
+            if (p.score !== undefined) state.score = p.score;
+            if (typeof render === 'function') render();
+            } else if (p.section && typeof showSection === 'function') {
+            showSection(p.section);
+            }
+            }
+            });
+            // Hook setView if this module uses state machine
+            if (typeof setView === 'function') {
+            const _oSV = setView;
+            setView = function(v) {
+            _oSV(v);
+            const snap = typeof state !== 'undefined' ? { view: state.view, currentQ: state.currentQ, score: state.score } : { view: v };
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                 const p = saved;
                 if (typeof state !== 'undefined') {
                     state.view = p.view || state.view;
@@ -899,9 +921,6 @@
                     if (typeof render === 'function') render();
                 } else if (p.section && typeof showSection === 'function') {
                     showSection(p.section);
-                }
-            }
-        });
         // Hook setView if this module uses state machine
         if (typeof setView === 'function') {
             const _oSV = setView;
@@ -909,11 +928,11 @@
                 _oSV(v);
                 const snap = typeof state !== 'undefined' ? { view: state.view, currentQ: state.currentQ, score: state.score } : { view: v };
                 if (window.ProgressTracker) ProgressTracker.autoSave(snap);
-            };
-        }
         if (typeof showSection === 'function') {
             const _oSS3 = showSection;
             showSection = function(n) { _oSS3(n); if (window.ProgressTracker) ProgressTracker.autoSave({ section: n }); };
-        }
+                    }
+                });
+            }
+        });
     </script>
-</html>

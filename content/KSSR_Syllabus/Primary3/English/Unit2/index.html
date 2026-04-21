@@ -1005,28 +1005,21 @@
         // Initialize App
         window.addEventListener('load', function() {
             goToPhase(1);
-
             // Pillar 4: State Management (Load saved progress on start)
-            ProgressTracker.init(async function(tracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     const p = saved;
                     currentStep = p.step || 1;
                     subLevel = p.subLevel || 0;
                     myCurrentScore = p.score || 0;
                     renderCurrentPhase();
                     console.log('Unit 2 progress loaded:', p);
+                    }
                 });
             }
-        };
+        });
 
     </script>
-
-    <!-- Pillar 4: State Management (SDK) -->
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="kssr-p3-eng-u2"
-            data-module-name="Primary 3 English - Unit 2: City Heroes"
-            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit2/index.html"></script>
-</body>
-
-</html>

@@ -806,13 +806,15 @@
             data-module-name="UEC Senior English Grammar"
             data-module-url="content/UEC_Syllabus/Senior/English/Grammar/index.html"></script>
     <script>
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (!window.ProgressTracker) return;
-            const saved = await tracker.load();
-            if (saved && saved && saved.part) {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved && saved.part) {
                 const pt = saved.part;
                 if (pt === 2 && typeof renderErrors === 'function') renderErrors();
             }
+            });
         });
         // Hook tab switching - Grammar uses buttons to call renderPart1/renderErrors
         const _origRenderPart1 = (typeof renderPart1 !== 'undefined') ? renderPart1 : null;

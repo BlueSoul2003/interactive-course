@@ -473,54 +473,31 @@
 
         // --- INIT ---
         window.addEventListener('load', function() {
-            if (window.ProgressTracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     const p = saved;
                     state.view = p.view || 'menu';
                     state.currentQ = p.currentQ || 0;
                     state.score = p.score || 0;
                     state.answers = p.answers || new Array(quizData.length).fill(null);
                     state.quizLang = p.quizLang || 'en';
-                }
-            }
             render();
-        };
 
         // --- PROGRESS HOOKS ---
         const _origSetView = setView;
         setView = function (viewName) {
             _origSetView(viewName);
             if (window.ProgressTracker) ProgressTracker.autoSave({ view: state.view, currentQ: state.currentQ, score: state.score, answers: state.answers, quizLang: state.quizLang });
-        };
         const _origHandleAnswer = handleAnswer;
         handleAnswer = function (choice) {
             _origHandleAnswer(choice);
             if (window.ProgressTracker) ProgressTracker.autoSave({ view: state.view, currentQ: state.currentQ, score: state.score, answers: state.answers, quizLang: state.quizLang });
-        };
+                    }
+                });
+            }
+        });
 
     </script>
-    <script src="../../../../../js/progress-tracker.js" data-module-id="SPM_Peribahasa"
-        data-module-name="SPM Peribahasa (BM)"
-        data-module-url="content/SPM_Syllabus/Form5/BM/Peribahasa/index.html"></script>
-<!--  Home Button  -->
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-  letter-spacing: 0.5px;
-}
-.home-btn-fixed:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  color: #fff;
-}
-</style>
-<a href="../../../../../index.html" class="home-btn-fixed"> Home</a>
-</body>
-
-</html>

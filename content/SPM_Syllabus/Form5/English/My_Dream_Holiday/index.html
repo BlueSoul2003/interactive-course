@@ -807,12 +807,14 @@
             data-module-name="SPM My Dream Holiday (English)"
             data-module-url="content/SPM_Syllabus/Form5/English/My_Dream_Holiday/index.html"></script>
     <script>
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (!window.ProgressTracker) return;
-            const saved = await tracker.load();
-            if (saved && saved && saved.section && typeof showSection === 'function') {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved && saved.section && typeof showSection === 'function') {
                 showSection(saved.section);
             }
+            });
         });
         if (typeof showSection === 'function') {
             const _oSS2 = showSection;

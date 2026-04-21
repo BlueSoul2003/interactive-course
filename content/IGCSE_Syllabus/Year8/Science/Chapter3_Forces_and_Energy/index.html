@@ -2146,12 +2146,12 @@
         });
 
         window.addEventListener('load', function() {
-            ProgressTracker.init(async function(tracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     // Restore state if needed based on the progress data
-                });
-            }
             initSpace(); initDTGraph(); initMoments(); initPressure(); initFluid(); initDiffusion();
 
             // Render all quizzes
@@ -2159,13 +2159,8 @@
 
             switchMode('theory'); // Start in Theory mode
             requestAnimationFrame(loop);
-        };
+                    }
+                });
+            }
+        });
     </script>
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="IGCSE_Science_Year8_Ch3"
-            data-module-name="Chapter 3: Forces and Energy"
-            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter3_Forces_and_Energy/index.html">
-    </script>
-</body>
-
-</html>

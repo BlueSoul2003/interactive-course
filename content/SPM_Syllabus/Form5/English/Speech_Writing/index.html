@@ -483,67 +483,37 @@
     </script>
     <script>
         let currentSection = 1;
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (typeof ProgressTracker !== 'undefined') {
-                const student = ProgressTracker.getActiveStudent();
-                if (student) {
-                    const b = document.getElementById('activeStudentBadge');
-                    if (b) b.style.display = 'block';
-                    const n = document.getElementById('activeStudentName');
-                    if (n) n.innerText = student;
-                }
-                const saved = await tracker.load();
-                if (saved && saved) {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     const p = saved;
                     if (p.vIndex !== undefined) { vIndex = p.vIndex; renderVocabSet(); }
                     if (p.mIndex !== undefined) { mIndex = p.mIndex; renderMagicQ(); }
                     if (p.section) { currentSection = p.section; showSection(currentSection, false); }
-                }
-            }
-        });
         function saveProgress() {
             if (typeof ProgressTracker !== 'undefined' && ProgressTracker.save) {
                 ProgressTracker.autoSave({ section: currentSection, vIndex: vIndex, mIndex: mIndex });
-            }
-        }
         
         const originalShowSection = showSection;
         showSection = function(num, shouldSave = true) {
             currentSection = num;
             originalShowSection(num);
             if (shouldSave) saveProgress();
-        };
 
         const originalChangeVocabSet = changeVocabSet;
         changeVocabSet = function(dir) {
             originalChangeVocabSet(dir);
             saveProgress();
-        };
 
         const originalChangeMagicQ = changeMagicQ;
         changeMagicQ = function(dir) {
             originalChangeMagicQ(dir);
             saveProgress();
-        };
+                    }
+                });
+            }
+        });
     </script>
-
-<!--  Home Button  -->
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-  letter-spacing: 0.5px;
-}
-.home-btn-fixed:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  color: #fff;
-}
-</style>
-<a href="../../../../../index.html" class="home-btn-fixed"> Home</a>
-</body>
-</html>

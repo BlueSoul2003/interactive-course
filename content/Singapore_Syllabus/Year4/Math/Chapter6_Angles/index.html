@@ -903,22 +903,19 @@
             }
         };
 
-        window.addEventListener('load', async () => {
-            const saved = await tracker.load();
-            if (saved && saved) {
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                 const p = saved;
                 currentSlide = p.step || 0;
                 xp = p.xp || 0;
                 document.getElementById('xp-display').innerText = xp;
-            }
             renderSlide();
+                    }
+                });
+            }
         });
     </script>
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="SG_Math_Y4_Ch6_Angles"
-            data-module-name="Minecraft Angle Quest - Primary 4"
-            data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter6_Angles/index.html">
-    </script>
-</body>
-
-</html>

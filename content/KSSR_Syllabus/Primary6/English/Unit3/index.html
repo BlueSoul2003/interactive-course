@@ -1678,26 +1678,19 @@
             renderSecI();
             renderSecJ();
             renderSecK();
-
             // Pillar 4: Load saved progress
-            const saved = await tracker.load();
-            if (saved && saved) {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                 const p = saved;
                 // Restore active tab if previously saved
                 if (p.activeTab) {
                     switchTab(p.activeTab);
-                }
+                    }
+                });
             }
-        };
+        });
 
     </script>
-
-    <!-- Pillar 4: State Management (Progress Tracking) -->
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="KSSR_Y6_Unit3_Outdoor_Activities"
-            data-module-name="KSSR Year 6 English – Unit 3: Outdoor Activities"
-            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit3/index.html">
-    </script>
-</body>
-
-</html>

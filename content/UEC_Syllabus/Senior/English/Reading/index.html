@@ -852,12 +852,14 @@
             data-module-name="UEC Senior English Reading"
             data-module-url="content/UEC_Syllabus/Senior/English/Reading/index.html"></script>
     <script>
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (!window.ProgressTracker) return;
-            const saved = await tracker.load();
-            if (saved && saved && saved.part === 2 && typeof renderPart2 === 'function') {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved && saved.part === 2 && typeof renderPart2 === 'function') {
                 renderPart2();
             }
+            });
         });
         if (typeof renderPart1 === 'function') {
             const _o1 = renderPart1;

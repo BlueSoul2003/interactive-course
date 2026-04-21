@@ -1158,32 +1158,25 @@
         initMatchGame();
 
         // --- PILLAR 4: PROGRESS TRACKING ---
-        window.addEventListener('load', async () => {
-            const saved = await tracker.load();
-            if (saved && saved) {
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                 const p = saved;
                 // Restore score if saved
                 if (p.score) {
                     score = p.score;
                     document.getElementById('total-score').innerText = score;
-                }
-            }
-        });
 
         // Save progress whenever score changes
         const _origAddScore = addScore;
         function addScore() {
             _origAddScore();
             ProgressTracker.autoSave({ score: score });
-        }
+                    }
+                });
+            }
+        });
     </script>
-
-    <!-- Pillar 4: Progress Tracker SDK -->
-    <script src="../../../../js/progress-tracker.js"
-            data-module-id="KSSR_Y3_English_Unit3"
-            data-module-name="KSSR Year 3 English – Unit 3: Housework"
-            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit3/index.html">
-    </script>
-</body>
-
-</html>

@@ -765,11 +765,14 @@
             data-module-name="UEC Senior English Summary Writing"
             data-module-url="content/UEC_Syllabus/Senior/English/Summary/index.html"></script>
     <script>
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             if (!window.ProgressTracker) return;
-            const saved = await tracker.load();
-            // Summary module - just record that student was here
-            if (window.ProgressTracker) ProgressTracker.autoSave({ visited: true });
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                // Summary module - just record that student was here
+            if (window.ProgressTracker) ProgressTracker.autoSave({ visited: true
+            });
+        });
         });
     </script>
 </html>

@@ -1258,10 +1258,12 @@
         // Init
         render();
 
-        window.addEventListener('load', async () => {
-            ProgressTracker.init(async function(tracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     const p = saved;
                     if (p.score !== undefined) state.score = p.score;
                     if (p.m1Level !== undefined) state.m1Level = p.m1Level;
@@ -1269,9 +1271,6 @@
                     if (p.bossLevel !== undefined) state.bossLevel = p.bossLevel;
                     if (p.bossProgress) state.bossProgress = p.bossProgress;
                     render();
-                });
-            }
-        });
 
         const originalShowToast = showToast;
         showToast = function (msg, isSuccess = true) {
@@ -1283,9 +1282,6 @@
                     m1Progress: state.m1Progress,
                     bossLevel: state.bossLevel,
                     bossProgress: state.bossProgress
-                });
-            }
-        };
 
         const originalClearData = window.clearData;
         window.clearData = function () {
@@ -1299,14 +1295,8 @@
                     m2SelectedIsi: [],
                     bossLevel: 0,
                     bossProgress: {}
+                    }
                 });
             }
-        };
+        });
     </script>
-    <script src="../../../../../js/progress-tracker.js" data-module-id="spm-f5-bm-reading"
-        data-module-name="SPM Reading Hacker"
-        data-module-url="content/SPM_Syllabus/Form5/BM/Reading_Comprehension/index.html">
-        </script>
-</body>
-
-</html>

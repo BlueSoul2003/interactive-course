@@ -115,10 +115,12 @@
             m3Level: 0, m3Progress: {}
         };
 
-        window.addEventListener('load', async () => {
-            ProgressTracker.init(async function(tracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     const p = saved;
                     if (p.score !== undefined) state.score = p.score;
                     if (p.m1Level !== undefined) state.m1Level = p.m1Level;
@@ -128,9 +130,6 @@
                     if (p.m3Level !== undefined) state.m3Level = p.m3Level;
                     if (p.m3Progress) state.m3Progress = p.m3Progress;
                     render();
-                });
-            }
-        });
 
         function saveProgress() {
             if (typeof ProgressTracker !== 'undefined') {
@@ -142,9 +141,6 @@
                     m2Progress: state.m2Progress,
                     m3Level: state.m3Level,
                     m3Progress: state.m3Progress
-                });
-            }
-        }
 
         // 翻译辅助函数 (Translator Function)
         const t = (zh, en) => state.lang === 'zh' ? zh : en;
@@ -277,7 +273,6 @@
                     { prefix: 'me-', suffix: '-kan', result: 'Melakukan', type: '动词 (使动)', typeEn: 'Verb (Transitive)', transZh: '进行/做', transEn: 'To do/perform' },
                     { prefix: 'ke-', suffix: '-an', result: 'Kelakuan', type: '名词', typeEn: 'Noun', transZh: '行为/品行', transEn: 'Behavior/Conduct' }
                 ]
-            }
         ];
 
         const allDefuseData = [
@@ -325,7 +320,6 @@
             totalM1: allAlchemyData.length,
             totalM2: allDefuseData.length,
             totalM3: allClozeData.length
-        };
 
         // ==========================================
         // 🛠 工具函数
@@ -333,7 +327,6 @@
         window.toggleLang = () => {
             state.lang = state.lang === 'zh' ? 'en' : 'zh';
             render();
-        }
 
         function showToast(msg, isSuccess = true) {
             const toast = document.createElement('div');
@@ -348,19 +341,16 @@
                 toast.style.transition = 'all 0.3s ease';
                 setTimeout(() => toast.remove(), 300);
             }, 2000);
-        }
 
         window.toggleTranslation = () => {
             state.showTranslation = !state.showTranslation;
             render();
-        }
 
         window.changeMode = (mode) => {
             state.currentMode = mode;
             if (mode === 'dashboard' || mode === 'notes') state.showTranslation = false;
             render();
             window.scrollTo(0, 0);
-        }
 
         window.clearData = () => {
             state.score = 0;
@@ -369,7 +359,6 @@
             state.m3Level = 0; state.m3Progress = {};
             render();
             showToast(t("实验室数据已重置", "Lab data reset"), true);
-        }
 
         // --- Mod 1: Alchemy Handlers ---
         window.handleAlchemyClick = (comboIndex) => {
@@ -388,17 +377,14 @@
                 showToast(t('配方全解密！可以进入下一元素。', 'Recipe fully decrypted! You can proceed.'), true);
             } else {
                 showToast(t('成功合成新词汇！', 'Successfully synthesized new word!'), true);
-            }
             render();
             saveProgress();
-        };
 
         window.navM1 = (dir) => {
             if (dir === 'prev' && state.m1Level > 0) state.m1Level--;
             if (dir === 'next' && state.m1Level < config.totalM1 - 1) state.m1Level++;
             state.showTranslation = false;
             render();
-        };
 
         // --- Mod 2: Defuse Handlers ---
         window.handleDefuseClick = (selectedOption) => {
@@ -419,15 +405,12 @@
                 }, 1500);
             } else {
                 showToast(t('错误！这不是原字 (Kata Dasar)。', 'Error! This is not the Kata Dasar.'), false);
-            }
-        };
 
         window.navM2 = (dir) => {
             if (dir === 'prev' && state.m2Level > 0) state.m2Level--;
             if (dir === 'next' && state.m2Level < config.totalM2 - 1) state.m2Level++;
             state.showTranslation = false;
             render();
-        };
 
         // --- Mod 3: Cloze Handlers ---
         window.handleClozeClick = (selectedOption) => {
@@ -448,15 +431,12 @@
                 }, 2000);
             } else {
                 showToast(t('语法错误！提示：', 'Grammar error! Hint: ') + (state.lang === 'zh' ? item.hintZh : item.hintEn), false);
-            }
-        };
 
         window.navM3 = (dir) => {
             if (dir === 'prev' && state.m3Level > 0) state.m3Level--;
             if (dir === 'next' && state.m3Level < config.totalM3 - 1) state.m3Level++;
             state.showTranslation = false;
             render();
-        };
 
         window.printNotes = () => { window.print(); };
 
@@ -584,7 +564,6 @@
                         </button>
                     </div>
                 </div>`;
-            }
 
             // ==========================================
             // MODULE 1: ALCHEMY
@@ -646,7 +625,6 @@
                                                 <span class="text-slate-300 font-medium">${t(combo.transZh, combo.transEn)}</span>
                                             </div>
                                         </div>`;
-                    }
                 }).join('')}
                             </div>
                         </div>
@@ -662,7 +640,6 @@
                         </button>
                     </div>
                 </div>`;
-            }
 
             // ==========================================
             // MODULE 2: DECONSTRUCTOR
@@ -715,8 +692,6 @@
                             icon = `<i class="ph-bold ph-check-circle mr-2"></i>`;
                         } else {
                             btnClass = "border border-slate-700 bg-slate-800 text-slate-500 py-4 rounded-xl font-bold text-xl opacity-50 cursor-default";
-                        }
-                    }
 
                     return `
                                         <button onclick="handleDefuseClick('${opt}')" class="${btnClass}">
@@ -738,7 +713,6 @@
                         </button>
                     </div>
                 </div>`;
-            }
 
             // ==========================================
             // MODULE 3: CLOZE (语境实战)
@@ -792,8 +766,6 @@
                             icon = `<i class="ph-bold ph-check-circle mr-2"></i>`;
                         } else {
                             btnClass = "flex-1 border border-slate-700 bg-slate-800 text-slate-500 py-4 rounded-xl font-bold text-xl opacity-50 cursor-default";
-                        }
-                    }
 
                     return `
                                     <button onclick="handleClozeClick('${opt}')" class="${btnClass}">
@@ -820,7 +792,6 @@
                         </button>
                     </div>
                 </div>`;
-            }
 
             // ==========================================
             // NOTES MODE (BUKU NOTA)
@@ -925,20 +896,14 @@
                         </div>
                     </div>
                 </div>`;
-            }
 
             html += `</div>`;
             app.innerHTML = html;
-        }
 
         // Init
         render();
+                    }
+                });
+            }
+        });
     </script>
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="SPM_Imbuhan_Alchemy"
-            data-module-name="Imbuhan Alchemy (词缀炼金术)"
-            data-module-url="content/SPM_Syllabus/Form5/BM/Imbuhan_Alchemy/index.html">
-    </script>
-</body>
-
-</html>

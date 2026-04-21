@@ -1178,17 +1178,18 @@
             }
         }
 
-        async function _loadProgress() {
+        function _loadProgress() {
             if (!window.ProgressTracker) return;
-
-            // Show active student badge
-            const student = ProgressTracker.getActiveStudent();
-            if (student) {
-                const badge = document.getElementById('activeStudentBadge');
-                if (badge) { badge.style.display = 'block'; }
-                const nameEl = document.getElementById('activeStudentName');
-                if (nameEl) nameEl.innerText = student;
-            }
+            ProgressTracker.init(async function(tracker) {
+                // Show active student badge
+                const student = ProgressTracker.getActiveStudent();
+                if (student) {
+                    const badge = document.getElementById('activeStudentBadge');
+                    if (badge) { badge.style.display = 'block'; }
+                    const nameEl = document.getElementById('activeStudentName');
+                    if (nameEl) nameEl.innerText = student;
+            });
+        }
 
             const saved = await tracker.load();
             if (!saved || !saved) return;

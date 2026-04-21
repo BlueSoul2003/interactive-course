@@ -1214,20 +1214,16 @@
             }
         }
         // Pillar 4: Load saved progress
-        window.addEventListener('load', async () => {
-            ProgressTracker.init(async function(tracker) {
-                const saved = await tracker.load();
-                if (saved && saved) {
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved) {
+
                     // Logic to restore state could be added here (e.g. marking questions as green)
                     console.log("Loaded student progress:", saved);
+                    }
                 });
             }
         });
     </script>
-    <script src="../../../../../js/progress-tracker.js" 
-            data-module-id="kssr-p6-eng-u1" 
-            data-module-name="Primary 6 English - Unit 1" 
-            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit1/index.html"></script>
-</body>
-
-</html>
