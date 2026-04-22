@@ -608,7 +608,9 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             // Pillar 4: Save progress whenever student changes tab
-            ProgressTracker.autoSave({ activeTab: tabId, mistakes: mistakes });
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.autoSave({ activeTab: tabId, mistakes: mistakes });
+            }
         }
 
         function toggleChinese() {
@@ -1682,15 +1684,15 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                const p = saved;
-                // Restore active tab if previously saved
-                if (p.activeTab) {
-                    switchTab(p.activeTab);
+                    if (saved) {
+                        const p = saved;
+                        // Restore active tab if previously saved
+                        if (p.activeTab) {
+                            switchTab(p.activeTab);
+                        }
                     }
-                }
-            });
+                });
+            }
         });
 
     </script>

@@ -1158,25 +1158,27 @@
         initMatchGame();
 
         // --- PILLAR 4: PROGRESS TRACKING ---
+        const _origAddScore = addScore;
+        window.addScore = function() {
+            _origAddScore();
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.autoSave({ score: score });
+            }
+        };
+
         window.addEventListener('load', function() {
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                const p = saved;
-                // Restore score if saved
-                if (p.score) {
-                    score = p.score;
-                    document.getElementById('total-score').innerText = score;
-
-        // Save progress whenever score changes
-        const _origAddScore = addScore;
-        function addScore() {
-            _origAddScore();
-            ProgressTracker.autoSave({ score: score });
+                    if (saved) {
+                        const p = saved;
+                        // Restore score if saved
+                        if (p.score) {
+                            score = p.score;
+                            document.getElementById('total-score').innerText = score;
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     </script>
