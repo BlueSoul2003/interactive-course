@@ -8,10 +8,10 @@
     <!-- CRITICAL Automator Metadata -->
     <meta name="ai-path" content="Primary_English/Standard_3">
     <meta name="ai-folder" content="Unit_2_Occupations_And_Routines_Pro">
-    <meta name="ai-title" content="🌟 Unit 2: City Heroes Pro - Complete Grammar & Vocab!">
-    <meta name="ai-desc" content="第2單元完整預習版：包含所有核心生字、频度副词与一般现在时态造句训练">
+    <meta name="ai-title" content="馃専 Unit 2: City Heroes Pro - Complete Grammar & Vocab!">
+    <meta name="ai-desc" content="绗?鍠厓瀹屾暣闋愮繏鐗堬細鍖呭惈鎵€鏈夋牳蹇冪敓瀛椼€侀搴﹀壇璇嶄笌涓€鑸幇鍦ㄦ椂鎬侀€犲彞璁粌">
 
-    <title>🌟 Unit 2: City Heroes & Dream Jobs!</title>
+    <title>馃専 Unit 2: City Heroes & Dream Jobs!</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -124,39 +124,39 @@
 
     <!-- Pillar 3: Local Navigation (Home Button) -->
     <a href="../../../../../index.html" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: white; padding: 10px 15px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#f8fafc';" onmouseout="this.style.transform='scale(1)'; this.style.background='white';">
-        <span style="font-size: 1.2rem;">🏠</span> <span>Home</span>
+        <span style="font-size: 1.2rem;">馃彔</span> <span>Home</span>
     </a>
 
     <!-- Top Navigation Tabs -->
     <div class="w-full max-w-3xl flex overflow-x-auto gap-2 mb-4 no-scrollbar pb-2 snap-x" id="nav-tabs">
         <button onclick="goToPhase(1)" id="tab-1"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">1.
-            Match (认字)</button>
+            Match (璁ゅ瓧)</button>
         <button onclick="goToPhase(2)" id="tab-2"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">2.
-            Spell (拼写)</button>
+            Spell (鎷煎啓)</button>
         <button onclick="goToPhase(3)" id="tab-3"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">3.
-            Train (造句)</button>
+            Train (閫犲彞)</button>
         <button onclick="goToPhase(4)" id="tab-4"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">4.
-            Read (阅读)</button>
+            Read (闃呰)</button>
         <button onclick="goToPhase(5)" id="tab-5"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">5.
-            Quiz (测验)</button>
+            Quiz (娴嬮獙)</button>
         <button onclick="goToPhase(6)" id="tab-6"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">6.
-            Essay (作文)</button>
+            Essay (浣滄枃)</button>
         <button onclick="goToPhase(7)" id="tab-7"
             class="whitespace-nowrap flex-shrink-0 snap-center py-3 px-5 rounded-2xl font-black text-sm md:text-base border-b-4 transition-all">7.
-            Copy (抄写)</button>
+            Copy (鎶勫啓)</button>
     </div>
 
     <!-- Header / Status Bar -->
     <div
         class="w-full max-w-3xl bg-white rounded-3xl shadow-sm p-4 mb-4 flex justify-between items-center border-4 border-blue-200">
         <div>
-            <h1 class="text-xl md:text-3xl font-black text-blue-600">🌟 City Heroes</h1>
+            <h1 class="text-xl md:text-3xl font-black text-blue-600">馃専 City Heroes</h1>
             <p class="text-xs md:text-sm font-bold text-gray-500">
                 Stage <span id="ui-step">1</span> - Q<span id="ui-sublevel">1</span>/<span id="ui-total">0</span>
             </p>
@@ -178,11 +178,11 @@
         <div class="w-full flex justify-between mt-8 pt-4 border-t-2 border-gray-100">
             <button onclick="prevLevel()"
                 class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-2 px-6 rounded-full shadow-sm active:scale-95 transition-all">
-                ⬅️ Prev (上一题)
+                猬咃笍 Prev (涓婁竴棰?
             </button>
             <button onclick="nextLevel()"
                 class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-6 rounded-full shadow-sm active:scale-95 transition-all">
-                Next (下一题) ➡️
+                Next (涓嬩竴棰? 鉃★笍
             </button>
         </div>
     </div>
@@ -236,237 +236,237 @@
         // --- COMPREHENSIVE GAME DATA ---
         const gameData = {
             phase1: [
-                { emoji: "📅", zh: "日常事务", en: "routine", options: ["routine", "shift", "skip"] },
-                { emoji: "⏰", zh: "轮班", en: "shift", options: ["patient", "shift", "rescue"] },
-                { emoji: "🛟", zh: "营救", en: "rescue", options: ["rescue", "avoid", "achieve"] },
-                { emoji: "🤒", zh: "病人", en: "patient", options: ["butcher", "mechanic", "patient"] },
-                { emoji: "💯", zh: "总是 (100%)", en: "always", options: ["always", "sometimes", "never"] },
-                { emoji: "🚫", zh: "从不 (0%)", en: "never", options: ["always", "sometimes", "never"] },
-                { emoji: "✂️", zh: "裁缝", en: "tailor", options: ["librarian", "tailor", "zookeeper"] },
-                { emoji: "📚", zh: "图书管理员", en: "librarian", options: ["author", "photographer", "librarian"] },
-                { emoji: "🥩", zh: "肉贩/屠夫", en: "butcher", options: ["chef", "butcher", "dentist"] }
+                { emoji: "馃搮", zh: "鏃ュ父浜嬪姟", en: "routine", options: ["routine", "shift", "skip"] },
+                { emoji: "鈴?, zh: "杞彮", en: "shift", options: ["patient", "shift", "rescue"] },
+                { emoji: "馃洘", zh: "钀ユ晳", en: "rescue", options: ["rescue", "avoid", "achieve"] },
+                { emoji: "馃", zh: "鐥呬汉", en: "patient", options: ["butcher", "mechanic", "patient"] },
+                { emoji: "馃挴", zh: "鎬绘槸 (100%)", en: "always", options: ["always", "sometimes", "never"] },
+                { emoji: "馃毇", zh: "浠庝笉 (0%)", en: "never", options: ["always", "sometimes", "never"] },
+                { emoji: "鉁傦笍", zh: "瑁佺紳", en: "tailor", options: ["librarian", "tailor", "zookeeper"] },
+                { emoji: "馃摎", zh: "鍥句功绠＄悊鍛?, en: "librarian", options: ["author", "photographer", "librarian"] },
+                { emoji: "馃ォ", zh: "鑲夎穿/灞犲か", en: "butcher", options: ["chef", "butcher", "dentist"] }
             ],
             phase2: [
                 {
-                    clueEn: "Someone who plays musical instruments or writes music.", clueZh: "演奏乐器或写音乐的人", emoji: "🎹", word: "MUSICIAN",
+                    clueEn: "Someone who plays musical instruments or writes music.", clueZh: "婕斿涔愬櫒鎴栧啓闊充箰鐨勪汉", emoji: "馃幑", word: "MUSICIAN",
                     given: ["M", "", "", "I", "", "", "", "N"], letters: ["U", "S", "C", "I", "A"]
                 },
                 {
-                    clueEn: "Someone who flies the plane and wears a white uniform.", clueZh: "驾驶飞机并穿着白色制服的人", emoji: "✈️", word: "PILOT",
+                    clueEn: "Someone who flies the plane and wears a white uniform.", clueZh: "椹鹃┒椋炴満骞剁┛鐫€鐧借壊鍒舵湇鐨勪汉", emoji: "鉁堬笍", word: "PILOT",
                     given: ["P", "", "L", "", "T"], letters: ["I", "O"]
                 },
                 {
-                    clueEn: "Someone who designs and makes things with wood.", clueZh: "用木头设计和制作物品的人", emoji: "🪚", word: "CARPENTER",
+                    clueEn: "Someone who designs and makes things with wood.", clueZh: "鐢ㄦ湪澶磋璁″拰鍒朵綔鐗╁搧鐨勪汉", emoji: "馃獨", word: "CARPENTER",
                     given: ["C", "", "R", "", "E", "", "", "E", "R"], letters: ["A", "P", "N", "T"]
                 },
                 {
-                    clueEn: "Someone who prepares and cooks food in a restaurant.", clueZh: "在餐厅准备和烹饪食物的人", emoji: "👨‍🍳", word: "CHEF",
+                    clueEn: "Someone who prepares and cooks food in a restaurant.", clueZh: "鍦ㄩ鍘呭噯澶囧拰鐑归オ椋熺墿鐨勪汉", emoji: "馃懆鈥嶐煃?, word: "CHEF",
                     given: ["C", "", "", "F"], letters: ["H", "E"]
                 },
                 {
-                    clueEn: "Someone who writes stories, books and articles.", clueZh: "写故事、书和文章的人", emoji: "✍️", word: "AUTHOR",
+                    clueEn: "Someone who writes stories, books and articles.", clueZh: "鍐欐晠浜嬨€佷功鍜屾枃绔犵殑浜?, emoji: "鉁嶏笍", word: "AUTHOR",
                     given: ["A", "", "T", "", "", "R"], letters: ["U", "H", "O"]
                 },
                 {
-                    clueEn: "Someone who designs and builds bridges and buildings.", clueZh: "设计并建造桥梁和建筑的人", emoji: "🏗️", word: "ENGINEER",
+                    clueEn: "Someone who designs and builds bridges and buildings.", clueZh: "璁捐骞跺缓閫犳ˉ姊佸拰寤虹瓚鐨勪汉", emoji: "馃彈锔?, word: "ENGINEER",
                     given: ["E", "", "", "I", "", "E", "", "R"], letters: ["N", "G", "N", "E"]
                 },
                 {
-                    clueEn: "Someone who helps sick people get better and stay healthy.", clueZh: "帮助病人康复并保持健康的人", emoji: "🩺", word: "DOCTOR",
+                    clueEn: "Someone who helps sick people get better and stay healthy.", clueZh: "甯姪鐥呬汉搴峰骞朵繚鎸佸仴搴风殑浜?, emoji: "馃┖", word: "DOCTOR",
                     given: ["D", "", "C", "", "", "R"], letters: ["O", "T", "O"]
                 },
                 {
-                    clueEn: "Someone who helps you learn at school.", clueZh: "在学校帮助你学习的人", emoji: "🧑‍🏫", word: "TEACHER",
+                    clueEn: "Someone who helps you learn at school.", clueZh: "鍦ㄥ鏍″府鍔╀綘瀛︿範鐨勪汉", emoji: "馃鈥嶐煆?, word: "TEACHER",
                     given: ["T", "", "A", "", "", "E", "R"], letters: ["E", "C", "H"]
                 },
                 {
-                    clueEn: "Someone who catches criminals and investigates crimes.", clueZh: "抓捕罪犯并调查犯罪的人", emoji: "👮", word: "POLICEMAN",
+                    clueEn: "Someone who catches criminals and investigates crimes.", clueZh: "鎶撴崟缃姱骞惰皟鏌ョ姱缃殑浜?, emoji: "馃懏", word: "POLICEMAN",
                     given: ["P", "", "L", "", "C", "", "M", "", "N"], letters: ["O", "I", "E", "A"]
                 },
                 {
-                    clueEn: "Someone who cuts and sells meat in a shop.", clueZh: "在店里切肉和卖肉的人", emoji: "🥩", word: "BUTCHER",
+                    clueEn: "Someone who cuts and sells meat in a shop.", clueZh: "鍦ㄥ簵閲屽垏鑲夊拰鍗栬倝鐨勪汉", emoji: "馃ォ", word: "BUTCHER",
                     given: ["B", "", "T", "", "", "E", "R"], letters: ["U", "C", "H"]
                 },
                 {
-                    clueEn: "This person feeds and takes care of animals that live in the zoo.", clueZh: "喂养和照顾动物园里的动物的人", emoji: "🦓", word: "ZOOKEEPER",
+                    clueEn: "This person feeds and takes care of animals that live in the zoo.", clueZh: "鍠傚吇鍜岀収椤惧姩鐗╁洯閲岀殑鍔ㄧ墿鐨勪汉", emoji: "馃", word: "ZOOKEEPER",
                     given: ["Z", "", "O", "", "E", "", "P", "", "R"], letters: ["O", "K", "E", "E"]
                 },
                 {
-                    clueEn: "This person fixes cars and makes sure engines run properly.", clueZh: "修理汽车并确保引擎正常运转的人", emoji: "🔧", word: "MECHANIC",
+                    clueEn: "This person fixes cars and makes sure engines run properly.", clueZh: "淇悊姹借溅骞剁‘淇濆紩鎿庢甯歌繍杞殑浜?, emoji: "馃敡", word: "MECHANIC",
                     given: ["M", "", "C", "", "A", "", "I", "C"], letters: ["E", "H", "N"]
                 },
                 {
-                    clueEn: "This person makes, mends and adjusts clothes to make them fit better.", clueZh: "制作、修补和调整衣服的人", emoji: "🧵", word: "TAILOR",
+                    clueEn: "This person makes, mends and adjusts clothes to make them fit better.", clueZh: "鍒朵綔銆佷慨琛ュ拰璋冩暣琛ｆ湇鐨勪汉", emoji: "馃У", word: "TAILOR",
                     given: ["T", "", "I", "", "O", "R"], letters: ["A", "L"]
                 },
                 {
-                    clueEn: "This person takes care of flowers and plants.", clueZh: "照顾花草的人", emoji: "🌻", word: "GARDENER",
+                    clueEn: "This person takes care of flowers and plants.", clueZh: "鐓ч【鑺辫崏鐨勪汉", emoji: "馃尰", word: "GARDENER",
                     given: ["G", "", "R", "", "E", "", "E", "R"], letters: ["A", "D", "N"]
                 },
                 {
-                    clueEn: "This person uses a camera to take pictures of people, places or events.", clueZh: "使用相机拍照的人", emoji: "📸", word: "PHOTOGRAPHER",
+                    clueEn: "This person uses a camera to take pictures of people, places or events.", clueZh: "浣跨敤鐩告満鎷嶇収鐨勪汉", emoji: "馃摳", word: "PHOTOGRAPHER",
                     given: ["P", "", "O", "", "O", "", "R", "", "P", "", "E", "R"], letters: ["H", "T", "G", "A", "H"]
                 },
                 {
-                    clueEn: "This person works in a library and helps you find books to read.", clueZh: "在图书馆工作并帮助你找书的人", emoji: "📚", word: "LIBRARIAN",
+                    clueEn: "This person works in a library and helps you find books to read.", clueZh: "鍦ㄥ浘涔﹂宸ヤ綔骞跺府鍔╀綘鎵句功鐨勪汉", emoji: "馃摎", word: "LIBRARIAN",
                     given: ["L", "", "B", "", "A", "", "I", "", "N"], letters: ["I", "R", "R", "A"]
                 }
             ],
             phase3: [
                 // Page 11: Example
                 {
-                    emoji: "🛟", cue: "Example: - lifeguard - save - drowning -", targetIds: ["L1", "L2", "L3", "L4", "L5", "L6"],
+                    emoji: "馃洘", cue: "Example: - lifeguard - save - drowning -", targetIds: ["L1", "L2", "L3", "L4", "L5", "L6"],
                     blocks: [{ id: "L3", text: "I" }, { id: "L2", text: "lifeguard." }, { id: "L5", text: "people" }, { id: "L1", text: "I'm a" }, { id: "L4", text: "save" }, { id: "L6", text: "from drowning." }]
                 },
                 // Page 11: Question 1
                 {
-                    emoji: "👨‍🌾", cue: "1. - farmer - grow - vegetables -", targetIds: ["f1", "f2", "f3", "f4", "f5"],
+                    emoji: "馃懆鈥嶐煂?, cue: "1. - farmer - grow - vegetables -", targetIds: ["f1", "f2", "f3", "f4", "f5"],
                     blocks: [{ id: "f4", text: "grow" }, { id: "f1", text: "I'm a" }, { id: "f5", text: "vegetables." }, { id: "f2", text: "farmer." }, { id: "f3", text: "I" }]
                 },
                 // Page 11: Question 2
                 {
-                    emoji: "🚒", cue: "2. - firefighter - put out fires - rescue -", targetIds: ["ff1", "ff2", "ff3", "ff4", "ff5", "ff6"],
+                    emoji: "馃殥", cue: "2. - firefighter - put out fires - rescue -", targetIds: ["ff1", "ff2", "ff3", "ff4", "ff5", "ff6"],
                     blocks: [{ id: "ff3", text: "I" }, { id: "ff6", text: "rescue." }, { id: "ff1", text: "I'm a" }, { id: "ff4", text: "put out fires" }, { id: "ff2", text: "firefighter." }, { id: "ff5", text: "and" }]
                 },
                 // Page 11: Question 3
                 {
-                    emoji: "🦷", cue: "3. - dentist - fix - teeth -", targetIds: ["d1", "d2", "d3", "d4", "d5"],
+                    emoji: "馃Ψ", cue: "3. - dentist - fix - teeth -", targetIds: ["d1", "d2", "d3", "d4", "d5"],
                     blocks: [{ id: "d3", text: "I" }, { id: "d5", text: "teeth." }, { id: "d1", text: "I'm a" }, { id: "d4", text: "fix" }, { id: "d2", text: "dentist." }]
                 },
                 // Page 11: Question 4
                 {
-                    emoji: "📺", cue: "4. - newscaster - read - news -", targetIds: ["n1", "n2", "n3", "n4", "n5"],
+                    emoji: "馃摵", cue: "4. - newscaster - read - news -", targetIds: ["n1", "n2", "n3", "n4", "n5"],
                     blocks: [{ id: "n3", text: "I" }, { id: "n2", text: "newscaster." }, { id: "n4", text: "read" }, { id: "n5", text: "news." }, { id: "n1", text: "I'm a" }]
                 }
             ],
             phase4: [
                 {
-                    emoji: "🤖",
+                    emoji: "馃",
                     en: "Wei Ming loves to draw robots. Every day after school, he takes out his sketchbook and fills the pages with cool machines that can fly, clean the house, and even talk!",
-                    zh: "伟明喜欢画机器人。每天放学后，他都会拿出素描本，画满会飞、会打扫房子甚至会说话的酷炫机器！"
+                    zh: "浼熸槑鍠滄鐢绘満鍣ㄤ汉銆傛瘡澶╂斁瀛﹀悗锛屼粬閮戒細鎷垮嚭绱犳弿鏈紝鐢绘弧浼氶銆佷細鎵撴壂鎴垮瓙鐢氳嚦浼氳璇濈殑閰风偒鏈哄櫒锛?
                 },
                 {
-                    emoji: "💻",
+                    emoji: "馃捇",
                     en: "He also watches videos about inventors and how they build amazing things.",
-                    zh: "他还会观看关于发明家的视频，了解他们如何制造出令人惊叹的东西。"
+                    zh: "浠栬繕浼氳鐪嬪叧浜庡彂鏄庡鐨勮棰戯紝浜嗚В浠栦滑濡備綍鍒堕€犲嚭浠や汉鎯婂徆鐨勪笢瑗裤€?
                 },
                 {
-                    emoji: "🧑‍🏫",
+                    emoji: "馃鈥嶐煆?,
                     en: "One day, Wei Ming told his teacher, 'When I grow up, I want to be an inventor!' His teacher smiled and said, 'That's a great ambition! Inventors help make life better for everyone.'",
-                    zh: "有一天，伟明告诉他的老师：“我长大后想成为一名发明家！”老师微笑着说：“那是个伟大的志向！发明家帮助让每个人的生活变得更好。”"
+                    zh: "鏈変竴澶╋紝浼熸槑鍛婅瘔浠栫殑鑰佸笀锛氣€滄垜闀垮ぇ鍚庢兂鎴愪负涓€鍚嶅彂鏄庡锛佲€濊€佸笀寰瑧鐫€璇达細鈥滈偅鏄釜浼熷ぇ鐨勫織鍚戯紒鍙戞槑瀹跺府鍔╄姣忎釜浜虹殑鐢熸椿鍙樺緱鏇村ソ銆傗€?
                 },
                 {
-                    emoji: "👩‍🍳",
+                    emoji: "馃懇鈥嶐煃?,
                     en: "Wei Ming nodded. 'One day, I'll build a robot that helps my mum cook dinner!'",
-                    zh: "伟明点点头。“总有一天，我要造一个机器人帮我妈妈做晚饭！”"
+                    zh: "浼熸槑鐐圭偣澶淬€傗€滄€绘湁涓€澶╋紝鎴戣閫犱竴涓満鍣ㄤ汉甯垜濡堝鍋氭櫄楗紒鈥?
                 }
             ],
             phase5: [
                 {
                     qEn: "1. What does Wei Ming like to do after school?",
-                    qZh: "伟明放学后喜欢做什么？",
+                    qZh: "浼熸槑鏀惧鍚庡枩娆㈠仛浠€涔堬紵",
                     options: [
-                        { text: "A. Watch cartoons (看卡通)", isCorrect: false },
-                        { text: "B. Draw robots (画机器人)", isCorrect: true },
-                        { text: "C. Play football (踢足球)", isCorrect: false }
+                        { text: "A. Watch cartoons (鐪嬪崱閫?", isCorrect: false },
+                        { text: "B. Draw robots (鐢绘満鍣ㄤ汉)", isCorrect: true },
+                        { text: "C. Play football (韪㈣冻鐞?", isCorrect: false }
                     ]
                 },
                 {
                     qEn: "2. What do Wei Ming's robots do?",
-                    qZh: "伟明的机器人能做什么？",
+                    qZh: "浼熸槑鐨勬満鍣ㄤ汉鑳藉仛浠€涔堬紵",
                     options: [
-                        { text: "A. Sleep and eat (睡觉和吃东西)", isCorrect: false },
-                        { text: "B. Build houses (建房子)", isCorrect: false },
-                        { text: "C. Fly, clean and talk (飞、打扫和说话)", isCorrect: true }
+                        { text: "A. Sleep and eat (鐫¤鍜屽悆涓滆タ)", isCorrect: false },
+                        { text: "B. Build houses (寤烘埧瀛?", isCorrect: false },
+                        { text: "C. Fly, clean and talk (椋炪€佹墦鎵拰璇磋瘽)", isCorrect: true }
                     ]
                 },
                 {
                     qEn: "3. What does Wei Ming want to be when he grows up?",
-                    qZh: "伟明长大后想成为什么？",
+                    qZh: "浼熸槑闀垮ぇ鍚庢兂鎴愪负浠€涔堬紵",
                     options: [
-                        { text: "A. A scientist (科学家)", isCorrect: false },
-                        { text: "B. An inventor (发明家)", isCorrect: true },
-                        { text: "C. A teacher (老师)", isCorrect: false }
+                        { text: "A. A scientist (绉戝瀹?", isCorrect: false },
+                        { text: "B. An inventor (鍙戞槑瀹?", isCorrect: true },
+                        { text: "C. A teacher (鑰佸笀)", isCorrect: false }
                     ]
                 },
                 {
                     qEn: "4. Why did the teacher say Wei Ming's dream was great?",
-                    qZh: "老师为什么说伟明的梦想很伟大？",
+                    qZh: "鑰佸笀涓轰粈涔堣浼熸槑鐨勬ⅵ鎯冲緢浼熷ぇ锛?,
                     options: [
-                        { text: "A. Because inventors make money (因为赚钱)", isCorrect: false },
-                        { text: "B. Because inventors help people (因为帮助别人)", isCorrect: true },
-                        { text: "C. Because inventors are smart (因为很聪明)", isCorrect: false }
+                        { text: "A. Because inventors make money (鍥犱负璧氶挶)", isCorrect: false },
+                        { text: "B. Because inventors help people (鍥犱负甯姪鍒汉)", isCorrect: true },
+                        { text: "C. Because inventors are smart (鍥犱负寰堣仾鏄?", isCorrect: false }
                     ]
                 },
                 {
                     qEn: "5. What kind of robot does Wei Ming want to build for his mum?",
-                    qZh: "伟明想为他妈妈造什么样的机器人？",
+                    qZh: "浼熸槑鎯充负浠栧濡堥€犱粈涔堟牱鐨勬満鍣ㄤ汉锛?,
                     options: [
-                        { text: "A. A robot that washes the car (洗车的机器人)", isCorrect: false },
-                        { text: "B. A robot that sings songs (唱歌的机器人)", isCorrect: false },
-                        { text: "C. A robot that helps cook dinner (帮忙做晚饭的机器人)", isCorrect: true }
+                        { text: "A. A robot that washes the car (娲楄溅鐨勬満鍣ㄤ汉)", isCorrect: false },
+                        { text: "B. A robot that sings songs (鍞辨瓕鐨勬満鍣ㄤ汉)", isCorrect: false },
+                        { text: "C. A robot that helps cook dinner (甯繖鍋氭櫄楗殑鏈哄櫒浜?", isCorrect: true }
                     ]
                 },
                 {
                     qEn: "6. What lesson can you learn from Wei Ming's story?",
-                    qZh: "你能从伟明的故事中学到什么道理？",
+                    qZh: "浣犺兘浠庝紵鏄庣殑鏁呬簨涓鍒颁粈涔堥亾鐞嗭紵",
                     options: [
-                        { text: "A. Follow your dreams and work hard. (追随梦想并努力)", isCorrect: true },
-                        { text: "B. It's fun to play with robots. (玩机器人很有趣)", isCorrect: false },
-                        { text: "C. Always ask your teacher for help. (经常向老师求助)", isCorrect: false }
+                        { text: "A. Follow your dreams and work hard. (杩介殢姊︽兂骞跺姫鍔?", isCorrect: true },
+                        { text: "B. It's fun to play with robots. (鐜╂満鍣ㄤ汉寰堟湁瓒?", isCorrect: false },
+                        { text: "C. Always ask your teacher for help. (缁忓父鍚戣€佸笀姹傚姪)", isCorrect: false }
                     ]
                 }
             ],
             phase6: [
                 {
-                    qEn: "1. What is the name of your job?", qZh: "你想做什么工作？",
+                    qEn: "1. What is the name of your job?", qZh: "浣犳兂鍋氫粈涔堝伐浣滐紵",
                     options: [
-                        { text: "I want to be an inventor.", zhText: "我想成为一名发明家。", emoji: "💡", requires: 0 },
-                        { text: "I want to be a zookeeper.", zhText: "我想成为一名动物管理员。", emoji: "🦓", requires: 1 },
-                        { text: "I want to be a photographer.", zhText: "我想成为一名摄影师。", emoji: "📸", requires: 2 },
-                        { text: "I want to be a chef.", zhText: "我想成为一名厨师。", emoji: "👨‍🍳", requires: 3 }
+                        { text: "I want to be an inventor.", zhText: "鎴戞兂鎴愪负涓€鍚嶅彂鏄庡銆?, emoji: "馃挕", requires: 0 },
+                        { text: "I want to be a zookeeper.", zhText: "鎴戞兂鎴愪负涓€鍚嶅姩鐗╃鐞嗗憳銆?, emoji: "馃", requires: 1 },
+                        { text: "I want to be a photographer.", zhText: "鎴戞兂鎴愪负涓€鍚嶆憚褰卞笀銆?, emoji: "馃摳", requires: 2 },
+                        { text: "I want to be a chef.", zhText: "鎴戞兂鎴愪负涓€鍚嶅帹甯堛€?, emoji: "馃懆鈥嶐煃?, requires: 3 }
                     ]
                 },
                 {
-                    qEn: "2. What is the nature of your job?", qZh: "你的工作内容是什么？",
+                    qEn: "2. What is the nature of your job?", qZh: "浣犵殑宸ヤ綔鍐呭鏄粈涔堬紵",
                     options: [
-                        { text: "I design and build cool machines.", zhText: "我设计并制造很酷的机器。", emoji: "🤖", requires: 0 },
-                        { text: "I feed and take care of animals.", zhText: "我喂养和照顾动物。", emoji: "🦁", requires: 1 },
-                        { text: "I take beautiful pictures of people and places.", zhText: "我拍摄人物和风景的美丽照片。", emoji: "🖼️", requires: 2 },
-                        { text: "I prepare and cook delicious food.", zhText: "我准备并烹饪美味的食物。", emoji: "🍲", requires: 3 }
+                        { text: "I design and build cool machines.", zhText: "鎴戣璁″苟鍒堕€犲緢閰风殑鏈哄櫒銆?, emoji: "馃", requires: 0 },
+                        { text: "I feed and take care of animals.", zhText: "鎴戝杺鍏诲拰鐓ч【鍔ㄧ墿銆?, emoji: "馃", requires: 1 },
+                        { text: "I take beautiful pictures of people and places.", zhText: "鎴戞媿鎽勪汉鐗╁拰椋庢櫙鐨勭編涓界収鐗囥€?, emoji: "馃柤锔?, requires: 2 },
+                        { text: "I prepare and cook delicious food.", zhText: "鎴戝噯澶囧苟鐑归オ缇庡懗鐨勯鐗┿€?, emoji: "馃嵅", requires: 3 }
                     ]
                 },
                 {
-                    qEn: "3. What is the name of your workplace?", qZh: "你的工作地点在哪里？",
+                    qEn: "3. What is the name of your workplace?", qZh: "浣犵殑宸ヤ綔鍦扮偣鍦ㄥ摢閲岋紵",
                     options: [
-                        { text: "I will work in a high-tech laboratory.", zhText: "我将在一个高科技实验室工作。", emoji: "🔬", requires: 0 },
-                        { text: "I will work in a large zoo.", zhText: "我将在一个大型动物园工作。", emoji: "🏞️", requires: 1 },
-                        { text: "I will work in a photo studio and outdoors.", zhText: "我将在摄影棚和户外工作。", emoji: "🏙️", requires: 2 },
-                        { text: "I will work in a busy restaurant.", zhText: "我将在一家繁忙的餐厅工作。", emoji: "🍽️", requires: 3 }
+                        { text: "I will work in a high-tech laboratory.", zhText: "鎴戝皢鍦ㄤ竴涓珮绉戞妧瀹為獙瀹ゅ伐浣溿€?, emoji: "馃敩", requires: 0 },
+                        { text: "I will work in a large zoo.", zhText: "鎴戝皢鍦ㄤ竴涓ぇ鍨嬪姩鐗╁洯宸ヤ綔銆?, emoji: "馃彏锔?, requires: 1 },
+                        { text: "I will work in a photo studio and outdoors.", zhText: "鎴戝皢鍦ㄦ憚褰辨鍜屾埛澶栧伐浣溿€?, emoji: "馃彊锔?, requires: 2 },
+                        { text: "I will work in a busy restaurant.", zhText: "鎴戝皢鍦ㄤ竴瀹剁箒蹇欑殑椁愬巺宸ヤ綔銆?, emoji: "馃嵔锔?, requires: 3 }
                     ]
                 },
                 {
-                    qEn: "4. What tools will you be using?", qZh: "你会使用什么工具？",
+                    qEn: "4. What tools will you be using?", qZh: "浣犱細浣跨敤浠€涔堝伐鍏凤紵",
                     options: [
-                        { text: "I will use a sketchbook, computers, and tools.", zhText: "我将使用素描本、电脑和工具。", emoji: "💻", requires: 0 },
-                        { text: "I will use food buckets, hoses, and medical kits.", zhText: "我将使用食物桶、水管和医疗箱。", emoji: "🪣", requires: 1 },
-                        { text: "I will use a digital camera and different lenses.", zhText: "我将使用数码相机和不同的镜头。", emoji: "🔭", requires: 2 },
-                        { text: "I will use sharp knives, pots, and pans.", zhText: "我将使用锋利的刀具、锅和煎锅。", emoji: "🔪", requires: 3 }
+                        { text: "I will use a sketchbook, computers, and tools.", zhText: "鎴戝皢浣跨敤绱犳弿鏈€佺數鑴戝拰宸ュ叿銆?, emoji: "馃捇", requires: 0 },
+                        { text: "I will use food buckets, hoses, and medical kits.", zhText: "鎴戝皢浣跨敤椋熺墿妗躲€佹按绠″拰鍖荤枟绠便€?, emoji: "馃", requires: 1 },
+                        { text: "I will use a digital camera and different lenses.", zhText: "鎴戝皢浣跨敤鏁扮爜鐩告満鍜屼笉鍚岀殑闀滃ご銆?, emoji: "馃敪", requires: 2 },
+                        { text: "I will use sharp knives, pots, and pans.", zhText: "鎴戝皢浣跨敤閿嬪埄鐨勫垁鍏枫€侀攨鍜岀厧閿呫€?, emoji: "馃敧", requires: 3 }
                     ]
                 },
                 {
-                    qEn: "5. What will you be wearing to work?", qZh: "你上班会穿什么？",
+                    qEn: "5. What will you be wearing to work?", qZh: "浣犱笂鐝細绌夸粈涔堬紵",
                     options: [
-                        { text: "I will wear a white lab coat and safety goggles.", zhText: "我将穿着白色实验袍和安全护目镜。", emoji: "🥽", requires: 0 },
-                        { text: "I will wear a green uniform and strong boots.", zhText: "我将穿着绿色制服和结实的靴子。", emoji: "🥾", requires: 1 },
-                        { text: "I will wear comfortable clothes and a vest.", zhText: "我将穿着舒适的衣服和背心。", emoji: "🦺", requires: 2 },
-                        { text: "I will wear a white uniform and a tall chef's hat.", zhText: "我将穿着白色制服和高高的厨师帽。", emoji: "🧑‍🍳", requires: 3 }
+                        { text: "I will wear a white lab coat and safety goggles.", zhText: "鎴戝皢绌跨潃鐧借壊瀹為獙琚嶅拰瀹夊叏鎶ょ洰闀溿€?, emoji: "馃ソ", requires: 0 },
+                        { text: "I will wear a green uniform and strong boots.", zhText: "鎴戝皢绌跨潃缁胯壊鍒舵湇鍜岀粨瀹炵殑闈村瓙銆?, emoji: "馃ゾ", requires: 1 },
+                        { text: "I will wear comfortable clothes and a vest.", zhText: "鎴戝皢绌跨潃鑸掗€傜殑琛ｆ湇鍜岃儗蹇冦€?, emoji: "馃", requires: 2 },
+                        { text: "I will wear a white uniform and a tall chef's hat.", zhText: "鎴戝皢绌跨潃鐧借壊鍒舵湇鍜岄珮楂樼殑鍘ㄥ笀甯姐€?, emoji: "馃鈥嶐煃?, requires: 3 }
                     ]
                 },
                 {
-                    qEn: "6. What must you do to achieve your ambition?", qZh: "你必须怎么做才能实现理想？",
+                    qEn: "6. What must you do to achieve your ambition?", qZh: "浣犲繀椤绘€庝箞鍋氭墠鑳藉疄鐜扮悊鎯筹紵",
                     options: [
-                        { text: "To achieve this, I must study hard and never skip classes!", zhText: "为了实现这个目标，我必须努力学习，从不逃课！", emoji: "🎓" } // 通用结尾
+                        { text: "To achieve this, I must study hard and never skip classes!", zhText: "涓轰簡瀹炵幇杩欎釜鐩爣锛屾垜蹇呴』鍔姏瀛︿範锛屼粠涓嶉€冭锛?, emoji: "馃帗" } // 閫氱敤缁撳熬
                     ]
                 }
             ]
@@ -588,7 +588,7 @@
             container.innerHTML = `
                 <div class="text-center animate-drop w-full">
                     <h2 class="text-2xl font-bold text-blue-800 mb-2">Step 1: Vocab Match</h2>
-                    <p class="text-gray-500 mb-6 font-bold">听音/看意，选择正确的英文单词</p>
+                    <p class="text-gray-500 mb-6 font-bold">鍚煶/鐪嬫剰锛岄€夋嫨姝ｇ‘鐨勮嫳鏂囧崟璇?/p>
                     
                     <div class="bg-blue-50 rounded-3xl p-8 mb-8 inline-block border-4 border-blue-200 shadow-inner">
                         <div class="text-7xl mb-4">${data.emoji}</div>
@@ -640,7 +640,7 @@
             container.innerHTML = `
                 <div class="text-center animate-drop w-full">
                     <h2 class="text-2xl font-bold text-purple-800 mb-2">Step 2: Magic Spelling</h2>
-                    <p class="text-gray-500 mb-4 font-bold">点击泡泡，补全单词 (Page 12)</p>
+                    <p class="text-gray-500 mb-4 font-bold">鐐瑰嚮娉℃场锛岃ˉ鍏ㄥ崟璇?(Page 12)</p>
                     
                     <div class="bg-purple-50 rounded-2xl p-4 mb-6 border-2 border-purple-200 flex items-center justify-center gap-4 text-left">
                         <div class="text-5xl">${data.emoji}</div>
@@ -718,7 +718,7 @@
             container.innerHTML = `
                 <div class="text-center animate-drop w-full">
                     <h2 class="text-2xl font-bold text-green-800 mb-2">Step 3: Sentence Train</h2>
-                    <p class="text-gray-500 mb-4 font-bold">按顺序点击方块造句 (注意时态和副词位置！)</p>
+                    <p class="text-gray-500 mb-4 font-bold">鎸夐『搴忕偣鍑绘柟鍧楅€犲彞 (娉ㄦ剰鏃舵€佸拰鍓瘝浣嶇疆锛?</p>
                     
                     <div class="bg-green-50 rounded-2xl p-4 mb-6 border-2 border-green-200 flex flex-col items-center">
                         <div class="text-4xl mb-2">${data.emoji}</div>
@@ -726,7 +726,7 @@
                     </div>
 
                     <div class="bg-gray-100 rounded-2xl p-4 mb-6 min-h-[80px] flex flex-wrap gap-2 items-center justify-start border-4 border-dashed border-gray-300" id="train-area">
-                        <span class="text-gray-400 font-bold w-full text-center" id="train-placeholder">Click words below to load train! 🚂</span>
+                        <span class="text-gray-400 font-bold w-full text-center" id="train-placeholder">Click words below to load train! 馃殏</span>
                     </div>
 
                     <div class="flex flex-wrap justify-center gap-2" id="block-bank">
@@ -787,7 +787,7 @@
             container.innerHTML = `
                 <div class="text-center animate-drop w-full max-w-lg mx-auto">
                     <h2 class="text-2xl font-bold text-teal-800 mb-2">Step 4: Story Time</h2>
-                    <p class="text-gray-500 mb-6 font-bold">读故事，点击翻译按钮了解意思 (Page 15)</p>
+                    <p class="text-gray-500 mb-6 font-bold">璇绘晠浜嬶紝鐐瑰嚮缈昏瘧鎸夐挳浜嗚В鎰忔€?(Page 15)</p>
                     
                     <div class="bg-teal-50 rounded-2xl p-6 md:p-8 mb-8 border-4 border-teal-200 shadow-sm relative text-left">
                         <div class="text-6xl mb-4 text-center">${data.emoji}</div>
@@ -801,10 +801,10 @@
 
                     <div class="flex gap-4 justify-center">
                         <button onclick="document.getElementById('zh-translation').classList.remove('hidden'); playCorrect1();" class="flex-1 bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold py-3 px-4 rounded-xl shadow-sm active:scale-95 transition-all">
-                            🪄 Translate (翻译)
+                            馃獎 Translate (缈昏瘧)
                         </button>
                         <button onclick="handlePhase4Next()" class="flex-1 bg-teal-500 hover:bg-teal-600 text-white font-bold py-3 px-4 rounded-xl shadow-sm active:scale-95 transition-all">
-                            Next (继续) ➡️
+                            Next (缁х画) 鉃★笍
                         </button>
                     </div>
                 </div>
@@ -823,7 +823,7 @@
             container.innerHTML = `
                 <div class="text-center animate-drop w-full">
                     <h2 class="text-2xl font-bold text-cyan-800 mb-2">Step 5: Story Quiz</h2>
-                    <p class="text-gray-500 mb-6 font-bold">根据刚才的故事回答问题 (Page 15)</p>
+                    <p class="text-gray-500 mb-6 font-bold">鏍规嵁鍒氭墠鐨勬晠浜嬪洖绛旈棶棰?(Page 15)</p>
                     
                     <div class="bg-cyan-50 rounded-2xl p-4 md:p-6 mb-8 border-4 border-cyan-200 text-left">
                         <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2">${data.qEn}</h3>
@@ -889,8 +889,8 @@
 
             const question = gameData.phase6[subLevel];
 
-            // 不再過濾選項，給出所有選項來考驗學生。
-            // 為了增加趣味性，將第 2~5 題的選項打亂順序，防止他們死記位置。
+            // 涓嶅啀閬庢烤閬搁爡锛岀郸鍑烘墍鏈夐伕闋呬締鑰冮瀛哥敓銆?
+            // 鐐轰簡澧炲姞瓒ｅ懗鎬э紝灏囩 2~5 椤岀殑閬搁爡鎵撲簜闋嗗簭锛岄槻姝粬鍊戞瑷樹綅缃€?
             let availableOptions = [...question.options];
             if (subLevel > 0 && availableOptions.length > 1) {
                 availableOptions = shuffleArray(availableOptions);
@@ -899,7 +899,7 @@
             container.innerHTML = `
                 <div class="text-center animate-drop w-full">
                     <h2 class="text-2xl font-bold text-orange-600 mb-2">Step 6: My Dream Job Story</h2>
-                    <p class="text-gray-500 mb-6 font-bold">回答问题，自动生成完整作文</p>
+                    <p class="text-gray-500 mb-6 font-bold">鍥炵瓟闂锛岃嚜鍔ㄧ敓鎴愬畬鏁翠綔鏂?/p>
                     
                     <div class="bg-orange-50 rounded-2xl p-4 md:p-6 mb-8 border-4 border-orange-200">
                         <h3 class="text-lg md:text-xl font-black text-gray-800 mb-2">${question.qEn}</h3>
@@ -924,32 +924,32 @@
         window.handlePhase6Select = function (text, zhText, pathIdx, btnElement) {
             initAudio();
 
-            // 將字串的 'undefined' 轉回真正的 undefined
+            // 灏囧瓧涓茬殑 'undefined' 杞夊洖鐪熸鐨?undefined
             if (pathIdx === 'undefined') pathIdx = undefined;
 
-            // 邏輯判斷：第一題永遠正確 / 選擇與職業匹配 / 通用結尾問題
+            // 閭忚集鍒ゆ柗锛氱涓€椤屾案閬犳纰?/ 閬告搰鑸囪伔妤尮閰?/ 閫氱敤绲愬熬鍟忛
             const isCorrect = (subLevel === 0) || (pathIdx === chosenPath) || (pathIdx === undefined);
 
             if (isCorrect) {
                 playCorrectSound();
-                if (subLevel === 0) chosenPath = pathIdx; // 鎖定選擇的職業路徑
+                if (subLevel === 0) chosenPath = pathIdx; // 閹栧畾閬告搰鐨勮伔妤矾寰?
 
                 essayAnswers[subLevel] = { text: text, zhText: zhText };
                 essayAnswers.length = subLevel + 1;
 
                 myCurrentScore += 20;
 
-                // 視覺反饋：變綠
+                // 瑕栬鍙嶉锛氳畩缍?
                 btnElement.classList.replace('border-gray-200', 'border-green-500');
                 btnElement.classList.replace('hover:border-orange-400', 'border-green-500');
                 btnElement.classList.add('bg-green-100');
 
-                // 延遲一點點時間再進入下一題，讓學生看到成功的視覺效果
+                // 寤堕伈涓€榛為粸鏅傞枔鍐嶉€插叆涓嬩竴椤岋紝璁撳鐢熺湅鍒版垚鍔熺殑瑕栬鏁堟灉
                 setTimeout(() => {
                     nextLevel();
                 }, 450);
             } else {
-                // 如果選錯了不符合職業邏輯的選項
+                // 濡傛灉閬搁尟浜嗕笉绗﹀悎鑱锋キ閭忚集鐨勯伕闋?
                 playWrongSound();
                 btnElement.classList.add('animate-shake');
                 setTimeout(() => btnElement.classList.remove('animate-shake'), 400);
@@ -962,11 +962,11 @@
             if (essayAnswers.length < gameData.phase6.length) {
                 container.innerHTML = `
                     <div class="text-center animate-drop w-full py-10">
-                        <div class="text-6xl mb-4">🚧</div>
+                        <div class="text-6xl mb-4">馃毀</div>
                         <h2 class="text-2xl font-bold text-gray-500 mb-2">Essay Not Finished!</h2>
-                        <p class="text-gray-400 font-bold mb-6">请先完成第六关 (Step 6)，才能生成你的专属作文哦！</p>
+                        <p class="text-gray-400 font-bold mb-6">璇峰厛瀹屾垚绗叚鍏?(Step 6)锛屾墠鑳界敓鎴愪綘鐨勪笓灞炰綔鏂囧摝锛?/p>
                         <button onclick="goToPhase(6)" class="bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-3 px-8 rounded-full shadow-sm transition-all active:scale-95">
-                            ⬅️ Go to Step 6 (去写作文)
+                            猬咃笍 Go to Step 6 (鍘诲啓浣滄枃)
                         </button>
                     </div>
                 `;
@@ -979,17 +979,17 @@
 
             container.innerHTML = `
                 <div class="text-center animate-drop w-full">
-                    <h2 class="text-3xl font-black text-yellow-600 mb-2">🏆 Final Essay Ready!</h2>
-                    <p class="text-gray-600 font-bold mb-4">太棒了！现在把这段完整的作文抄进你的练习本吧 (Page 16)</p>
+                    <h2 class="text-3xl font-black text-yellow-600 mb-2">馃弳 Final Essay Ready!</h2>
+                    <p class="text-gray-600 font-bold mb-4">澶浜嗭紒鐜板湪鎶婅繖娈靛畬鏁寸殑浣滄枃鎶勮繘浣犵殑缁冧範鏈惂 (Page 16)</p>
                     
                     <div class="mb-4">
                         <button onclick="toggleTranslation()" class="bg-indigo-100 hover:bg-indigo-200 text-indigo-700 font-bold py-2 px-6 rounded-full shadow-sm active:scale-95 transition-all">
-                            🌐 Show/Hide Chinese Meaning (显示/隐藏中文)
+                            馃寪 Show/Hide Chinese Meaning (鏄剧ず/闅愯棌涓枃)
                         </button>
                     </div>
 
                     <div class="bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjI4Ij48bGluZSB4MT0iMCIgeTE9IjI3IiB4Mj0iMTAwJSIgeTI9IjI3IiBzdHJva2U9IiNlNWU3ZWIiIHN0cm9rZS13aWR0aD0iMSIvPjwvc3ZnPg==')] bg-white rounded-xl p-8 text-left border border-gray-200 shadow-xl mb-6 relative overflow-hidden" style="line-height: 28px;">
-                        <div class="absolute top-0 right-0 p-4 text-6xl opacity-10">📝</div>
+                        <div class="absolute top-0 right-0 p-4 text-6xl opacity-10">馃摑</div>
                         <h3 class="text-2xl font-black text-gray-800 mb-4 text-center">My Ambition</h3>
                         <div class="text-lg font-medium text-gray-800 indent-8">
                             ${essayAnswers.map(ans => `
@@ -1009,7 +1009,7 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
+                    if (saved) {
 
                     const p = saved;
                     currentStep = p.step || 1;

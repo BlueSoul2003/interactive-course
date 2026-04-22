@@ -471,7 +471,7 @@
 
     <header>
         <a href="../../../../../index.html" class="logo">
-            <span>📱</span> English Mastery
+            <span>馃摫</span> English Mastery
         </a>
         <a href="../../../../../index.html" class="back-link">
             &larr; Back to Home
@@ -523,13 +523,13 @@
                     <div class="game-grid-bg"></div>
                     <div id="game-card-content" class="game-card">
                         <div style="margin-bottom:20px;">PRESS START</div>
-                        <button class="btn-primary" onclick="startGame()">▶️ START GAME</button>
+                        <button class="btn-primary" onclick="startGame()">鈻讹笍 START GAME</button>
                     </div>
                 </div>
 
                 <div class="game-controls" id="game-btns" style="display:none; opacity:0; transition:opacity 0.5s">
-                    <button class="game-btn btn-bad" onclick="answerGame('Bad')">👎 BAD</button>
-                    <button class="game-btn btn-good" onclick="answerGame('Good')">👍 GOOD</button>
+                    <button class="game-btn btn-bad" onclick="answerGame('Bad')">馃憥 BAD</button>
+                    <button class="game-btn btn-good" onclick="answerGame('Good')">馃憤 GOOD</button>
                 </div>
 
                 <div id="g-feedback" class="feedback-text" style="color:var(--accent-primary);"></div>
@@ -615,19 +615,19 @@
     <script>
         // --- DATA ---
         let vocabData = [
-            { "title": "Set 1: Basic Actions (动作)", "words": [{ "w": "Connect", "a": "Talk to friends online" }, { "w": "Upload", "a": "Post a photo/video" }, { "w": "Share", "a": "Send to others" }, { "w": "Create", "a": "Make something new" }, { "w": "Search", "a": "Look for information" }], "options": ["Talk to friends online", "Post a photo/video", "Send to others", "Make something new", "Look for information"] },
+            { "title": "Set 1: Basic Actions (鍔ㄤ綔)", "words": [{ "w": "Connect", "a": "Talk to friends online" }, { "w": "Upload", "a": "Post a photo/video" }, { "w": "Share", "a": "Send to others" }, { "w": "Create", "a": "Make something new" }, { "w": "Search", "a": "Look for information" }], "options": ["Talk to friends online", "Post a photo/video", "Send to others", "Make something new", "Look for information"] },
             { "title": "Set 2: Good Things (Pros)", "words": [{ "w": "Beneficial", "a": "Good / Helpful" }, { "w": "Convenient", "a": "Easy to use" }, { "w": "Useful", "a": "Helps you do things" }, { "w": "Effective", "a": "Works well" }, { "w": "Global", "a": "Whole world" }], "options": ["Good / Helpful", "Easy to use", "Helps you do things", "Works well", "Whole world"] },
             { "title": "Set 3: Bad Things (Cons)", "words": [{ "w": "Harmful", "a": "Bad / Dangerous" }, { "w": "Fake", "a": "Not real" }, { "w": "Addictive", "a": "Hard to stop using" }, { "w": "Dangerous", "a": "Not safe" }, { "w": "Rude", "a": "Not polite" }], "options": ["Bad / Dangerous", "Not real", "Hard to stop using", "Not safe", "Not polite"] },
-            { "title": "Set 4: Tech Nouns (名词)", "words": [{ "w": "Device", "a": "Phone / Computer" }, { "w": "Platform", "a": "App or Website" }, { "w": "Content", "a": "Videos / Photos / Text" }, { "w": "Privacy", "a": "Keeping secrets safe" }, { "w": "Cyberbullying", "a": "Online bullying" }], "options": ["Phone / Computer", "App or Website", "Videos / Photos / Text", "Keeping secrets safe", "Online bullying"] },
-            { "title": "Set 5: Connectors (连接词)", "words": [{ "w": "However", "a": "But" }, { "w": "Furthermore", "a": "Also / And" }, { "w": "Therefore", "a": "So" }, { "w": "For example", "a": "Like..." }, { "w": "In conclusion", "a": "To end the essay" }], "options": ["But", "Also / And", "So", "Like...", "To end the essay"] }
+            { "title": "Set 4: Tech Nouns (鍚嶈瘝)", "words": [{ "w": "Device", "a": "Phone / Computer" }, { "w": "Platform", "a": "App or Website" }, { "w": "Content", "a": "Videos / Photos / Text" }, { "w": "Privacy", "a": "Keeping secrets safe" }, { "w": "Cyberbullying", "a": "Online bullying" }], "options": ["Phone / Computer", "App or Website", "Videos / Photos / Text", "Keeping secrets safe", "Online bullying"] },
+            { "title": "Set 5: Connectors (杩炴帴璇?", "words": [{ "w": "However", "a": "But" }, { "w": "Furthermore", "a": "Also / And" }, { "w": "Therefore", "a": "So" }, { "w": "For example", "a": "Like..." }, { "w": "In conclusion", "a": "To end the essay" }], "options": ["But", "Also / And", "So", "Like...", "To end the essay"] }
         ];
 
         let gameQ = [
-            { "t": "跟远方的朋友保持联系", "a": "Good", "level": "L1: Chinese" },
-            { "t": "容易看到假新闻 (Fake News)", "a": "Bad", "level": "L1: Chinese" },
-            { "t": "沉迷手机，不想做功课", "a": "Bad", "level": "L1: Chinese" },
-            { "t": "学习新技能 (比如看视频学做饭)", "a": "Good", "level": "L1: Chinese" },
-            { "t": "网络霸凌 (被人骂)", "a": "Bad", "level": "L1: Chinese" },
+            { "t": "璺熻繙鏂圭殑鏈嬪弸淇濇寔鑱旂郴", "a": "Good", "level": "L1: Chinese" },
+            { "t": "瀹规槗鐪嬪埌鍋囨柊闂?(Fake News)", "a": "Bad", "level": "L1: Chinese" },
+            { "t": "娌夎糠鎵嬫満锛屼笉鎯冲仛鍔熻", "a": "Bad", "level": "L1: Chinese" },
+            { "t": "瀛︿範鏂版妧鑳?(姣斿鐪嬭棰戝鍋氶キ)", "a": "Good", "level": "L1: Chinese" },
+            { "t": "缃戠粶闇稿噷 (琚汉楠?", "a": "Bad", "level": "L1: Chinese" },
             { "t": "Connect with friends easily", "a": "Good", "level": "L2: English" },
             { "t": "Spread of Fake News", "a": "Bad", "level": "L2: English" },
             { "t": "Addiction / Wasting time", "a": "Bad", "level": "L2: English" },
@@ -636,7 +636,7 @@
         ];
 
         let peelSets = [
-            { "level": "Level 1: Chinese Logic (Good)", "desc": "Topic: Keeping in Touch (保持联系)", "sentences": { "A": "A: 例如：我们可以用WhatsApp打视频电话给在国外的亲戚。 (Example)", "B": "B: 因此，我们的关系会变得更亲密。 (Link)", "C": "C: 首先，社交媒体可以帮助我们保持联系。 (Point)", "D": "D: 这是因为无论朋友住得多远，我们都可以随时发信息给他们。 (Explanation)" }, "ans": { "P": "C", "E": "D", "Ex": "A", "L": "B" } },
+            { "level": "Level 1: Chinese Logic (Good)", "desc": "Topic: Keeping in Touch (淇濇寔鑱旂郴)", "sentences": { "A": "A: 渚嬪锛氭垜浠彲浠ョ敤WhatsApp鎵撹棰戠數璇濈粰鍦ㄥ浗澶栫殑浜叉垰銆?(Example)", "B": "B: 鍥犳锛屾垜浠殑鍏崇郴浼氬彉寰楁洿浜插瘑銆?(Link)", "C": "C: 棣栧厛锛岀ぞ浜ゅ獟浣撳彲浠ュ府鍔╂垜浠繚鎸佽仈绯汇€?(Point)", "D": "D: 杩欐槸鍥犱负鏃犺鏈嬪弸浣忓緱澶氳繙锛屾垜浠兘鍙互闅忔椂鍙戜俊鎭粰浠栦滑銆?(Explanation)" }, "ans": { "P": "C", "E": "D", "Ex": "A", "L": "B" } },
             { "level": "Level 2: English (Simple)", "desc": "Topic: Learning New Skills", "sentences": { "A": "A: For instance, students can watch YouTube videos to learn how to cook.", "B": "B: This is because there are many free tutorials online.", "C": "C: Therefore, it is a very useful educational tool.", "D": "D: Firstly, social media is a great place to learn new skills." }, "ans": { "P": "D", "E": "B", "Ex": "A", "L": "C" } },
             { "level": "Level 3: English (Challenge)", "desc": "Topic: Fake News", "sentences": { "A": "A: People often share stories without checking if they are true.", "B": "B: Consequently, this causes panic and confusion in society.", "C": "C: Moreover, fake news spreads very fast on social media.", "D": "D: For example, believing rumours about a new virus or celebrity." }, "ans": { "P": "C", "E": "A", "Ex": "D", "L": "B" } }
         ];
@@ -704,14 +704,14 @@
 
             let fb = document.getElementById('v-feedback');
             if (allCorrect) {
-                fb.innerHTML = "<span style='color:#34d399'>🎉 Awesome! You got it right.</span>";
+                fb.innerHTML = "<span style='color:#34d399'>馃帀 Awesome! You got it right.</span>";
                 if (vIndex < vocabData.length - 1) {
                     document.getElementById('v-next').disabled = false;
                 } else {
-                    fb.innerHTML = "<span style='color:#34d399'>🏆 All Sets Completed!</span>";
+                    fb.innerHTML = "<span style='color:#34d399'>馃弳 All Sets Completed!</span>";
                 }
             } else {
-                fb.innerHTML = "<span style='color:#f87171'>⚠️ Try again!</span>";
+                fb.innerHTML = "<span style='color:#f87171'>鈿狅笍 Try again!</span>";
             }
         }
 
@@ -731,7 +731,7 @@
         function nextGameCard() {
             if (gIndex >= gameQ.length) {
                 document.getElementById('game-card-content').innerHTML = `
-                    <div style='font-size:3rem'>🏆</div>
+                    <div style='font-size:3rem'>馃弳</div>
                     <div>GAME CLEARED!</div>
                 `;
                 document.getElementById('game-btns').style.display = 'none';
@@ -753,14 +753,14 @@
             let q = gameQ[gIndex];
             let fb = document.getElementById('g-feedback');
             if (q.a === ans) {
-                fb.innerText = "✅ CORRECT!";
+                fb.innerText = "鉁?CORRECT!";
                 gIndex++;
                 setTimeout(() => {
                     fb.innerText = "";
                     nextGameCard();
                 }, 500);
             } else {
-                fb.innerText = "❌ WRONG!";
+                fb.innerText = "鉂?WRONG!";
             }
         }
 
@@ -794,14 +794,14 @@
             let l = document.getElementById('sel-l').value;
 
             if (p === s.ans.P && e === s.ans.E && ex === s.ans.Ex && l === s.ans.L) {
-                document.getElementById('peel-feedback').innerHTML = "<span style='color:#34d399'>🌟 Perfect Structure!</span>";
+                document.getElementById('peel-feedback').innerHTML = "<span style='color:#34d399'>馃専 Perfect Structure!</span>";
                 if (pIndex < peelSets.length - 1) {
                     document.getElementById('peel-next').style.display = 'inline-block';
                 } else {
-                    document.getElementById('peel-feedback').innerHTML = "<span style='color:#34d399'>🏆 MASTER WRITER!</span>";
+                    document.getElementById('peel-feedback').innerHTML = "<span style='color:#34d399'>馃弳 MASTER WRITER!</span>";
                 }
             } else {
-                document.getElementById('peel-feedback').innerHTML = "<span style='color:#f87171'>❌ Incorrect sequence. Try logical ordering.</span>";
+                document.getElementById('peel-feedback').innerHTML = "<span style='color:#f87171'>鉂?Incorrect sequence. Try logical ordering.</span>";
             }
         }
 
@@ -835,7 +835,7 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
+                    if (saved) {
 
                 const p = saved;
                 if (p.vocabIndex) { vIndex = p.vocabIndex; renderVocab(); }

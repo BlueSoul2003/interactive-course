@@ -213,7 +213,7 @@
 
 <body class="min-h-screen flex flex-col items-center py-4 px-2 sm:px-6">
 
-    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+    <a href="../../../../../index.html" class="home-btn-fixed">馃彔 Home</a>
 
     <script>
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -375,12 +375,12 @@
 
             if (showControls) {
                 html += '<div class="flex items-center justify-center gap-2 mt-4 bg-black/50 p-2 rounded border border-gray-500">' +
-                    '<button onclick="rotatePlayer(-45)" class="mc-btn px-3 py-2 text-sm sm:text-lg">↺ CCW</button>' +
+                    '<button onclick="rotatePlayer(-45)" class="mc-btn px-3 py-2 text-sm sm:text-lg">鈫?CCW</button>' +
                     '<div id="player-deg-display" class="text-xl text-yellow-300 w-28 text-center flex flex-col leading-none">' +
-                    '<span>0°</span>' +
+                    '<span>0掳</span>' +
                     '<span class="text-sm text-white mt-1">North</span>' +
                     '</div>' +
-                    '<button onclick="rotatePlayer(45)" class="mc-btn px-3 py-2 text-sm sm:text-lg">CW ↻</button>' +
+                    '<button onclick="rotatePlayer(45)" class="mc-btn px-3 py-2 text-sm sm:text-lg">CW 鈫?/button>' +
                     '</div>';
             }
             html += '</div>';
@@ -411,7 +411,7 @@
             if (normalizedDeg < 0) normalizedDeg += 360;
 
             const dirName = getDirectionName(normalizedDeg);
-            document.getElementById('player-deg-display').innerHTML = '<span>' + normalizedDeg + '°</span><span class="text-sm text-white mt-1">' + dirName + '</span>';
+            document.getElementById('player-deg-display').innerHTML = '<span>' + normalizedDeg + '掳</span><span class="text-sm text-white mt-1">' + dirName + '</span>';
         };
 
         const drawProtractorMeasure = (deg, label, showNow = false, baseRotation = 0) => {
@@ -475,7 +475,7 @@
                 '<line x1="-45" y1="0" x2="45" y2="0" stroke="#777" stroke-dasharray="2 2"/>' +
                 '</svg>' +
                 '<input type="range" min="0" max="360" step="90" value="90" class="w-full" oninput="updatePieUI(this.value)">' +
-                '<div id="pie-display" class="text-xl text-yellow-300 mt-2 font-bold">1/4 Turn (90°)</div>' +
+                '<div id="pie-display" class="text-xl text-yellow-300 mt-2 font-bold">1/4 Turn (90掳)</div>' +
                 '</div>';
         };
 
@@ -491,10 +491,10 @@
             document.getElementById('pie-slice').setAttribute('d', path);
 
             let text = "0 Turn";
-            if (deg == 90) text = "1/4 Turn (90°)";
-            else if (deg == 180) text = "1/2 Turn (180°)";
-            else if (deg == 270) text = "3/4 Turn (270°)";
-            else if (deg == 360) text = "1 Complete Turn (360°)";
+            if (deg == 90) text = "1/4 Turn (90掳)";
+            else if (deg == 180) text = "1/2 Turn (180掳)";
+            else if (deg == 270) text = "3/4 Turn (270掳)";
+            else if (deg == 360) text = "1 Complete Turn (360掳)";
             document.getElementById('pie-display').innerText = text;
         };
 
@@ -559,8 +559,8 @@
             {
                 type: "info",
                 title: "TUTORIAL: Drawing Angles",
-                text: "Welcome, Crafter! Before we build Steve's house, we need to read blueprints! An angle measures how much a line turns.<br><br>Example: Draw an angle equal to 135°.",
-                svg: drawAngleSimple(135, "135°", 25),
+                text: "Welcome, Crafter! Before we build Steve's house, we need to read blueprints! An angle measures how much a line turns.<br><br>Example: Draw an angle equal to 135掳.",
+                svg: drawAngleSimple(135, "135掳", 25),
                 buttonText: "I'm ready leh!"
             },
             {
@@ -571,39 +571,39 @@
                 buttonText: "Okay, got it!"
             },
             { type: "q", title: "Example 2(a)", text: "Rebeca is facing northwest. What can she see?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["laptop"], hint: "Turn the player to point to Top-Left!" },
-            { type: "q", title: "Example 2(b)", text: "Rebeca is facing south. If she turns 90° CCW, what will she see?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["chocolates", "chocolate"], hint: "Point Steve South, then click -45° twice!" },
-            { type: "q", title: "Example 2(c)", text: "Rebeca will see the flowers if she turns 180° clockwise. Where is she facing now?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["southwest"], hint: "180° is a half-turn. What is exactly opposite of flowers?" },
-            { type: "q", title: "Example 2(d)", text: "Rebeca is looking at the papers. If she turns ___° counterclockwise, she will see the radio.", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["315"], hint: "Papers to radio is 1 step clockwise (45°), but we are going counterclockwise the long way around! Try turning Steve left until you hit the radio!" },
+            { type: "q", title: "Example 2(b)", text: "Rebeca is facing south. If she turns 90掳 CCW, what will she see?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["chocolates", "chocolate"], hint: "Point Steve South, then click -45掳 twice!" },
+            { type: "q", title: "Example 2(c)", text: "Rebeca will see the flowers if she turns 180掳 clockwise. Where is she facing now?", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["southwest"], hint: "180掳 is a half-turn. What is exactly opposite of flowers?" },
+            { type: "q", title: "Example 2(d)", text: "Rebeca is looking at the papers. If she turns ___掳 counterclockwise, she will see the radio.", svg: drawInteractiveCompass("Rebeca", "cards", "flowers", "chocolates", "candy", "papers", "radio", "television", "laptop", true), ans: ["315"], hint: "Papers to radio is 1 step clockwise (45掳), but we are going counterclockwise the long way around! Try turning Steve left until you hit the radio!" },
             { type: "info", title: "CPA: Naming Angles", text: "Look at a roof (triangle). We name the corner angle by tracing the points. The middle letter is the vertex (the sharp point)!", svg: drawTriangle(), buttonText: "Mine it!" },
-            { type: "q", title: "Question 1(a)", text: "Name the marked angle in another way: ∠ABC = ?", svg: drawTriangle(), ans: ["y", "∠y", "angle y"], hint: "Trace A -> B -> C. Which small letter is at B?" },
-            { type: "q", title: "Question 1(b)", text: "∠ACB = ?", svg: drawTriangle(), ans: ["x", "∠x", "angle x"], hint: "Trace A -> C -> B. Which letter is at corner C?" },
-            { type: "q", title: "Question 1(c)", text: "∠BAC = ?", svg: drawTriangle(), ans: ["z", "∠z", "angle z"], hint: "Trace B -> A -> C. Which letter is at the top corner A?" },
+            { type: "q", title: "Question 1(a)", text: "Name the marked angle in another way: 鈭燗BC = ?", svg: drawTriangle(), ans: ["y", "鈭爕", "angle y"], hint: "Trace A -> B -> C. Which small letter is at B?" },
+            { type: "q", title: "Question 1(b)", text: "鈭燗CB = ?", svg: drawTriangle(), ans: ["x", "鈭爔", "angle x"], hint: "Trace A -> C -> B. Which letter is at corner C?" },
+            { type: "q", title: "Question 1(c)", text: "鈭燘AC = ?", svg: drawTriangle(), ans: ["z", "鈭爖", "angle z"], hint: "Trace B -> A -> C. Which letter is at the top corner A?" },
             { type: "info", title: "CPA: Naming Angles", text: "Now look at a Nether Portal frame (pentagon). Match the small letter angles to their big 3-letter names!", svg: drawPentagon(), buttonText: "Enter Portal!" },
-            { type: "q", title: "Question 2(a)", text: "Name the marked angle: ∠d = ?", svg: drawPentagon(), ans: ["srq", "qrs", "∠srq", "∠qrs"], hint: "Angle d is at vertex R. What points connect to R?" },
-            { type: "q", title: "Question 2(b)", text: "∠e = ?", svg: drawPentagon(), ans: ["osr", "rso", "∠osr", "∠rso"], hint: "Angle e is at vertex S." },
-            { type: "q", title: "Question 2(c)", text: "∠f = ?", svg: drawPentagon(), ans: ["sop", "pos", "∠sop", "∠pos"], hint: "Angle f is at the top vertex O." },
-            { type: "q", title: "Question 2(d)", text: "∠g = ?", svg: drawPentagon(), ans: ["opq", "qpo", "∠opq", "∠qpo"], hint: "Angle g is at vertex P." },
-            { type: "q", title: "Question 2(e)", text: "∠h = ?", svg: drawPentagon(), ans: ["pqr", "rqp", "∠pqr", "∠rqp"], hint: "Angle h is at vertex Q." },
-            { type: "info", title: "CPA: Greater/Smaller than 90°", text: "A right angle is exactly 90°, like the corner of a Dirt Block! 'Acute' is smaller (sharp), 'Obtuse' is bigger (wide open chest).", svg: drawAnglesGrid(), buttonText: "Let's Go!" },
-            { type: "q", title: "Question 3", text: "Identify the angles that are greater than 90º (type letters with commas, e.g. a,b)", svg: drawAnglesGrid(), ans: ["b,c,d,f", "b, c, d, f", "b c d f"], hint: "Which ones open WIDER than an 'L' shape?" },
-            { type: "q", title: "Question 4", text: "Identify the angles that are smaller than 90º (type letters with commas)", svg: drawAnglesGrid(), ans: ["a,e", "a, e", "a e"], hint: "Which ones are SHARPER than an 'L' shape?" },
-            { type: "info", title: "CPA: Lab Protractor", text: "Time to use your Lab Protractor! Like a true scientist, first GUESS the angle (Hypothesis). Lock it in, and the protractor will appear so you can measure the real thing!", svg: drawProtractorMeasure(90, "90° is L", true), buttonText: "Start Experiment!" },
-            { type: "measure", title: "Question 5", text: "Estimate and measure the marked angle: ∠a", svg: drawProtractorMeasure(100, "a", false, 0), target: 100, hint: "Align the 0° line on the bottom of the protractor with one of the pink lines!" },
-            { type: "measure", title: "Question 6", text: "Estimate and measure the marked angle: ∠b", svg: drawProtractorMeasure(60, "b", false, 120), target: 60, hint: "Rotate the protractor until the base matches a pink line, then read the number on the scale." },
-            { type: "measure", title: "Question 7", text: "Estimate and measure the marked angle: ∠PQR", svg: drawProtractorMeasure(110, "PQR", false, 0), target: 110, hint: "A bit more than 100º loh!" },
-            { type: "measure", title: "Question 8", text: "Estimate and measure the marked angle: ∠XWY", svg: drawProtractorMeasure(140, "XWY", false, 200), target: 140, hint: "Use the slider to align the protractor with the pink angle lines." },
+            { type: "q", title: "Question 2(a)", text: "Name the marked angle: 鈭燿 = ?", svg: drawPentagon(), ans: ["srq", "qrs", "鈭爏rq", "鈭爍rs"], hint: "Angle d is at vertex R. What points connect to R?" },
+            { type: "q", title: "Question 2(b)", text: "鈭爀 = ?", svg: drawPentagon(), ans: ["osr", "rso", "鈭爋sr", "鈭爎so"], hint: "Angle e is at vertex S." },
+            { type: "q", title: "Question 2(c)", text: "鈭爁 = ?", svg: drawPentagon(), ans: ["sop", "pos", "鈭爏op", "鈭爌os"], hint: "Angle f is at the top vertex O." },
+            { type: "q", title: "Question 2(d)", text: "鈭爂 = ?", svg: drawPentagon(), ans: ["opq", "qpo", "鈭爋pq", "鈭爍po"], hint: "Angle g is at vertex P." },
+            { type: "q", title: "Question 2(e)", text: "鈭爃 = ?", svg: drawPentagon(), ans: ["pqr", "rqp", "鈭爌qr", "鈭爎qp"], hint: "Angle h is at vertex Q." },
+            { type: "info", title: "CPA: Greater/Smaller than 90掳", text: "A right angle is exactly 90掳, like the corner of a Dirt Block! 'Acute' is smaller (sharp), 'Obtuse' is bigger (wide open chest).", svg: drawAnglesGrid(), buttonText: "Let's Go!" },
+            { type: "q", title: "Question 3", text: "Identify the angles that are greater than 90潞 (type letters with commas, e.g. a,b)", svg: drawAnglesGrid(), ans: ["b,c,d,f", "b, c, d, f", "b c d f"], hint: "Which ones open WIDER than an 'L' shape?" },
+            { type: "q", title: "Question 4", text: "Identify the angles that are smaller than 90潞 (type letters with commas)", svg: drawAnglesGrid(), ans: ["a,e", "a, e", "a e"], hint: "Which ones are SHARPER than an 'L' shape?" },
+            { type: "info", title: "CPA: Lab Protractor", text: "Time to use your Lab Protractor! Like a true scientist, first GUESS the angle (Hypothesis). Lock it in, and the protractor will appear so you can measure the real thing!", svg: drawProtractorMeasure(90, "90掳 is L", true), buttonText: "Start Experiment!" },
+            { type: "measure", title: "Question 5", text: "Estimate and measure the marked angle: 鈭燼", svg: drawProtractorMeasure(100, "a", false, 0), target: 100, hint: "Align the 0掳 line on the bottom of the protractor with one of the pink lines!" },
+            { type: "measure", title: "Question 6", text: "Estimate and measure the marked angle: 鈭燽", svg: drawProtractorMeasure(60, "b", false, 120), target: 60, hint: "Rotate the protractor until the base matches a pink line, then read the number on the scale." },
+            { type: "measure", title: "Question 7", text: "Estimate and measure the marked angle: 鈭燩QR", svg: drawProtractorMeasure(110, "PQR", false, 0), target: 110, hint: "A bit more than 100潞 loh!" },
+            { type: "measure", title: "Question 8", text: "Estimate and measure the marked angle: 鈭燲WY", svg: drawProtractorMeasure(140, "XWY", false, 200), target: 140, hint: "Use the slider to align the protractor with the pink angle lines." },
             { type: "info", title: "CPA: Drawing Angles", text: "Time to craft! Use the slider to rotate the laser beam and draw the exact angle requested.", svg: '<svg viewBox="-50 -50 100 100" class="w-32 h-32 mx-auto"><circle cx="0" cy="0" r="10" fill="gold"/><path d="M0,0 L40,-40" stroke="red" stroke-width="2" stroke-dasharray="2 2"/></svg>', buttonText: "Equip Laser" },
-            { type: "draw", title: "Question 9", text: "Draw the following angle: ∠p = 75º", target: 75 },
-            { type: "draw", title: "Question 10", text: "Draw the following angle: ∠r = 108º", target: 108 },
-            { type: "draw", title: "Question 11", text: "Draw the following angle: ∠q = 45º", target: 45 },
-            { type: "draw", title: "Question 12", text: "Draw the following angle: ∠s = 134º", target: 134 },
+            { type: "draw", title: "Question 9", text: "Draw the following angle: 鈭爌 = 75潞", target: 75 },
+            { type: "draw", title: "Question 10", text: "Draw the following angle: 鈭爎 = 108潞", target: 108 },
+            { type: "draw", title: "Question 11", text: "Draw the following angle: 鈭爍 = 45潞", target: 45 },
+            { type: "draw", title: "Question 12", text: "Draw the following angle: 鈭爏 = 134潞", target: 134 },
             { type: "info", title: "CPA: Turns", text: "Slide the bar to explore how fractions of a turn match with degrees!", svg: drawDynamicPie(), buttonText: "Spin me!" },
-            { type: "q", title: "Question 13", text: "Fill in the blank: A ______-turn equals 1 right angle.", svg: drawDynamicPie(), ans: ["1/4", "quarter", "1/4 turn", "quarter turn"], hint: "A right angle is 90º. Move the slider to 90º and see what the fraction is." },
-            { type: "q", title: "Question 14", text: "A half-turn equals ______ º.", svg: drawDynamicPie(), ans: ["180", "180º", "180°"], hint: "Move the pie slider to 1/2 Turn. What degree is it?" },
-            { type: "q", title: "Question 15", text: "A ______-turn equals 270º.", svg: drawDynamicPie(), ans: ["3/4", "three quarter", "three-quarter"], hint: "Move the pie slider to 270º and look at the label!" },
+            { type: "q", title: "Question 13", text: "Fill in the blank: A ______-turn equals 1 right angle.", svg: drawDynamicPie(), ans: ["1/4", "quarter", "1/4 turn", "quarter turn"], hint: "A right angle is 90潞. Move the slider to 90潞 and see what the fraction is." },
+            { type: "q", title: "Question 14", text: "A half-turn equals ______ 潞.", svg: drawDynamicPie(), ans: ["180", "180潞", "180掳"], hint: "Move the pie slider to 1/2 Turn. What degree is it?" },
+            { type: "q", title: "Question 15", text: "A ______-turn equals 270潞.", svg: drawDynamicPie(), ans: ["3/4", "three quarter", "three-quarter"], hint: "Move the pie slider to 270潞 and look at the label!" },
             { type: "q", title: "Question 16", text: "A complete turn equals ______ right angles.", svg: drawDynamicPie(), ans: ["4", "four"], hint: "How many 90s make 360?" },
-            { type: "q", title: "Question 17", text: "______ of a complete turn is 180º.", svg: drawDynamicPie(), ans: ["1/2", "half"], hint: "180 is what fraction of 360?" },
-            { type: "q", title: "Question 18", text: "______ of a complete turn is 90º.", svg: drawDynamicPie(), ans: ["1/4", "quarter"], hint: "90 is what fraction of 360?" },
+            { type: "q", title: "Question 17", text: "______ of a complete turn is 180潞.", svg: drawDynamicPie(), ans: ["1/2", "half"], hint: "180 is what fraction of 360?" },
+            { type: "q", title: "Question 18", text: "______ of a complete turn is 90潞.", svg: drawDynamicPie(), ans: ["1/4", "quarter"], hint: "90 is what fraction of 360?" },
             { type: "info", title: "CPA: Multiplayer Radar", text: "Time to check the radar! X is the center. Turn the player to find where your friends are hiding.", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", true), buttonText: "Open Map" },
             { type: "q", title: "Question 19(a)", text: "Which direction is Tony from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["north", "n"], hint: "Tony is straight UP!" },
             { type: "q", title: "Question 19(b)", text: "Which direction is Aaron from X?", svg: drawInteractiveCompass("X", "Tony", "Aaron", "Susan", "Jasmine", "Maggie", "Sam", "Malik", "Zack", false), ans: ["northeast", "ne"], hint: "Aaron is top-right." },
@@ -623,10 +623,10 @@
             { type: "q", title: "Question 20(g)", text: "The triangle is ______ of the cross.", svg: drawGrid(), ans: ["northeast", "ne"], hint: "From cross, go UP and RIGHT." },
             { type: "q", title: "Question 20(h)", text: "The star is ______ of the circle.", svg: drawGrid(), ans: ["southwest", "sw"], hint: "From circle, go DOWN and LEFT to hit the star." },
             { type: "info", title: "FINAL BOSS: Navigating The End", text: "George is stuck! Use the interactive compass buttons to help him figure out where to face. Turn him to survive!", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), buttonText: "FIGHT!" },
-            { type: "q", title: "Question 21(a)", text: "George is facing north. If he turns clockwise ______º, he will face southwest.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["225"], hint: "Use the buttons! Turn Steve from North to Southwest and check the degrees." },
-            { type: "q", title: "Question 21(b)", text: "George is facing west. If he turns counterclockwise ______º, he will face east.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["180"], hint: "West to East is exactly opposite. Half turn!" },
-            { type: "q", title: "Question 21(c)", text: "George is facing northwest. If he turns counterclockwise ______º, he will face northeast.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["270"], hint: "Turn him CCW (left) until he faces NE. Read the number!" },
-            { type: "q", title: "Question 21(d)", text: "George is facing south. If he turns counterclockwise ______º, he will face southeast.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["315"], hint: "Keep clicking CCW from South until you hit SE. It's a big spin!" },
+            { type: "q", title: "Question 21(a)", text: "George is facing north. If he turns clockwise ______潞, he will face southwest.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["225"], hint: "Use the buttons! Turn Steve from North to Southwest and check the degrees." },
+            { type: "q", title: "Question 21(b)", text: "George is facing west. If he turns counterclockwise ______潞, he will face east.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["180"], hint: "West to East is exactly opposite. Half turn!" },
+            { type: "q", title: "Question 21(c)", text: "George is facing northwest. If he turns counterclockwise ______潞, he will face northeast.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["270"], hint: "Turn him CCW (left) until he faces NE. Read the number!" },
+            { type: "q", title: "Question 21(d)", text: "George is facing south. If he turns counterclockwise ______潞, he will face southeast.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["315"], hint: "Keep clicking CCW from South until you hit SE. It's a big spin!" },
             { type: "q", title: "Question 21(e)", text: "George is facing east. If he makes a ______-turn clockwise, he will face south.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["1/4", "quarter", "1/4 turn", "quarter turn"], hint: "East to South is just one step on the clock. What fraction of 360?" },
             { type: "q", title: "Question 21(f)", text: "George is facing north. If he makes a ______-turn counterclockwise, he will face east.", svg: drawInteractiveCompass("George", "North", "", "East", "", "South", "", "West", "", true), ans: ["3/4", "three quarter", "three-quarter"], hint: "North -> West -> South -> East. How many quarters is that?" },
             { type: "end" }
@@ -686,17 +686,17 @@
                     '<p class="text-2xl mb-4 px-4 font-bold leading-relaxed">' + slide.text + '</p>' +
                     '<div class="flex flex-row gap-4 justify-center items-center w-full max-w-md mb-4">' +
                     '<div class="flex flex-col items-center bg-gray-700 p-2 rounded border-2 border-gray-500 w-1/2 transition-opacity duration-300" id="est-container">' +
-                    '<label class="text-yellow-300 text-sm sm:text-lg mb-1 font-bold">Estimated (°)</label>' +
+                    '<label class="text-yellow-300 text-sm sm:text-lg mb-1 font-bold">Estimated (掳)</label>' +
                     '<input type="number" id="answer-est" class="mc-input w-full text-2xl sm:text-3xl" autocomplete="off" placeholder="???">' +
                     '</div>' +
                     '<div class="flex flex-col items-center bg-gray-700 p-2 rounded border-2 border-gray-500 w-1/2 opacity-30 pointer-events-none transition-opacity duration-300" id="act-container">' +
-                    '<label class="text-green-400 text-sm sm:text-lg mb-1 font-bold">Actual Value (°)</label>' +
+                    '<label class="text-green-400 text-sm sm:text-lg mb-1 font-bold">Actual Value (掳)</label>' +
                     '<input type="number" id="answer-act" class="mc-input w-full text-2xl sm:text-3xl" autocomplete="off" placeholder="Locked" disabled>' +
                     '</div>' +
                     '</div>' +
                     '<button id="measure-btn" onclick="lockEstimate()" class="mc-btn px-8 py-3 text-3xl w-full max-w-md">Lock Estimate!</button>' +
                     '<p id="hint-text" class="text-red-400 mt-4 text-xl sm:text-2xl hidden flex items-center justify-center gap-2 font-bold">' +
-                    '<span class="text-3xl">💣</span> <span id="hint-content"></span>' +
+                    '<span class="text-3xl">馃挘</span> <span id="hint-content"></span>' +
                     '</p>';
 
                 setTimeout(() => {
@@ -717,7 +717,7 @@
                     '<line x1="0" y1="0" x2="80" y2="0" stroke="white" stroke-width="4" stroke-linecap="round"/>' +
                     '<line x1="0" y1="0" x2="80" y2="0" stroke="#51f0ea" stroke-width="4" stroke-linecap="round" id="dynamic-line"/>' +
                     '<path id="dynamic-arc" d="" fill="none" stroke="yellow" stroke-width="2"/>' +
-                    '<text x="30" y="-30" id="dynamic-text" fill="white" font-size="24" font-weight="bold">0°</text>' +
+                    '<text x="30" y="-30" id="dynamic-text" fill="white" font-size="24" font-weight="bold">0掳</text>' +
                     '<circle cx="0" cy="0" r="4" fill="white"/>' +
                     '</svg>' +
                     '</div>' +
@@ -735,7 +735,7 @@
                     '<input type="text" id="answer-input" class="mc-input w-full max-w-sm mb-4 text-3xl" placeholder="Type answer..." autocomplete="off">' +
                     '<button onclick="checkAnswer()" class="mc-btn px-8 py-3 text-3xl w-full max-w-sm">Submit</button>' +
                     '<p id="hint-text" class="text-red-400 mt-4 text-2xl hidden flex items-center justify-center gap-2 font-bold">' +
-                    '<span class="text-3xl">💣</span> <span id="hint-content"></span>' +
+                    '<span class="text-3xl">馃挘</span> <span id="hint-content"></span>' +
                     '</p>';
 
                 setTimeout(() => {
@@ -771,7 +771,7 @@
             const largeArc = deg > 180 ? 1 : 0;
             arc.setAttribute('d', 'M ' + arcR + ' 0 A ' + arcR + ' ' + arcR + ' 0 ' + largeArc + ' 0 ' + arcX + ' ' + arcY);
 
-            text.textContent = deg + '°';
+            text.textContent = deg + '掳';
         };
 
         window.checkDrawAnswer = function (target) {
@@ -780,7 +780,7 @@
             if (Math.abs(val - target) <= 2) {
                 showSuccess();
             } else {
-                showFail('Aiyo, quite close but not exact leh! Try to slide to exactly ' + target + 'º.');
+                showFail('Aiyo, quite close but not exact leh! Try to slide to exactly ' + target + '潞.');
             }
         };
 
@@ -833,7 +833,7 @@
             const target = slide.target;
 
             if (Math.abs(act - target) > 2) {
-                showFail('Aiyo, your Actual Measurement is wrong leh! Try aligning the 0° base line perfectly with the pink line.');
+                showFail('Aiyo, your Actual Measurement is wrong leh! Try aligning the 0掳 base line perfectly with the pink line.');
                 return;
             }
 
@@ -907,7 +907,7 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
+                    if (saved) {
 
                 const p = saved;
                 currentSlide = p.step || 0;

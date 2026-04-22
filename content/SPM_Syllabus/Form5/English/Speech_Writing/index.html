@@ -487,33 +487,38 @@
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
-                    if (saved && saved) {
-
-                    const p = saved;
-                    if (p.vIndex !== undefined) { vIndex = p.vIndex; renderVocabSet(); }
-                    if (p.mIndex !== undefined) { mIndex = p.mIndex; renderMagicQ(); }
-                    if (p.section) { currentSection = p.section; showSection(currentSection, false); }
-        function saveProgress() {
-            if (typeof ProgressTracker !== 'undefined' && ProgressTracker.save) {
-                ProgressTracker.autoSave({ section: currentSection, vIndex: vIndex, mIndex: mIndex });
-        
-        const originalShowSection = showSection;
-        showSection = function(num, shouldSave = true) {
-            currentSection = num;
-            originalShowSection(num);
-            if (shouldSave) saveProgress();
-
-        const originalChangeVocabSet = changeVocabSet;
-        changeVocabSet = function(dir) {
-            originalChangeVocabSet(dir);
-            saveProgress();
-
-        const originalChangeMagicQ = changeMagicQ;
-        changeMagicQ = function(dir) {
-            originalChangeMagicQ(dir);
-            saveProgress();
+                    if (saved) {
+                        const p = saved;
+                        if (p.vIndex !== undefined) { vIndex = p.vIndex; renderVocabSet(); }
+                        if (p.mIndex !== undefined) { mIndex = p.mIndex; renderMagicQ(); }
+                        if (p.section) { currentSection = p.section; showSection(currentSection, false); }
                     }
                 });
             }
         });
+
+        function saveProgress() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.autoSave({ section: currentSection, vIndex: vIndex, mIndex: mIndex });
+            }
+        }
+        
+        const originalShowSection = showSection;
+        window.showSection = function(num, shouldSave = true) {
+            currentSection = num;
+            originalShowSection(num);
+            if (shouldSave) saveProgress();
+        };
+
+        const originalChangeVocabSet = changeVocabSet;
+        window.changeVocabSet = function(dir) {
+            originalChangeVocabSet(dir);
+            saveProgress();
+        };
+
+        const originalChangeMagicQ = changeMagicQ;
+        window.changeMagicQ = function(dir) {
+            originalChangeMagicQ(dir);
+            saveProgress();
+        };
     </script>
