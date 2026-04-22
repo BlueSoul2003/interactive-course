@@ -908,14 +908,23 @@
                 ProgressTracker.init(async function(tracker) {
                     const saved = await tracker.load();
                     if (saved) {
-
-                const p = saved;
-                currentSlide = p.step || 0;
-                xp = p.xp || 0;
-                document.getElementById('xp-display').innerText = xp;
-            renderSlide();
+                        const p = saved;
+                        currentSlide = p.step || 0;
+                        xp = p.xp || 0;
+                        document.getElementById('xp-display').innerText = xp;
                     }
+                    renderSlide();
                 });
+            } else {
+                renderSlide();
             }
         });
     </script>
+
+    <!-- Progress Tracker -->
+    <script src="../../../../../js/progress-tracker.js" data-module-id="SG_Y4_Math_Ch6Angles"
+        data-module-name="Singapore Y4 Math: Angle Quest"
+        data-module-url="content/Singapore_Syllabus/Year4/Math/Chapter6_Angles/index.html"></script>
+
+</body>
+</html>
