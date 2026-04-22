@@ -566,6 +566,9 @@
             document.getElementById('total-score').innerText = ++score;
             document.getElementById('total-score').classList.add('text-yellow-300');
             setTimeout(() => document.getElementById('total-score').classList.remove('text-yellow-300'), 300);
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.autoSave({ score: score });
+            }
         }
 
         // --- WEB AUDIO API (8-BIT SOUND EFFECTS) ---
@@ -1158,13 +1161,6 @@
         initMatchGame();
 
         // --- PILLAR 4: PROGRESS TRACKING ---
-        const _origAddScore = addScore;
-        window.addScore = function() {
-            _origAddScore();
-            if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.autoSave({ score: score });
-            }
-        };
 
         window.addEventListener('load', function() {
             if (typeof ProgressTracker !== 'undefined') {
