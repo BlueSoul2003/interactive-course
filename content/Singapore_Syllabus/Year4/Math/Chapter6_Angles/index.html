@@ -216,9 +216,15 @@
     <a href="../../../../../index.html" class="home-btn-fixed">馃彔 Home</a>
 
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        let audioCtx;
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        } catch (e) {
+            console.warn("AudioContext not supported", e);
+        }
 
         function playTone(freq, type, delay, duration) {
+            if (!audioCtx) return;
             const t = audioCtx.currentTime + delay;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
@@ -233,6 +239,7 @@
         }
 
         function playSound(type) {
+            if (!audioCtx) return;
             if (audioCtx.state === 'suspended') audioCtx.resume();
             const t = audioCtx.currentTime;
 
@@ -903,22 +910,32 @@
             }
         };
 
-        window.addEventListener('load', function() {
+        function initGame() {
             if (typeof ProgressTracker !== 'undefined') {
                 ProgressTracker.init(async function(tracker) {
-                    const saved = await tracker.load();
-                    if (saved) {
-                        const p = saved;
-                        currentSlide = p.step || 0;
-                        xp = p.xp || 0;
-                        document.getElementById('xp-display').innerText = xp;
+                    try {
+                        const saved = await tracker.load();
+                        if (saved) {
+                            const p = saved;
+                            currentSlide = p.step || 0;
+                            xp = p.xp || 0;
+                            document.getElementById('xp-display').innerText = xp;
+                        }
+                    } catch(e) {
+                        console.error('Progress load error:', e);
                     }
                     renderSlide();
                 });
             } else {
                 renderSlide();
             }
-        });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGame);
+        } else {
+            initGame();
+        }
     </script>
 
     <!-- Progress Tracker -->
