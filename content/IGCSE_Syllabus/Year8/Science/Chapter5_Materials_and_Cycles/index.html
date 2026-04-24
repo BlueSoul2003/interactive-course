@@ -1,0 +1,2204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hogwarts Muggle Science: Materials & Cycles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Lora', serif;
+            background-color: #1a1a1a;
+            color: #d4af37;
+            background-image: radial-gradient(circle at center, #2a2a2a 0%, #0a0a0a 100%);
+            min-height: 100vh;
+        }
+
+        h1,
+        h2,
+        h3,
+        .magic-font {
+            font-family: 'Cinzel', serif;
+        }
+
+        .title-shadow {
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9), -1px -1px 0 rgba(0, 0, 0, 0.8);
+            color: #fbbf24;
+        }
+
+        .parchment-title {
+            color: #4a0404;
+            font-weight: 800;
+        }
+
+        .parchment {
+            background-color: #f4ecd8;
+            background-image: url('https://www.transparenttextures.com/patterns/aged-paper.png');
+            color: #1f140e;
+            border: 4px solid #5c232d;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .spellbook-header {
+            background-color: #4a1c24;
+            color: #f4ecd8;
+            border-bottom: 3px solid #b4860b;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .btn-magic {
+            background: linear-gradient(135deg, #722F37 0%, #3a1118 100%);
+            color: #f3e5ab;
+            border: 2px solid #b4860b;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-magic:hover {
+            background: linear-gradient(135deg, #8a3a44 0%, #4a1c24 100%);
+            box-shadow: 0 0 12px #d4af37;
+            transform: translateY(-2px);
+        }
+
+        .btn-magic:disabled {
+            background: #444;
+            border-color: #666;
+            color: #999;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .btn-action {
+            background: #b4860b;
+            color: #1a1a1a;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s ease;
+            border: 1px solid #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+        }
+
+        .btn-action:hover {
+            background: #d4af37;
+            transform: scale(1.05);
+        }
+
+        @keyframes orbit {
+            from {
+                transform: rotate(0deg) translateX(45px) rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg) translateX(45px) rotate(-360deg);
+            }
+        }
+
+        @keyframes orbit2 {
+            from {
+                transform: rotate(0deg) translateX(70px) rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg) translateX(70px) rotate(360deg);
+            }
+        }
+
+        .electron-orbit {
+            animation: orbit 2s linear infinite;
+        }
+
+        .electron-orbit-2 {
+            animation: orbit2 3s linear infinite;
+        }
+
+        .layer-slide {
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-4px);
+            }
+
+            75% {
+                transform: translateX(4px);
+            }
+        }
+
+        .layer-stuck {
+            animation: shake 0.3s ease-in-out 2;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            transition: all 1s ease;
+        }
+
+        .tab-active {
+            background-color: #f4ecd8;
+            color: #4a1c24;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border-bottom: 2px solid #f4ecd8;
+            margin-bottom: -2px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .tab-inactive {
+            background-color: #3a1118;
+            color: #d4af37;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border: 1px solid #722F37;
+        }
+
+        .feedback-correct {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .feedback-warning {
+            color: #b45309;
+            font-weight: bold;
+        }
+
+        .feedback-wrong {
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
+        .note-select {
+            background: #f3e5ab;
+            border: 2px solid #b4860b;
+            color: #4a0404;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-weight: bold;
+            cursor: pointer;
+            outline: none;
+            appearance: menulist;
+            font-style: italic;
+            transition: all 0.2s;
+            margin: 2px 0;
+        }
+
+        .note-select:hover {
+            background: #fff8dc;
+            border-color: #d4af37;
+        }
+
+        .note-select-correct {
+            background: #dcfce7;
+            border: 2px solid #16a34a;
+            color: #166534;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-weight: bold;
+            appearance: none;
+            margin: 2px 0;
+        }
+
+        .note-select-wrong {
+            background: #fee2e2;
+            border: 2px solid #dc2626;
+            color: #991b1b;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-weight: bold;
+            appearance: none;
+            animation: shake 0.3s ease-in-out;
+            margin: 2px 0;
+        }
+
+        /* Digital Readout Font */
+        .digital-readout {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #000;
+            color: #0f0;
+            padding: 10px;
+            border-radius: 4px;
+            border: 2px solid #333;
+        }
+
+        /* Full Screen Magic FX */
+        @keyframes fadeOutFast {
+            from {
+                opacity: 0.6;
+            }
+
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes burst {
+            0% {
+                transform: translate(0, 0) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(var(--vx), var(--vy)) scale(0.2) rotate(var(--rot));
+                opacity: 0;
+            }
+        }
+
+        @keyframes flicker {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            10%,
+            30%,
+            50%,
+            70% {
+                opacity: 0.8;
+            }
+
+            20%,
+            40%,
+            60% {
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes smokeFloatUp {
+            0% {
+                transform: translateY(10vh) scale(0.5);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Rutherford Experiment Animations */
+        @keyframes alphaStraight {
+            0% {
+                left: 48px;
+                top: 50%;
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                left: calc(100% - 20px);
+                top: var(--endY);
+                opacity: 0;
+            }
+        }
+
+        @keyframes alphaBounce {
+            0% {
+                left: 48px;
+                top: 50%;
+                opacity: 1;
+            }
+
+            40% {
+                left: 50%;
+                top: 50%;
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                left: var(--endX);
+                top: var(--endY);
+                opacity: 0;
+            }
+        }
+
+        .flash-spot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #22c55e;
+            transform: translate(-50%, -50%);
+            animation: fadeOutFast 0.5s ease-out forwards;
+            z-index: 30;
+        }
+
+        /* Forge Hammer Animations */
+        .atom-node {
+            position: absolute;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        @keyframes hammerSwing {
+            0% {
+                transform: translate(-50%, -100%) rotate(-45deg);
+                opacity: 0;
+            }
+
+            30% {
+                transform: translate(-50%, -80%) rotate(10deg);
+                opacity: 1;
+            }
+
+            60% {
+                transform: translate(-50%, -10px) rotate(-15deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -100%) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        .hammer-strike {
+            animation: hammerSwing 0.4s ease-out forwards;
+        }
+
+        .fracture-line {
+            position: absolute;
+            width: 4px;
+            height: 100%;
+            background-color: #ef4444;
+            box-shadow: 0 0 10px #f00;
+            z-index: 15;
+            transform-origin: top;
+            animation: expandCrack 0.2s ease-out forwards;
+        }
+
+        @keyframes expandCrack {
+            from {
+                transform: scaleY(0);
+            }
+
+            to {
+                transform: scaleY(1);
+            }
+        }
+
+        /* Weather/Climate Animations */
+        .weather-drop {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.7);
+            width: 2px;
+            height: 20px;
+            animation: rain 0.6s linear infinite;
+        }
+
+        @keyframes rain {
+            0% {
+                top: -10%;
+                opacity: 0;
+                transform: rotate(10deg);
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 110%;
+                opacity: 0;
+                transform: rotate(10deg);
+            }
+        }
+
+        @keyframes lightningStrike {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            5%,
+            25% {
+                opacity: 0.8;
+            }
+
+            15%,
+            30% {
+                opacity: 0.2;
+            }
+
+            20% {
+                opacity: 1;
+            }
+        }
+
+        .lightning-effect {
+            animation: lightningStrike 1.5s ease-in-out infinite;
+            background-color: white;
+            mix-blend-mode: overlay;
+            z-index: 20;
+        }
+
+        @keyframes dayNightCycle {
+            0% {
+                background-color: #1e3a8a;
+            }
+
+            /* Night */
+            25% {
+                background-color: #fb923c;
+            }
+
+            /* Dawn */
+            50% {
+                background-color: #38bdf8;
+            }
+
+            /* Day */
+            75% {
+                background-color: #9f1239;
+            }
+
+            /* Dusk */
+            100% {
+                background-color: #1e3a8a;
+            }
+
+            /* Night */
+        }
+
+        .timelapse-effect {
+            animation: dayNightCycle 0.5s linear infinite;
+        }
+
+        .rolling-data {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+
+        /* Drill Game Animations */
+        @keyframes drillVibrate {
+            0% {
+                transform: translateX(-50%) rotate(-5deg) translateY(0px);
+            }
+
+            50% {
+                transform: translateX(-50%) rotate(5deg) translateY(2px);
+            }
+
+            100% {
+                transform: translateX(-50%) rotate(-5deg) translateY(0px);
+            }
+        }
+
+        .drill-active {
+            animation: drillVibrate 0.1s linear infinite !important;
+        }
+
+        @keyframes itemPop {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.4) rotate(10deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .item-revealed {
+            animation: itemPop 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+        }
+
+        /* Home Button */
+        .home-btn-fixed {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #722F37 0%, #3a1118 100%);
+            color: #f3e5ab;
+            border: 2px solid #b4860b;
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+        }
+        .home-btn-fixed:hover {
+            background: linear-gradient(135deg, #8a3a44 0%, #4a1c24 100%);
+            box-shadow: 0 0 12px #d4af37;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8 relative">
+
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+    <!-- Magic FX Container -->
+    <div id="magic-fx-container"
+        class="fixed inset-0 pointer-events-none z-50 overflow-hidden flex items-center justify-center"></div>
+
+    <div class="max-w-5xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 title-shadow">✨ Hogwarts Muggle Studies ✨</h1>
+            <h2 class="text-2xl md:text-3xl font-bold text-yellow-300">Chapter 5: Materials and Cycles on Earth</h2>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <div class="flex flex-wrap border-b-2 border-yellow-700 mb-6 magic-font text-lg md:text-xl">
+            <button onclick="switchTab('notes')" id="tab-notes"
+                class="px-6 py-3 tab-active font-bold transition-colors">📚 Study Notes</button>
+            <button onclick="switchTab('quiz')" id="tab-quiz"
+                class="px-6 py-3 tab-inactive font-bold transition-colors ml-2">📜 O.W.L. Exam</button>
+        </div>
+
+        <!-- STUDY NOTES SECTION -->
+        <div id="section-notes" class="parchment p-6 md:p-10 mb-10">
+            <h2 class="text-3xl font-bold text-center mb-8 border-b-4 border-red-900 pb-2 parchment-title">The Standard
+                Book of Science (Year 8)</h2>
+
+            <!-- Lesson 1 -->
+            <div class="mb-12 border-b-2 border-gray-400 pb-8">
+                <h3 class="text-2xl font-bold spellbook-header p-3 rounded mb-4">5.1 Potions & Particles (Atomic
+                    Structure)</h3>
+                <div class="px-2">
+                    <p class="mb-3"><strong>Concept:</strong> Atoms are the tiny building blocks of all matter. They are
+                        made of three
+                        <select class="note-select" onchange="checkNote('subatomic particles', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="cellular tissues">cellular tissues</option>
+                            <option value="chemical bonds">chemical bonds</option>
+                            <option value="subatomic particles">subatomic particles</option>
+                            <option value="magical elements">magical elements</option>
+                        </select>. The center of the atom is mostly empty space, but contains a dense center called the
+                        <select class="note-select" onchange="checkNote('nucleus', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="nucleus">nucleus</option>
+                            <option value="electron shell">electron shell</option>
+                            <option value="vacuum">vacuum</option>
+                            <option value="mitochondria">mitochondria</option>
+                        </select>.
+                    </p>
+                    <ul class="list-disc ml-8 mb-4 space-y-2">
+                        <li><strong>Protons:</strong> Positive (+) charge. Packed inside the nucleus. The amount of
+                            protons acts as the
+                            <select class="note-select" onchange="checkNote('atomic number', this)">
+                                <option value="">[ Select Term ]</option>
+                                <option value="atomic number">atomic number</option>
+                                <option value="magical aura">magical aura</option>
+                                <option value="spectral line">spectral line</option>
+                                <option value="atomic weight">atomic weight</option>
+                            </select>, which determines exactly what element an atom is. Both protons and neutrons have
+                            a mass of 1 atomic unit.
+                        </li>
+                        <li><strong>Neutrons:</strong> Neutral (0) charge. Also packed inside the nucleus.</li>
+                        <li><strong>Electrons:</strong> Negative (-) charge. They have almost zero mass and orbit the
+                            nucleus in specific energy levels called
+                            <select class="note-select" onchange="checkNote('shells', this)">
+                                <option value="">[ Select Term ]</option>
+                                <option value="pockets">pockets</option>
+                                <option value="clouds">clouds</option>
+                                <option value="shells">shells</option>
+                                <option value="bubbles">bubbles</option>
+                            </select>.
+                        </li>
+                    </ul>
+                    <p class="mb-2 italic text-gray-700">Because the number of positive protons exactly equals the
+                        number of negative electrons, the entire atom is completely
+                        <select class="note-select" onchange="checkNote('neutral', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="positively charged">positively charged</option>
+                            <option value="neutral">neutral</option>
+                            <option value="radioactive">radioactive</option>
+                            <option value="magnetic">magnetic</option>
+                        </select>.
+                    </p>
+
+                    <!-- INTERACTIVE 5.1: RUTHERFORD SCATTERING -->
+                    <div class="bg-[#1a1512] p-6 rounded border-4 border-yellow-700 my-6 text-white shadow-lg">
+                        <h4 class="magic-font text-2xl title-shadow text-center mb-2">🧪 Rutherford's Gold Foil
+                            Experiment</h4>
+                        <p class="text-center text-gray-300 text-sm mb-4">Fire Alpha Particles from the emitter. Observe
+                            the physical scattering effect on the fluorescent detector screen based on the atomic model!
+                        </p>
+
+                        <div class="flex justify-center flex-wrap gap-3 mb-6 z-20 relative">
+                            <button onclick="setAtomLayer(1)" class="btn-action bg-pink-700">1. Thomson (Plum
+                                Pudding)</button>
+                            <button onclick="setAtomLayer(2)" class="btn-action bg-blue-700">2. Rutherford (Dense
+                                Nucleus)</button>
+                            <button onclick="setAtomLayer(3)" class="btn-action bg-green-700 text-white">3. Modern
+                                (Electron Shells)</button>
+                        </div>
+
+                        <!-- Top-down Experiment Setup -->
+                        <div id="experiment-setup"
+                            class="relative w-full h-56 bg-black rounded-lg border-2 border-gray-600 flex items-center overflow-hidden mb-4 shadow-[0_0_20px_rgba(0,0,0,0.8)_inset]">
+
+                            <!-- Detector Screen (C-Shape) -->
+                            <div
+                                class="absolute inset-y-4 right-4 w-3/4 border-y-8 border-r-8 border-green-500/30 rounded-r-full shadow-[0_0_15px_rgba(34,197,94,0.1)_inset]">
+                            </div>
+
+                            <!-- Emitter (Source) -->
+                            <div
+                                class="absolute left-2 w-12 h-16 bg-gray-800 border-2 border-gray-400 rounded flex flex-col items-center justify-center z-20 shadow-lg">
+                                <div class="text-[8px] text-gray-400 font-bold mb-1">EMITTER</div>
+                                <div class="w-4 h-4 bg-yellow-500 rounded-full animate-pulse shadow-[0_0_10px_#eab308]">
+                                </div>
+                            </div>
+
+                            <!-- Target Atom Stage -->
+                            <div id="atom-stage"
+                                class="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 scale-75">
+                                <!-- Atom visual injected here -->
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-center gap-6">
+                            <button onclick="fireAlphaLaser()"
+                                class="btn-magic px-6 py-3 font-bold w-full md:w-1/3 uppercase tracking-widest text-sm text-center">⚡
+                                Fire 10,000 Particles</button>
+
+                            <div class="w-full md:w-2/3 digital-readout text-sm flex flex-col justify-center">
+                                <div class="flex justify-between items-end border-b border-green-800 pb-2 mb-2">
+                                    <span class="font-bold">GEIGER COUNTER DATA</span>
+                                    <span class="text-[10px] text-gray-400">Target hit rate analysis</span>
+                                </div>
+                                <div class="grid grid-cols-3 gap-2 text-center">
+                                    <div>Fired<br><span id="stat-fired" class="text-white text-lg">0</span></div>
+                                    <div>Passed Screen<br><span id="stat-passed"
+                                            class="text-yellow-400 text-lg">0</span></div>
+                                    <div>Deflected Back<br><span id="stat-deflected"
+                                            class="text-red-500 font-bold text-lg">0</span></div>
+                                </div>
+                                <div id="atom-conclusion" class="mt-4 text-xs text-green-300 italic text-center">Select
+                                    a model and fire to begin data collection.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson 2 -->
+            <div class="mb-12 border-b-2 border-gray-400 pb-8">
+                <h3 class="text-2xl font-bold spellbook-header p-3 rounded mb-4">5.2 Alchemy (Purity & Alloys)</h3>
+                <div class="px-2">
+                    <p class="mb-3"><strong>Pure Substances:</strong> Made of only one type of atom. They melt at one
+                        exact,
+                        <select class="note-select" onchange="checkNote('sharp', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="boiling">boiling</option>
+                            <option value="random">random</option>
+                            <option value="freezing">freezing</option>
+                            <option value="sharp">sharp</option>
+                        </select>
+                        temperature. Pure metals are soft because their neat atomic rows slide easily. Because they are
+                        pure elements, they cannot be separated by physical techniques like distillation or
+                        <select class="note-select" onchange="checkNote('chromatography', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="transfiguration">transfiguration</option>
+                            <option value="chromatography">chromatography</option>
+                            <option value="teleportation">teleportation</option>
+                            <option value="combustion">combustion</option>
+                        </select>.
+                    </p>
+                    <p class="mb-2"><strong>Alloys:</strong> Mixing a metal with other elements creates an
+                        <select class="note-select" onchange="checkNote('alloy', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="element">element</option>
+                            <option value="alloy">alloy</option>
+                            <option value="isotope">isotope</option>
+                            <option value="acid">acid</option>
+                        </select>.
+                        Different-sized atoms disrupt the neat rows, preventing them from sliding. This makes them much
+                        <select class="note-select" onchange="checkNote('harder', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="softer">softer</option>
+                            <option value="harder">harder</option>
+                            <option value="lighter">lighter</option>
+                            <option value="transparent">transparent</option>
+                        </select>
+                        and causes them to melt over a wider range of temperatures. For example, stainless steel resists
+                        rust, bronze is an ancient favorite, and any alloy containing
+                        <select class="note-select" onchange="checkNote('Mercury', this)">
+                            <option value="">[ Select Metal ]</option>
+                            <option value="Iron">Iron</option>
+                            <option value="Mercury">Mercury</option>
+                            <option value="Silver">Silver</option>
+                            <option value="Copper">Copper</option>
+                        </select>
+                        is uniquely called an amalgam.
+                    </p>
+
+                    <!-- INTERACTIVE 5.2: TENSILE TEST -->
+                    <div class="bg-[#1a1512] p-6 rounded border-4 border-yellow-700 my-6 text-white shadow-lg">
+                        <h4 class="magic-font text-2xl title-shadow text-center mb-2">⚒️ Interactive Transfiguration
+                            Forge</h4>
+                        <p class="text-center text-gray-300 text-sm mb-4">Click anywhere on the metal lattice to strike
+                            it with the hammer! Observe how pure metals deform gracefully, while alloys resist until
+                            they snap.</p>
+
+                        <div class="flex justify-center flex-wrap gap-3 mb-6">
+                            <button onclick="setAlloyLayer(1)" class="btn-action bg-yellow-500 text-black">1. Pure 24k
+                                Gold (Soft)</button>
+                            <button onclick="setAlloyLayer(2)" class="btn-action bg-gray-500 text-white">2. Low-Carbon
+                                Steel (Alloy)</button>
+                            <button onclick="setAlloyLayer(3)" class="btn-action bg-red-900 text-white">3. High-Carbon
+                                Steel (Hard Alloy)</button>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row items-center gap-6 justify-center">
+
+                            <!-- Interactive Lattice Area -->
+                            <div id="lattice-container" onclick="strikeMetal(event)"
+                                class="relative w-80 h-48 bg-gray-900 border-b-8 border-gray-600 cursor-crosshair rounded-t-lg shadow-inner overflow-hidden">
+                                <!-- Hammer Sprite -->
+                                <div id="magic-hammer"
+                                    class="absolute text-5xl z-20 opacity-0 pointer-events-none transform -translate-x-1/2 -translate-y-full"
+                                    style="left: 50%; top: 0;">🔨</div>
+
+                                <!-- Atoms injected via JS -->
+                                <div id="lattice-atoms" class="absolute inset-0"></div>
+                            </div>
+
+                            <!-- Readout Panel -->
+                            <div class="w-full md:w-64 digital-readout text-sm flex flex-col justify-center">
+                                <div class="border-b border-green-800 pb-2 mb-2 font-bold text-center">STRESS ANALYSIS
+                                </div>
+                                <div class="flex justify-between"><span>Strikes:</span> <span id="forge-strikes"
+                                        class="text-white">0</span></div>
+                                <div class="flex justify-between"><span>Local Stress:</span> <span id="forge-stress"
+                                        class="text-red-400">0%</span></div>
+                                <div class="flex justify-between"><span>Deformation:</span> <span id="forge-deform"
+                                        class="text-yellow-400">0 mm</span></div>
+
+                                <div id="alloy-result"
+                                    class="mt-4 text-center text-xs font-bold h-8 text-green-400 border-t border-green-800 pt-2">
+                                    Ready to forge. Click the metal!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson 3 -->
+            <div class="mb-12 border-b-2 border-gray-400 pb-8">
+                <h3 class="text-2xl font-bold spellbook-header p-3 rounded mb-4">5.3 Divination of the Skies (Weather
+                    vs. Climate)</h3>
+                <div class="px-2">
+                    <ul class="list-disc ml-8 mb-4 space-y-2">
+                        <li><strong>Weather:</strong> The short-term condition of the atmosphere (e.g., today's
+                            temperature,
+                            <select class="note-select" onchange="checkNote('precipitation', this)">
+                                <option value="">[ Select Term ]</option>
+                                <option value="gravity">gravity</option>
+                                <option value="tectonic shift">tectonic shift</option>
+                                <option value="magnetism">magnetism</option>
+                                <option value="precipitation">precipitation</option>
+                            </select>,
+                            and humidity). It changes rapidly, and extreme anomalies like hurricanes happen within it.
+                            Scientists who study daily forecasts are called
+                            <select class="note-select" onchange="checkNote('meteorologists', this)">
+                                <option value="">[ Select Term ]</option>
+                                <option value="meteorologists">meteorologists</option>
+                                <option value="astrologers">astrologers</option>
+                                <option value="climatologists">climatologists</option>
+                                <option value="geologists">geologists</option>
+                            </select>.
+                        </li>
+                        <li><strong>Climate:</strong> The long-term average of weather patterns in an area,
+                            scientifically measured over a period of
+                            <select class="note-select" onchange="checkNote('30 years or more', this)">
+                                <option value="">[ Select Timeframe ]</option>
+                                <option value="24 hours">24 hours</option>
+                                <option value="1 week">1 week</option>
+                                <option value="30 years or more">30 years or more</option>
+                                <option value="1000 years">1000 years</option>
+                            </select>. Climate is heavily influenced by a region's
+                            <select class="note-select" onchange="checkNote('latitude', this)">
+                                <option value="">[ Select Term ]</option>
+                                <option value="longitude">longitude</option>
+                                <option value="latitude">latitude</option>
+                                <option value="hemisphere">hemisphere</option>
+                                <option value="timezone">timezone</option>
+                            </select>
+                            (distance from the equator) and altitude. Massive
+                            <select class="note-select" onchange="checkNote('ocean currents', this)">
+                                <option value="">[ Select Force ]</option>
+                                <option value="tectonic plates">tectonic plates</option>
+                                <option value="ocean currents">ocean currents</option>
+                                <option value="solar flares">solar flares</option>
+                                <option value="shooting stars">shooting stars</option>
+                            </select>
+                            also move heat globally. Small isolated areas (like a damp forest) can form their own unique
+                            microclimate.
+                        </li>
+                    </ul>
+
+                    <!-- INTERACTIVE 5.3: DATA GENERATION -->
+                    <div class="bg-blue-950 p-6 rounded border-4 border-yellow-700 my-6 text-white shadow-lg">
+                        <h4 class="magic-font text-2xl title-shadow text-center mb-2">🔮 Meteorological Data Gatherer
+                        </h4>
+                        <p class="text-center text-gray-300 text-sm mb-4">Trigger the sensors to gather realistic data
+                            sets. Observe the noise in short-term weather vs. the stable trend in long-term climate.</p>
+
+                        <div class="flex justify-center flex-wrap gap-4 mb-6">
+                            <button onclick="generateWeatherData()" class="btn-action bg-cyan-600">Gather 7-Day Weather
+                                Forecast</button>
+                            <button onclick="generateClimateData()" class="btn-action bg-purple-700">Gather 30-Year
+                                Climate Average</button>
+                        </div>
+
+                        <div class="flex flex-col md:flex-row gap-4 items-stretch">
+                            <!-- Visual Animation Window -->
+                            <div id="sky-view"
+                                class="w-full md:w-1/3 h-48 bg-gray-800 rounded border-2 border-gray-500 relative overflow-hidden flex items-center justify-center text-center p-4 transition-all duration-1000">
+                                <p class="text-gray-400 italic font-bold z-20 relative">Select a tool to begin
+                                    measurement...</p>
+                            </div>
+
+                            <!-- Digital Readout Table -->
+                            <div
+                                class="w-full md:w-2/3 bg-white text-black p-4 rounded overflow-x-auto min-h-[150px] shadow-inner text-sm font-mono flex flex-col justify-center">
+                                <div id="sky-data-table" class="w-full text-center">
+                                    <p class="text-gray-500 italic mt-8">Awaiting sensor activation...</p>
+                                </div>
+                                <div id="sky-conclusion" class="mt-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson 4 -->
+            <div class="mb-12 border-b-2 border-gray-400 pb-8">
+                <h3 class="text-2xl font-bold spellbook-header p-3 rounded mb-4">5.4 Time-Turners (Climate and Ice Ages)
+                </h3>
+                <div class="px-2">
+                    <p class="mb-3">Earth's climate naturally cycles between
+                        <select class="note-select" onchange="checkNote('Glacial Periods', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="Solar Flares">Solar Flares</option>
+                            <option value="Glacial Periods">Glacial Periods</option>
+                            <option value="Magnetic Shifts">Magnetic Shifts</option>
+                            <option value="Lunar Eclipses">Lunar Eclipses</option>
+                        </select>
+                        (Ice Ages) and Interglacial Periods. During Ice Ages, so much water freezes into glaciers that
+                        global
+                        <select class="note-select" onchange="checkNote('sea levels', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="mountain peaks">mountain peaks</option>
+                            <option value="sea levels">sea levels</option>
+                            <option value="forest densities">forest densities</option>
+                            <option value="cloud covers">cloud covers</option>
+                        </select>
+                        drop dramatically, and megafauna like woolly mammoths thrive. These cycles are triggered by
+                        natural wobbles in the Earth's
+                        <select class="note-select" onchange="checkNote('orbit', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="core temperature">core temperature</option>
+                            <option value="orbit">orbit</option>
+                            <option value="magnetic field">magnetic field</option>
+                            <option value="crust">crust</option>
+                        </select>.
+                    </p>
+                    <p class="mb-2"><strong>The Evidence:</strong> Scientists study past climates using <strong>Ice
+                            Cores</strong> and <strong>Peat Bogs</strong> (acidic soil that preserves ancient plant
+                        <select class="note-select" onchange="checkNote('pollen', this)">
+                            <option value="">[ Select Material ]</option>
+                            <option value="dinosaur bones">dinosaur bones</option>
+                            <option value="meteorites">meteorites</option>
+                            <option value="pollen">pollen</option>
+                            <option value="liquid water">liquid water</option>
+                        </select>). Additionally, counting
+                        <select class="note-select" onchange="checkNote('tree rings', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="river stones">river stones</option>
+                            <option value="bird feathers">bird feathers</option>
+                            <option value="tree rings">tree rings</option>
+                            <option value="spider webs">spider webs</option>
+                        </select>
+                        reveals how warm and wet specific ancient years were, and finding tropical fossils in Antarctica
+                        proves massive historical climate shifts.
+                    </p>
+
+                    <!-- INTERACTIVE 5.4: ICE DRILLING GAME -->
+                    <div class="bg-[#1a1512] p-6 rounded border-4 border-yellow-700 my-6 text-white shadow-lg">
+                        <h4 class="magic-font text-2xl title-shadow text-center mb-2">🧊 The Deep-Earth Auger Game</h4>
+                        <p class="text-center text-gray-300 text-sm mb-6">Drill down through the Earth's layers! Uncover
+                            ancient secrets to generate a realistic paleoclimatology lab report.</p>
+
+                        <div class="flex flex-col md:flex-row gap-8 items-center md:items-stretch">
+                            <!-- Core Drill Mini Game -->
+                            <div class="w-full md:w-1/3 flex flex-col items-center justify-center relative">
+
+                                <div id="core-container"
+                                    class="w-24 h-64 border-4 border-gray-400 rounded-lg overflow-hidden flex flex-col relative shadow-[0_0_15px_rgba(59,130,246,0.5)]">
+                                    <!-- Drill Bit -->
+                                    <div id="magic-drill"
+                                        class="absolute text-4xl z-30 transition-all duration-1000 transform -translate-x-1/2"
+                                        style="top: -45px; left: 50%;">⛏️</div>
+
+                                    <!-- Layers & Hidden Items -->
+                                    <div id="layer-modern"
+                                        class="h-1/3 bg-blue-200 border-b-2 border-white flex flex-col items-center justify-end pb-2 relative">
+                                        <span
+                                            class="text-blue-900 font-bold text-[10px] absolute top-1 text-center leading-tight">Modern
+                                            Ice<br>(Surface)</span>
+                                        <div id="item-1" class="text-3xl transform scale-0 drop-shadow-md">🥤</div>
+                                    </div>
+                                    <div id="layer-bog"
+                                        class="h-1/3 bg-amber-900 border-b-2 border-white flex flex-col items-center justify-end pb-2 relative">
+                                        <span
+                                            class="text-white font-bold text-[10px] absolute top-1 text-center leading-tight">Peat
+                                            Bog<br>(Interglacial)</span>
+                                        <div id="item-2" class="text-3xl transform scale-0 drop-shadow-md">🌿</div>
+                                    </div>
+                                    <div id="layer-deep"
+                                        class="h-1/3 bg-blue-800 flex flex-col items-center justify-end pb-2 relative">
+                                        <span
+                                            class="text-blue-100 font-bold text-[10px] absolute top-1 text-center leading-tight">Ancient
+                                            Ice<br>(Ice Age)</span>
+                                        <div id="item-3" class="text-3xl transform scale-0 drop-shadow-md">🦣</div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4 flex gap-2 w-full max-w-[12rem]">
+                                    <button id="btn-drill" onclick="drillDeeper()"
+                                        class="btn-magic px-2 py-3 w-full font-bold text-xs uppercase shadow-[0_0_10px_#eab308]">Drill
+                                        Down!</button>
+                                    <button id="btn-reset-drill" onclick="resetDrill()"
+                                        class="btn-action bg-gray-600 text-white px-2 py-3 w-full text-xs uppercase hidden">🔄
+                                        Reset</button>
+                                </div>
+                            </div>
+
+                            <!-- Official Lab Report Ticket -->
+                            <div class="w-full md:w-2/3 parchment p-4 shadow-inner text-sm leading-relaxed flex flex-col"
+                                style="min-height: 200px;">
+                                <div class="border-b-2 border-black pb-2 mb-2 flex justify-between font-bold">
+                                    <span>MINISTRY OF MAGIC LAB REPORT</span>
+                                    <span>Dept. of Paleoclimatology</span>
+                                </div>
+                                <div id="lab-report-content" class="flex-grow flex flex-col justify-center">
+                                    <p class="italic text-gray-600 text-center font-bold text-lg">Awaiting sample
+                                        extraction...<br><span class="text-sm">Click "Drill Down" to start the
+                                            excavation.</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lesson 5 -->
+            <div class="mb-4">
+                <h3 class="text-2xl font-bold spellbook-header p-3 rounded mb-4">5.5 The Greenhouse Charm (Atmosphere &
+                    Climate)</h3>
+                <div class="px-2">
+                    <ul class="list-disc ml-8 mb-4 space-y-2">
+                        <li><strong>Ancient Earth:</strong> Volcanoes released high CO₂ and water vapor. <strong>No
+                                oxygen.</strong></li>
+                        <li><strong>Rise of Oxygen:</strong> Plants evolved and used
+                            <select class="note-select" onchange="checkNote('photosynthesis', this)">
+                                <option value="">[ Select Process ]</option>
+                                <option value="respiration">respiration</option>
+                                <option value="combustion">combustion</option>
+                                <option value="evaporation">evaporation</option>
+                                <option value="photosynthesis">photosynthesis</option>
+                            </select>, removing CO₂ and adding O₂. Chopping down forests (deforestation) removes this
+                            natural carbon sink.
+                        </li>
+                        <li><strong>Modern Era:</strong> Burning fossil fuels violently releases millions of years of
+                            locked CO₂. Because CO₂ is a
+                            <select class="note-select" onchange="checkNote('greenhouse gas', this)">
+                                <option value="">[ Select Gas Type ]</option>
+                                <option value="noble gas">noble gas</option>
+                                <option value="greenhouse gas">greenhouse gas</option>
+                                <option value="cooling liquid">cooling liquid</option>
+                                <option value="magnetic field">magnetic field</option>
+                            </select>, it traps heat. A natural greenhouse effect shields Earth from freezing, but human
+                            activity causes a dangerous <em>enhanced</em> effect.
+                        </li>
+                    </ul>
+                    <p class="mb-2 italic text-gray-800 font-medium">Other powerful greenhouse gases include water vapor
+                        and
+                        <select class="note-select" onchange="checkNote('Methane', this)">
+                            <option value="">[ Select Gas ]</option>
+                            <option value="Argon">Argon</option>
+                            <option value="Methane">Methane</option>
+                            <option value="Helium">Helium</option>
+                            <option value="Neon">Neon</option>
+                        </select>
+                        (from livestock). Excess CO₂ also dissolves into the sea, causing ocean
+                        <select class="note-select" onchange="checkNote('acidification', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="acidification">acidification</option>
+                            <option value="evaporation">evaporation</option>
+                            <option value="condensation">condensation</option>
+                            <option value="salinization">salinization</option>
+                        </select>, which harms coral reefs. Shifting to
+                        <select class="note-select" onchange="checkNote('renewable', this)">
+                            <option value="">[ Select Term ]</option>
+                            <option value="exhaustible">exhaustible</option>
+                            <option value="fossil">fossil</option>
+                            <option value="renewable">renewable</option>
+                            <option value="radioactive">radioactive</option>
+                        </select>
+                        energies (like wind and solar) is the primary solution.
+                    </p>
+
+                    <!-- INTERACTIVE 5.5: REAL TIME CLIMATE SIMULATOR -->
+                    <div class="bg-gray-900 p-6 rounded border-4 border-yellow-700 my-6 text-white relative shadow-lg">
+                        <h4 class="magic-font text-2xl title-shadow text-center mb-2">🌍 100-Year Global Climate
+                            Simulator</h4>
+                        <p class="text-center text-gray-300 text-sm mb-4">Set your worldwide production rates, then
+                            advance time to see the severe consequences on Earth's systems.</p>
+
+                        <!-- Controls -->
+                        <div class="flex justify-center flex-wrap gap-4 mb-4 bg-black p-3 rounded">
+                            <div class="flex items-center gap-2">
+                                <span class="text-2xl">🏭</span>
+                                <div>
+                                    <div class="text-xs text-gray-400">Fossil Fuel Factories</div>
+                                    <div class="flex gap-1">
+                                        <button onclick="changeSimRate('factory', -1)"
+                                            class="bg-red-800 px-2 rounded">-</button>
+                                        <span id="rate-factory" class="w-6 text-center font-bold">1</span>
+                                        <button onclick="changeSimRate('factory', 1)"
+                                            class="bg-green-700 px-2 rounded">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 border-l border-gray-600 pl-4">
+                                <span class="text-2xl">🌳</span>
+                                <div>
+                                    <div class="text-xs text-gray-400">Forest / Renewables</div>
+                                    <div class="flex gap-1">
+                                        <button onclick="changeSimRate('forest', -1)"
+                                            class="bg-red-800 px-2 rounded">-</button>
+                                        <span id="rate-forest" class="w-6 text-center font-bold">1</span>
+                                        <button onclick="changeSimRate('forest', 1)"
+                                            class="bg-green-700 px-2 rounded">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="advanceTime()"
+                                class="btn-magic px-6 ml-4 font-bold rounded uppercase">Advance 10 Years ⏳</button>
+                        </div>
+
+                        <!-- Atmosphere & Thermometer Visuals -->
+                        <div class="flex items-end justify-center gap-8 h-48 mb-6">
+                            <!-- Atmosphere Visualization -->
+                            <div id="atmo-box"
+                                class="w-64 h-full border-4 border-gray-500 bg-black relative overflow-hidden rounded-lg shadow-inner">
+                                <div class="absolute inset-0 flex items-center justify-center opacity-30 text-5xl z-0">
+                                    🌍</div>
+                                <!-- Particles spawn here -->
+                            </div>
+
+                            <!-- Thermometer Gauge -->
+                            <div
+                                class="w-12 h-full bg-gray-300 rounded-full border-4 border-gray-600 relative overflow-hidden flex items-end">
+                                <div id="thermometer-fluid" class="w-full bg-red-500 transition-all duration-500"
+                                    style="height: 30%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Readouts -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                            <div class="bg-[#1a1a1a] border-2 border-gray-700 p-2 rounded">
+                                <div class="text-xs text-gray-400">Current Year</div>
+                                <div id="sim-year" class="text-xl font-bold text-white">2024</div>
+                            </div>
+                            <div class="bg-[#1a1a1a] border-2 border-gray-700 p-2 rounded">
+                                <div class="text-xs text-gray-400">Atmospheric CO₂</div>
+                                <div class="text-xl font-bold text-yellow-400"><span id="sim-co2">420</span> ppm</div>
+                            </div>
+                            <div class="bg-[#1a1a1a] border-2 border-gray-700 p-2 rounded">
+                                <div class="text-xs text-gray-400">Global Avg Temp</div>
+                                <div class="text-xl font-bold text-red-400"><span id="sim-temp">15.0</span> °C</div>
+                            </div>
+                            <div class="bg-[#1a1a1a] border-2 border-gray-700 p-2 rounded">
+                                <div class="text-xs text-gray-400">Sea Level Change</div>
+                                <div class="text-xl font-bold text-blue-400"><span id="sim-sea">0.0</span> m</div>
+                            </div>
+                        </div>
+
+                        <div id="sim-warning" class="mt-4 text-center font-bold text-green-400 h-6">Ecosystem is stable.
+                            Proceed carefully.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div id="section-quiz" class="hidden">
+            <div class="parchment p-6 md:p-10">
+                <h2 class="text-3xl font-bold text-center mb-2 border-b-4 border-red-900 pb-2 parchment-title">O.W.L.
+                    Examinations</h2>
+                <p class="text-center italic text-gray-800 font-bold mb-8">Anti-cheating charms have been applied. You
+                    have exactly 2 attempts per question before the Ministry reveals the answer.</p>
+
+                <div class="flex flex-wrap justify-center mb-6 gap-3">
+                    <button onclick="renderQuiz('A')"
+                        class="px-5 py-2 bg-red-900 text-white rounded font-bold hover:bg-red-800 shadow-md">Section A:
+                        Core Concepts</button>
+                    <button onclick="renderQuiz('B')"
+                        class="px-5 py-2 bg-blue-900 text-white rounded font-bold hover:bg-blue-800 shadow-md">Section
+                        B: Working Scientifically</button>
+                    <button onclick="renderQuiz('C')"
+                        class="px-5 py-2 bg-yellow-700 text-white rounded font-bold hover:bg-yellow-600 shadow-md">Section
+                        C: Science in Context</button>
+                </div>
+
+                <div id="quiz-container" class="space-y-8"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // TAB LOGIC
+        // ==========================================
+        function switchTab(tabId) {
+            document.getElementById('section-notes').classList.add('hidden');
+            document.getElementById('section-quiz').classList.add('hidden');
+            document.getElementById('tab-notes').classList.remove('tab-active');
+            document.getElementById('tab-notes').classList.add('tab-inactive');
+            document.getElementById('tab-quiz').classList.remove('tab-active');
+            document.getElementById('tab-quiz').classList.add('tab-inactive');
+
+            if (tabId === 'notes') {
+                document.getElementById('section-notes').classList.remove('hidden');
+                document.getElementById('tab-notes').classList.add('tab-active');
+                document.getElementById('tab-notes').classList.remove('tab-inactive');
+            } else {
+                document.getElementById('section-quiz').classList.remove('hidden');
+                document.getElementById('tab-quiz').classList.add('tab-active');
+                document.getElementById('tab-quiz').classList.remove('tab-inactive');
+                if (!currentSection) renderQuiz('A');
+            }
+        }
+
+        // ==========================================
+        // NOTES DROPDOWN LOGIC
+        // ==========================================
+        function checkNote(correctVal, selectEl) {
+            if (selectEl.value === correctVal) {
+                selectEl.className = "note-select-correct";
+                selectEl.disabled = true;
+            } else if (selectEl.value !== "") {
+                selectEl.className = "note-select-wrong";
+                setTimeout(() => {
+                    if (!selectEl.disabled) {
+                        selectEl.className = "note-select";
+                        selectEl.value = "";
+                    }
+                }, 800);
+            }
+        }
+
+        // ==========================================
+        // 5.1 ATOM LOGIC (Statistical Rutherford)
+        // ==========================================
+        let currentAtomModel = 1;
+        let atomStats = { fired: 0, passed: 0, deflected: 0 };
+
+        function setAtomLayer(modelNum) {
+            currentAtomModel = modelNum;
+            const stage = document.getElementById('atom-stage');
+
+            atomStats = { fired: 0, passed: 0, deflected: 0 };
+            updateAtomDom();
+
+            if (modelNum === 1) {
+                stage.innerHTML = `<div class="w-32 h-32 bg-pink-400 rounded-full flex flex-wrap items-center justify-center p-2 relative"><span class="absolute text-pink-900 font-bold opacity-60 text-center text-xs">+ Positive<br>Cloud</span></div>`;
+                document.getElementById('atom-conclusion').innerText = "Thomson selected. Ready to fire.";
+            } else if (modelNum === 2) {
+                stage.innerHTML = `<div class="relative w-full h-full flex justify-center items-center"><div class="w-4 h-4 bg-red-500 rounded-full z-10 text-white text-[8px] flex items-center justify-center font-bold shadow-[0_0_15px_#f00]">+</div><div class="absolute w-32 h-32 border border-gray-500 rounded-full border-dashed"></div></div>`;
+                document.getElementById('atom-conclusion').innerText = "Rutherford selected. Ready to fire.";
+            } else {
+                stage.innerHTML = `<div class="relative w-full h-full flex justify-center items-center">
+                <div class="w-4 h-4 bg-red-600 rounded-full z-10 text-white font-bold text-[6px] flex items-center justify-center text-center shadow-[0_0_15px_#f00] leading-none">P+<br>N0</div>
+                <div class="absolute w-16 h-16 border border-blue-800 rounded-full flex items-center justify-center"><div class="w-2 h-2 bg-cyan-400 rounded-full absolute -top-1 electron-orbit shadow-[0_0_5px_#0ff]"></div></div>
+                <div class="absolute w-28 h-28 border border-blue-800 rounded-full flex items-center justify-center"><div class="w-2 h-2 bg-cyan-400 rounded-full absolute -left-1 electron-orbit-2 shadow-[0_0_5px_#0ff]"></div></div>
+            </div>`;
+                document.getElementById('atom-conclusion').innerText = "Modern Model selected. Ready to fire.";
+            }
+        }
+
+        function fireAlphaLaser() {
+            let fired = 10000;
+            let deflected = 0;
+            const setup = document.getElementById('experiment-setup');
+
+            if (currentAtomModel === 1) {
+                deflected = 0;
+                document.getElementById('atom-conclusion').innerHTML = "<span class='text-pink-400'>Conclusion: 100% of particles passed straight through the soft positive cloud to the back screen. The atom has no dense center!</span>";
+            } else {
+                for (let i = 0; i < fired; i++) {
+                    if (Math.random() < (1 / 8000)) deflected++;
+                }
+                if (deflected === 0) deflected = 1;
+
+                if (currentAtomModel === 2) {
+                    document.getElementById('atom-conclusion').innerHTML = `<span class='text-red-400'>Conclusion: Massive empty space! But a tiny fraction (${deflected} particles) hit a dense positive nucleus and bounced back to the sides!</span>`;
+                } else {
+                    document.getElementById('atom-conclusion').innerHTML = `<span class='text-green-400'>Conclusion: Same scattering as Rutherford! Electrons are too light to stop Alpha particles. Only the tiny central nucleus causes deflections.</span>`;
+                }
+            }
+
+            for (let i = 0; i < 30; i++) {
+                let p = document.createElement('div');
+                p.className = 'alpha-particle';
+                p.style.left = '48px';
+                p.style.top = '50%';
+
+                let isVisualDeflect = (currentAtomModel >= 2 && i % 8 === 0);
+
+                if (!isVisualDeflect) {
+                    let endY = 30 + Math.random() * 40;
+                    p.style.setProperty('--endY', endY + '%');
+                    p.style.animation = `alphaStraight ${0.3 + Math.random() * 0.2}s linear forwards`;
+
+                    setTimeout(() => {
+                        createFlash(setup, 'calc(100% - 16px)', endY + '%');
+                    }, 500);
+
+                } else {
+                    let endX = 10 + Math.random() * 30;
+                    let endY = Math.random() > 0.5 ? (5 + Math.random() * 10) : (85 + Math.random() * 10);
+                    p.style.setProperty('--endX', endX + '%');
+                    p.style.setProperty('--endY', endY + '%');
+                    p.style.animation = `alphaBounce ${0.4 + Math.random() * 0.2}s linear forwards`;
+
+                    setTimeout(() => {
+                        createFlash(setup, endX + '%', endY + '%');
+                    }, 600);
+                }
+
+                setup.appendChild(p);
+                setTimeout(() => { if (p.parentNode) p.remove(); }, 1000);
+            }
+
+            let startFired = atomStats.fired;
+            let endFired = startFired + fired;
+            let startDeflected = atomStats.deflected;
+            let endDeflected = startDeflected + deflected;
+
+            let ticks = 0;
+            let interval = setInterval(() => {
+                ticks++;
+                atomStats.fired += 500;
+                if (currentAtomModel >= 2 && ticks % Math.ceil(20 / deflected) === 0) atomStats.deflected++;
+                atomStats.passed = atomStats.fired - atomStats.deflected;
+
+                if (atomStats.fired >= endFired) {
+                    atomStats.fired = endFired;
+                    atomStats.deflected = endDeflected;
+                    atomStats.passed = endFired - endDeflected;
+                    clearInterval(interval);
+                }
+                updateAtomDom();
+            }, 30);
+        }
+
+        function createFlash(container, left, top) {
+            let flash = document.createElement('div');
+            flash.className = 'flash-spot';
+            flash.style.left = left;
+            flash.style.top = top;
+            container.appendChild(flash);
+            setTimeout(() => { if (flash.parentNode) flash.remove(); }, 500);
+        }
+
+        function updateAtomDom() {
+            document.getElementById('stat-fired').innerText = atomStats.fired.toLocaleString();
+            document.getElementById('stat-passed').innerText = atomStats.passed.toLocaleString();
+            document.getElementById('stat-deflected').innerText = atomStats.deflected.toLocaleString();
+        }
+
+        // ==========================================
+        // 5.2 ALLOY LOGIC (Interactive 2D Forge)
+        // ==========================================
+        let currentAlloyState = 1;
+        let forgeStats = { strikes: 0, stress: 0, deform: 0 };
+        let isBroken = false;
+        let latticeGrid = [];
+        const cols = 7;
+        const rows = 3;
+        const atomSize = 36;
+        const startX = 15;
+        const startY = 40;
+
+        function setAlloyLayer(state) {
+            currentAlloyState = state;
+            forgeStats = { strikes: 0, stress: 0, deform: 0 };
+            isBroken = false;
+
+            latticeGrid = [];
+            for (let r = 0; r < rows; r++) {
+                let rowArr = [];
+                for (let c = 0; c < cols; c++) {
+                    let type = 'pure';
+                    let size = atomSize;
+                    let color = 'bg-yellow-400';
+                    let label = '';
+
+                    if (state === 2 && (r === 1 && c === 3 || r === 2 && c === 5)) {
+                        type = 'impurity'; size = atomSize + 6; color = 'bg-orange-600'; label = 'C';
+                    } else if (state === 3 && (r === 1 && c === 2 || r === 1 && c === 5 || r === 2 && c === 3 || r === 0 && c === 6)) {
+                        type = 'impurity'; size = atomSize + 10; color = 'bg-gray-800'; label = 'C';
+                    } else if (state > 1) {
+                        color = 'bg-gray-400';
+                    }
+
+                    rowArr.push({
+                        c: c, r: r,
+                        x: startX + c * (atomSize + 4),
+                        y: startY + r * (atomSize + 4),
+                        type: type, size: size, color: color, label: label,
+                        dx: 0, dy: 0
+                    });
+                }
+                latticeGrid.push(rowArr);
+            }
+
+            updateLatticeDOM();
+            updateForgeUI("Ready to forge. Click the metal!");
+        }
+
+        function updateLatticeDOM() {
+            const container = document.getElementById('lattice-atoms');
+            container.innerHTML = '';
+
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    let atom = latticeGrid[r][c];
+                    let div = document.createElement('div');
+                    div.className = `atom-node rounded-full flex items-center justify-center text-white font-bold text-[10px] shadow-[inset_-2px_-2px_6px_rgba(0,0,0,0.4)] ${atom.color}`;
+                    div.style.width = atom.size + 'px';
+                    div.style.height = atom.size + 'px';
+
+                    let offset = (atom.size - atomSize) / 2;
+                    div.style.left = (atom.x + atom.dx - offset) + 'px';
+                    div.style.top = (atom.y + atom.dy - offset) + 'px';
+                    div.innerHTML = atom.label;
+
+                    container.appendChild(div);
+                }
+            }
+        }
+
+        function strikeMetal(event) {
+            if (isBroken) return;
+
+            const container = document.getElementById('lattice-container');
+            const rect = container.getBoundingClientRect();
+
+            let clickX = event.clientX - rect.left;
+            if (clickX < 0) clickX = 0;
+            if (clickX > rect.width) clickX = rect.width;
+
+            const hammer = document.getElementById('magic-hammer');
+            hammer.style.left = clickX + 'px';
+            hammer.classList.remove('hammer-strike');
+            void hammer.offsetWidth;
+            hammer.classList.add('hammer-strike');
+
+            playMagicSound('hammer');
+
+            forgeStats.strikes++;
+
+            let hitCol = Math.floor((clickX - startX) / (atomSize + 4));
+            if (hitCol < 0) hitCol = 0;
+            if (hitCol >= cols) hitCol = cols - 1;
+
+            if (currentAlloyState === 1) {
+                forgeStats.deform += 2.5;
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        let dist = Math.abs(c - hitCol);
+                        if (dist === 0) {
+                            latticeGrid[r][c].dy += 8;
+                        } else if (dist === 1) {
+                            latticeGrid[r][c].dx += (c > hitCol ? 5 : -5);
+                            latticeGrid[r][c].dy += 4;
+                        } else if (dist === 2) {
+                            latticeGrid[r][c].dx += (c > hitCol ? 2 : -2);
+                        }
+                    }
+                }
+                updateForgeUI("<span class='text-yellow-400'>Pure metal is malleable. Slip planes slide smoothly.</span>");
+
+            } else {
+                let stressIncrement = (currentAlloyState === 2) ? 20 : 35;
+                forgeStats.stress += stressIncrement;
+
+                container.classList.remove('layer-stuck');
+                void container.offsetWidth;
+                container.classList.add('layer-stuck');
+
+                if (forgeStats.stress >= 100) {
+                    forgeStats.stress = 100;
+                    isBroken = true;
+
+                    for (let r = 0; r < rows; r++) {
+                        for (let c = 0; c < cols; c++) {
+                            if (c > hitCol) {
+                                latticeGrid[r][c].dx += 15;
+                                latticeGrid[r][c].dy += 10;
+                            } else {
+                                latticeGrid[r][c].dx -= 5;
+                            }
+                        }
+                    }
+
+                    let crack = document.createElement('div');
+                    crack.className = 'fracture-line';
+                    crack.style.left = (startX + hitCol * (atomSize + 4) + atomSize + 2) + 'px';
+                    crack.style.top = '20px';
+                    document.getElementById('lattice-atoms').appendChild(crack);
+                    playMagicSound('shake');
+
+                    updateForgeUI("<span class='text-red-500 font-bold'>FRACTURE! Impurities blocked the slip planes until the stress broke the bonds.</span>");
+                } else {
+                    updateForgeUI(`<span class='text-orange-400'>Impurities are pinning the dislocations. Stress building...</span>`);
+                }
+            }
+
+            updateLatticeDOM();
+        }
+
+        function updateForgeUI(msg) {
+            document.getElementById('forge-strikes').innerText = forgeStats.strikes;
+            document.getElementById('forge-stress').innerText = forgeStats.stress + "%";
+            document.getElementById('forge-deform').innerText = forgeStats.deform.toFixed(1) + " mm";
+            if (msg) document.getElementById('alloy-result').innerHTML = msg;
+        }
+
+        // ==========================================
+        // 5.3 WEATHER/CLIMATE LOGIC (Data Table & Scrambling)
+        // ==========================================
+        let scrambleInterval;
+
+        function generateWeatherData() {
+            clearInterval(scrambleInterval);
+
+            const view = document.getElementById('sky-view');
+            view.className = "w-full md:w-1/3 h-48 bg-gray-800 rounded border-2 border-gray-500 relative overflow-hidden flex items-center justify-center text-center p-4 transition-all duration-300";
+            view.innerHTML = "";
+
+            let lightning = document.createElement('div');
+            lightning.className = "absolute inset-0 lightning-effect";
+            view.appendChild(lightning);
+
+            for (let i = 0; i < 30; i++) {
+                let d = document.createElement('div');
+                d.className = 'weather-drop';
+                d.style.left = Math.random() * 100 + '%';
+                d.style.animationDelay = Math.random() + 's';
+                view.appendChild(d);
+            }
+
+            playMagicSound('thunder');
+
+            let finalData = [];
+            let html = `<table class="w-full text-center border-collapse">
+            <tr class="bg-gray-200 font-bold border-b border-gray-400">
+                <td class="p-2 border-r border-gray-300">Day</td><td class="p-2 border-r border-gray-300">Temp</td><td class="p-2">Precipitation</td>
+            </tr>`;
+
+            for (let i = 1; i <= 7; i++) {
+                let temp = Math.floor(Math.random() * 15) + 10;
+                let rain = Math.floor(Math.random() * 20);
+                finalData.push({ id: `w-temp-${i}`, val: temp });
+                finalData.push({ id: `w-rain-${i}`, val: rain });
+
+                html += `<tr class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="p-1 border-r border-gray-300">Day ${i}</td>
+                <td class="p-1 border-r border-gray-300 text-red-600 font-bold"><span id="w-temp-${i}" class="rolling-data">00</span>°C</td>
+                <td class="p-1 text-blue-600 font-bold"><span id="w-rain-${i}" class="rolling-data">00</span> mm</td>
+            </tr>`;
+            }
+            html += `</table>`;
+            document.getElementById('sky-data-table').innerHTML = html;
+            document.getElementById('sky-conclusion').innerHTML = "";
+
+            let ticks = 0;
+            scrambleInterval = setInterval(() => {
+                finalData.forEach(item => {
+                    document.getElementById(item.id).innerText = Math.floor(Math.random() * 99);
+                });
+                ticks++;
+
+                if (ticks > 30) {
+                    clearInterval(scrambleInterval);
+                    finalData.forEach(item => {
+                        document.getElementById(item.id).innerText = item.val;
+                    });
+                    document.getElementById('sky-conclusion').innerHTML = `<p class="text-xs text-center font-bold text-red-700">Conclusion: Weather is highly chaotic and changes wildly day by day.</p>`;
+                }
+            }, 50);
+        }
+
+        function generateClimateData() {
+            clearInterval(scrambleInterval);
+
+            const view = document.getElementById('sky-view');
+            view.className = "w-full md:w-1/3 h-48 rounded border-2 border-gray-500 relative overflow-hidden flex items-center justify-center text-center p-4 timelapse-effect";
+            view.innerHTML = "<div class='text-6xl opacity-80 font-bold z-20 mix-blend-overlay' style='animation: orbit 2s linear infinite;'>🌍</div><div class='absolute bottom-2 text-white font-bold tracking-widest text-sm z-30 drop-shadow-md'>30 YEARS...</div>";
+
+            playMagicSound('timelapse');
+
+            let finalData = [];
+            let html = `<table class="w-full text-center border-collapse">
+            <tr class="bg-gray-200 font-bold border-b border-gray-400">
+                <td class="p-2 border-r border-gray-300">Decade</td><td class="p-2 border-r border-gray-300">Avg Temp</td><td class="p-2">Annual Rain</td>
+            </tr>`;
+
+            for (let i = 0; i < 3; i++) {
+                let years = `19${90 + (i * 10)}s`;
+                let temp = (14.2 + (i * 0.3)).toFixed(1);
+                let rain = 850 + (Math.floor(Math.random() * 20));
+                finalData.push({ id: `c-temp-${i}`, val: temp });
+                finalData.push({ id: `c-rain-${i}`, val: rain });
+
+                html += `<tr class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="p-1 border-r border-gray-300">${years}</td>
+                <td class="p-1 border-r border-gray-300 text-red-600 font-bold"><span id="c-temp-${i}" class="rolling-data">00.0</span>°C</td>
+                <td class="p-1 text-blue-600 font-bold"><span id="c-rain-${i}" class="rolling-data">0000</span> mm</td>
+            </tr>`;
+            }
+            html += `</table>`;
+            document.getElementById('sky-data-table').innerHTML = html;
+            document.getElementById('sky-conclusion').innerHTML = "";
+
+            let ticks = 0;
+            scrambleInterval = setInterval(() => {
+                finalData.forEach(item => {
+                    if (item.id.includes('temp')) {
+                        document.getElementById(item.id).innerText = (Math.random() * 40).toFixed(1);
+                    } else {
+                        document.getElementById(item.id).innerText = Math.floor(Math.random() * 9999);
+                    }
+                });
+                ticks++;
+
+                if (ticks > 40) {
+                    clearInterval(scrambleInterval);
+                    finalData.forEach(item => {
+                        document.getElementById(item.id).innerText = item.val;
+                    });
+                    document.getElementById('sky-conclusion').innerHTML = `<p class="text-xs text-center font-bold text-purple-700">Conclusion: Climate averages 30 years of data. Notice the stable, predictable trend.</p>`;
+                }
+            }, 50);
+        }
+
+        // ==========================================
+        // 5.4 ICE CORE LOGIC (Deep-Earth Auger Game)
+        // ==========================================
+        let drillDepth = 0;
+
+        function drillDeeper() {
+            if (drillDepth >= 3) return;
+            drillDepth++;
+
+            const drill = document.getElementById('magic-drill');
+            const btn = document.getElementById('btn-drill');
+            const report = document.getElementById('lab-report-content');
+
+            btn.disabled = true;
+            btn.innerText = "Drilling...";
+            drill.classList.add('drill-active');
+            playMagicSound('drill');
+
+            report.innerHTML = '<p class="italic text-gray-600 text-center mt-10 animate-pulse font-bold text-lg">Drill active... analyzing ground resistance and chemical signatures...</p>';
+
+            let newTop = (drillDepth * 33.33) - 16;
+            drill.style.top = newTop + '%';
+
+            setTimeout(() => {
+                drill.classList.remove('drill-active');
+
+                const item = document.getElementById('item-' + drillDepth);
+                item.classList.add('item-revealed');
+                playMagicSound('reveal');
+
+                generateCoreReport(drillDepth);
+
+                if (drillDepth < 3) {
+                    btn.disabled = false;
+                    btn.innerText = "Drill Deeper!";
+                } else {
+                    btn.classList.add('hidden');
+                    document.getElementById('btn-reset-drill').classList.remove('hidden');
+                }
+            }, 1000);
+        }
+
+        function generateCoreReport(depthIndex) {
+            const report = document.getElementById('lab-report-content');
+
+            let layerName, ppm, age, bio, conclusion;
+
+            if (depthIndex === 1) {
+                layerName = "Modern Ice (Surface Level)";
+                ppm = "<span class='text-red-600 font-bold'>415 ppm (CRITICAL)</span>";
+                age = "10 - 150 Years (Modern Industrial)";
+                bio = "Microplastics 🥤, Soot Particles 🏭";
+                conclusion = "Unprecedented spike in greenhouse gases directly linked to burning fossil fuels.";
+            } else if (depthIndex === 2) {
+                layerName = "Peat Bog (Interglacial Level)";
+                ppm = "280 ppm (Stable Interglacial)";
+                age = "Carbon-14 Date: 12,500 ± 50 Years";
+                bio = "<span class='text-green-600 font-bold'>Oak & Birch Pollen 🌿 (Abundant)</span>";
+                conclusion = "High pollen count proves this area was a warm, thriving forest before the modern era.";
+            } else {
+                layerName = "Ancient Ice (Deep Glacial Level)";
+                ppm = "<span class='text-blue-600 font-bold'>180 ppm (Low/Cold)</span>";
+                age = "Isotope Date: 250,000+ Years";
+                bio = "Frozen Woolly Mammoth Tissue 🦣";
+                conclusion = "Low CO2 confirms a deep Glacial Period (Ice Age). Massive creatures roamed while sea levels were reduced.";
+            }
+
+            report.innerHTML = `
+            <div class="mb-4 text-center font-bold text-red-900 border-b border-red-900 pb-2 text-lg uppercase tracking-wider">${layerName}</div>
+            <div class="grid grid-cols-3 gap-3 mb-2 pb-2 text-base">
+                <div class="font-bold text-gray-500 flex items-center">Gas Spectrometer (CO₂):</div>
+                <div class="col-span-2 digital-readout m-0 p-2 text-sm">${ppm}</div>
+                
+                <div class="font-bold text-gray-500 flex items-center">Radiometric Dating:</div>
+                <div class="col-span-2 bg-gray-100 p-2 rounded border border-gray-300 font-bold">${age}</div>
+                
+                <div class="font-bold text-gray-500 flex items-center">Microscopic Bio-Scan:</div>
+                <div class="col-span-2 bg-gray-100 p-2 rounded border border-gray-300 font-bold">${bio}</div>
+            </div>
+            <div class="font-bold mt-4 border-t border-black pt-2">Analysis Conclusion:</div>
+            <p class="text-sm mt-1 text-gray-800 font-medium">${conclusion}</p>
+        `;
+        }
+
+        function resetDrill() {
+            drillDepth = 0;
+            const drill = document.getElementById('magic-drill');
+            drill.style.top = '-45px';
+
+            document.getElementById('item-1').classList.remove('item-revealed');
+            document.getElementById('item-2').classList.remove('item-revealed');
+            document.getElementById('item-3').classList.remove('item-revealed');
+
+            document.getElementById('btn-reset-drill').classList.add('hidden');
+            const btn = document.getElementById('btn-drill');
+            btn.classList.remove('hidden');
+            btn.disabled = false;
+            btn.innerText = "Drill Down!";
+
+            document.getElementById('lab-report-content').innerHTML = '<p class="italic text-gray-600 text-center mt-10 font-bold text-lg">Awaiting sample extraction...<br><span class="text-sm">Click "Drill Down" to start the excavation.</span></p>';
+        }
+
+        // ==========================================
+        // 5.5 ATMOSPHERE LOGIC (Time Simulation)
+        // ==========================================
+        let simRates = { factory: 1, forest: 1 };
+        let simStats = { year: 2024, co2: 420, temp: 15.0, seaLevel: 0.0 };
+
+        function changeSimRate(type, amount) {
+            simRates[type] += amount;
+            if (simRates[type] < 0) simRates[type] = 0;
+            document.getElementById(`rate-${type}`).innerText = simRates[type];
+        }
+
+        function advanceTime() {
+            simStats.year += 10;
+            let co2Delta = (simRates.factory * 4) - (simRates.forest * 2);
+            simStats.co2 += co2Delta;
+            if (simStats.co2 < 100) simStats.co2 = 100;
+
+            let co2OverBaseline = simStats.co2 - 280;
+            simStats.temp = 14.0 + (co2OverBaseline * 0.01);
+
+            if (simStats.temp > 14.5) {
+                let heatExcess = simStats.temp - 14.5;
+                simStats.seaLevel += (heatExcess * 0.1);
+            }
+
+            const box = document.getElementById('atmo-box');
+            if (box) {
+                for (let i = 0; i < simRates.factory * 3; i++) {
+                    let p = document.createElement('div');
+                    p.className = `particle w-4 h-4 bg-gray-400 shadow-[0_0_5px_#000]`;
+                    p.style.left = Math.random() * 90 + '%';
+                    p.style.bottom = '0px';
+                    box.appendChild(p);
+                    setTimeout(() => { p.style.bottom = (Math.random() * 80 + 20) + '%'; }, 50);
+                    if (box.childElementCount > 60) { box.removeChild(box.firstElementChild); }
+                }
+            }
+
+            updateSimDOM();
+        }
+
+        function updateSimDOM() {
+            document.getElementById('sim-year').innerText = simStats.year;
+            document.getElementById('sim-co2').innerText = Math.round(simStats.co2);
+            document.getElementById('sim-temp').innerText = simStats.temp.toFixed(1);
+            document.getElementById('sim-sea').innerText = simStats.seaLevel.toFixed(2);
+
+            // Update thermometer visual
+            let heightPct = Math.min((simStats.temp / 50) * 100, 100);
+            let thermometer = document.getElementById('thermometer-fluid');
+            if (thermometer) thermometer.style.height = heightPct + "%";
+
+            const box = document.getElementById('atmo-box');
+            if (box) {
+                box.style.transition = "background-color 1s ease";
+                if (simStats.temp > 16.5) box.style.backgroundColor = "#4a0404";
+                else if (simStats.temp > 15.0) box.style.backgroundColor = "#4a2a04";
+                else if (simStats.temp < 13.5) box.style.backgroundColor = "#042a4a";
+                else box.style.backgroundColor = "#000000";
+            }
+
+            let warn = document.getElementById('sim-warning');
+            if (simStats.temp > 17.0) {
+                warn.innerHTML = "<span class='text-red-500'>CRITICAL MASS EXTINCTION! Sea levels flooded coastal cities.</span>";
+            } else if (simStats.temp > 15.5) {
+                warn.innerHTML = "<span class='text-orange-400'>Warning: Severe global warming. Ice caps melting rapidly.</span>";
+            } else if (simStats.temp < 13.0) {
+                warn.innerHTML = "<span class='text-blue-400'>Warning: Ice Age triggered. Glaciers expanding globally.</span>";
+            } else {
+                warn.innerHTML = "<span class='text-green-400'>Ecosystem is stable.</span>";
+            }
+        }
+
+        // ==========================================
+        // QUIZ LOGIC
+        // ==========================================
+        const quizData = [
+            { id: "q1", section: "A", type: "mcq", text: "Which subatomic particle has no electrical charge?", options: ["Proton", "Electron", "Neutron", "Nucleus"], answerIndex: 2, explanation: "Neutrons are neutral (no charge)." },
+            { id: "q2", section: "A", type: "mcq", text: "What is the dense, central part of an atom called?", options: ["Shell", "Nucleus", "Orbit", "Cloud"], answerIndex: 1, explanation: "The nucleus is the dense, positive center of the atom." },
+            { id: "q3", section: "A", type: "mcq", text: "Which of the following is considered a chemically pure substance?", options: ["9-carat gold", "24-carat gold", "Steel", "Bronze"], answerIndex: 1, explanation: "24-carat gold contains only gold atoms, making it pure." },
+            { id: "q4", section: "A", type: "mcq", text: "Why are impurities often added to pure gold to make jewellery?", options: ["To make it softer", "To make it harder", "To make it invisible", "To decrease its melting point"], answerIndex: 1, explanation: "Mixing metals creates an alloy, which disrupts the atomic layers, making it harder and more durable." },
+            { id: "q5", section: "A", type: "mcq", text: "Which of the following describes climate rather than weather?", options: ["A thunderstorm this afternoon", "A sudden drop in temperature yesterday", "The average annual rainfall over 30 years", "High humidity levels today"], answerIndex: 2, explanation: "Climate is the long-term average (30+ years) of weather." },
+            { id: "q6", section: "A", type: "mcq", text: "What do scientists call the coldest periods of an Ice Age where glaciers expand?", options: ["Interglacial periods", "Tropical periods", "Glacial periods", "Greenhouse periods"], answerIndex: 2, explanation: "Glacial periods are the phases when massive ice sheets cover the Earth." },
+            { id: "q7", section: "A", type: "mcq", text: "Which gas was NOT present in Earth's early atmosphere 4.5 billion years ago?", options: ["Carbon dioxide", "Water vapor", "Nitrogen", "Oxygen"], answerIndex: 3, explanation: "There was no oxygen until plants evolved and started photosynthesis." },
+            { id: "q8", section: "A", type: "mcq", text: "Which biological process performed by early plants helped reduce carbon dioxide and increase oxygen in the atmosphere?", options: ["Respiration", "Photosynthesis", "Combustion", "Evaporation"], answerIndex: 1, explanation: "Photosynthesis uses CO2 and water to make food, releasing oxygen as a byproduct." },
+            { id: "q9", section: "A", type: "saq", text: "a) Name the subatomic particle that has a negative charge. b) Contrast J.J. Thomson's model with Rutherford's model.", keywords: ["electron", "nucleus", "empty space", "center", "plum pudding"], explanation: "a) Electron. b) Thomson believed the atom was a positive cloud with scattered electrons. Rutherford discovered a tiny, dense, positive nucleus with mostly empty space." },
+            { id: "q10", section: "A", type: "saq", text: "Explain the scientific reason why a jeweller suggests buying a 14-carat gold ring instead of a pure 24-carat gold ring for everyday wear.", keywords: ["alloy", "hard", "soft", "mix", "durable"], explanation: "24-carat gold is pure and very soft (bends/scratches easily). 14-carat gold is an alloy, which disrupts the layers of atoms, making it much harder and durable." },
+            { id: "q11", section: "A", type: "saq", text: "Identify which describes Weather and which describes Climate: A) 'It rained heavily this morning, but it is sunny now.' B) 'The Sahara region is generally hot and receives very little rainfall year-round.'", keywords: ["weather", "climate", "a", "b"], explanation: "Statement A is Weather (short-term). Statement B is Climate (long-term average)." },
+            { id: "q12", section: "A", type: "saq", text: "Name the specific plant material preserved in peat bogs that helps scientists figure out what the climate was like thousands of years ago.", keywords: ["pollen"], explanation: "Pollen (or pollen grains) are preserved in the acidic bogs." },
+            { id: "q13", section: "A", type: "saq", text: "State two places where carbon became 'locked up' over millions of years.", keywords: ["fossil", "coal", "oil", "gas", "rock", "limestone"], explanation: "Carbon is locked up in fossil fuels (coal, oil, gas) and in rocks (like limestone/carbonates)." },
+            { id: "q14", section: "B", type: "mcq", text: "Why did Rutherford's model of the atom replace Thomson's model?", options: ["Rutherford was more famous", "New experimental evidence showed atoms have a dense nucleus", "Thomson's model was too difficult to draw", "Electrons were discovered to be positive"], answerIndex: 1, explanation: "Scientific models change when new evidence is discovered that the old model cannot explain." },
+            { id: "q15", section: "B", type: "mcq", text: "A student wants to test if a metal is pure or an alloy. Which physical property would be best to test?", options: ["Color", "Hardness", "Smell", "Size"], answerIndex: 1, explanation: "Alloys are significantly harder than pure metals because impurities lock the atomic layers." },
+            { id: "q16", section: "B", type: "mcq", text: "A scientist looks at 50 years of continuous temperature data for a city. What is the scientist most likely studying?", options: ["Today's weather forecast", "The local climate trend", "The formation of a single hurricane", "Daily humidity changes"], answerIndex: 1, explanation: "50 years of data represents long-term climate, not short-term weather." },
+            { id: "q17", section: "B", type: "mcq", text: "How do scientists find out about the chemical composition of the atmosphere from thousands of years ago?", options: ["By reading ancient history books", "By trapping modern air in jars", "By analyzing air bubbles trapped in deep ice cores", "By predicting future weather"], answerIndex: 2, explanation: "Glaciers trap tiny air bubbles over thousands of years, preserving ancient air samples." },
+            { id: "q18", section: "B", type: "mcq", text: "What evidence is preserved in peat bogs that tells scientists about past plant life and climates?", options: ["Dinosaur bones", "Trapped pollen grains", "Iron ores", "Liquid water"], answerIndex: 1, explanation: "Pollen grains survive in acidic bogs and identify which plants thrived in past climates." },
+            { id: "q19", section: "B", type: "mcq", text: "A student creates a model of the greenhouse effect using two jars, one covered with a lid and one uncovered, both in the sun. What is the independent variable?", options: ["The temperature of the jars", "The size of the jars", "The presence or absence of the lid", "The amount of sunlight"], answerIndex: 2, explanation: "The independent variable is what the student actively changes: the lid." },
+            { id: "q20", section: "B", type: "saq", text: "Why do scientists use physical models to represent atoms? Give one limitation of using a cotton ball and a hula hoop.", keywords: ["visualize", "see", "small", "scale", "size", "3d", "flat", "inaccurate"], explanation: "Models help visualize things too small to see. Limitation: The scale is highly inaccurate, and atoms are 3D moving structures, not flat." },
+            { id: "q21", section: "B", type: "saq", text: "You have pure iron (soft) and steel (hard alloy). Plan a simple physical test to determine which is which.", keywords: ["scratch", "hard", "dent", "bend", "hit"], explanation: "Perform a scratch or hardness test. Try to scratch one bar with the other; the alloy (steel) will scratch the pure, softer iron." },
+            { id: "q22", section: "B", type: "saq", text: "A student measures the temperature rising by 2°C over one week and concludes the climate is permanently hotter. Evaluate this.", keywords: ["weather", "short", "long", "30", "years", "invalid", "wrong"], explanation: "The conclusion is invalid. One week is short-term weather. Climate conclusions require data over 30+ years." },
+            { id: "q23", section: "B", type: "saq", text: "In an ice core, top layers have many CO2 bubbles; deep/older layers have very few. What conclusion can be drawn?", keywords: ["increase", "more", "rise", "human", "recent"], explanation: "We can conclude that the amount of Carbon Dioxide in the atmosphere has increased significantly in recent times compared to the distant past." },
+            { id: "q24", section: "B", type: "saq", text: "As global ice melts, less sunlight is reflected and Earth absorbs more heat. Conclude what will happen to remaining ice over the next 50 years.", keywords: ["melt", "faster", "disappear", "rise", "heat"], explanation: "Temperatures will continue to rise (positive feedback loop), causing the remaining ice caps to melt at an increasingly faster rate." },
+            { id: "q25", section: "C", type: "mcq", text: "Before a new scientific model is published and accepted, it is checked and tested by other scientists. What is this vital process called?", options: ["Peer review", "Plagiarism", "Fossilization", "Climate change"], answerIndex: 0, explanation: "Peer review ensures that scientific claims are tested and verified by independent experts." },
+            { id: "q26", section: "C", type: "mcq", text: "How has the development of alloys impacted modern human engineering?", options: ["It has made buildings weaker", "It allows for the creation of stronger and more durable materials like steel", "It has reduced the need for plastics", "It has stopped the mining of pure metals"], answerIndex: 1, explanation: "Alloys like steel are crucial for building skyscrapers and bridges because pure metals are too soft." },
+            { id: "q27", section: "C", type: "mcq", text: "What is the main human activity contributing to the rapid rise in atmospheric carbon dioxide today?", options: ["Planting trees", "Building wind turbines", "Burning fossil fuels", "Recycling plastics"], answerIndex: 2, explanation: "Burning coal, oil, and gas releases millions of years of locked-up carbon back into the air." },
+            { id: "q28", section: "C", type: "mcq", text: "Which of the following is an example of a renewable energy resource?", options: ["Coal", "Natural Gas", "Oil", "Solar power"], answerIndex: 3, explanation: "Solar power relies on the sun, which will not run out in a human timeframe, making it renewable." },
+            { id: "q29", section: "C", type: "mcq", text: "Why is understanding past Ice Ages important for modern society?", options: ["It helps us breed extinct animals", "It provides a baseline to understand how abnormally fast the current climate is changing", "It tells us exactly when the next asteroid will hit", "It naturally stops global warming"], answerIndex: 1, explanation: "By understanding natural climate cycles, scientists can prove that current rapid warming is human-caused." },
+            { id: "q30", section: "C", type: "mcq", text: "If a global policy banned fossil fuels, what would be the most likely long-term environmental impact?", options: ["A drastic increase in greenhouse gases", "A decrease in the rate of global warming", "The destruction of the ozone layer", "An immediate return to an Ice Age"], answerIndex: 1, explanation: "Without fossil fuel emissions, greenhouse gas levels would stabilize, slowing down the rate of global warming." },
+            { id: "q31", section: "C", type: "saq", text: "Describe how scientists use 'peer review' to verify new ideas before they are accepted by the scientific community.", keywords: ["check", "test", "other", "scientists", "verify", "error", "independent"], explanation: "Independent scientists examine the data, test the experiment themselves, and check for errors to ensure the new model is accurate." },
+            { id: "q32", section: "C", type: "saq", text: "Give an example comparing the properties of a pure metal to an alloy in construction.", keywords: ["iron", "steel", "soft", "hard", "strong", "brittle", "carbon"], explanation: "Pure iron is too soft and brittle for construction. Mixing it with carbon creates steel (an alloy), which is incredibly strong and load-bearing." },
+            { id: "q33", section: "C", type: "saq", text: "Discuss the global environmental impact of heavily relying on fossil fuels. Provide two consequences.", keywords: ["warming", "melt", "ice", "sea", "level", "extreme", "weather", "greenhouse"], explanation: "Consequences include: 1) Enhanced greenhouse effect/global warming. 2) Melting polar ice caps and rising sea levels. 3) Increase in extreme weather." },
+            { id: "q34", section: "C", type: "saq", text: "How does studying past Ice Ages help scientists understand current global warming trends?", keywords: ["baseline", "normal", "fast", "human", "rate", "compare"], explanation: "It establishes a 'baseline' of normal temperature changes. Comparing modern data to this baseline proves the Earth is warming unnaturally fast due to humans." },
+            { id: "q35", section: "C", type: "saq", text: "If a country switches entirely to renewable energy (wind/solar), explain the effect on the local atmosphere over the next 30 years.", keywords: ["co2", "carbon", "decrease", "stabilize", "stop", "pure"], explanation: "Wind and solar do not release CO2. Over 30 years, greenhouse gas concentrations would stop rising, stabilizing the atmosphere and slowing global warming." }
+        ];
+
+        let currentSection = '';
+        let attemptsData = {};
+
+        function renderQuiz(section) {
+            currentSection = section;
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+
+            const filteredQuestions = quizData.filter(q => q.section === section);
+
+            filteredQuestions.forEach((q, index) => {
+                if (attemptsData[q.id] === undefined) attemptsData[q.id] = 0;
+
+                let questionHTML = `
+                <div class="bg-white/10 p-5 rounded-lg border-2 border-yellow-700 shadow-md" id="container-${q.id}">
+                    <p class="font-bold text-lg text-red-900 mb-3"><span class="text-xl">Q${index + 1}:</span> ${q.text}</p>
+            `;
+
+                if (q.type === 'mcq') {
+                    questionHTML += `<div class="space-y-2 mb-4" id="opts-${q.id}">`;
+                    q.options.forEach((opt, optIdx) => {
+                        questionHTML += `
+                        <label class="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-yellow-100 transition">
+                            <input type="radio" name="${q.id}" value="${optIdx}" class="form-radio h-5 w-5 text-red-900">
+                            <span class="text-gray-900 font-medium">${opt}</span>
+                        </label>
+                    `;
+                    });
+                    questionHTML += `</div>`;
+                } else if (q.type === 'saq') {
+                    questionHTML += `
+                    <textarea id="input-${q.id}" class="w-full p-3 bg-yellow-50 border border-yellow-600 rounded text-gray-900 font-medium focus:outline-none focus:ring-2 focus:ring-red-900 mb-4" rows="3" placeholder="Write your spell (answer) here..."></textarea>
+                `;
+                }
+
+                questionHTML += `
+                    <button onclick="submitAnswer('${q.id}')" id="btn-${q.id}" class="btn-magic px-5 py-2 rounded font-bold uppercase tracking-wider text-sm">Cast Spell (Submit)</button>
+                    <div id="feedback-${q.id}" class="mt-4 text-md hidden"></div>
+                </div>
+            `;
+
+                container.insertAdjacentHTML('beforeend', questionHTML);
+
+                if (attemptsData[q.id] >= 100) {
+                    disableInputs(q.id);
+                    showFeedback(q.id, `Already answered correctly!`, 'correct');
+                } else if (attemptsData[q.id] >= 2) {
+                    disableInputs(q.id);
+                    const fullQuestion = quizData.find(x => x.id === q.id);
+                    showFeedback(q.id, `Attempts exhausted. Answer: ${fullQuestion.explanation}`, 'wrong');
+                }
+            });
+        }
+
+        function submitAnswer(qId) {
+            const question = quizData.find(q => q.id === qId);
+            let isCorrect = false;
+            let userAnswer = '';
+
+            if (question.type === 'mcq') {
+                const selected = document.querySelector(`input[name="${qId}"]:checked`);
+                if (!selected) { alert("Please select an answer before casting your spell!"); return; }
+                userAnswer = parseInt(selected.value);
+                isCorrect = (userAnswer === question.answerIndex);
+            } else {
+                userAnswer = document.getElementById(`input-${qId}`).value.trim().toLowerCase();
+                if (userAnswer === '') { alert("Please write your answer before casting your spell!"); return; }
+                isCorrect = question.keywords.some(kw => userAnswer.includes(kw));
+            }
+
+            if (isCorrect) {
+                attemptsData[qId] = 100;
+                disableInputs(qId);
+                showFeedback(qId, `Correct! 10 points to Gryffindor! <br><span class="text-sm text-gray-700 mt-2 block">Explanation: ${question.explanation}</span>`, 'correct');
+                playCorrectMagic();
+            } else {
+                attemptsData[qId]++;
+                if (attemptsData[qId] >= 2) {
+                    disableInputs(qId);
+                    showFeedback(qId, `Incorrect. The magic fades. <br><strong>The correct answer is:</strong> ${question.explanation}`, 'wrong');
+                    playWrongMagic();
+                } else {
+                    showFeedback(qId, `Incorrect! The spell fizzled. You have ${2 - attemptsData[qId]} attempt left.`, 'warning');
+                    playWrongMagic();
+                }
+            }
+        }
+
+        // ==========================================
+        // FULL SCREEN MAGIC FX LOGIC WITH SOUND
+        // ==========================================
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playMagicSound(type) {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const t = audioCtx.currentTime;
+
+            if (type === 'correct') {
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(600 + (i * 150) + (Math.random() * 100), audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.5);
+                    }, i * 80);
+                }
+            } else if (type === 'shake') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, t);
+                osc.frequency.exponentialRampToValueAtTime(40, t + 0.8);
+                gain.gain.setValueAtTime(0.2, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.8);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(t + 0.8);
+            } else if (type === 'fizzle') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, t);
+                osc.frequency.exponentialRampToValueAtTime(50, t + 1);
+                gain.gain.setValueAtTime(0.15, t);
+                gain.gain.linearRampToValueAtTime(0.01, t + 1);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(t + 1);
+            } else if (type === 'dementor') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(120, t);
+                osc.frequency.linearRampToValueAtTime(80, t + 1.2);
+                gain.gain.setValueAtTime(0.3, t);
+                gain.gain.linearRampToValueAtTime(0.01, t + 1.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(t + 1.2);
+            } else if (type === 'hammer') {
+                const osc1 = audioCtx.createOscillator();
+                const osc2 = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc1.type = 'sine'; osc2.type = 'triangle';
+                osc1.frequency.setValueAtTime(1200, t);
+                osc2.frequency.setValueAtTime(2500, t);
+                gain.gain.setValueAtTime(0.3, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+                osc1.connect(gain); osc2.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc1.start(); osc2.start();
+                osc1.stop(t + 0.2); osc2.stop(t + 0.2);
+            } else if (type === 'thunder') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(80, t);
+                osc.frequency.exponentialRampToValueAtTime(10, t + 1.5);
+                gain.gain.setValueAtTime(0.4, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 1.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(t + 1.5);
+            } else if (type === 'timelapse') {
+                let tickCount = 0;
+                let tickInt = setInterval(() => {
+                    if (tickCount++ > 15) { clearInterval(tickInt); return; }
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(2000, audioCtx.currentTime);
+                    gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.05);
+                }, 80);
+            } else if (type === 'drill') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(60, t);
+                osc.frequency.linearRampToValueAtTime(80, t + 0.5);
+                osc.frequency.linearRampToValueAtTime(40, t + 1.0);
+                gain.gain.setValueAtTime(0.3, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 1.0);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(t + 1.0);
+            } else if (type === 'reveal') {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, t);
+                osc.frequency.exponentialRampToValueAtTime(1760, t + 0.3);
+                gain.gain.setValueAtTime(0.2, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.5);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(t + 0.5);
+            }
+        }
+
+        function playCorrectMagic() {
+            playMagicSound('correct');
+            const container = document.getElementById('magic-fx-container');
+            container.innerHTML = '';
+
+            const flash = document.createElement('div');
+            flash.className = 'absolute inset-0 bg-yellow-400 z-40';
+            flash.style.animation = 'fadeOutFast 1s ease-out forwards';
+            container.appendChild(flash);
+
+            const emojis = ['✨', '⭐', '🌟', '🏆'];
+            for (let i = 0; i < 80; i++) {
+                let star = document.createElement('div');
+                star.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                star.className = 'absolute text-4xl z-50';
+
+                let angle = Math.random() * Math.PI * 2;
+                let distance = 300 + Math.random() * 600;
+                let vx = Math.cos(angle) * distance + 'px';
+                let vy = Math.sin(angle) * distance + 'px';
+                let rot = (Math.random() - 0.5) * 720 + 'deg';
+
+                star.style.setProperty('--vx', vx);
+                star.style.setProperty('--vy', vy);
+                star.style.setProperty('--rot', rot);
+                star.style.animation = `burst ${1 + Math.random()}s cubic-bezier(0.25, 1, 0.5, 1) forwards`;
+                container.appendChild(star);
+            }
+
+            setTimeout(() => container.innerHTML = '', 2000);
+        }
+
+        function playWrongMagic() {
+            const container = document.getElementById('magic-fx-container');
+            container.innerHTML = '';
+            const rand = Math.random();
+
+            if (rand < 0.33) {
+                playMagicSound('shake');
+                document.body.classList.add('layer-stuck');
+                const flash = document.createElement('div');
+                flash.className = 'absolute inset-0 bg-red-600 z-40';
+                flash.style.animation = 'fadeOutFast 0.8s ease-out forwards';
+                container.appendChild(flash);
+                setTimeout(() => { document.body.classList.remove('layer-stuck'); container.innerHTML = ''; }, 800);
+            } else if (rand < 0.66) {
+                playMagicSound('fizzle');
+                for (let i = 0; i < 30; i++) {
+                    let smoke = document.createElement('div');
+                    smoke.innerHTML = '💨';
+                    smoke.className = 'absolute text-6xl z-50';
+                    smoke.style.left = (Math.random() * 100) + '%';
+                    smoke.style.bottom = '-10%';
+                    smoke.style.animation = `smokeFloatUp ${1 + Math.random() * 1.5}s ease-in forwards`;
+                    container.appendChild(smoke);
+                }
+                setTimeout(() => container.innerHTML = '', 2500);
+            } else {
+                playMagicSound('dementor');
+                const flash = document.createElement('div');
+                flash.className = 'absolute inset-0 bg-black z-40';
+                flash.style.animation = 'flicker 1s ease-in-out forwards';
+                container.appendChild(flash);
+                setTimeout(() => container.innerHTML = '', 1000);
+            }
+        }
+
+        function disableInputs(qId) {
+            const question = quizData.find(q => q.id === qId);
+            document.getElementById(`btn-${qId}`).disabled = true;
+            document.getElementById(`btn-${qId}`).innerText = "Spell Completed";
+
+            if (question.type === 'mcq') {
+                const radios = document.querySelectorAll(`input[name="${qId}"]`);
+                radios.forEach(r => r.disabled = true);
+            } else {
+                document.getElementById(`input-${qId}`).disabled = true;
+            }
+        }
+
+        function showFeedback(qId, message, type) {
+            const fb = document.getElementById(`feedback-${qId}`);
+            fb.classList.remove('hidden', 'feedback-correct', 'feedback-warning', 'feedback-wrong');
+            fb.innerHTML = message;
+
+            if (type === 'correct') fb.classList.add('feedback-correct');
+            else if (type === 'warning') fb.classList.add('feedback-warning');
+            else if (type === 'wrong') fb.classList.add('feedback-wrong');
+        }
+
+        // Initialize defaults on load
+        setTimeout(() => {
+            setAtomLayer(1);
+            setAlloyLayer(1);
+        }, 100);
+
+        // ==========================================
+        // PROGRESS TRACKER INTEGRATION
+        // ==========================================
+        window.addEventListener('load', async () => {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved.progress_data) {
+                        const p = saved.progress_data;
+                        // Restore quiz section if previously visited
+                        if (p.lastSection) {
+                            currentSection = p.lastSection;
+                        }
+                    }
+                });
+            }
+        });
+
+        // Wrap submitAnswer to also auto-save progress
+        const _origSubmitAnswer = submitAnswer;
+        submitAnswer = function(qId) {
+            _origSubmitAnswer(qId);
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.autoSave({
+                    lastSection: currentSection,
+                    lastAnswered: qId,
+                    attemptsData: attemptsData,
+                    timestamp: new Date().toISOString()
+                });
+            }
+        };
+    </script>
+
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="igcse-y8-sci-ch5"
+            data-module-name="Chapter 5: Materials and Cycles"
+            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/index.html">
+    </script>
+</body>
+
+</html>
