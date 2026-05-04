@@ -315,6 +315,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y8-sci-ch3',           'Chapter 3: Forces and Energy',               'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch4',           'Chapter 4: Ecosystems',                      'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch5',           'Chapter 5: Materials and Cycles on Earth',   'igcse', 'science', 'igcse_y8_science', 'Year8'),
+('igcse-y8-sci-ch6',           'Chapter 6: Light and Space',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
 
 -- ── Singapore Math Year 4 ─────────────────────────────────────────
 ('sg-y4-math-whole-number',    'Chapter 2: Whole Numbers (Part 2)',           'sg', 'math', 'sg_y4_math', 'Year4'),
@@ -336,7 +337,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 
 -- ──────────────────────────────────────────────────────────────────
 -- VERIFICATION QUERIES (run manually after applying):
---   SELECT COUNT(*) FROM public.modules;         -- should be 40
+--   SELECT COUNT(*) FROM public.modules;         -- should be 41
 --   SELECT id FROM public.modules ORDER BY id;   -- full alphabetical list
 --   SELECT COUNT(*) FROM public.activation_pins; -- 0 if you wiped old PINs
 -- ──────────────────────────────────────────────────────────────────

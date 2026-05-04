@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasukabe Defense Force: Science Mission</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax for LaTeX Rendering -->
+    <script>
+        MathJax = {
+            tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            background-color: #FFF9E6;
+            /* Light yellow Shin-chan background */
+            color: #333;
+            background-image: radial-gradient(#FFD54F 2px, transparent 2px);
+            background-size: 30px 30px;
+        }
+
+        /* Chunky Shin-chan Borders */
+        .chunky-border {
+            border: 4px solid #D32F2F;
+            /* Red border */
+            border-radius: 16px;
+            box-shadow: 6px 6px 0px #1976D2;
+            /* Blue shadow */
+            background-color: white;
+        }
+
+        .chunky-btn {
+            border: 3px solid #333;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px #333;
+            transition: all 0.1s ease-in-out;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .chunky-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #333;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #D32F2F;
+            text-shadow: 1px 1px 0px #FFF, 2px 2px 0px #1976D2;
+        }
+
+        .blank-select {
+            appearance: none;
+            background-color: #E3F2FD;
+            border: 2px dashed #1976D2;
+            padding: 2px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #1976D2;
+            cursor: pointer;
+            outline: none;
+            text-align: center;
+            margin: 2px 0;
+        }
+
+        .blank-select.correct {
+            background-color: #C8E6C9;
+            border-color: #388E3C;
+            color: #2E7D32;
+        }
+
+        .blank-select.wrong {
+            background-color: #FFCDD2;
+            border-color: #D32F2F;
+            color: #C62828;
+            animation: shake 0.3s;
+        }
+
+        .text-input-blank {
+            border: 2px dashed #1976D2;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            outline: none;
+            text-align: center;
+            width: 150px;
+            transition: all 0.3s;
+        }
+
+        .text-input-blank.correct {
+            background-color: #C8E6C9;
+            border-color: #388E3C;
+            color: #2E7D32;
+        }
+
+        @keyframes shake {
+            0% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            50% {
+                transform: translateX(5px);
+            }
+
+            75% {
+                transform: translateX(-5px);
+            }
+
+            100% {
+                transform: translateX(0);
+            }
+        }
+
+        .mcq-btn.correct {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #1B5E20;
+        }
+
+        .mcq-btn.wrong {
+            background-color: #F44336;
+            color: white;
+            border-color: #B71C1C;
+        }
+
+        canvas {
+            border: 3px solid #1976D2;
+            border-radius: 12px;
+            cursor: crosshair;
+            touch-action: none;
+            background-color: #fafafa;
+        }
+
+        #start-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 249, 230, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        /* Home Button */
+        .home-btn-fixed {
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 99999;
+            background: #D32F2F;
+            color: white;
+            border: 3px solid #333;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px #333;
+            padding: 8px 16px;
+            font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.1s ease-in-out;
+        }
+        .home-btn-fixed:hover {
+            opacity: 0.85;
+        }
+        .home-btn-fixed:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px #333;
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8 relative">
+
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+    <!-- Start Overlay (Required to initialize Web Audio API) -->
+    <div id="start-overlay">
+        <div class="text-6xl mb-4">🦸‍♂️👦🏻🐶</div>
+        <h1 class="text-4xl md:text-6xl text-center mb-8">Kasukabe Defense Force<br>Science Mission!</h1>
+        <p class="text-xl mb-8 font-bold text-blue-700">Click below to activate Action Kamen Sound Effects!</p>
+        <button onclick="startMission()" class="chunky-btn bg-yellow-400 text-2xl py-4 px-8 text-red-700">START
+            MISSION!</button>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-bold mb-4">🌟 Chapter 6: Light & Space 🌟</h1>
+            <p
+                class="text-2xl font-bold text-blue-700 bg-white inline-block px-6 py-2 rounded-full border-4 border-blue-500 shadow-[4px_4px_0px_#D32F2F]">
+                Help Shin-chan learn science to defeat the space monsters! 🍘
+            </p>
+        </header>
+
+        <!-- PART 1: Interactive Notes -->
+        <section class="mb-12">
+            <h2 class="text-4xl mb-6 flex items-center gap-3">
+                <span class="text-5xl">🖍️</span> 1. Chocobi Knowledge Cards
+            </h2>
+            <p class="text-lg mb-4 font-bold bg-white p-3 rounded-lg border-2 border-dashed border-gray-400">
+                Misae says: "Fill in the missing words correctly, or no snacks for you!"
+            </p>
+
+            <div class="space-y-6">
+                <!-- Card 1 -->
+                <div class="chunky-border p-6 relative">
+                    <div class="absolute -top-5 -right-5 text-5xl">👦🏻</div>
+                    <h3 class="text-2xl font-bold mb-3 text-blue-600">6.1 Reflection of Light</h3>
+                    <p class="text-lg leading-relaxed">
+                        Light travels in extremely fast, <span class="interactive-blank" data-ans="straight"
+                            data-opts="wavy,straight,circular,teleporting"></span> lines. When light hits a surface and
+                        bounces off, we call this <span class="interactive-blank" data-ans="reflection"
+                            data-opts="refraction,dispersion,reflection,absorption"></span>.
+                        <br><br>
+                        The Law of Reflection states that the angle of <span class="interactive-blank"
+                            data-ans="incidence" data-opts="reflection,incidence,refraction,normal"></span> (\(i\)) is
+                        ALWAYS equal to the angle of <span class="interactive-blank" data-ans="reflection"
+                            data-opts="incidence,refraction,reflection,dispersion"></span> (\(r\)).
+                        <br><br>
+                        The <span class="interactive-blank" data-ans="Incident Ray"
+                            data-opts="Incident Ray,Normal,Reflected Ray,Mirror"></span> is the incoming ray, and the
+                        <span class="interactive-blank" data-ans="Reflected Ray"
+                            data-opts="Incident Ray,Normal,Reflected Ray,Lens"></span> bounces off. The <span
+                            class="interactive-blank" data-ans="Normal"
+                            data-opts="Mirror,Incident Ray,Normal,Reflected Ray"></span> is an imaginary line drawn at
+                        exactly <span class="interactive-blank" data-ans="90"
+                            data-opts="45,90,180,360"></span>\(^\circ\) (degrees) to the mirror. Angles are ALWAYS
+                        measured between the light ray and the <span class="interactive-blank" data-ans="Normal"
+                            data-opts="Mirror,Incident Ray,Normal,Reflected Ray"></span>.
+                        <br><br>
+                        The <span class="interactive-blank" data-ans="Incident Ray"
+                            data-opts="Incident Ray,Normal,Reflected Ray,Mirror"></span> is the incoming ray, and the
+                        <span class="interactive-blank" data-ans="Reflected Ray"
+                            data-opts="Incident Ray,Normal,Reflected Ray,Lens"></span> bounces off. The <span
+                            class="interactive-blank" data-ans="Normal"
+                            data-opts="Mirror,Incident Ray,Normal,Reflected Ray"></span> is an imaginary line drawn at
+                        exactly <span class="interactive-blank" data-ans="90" data-opts="45,90,180,360"></span> degrees
+                        to the mirror. Angles are ALWAYS measured between the light ray and the <span
+                            class="interactive-blank" data-ans="Normal"
+                            data-opts="Mirror,Incident Ray,Normal,Reflected Ray"></span>.
+                        <br><br>
+                        <span class="interactive-blank" data-ans="Specular"
+                            data-opts="Diffuse,Specular,Virtual,Real"></span> reflection happens on smooth shiny
+                        surfaces, while <span class="interactive-blank" data-ans="Diffuse"
+                            data-opts="Specular,Diffuse,Refracted,Dispersed"></span> reflection happens on rough
+                        surfaces. Images in a flat mirror are <span class="interactive-blank" data-ans="virtual"
+                            data-opts="real,virtual,smaller,larger"></span> and <span class="interactive-blank"
+                            data-ans="laterally inverted"
+                            data-opts="upside down,laterally inverted,magnified,blurred"></span>!
+                    </p>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="chunky-border p-6 relative">
+                    <div class="absolute -top-5 -right-5 text-5xl">🐶</div>
+                    <h3 class="text-2xl font-bold mb-3 text-teal-600">6.2 Refraction of Light</h3>
+                    <p class="text-lg leading-relaxed">
+                        <span class="interactive-blank" data-ans="Refraction"
+                            data-opts="Reflection,Refraction,Dispersion,Absorption"></span> is the bending of light when
+                        it passes from one transparent material into another. It happens because light travels at
+                        different <span class="interactive-blank" data-ans="speeds"
+                            data-opts="colors,speeds,temperatures,sizes"></span> depending on the material's <span
+                            class="interactive-blank" data-ans="density" data-opts="color,density,weight,shape"></span>.
+                        <br><br>
+                        When light goes from less dense to more dense (Air into Glass), it slows down and bends <span
+                            class="interactive-blank" data-ans="towards"
+                            data-opts="away from,towards,parallel to,over"></span> the normal. When it goes from more
+                        dense to less dense, it speeds up and bends <span class="interactive-blank" data-ans="away from"
+                            data-opts="towards,away from,under,into"></span> the normal.
+                        <br><br>
+                        Because of this, a pencil in water looks <span class="interactive-blank" data-ans="bent"
+                            data-opts="straight,invisible,bent,red"></span>, and swimming pools look <span
+                            class="interactive-blank" data-ans="shallower"
+                            data-opts="deeper,shallower,darker,wider"></span> than they actually are.
+                    </p>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="chunky-border p-6 relative">
+                    <div class="absolute -top-5 -right-5 text-5xl">🌻</div>
+                    <h3 class="text-2xl font-bold mb-3 text-purple-600">6.3 Dispersion & Colours</h3>
+                    <p class="text-lg leading-relaxed">
+                        White light is actually a <span class="interactive-blank" data-ans="mixture"
+                            data-opts="mixture,solid,illusion,single color"></span> of all colors combined! <span
+                            class="interactive-blank" data-ans="Dispersion"
+                            data-opts="Reflection,Refraction,Dispersion,Diffusion"></span> is the splitting of white
+                        light into a spectrum using a triangular glass <span class="interactive-blank" data-ans="prism"
+                            data-opts="mirror,lens,prism,rock"></span>.
+                        <br><br>
+                        Red light bends the <span class="interactive-blank" data-ans="least"
+                            data-opts="least,most,fastest,brightest"></span> (it is the fastest in glass), while Violet
+                        light bends the <span class="interactive-blank" data-ans="most"
+                            data-opts="least,most,slowest,dimmest"></span>.
+                        <br><br>
+                        When white light hits an object, it <span class="interactive-blank" data-ans="absorbs"
+                            data-opts="absorbs,reflects,refracts,disperses"></span> some colors and <span
+                            class="interactive-blank" data-ans="reflects"
+                            data-opts="absorbs,reflects,bends,hides"></span> others. A perfectly <span
+                            class="interactive-blank" data-ans="white" data-opts="black,white,red,green"></span> object
+                        reflects all colors, while a perfectly <span class="interactive-blank" data-ans="black"
+                            data-opts="white,black,blue,yellow"></span> object absorbs all colors.
+                    </p>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="chunky-border p-6 relative">
+                    <div class="absolute -top-5 -right-5 text-5xl">👽</div>
+                    <h3 class="text-2xl font-bold mb-3 text-gray-800">6.4 & 6.5 Galaxies</h3>
+                    <p class="text-lg leading-relaxed">
+                        A Galaxy is a massive collection of stars, dust, and gas held together by <span
+                            class="interactive-blank" data-ans="gravity"
+                            data-opts="magnetism,gravity,friction,electricity"></span>. There are <span
+                            class="interactive-blank" data-ans="Spiral" data-opts="Spiral,Square,Triangle,Flat"></span>
+                        galaxies (like our <span class="interactive-blank" data-ans="Milky Way"
+                            data-opts="Andromeda,Milky Way,Snickers,Orion"></span>), <span class="interactive-blank"
+                            data-ans="Elliptical" data-opts="Elliptical,Circular,Wavy,Broken"></span> galaxies, and
+                        <span class="interactive-blank" data-ans="Irregular"
+                            data-opts="Irregular,Perfect,Normal,Even"></span> galaxies.
+                        <br><br>
+                        The universe began expanding from a single point during the <span class="interactive-blank"
+                            data-ans="Big Bang" data-opts="Big Crunch,Big Bang,Great Expansion,Black Hole"></span>.
+                        Distances in space are so huge, they are measured in <span class="interactive-blank"
+                            data-ans="light-years" data-opts="kilometers,miles,light-years,parsecs"></span>, which is a
+                        measure of <span class="interactive-blank" data-ans="distance"
+                            data-opts="time,speed,distance,weight"></span>, not time!
+                    </p>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="chunky-border p-6 relative">
+                    <div class="absolute -top-5 -right-5 text-5xl">☄️</div>
+                    <h3 class="text-2xl font-bold mb-3 text-orange-600">6.6 Rocks in Space</h3>
+                    <p class="text-lg leading-relaxed">
+                        <span class="interactive-blank" data-ans="Asteroids"
+                            data-opts="Comets,Asteroids,Meteors,Stars"></span> are lumps of solid rock and metal. Most
+                        are found in the <span class="interactive-blank" data-ans="Asteroid Belt"
+                            data-opts="Kuiper Belt,Asteroid Belt,Oort Cloud,Orion Arm"></span> between <span
+                            class="interactive-blank" data-ans="Mars" data-opts="Earth,Mars,Saturn,Venus"></span> and
+                        <span class="interactive-blank" data-ans="Jupiter"
+                            data-opts="Jupiter,Neptune,Uranus,Mercury"></span>.
+                        <br><br>
+                        <span class="interactive-blank" data-ans="Comets"
+                            data-opts="Comets,Asteroids,Meteors,Planets"></span> are "dirty snowballs" of ice and dust.
+                        As they near the Sun, they form a glowing <span class="interactive-blank" data-ans="coma"
+                            data-opts="coma,tail,ring,shield"></span> and a <span class="interactive-blank"
+                            data-ans="tail" data-opts="head,tail,wing,arm"></span> that always points <span
+                            class="interactive-blank" data-ans="away" data-opts="towards,away,parallel,down"></span>
+                        from the Sun.
+                        <br><br>
+                        A <span class="interactive-blank" data-ans="Meteoroid"
+                            data-opts="Meteorite,Meteor,Meteoroid,Asteroid"></span> travels freely in space. A <span
+                            class="interactive-blank" data-ans="Meteor"
+                            data-opts="Meteorite,Meteor,Meteoroid,Comet"></span> burns up in the atmosphere (shooting
+                        star). A <span class="interactive-blank" data-ans="Meteorite"
+                            data-opts="Meteorite,Meteor,Meteoroid,Planet"></span> survives and crashes into Earth!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PART 2: MCQ Quiz -->
+        <section class="mb-12">
+            <h2 class="text-4xl mb-6 flex items-center gap-3">
+                <span class="text-5xl">🦸‍♂️</span> 2. Action Kamen's Multi-Choice Quiz
+            </h2>
+            <div id="mcq-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- MCQs rendered via JS -->
+            </div>
+        </section>
+
+        <!-- PART 3: Fill in the Blanks -->
+        <section class="mb-12">
+            <h2 class="text-4xl mb-6 flex items-center gap-3">
+                <span class="text-5xl">🤧</span> 3. Bo-chan's Blank Fillers
+            </h2>
+            <p class="text-lg mb-4 font-bold bg-white p-3 rounded-lg border-2 border-dashed border-gray-400">
+                Type the correct word in the box and press Enter. It will turn green when you get it right! <br>
+                <span class="text-red-600 text-base">(Hint: If you guess wrong 2 times, Bo-chan will reveal the answer
+                    for you!)</span>
+            </p>
+            <div class="chunky-border p-6 bg-white space-y-4 text-lg">
+                <p>1. When light hits a surface and bounces off, we call this <input type="text"
+                        class="text-input-blank" data-ans="reflection">.</p>
+                <p>2. The imaginary dotted line drawn at exactly 90° to a mirror's surface is called the <input
+                        type="text" class="text-input-blank" data-ans="normal">.</p>
+                <p>3. <input type="text" class="text-input-blank" data-ans="diffuse"> reflection happens on rough
+                    surfaces like wood.</p>
+                <p>4. An image in a plane mirror cannot be projected onto a screen because it is a <input type="text"
+                        class="text-input-blank" data-ans="virtual"> image.</p>
+                <p>5. The bending of light when it passes from one transparent medium to another is called <input
+                        type="text" class="text-input-blank" data-ans="refraction">.</p>
+                <p>6. Light travels fastest in a <input type="text" class="text-input-blank" data-ans="vacuum">.</p>
+                <p>7. When light travels from water into air (more dense to less dense), it bends <input type="text"
+                        class="text-input-blank" data-ans="away"> from the normal.</p>
+                <p>8. The splitting of white light into a spectrum of colours is known as <input type="text"
+                        class="text-input-blank" data-ans="dispersion">.</p>
+                <p>9. The colours of the visible spectrum in order are Red, Orange, Yellow, Green, Blue, Indigo, and
+                    <input type="text" class="text-input-blank" data-ans="violet">.</p>
+                <p>10. A perfectly <input type="text" class="text-input-blank" data-ans="black"> object absorbs all
+                    colours.</p>
+                <p>11. A <input type="text" class="text-input-blank" data-ans="galaxy"> is a massive collection of
+                    billions of stars held together by gravity.</p>
+                <p>12. Scientists believe the universe began expanding from a single point during the <input type="text"
+                        class="text-input-blank" data-ans="big bang">.</p>
+                <p>13. Comets are often described as "dirty <input type="text" class="text-input-blank"
+                        data-ans="snowballs">".</p>
+                <p>14. A comet's tail always points <input type="text" class="text-input-blank" data-ans="away"> from
+                    the Sun.</p>
+                <p>15. A meteor burning up in the Earth's atmosphere is a "<input type="text" class="text-input-blank"
+                        data-ans="shooting"> star".</p>
+            </div>
+        </section>
+
+        <!-- PART 4: Short Answer Reveal -->
+        <section class="mb-12">
+            <h2 class="text-4xl mb-6 flex items-center gap-3">
+                <span class="text-5xl">👨🏻</span> 4. Hiroshi's Secret Answers
+            </h2>
+            <p class="text-lg mb-4 font-bold bg-white p-3 rounded-lg border-2 border-dashed border-gray-400">
+                Type your explanation, then click the button to reveal the Teacher's Key!
+            </p>
+
+            <div id="sa-container" class="space-y-6">
+                <!-- SA rendered via JS to keep HTML clean -->
+            </div>
+        </section>
+
+        <!-- PART 5: Nene's Drawing Board -->
+        <section class="mb-12">
+            <h2 class="text-4xl mb-6 flex items-center gap-3">
+                <span class="text-5xl">🐰</span> 5. Nene's Drawing Boards
+            </h2>
+            <p class="text-lg mb-4 font-bold bg-white p-3 rounded-lg border-2 border-dashed border-gray-400">
+                Use your mouse or finger to draw the scientific diagrams! Select your colours carefully.
+            </p>
+
+            <div id="drawing-container" class="space-y-8">
+                <!-- Canvases rendered via JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- AUDIO SYSTEM & LOGIC -->
+    <script>
+        // --- WEB AUDIO API SYNTHESIZER ---
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playTone(freq, type, duration, vol = 0.1) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        function playStart() {
+            playTone(440, 'square', 0.1); setTimeout(() => playTone(554, 'square', 0.1), 100); setTimeout(() => playTone(659, 'square', 0.3), 200);
+        }
+
+        function playCorrect() {
+            playTone(523.25, 'sine', 0.1); setTimeout(() => playTone(659.25, 'sine', 0.15), 100); setTimeout(() => playTone(783.99, 'sine', 0.25), 200);
+        }
+
+        function playWrong() {
+            playTone(200, 'sawtooth', 0.2); setTimeout(() => playTone(150, 'sawtooth', 0.3), 150);
+        }
+
+        function playClick() {
+            playTone(800, 'triangle', 0.05, 0.05);
+        }
+
+        function playReveal() {
+            for (let i = 0; i < 6; i++) { setTimeout(() => playTone(600 + i * 100, 'sine', 0.1), i * 40); }
+        }
+
+        function startMission() {
+            initAudio();
+            playStart();
+            document.getElementById('start-overlay').style.display = 'none';
+            setupBlanks();
+            setupTextInputs();
+            setupCanvases();
+        }
+
+        // --- INTERACTIVE BLANKS LOGIC ---
+        function setupBlanks() {
+            document.querySelectorAll('.interactive-blank').forEach(span => {
+                const ans = span.dataset.ans;
+                const opts = span.dataset.opts.split(',');
+                opts.sort(() => Math.random() - 0.5);
+
+                const select = document.createElement('select');
+                select.className = 'blank-select';
+                select.innerHTML = `<option value="" disabled selected>___?</option>`;
+                opts.forEach(opt => select.innerHTML += `<option value="${opt}">${opt}</option>`);
+
+                select.addEventListener('change', (e) => {
+                    select.classList.remove('correct', 'wrong');
+                    if (e.target.value === ans) { select.classList.add('correct'); playCorrect(); }
+                    else { select.classList.add('wrong'); playWrong(); }
+                });
+                span.replaceWith(select);
+            });
+        }
+
+        function setupTextInputs() {
+            document.querySelectorAll('.text-input-blank').forEach(input => {
+                let attempts = 0;
+                input.addEventListener('change', (e) => { // 'change' triggers on Enter or clicking outside
+                    if (e.target.disabled) return;
+                    const ans = e.target.dataset.ans.toLowerCase();
+                    const val = e.target.value.toLowerCase().trim();
+
+                    if (val === ans) {
+                        e.target.classList.remove('wrong');
+                        e.target.classList.add('correct');
+                        e.target.disabled = true; // lock it in!
+                        playCorrect();
+                    } else if (val !== "") {
+                        attempts++;
+                        e.target.classList.add('wrong');
+                        playWrong();
+
+                        // Remove animation class after it plays
+                        setTimeout(() => e.target.classList.remove('wrong'), 300);
+
+                        // Reveal answer after 2 wrong attempts
+                        if (attempts >= 2) {
+                            setTimeout(() => {
+                                e.target.value = e.target.dataset.ans; // Show correct answer
+                                e.target.classList.add('bg-yellow-200', 'text-red-600', 'border-red-500');
+                                e.target.disabled = true;
+                                playReveal(); // Magical shimmer sound for revealing
+                            }, 300);
+                        }
+                    }
+                });
+            });
+        }
+
+        // --- MCQ LOGIC (All 15 Questions) ---
+        const mcqs = [
+            { q: "How does light travel?", opts: ["In wavy lines", "In straight lines", "In circles", "It teleports"], a: 1 },
+            { q: "According to the Law of Reflection, if the angle of incidence is \\(40^\\circ\\), what is the angle of reflection?", opts: ["\\(20^\\circ\\)", "\\(50^\\circ\\)", "\\(40^\\circ\\)", "\\(90^\\circ\\)"], a: 2 },
+            { q: "Where is the angle of incidence measured?", opts: ["Between incident ray and mirror", "Between incident ray and normal", "Between reflected ray and normal", "Between reflected ray and mirror"], a: 1 },
+            { q: "Which type of reflection happens on a completely smooth, shiny surface?", opts: ["Diffuse", "Virtual", "Specular", "Refractive"], a: 2 },
+            { q: "Why does AMBULANCE appear backwards?", opts: ["Diffuse reflection", "Refraction in air", "Lateral inversion in mirrors", "So the driver can read it"], a: 2 },
+            { q: "What happens to light when it travels from air into a glass block?", opts: ["Speeds up, bends towards normal", "Speeds up, bends away from normal", "Slows down, bends towards normal", "Slows down, bends away from normal"], a: 2 },
+            { q: "Which phenomenon makes a swimming pool look shallower than it actually is?", opts: ["Reflection", "Refraction", "Dispersion", "Absorption"], a: 1 },
+            { q: "What equipment is used to split white light into a spectrum in a laboratory?", opts: ["Plane mirror", "Glass block", "Triangular glass prism", "Magnifying lens"], a: 2 },
+            { q: "Which colour of light travels the SLOWEST inside a glass prism?", opts: ["Red", "Green", "Yellow", "Violet"], a: 3 },
+            { q: "Why does a green leaf appear green under sunlight?", opts: ["Absorbs green, reflects others", "Reflects green, absorbs others", "Creates its own light", "Refracts green away"], a: 1 },
+            { q: "Which shape accurately describes our home galaxy, the Milky Way?", opts: ["Elliptical", "Irregular", "Spiral", "Spherical"], a: 2 },
+            { q: "What does a 'light-year' measure?", opts: ["Speed of a star", "Time", "Distance light travels in one year", "Brightness of a galaxy"], a: 2 },
+            { q: "Where is the main Asteroid Belt located?", opts: ["Between Earth and Mars", "Between Mars and Jupiter", "Past Neptune", "Between Venus and Earth"], a: 1 },
+            { q: "Why does a comet have a glowing tail?", opts: ["Burning in Earth's atmosphere", "Ice melts and vaporises into gas near the Sun", "Reflects light of nearby stars", "It is made of fire"], a: 1 },
+            { q: "What do we call a piece of space rock that survives the atmosphere and hits Earth's surface?", opts: ["Meteoroid", "Meteor", "Meteorite", "Asteroid"], a: 2 }
+        ];
+
+        const mcqContainer = document.getElementById('mcq-container');
+        mcqs.forEach((mcq, index) => {
+            const div = document.createElement('div');
+            div.className = "chunky-border p-5 bg-white";
+            div.innerHTML = `<p class="font-bold text-lg mb-3">${index + 1}. ${mcq.q}</p>`;
+            const btnContainer = document.createElement('div');
+            btnContainer.className = "flex flex-col gap-2";
+
+            mcq.opts.forEach((opt, optIndex) => {
+                const btn = document.createElement('button');
+                btn.className = "mcq-btn chunky-btn bg-gray-100 p-2 text-left w-full hover:bg-gray-200";
+                btn.innerHTML = opt;
+                btn.onclick = () => {
+                    Array.from(btnContainer.children).forEach(b => b.className = "mcq-btn chunky-btn bg-gray-100 p-2 text-left w-full");
+                    if (optIndex === mcq.a) { btn.classList.add('correct', 'bg-green-500', 'text-white'); playCorrect(); }
+                    else { btn.classList.add('wrong', 'bg-red-500', 'text-white'); playWrong(); }
+                };
+                btnContainer.appendChild(btn);
+            });
+            div.appendChild(btnContainer);
+            mcqContainer.appendChild(div);
+        });
+
+        // --- SHORT ANSWER LOGIC (All 15 Questions) ---
+        const sas = [
+            { q: "State the Law of Reflection.", a: "The angle of incidence is always equal to the angle of reflection (\\(i = r\\))." },
+            { q: "Explain the difference between the incident ray and the reflected ray.", a: "The incident ray is the incoming light hitting a surface, while the reflected ray is the light bouncing off." },
+            { q: "List three properties of an image formed in a plane (flat) mirror.", a: "It is virtual, laterally inverted, and the exact same size as the original object." },
+            { q: "Explain clearly why a straight pencil looks bent or broken when placed in a glass of water.", a: "Light travels at different speeds in water and air. Light from the underwater pencil refracts (bends) as it enters the air." },
+            { q: "Explain why a violet light ray bends more than a red light ray when passing through a glass prism.", a: "Violet light travels slower through the glass than red light does, causing it to bend (refract) at a sharper angle." },
+            { q: "How do real rainbows form in nature after a rainstorm?", a: "Millions of water droplets suspended in the air act as tiny prisms, refracting and dispersing white sunlight into a spectrum." },
+            { q: "If you wear a white t-shirt on a sunny day, why do you feel cooler than someone wearing a black t-shirt?", a: "A white t-shirt reflects all colours of light (and heat), whereas a black t-shirt absorbs all colours, trapping the heat." },
+            { q: "Name the three main shapes/types of galaxies found in the universe.", a: "Spiral, Elliptical, and Irregular galaxies." },
+            { q: "Why do scientists use 'light-years' to measure distances in space instead of kilometers?", a: "Space is so vast that using kilometers would result in numbers that are too long and impractical to calculate with." },
+            { q: "Proxima Centauri is 4.2 light-years away. If that star exploded today, when would we see it happen on Earth? Explain.", a: "We would see it in 4.2 years, because it will take exactly 4.2 years for the light from the explosion to travel to Earth." },
+            { q: "What is the difference between an asteroid and a comet in terms of what they are made of?", a: "Asteroids are made of solid rock and metal, while comets are made of loose rock, dust, and frozen gases/ice." },
+            { q: "Describe the shape of a comet's orbit around the Sun.", a: "Comets have highly elliptical (oval-shaped) orbits that bring them very close to the Sun and then far out to the edge of the solar system." },
+            { q: "Define what a meteoroid is.", a: "A small piece of rock or metal travelling completely freely through space." },
+            { q: "Why does a meteor create a bright streak of light when it enters Earth's atmosphere?", a: "It travels so incredibly fast that friction with the air particles heats it up, causing it to burn and glow brightly." },
+            { q: "What is the scientific theory regarding the extinction of the dinosaurs 66 million years ago?", a: "A massive asteroid impacted the Earth, altering the global climate drastically and leading to a mass extinction." }
+        ];
+
+        const saContainer = document.getElementById('sa-container');
+        sas.forEach((sa, index) => {
+            const div = document.createElement('div');
+            div.className = "chunky-border p-6 bg-blue-50";
+            div.innerHTML = `
+                <p class="font-bold text-xl mb-2">Q${index + 1}: ${sa.q}</p>
+                <textarea class="w-full p-3 rounded-lg border-2 border-gray-300 mb-3" rows="2" placeholder="Type your answer here..."></textarea>
+                <button class="sa-reveal-btn chunky-btn bg-yellow-400 px-4 py-2 text-sm">🔍 Reveal Answer</button>
+                <p class="hidden-ans mt-3 font-bold text-red-600 hidden bg-white p-3 rounded border-2 border-red-200"></p>
+            `;
+
+            const btn = div.querySelector('.sa-reveal-btn');
+            btn.addEventListener('click', function () {
+                playReveal();
+                const p = this.nextElementSibling;
+                p.innerHTML = "👨🏻 Teacher Key: " + sa.a;
+                p.classList.remove('hidden');
+                this.style.display = 'none';
+                if (window.MathJax) {
+                    MathJax.typesetPromise([p]);
+                }
+            });
+
+            saContainer.appendChild(div);
+        });
+
+        // --- CANVAS DRAWING LOGIC (Multiple Canvases) ---
+        let currentColor = 'black';
+
+        function setColor(color) { playClick(); currentColor = color; }
+
+        function clearCanvas(id) {
+            playClick();
+            const c = document.getElementById(id);
+            c.getContext('2d').clearRect(0, 0, c.width, c.height);
+        }
+
+        const drawingTasks = [
+            "Task 1: Draw a flat mirror with an incident ray, normal, and reflected ray. Label i and r.",
+            "Task 2: Draw a rectangular glass block showing light refracting (bending) as it enters and exits.",
+            "Task 3: Draw a Triangular Prism dispersing White Light into Red (bends least) and Violet (bends most).",
+            "Task 4: Sketch a spiral galaxy and place an 'X' where our Solar System is.",
+            "Task 5: Sketch the Sun and the elliptical orbit of a Comet. Draw its tail correctly!"
+        ];
+
+        function setupCanvases() {
+            const container = document.getElementById('drawing-container');
+            drawingTasks.forEach((task, index) => {
+                const canvasId = `draw-canvas-${index}`;
+                const div = document.createElement('div');
+                div.className = "chunky-border p-6 bg-white";
+                div.innerHTML = `
+                    <p class="font-bold text-xl mb-4 text-pink-600">${task}</p>
+                    <div class="flex gap-2 mb-4">
+                        <button class="chunky-btn w-8 h-8 rounded-full bg-black" onclick="setColor('black')"></button>
+                        <button class="chunky-btn w-8 h-8 rounded-full bg-red-600" onclick="setColor('red')"></button>
+                        <button class="chunky-btn w-8 h-8 rounded-full bg-blue-600" onclick="setColor('blue')"></button>
+                        <button class="chunky-btn w-8 h-8 rounded-full bg-yellow-400" onclick="setColor('gold')"></button>
+                        <button class="chunky-btn w-8 h-8 rounded-full bg-purple-600" onclick="setColor('purple')"></button>
+                        <button class="chunky-btn px-4 py-1 bg-gray-200 text-sm ml-auto" onclick="clearCanvas('${canvasId}')">🗑️ Clear</button>
+                    </div>
+                    <canvas id="${canvasId}" class="w-full h-64 bg-gray-50"></canvas>
+                `;
+                container.appendChild(div);
+
+                // Setup drawing context
+                const canvas = document.getElementById(canvasId);
+                const ctx = canvas.getContext('2d');
+
+                // Match internal resolution to CSS size
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+
+                let isDrawing = false;
+
+                const startDraw = (e) => { isDrawing = true; drawLine(e); };
+                const endDraw = () => { isDrawing = false; ctx.beginPath(); };
+
+                const drawLine = (e) => {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    const rect = canvas.getBoundingClientRect();
+                    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+                    ctx.lineWidth = 4;
+                    ctx.lineCap = 'round';
+                    ctx.strokeStyle = currentColor;
+                    ctx.lineTo(x, y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(x, y);
+                };
+
+                canvas.addEventListener('mousedown', startDraw);
+                canvas.addEventListener('mouseup', endDraw);
+                canvas.addEventListener('mousemove', drawLine);
+                canvas.addEventListener('mouseleave', endDraw);
+                canvas.addEventListener('touchstart', startDraw, { passive: false });
+                canvas.addEventListener('touchend', endDraw);
+                canvas.addEventListener('touchmove', drawLine, { passive: false });
+            });
+        }
+
+        // ── Progress Tracking ─────────────────────────────────────
+        window.addEventListener('load', async () => {
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data) {
+                // Module state is self-contained; progress auto-restores via DOM
+            }
+        });
+    </script>
+
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="igcse-y8-sci-ch6"
+            data-module-name="Chapter 6: Light and Space"
+            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/index.html">
+    </script>
+</body>
+
+</html>
