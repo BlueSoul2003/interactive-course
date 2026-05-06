@@ -329,6 +329,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p3-en-unit1',           'Unit 1: Getting Smart',                      'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit2',           'Unit 2: City Heroes',                        'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit3',           'Unit 3: Housework',                          'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit4',           'Unit 4: The Four Seasons',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 
 -- ── KSSR English Primary 6 ────────────────────────────────────────
 ('kssr-p6-en-unit1',           'Unit 1: Scenario Practice',                  'kssr', 'english', 'kssr_p6_english', 'Primary6'),

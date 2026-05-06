@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Unit 4: The Four Seasons - Interactive Worksheet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Nunito:wght@400;600;800&display=swap');
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f0fdfa;
+            background-image: radial-gradient(#ccfbf1 2px, transparent 2px);
+            background-size: 30px 30px;
+
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+        }
+
+        #text-a,
+        #text-c-a,
+        #text-c-b,
+        #text-c-c {
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        button,
+        .dict-word,
+        .blank-slot,
+        .word-card,
+        select {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        .comic-font {
+            font-family: 'Comic Neue', cursive;
+        }
+
+        /* Hover Dictionary Styles */
+        .dict-word {
+            color: #2563eb;
+            font-weight: bold;
+            cursor: pointer;
+            border-bottom: 2px dashed #93c5fd;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .dict-word:hover {
+            background-color: #dbeafe;
+            border-radius: 4px;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 120%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            color: #1e40af;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 3px solid #fcd34d;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 50;
+            width: max-content;
+            font-size: 1.1rem;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -8px;
+            border-width: 8px;
+            border-style: solid;
+            border-color: #fcd34d transparent transparent transparent;
+        }
+
+        .dict-word.active .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px) rotate(-1deg);
+            }
+
+            75% {
+                transform: translateX(5px) rotate(1deg);
+            }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pop {
+            animation: pop 0.4s ease-in-out;
+        }
+
+        .blank-slot {
+            display: inline-block;
+            min-width: 100px;
+            height: 32px;
+            border-bottom: 3px solid #6b7280;
+            margin: 0 8px;
+            text-align: center;
+            color: #047857;
+            font-weight: bold;
+            cursor: pointer;
+            vertical-align: bottom;
+            transition: all 0.3s;
+        }
+
+        .blank-slot:hover {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .blank-slot.filled {
+            border-bottom: 3px solid #10b981;
+            pointer-events: none;
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* 翻譯滑動動畫 */
+        .trans-text {
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .trans-text.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Tree Map Line styling */
+        .tree-line-v {
+            width: 2px;
+            height: 20px;
+            background-color: #d8b4fe;
+            margin: 0 auto;
+        }
+
+        .tree-line-h {
+            height: 2px;
+            background-color: #d8b4fe;
+            width: 100%;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+            padding-right: 2.5rem !important;
+        }
+
+        select:disabled {
+            opacity: 1;
+            background-image: none;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 pb-20">
+    <a href="../../../../../index.html" style="position: fixed; top: 20px; left: 20px; z-index: 1000; background: white; padding: 10px 15px; border-radius: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); text-decoration: none; color: #334155; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; transition: all 0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.background='#f8fafc';" onmouseout="this.style.transform='scale(1)'; this.style.background='white';">
+        <span style="font-size: 1.2rem;">🏠</span> <span>Home</span>
+    </a>
+
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-40">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-2xl shadow-inner">
+                    🌟</div>
+                <div>
+                    <h1 class="text-xl font-bold text-teal-700 comic-font">Unit 4: The Four Seasons</h1>
+                    <p class="text-sm text-gray-500" data-zh="小三英文互動練習" data-en="Grade 3 English Interactive Practice">
+                        Grade 3 English Interactive Practice</p>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <div class="hidden md:flex gap-2 bg-gray-100 p-2 rounded-full border-2 border-gray-200">
+                    <div id="badge-a"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section A">🌸</div>
+                    <div id="badge-b"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section B">☀️</div>
+                    <div id="badge-c"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section C">🍁</div>
+                    <div id="badge-d"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section D">⛄</div>
+                    <div id="badge-e"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section E">🌤️</div>
+                    <div id="badge-f"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section F">✅</div>
+                    <div id="badge-g"
+                        class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center grayscale transition-all duration-500"
+                        title="Section G">📮</div>
+                </div>
+                <button onclick="toggleLanguage()"
+                    class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-full font-bold shadow-md transition-colors flex items-center gap-2">
+                    <i class="fas fa-language"></i> <span id="lang-btn-text">中文說明</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 mt-8 space-y-12">
+
+        <!-- Section A -->
+        <section id="section-A" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-pink-200">
+            <div class="bg-pink-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-pink-700 comic-font">
+                    <i class="fas fa-book-open mr-2"></i> Section A: Reading
+                </h2>
+                <span class="text-pink-600 font-bold" data-en="Read and answer" data-zh="閱讀短文並回答問題">Read and
+                    answer</span>
+            </div>
+
+            <div class="p-6">
+                <div class="bg-orange-50 rounded-2xl p-6 border-2 border-orange-200 relative mb-8">
+                    <div class="absolute top-4 right-4 flex gap-2">
+                        <button onclick="toggleTrans('trans-text-a')"
+                            class="w-10 h-10 bg-green-500 text-white rounded-full flex items-center justify-center hover:bg-green-600 shadow-md font-bold">中</button>
+                        <button onclick="speakText('text-a')"
+                            class="w-10 h-10 bg-orange-400 text-white rounded-full flex items-center justify-center hover:bg-orange-500 shadow-md">
+                            <i class="fas fa-volume-up text-lg"></i>
+                        </button>
+                    </div>
+                    <p class="text-gray-500 text-sm mb-2"
+                        data-en="💡 Tap blue words to see meaning! Click '中' for translation."
+                        data-zh="💡 點藍色單字看意思！聽不懂可以點「中」看翻譯喔！">💡 Tap blue words to see meaning! Click '中' for
+                        translation.</p>
+
+                    <div id="text-a" class="text-lg leading-relaxed font-medium text-gray-700 mt-4">
+                        There are four <span class="dict-word" onclick="toggleTooltip(this)">seasons<span
+                                class="tooltip">🌸 季節</span></span> in a year: spring, summer, autumn and winter.
+                        In spring, flowers <span class="dict-word" onclick="toggleTooltip(this)">bloom<span
+                                class="tooltip">🌷 開花</span></span> and the weather becomes warmer. People often go for
+                        walks in the park.
+                        Summer is the <span class="dict-word" onclick="toggleTooltip(this)">hottest<span
+                                class="tooltip">🔥 最熱的</span></span> season. Many children enjoy swimming or eating ice
+                        cream.
+                        In <span class="dict-word" onclick="toggleTooltip(this)">autumn<span class="tooltip">🍁
+                                秋天</span></span>, the leaves turn red, orange and yellow. The weather gets cooler and
+                        windier.
+                        Winter is the coldest season. Sometimes it <span class="dict-word"
+                            onclick="toggleTooltip(this)">snows<span class="tooltip">❄️ 下雪</span></span>, and people
+                        wear <span class="dict-word" onclick="toggleTooltip(this)">thick clothes<span class="tooltip">🧥
+                                厚衣服</span></span> to stay warm.
+                    </div>
+                    <div id="trans-text-a"
+                        class="trans-text mt-4 p-4 bg-white rounded-xl border border-green-200 text-green-700 font-medium">
+                        一年有四個季節：春、夏、秋、冬。在春天，花朵綻放，天氣變暖。人們常去公園散步。夏天是最熱的季節。許多小孩喜歡游泳或吃冰淇淋。在秋天，樹葉變成紅色、橘色和黃色。天氣變得比較涼爽，風也比較大。冬天是最冷的季節。有時候會下雪，人們穿厚衣服保暖。
+                    </div>
+                </div>
+
+                <div id="qa-container" class="space-y-6"></div>
+            </div>
+        </section>
+
+        <!-- Section B -->
+        <section id="section-B" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-blue-200">
+            <div class="bg-blue-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-blue-700 comic-font">
+                    <i class="fas fa-puzzle-piece mr-2"></i> Section B: Fill in the Blanks
+                </h2>
+                <span class="text-blue-600 font-bold" data-en="Months of the Year" data-zh="填入正確的月份">Months of the
+                    Year</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4 font-bold" data-en="👆 Click a word card, then click a blank line!"
+                    data-zh="👆 先點擊月份卡片，再點擊空白處！">👆 Click a word card, then click a blank line!</p>
+                <div id="word-bank"
+                    class="flex flex-wrap gap-3 mb-8 p-4 bg-blue-50 rounded-2xl border-2 border-dashed border-blue-300">
+                </div>
+                <div id="blanks-container" class="space-y-4 text-lg font-medium text-gray-700"></div>
+            </div>
+        </section>
+
+        <!-- Section C -->
+        <section id="section-C" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-green-200">
+            <div class="bg-green-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-green-700 comic-font">
+                    <i class="fas fa-link mr-2"></i> Section C: Read and Match
+                </h2>
+                <span class="text-green-600 font-bold" data-en="Match texts to sentences" data-zh="閱讀短文並配對">Match texts
+                    to sentences</span>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                    <!-- Texts generated in JS for brevity -->
+                    <div class="bg-pink-50 p-4 rounded-2xl border-2 border-pink-200 relative">
+                        <div class="absolute top-2 right-2 flex gap-1">
+                            <button onclick="toggleTrans('trans-c-a')"
+                                class="text-green-500 font-bold text-sm bg-white rounded-full w-6 h-6 shadow">中</button>
+                            <button onclick="speakText('text-c-a')"
+                                class="text-pink-500 bg-white rounded-full w-6 h-6 shadow"><i
+                                    class="fas fa-volume-up text-xs"></i></button>
+                        </div>
+                        <h3 class="font-bold text-pink-800 text-xl mb-2 flex items-center gap-2"><span
+                                class="bg-pink-500 text-white w-8 h-8 rounded-full flex items-center justify-center">A</span>
+                            February</h3>
+                        <p id="text-c-a" class="text-gray-700 text-sm">This is the second and shortest month of the year
+                            with 28 days, except during leap years when it has 29 days. Leap year occurs every four
+                            years. The next leap year will be in 2028.</p>
+                        <p id="trans-c-a"
+                            class="trans-text text-sm text-green-700 mt-2 font-bold border-t border-pink-200 pt-2">
+                            這是一年中第二個也是最短的月份，有28天。除了一年有29天的「閏年」。閏年每四年發生一次。下一次閏年是2028年。</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-200 relative">
+                        <div class="absolute top-2 right-2 flex gap-1">
+                            <button onclick="toggleTrans('trans-c-b')"
+                                class="text-green-500 font-bold text-sm bg-white rounded-full w-6 h-6 shadow">中</button>
+                            <button onclick="speakText('text-c-b')"
+                                class="text-yellow-500 bg-white rounded-full w-6 h-6 shadow"><i
+                                    class="fas fa-volume-up text-xs"></i></button>
+                        </div>
+                        <h3 class="font-bold text-yellow-800 text-xl mb-2 flex items-center gap-2"><span
+                                class="bg-yellow-500 text-white w-8 h-8 rounded-full flex items-center justify-center">B</span>
+                            June</h3>
+                        <p id="text-c-b" class="text-gray-700 text-sm">This month is named after Goddess Juno. In
+                            Malaysia, this is the month where Sarawakians celebrate the vibrant Harvesting Festival
+                            yearly for three days. It is a festival of thanksgiving.</p>
+                        <p id="trans-c-b"
+                            class="trans-text text-sm text-green-700 mt-2 font-bold border-t border-yellow-200 pt-2">
+                            這個月以朱諾女神命名。在馬來西亞，砂拉越人每年這個月都會慶祝為期三天的豐收節。這是一個感恩豐收的節日。</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-2xl border-2 border-blue-200 relative">
+                        <div class="absolute top-2 right-2 flex gap-1">
+                            <button onclick="toggleTrans('trans-c-c')"
+                                class="text-green-500 font-bold text-sm bg-white rounded-full w-6 h-6 shadow">中</button>
+                            <button onclick="speakText('text-c-c')"
+                                class="text-blue-500 bg-white rounded-full w-6 h-6 shadow"><i
+                                    class="fas fa-volume-up text-xs"></i></button>
+                        </div>
+                        <h3 class="font-bold text-blue-800 text-xl mb-2 flex items-center gap-2"><span
+                                class="bg-blue-500 text-white w-8 h-8 rounded-full flex items-center justify-center">C</span>
+                            December</h3>
+                        <p id="text-c-c" class="text-gray-700 text-sm">This is the twelfth and final month. Before the
+                            pandemic, this was the month where students had a month long holiday. Every year on the 25th
+                            of this month, Christmas is celebrated.</p>
+                        <p id="trans-c-c"
+                            class="trans-text text-sm text-green-700 mt-2 font-bold border-t border-blue-200 pt-2">
+                            這是第十二個也是最後一個月。在疫情前，學生這個月會放長達一個月的假。每年這個月的25日都會慶祝聖誕節。</p>
+                    </div>
+                </div>
+                <div id="match-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <!-- Section D (HEAVILY UPGRADED) -->
+        <section id="section-D" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-purple-200">
+            <div class="bg-purple-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-purple-700 comic-font">
+                    <i class="fas fa-table mr-2"></i> Section D: Table Study & Application
+                </h2>
+                <span class="text-purple-600 font-bold" data-en="Information Processing" data-zh="資訊整合與應用">Information
+                    Processing</span>
+            </div>
+
+            <div class="p-6 space-y-10">
+                <!-- Part 0: Visual Table Study -->
+                <div>
+                    <h3 class="font-bold text-xl text-purple-800 mb-4 flex items-center gap-2"><i
+                            class="fas fa-search"></i> <span data-en="Study the given table carefully."
+                            data-zh="請仔細觀察下方的季節資訊表：">Study the given table carefully.</span></h3>
+                    <div class="overflow-x-auto">
+                        <table
+                            class="w-full min-w-[600px] border-collapse bg-white text-center rounded-xl overflow-hidden shadow-sm border-2 border-purple-100">
+                            <thead class="bg-purple-50 text-purple-800">
+                                <tr>
+                                    <th class="p-3 border border-purple-200">Seasons</th>
+                                    <th class="p-3 border border-purple-200">Months</th>
+                                    <th class="p-3 border border-purple-200">Weather</th>
+                                    <th class="p-3 border border-purple-200">Clothing</th>
+                                    <th class="p-3 border border-purple-200">Activities</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-gray-700 font-medium">
+                                <tr class="hover:bg-purple-50 transition-colors">
+                                    <td class="p-3 border border-purple-100 text-lg">🌸 Spring</td>
+                                    <td class="p-3 border border-purple-100">March, April, May</td>
+                                    <td class="p-3 border border-purple-100">⛅ Partly Sunny<br><span
+                                            class="text-sm text-gray-500">Warm</span></td>
+                                    <td class="p-3 border border-purple-100">👗 Dresses, skirts, jeans</td>
+                                    <td class="p-3 border border-purple-100">🚲 Cycling, Hiking</td>
+                                </tr>
+                                <tr class="hover:bg-purple-50 transition-colors bg-gray-50">
+                                    <td class="p-3 border border-purple-100 text-lg">☀️ Summer</td>
+                                    <td class="p-3 border border-purple-100">June, July, August</td>
+                                    <td class="p-3 border border-purple-100">☀️ Sunny<br><span
+                                            class="text-sm text-gray-500">Very Hot</span></td>
+                                    <td class="p-3 border border-purple-100">🩳 Shorts, singlets, slippers</td>
+                                    <td class="p-3 border border-purple-100">🏄 Surfing, Swimming</td>
+                                </tr>
+                                <tr class="hover:bg-purple-50 transition-colors">
+                                    <td class="p-3 border border-purple-100 text-lg">🍁 Autumn</td>
+                                    <td class="p-3 border border-purple-100">September, October, November</td>
+                                    <td class="p-3 border border-purple-100">🌬️ Windy<br><span
+                                            class="text-sm text-gray-500">Cold</span></td>
+                                    <td class="p-3 border border-purple-100">🧥 Jackets, boots</td>
+                                    <td class="p-3 border border-purple-100">🚜 Hayride, Fruit picking</td>
+                                </tr>
+                                <tr class="hover:bg-purple-50 transition-colors bg-gray-50">
+                                    <td class="p-3 border border-purple-100 text-lg">⛄ Winter</td>
+                                    <td class="p-3 border border-purple-100">December, January, February</td>
+                                    <td class="p-3 border border-purple-100">❄️ Snowy<br><span
+                                            class="text-sm text-gray-500">Very Cold</span></td>
+                                    <td class="p-3 border border-purple-100">🧣 Sweaters, mittens</td>
+                                    <td class="p-3 border border-purple-100">🎿 Skiing, Snowman</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Part 1: Sentence Builder (With Substitution Table) -->
+                <div class="border-t-4 border-dotted border-purple-100 pt-8">
+                    <h3 class="font-bold text-xl text-purple-800 mb-4"
+                        data-en="1. Construct complete sentences to describe the following seasons based on the information from the substitution table."
+                        data-zh="1. 根據替換表(Substitution Table)的資訊，完成以下季節的完整句子：">1. Construct complete sentences to
+                        describe the following seasons based on the information from the substitution table.</h3>
+
+                    <!-- Substitution Table Recreated -->
+                    <div class="overflow-x-auto my-6">
+                        <table
+                            class="w-full min-w-[700px] border-collapse bg-white text-left rounded-xl shadow-sm border-2 border-purple-200">
+                            <tbody class="text-gray-700 font-medium align-middle">
+                                <tr class="border-b-2 border-purple-100">
+                                    <td class="p-3 border-r-2 border-purple-100 leading-loose">
+                                        Winter<br>Spring<br>Summer<br>Autumn</td>
+                                    <td
+                                        class="p-3 border-r-2 border-purple-100 text-center font-bold text-purple-700 bg-purple-50">
+                                        starts in</td>
+                                    <td class="p-3 border-r-2 border-purple-100 leading-loose">
+                                        June<br>December<br>March<br>September</td>
+                                    <td
+                                        class="p-3 border-r-2 border-purple-100 text-center font-bold text-purple-700 bg-purple-50">
+                                        and ends in</td>
+                                    <td class="p-3 leading-loose">May.<br>February.<br>November.<br>August.</td>
+                                </tr>
+                                <tr class="border-b-2 border-purple-100 bg-gray-50">
+                                    <td
+                                        class="p-3 border-r-2 border-purple-100 font-bold text-purple-700 bg-purple-100">
+                                        The weather is</td>
+                                    <td class="p-3 border-r-2 border-purple-100 leading-loose">windy<br>partly
+                                        sunny<br>snowy<br>sunny</td>
+                                    <td
+                                        class="p-3 border-r-2 border-purple-100 font-bold text-purple-700 bg-purple-100">
+                                        while the temperature is</td>
+                                    <td colspan="2" class="p-3 leading-loose">cold in autumn.<br>very cold in
+                                        winter.<br>warm in spring.<br>very hot in summer.</td>
+                                </tr>
+                                <tr class="border-b-2 border-purple-100">
+                                    <td class="p-3 border-r-2 border-purple-100 font-bold text-purple-700 bg-purple-50">
+                                        We should wear</td>
+                                    <td colspan="3" class="p-3 border-r-2 border-purple-100 leading-loose">dresses,
+                                        skirts or jeans<br>jacket, leather pants or leather boots<br>shorts, singlets or
+                                        slippers<br>sweater, mittens or winter boots</td>
+                                    <td class="p-3 leading-loose">in autumn.<br>in summer.<br>in spring.<br>in winter.
+                                    </td>
+                                </tr>
+                                <tr class="">
+                                    <td
+                                        class="p-3 border-r-2 border-purple-100 font-bold text-purple-700 bg-purple-100">
+                                        We can</td>
+                                    <td colspan="3" class="p-3 border-r-2 border-purple-100 leading-loose">go swimming
+                                        or surfing<br>go on a hayride or fruitpicking<br>go skiing or make a
+                                        snowman<br>go hiking or cycling</td>
+                                    <td class="p-3 leading-loose">in autumn.<br>in summer.<br>in spring.<br>in winter.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-sm text-gray-500 mb-4" data-en="Select the correct answers from the dropdowns."
+                        data-zh="請點擊下拉選單，選出符合該季節的正確答案。答對會變成綠色！">Select the correct answers from the dropdowns.</p>
+                    <div id="d-sentences-container" class="space-y-6">
+                        <!-- JS injected -->
+                    </div>
+                </div>
+
+                <!-- Part 2: Tree Map -->
+                <div class="border-t-4 border-dotted border-purple-100 pt-8">
+                    <h3 class="font-bold text-xl text-purple-800 mb-2"
+                        data-en="2. Complete the tree map with two other activities:" data-zh="2. 將下方的活動分類到正確的季節樹狀圖中：">
+                        2. Complete the tree map with two other activities:</h3>
+                    <p class="text-sm text-gray-500 mb-4"
+                        data-en="👆 Click an activity below, then click an empty slot in the map!"
+                        data-zh="👆 先點選下方橘色的活動卡片，再點擊樹狀圖中的底線放上去！">👆 Click an activity below, then click an empty slot in
+                        the map!</p>
+
+                    <div id="d-treemap-bank"
+                        class="flex flex-wrap justify-center gap-2 mb-6 p-4 bg-orange-50 rounded-2xl border-2 border-dashed border-orange-300">
+                        <!-- JS injected -->
+                    </div>
+
+                    <!-- Visual Tree Map -->
+                    <div class="flex flex-col items-center select-none overflow-x-auto pb-4">
+                        <div class="font-bold text-xl bg-purple-600 text-white px-6 py-2 rounded-full z-10 shadow-md">
+                            Seasons</div>
+                        <div class="tree-line-v"></div>
+                        <div class="tree-line-h max-w-[800px] w-[90%]"></div>
+                        <div class="flex justify-between w-full max-w-[900px] px-2 relative -top-[1px]">
+                            <!-- Spring -->
+                            <div class="flex flex-col items-center w-1/4">
+                                <div class="tree-line-v mb-2"></div>
+                                <div class="font-bold text-pink-600 mb-2">🌸 Spring</div>
+                                <div class="w-8 h-1 bg-pink-300 mb-2"></div>
+                                <div class="space-y-3 w-full px-1">
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">a</span><span
+                                            class="blank-slot w-full border-pink-400 text-pink-700"
+                                            onclick="placeWordD2(0, this, 'Plant flowers')"></span></div>
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">b</span><span
+                                            class="blank-slot w-full border-pink-400 text-pink-700"
+                                            onclick="placeWordD2(1, this, 'Have a picnic')"></span></div>
+                                </div>
+                            </div>
+                            <!-- Summer -->
+                            <div class="flex flex-col items-center w-1/4">
+                                <div class="tree-line-v mb-2"></div>
+                                <div class="font-bold text-yellow-600 mb-2">☀️ Summer</div>
+                                <div class="w-8 h-1 bg-yellow-300 mb-2"></div>
+                                <div class="space-y-3 w-full px-1">
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">c</span><span
+                                            class="blank-slot w-full border-yellow-400 text-yellow-700"
+                                            onclick="placeWordD2(2, this, 'Build sandcastles')"></span></div>
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">d</span><span
+                                            class="blank-slot w-full border-yellow-400 text-yellow-700"
+                                            onclick="placeWordD2(3, this, 'Eat ice cream')"></span></div>
+                                </div>
+                            </div>
+                            <!-- Autumn -->
+                            <div class="flex flex-col items-center w-1/4">
+                                <div class="tree-line-v mb-2"></div>
+                                <div class="font-bold text-orange-600 mb-2">🍁 Autumn</div>
+                                <div class="w-8 h-1 bg-orange-300 mb-2"></div>
+                                <div class="space-y-3 w-full px-1">
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">e</span><span
+                                            class="blank-slot w-full border-orange-400 text-orange-700"
+                                            onclick="placeWordD2(4, this, 'Fly kites')"></span></div>
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">f</span><span
+                                            class="blank-slot w-full border-orange-400 text-orange-700"
+                                            onclick="placeWordD2(5, this, 'Collect leaves')"></span></div>
+                                </div>
+                            </div>
+                            <!-- Winter -->
+                            <div class="flex flex-col items-center w-1/4">
+                                <div class="tree-line-v mb-2"></div>
+                                <div class="font-bold text-blue-600 mb-2">⛄ Winter</div>
+                                <div class="w-8 h-1 bg-blue-300 mb-2"></div>
+                                <div class="space-y-3 w-full px-1">
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">g</span><span
+                                            class="blank-slot w-full border-blue-400 text-blue-700"
+                                            onclick="placeWordD2(6, this, 'Drink hot chocolate')"></span></div>
+                                    <div class="flex items-center gap-2 text-sm"><span
+                                            class="bg-gray-200 text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">h</span><span
+                                            class="blank-slot w-full border-blue-400 text-blue-700"
+                                            onclick="placeWordD2(7, this, 'Ice skating')"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part 3: Materials -->
+                <div class="border-t-4 border-dotted border-purple-100 pt-8">
+                    <h3 class="font-bold text-xl text-purple-800 mb-4" data-en="3. Match materials to their features:"
+                        data-zh="3. 將衣服材質與特徵配對：">3. Match materials to their features:</h3>
+                    <div id="materials-container" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- JS injected -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section E -->
+        <section id="section-E" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-indigo-200">
+            <div class="bg-indigo-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-indigo-700 comic-font">
+                    <i class="fas fa-cloud-sun mr-2"></i> Section E: Weather Vocabulary
+                </h2>
+                <span class="text-indigo-600 font-bold" data-en="Match the weather" data-zh="天氣單字配對">Match the
+                    weather</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4 font-bold" data-en="👆 Click a word, then click the correct weather icon!"
+                    data-zh="👆 先點擊單字卡，再點擊對應的天氣圖標下方！">👆 Click a word, then click the correct weather icon!</p>
+                <div id="word-bank-e"
+                    class="flex flex-wrap gap-3 mb-8 p-4 bg-indigo-50 rounded-2xl border-2 border-dashed border-indigo-300">
+                </div>
+                <div id="weather-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center"></div>
+            </div>
+        </section>
+
+        <!-- Section F -->
+        <section id="section-F" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-red-200">
+            <div class="bg-red-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-red-700 comic-font">
+                    <i class="fas fa-calendar-check mr-2"></i> Section F: True or False
+                </h2>
+                <span class="text-red-600 font-bold" data-en="Check the forecast" data-zh="看天氣預報判斷對錯">Check the
+                    forecast</span>
+            </div>
+            <div class="p-6">
+                <div class="flex flex-wrap gap-4 justify-center mb-8 bg-red-50 p-4 rounded-xl border border-red-200"
+                    id="forecast-banner"></div>
+                <div id="tf-container" class="space-y-4"></div>
+            </div>
+        </section>
+
+        <!-- Section G -->
+        <section id="section-G" class="bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-teal-200">
+            <div class="bg-teal-100 px-6 py-4 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-teal-700 comic-font">
+                    <i class="fas fa-envelope-open-text mr-2"></i> Section G: Postcard
+                </h2>
+                <span class="text-teal-600 font-bold" data-en="Fill in the blanks" data-zh="完成明信片">Fill in the
+                    blanks</span>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-600 mb-4 font-bold"
+                    data-en="👆 Click a phrase below, then click a blank in the postcard!"
+                    data-zh="👆 點擊下方句子，再點擊明信片中的空白處填入！">👆 Click a phrase below, then click a blank in the postcard!</p>
+                <div id="word-bank-g"
+                    class="flex flex-wrap gap-3 mb-6 p-4 bg-teal-50 rounded-2xl border-2 border-dashed border-teal-300">
+                </div>
+
+                <div class="bg-yellow-50 p-6 md:p-10 rounded-xl border-4 border-dashed border-yellow-300 relative shadow-inner text-lg font-medium text-gray-800"
+                    style="font-family: 'Comic Neue', cursive;">
+                    <div
+                        class="absolute top-4 right-4 w-16 h-20 border-2 border-gray-300 flex items-center justify-center text-gray-400 bg-white shadow-sm flex-col">
+                        <i class="fas fa-camera text-xl mb-1"></i><span class="text-xs">Stamp</span>
+                    </div>
+                    <div id="postcard-content"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center transform scale-90 transition-transform duration-300"
+            id="modal-content">
+            <div class="text-6xl mb-4" id="modal-icon">🏆</div>
+            <h2 class="text-3xl font-bold text-gray-800 comic-font mb-2" id="modal-title">Great Job!</h2>
+            <p class="text-gray-600 mb-6 text-lg" id="modal-desc" data-en="You completed this section!"
+                data-zh="你完成這個部分了！">You completed this section!</p>
+            <button onclick="closeModal()"
+                class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl shadow-lg transition-colors text-xl">
+                Continue 🚀
+            </button>
+        </div>
+    </div>
+
+    <!-- Audio Effects -->
+    <audio id="audio-correct" src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3"
+        preload="auto"></audio>
+    <audio id="audio-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3"
+        preload="auto"></audio>
+    <audio id="audio-tada" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
+        preload="auto"></audio>
+
+    <script>
+        let currentLang = 'en';
+        let sectionAProgress = 0; let sectionBProgress = 0; let sectionCProgress = 0;
+        let sectionD1Progress = 0; let sectionD2Progress = 0; let sectionD3Progress = 0;
+        let sectionEProgress = 0; let sectionFProgress = 0; let sectionGProgress = 0;
+
+        window.addEventListener('load', async () => {
+            const saved = await ProgressTracker.load();
+            if (saved && saved.progress_data) {
+                const p = saved.progress_data;
+                if (p.completedSections) {
+                    completedSections = p.completedSections;
+                    p.completedSections.forEach(section => {
+                        const badge = document.getElementById(`badge-${section.toLowerCase()}`);
+                        if (badge) {
+                            badge.classList.remove('grayscale', 'bg-gray-300');
+                            badge.classList.add('bg-yellow-100', 'ring-4', 'ring-yellow-400');
+                        }
+                    });
+                }
+            }
+        });
+
+        let completedSections = [];
+        function saveProgress(section) {
+            if (!completedSections.includes(section)) {
+                completedSections.push(section);
+                ProgressTracker.save({
+                    completedSections: completedSections
+                });
+            }
+        }
+
+        let selectedWordForBlank = null; let selectedBankBtn = null;
+        let selectedWordForD2 = null; let selectedBankBtnD2 = null;
+        let selectedWordForE = null; let selectedBankBtnE = null;
+        let selectedWordForG = null; let selectedBankBtnG = null;
+
+        // --- Data Definitions ---
+        const dataA = [
+            { q: "1. What happens in spring?", zh: "春天會發生什麼事？", opts: ["A. It snows.", "B. Leaves fall off trees.", "C. Flowers bloom."], ans: 2 },
+            { q: "2. Which season is the hottest?", zh: "哪個季節最熱？", opts: ["A. Autumn", "B. Summer", "C. Winter"], ans: 1 },
+            { q: "3. What do people wear in winter?", zh: "人們在冬天穿什麼？", opts: ["A. Shorts and T-shirts", "B. Thin clothes", "C. Thick clothes"], ans: 2 },
+            { q: "4. Which season would be best for a picnic in the park?", zh: "哪個季節最適合在公園野餐？", opts: ["A. Spring", "B. Winter", "C. Autumn"], ans: 0 },
+            { q: "5. If you wanted to build a snowman, which season should you wait for?", zh: "如果你想堆雪人，你應該等哪個季節？", opts: ["A. Summer", "B. Autumn", "C. Winter"], ans: 2 },
+            { q: "6. What might happen if someone wears summer clothes in winter?", zh: "如果有人在冬天穿夏天的衣服，會發生什麼事？", opts: ["A. They will feel very warm.", "B. They might catch a cold.", "C. They will enjoy the snow more."], ans: 1 },
+            { q: "7. Why do you think leaves change colour in autumn?", zh: "你認為為什麼秋天樹葉會變色？", opts: ["A. Due to cooler weather and less sunlight.", "B. Due to hotter weather.", "C. Due to wetter weather."], ans: 0 }
+        ];
+
+        const dataB = [
+            { q: "This month has only got 28 days.", zh: "這個月只有28天。", ans: "February" },
+            { q: "This month is the twelfth month of the year.", zh: "這個月是一年的第十二個月。", ans: "December" },
+            { q: "This month is the first month of the year.", zh: "這個月是一年的第一個月。", ans: "January" },
+            { q: "This month comes after the month of March.", zh: "這個月在三月之後。", ans: "April" },
+            { q: "This month falls between February and April.", zh: "這個月介於二月和四月之間。", ans: "March" },
+            { q: "This month marks the celebration of Mother's Day.", zh: "這個月是慶祝母親節的月份。", ans: "May" },
+            { q: "This month is the tenth month of the year.", zh: "這個月是一年的第十個月。", ans: "October" },
+            { q: "This month hosts the celebration of Merdeka Day.", zh: "這個月是慶祝國慶日（馬來西亞）的月份。", ans: "August" },
+            { q: "This month marks the celebration of Malaysia Day.", zh: "這個月是慶祝馬來西亞日的月份。", ans: "September" },
+            { q: "This month falls between October and December.", zh: "這個月介於十月和十二月之間。", ans: "November" },
+            { q: "This month is the month before August.", zh: "這個月是八月的前一個月。", ans: "July" },
+            { q: "This month marks the celebration of the Gawai Festival for three days.", zh: "這個月會慶祝為期三天的豐收節 (Gawai Festival)。", ans: "June" }
+        ];
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        const dataC = [
+            { q: "1. This is the month when Christmas falls on the 25th.", zh: "這是25日過聖誕節的月份。", ans: "C" },
+            { q: "2. This is the month when the Harvesting Festival occurs.", zh: "這是舉行豐收節的月份。", ans: "B" },
+            { q: "3. This is the month with the shortest number of days.", zh: "這是天數最短的月份。", ans: "A" },
+            { q: "4. This is the only month which has a leap year.", zh: "這是唯一有閏年的月份。", ans: "A" },
+            { q: "5. This month is named after an Ancient Rome Goddess.", zh: "這個月以古羅馬女神命名。", ans: "B" },
+            { q: "6. This month used to mark the longest holiday period for schools.", zh: "這個月過去是學校最長的假期。", ans: "C" }
+        ];
+
+        // Section D1 Data (Sentence Builder)
+        const d_options = {
+            m1: ["March", "June", "September", "December"],
+            m2: ["May", "August", "November", "February"],
+            w: ["partly sunny", "sunny", "windy", "snowy"],
+            t: ["warm in spring.", "very hot in summer.", "cold in autumn.", "very cold in winter."],
+            c: ["dresses, skirts or jeans", "shorts, singlets or slippers", "jacket, leather pants or leather boots", "sweater, mittens or winter boots"],
+            a: ["go hiking or cycling", "go swimming or surfing", "go on a hayride or fruitpicking", "go skiing or make a snowman"],
+            s: ["in spring.", "in summer.", "in autumn.", "in winter."]
+        };
+        const dataD1 = [
+            { id: "Spring", letter: "a", icon: "🌸", m1: "March", m2: "May", w: "partly sunny", t: "warm in spring.", c: "dresses, skirts or jeans", s1: "in spring.", a: "go hiking or cycling", s2: "in spring." },
+            { id: "Summer", letter: "b", icon: "☀️", m1: "June", m2: "August", w: "sunny", t: "very hot in summer.", c: "shorts, singlets or slippers", s1: "in summer.", a: "go swimming or surfing", s2: "in summer." },
+            { id: "Autumn", letter: "c", icon: "🍁", m1: "September", m2: "November", w: "windy", t: "cold in autumn.", c: "jacket, leather pants or leather boots", s1: "in autumn.", a: "go on a hayride or fruitpicking", s2: "in autumn." },
+            { id: "Winter", letter: "d", icon: "⛄", m1: "December", m2: "February", w: "snowy", t: "very cold in winter.", c: "sweater, mittens or winter boots", s1: "in winter.", a: "go skiing or make a snowman", s2: "in winter." }
+        ];
+
+        const dataD2_words = [
+            { text: "Plant flowers", zh: "種花" }, { text: "Have a picnic", zh: "野餐" },
+            { text: "Build sandcastles", zh: "堆沙堡" }, { text: "Eat ice cream", zh: "吃冰淇淋" },
+            { text: "Fly kites", zh: "放風箏" }, { text: "Collect leaves", zh: "收集落葉" },
+            { text: "Drink hot chocolate", zh: "喝熱巧克力" }, { text: "Ice skating", zh: "溜冰" }
+        ];
+
+        const dataD3 = [
+            { m: "wool", m_zh: "羊毛", char: "warm", char_zh: "保暖" },
+            { m: "leather", m_zh: "皮革", char: "strong", char_zh: "堅固" },
+            { m: "cotton", m_zh: "棉", char: "cool", char_zh: "涼爽" }
+        ];
+
+        const dataE = [
+            { word: "cloudy", icon: "☁️", zh: "多雲的" }, { word: "sunny", icon: "☀️", zh: "晴朗的" },
+            { word: "rainy", icon: "🌧️", zh: "下雨的" }, { word: "thunderstorm", icon: "⛈️", zh: "雷陣雨" },
+            { word: "snowy", icon: "❄️", zh: "下雪的" }, { word: "windy", icon: "🌬️", zh: "刮風的" },
+            { word: "foggy", icon: "🌫️", zh: "起霧的" }, { word: "tornado", icon: "🌪️", zh: "龍捲風" }
+        ];
+
+        const dataF = [
+            { day: "Mon", forecast: "Rainy 🌧️", q: "1. On Monday, it will be a sunny day.", zh: "星期一將是個晴朗的日子。", ans: false },
+            { day: "Tue", forecast: "Sunny ☀️", q: "2. It is expected to be a hot day on Tuesday.", zh: "預計星期二會是個炎熱的日子。", ans: true },
+            { day: "Wed", forecast: "Windy 🌬️", q: "3. On Wednesday, it will be a windy day.", zh: "星期三將會刮風。", ans: true },
+            { day: "Thu", forecast: "Cloudy ☁️", q: "4. There will be a thunderstorm on Thursday.", zh: "星期四會有雷陣雨。", ans: false },
+            { day: "Fri", forecast: "Storm ⛈️", q: "5. On Friday, it will be a hazy day.", zh: "星期五會有霧霾。", ans: false }
+        ];
+
+        const dataG_words = [
+            { text: "show you all the photos", zh: "給你看照片" }, { text: "here on a holiday", zh: "在這裡度假" },
+            { text: "it's winter now", zh: "現在是冬天" }, { text: "built a snowman", zh: "堆了雪人" },
+            { text: "everything's covered in snow", zh: "被雪覆蓋" }, { text: "I miss you", zh: "我想念你" }
+        ];
+
+        const dataG_postcard = `
+            <p class="mb-4">Dear Grandma,</p>
+            <p class="mb-4 leading-loose">
+                Hello from Japan! I'm <span class="blank-slot" onclick="placeWordG(0, this, 'here on a holiday')"></span> with Mum and Dad. We flew here by plane last week. <span class="blank-slot" onclick="placeWordG(1, this, 'it\\'s winter now')"></span> and it's very cold. The trees have no leaves, and <span class="blank-slot" onclick="placeWordG(2, this, 'everything\\'s covered in snow')"></span>. I loved seeing snow for the first time!
+            </p>
+            <p class="mb-4 leading-loose">
+                We've been drinking hot chocolate and visiting temples. Yesterday, I <span class="blank-slot" onclick="placeWordG(3, this, 'built a snowman')"></span> and even tried skiing. I had so much fun! I hope you're doing well. I'll <span class="blank-slot" onclick="placeWordG(4, this, 'show you all the photos')"></span> when I get back! <span class="blank-slot" onclick="placeWordG(5, this, 'I miss you')"></span>.
+            </p>
+            <p>Love,<br/>Janet.</p>
+        `;
+
+        // --- Init ---
+        window.onload = () => {
+            renderSectionA(); renderSectionB(); renderSectionC();
+            renderSectionD1(); renderSectionD2(); renderSectionD3();
+            renderSectionE(); renderSectionF(); renderSectionG();
+            updateLanguageUI(); unlockAudioForIOS();
+        };
+
+        function unlockAudioForIOS() {
+            let audioUnlocked = false;
+            const unlock = function () {
+                if (!audioUnlocked) {
+                    if ('speechSynthesis' in window) {
+                        let silentUtterance = new SpeechSynthesisUtterance('');
+                        silentUtterance.volume = 0; window.speechSynthesis.speak(silentUtterance);
+                    }
+                    ['correct', 'wrong', 'tada'].forEach(id => {
+                        let au = document.getElementById(`audio-${id}`);
+                        if (au) {
+                            au.volume = 0;
+                            let playPromise = au.play();
+                            if (playPromise !== undefined) {
+                                playPromise.then(() => { au.pause(); au.currentTime = 0; au.volume = 1; }).catch(e => e);
+                            }
+                        }
+                    });
+                    audioUnlocked = true;
+                    document.removeEventListener('touchstart', unlock); document.removeEventListener('click', unlock);
+                }
+            };
+            document.addEventListener('touchstart', unlock); document.addEventListener('click', unlock);
+        }
+
+        function toggleTrans(id) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('show');
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            updateLanguageUI();
+        }
+
+        function updateLanguageUI() {
+            const langBtnText = document.getElementById('lang-btn-text');
+            if (langBtnText) {
+                langBtnText.innerText = currentLang === 'en' ? '中文說明' : 'English';
+            }
+            document.querySelectorAll('[data-en][data-zh]').forEach(el => {
+                el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+
+        // --- Render Functions ---
+        function renderSectionA() {
+            const container = document.getElementById('qa-container');
+            dataA.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-white p-4 rounded-xl border-2 border-gray-100 hover:border-pink-200 transition-colors shadow-sm";
+                let optsHtml = item.opts.map((opt, i) => `
+                    <button onclick="checkAnswerA(${index}, ${i}, this)" class="w-full text-left p-3 rounded-lg border-2 border-gray-200 hover:bg-pink-50 hover:border-pink-300 transition-all font-medium text-gray-700">${opt}</button>
+                `).join('');
+                div.innerHTML = `
+                    <div class="flex gap-2 mb-2 items-start">
+                        <button onclick="toggleTrans('trans-qa-${index}')" class="text-green-500 font-bold bg-green-50 rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-1 shadow-sm hover:bg-green-100">中</button>
+                        <button onclick="speakText('${item.q}')" class="text-orange-400 bg-orange-50 rounded-full w-8 h-8 flex items-center justify-center shrink-0 mt-1 shadow-sm hover:bg-orange-100"><i class="fas fa-volume-up"></i></button>
+                        <div class="flex-1"><h3 class="font-bold text-lg text-gray-800">${item.q}</h3><div id="trans-qa-${index}" class="trans-text text-sm text-green-600 font-bold mt-1">${item.zh}</div></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-4">${optsHtml}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderSectionB() {
+            const bank = document.getElementById('word-bank');
+            [...months].sort(() => Math.random() - 0.5).forEach(m => {
+                const btn = document.createElement('button');
+                btn.className = "word-card px-4 py-2 bg-white border-2 border-blue-400 text-blue-700 font-bold rounded-xl shadow-sm hover:bg-blue-50 hover:scale-105 transition-all";
+                btn.innerText = m; btn.onclick = () => selectWord(btn, m);
+                bank.appendChild(btn);
+            });
+            const container = document.getElementById('blanks-container');
+            dataB.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "p-3 bg-white rounded-lg border border-gray-100 shadow-sm";
+                const sentence = item.q.replace("This month", `<span class="blank-slot" onclick="placeWord(${index}, this, '${item.ans}')"></span>`);
+                div.innerHTML = `
+                    <div class="flex items-center flex-wrap gap-2">
+                        <button onclick="toggleTrans('trans-qb-${index}')" class="text-green-500 font-bold bg-green-50 rounded-full w-8 h-8 flex items-center justify-center shrink-0 shadow-sm">中</button>
+                        <button onclick="speakText('${item.q.replace("This month", "Blank")}')" class="text-blue-500 bg-blue-50 rounded-full w-8 h-8 flex items-center justify-center shrink-0 shadow-sm"><i class="fas fa-volume-up"></i></button>
+                        <span class="flex-1">${index + 1}. ${sentence}</span>
+                    </div>
+                    <div id="trans-qb-${index}" class="trans-text text-sm text-green-600 font-bold mt-2 ml-20">${item.zh}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function renderSectionC() {
+            const container = document.getElementById('match-container');
+            dataC.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-white rounded-xl border-2 border-gray-100 hover:border-green-200 transition-colors shadow-sm";
+                div.innerHTML = `
+                    <div class="flex gap-2 items-start flex-1">
+                        <div class="flex gap-1 mt-1 shrink-0">
+                            <button onclick="toggleTrans('trans-qc-${index}')" class="text-green-500 font-bold bg-green-50 rounded-full w-8 h-8 flex items-center justify-center shadow-sm">中</button>
+                            <button onclick="speakText('${item.q.substring(3)}')" class="text-green-500 bg-green-50 rounded-full w-8 h-8 flex items-center justify-center shadow-sm"><i class="fas fa-volume-up"></i></button>
+                        </div>
+                        <div class="flex-1"><h3 class="font-bold text-gray-800">${item.q}</h3><div id="trans-qc-${index}" class="trans-text text-sm text-green-600 font-bold mt-1">${item.zh}</div></div>
+                    </div>
+                    <div class="flex gap-2 shrink-0">
+                        <button onclick="checkAnswerC(${index}, 'A', this)" class="w-12 h-12 rounded-xl font-bold text-lg border-2 border-pink-300 text-pink-600 hover:bg-pink-100 transition-all">A</button>
+                        <button onclick="checkAnswerC(${index}, 'B', this)" class="w-12 h-12 rounded-xl font-bold text-lg border-2 border-yellow-300 text-yellow-600 hover:bg-yellow-100 transition-all">B</button>
+                        <button onclick="checkAnswerC(${index}, 'C', this)" class="w-12 h-12 rounded-xl font-bold text-lg border-2 border-blue-300 text-blue-600 hover:bg-blue-100 transition-all">C</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // Section D1: Sentence Builder
+        function renderSectionD1() {
+            const container = document.getElementById('d-sentences-container');
+            const makeOpts = (arr) => `<option value="" disabled selected>Select...</option>` + arr.sort(() => Math.random() - 0.5).map(o => `<option value="${o}">${o}</option>`).join('');
+
+            dataD1.forEach((season, index) => {
+                const div = document.createElement('div');
+                div.className = "bg-purple-50 p-5 rounded-2xl border-2 border-purple-100 relative";
+
+                // Helper for selects
+                const sel = (type, correctVal) => `<select onchange="checkSelectD1(this, '${correctVal}')" class="mx-1 my-1 p-1 px-3 border-2 border-purple-300 rounded-lg font-bold text-purple-700 bg-white shadow-sm hover:border-purple-500 text-sm sm:text-base">${makeOpts(d_options[type])}</select>`;
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-gray-300 text-white rounded-full flex items-center justify-center font-bold text-lg shadow-inner">${season.letter}</div>
+                        <div class="flex items-center bg-gray-200 px-4 py-1 rounded-full shadow-inner text-gray-700 font-bold border border-gray-300 gap-2"><span class="text-xl">${season.icon}</span> ${season.id}</div>
+                    </div>
+                    <p class="leading-loose text-gray-700 font-medium ml-4">
+                        ${season.id} starts in ${sel('m1', season.m1)} and ends in ${sel('m2', season.m2)}<br>
+                        The weather is ${sel('w', season.w)} while the temperature is ${sel('t', season.t)}<br>
+                        We should wear ${sel('c', season.c)} ${sel('s', season.s1)}<br>
+                        We can ${sel('a', season.a)} ${sel('s', season.s2)}
+                    </p>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkSelectD1(el, correctVal) {
+            if (el.value === correctVal) {
+                playSound('correct');
+                el.classList.remove('border-purple-300', 'text-purple-700');
+                el.classList.add('border-green-500', 'bg-green-100', 'text-green-700', 'pop');
+                el.disabled = true;
+                sectionD1Progress++;
+                checkDComplete();
+            } else {
+                playSound('wrong');
+                el.classList.add('shake', 'border-red-500', 'text-red-600');
+                setTimeout(() => { el.classList.remove('shake', 'border-red-500', 'text-red-600'); el.value = ""; }, 500);
+            }
+        }
+
+        // Section D2: Tree Map
+        function renderSectionD2() {
+            const bank = document.getElementById('d-treemap-bank');
+            [...dataD2_words].sort(() => Math.random() - 0.5).forEach(w => {
+                const btn = document.createElement('button');
+                btn.className = "px-3 py-1 bg-white border-2 border-orange-400 text-orange-700 font-bold rounded-xl shadow-sm hover:bg-orange-50 hover:scale-105 transition-all text-sm";
+                btn.innerHTML = `${w.text} <span class="text-xs text-green-600 ml-1 hidden md:inline">${w.zh}</span>`;
+                btn.onclick = () => {
+                    if (selectedBankBtnD2) {
+                        selectedBankBtnD2.classList.remove('bg-orange-500', 'text-white', 'scale-110');
+                        selectedBankBtnD2.classList.add('bg-white', 'text-orange-700');
+                    }
+                    selectedBankBtnD2 = btn; selectedWordForD2 = w.text;
+                    btn.classList.remove('bg-white', 'text-orange-700');
+                    btn.classList.add('bg-orange-500', 'text-white', 'scale-110');
+                };
+                bank.appendChild(btn);
+            });
+        }
+
+        function placeWordD2(index, slotEl, correctWord) {
+            if (!selectedWordForD2) {
+                slotEl.classList.add('shake'); setTimeout(() => slotEl.classList.remove('shake'), 400); return;
+            }
+            if (selectedWordForD2 === correctWord) {
+                playSound('correct');
+                slotEl.innerText = selectedWordForD2;
+                slotEl.classList.add('filled', 'pop', 'text-green-700', 'border-green-500', 'bg-green-50');
+                selectedBankBtnD2.style.display = 'none';
+                selectedWordForD2 = null; selectedBankBtnD2 = null;
+                sectionD2Progress++;
+                checkDComplete();
+            } else {
+                playSound('wrong');
+                slotEl.classList.add('shake', 'border-red-500'); setTimeout(() => slotEl.classList.remove('shake', 'border-red-500'), 500);
+            }
+        }
+
+        // Section D3: Materials
+        function renderSectionD3() {
+            const container = document.getElementById('materials-container');
+            dataD3.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col gap-2 p-4 bg-white border-2 border-purple-100 rounded-xl items-center text-center shadow-sm";
+                div.innerHTML = `
+                    <div class="font-bold text-xl text-gray-800">${item.m} <span class="text-sm text-gray-500">(${item.m_zh})</span></div>
+                    <i class="fas fa-arrow-down text-purple-300 my-1"></i>
+                    <div class="flex gap-2 w-full">
+                        ${dataD3.map((opt, i) => `
+                            <button onclick="checkMaterialD3(this, '${opt.char}', '${item.char}')" class="flex-1 text-sm font-bold p-2 border-2 border-gray-200 rounded-lg hover:bg-purple-50 transition-colors">${opt.char}</button>
+                        `).sort(() => Math.random() - 0.5).join('')}
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkMaterialD3(btnEl, selectedChar, correctChar) {
+            if (btnEl.parentElement.dataset.answered === "true") return;
+            if (selectedChar === correctChar) {
+                playSound('correct');
+                btnEl.classList.add('bg-green-500', 'text-white', 'border-green-600', 'pop');
+                btnEl.parentElement.dataset.answered = "true";
+                Array.from(btnEl.parentElement.children).forEach(child => {
+                    if (child !== btnEl) child.classList.add('opacity-30', 'cursor-not-allowed', 'bg-gray-100');
+                });
+                sectionD3Progress++;
+                checkDComplete();
+            } else {
+                playSound('wrong');
+                btnEl.classList.add('shake', 'bg-red-100', 'border-red-400', 'text-red-600');
+                setTimeout(() => btnEl.classList.remove('shake', 'bg-red-100', 'border-red-400', 'text-red-600'), 500);
+            }
+        }
+
+        function checkDComplete() {
+            // D1: 4 seasons * 8 blanks = 32. D2: 8 tree slots. D3: 3 materials.
+            if (sectionD1Progress === 32 && sectionD2Progress === 8 && sectionD3Progress === 3) {
+                awardBadge('D');
+            }
+        }
+
+        // Section E
+        function renderSectionE() {
+            const bank = document.getElementById('word-bank-e');
+            [...dataE].sort(() => Math.random() - 0.5).forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "px-4 py-2 bg-white border-2 border-indigo-400 text-indigo-700 font-bold rounded-xl shadow-sm hover:bg-indigo-50 hover:scale-105 transition-all";
+                btn.innerHTML = `${item.word} <span class="text-xs text-green-600 ml-1 block md:inline">${item.zh}</span>`;
+                btn.onclick = () => {
+                    if (selectedBankBtnE) {
+                        selectedBankBtnE.classList.remove('bg-indigo-500', 'text-white', 'scale-110');
+                        selectedBankBtnE.classList.add('bg-white', 'text-indigo-700');
+                    }
+                    selectedBankBtnE = btn; selectedWordForE = item.word;
+                    btn.classList.remove('bg-white', 'text-indigo-700');
+                    btn.classList.add('bg-indigo-500', 'text-white', 'scale-110');
+                };
+                bank.appendChild(btn);
+            });
+            const grid = document.getElementById('weather-grid');
+            dataE.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col items-center gap-3 p-4 bg-white border border-gray-100 rounded-2xl shadow-sm";
+                div.innerHTML = `<div class="text-6xl mb-2">${item.icon}</div><span class="blank-slot w-full max-w-[120px]" onclick="placeWordE(this, '${item.word}')"></span>`;
+                grid.appendChild(div);
+            });
+        }
+
+        function placeWordE(slotEl, correctWord) {
+            if (!selectedWordForE) { slotEl.classList.add('shake'); setTimeout(() => slotEl.classList.remove('shake'), 400); return; }
+            if (selectedWordForE === correctWord) {
+                playSound('correct'); slotEl.innerText = selectedWordForE;
+                slotEl.classList.add('filled', 'pop', 'text-green-600', 'bg-green-50');
+                selectedBankBtnE.style.display = 'none'; selectedWordForE = null; selectedBankBtnE = null;
+                sectionEProgress++; if (sectionEProgress === dataE.length) awardBadge('E');
+            } else {
+                playSound('wrong'); slotEl.classList.add('shake', 'border-red-500'); setTimeout(() => slotEl.classList.remove('shake', 'border-red-500'), 500);
+            }
+        }
+
+        // Section F
+        function renderSectionF() {
+            const banner = document.getElementById('forecast-banner');
+            dataF.forEach(item => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col items-center bg-white p-3 rounded-lg shadow-sm border border-red-100 flex-1 min-w-[80px]";
+                div.innerHTML = `<span class="font-bold text-red-800">${item.day}</span><span class="text-2xl mt-1">${item.forecast.split(' ')[1]}</span><span class="text-sm text-gray-600 font-medium">${item.forecast.split(' ')[0]}</span>`;
+                banner.appendChild(div);
+            });
+            const container = document.getElementById('tf-container');
+            dataF.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = "flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-white rounded-xl border-2 border-gray-100 hover:border-red-200 transition-colors shadow-sm";
+                div.innerHTML = `
+                    <div class="flex gap-2 items-start flex-1">
+                        <div class="flex gap-1 mt-1 shrink-0">
+                            <button onclick="toggleTrans('trans-qf-${index}')" class="text-green-500 font-bold bg-green-50 rounded-full w-8 h-8 flex items-center justify-center shadow-sm">中</button>
+                            <button onclick="speakText('${item.q.substring(3)}')" class="text-red-500 bg-red-50 rounded-full w-8 h-8 flex items-center justify-center shadow-sm"><i class="fas fa-volume-up"></i></button>
+                        </div>
+                        <div class="flex-1"><h3 class="font-bold text-gray-800">${item.q}</h3><div id="trans-qf-${index}" class="trans-text text-sm text-green-600 font-bold mt-1">${item.zh}</div></div>
+                    </div>
+                    <div class="flex gap-2 shrink-0">
+                        <button onclick="checkAnswerF(${index}, true, this)" class="px-4 py-2 rounded-xl font-bold text-lg border-2 border-green-400 text-green-600 hover:bg-green-100 transition-all">True 🟢</button>
+                        <button onclick="checkAnswerF(${index}, false, this)" class="px-4 py-2 rounded-xl font-bold text-lg border-2 border-red-400 text-red-600 hover:bg-red-100 transition-all">False 🔴</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkAnswerF(qIndex, selectedOpt, btnEl) {
+            if (btnEl.parentElement.dataset.answered === "true") return;
+            if (dataF[qIndex].ans === selectedOpt) {
+                playSound('correct'); btnEl.classList.add('bg-green-500', 'text-white', 'border-green-600', 'pop');
+                btnEl.parentElement.dataset.answered = "true";
+                Array.from(btnEl.parentElement.children).forEach(c => { if (c !== btnEl) c.classList.add('opacity-30', 'cursor-not-allowed'); });
+                sectionFProgress++; if (sectionFProgress === dataF.length) awardBadge('F');
+            } else {
+                playSound('wrong'); btnEl.classList.add('shake', 'bg-red-500', 'text-white'); setTimeout(() => btnEl.classList.remove('shake', 'bg-red-500', 'text-white'), 500);
+            }
+        }
+
+        // Section G
+        function renderSectionG() {
+            const bank = document.getElementById('word-bank-g');
+            [...dataG_words].sort(() => Math.random() - 0.5).forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = "px-4 py-2 bg-white border-2 border-teal-400 text-teal-700 font-bold rounded-xl shadow-sm hover:bg-teal-50 hover:scale-105 transition-all";
+                btn.innerHTML = `${item.text} <span class="text-xs text-green-600 ml-1 block md:inline">${item.zh}</span>`;
+                btn.onclick = () => {
+                    if (selectedBankBtnG) { selectedBankBtnG.classList.remove('bg-teal-500', 'text-white', 'scale-110'); selectedBankBtnG.classList.add('bg-white', 'text-teal-700'); }
+                    selectedBankBtnG = btn; selectedWordForG = item.text;
+                    btn.classList.remove('bg-white', 'text-teal-700'); btn.classList.add('bg-teal-500', 'text-white', 'scale-110');
+                };
+                bank.appendChild(btn);
+            });
+            document.getElementById('postcard-content').innerHTML = dataG_postcard;
+        }
+
+        function placeWordG(index, slotEl, correctWord) {
+            if (!selectedWordForG) { slotEl.classList.add('shake'); setTimeout(() => slotEl.classList.remove('shake'), 400); return; }
+            if (selectedWordForG === correctWord) {
+                playSound('correct'); slotEl.innerText = selectedWordForG;
+                slotEl.classList.add('filled', 'pop', 'text-green-600', 'bg-green-50');
+                selectedBankBtnG.style.display = 'none'; selectedWordForG = null; selectedBankBtnG = null;
+                sectionGProgress++;
+                if (sectionGProgress === dataG_words.length) {
+                    awardBadge('G');
+                    setTimeout(() => {
+                        const stamp = document.createElement('div');
+                        stamp.className = "absolute inset-0 flex items-center justify-center pointer-events-none z-10 pop";
+                        stamp.innerHTML = `<div class="border-4 border-red-500 text-red-500 text-3xl md:text-5xl font-bold p-4 transform -rotate-12 rounded-xl bg-white bg-opacity-90 shadow-lg">POSTCARD SENT!</div>`;
+                        document.getElementById('postcard-content').parentElement.appendChild(stamp);
+                    }, 1000);
+                }
+            } else {
+                playSound('wrong'); slotEl.classList.add('shake', 'border-red-500'); setTimeout(() => slotEl.classList.remove('shake', 'border-red-500'), 500);
+            }
+        }
+
+        // Shared logc
+        function toggleTooltip(element) {
+            document.querySelectorAll('.dict-word').forEach(el => { if (el !== element) el.classList.remove('active'); });
+            element.classList.toggle('active');
+        }
+        document.addEventListener('click', (e) => { if (!e.target.closest('.dict-word')) document.querySelectorAll('.dict-word').forEach(el => el.classList.remove('active')); });
+
+        function speakText(textOrId) {
+            let text = textOrId;
+            if (document.getElementById(textOrId)) {
+                let el = document.getElementById(textOrId).cloneNode(true);
+                el.querySelectorAll('.tooltip').forEach(t => t.remove());
+                text = el.innerText;
+            }
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                let voices = window.speechSynthesis.getVoices();
+                let enVoice = voices.find(v => v.lang.startsWith('en-GB') || v.lang.startsWith('en-US') || v.lang.startsWith('en'));
+                if (enVoice) utterance.voice = enVoice;
+                utterance.lang = 'en-US'; utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function checkAnswerA(qIndex, optIndex, btnEl) {
+            if (btnEl.parentElement.dataset.answered === "true") return;
+            if (dataA[qIndex].ans === optIndex) {
+                playSound('correct'); btnEl.classList.remove('border-gray-200', 'text-gray-700', 'hover:bg-pink-50');
+                btnEl.classList.add('bg-green-500', 'text-white', 'border-green-600', 'pop');
+                btnEl.parentElement.dataset.answered = "true";
+                Array.from(btnEl.parentElement.children).forEach(c => { if (c !== btnEl) c.classList.add('opacity-50', 'cursor-not-allowed'); });
+                sectionAProgress++; if (sectionAProgress === dataA.length) awardBadge('A');
+            } else {
+                playSound('wrong'); btnEl.classList.add('shake', 'bg-red-100', 'border-red-400', 'text-red-700'); setTimeout(() => btnEl.classList.remove('shake', 'bg-red-100', 'border-red-400', 'text-red-700'), 500);
+            }
+        }
+
+        function selectWord(btnEl, word) {
+            if (selectedBankBtn) { selectedBankBtn.classList.remove('bg-blue-500', 'text-white', 'scale-110'); selectedBankBtn.classList.add('bg-white', 'text-blue-700'); }
+            selectedBankBtn = btnEl; selectedWordForBlank = word;
+            btnEl.classList.remove('bg-white', 'text-blue-700'); btnEl.classList.add('bg-blue-500', 'text-white', 'scale-110');
+        }
+
+        function placeWord(index, slotEl, correctWord) {
+            if (!selectedWordForBlank) { slotEl.classList.add('shake'); setTimeout(() => slotEl.classList.remove('shake'), 400); return; }
+            if (selectedWordForBlank === correctWord) {
+                playSound('correct'); slotEl.innerText = selectedWordForBlank;
+                slotEl.classList.add('filled', 'pop', 'text-green-600', 'bg-green-50');
+                selectedBankBtn.style.display = 'none'; selectedWordForBlank = null; selectedBankBtn = null;
+                sectionBProgress++; if (sectionBProgress === dataB.length) awardBadge('B');
+            } else {
+                playSound('wrong'); slotEl.classList.add('shake', 'border-red-500'); setTimeout(() => slotEl.classList.remove('shake', 'border-red-500'), 500);
+            }
+        }
+
+        function checkAnswerC(qIndex, selectedOpt, btnEl) {
+            if (btnEl.parentElement.dataset.answered === "true") return;
+            if (dataC[qIndex].ans === selectedOpt) {
+                playSound('correct'); btnEl.classList.add('bg-green-500', 'text-white', 'border-green-600', 'pop');
+                btnEl.parentElement.dataset.answered = "true";
+                Array.from(btnEl.parentElement.children).forEach(c => { if (c !== btnEl) c.classList.add('opacity-30', 'cursor-not-allowed', 'bg-gray-100'); });
+                sectionCProgress++; if (sectionCProgress === dataC.length) awardBadge('C');
+            } else {
+                playSound('wrong'); btnEl.classList.add('shake', 'bg-red-500', 'text-white'); setTimeout(() => btnEl.classList.remove('shake', 'bg-red-500', 'text-white'), 500);
+            }
+        }
+
+        function playSound(type) {
+            const audio = document.getElementById(`audio-${type}`);
+            if (audio) { audio.currentTime = 0; audio.play().catch(e => e); }
+        }
+
+        function awardBadge(section) {
+            setTimeout(() => {
+                playSound('tada'); fireConfetti();
+                const badge = document.getElementById(`badge-${section.toLowerCase()}`);
+                if (badge) {
+                    badge.classList.remove('grayscale', 'bg-gray-300');
+                    badge.classList.add('bg-yellow-100', 'scale-125', 'ring-4', 'ring-yellow-400');
+                    setTimeout(() => badge.classList.remove('scale-125'), 500);
+                }
+                saveProgress(section);
+                showModal(section);
+            }, 500);
+        }
+
+        function showModal(section) {
+            const modal = document.getElementById('success-modal');
+            const content = document.getElementById('modal-content');
+            const badges = { 'A': '🌸', 'B': '☀️', 'C': '🍁', 'D': '⛄', 'E': '🌤️', 'F': '✅', 'G': '📮' };
+            document.getElementById('modal-icon').innerText = badges[section];
+            document.getElementById('modal-title').innerText = `Section ${section} Complete!`;
+            modal.classList.remove('hidden');
+            setTimeout(() => content.classList.remove('scale-90'), 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('success-modal');
+            document.getElementById('modal-content').classList.add('scale-90');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        // Confetti
+        let particles = []; const colors = ["#ef4444", "#f59e0b", "#10b981", "#3b82f6", "#a855f7", "#ec4899"]; let confettiCtx;
+        function fireConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            confettiCtx = canvas.getContext('2d');
+            for (let i = 0; i < 100; i++) particles.push({ x: canvas.width / 2, y: canvas.height / 2 + 100, r: Math.random() * 6 + 4, dx: Math.random() * 10 - 5, dy: Math.random() * -10 - 5, color: colors[Math.floor(Math.random() * colors.length)], tilt: Math.floor(Math.random() * 10) - 10, tiltAngle: 0, tiltAngleInc: (Math.random() * 0.07) + 0.05 });
+            requestAnimationFrame(renderConfetti);
+        }
+        function renderConfetti() {
+            if (particles.length === 0) return;
+            const canvas = document.getElementById('confetti-canvas');
+            confettiCtx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach((p, index) => {
+                p.tiltAngle += p.tiltAngleInc; p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2; p.x += Math.sin(p.tiltAngle) * 2; p.dy += 0.1; p.y += p.dy; p.x += p.dx;
+                confettiCtx.beginPath(); confettiCtx.lineWidth = p.r; confettiCtx.strokeStyle = p.color; confettiCtx.moveTo(p.x + p.tilt + p.r, p.y); confettiCtx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r); confettiCtx.stroke();
+                if (p.y > canvas.height) particles.splice(index, 1);
+            });
+            if (particles.length > 0) requestAnimationFrame(renderConfetti); else confettiCtx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+    </script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p3-en-unit4"
+            data-module-name="Unit 4: The Four Seasons"
+            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit4/index.html">
+    </script>
+</body>
+
+</html>
