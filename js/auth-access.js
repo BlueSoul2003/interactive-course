@@ -46,28 +46,46 @@ const AuthAccess = {
 
     async signUp(email, password, profileData = null) {
         const result = await window.supabaseClient.auth.signUp({ email, password });
-        if (result.data?.user) {
-            const profileRecord = { 
-                id: result.data.user.id, 
-                email,
-                tier: 'member', 
-                tier_level: 1 
-            };
-            if (profileData) {
-                Object.assign(profileRecord, {
-                    fullname: profileData.fullname,
-                    phone:    profileData.phone,
-                    syllabus: profileData.syllabus,
-                    age:      profileData.age,
-                    gender:   profileData.gender,
-                    role:     profileData.role,
-                });
-                if (profileData.syllabus) {
-                    profileRecord.unlocked_modules = [profileData.syllabus];
-                }
+
+        // Fail fast if auth itself errored — no user created
+        if (result.error) return result;
+
+        const userId = result.data?.user?.id;
+        if (!userId) return result; // email-confirm flow: session not yet active, trigger will handle profile
+
+        const profileRecord = {
+            id:         userId,
+            email,
+            tier:       'member',
+            tier_level: 1,
+        };
+        if (profileData) {
+            Object.assign(profileRecord, {
+                fullname: profileData.fullname,
+                phone:    profileData.phone,
+                syllabus: profileData.syllabus,
+                age:      profileData.age,
+                gender:   profileData.gender,
+                role:     profileData.role,
+            });
+            if (profileData.syllabus) {
+                profileRecord.unlocked_modules = [profileData.syllabus];
             }
-            await window.supabaseClient.from('user_profiles').upsert([profileRecord]);
         }
+
+        // Upsert profile and surface any failure to the caller
+        const { error: profileError } = await window.supabaseClient
+            .from('user_profiles')
+            .upsert([profileRecord]);
+
+        if (profileError) {
+            console.error('[AuthAccess] signUp profile upsert failed:', profileError);
+            return {
+                data: result.data,
+                error: { message: 'Account created but profile save failed: ' + profileError.message }
+            };
+        }
+
         return result;
     },
 

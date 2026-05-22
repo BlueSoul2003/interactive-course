@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -873,9 +873,12 @@
     </div>
 
     <!-- ══════════ SCRIPTS ══════════ -->
-    <script src="../../../../../js/progress-tracker.js" data-module-id="IGCSE_Science_Y4C2"
-        data-module-name="IGCSE Science Y4 · Ch. 2: Living Things"
-        data-module-url="content/IGCSE_Syllabus/Year4/Science/Chapter2_Living_Things/index.html"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="igcse-y4-sci-topic2"
+            data-module-name="Topic 2: Living Things in Their Environment"
+            data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic2_Living_Things/index.html"></script></script>
     <script>
         // ── TAB SWITCH ────────────────────────────────────────
         function switchTab(tab) {
@@ -1173,7 +1176,7 @@
         let _tracking = { tab: 'ppt', mcq: {}, tf: {}, fill: {}, short: {} };
 
         function _saveProgress() {
-            if (window.ProgressTracker && ProgressTracker.getActiveStudent()) {
+            if (window.ProgressTracker) {
                 ProgressTracker.autoSave(_tracking);
             }
         }
@@ -1181,46 +1184,50 @@
         function _loadProgress() {
             if (!window.ProgressTracker) return;
             ProgressTracker.init(async function(tracker) {
-                // Show active student badge
-                const student = ProgressTracker.getActiveStudent();
-                if (student) {
-                    const badge = document.getElementById('activeStudentBadge');
-                    if (badge) { badge.style.display = 'block'; }
-                    const nameEl = document.getElementById('activeStudentName');
-                    if (nameEl) nameEl.innerText = student;
+                // Show active student badge using Supabase Auth (v2 API)
+                if (window.supabaseClient) {
+                    try {
+                        const { data: { user } } = await window.supabaseClient.auth.getUser();
+                        if (user) {
+                            const badge = document.getElementById('activeStudentBadge');
+                            if (badge) badge.style.display = 'block';
+                            const nameEl = document.getElementById('activeStudentName');
+                            if (nameEl) nameEl.innerText = user.email;
+                        }
+                    } catch(e) { /* guest — no badge */ }
+                }
+
+                const saved = await tracker.load();
+                if (!saved) return;
+
+                const p = saved;
+                _tracking = { tab: p.tab || 'ppt', mcq: p.mcq || {}, tf: p.tf || {}, fill: p.fill || {}, short: p.short || {} };
+
+                // Restore tab
+                switchTab(_tracking.tab);
+
+                // Restore MCQ answers
+                for (const [idx, val] of Object.entries(_tracking.mcq)) {
+                    checkMcq(parseInt(idx), val);
+                }
+
+                // Restore T/F answers
+                for (const [idx, val] of Object.entries(_tracking.tf)) {
+                    checkTf(parseInt(idx), val === true || val === 'true');
+                }
+
+                // Restore Fill-in-blank answers
+                for (const [idx, val] of Object.entries(_tracking.fill)) {
+                    const inp = document.getElementById(`fill-inp-${idx}`);
+                    if (inp) { inp.value = val; checkFill(parseInt(idx)); }
+                }
+
+                // Restore short answers (text only, no re-checking)
+                for (const [idx, val] of Object.entries(_tracking.short)) {
+                    const ta = document.getElementById(`short-ta-${idx}`);
+                    if (ta) ta.value = val;
+                }
             });
-        }
-
-            const saved = await tracker.load();
-            if (!saved || !saved) return;
-
-            const p = saved;
-            _tracking = { tab: p.tab || 'ppt', mcq: p.mcq || {}, tf: p.tf || {}, fill: p.fill || {}, short: p.short || {} };
-
-            // Restore tab
-            switchTab(_tracking.tab);
-
-            // Restore MCQ answers
-            for (const [idx, val] of Object.entries(_tracking.mcq)) {
-                checkMcq(parseInt(idx), val);
-            }
-
-            // Restore T/F answers
-            for (const [idx, val] of Object.entries(_tracking.tf)) {
-                checkTf(parseInt(idx), val === true || val === 'true');
-            }
-
-            // Restore Fill-in-blank answers
-            for (const [idx, val] of Object.entries(_tracking.fill)) {
-                const inp = document.getElementById(`fill-inp-${idx}`);
-                if (inp) { inp.value = val; checkFill(parseInt(idx)); }
-            }
-
-            // Restore short answers (text only, no re-checking)
-            for (const [idx, val] of Object.entries(_tracking.short)) {
-                const ta = document.getElementById(`short-ta-${idx}`);
-                if (ta) ta.value = val;
-            }
         }
 
         // Hook: save on tab switch
