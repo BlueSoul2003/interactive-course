@@ -1017,18 +1017,20 @@
             </section>`).join('');
         }
         
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             initApp();
             if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data && saved.progress_data.completedSections) {
-                    completedSections = saved.progress_data.completedSections;
-                    completedSections.forEach(secId => {
-                        progress[secId] = true;
-                        const badge = document.getElementById(`badge-${secId}`);
-                        if (badge) badge.classList.replace('badge-locked', 'badge-unlocked');
-                    });
-                }
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved.completedSections) {
+                        completedSections = saved.completedSections;
+                        completedSections.forEach(secId => {
+                            progress[secId] = true;
+                            const badge = document.getElementById(`badge-${secId}`);
+                            if (badge) badge.classList.replace('badge-locked', 'badge-unlocked');
+                        });
+                    }
+                });
             }
         });
     </script>
@@ -1038,7 +1040,6 @@
             data-module-id="kssr-p6-en-unit4"
             data-module-name="Unit 4: Interactive Worksheet"
             data-module-url="content/KSSR_Syllabus/Primary6/English/Unit4/index.html"></script>
-    </script>
 </body>
 
 </html>

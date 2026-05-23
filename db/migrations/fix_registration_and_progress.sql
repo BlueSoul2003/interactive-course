@@ -38,18 +38,61 @@ END $$;
 
 -- ── Fix 2: Create safety-net trigger for new user registration ───────────────
 -- This function runs automatically whenever a new row is inserted into auth.users.
--- It creates the public.user_profiles row with sensible defaults, so the profile
--- always exists even if the frontend upsert fails due to a timing race.
+-- It creates the public.user_profiles row with demographic data stored in
+-- raw_user_meta_data by auth.signUp(), ensuring the profile is fully saved
+-- even if the frontend session is not active due to email confirmation.
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = public
 AS $$
+DECLARE
+    v_syllabus TEXT;
+    v_unlocked_modules TEXT[];
 BEGIN
-    INSERT INTO public.user_profiles (id, email, tier, tier_level)
-    VALUES (NEW.id, NEW.email, 'member', 1)
-    ON CONFLICT (id) DO NOTHING;  -- never overwrite a richer profile written by the frontend
+    v_syllabus := NEW.raw_user_meta_data->>'syllabus';
+    IF v_syllabus IS NOT NULL AND v_syllabus <> '' THEN
+        v_unlocked_modules := ARRAY[v_syllabus];
+    ELSE
+        v_unlocked_modules := ARRAY[]::TEXT[];
+    END IF;
+
+    INSERT INTO public.user_profiles (
+        id, 
+        email, 
+        tier, 
+        tier_level, 
+        fullname, 
+        phone, 
+        syllabus, 
+        age, 
+        gender, 
+        role,
+        unlocked_modules
+    )
+    VALUES (
+        NEW.id, 
+        NEW.email, 
+        'member', 
+        1,
+        NEW.raw_user_meta_data->>'fullname',
+        NEW.raw_user_meta_data->>'phone',
+        v_syllabus,
+        (NEW.raw_user_meta_data->>'age')::INTEGER,
+        NEW.raw_user_meta_data->>'gender',
+        NEW.raw_user_meta_data->>'role',
+        v_unlocked_modules
+    )
+    ON CONFLICT (id) DO UPDATE SET
+        email = EXCLUDED.email,
+        fullname = COALESCE(user_profiles.fullname, EXCLUDED.fullname),
+        phone = COALESCE(user_profiles.phone, EXCLUDED.phone),
+        syllabus = COALESCE(user_profiles.syllabus, EXCLUDED.syllabus),
+        age = COALESCE(user_profiles.age, EXCLUDED.age),
+        gender = COALESCE(user_profiles.gender, EXCLUDED.gender),
+        role = COALESCE(user_profiles.role, EXCLUDED.role),
+        unlocked_modules = COALESCE(user_profiles.unlocked_modules, EXCLUDED.unlocked_modules);
     RETURN NEW;
 END;
 $$;

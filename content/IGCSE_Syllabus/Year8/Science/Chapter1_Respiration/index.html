@@ -844,7 +844,21 @@
     <script src="../../../../../js/progress-tracker.js"
             data-module-id="igcse-y8-sci-ch1"
             data-module-name="Chapter 1: Respiration & Breathing"
-            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter1_Respiration/index.html"></script></script>
+            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter1_Respiration/index.html"></script>
+    <script>
+    window.addEventListener('load', function() {
+        if (!window.ProgressTracker) return;
+        ProgressTracker.init(async function(tracker) {
+            // Load saved progress and restore if available
+            const saved = await tracker.load();
+            if (saved) {
+                // Module state managed by existing autoSave calls in the module code
+                window.__savedProgress = saved;
+                window.dispatchEvent(new CustomEvent('progressRestored', { detail: saved }));
+            }
+        });
+    });
+    </script>
 
     <!-- Home Button -->
     <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>

@@ -650,13 +650,50 @@
     <script src="../../../../../js/progress-tracker.js"
             data-module-id="spm-bm-rumusan"
             data-module-name="Rumusan 极简通关训练"
-            data-module-url="content/SPM_Syllabus/Form5/BM/Rumusan/index.html"></script></script>
+            data-module-url="content/SPM_Syllabus/Form5/BM/Rumusan/index.html"></script>
     <script>
         window.addEventListener('load', function() {
             ProgressTracker.init(async function(tracker) {
-                await tracker.load(); // marks visit, no stage state for this module
+                // ── Restore saved quiz state ──────────────────────────────
+                const saved = await tracker.load();
+                if (saved && saved.answered && Array.isArray(saved.answered)) {
+                    // Replay answers silently so score and progress bars are restored
+                    saved.answered.forEach(function(entry) {
+                        var block = document.getElementById('qblock-' + entry.id);
+                        if (!block) return;
+                        // Mark inputs as disabled and apply green styling (correct answer)
+                        block.querySelectorAll('input, select').forEach(function(el) { el.disabled = true; });
+                        var btn = block.querySelector('button');
+                        if (btn) { btn.disabled = true; btn.classList.add('opacity-40', 'cursor-not-allowed'); }
+                        block.classList.add('border-green-200');
+                        block.style.background = 'rgba(240,253,244,0.5)';
+                        var fb = document.getElementById('feedback-' + entry.id);
+                        if (fb) {
+                            fb.className = 'mt-4 p-3 rounded-xl text-sm font-medium border bg-green-50 text-green-700 border-green-200';
+                            fb.innerHTML = '<div class="flex items-center gap-2">Restored — Correct!</div>';
+                        }
+                        // Restore score counters
+                        if (typeof answeredQuestions !== 'undefined' && typeof updateScore === 'function') {
+                            updateScore(entry.id, true);
+                        }
+                    });
+                }
             });
         });
+
+        // ── autoSave helper — call after each correct answer ──────────────
+        function _collectAndSave() {
+            if (!window.ProgressTracker) return;
+            // Collect all answered (green) question IDs from the DOM
+            var answered = [];
+            document.querySelectorAll('[id^="qblock-"]').forEach(function(block) {
+                if (block.classList.contains('border-green-200')) {
+                    var id = parseInt(block.id.replace('qblock-', ''));
+                    if (!isNaN(id)) answered.push({ id: id });
+                }
+            });
+            ProgressTracker.autoSave({ answered: answered }, 1500);
+        }
     </script>
 </body>
 
