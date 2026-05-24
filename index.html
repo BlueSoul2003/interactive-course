@@ -673,6 +673,133 @@
             font-size: 1.5rem;
             cursor: pointer;
         }
+
+        /* ── Feedback Modal & FAB Styling ──────────────────────────────── */
+        #feedback-fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            z-index: 999;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: var(--font-main);
+        }
+        #feedback-fab:hover {
+            background: rgba(16, 185, 129, 0.4);
+            border-color: #34d399;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.25);
+        }
+        /* Admin tab styles */
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 8px;
+        }
+        .admin-tab-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-weight: 600;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .admin-tab-btn.active {
+            color: white;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        /* Feedback item styles */
+        .feedback-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .feedback-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        .feedback-badge {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-bug {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .badge-request {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .badge-general {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .feedback-meta {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        .feedback-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .feedback-btn-action {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+        }
+        .feedback-btn-resolve {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .feedback-btn-resolve:hover {
+            background: #10b981;
+            color: white;
+        }
+        .feedback-btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .feedback-btn-delete:hover {
+            background: #ef4444;
+            color: white;
+        }
     </style>
 </head>
 
@@ -2155,10 +2282,85 @@
         </div>
     </div>
 
+    <!-- ── Floating Feedback & Subject Requests Widget ── -->
+    <button id="feedback-fab" onclick="openFeedbackModal()">
+        <span>💬</span> Help & Feedback
+    </button>
+
+    <!-- ==========================================
+         FEEDBACK & REQUEST MODAL
+    =========================================== -->
+    <div id="feedbackModalOverlay" class="modal-overlay" onclick="closeFeedbackModal(event)">
+        <div class="modal-box" style="animation-duration: 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-width: 480px; width: 90%;">
+            <button class="modal-close" onclick="closeFeedbackModalDirect()">&times;</button>
+            <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; margin-top: 15px; display: flex; align-items: center; gap: 10px; justify-content: center;">
+                <span>💬</span> Feedback & Requests
+            </h2>
+            <div class="modal-subtitle" style="margin-bottom: 20px; color: #94a3b8; text-align: center;">
+                Help us build the ultimate learning portal or request a subject module!
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Feedback Type Selection -->
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">I want to...</label>
+                        <select id="feedbackType" onchange="toggleFeedbackTypeFields(this.value)" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; cursor: pointer;">
+                            <option value="subject_request">Request a New Subject / Module</option>
+                            <option value="bug_report">Report a Bug / Issue</option>
+                            <option value="general">Submit a General Suggestion</option>
+                        </select>
+                    </div>
+
+                    <!-- Contact details -->
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Your Name</label>
+                            <input type="text" id="feedbackName" placeholder="Name (optional)" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Email Address</label>
+                            <input type="email" id="feedbackEmail" placeholder="Email (optional)" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        </div>
+                    </div>
+
+                    <!-- Subject Request Fields (shown by default) -->
+                    <div id="subjectRequestFields" style="display: flex; gap: 10px; flex-direction: row;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Syllabus</label>
+                            <select id="feedbackSyllabus" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; cursor: pointer;">
+                                <option value="spm">🇲🇾 SPM</option>
+                                <option value="uec">🎓 UEC</option>
+                                <option value="igcse">🌏 IGCSE</option>
+                                <option value="sg">🇸🇬 Singapore</option>
+                                <option value="kssr">🇲🇾 KSSR (Primary)</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Subject Name</label>
+                            <input type="text" id="feedbackSubject" placeholder="e.g. Physics, History" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        </div>
+                    </div>
+
+                    <!-- Feedback Details -->
+                    <div>
+                        <label id="feedbackDetailsLabel" style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Describe what you need</label>
+                        <textarea id="feedbackDetails" placeholder="Tell us which topic or chapter you want us to add next..." rows="4" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; resize: vertical;"></textarea>
+                    </div>
+
+                    <!-- Submit & Status -->
+                    <button id="submitFeedbackBtn" onclick="handleFeedbackSubmit()" style="width: 100%; padding: 12px; border-radius: 8px; font-size: 1rem; background: #10b981; color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Submit Feedback</button>
+                    <div id="feedbackSubmitMessage" style="font-size: 0.85rem; text-align: center; margin-top: 5px; min-height: 20px; color: #10b981;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/auth-access.js"></script>
     <script src="js/progress-tracker.js"></script>
+    <script src="js/feedback.js"></script>
     <script>
         // ── i18n Translations ────────────────────────
         const authTranslations = {
@@ -2423,12 +2625,253 @@
                 btn.disabled = false;
             }
         }
+
+        // ── Feedback System Modal & Form Logic ──────────────────────────────
+        function openFeedbackModal() {
+            const nameInput = document.getElementById('feedbackName');
+            const emailInput = document.getElementById('feedbackEmail');
+            const msgEl = document.getElementById('feedbackSubmitMessage');
+            if (msgEl) msgEl.innerText = '';
+            
+            // Default to subject request type and show fields
+            document.getElementById('feedbackType').value = 'subject_request';
+            toggleFeedbackTypeFields('subject_request');
+
+            if (window.AuthAccess) {
+                window.AuthAccess.getCurrentUser().then(authInfo => {
+                    if (authInfo && authInfo.user) {
+                        if (emailInput) emailInput.value = authInfo.user.email;
+                        if (nameInput) nameInput.value = authInfo.user.email.split('@')[0];
+                    }
+                });
+            }
+            document.getElementById('feedbackModalOverlay').classList.add('open');
+        }
+
+        function closeFeedbackModalDirect() {
+            document.getElementById('feedbackModalOverlay').classList.remove('open');
+        }
+
+        function closeFeedbackModal(event) {
+            if (event.target === document.getElementById('feedbackModalOverlay')) {
+                closeFeedbackModalDirect();
+            }
+        }
+
+        function toggleFeedbackTypeFields(type) {
+            const subjectFields = document.getElementById('subjectRequestFields');
+            const label = document.getElementById('feedbackDetailsLabel');
+            const detailsTextarea = document.getElementById('feedbackDetails');
+            
+            if (type === 'subject_request') {
+                subjectFields.style.display = 'flex';
+                label.innerText = 'Describe what you need';
+                detailsTextarea.placeholder = 'Tell us which topic or chapter you want us to add next...';
+            } else if (type === 'bug_report') {
+                subjectFields.style.display = 'none';
+                label.innerText = 'Steps to reproduce / Issue details';
+                detailsTextarea.placeholder = 'Please describe the bug, what happened, and how to trigger it...';
+            } else {
+                subjectFields.style.display = 'none';
+                label.innerText = 'Your Suggestion / Comments';
+                detailsTextarea.placeholder = 'Help us improve with your suggestions...';
+            }
+        }
+
+        async function handleFeedbackSubmit() {
+            const btn = document.getElementById('submitFeedbackBtn');
+            const msgEl = document.getElementById('feedbackSubmitMessage');
+            const feedback_type = document.getElementById('feedbackType').value;
+            const fullname = document.getElementById('feedbackName').value.trim();
+            const email = document.getElementById('feedbackEmail').value.trim();
+            const syllabus = document.getElementById('feedbackSyllabus').value;
+            const subject = document.getElementById('feedbackSubject').value.trim();
+            const details = document.getElementById('feedbackDetails').value.trim();
+
+            if (!details) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = 'Description is required.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = 'Submitting...';
+            msgEl.innerText = '';
+
+            try {
+                const res = await window.FeedbackSystem.submitFeedback({
+                    feedback_type,
+                    fullname,
+                    email,
+                    syllabus: feedback_type === 'subject_request' ? syllabus : null,
+                    subject: feedback_type === 'subject_request' ? subject : null,
+                    details
+                });
+
+                if (res.success) {
+                    msgEl.style.color = '#10b981';
+                    msgEl.innerText = 'Thank you! Your feedback has been submitted successfully.';
+                    document.getElementById('feedbackDetails').value = '';
+                    document.getElementById('feedbackSubject').value = '';
+                    
+                    // Re-render accessibility which triggers badge update if admin is logged in
+                    if (window.AuthAccess && window.AuthAccess.renderModuleAccessibility) {
+                        await window.AuthAccess.renderModuleAccessibility();
+                    }
+                    
+                    setTimeout(closeFeedbackModalDirect, 2000);
+                } else {
+                    msgEl.style.color = '#ef4444';
+                    msgEl.innerText = res.error || 'Failed to submit feedback.';
+                }
+            } catch (err) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = err.message || 'An error occurred.';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Submit Feedback';
+            }
+        }
+
+        // ── Admin Panel Tab & Console Logic ───────────────────────────────
+        async function switchAdminTab(tab) {
+            document.getElementById('btnAdminTabPins').classList.toggle('active', tab === 'pins');
+            document.getElementById('btnAdminTabFeedback').classList.toggle('active', tab === 'feedback');
+            
+            const pinsContent = document.getElementById('admin-tab-pins-content');
+            const feedbackContent = document.getElementById('admin-tab-feedback-content');
+            
+            if (tab === 'pins') {
+                pinsContent.style.display = 'block';
+                feedbackContent.style.display = 'none';
+            } else {
+                pinsContent.style.display = 'none';
+                feedbackContent.style.display = 'block';
+                await loadAdminFeedbackList();
+            }
+        }
+
+        async function loadAdminFeedbackList() {
+            const listContainer = document.getElementById('admin-feedback-list');
+            listContainer.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem; text-align: center; padding: 20px 0;">Loading feedback...</p>';
+            
+            if (!window.FeedbackSystem || !window.FeedbackSystem.getAllFeedback) {
+                listContainer.innerHTML = '<p style="color: #ef4444; font-size: 0.9rem; text-align: center; padding: 20px 0;">Feedback system not loaded.</p>';
+                return;
+            }
+
+            const feedbacks = await window.FeedbackSystem.getAllFeedback();
+            
+            // Update badge count
+            const activeFeedbacks = feedbacks.filter(f => f.status !== 'resolved');
+            const badge = document.getElementById('admin-feedback-badge');
+            if (badge) badge.innerText = activeFeedbacks.length;
+
+            if (feedbacks.length === 0) {
+                listContainer.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem; text-align: center; padding: 20px 0;">No feedback entries found.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = '';
+            feedbacks.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'feedback-item';
+                
+                let badgeClass = 'badge-general';
+                let typeLabel = 'Suggestion';
+                if (item.feedback_type === 'bug_report') {
+                    badgeClass = 'badge-bug';
+                    typeLabel = 'Bug';
+                } else if (item.feedback_type === 'subject_request') {
+                    badgeClass = 'badge-request';
+                    typeLabel = `Request: ${item.syllabus?.toUpperCase()} - ${item.subject || 'Unknown Subject'}`;
+                }
+
+                const d = new Date(item.created_at);
+                const dateStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const nameLabel = item.fullname || 'Anonymous';
+                const emailLink = item.email ? `<a href="mailto:${item.email}" style="color: #3b82f6; text-decoration: none; margin-left: 5px;">(${item.email})</a>` : '';
+                
+                let actionsHtml = '';
+                if (item.status !== 'resolved') {
+                    actionsHtml = `
+                        <div class="feedback-actions">
+                            <button class="feedback-btn-action feedback-btn-resolve" onclick="resolveFeedback('${item.id}', this)">Mark Resolved</button>
+                            <button class="feedback-btn-action feedback-btn-delete" onclick="deleteFeedback('${item.id}', this)">Delete</button>
+                        </div>
+                    `;
+                } else {
+                    actionsHtml = `
+                        <div class="feedback-meta" style="color: #10b981; font-weight: bold; margin-top: 8px;">✓ Resolved</div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="feedback-item-header">
+                        <span class="feedback-badge ${badgeClass}">${typeLabel}</span>
+                        <span style="color: #64748b; font-size: 0.75rem;">${dateStr}</span>
+                    </div>
+                    <div style="color: #f1f5f9; font-weight: bold; margin-bottom: 6px;">From: ${nameLabel}${emailLink}</div>
+                    <div style="color: #cbd5e1; word-break: break-word; line-height: 1.4; white-space: pre-wrap;">${item.details}</div>
+                    ${actionsHtml}
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        async function resolveFeedback(id, btn) {
+            btn.disabled = true;
+            btn.innerText = 'Resolving...';
+            const res = await window.FeedbackSystem.updateFeedbackStatus(id, 'resolved');
+            if (res.success) {
+                await loadAdminFeedbackList();
+            } else {
+                alert('Failed to resolve feedback: ' + (res.error || 'unknown error'));
+                btn.disabled = false;
+                btn.innerText = 'Mark Resolved';
+            }
+        }
+
+        async function deleteFeedback(id, btn) {
+            if (!confirm('Are you sure you want to permanently delete this feedback?')) return;
+            btn.disabled = true;
+            btn.innerText = 'Deleting...';
+            const res = await window.FeedbackSystem.deleteFeedback(id);
+            if (res.success) {
+                await loadAdminFeedbackList();
+            } else {
+                alert('Failed to delete feedback: ' + (res.error || 'unknown error'));
+                btn.disabled = false;
+                btn.innerText = 'Delete';
+            }
+        }
         
         // Execute render on load after a slight delay to ensure DOM and Auth scripts are ready
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
+            setTimeout(async () => {
                 if(window.AuthAccess && window.AuthAccess.renderModuleAccessibility) {
-                    window.AuthAccess.renderModuleAccessibility();
+                    // Hook into renderModuleAccessibility to fetch feedback badge count
+                    const originalRender = window.AuthAccess.renderModuleAccessibility;
+                    window.AuthAccess.renderModuleAccessibility = async function() {
+                        await originalRender.call(window.AuthAccess);
+                        
+                        const authInfo = await window.AuthAccess.getCurrentUser();
+                        const isAdmin = authInfo && authInfo.tier === 'admin';
+                        
+                        if (isAdmin && window.FeedbackSystem && window.FeedbackSystem.getAllFeedback) {
+                            try {
+                                const feedbacks = await window.FeedbackSystem.getAllFeedback();
+                                const activeFeedbacks = feedbacks.filter(f => f.status !== 'resolved');
+                                const badge = document.getElementById('admin-feedback-badge');
+                                if (badge) badge.innerText = activeFeedbacks.length;
+                            } catch(e) {
+                                console.error('[FeedbackSystem] failed to load feedback count:', e);
+                            }
+                        }
+                    };
+
+                    await window.AuthAccess.renderModuleAccessibility();
                 }
             }, 500); 
         });
@@ -2437,22 +2880,40 @@
     <!-- Admin PIN Generator Toggle Button -->
     <button id="admin-pin-toggle-btn" onclick="const p = document.getElementById('admin-pin-generator'); p.style.display = p.style.display === 'none' ? 'block' : 'none';" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #3b82f6; color: white; width: 60px; height: 60px; border-radius: 50%; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: none; cursor: pointer; font-size: 1.8rem; align-items: center; justify-content: center;">⚙️</button>
 
-    <!-- Admin PIN Generator Modal/Panel -->
-    <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 400px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
+    <!-- Admin Control Panel (Tabbed) -->
+    <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 480px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>⚡</span> Admin: Generate PIN</h3>
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>⚡</span> Admin Control Panel</h3>
             <button onclick="document.getElementById('admin-pin-generator').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
-        <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Select modules or syllabus to include in the PIN.</p>
-        
-        <input type="text" id="admin-pin-code" placeholder="PIN Code (e.g., VIP2026)" style="width:100%; margin-bottom: 15px; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #0f172a; color: white;">
-        
-        <div id="admin-pin-modules-list" style="background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #333; margin-bottom: 15px; max-height: 250px; overflow-y: auto;">
-            <!-- Rendered via JS -->
-            Loading syllabus structure...
+
+        <!-- Tab Switcher -->
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" id="btnAdminTabPins" onclick="switchAdminTab('pins')">🔑 PINs</button>
+            <button class="admin-tab-btn" id="btnAdminTabFeedback" onclick="switchAdminTab('feedback')">💬 Feedback & Requests (<span id="admin-feedback-badge">0</span>)</button>
         </div>
 
-        <button onclick="AdminTools.createPin()" style="background:#3b82f6; border:none; padding:12px; color:white; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold;">Generate Secure PIN</button>
+        <!-- Tab content: PINs -->
+        <div id="admin-tab-pins-content">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Select modules or syllabus to include in the PIN.</p>
+            
+            <input type="text" id="admin-pin-code" placeholder="PIN Code (e.g., VIP2026)" style="width:100%; margin-bottom: 15px; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #0f172a; color: white;">
+            
+            <div id="admin-pin-modules-list" style="background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #333; margin-bottom: 15px; max-height: 250px; overflow-y: auto;">
+                <!-- Rendered via JS -->
+                Loading syllabus structure...
+            </div>
+
+            <button onclick="AdminTools.createPin()" style="background:#3b82f6; border:none; padding:12px; color:white; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold;">Generate Secure PIN</button>
+        </div>
+
+        <!-- Tab content: Feedback -->
+        <div id="admin-tab-feedback-content" style="display: none;">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Student suggestions, bug reports, and module requests.</p>
+            <div id="admin-feedback-list" style="max-height: 400px; overflow-y: auto; background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #333;">
+                Loading feedback submissions...
+            </div>
+        </div>
     </div>
 
 </body>
