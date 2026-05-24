@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -745,21 +745,21 @@
         let sectionD1Progress = 0; let sectionD2Progress = 0; let sectionD3Progress = 0;
         let sectionEProgress = 0; let sectionFProgress = 0; let sectionGProgress = 0;
 
-        window.addEventListener('load', async () => {
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                const p = saved.progress_data;
-                if (p.completedSections) {
-                    completedSections = p.completedSections;
-                    p.completedSections.forEach(section => {
-                        const badge = document.getElementById(`badge-${section.toLowerCase()}`);
+        window.addEventListener('load', function() {
+            if (!window.ProgressTracker) return;
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved.completedSections) {
+                    completedSections = saved.completedSections;
+                    saved.completedSections.forEach(function(section) {
+                        const badge = document.getElementById('badge-' + section.toLowerCase());
                         if (badge) {
                             badge.classList.remove('grayscale', 'bg-gray-300');
                             badge.classList.add('bg-yellow-100', 'ring-4', 'ring-yellow-400');
                         }
                     });
                 }
-            }
+            });
         });
 
         let completedSections = [];
@@ -1365,11 +1365,27 @@
             if (particles.length > 0) requestAnimationFrame(renderConfetti); else confettiCtx.clearRect(0, 0, canvas.width, canvas.height);
         }
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
     <script src="../../../../../js/progress-tracker.js"
             data-module-id="kssr-p3-en-unit4"
             data-module-name="Unit 4: The Four Seasons"
-            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit4/index.html">
+            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit4/index.html"></script>
     </script>
+
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 </body>
 
 </html>

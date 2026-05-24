@@ -516,15 +516,46 @@
 </style>
 <a href="../../../../../index.html" class="home-btn-fixed">&#127968; Home</a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../../../../js/auth-access.js"></script>
 <script src="../../../../../js/progress-tracker.js"
-        data-module-id="IGCSE_Y4_Sci_T1"
-        data-module-name="IGCSE Y4 Science - Life Processes and Ecosystems"
+        data-module-id="igcse-y4-sci-topic1"
+        data-module-name="Topic 1: Life Processes & Ecosystems"
         data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic1_Life_Processes_Ecosystems/index.html"></script>
 <script>
 window.addEventListener('load', function() {
     ProgressTracker.init(async function(tracker) {
-        await tracker.load(); // marks visit, no stage state for this module
+        // ── Restore: replay any previously-saved state into React ──────
+        const saved = await tracker.load();
+        if (saved && saved.answered && Array.isArray(saved.answered)) {
+            // For React-based modules, state is internal — we use a
+            // custom event so the React app can optionally listen.
+            window.dispatchEvent(new CustomEvent('progressRestored', { detail: saved }));
+        }
     });
+
+    // ── MutationObserver autoSave: fires 2s after any DOM change ──────
+    // This works regardless of the framework (React, vanilla, etc.)
+    let _saveTimer = null;
+    const observer = new MutationObserver(function() {
+        clearTimeout(_saveTimer);
+        _saveTimer = setTimeout(function() {
+            if (!window.ProgressTracker) return;
+            // Collect all green-highlighted question blocks as proxy for answered state
+            const answered = [];
+            document.querySelectorAll('[class*="emerald"][class*="bg-emerald-100"]').forEach(function(el) {
+                const block = el.closest('[id^="qblock-"]') || el.closest('div[data-qid]');
+                if (block) {
+                    const id = parseInt((block.id || '').replace(/[^0-9]/g, ''));
+                    if (!isNaN(id) && id > 0) answered.push({ id: id });
+                }
+            });
+            if (answered.length > 0) {
+                ProgressTracker.autoSave({ answered: answered, timestamp: Date.now() }, 0);
+            }
+        }, 2000);
+    });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 });
 </script>
 

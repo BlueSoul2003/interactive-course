@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -1017,26 +1017,43 @@
             </section>`).join('');
         }
         
-        window.addEventListener('load', async () => {
+        window.addEventListener('load', function() {
             initApp();
             if (typeof ProgressTracker !== 'undefined') {
-                const saved = await ProgressTracker.load();
-                if (saved && saved.progress_data && saved.progress_data.completedSections) {
-                    completedSections = saved.progress_data.completedSections;
-                    completedSections.forEach(secId => {
-                        progress[secId] = true;
-                        const badge = document.getElementById(`badge-${secId}`);
-                        if (badge) badge.classList.replace('badge-locked', 'badge-unlocked');
-                    });
-                }
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved && saved.completedSections) {
+                        completedSections = saved.completedSections;
+                        completedSections.forEach(secId => {
+                            progress[secId] = true;
+                            const badge = document.getElementById(`badge-${secId}`);
+                            if (badge) badge.classList.replace('badge-locked', 'badge-unlocked');
+                        });
+                    }
+                });
             }
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
     <script src="../../../../../js/progress-tracker.js"
             data-module-id="kssr-p6-en-unit4"
             data-module-name="Unit 4: Interactive Worksheet"
-            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit4/index.html">
-    </script>
+            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit4/index.html"></script>
+
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 </body>
 
 </html>

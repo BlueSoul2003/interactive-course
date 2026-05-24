@@ -520,15 +520,43 @@
 </style>
 <a href="../../../../../index.html" class="home-btn-fixed">&#127968; Home</a>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../../../../js/auth-access.js"></script>
 <script src="../../../../../js/progress-tracker.js"
-        data-module-id="IGCSE_Y4_Sci_T7"
-        data-module-name="IGCSE Y4 Science - Earth and Space"
+        data-module-id="igcse-y4-sci-topic7"
+        data-module-name="Topic 7: Earth and Space"
         data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html"></script>
 <script>
 window.addEventListener('load', function() {
     ProgressTracker.init(async function(tracker) {
-        await tracker.load(); // marks visit, no stage state for this module
+        // Restore saved progress
+        const saved = await tracker.load();
+        if (saved && saved.completedIndices) {
+            window.__restoredProgress = saved.completedIndices;
+        }
     });
+
+    // MutationObserver: autosave 2s after any DOM completion event
+    let _saveTimer = null;
+    const observer = new MutationObserver(function() {
+        clearTimeout(_saveTimer);
+        _saveTimer = setTimeout(function() {
+            if (!window.ProgressTracker) return;
+            // Collect all green-highlighted (correct) answers across both DOM and React modules
+            const completed = [];
+            // React pattern: isCompleted state reflected as bg-green-100 class on button
+            document.querySelectorAll('.bg-green-100, .bg-emerald-100').forEach(function(el) {
+                var qEl = el.closest('[class*="max-w"]') || el.parentElement;
+                if (qEl) {
+                    var idx = qEl.dataset ? qEl.dataset.qidx : null;
+                    if (idx !== null && idx !== undefined) completed.push(parseInt(idx));
+                }
+            });
+            ProgressTracker.autoSave({ completedIndices: completed, ts: Date.now() }, 0);
+        }, 2000);
+    });
+    observer.observe(document.getElementById('root') || document.body,
+        { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
 });
 </script>
 

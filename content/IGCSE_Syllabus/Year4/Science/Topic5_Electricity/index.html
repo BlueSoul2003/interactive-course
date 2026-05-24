@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -553,6 +553,59 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="igcse-y4-sci-topic5"
+            data-module-name="Topic 5: Electricity"
+            data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic5_Electricity/index.html"></script>
+    <script>
+    window.addEventListener('load', function() {
+        ProgressTracker.init(async function(tracker) {
+            // Restore saved progress
+            const saved = await tracker.load();
+            if (saved && saved.completedIndices) {
+                window.__restoredProgress = saved.completedIndices;
+            }
+        });
+
+        // MutationObserver: autosave 2s after any DOM completion event
+        let _saveTimer = null;
+        const observer = new MutationObserver(function() {
+            clearTimeout(_saveTimer);
+            _saveTimer = setTimeout(function() {
+                if (!window.ProgressTracker) return;
+                // Collect all green-highlighted (correct) answers across both DOM and React modules
+                const completed = [];
+                // React pattern: isCompleted state reflected as bg-green-100 class on button
+                document.querySelectorAll('.bg-green-100, .bg-emerald-100').forEach(function(el) {
+                    var qEl = el.closest('[class*="max-w"]') || el.parentElement;
+                    if (qEl) {
+                        var idx = qEl.dataset ? qEl.dataset.qidx : null;
+                        if (idx !== null && idx !== undefined) completed.push(parseInt(idx));
+                    }
+                });
+                ProgressTracker.autoSave({ completedIndices: completed, ts: Date.now() }, 0);
+            }, 2000);
+        });
+        observer.observe(document.getElementById('root') || document.body,
+            { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    });
+    </script>
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 </body>
 
 </html>

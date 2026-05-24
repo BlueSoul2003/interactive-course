@@ -45,20 +45,46 @@ const AuthAccess = {
     },
 
     async signUp(email, password, profileData = null) {
-        const result = await window.supabaseClient.auth.signUp({ email, password });
-        if (result.data?.user) {
-            const profileRecord = { 
-                id: result.data.user.id, 
+        const signUpOptions = {
+            email,
+            password
+        };
+
+        if (profileData) {
+            signUpOptions.options = {
+                data: {
+                    fullname: profileData.fullname,
+                    phone:    profileData.phone,
+                    syllabus: profileData.syllabus,
+                    age:      profileData.age ? parseInt(profileData.age) : null,
+                    gender:   profileData.gender,
+                    role:     profileData.role
+                }
+            };
+        }
+
+        const result = await window.supabaseClient.auth.signUp(signUpOptions);
+
+        // Fail fast if auth itself errored — no user created
+        if (result.error) return result;
+
+        const userId = result.data?.user?.id;
+        if (!userId) return result;
+
+        // If email confirmation is disabled, session is active immediately and we can upsert
+        if (result.data.session) {
+            const profileRecord = {
+                id:         userId,
                 email,
-                tier: 'member', 
-                tier_level: 1 
+                tier:       'member',
+                tier_level: 1,
             };
             if (profileData) {
                 Object.assign(profileRecord, {
                     fullname: profileData.fullname,
                     phone:    profileData.phone,
                     syllabus: profileData.syllabus,
-                    age:      profileData.age,
+                    age:      profileData.age ? parseInt(profileData.age) : null,
                     gender:   profileData.gender,
                     role:     profileData.role,
                 });
@@ -66,8 +92,20 @@ const AuthAccess = {
                     profileRecord.unlocked_modules = [profileData.syllabus];
                 }
             }
-            await window.supabaseClient.from('user_profiles').upsert([profileRecord]);
+
+            const { error: profileError } = await window.supabaseClient
+                .from('user_profiles')
+                .upsert([profileRecord]);
+
+            if (profileError) {
+                console.error('[AuthAccess] signUp profile upsert failed:', profileError);
+                return {
+                    data: result.data,
+                    error: { message: 'Account created but profile save failed: ' + profileError.message }
+                };
+            }
         }
+
         return result;
     },
 

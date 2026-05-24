@@ -949,19 +949,40 @@
         }
 
         // ── Progress Tracking ─────────────────────────────────────
-        window.addEventListener('load', async () => {
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                // Module state is self-contained; progress auto-restores via DOM
-            }
+        // Must wait for ProgressTracker to load (script is below), so we defer
+        window.addEventListener('load', function() {
+            if (!window.ProgressTracker) return;
+            ProgressTracker.init(async function(tracker) {
+                // Load any previously saved progress (for this module, we record visit)
+                await tracker.load();
+            });
+
+            // autoSave when any answer is selected or typed correctly
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('blank-select') && e.target.classList.contains('correct')) {
+                    _saveChapter6Progress();
+                }
+                if (e.target.classList.contains('text-input-blank') && e.target.disabled) {
+                    _saveChapter6Progress();
+                }
+            });
         });
+
+        function _saveChapter6Progress() {
+            if (!window.ProgressTracker) return;
+            var selects = {}, inputs = {};
+            document.querySelectorAll('.blank-select.correct').forEach(function(s, i) { selects[i] = s.value; });
+            document.querySelectorAll('.text-input-blank[disabled]').forEach(function(inp) { inputs[inp.dataset.ans] = true; });
+            ProgressTracker.autoSave({ selects: selects, inputs: inputs }, 1500);
+        }
     </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
     <script src="../../../../../js/progress-tracker.js"
             data-module-id="igcse-y8-sci-ch6"
             data-module-name="Chapter 6: Light and Space"
-            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/index.html">
-    </script>
+            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/index.html"></script>
 </body>
 
 </html>

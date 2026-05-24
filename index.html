@@ -880,8 +880,8 @@
                 <div class="grid">
                     <a href="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html" class="card sub-bm" data-bundle="spm_form5" data-module-id="spm-bm-kesalahan-ejaan">
                         <div class="card-tag">Module 1 - Kesalahan Ejaan</div>
-                        <h3>Sistem特訓: 錯別字 Debug</h3>
-                        <p>Kuasai ejaan melalui sistem特訓: Tinder-style swipe, 2-choice traps, dan 終極 boss-level debugging.</p>
+                        <h3>Sistem Latihan: 错别字 Debug</h3>
+                        <p>Kuasai ejaan melalui sistem latihan: Tinder-style swipe, 2-choice traps, dan ultimate boss-level debugging.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Training <span>&rarr;</span></div>
                         </div>
@@ -1997,9 +1997,14 @@
 
         // ── Existing Navigation Logic ─────────────────────────────────────────────
         function switchSyllabus(event, syllabusId) {
-            // Remove 'active' class from all tab buttons
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            tabBtns.forEach(btn => btn.classList.remove('active'));
+            // Remove 'active' only from the currently visible syllabus tab row,
+            // NOT from the level-switcher buttons (Secondary / Primary).
+            const secondaryTabs = document.getElementById('secondary-tabs');
+            const primaryTabs   = document.getElementById('primary-tabs');
+            const activeTabsContainer = secondaryTabs.style.display !== 'none'
+                ? secondaryTabs
+                : primaryTabs;
+            activeTabsContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
 
             // Add 'active' class to the clicked button
             event.currentTarget.classList.add('active');
@@ -2347,7 +2352,7 @@
                 const el = document.createElement('div');
                 el.style.cssText = 'background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; gap: 12px;';
 
-                const d = new Date(row.last_updated);
+                const d = new Date(row.updated_at);
                 const timeStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                 el.innerHTML = `

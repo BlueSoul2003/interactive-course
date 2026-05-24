@@ -361,42 +361,52 @@ function toggleLang(lang) {
 }
 
 function saveCurrentProgress() {
-    if (window.ProgressTracker && ProgressTracker.getActiveStudent()) {
-        ProgressTracker.save({
+    if (window.ProgressTracker) {
+        ProgressTracker.autoSave({
             currentTheme: currentThemeIdx,
             currentSet: parseInt(currentSetIdx),
             currentStep: currentStep
-        });
+        }, 1000);
     }
 }
 
 async function initApp() {
-    // Show active student badge
-    if (window.ProgressTracker) {
-        const student = ProgressTracker.getActiveStudent();
-        if (student) {
-            const badge = document.getElementById('activeStudentBadge');
-            if (badge) {
-                badge.style.display = 'inline-block';
-                document.getElementById('activeStudentName').innerText = student;
-            }
-
-            // Restore saved progress from Supabase
-            const saved = await ProgressTracker.load();
-            if (saved && saved.progress_data) {
-                const p = saved.progress_data;
-                currentThemeIdx = p.currentTheme ?? 0;
-                currentSetIdx = p.currentSet ?? 0;
-                currentStep = p.currentStep ?? 1;
-            }
-        }
-    }
-
     setupThemeGrid();
     updateSets();
 
     if (currentStep > 1) {
         goToStep(currentStep);
+    }
+
+    // Initialize Progress Tracker and load progress
+    if (window.ProgressTracker) {
+        ProgressTracker.init(async function(tracker) {
+            // Show active student badge using Supabase Auth
+            if (window.supabaseClient) {
+                try {
+                    const { data: { user } } = await window.supabaseClient.auth.getUser();
+                    if (user) {
+                        const badge = document.getElementById('activeStudentBadge');
+                        if (badge) badge.style.display = 'inline-block';
+                        const nameEl = document.getElementById('activeStudentName');
+                        if (nameEl) nameEl.innerText = user.email;
+                    }
+                } catch(e) { /* guest — no badge */ }
+            }
+
+            const saved = await tracker.load();
+            if (saved) {
+                currentThemeIdx = saved.currentTheme ?? 0;
+                currentSetIdx = saved.currentSet ?? 0;
+                currentStep = saved.currentStep ?? 1;
+
+                setupThemeGrid();
+                updateSets();
+                if (currentStep > 1) {
+                    goToStep(currentStep);
+                }
+            }
+        });
     }
 }
 
@@ -792,4 +802,6 @@ function updateStepVisibility() {
 }
 
 // Start app
-window.onload = initApp;
+window.onload = function() {
+    initApp();
+};

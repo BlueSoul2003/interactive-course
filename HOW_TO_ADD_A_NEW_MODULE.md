@@ -103,43 +103,59 @@ Once a student is inside the module, they need a way to get back to the Grand La
 
 ## Pillar 4: State Management (Progress Tracking)
 
-### Step 6: Add the Universal Progress SDK
-Before the closing `</body>` tag of your module, link the Supabase progress tracking script. **You must customize the `data-module-id`, `data-module-name`, and `data-module-url`**:
+### Step 6: Add the Supabase & Progress SDKs
+Before the closing `</body>` tag of your module, link the Supabase Client SDK, our auth manager, and the progress tracking script. **You must customize the relative paths (`../`) and the `data-module-id`, `data-module-name`, and `data-module-url`**:
 
 ```html
+<!-- Supabase SDK, Auth Client, and Progress Tracker (order is critical!) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../../../js/auth-access.js"></script>
 <script src="../../../../js/progress-tracker.js"
         data-module-id="UNIQUE_NO_SPACES_ID"
         data-module-name="Human Readable Name"
         data-module-url="content/your/path/index.html">
 </script>
 ```
-- `data-module-id`: Unique canonical key, e.g., `spm-bm-kesalahan`. This is the exact key the PIN authentication system uses to lock/unlock your module.
+- `data-module-id`: Unique canonical key, e.g., `spm-bm-kesalahan`. This is the exact key the PIN authentication system uses to lock/unlock your module and map it to database records.
 - `data-module-name`: What appears in the Student Dashboard.
 - `data-module-url`: The exact path from the root, used by the "Resume" button.
 
 ### Step 7: Load Saved Progress on Start
-Inside your module's own `<script>` tag, add logic to load progress when the page opens:
+Inside your module's own `<script>` tag, initialize the tracker and load progress. **Do NOT call load() outside the `init()` callback**, as it relies on the auth session being fully initialized first:
 ```javascript
-window.addEventListener('load', async () => {
-    const saved = await ProgressTracker.load();
-    if (saved && saved.progress_data) {
-        const p = saved.progress_data;
-        // Restore your module state here. Example:
-        // currentStep = p.step || 1;
-        // goToStep(currentStep);
+window.addEventListener('load', function() {
+    if (typeof ProgressTracker !== 'undefined') {
+        ProgressTracker.init(async function(tracker) {
+            // Restore saved progress (saved is the raw JSON progress object you stored)
+            const saved = await tracker.load();
+            if (saved) {
+                // Restore your module state here. Example:
+                // currentStep = saved.step || 1;
+                // goToStep(currentStep);
+            }
+        });
     }
 });
 ```
 
-### Step 8: Save Progress Automatically
-Whenever the student completes an action (like finishing a question or going to the next page), trigger the save function:
-```javascript
-ProgressTracker.save({
-    step: currentStep,
-    score: myCurrentScore,
-    // Add any variables you need to remember!
-});
-```
+### Step 8: Save Progress Automatically (Debounced or Immediate)
+Whenever the student completes an action (like finishing a question or going to the next page), trigger the save function. 
+
+* **Debounced `autoSave` (Recommended)**: Use this for frequent state updates, such as keypresses or after checking individual questions, to avoid hitting database rate limits:
+  ```javascript
+  ProgressTracker.autoSave({
+      step: currentStep,
+      score: myCurrentScore
+  }, 1500); // 1.5s debounce delay
+  ```
+
+* **Immediate `save`**: Use this for major milestones where instant database write is preferred (e.g. level completion):
+  ```javascript
+  ProgressTracker.save({
+      step: currentStep,
+      score: myCurrentScore
+  });
+  ```
 *(You do not need to pass the module ID here; the SDK automatically reads it from the script tag in Step 6).*
 
 ---
@@ -222,32 +238,9 @@ Every time you add a new module, verify you have hit all 5 pillars:
 ---
 
 <details>
-<summary><b>Appendix: Admin Supabase Setup (One-Time Configuration)</b></summary>
+<summary><b>Appendix: Database Schema & RLS Policies (One-Time Configuration)</b></summary>
 
-If the database is ever reset or you deploy to a new Supabase instance, run this SQL in the Supabase SQL Editor:
-```sql
-CREATE TABLE IF NOT EXISTS students (
-    id SERIAL PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
+If the database is ever reset or you deploy to a new Supabase instance, please run the SQL statements located in [db/schema.sql](file:///c:/Users/hong0/Desktop/interactive-course-main/db/schema.sql) in your Supabase SQL Editor.
 
-CREATE TABLE IF NOT EXISTS progress (
-    id SERIAL PRIMARY KEY,
-    student_name TEXT NOT NULL REFERENCES students(name) ON DELETE CASCADE,
-    module_id TEXT NOT NULL,
-    module_name TEXT NOT NULL,
-    module_url TEXT NOT NULL,
-    progress_data JSONB NOT NULL,
-    last_updated TIMESTAMPTZ DEFAULT NOW(),
-    UNIQUE(student_name, module_id)
-);
-
-ALTER TABLE students ENABLE ROW LEVEL SECURITY;
-ALTER TABLE progress ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "allow_all_students" ON students FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "allow_all_progress" ON progress FOR ALL USING (true) WITH CHECK (true);
-```
-Then update `SUPABASE_URL` and `SUPABASE_KEY` inside `js/progress-tracker.js`.
+Additionally, make sure to apply the updates in [db/migrations/fix_registration_and_progress.sql](file:///c:/Users/hong0/Desktop/interactive-course-main/db/migrations/fix_registration_and_progress.sql) to add the RLS SELECT policy on `user_profiles` and set up the automatic profile creation trigger `handle_new_user()` which supports email-confirmation signup flows.
 </details>

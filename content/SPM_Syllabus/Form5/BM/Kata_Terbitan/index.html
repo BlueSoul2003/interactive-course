@@ -790,10 +790,12 @@
 
             feedback.style.display = 'block';
             document.getElementById('next-btn').style.display = 'inline-block';
+            saveProgress();
         }
 
         function nextQuestion() {
             currentQIndex++;
+            saveProgress();
             if (currentQIndex < questions.length) {
                 loadQuestion(currentQIndex);
             } else {
@@ -806,6 +808,8 @@
             document.getElementById('result-area').style.display = 'block';
             document.getElementById('final-score').innerText = `${score} / ${questions.length}`;
             document.getElementById('progress-fill').style.width = '100%';
+            saveProgress();
+            saveProgress();
         }
     </script>
 <!--  Home Button  -->
@@ -826,5 +830,54 @@
 }
 </style>
 <a href="../../../../../index.html" class="home-btn-fixed"> Home</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="spm-bm-kata-terbitan"
+            data-module-name="Morfologi Mastery"
+            data-module-url="content/SPM_Syllabus/Form5/BM/Kata_Terbitan/index.html"></script>
+    <script>
+    window.addEventListener('load', function() {
+        if (!window.ProgressTracker) return;
+        ProgressTracker.init(async function(tracker) {
+            const saved = await tracker.load();
+            if (saved && saved.currentQIndex !== undefined) {
+                currentQIndex = saved.currentQIndex;
+                score = saved.score || 0;
+                isAnswered = saved.isAnswered || false;
+                if (currentQIndex < questions.length) {
+                    loadQuestion(currentQIndex);
+                } else {
+                    showResult();
+                }
+            }
+        });
+    });
+
+    function saveProgress() {
+        if (window.ProgressTracker) {
+            ProgressTracker.autoSave({
+                currentQIndex: currentQIndex,
+                score: score,
+                isAnswered: isAnswered,
+                timestamp: Date.now()
+            }, 1000);
+        }
+    }
+    </script>
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
+</style>
+<a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 </body>
 </html>
