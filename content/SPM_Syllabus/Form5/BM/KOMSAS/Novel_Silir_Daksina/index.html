@@ -219,11 +219,15 @@
             prevBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if(currentChapterIndex > 0) loadChapter(currentChapterIndex - 1);
+                saveProgress();
+                saveProgress();
             });
             
             nextBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if(currentChapterIndex < novelData.length - 1) loadChapter(currentChapterIndex + 1);
+                saveProgress();
+                saveProgress();
             });
         }
         
@@ -329,6 +333,8 @@
             } else if (currentChapterIndex < novelData.length - 1) {
                 // Go to next chapter
                 loadChapter(currentChapterIndex + 1);
+                saveProgress();
+                saveProgress();
             } else {
                 // End of novel
                 highlightAll();
@@ -404,5 +410,69 @@
 }
 </style>
 <a href="../../../../../../index.html" class="home-btn-fixed"> Home</a>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../../js/auth-access.js"></script>
+    <script src="../../../../../../js/progress-tracker.js"
+            data-module-id="spm-bm-komsas-novel"
+            data-module-name="Novel Silir Daksina (Interactive)"
+            data-module-url="content/SPM_Syllabus/Form5/BM/KOMSAS/Novel_Silir_Daksina/index.html"></script>
+    <script>
+    window.addEventListener('load', function() {
+        if (!window.ProgressTracker) return;
+        ProgressTracker.init(async function(tracker) {
+            const saved = await tracker.load();
+            if (saved && saved.chapterIndex !== undefined) {
+                currentChapterIndex = saved.chapterIndex;
+                currentSentenceIndex = saved.sentenceIndex || 0;
+                isStarted = saved.isStarted || false;
+                
+                if (isStarted) {
+                    document.getElementById('start-screen').classList.add('hidden');
+                    document.getElementById('reader-screen').classList.remove('hidden');
+                    loadChapter(currentChapterIndex);
+                    // Fast-forward sentence highlights
+                    for (let i = 0; i < currentSentenceIndex; i++) {
+                        const el = document.getElementById('s-' + i);
+                        if (el) {
+                            el.classList.remove('dimmed', 'active');
+                            el.classList.add('done');
+                        }
+                    }
+                    const activeEl = document.getElementById('s-' + currentSentenceIndex);
+                    if (activeEl) {
+                        activeEl.classList.remove('dimmed', 'done');
+                        activeEl.classList.add('highlighted');
+                    }
+                    updateProgressBar();
+                }
+            }
+        });
+    });
+
+    function saveProgress() {
+        if (window.ProgressTracker) {
+            ProgressTracker.autoSave({
+                chapterIndex: currentChapterIndex,
+                sentenceIndex: currentSentenceIndex,
+                isStarted: isStarted,
+                timestamp: Date.now()
+            }, 1000);
+        }
+    }
+    </script>
+<style>
+.home-btn-fixed {
+  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
+  background: linear-gradient(135deg, #1e3a8a, #764ba2);
+  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
+}
+.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
+</style>
+<a href="../../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 </body>
 </html>
