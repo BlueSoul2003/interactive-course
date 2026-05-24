@@ -89,7 +89,7 @@
         </div>
         <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-4">
-                <a href="../../../../../index.html" class="text-blue-600 hover:text-blue-800 transition flex items-center font-semibold z-50">
+                <a href="../../../../../../index.html" class="text-blue-600 hover:text-blue-800 transition flex items-center font-semibold z-50">
                     <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     Kembali
                 </a>
@@ -219,14 +219,16 @@
             prevBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if(currentChapterIndex > 0) loadChapter(currentChapterIndex - 1);
-                saveProgress();
+                saveProgress();
+
                 saveProgress();
             });
             
             nextBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 if(currentChapterIndex < novelData.length - 1) loadChapter(currentChapterIndex + 1);
-                saveProgress();
+                saveProgress();
+
                 saveProgress();
             });
         }
@@ -333,7 +335,8 @@
             } else if (currentChapterIndex < novelData.length - 1) {
                 // Go to next chapter
                 loadChapter(currentChapterIndex + 1);
-                saveProgress();
+                saveProgress();
+
                 saveProgress();
             } else {
                 // End of novel
@@ -392,24 +395,8 @@
         // Boot
         document.addEventListener('DOMContentLoaded', init);
     </script>
-<!--  Home Button  -->
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-  letter-spacing: 0.5px;
-}
-.home-btn-fixed:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  color: #fff;
-}
-</style>
-<a href="../../../../../../index.html" class="home-btn-fixed"> Home</a>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../../../../../../js/auth-access.js"></script>
@@ -461,18 +448,7 @@
         }
     }
     </script>
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-}
-.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
-</style>
-<a href="../../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+
 </body>
 </html>
