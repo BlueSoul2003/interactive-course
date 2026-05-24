@@ -12,32 +12,59 @@
         rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
+            /* Theme Colors (Obsidian Dark Mode) */
+            --bg-color: #080c14;
+            --card-bg: #111827;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
 
-            /* Subject Accents */
-            --sub-english: #3b82f6;
-            /* Blue */
-            --sub-bm: #8b5cf6;
-            /* Violet */
-            --sub-math: #ec4899;
-            /* Pink */
-            --sub-science: #10b981;
-            /* Emerald */
-            --sub-chinese: #ef4444;
-            /* Red */
-            --sub-sejarah: #d97706;
-            /* Amber */
-            --sub-chemistry: #06b6d4;
-            /* Cyan */
-            --sub-physics: #6366f1;
-            /* Indigo */
-            --sub-biology: #84cc16;
-            /* Lime */
+            /* Glassmorphism System Tokens */
+            --glass-bg: rgba(17, 24, 39, 0.45);
+            --glass-bg-hover: rgba(17, 24, 39, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-border-hover: rgba(255, 255, 255, 0.12);
+            --glass-blur: 16px;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 
-            --gradient-hero: linear-gradient(135deg, #1e3a8a 0%, #764ba2 100%);
+            /* Subject Accent Colors */
+            --sub-english: #3b82f6;     /* Blue */
+            --sub-bm: #8b5cf6;          /* Violet */
+            --sub-math: #ec4899;        /* Pink */
+            --sub-science: #10b981;     /* Emerald */
+            --sub-chinese: #ef4444;     /* Red */
+            --sub-sejarah: #d97706;     /* Amber */
+            --sub-chemistry: #06b6d4;   /* Cyan */
+            --sub-physics: #6366f1;     /* Indigo */
+            --sub-biology: #84cc16;     /* Lime */
+
+            /* Subject-matched Glass Borders (Subtle tinted outlines) */
+            --border-english: rgba(59, 130, 246, 0.15);
+            --border-bm: rgba(139, 92, 246, 0.15);
+            --border-math: rgba(236, 72, 153, 0.15);
+            --border-science: rgba(16, 185, 129, 0.15);
+            --border-chinese: rgba(239, 68, 68, 0.15);
+            --border-sejarah: rgba(217, 119, 6, 0.15);
+            --border-chemistry: rgba(6, 182, 212, 0.15);
+            --border-physics: rgba(99, 102, 241, 0.15);
+            --border-biology: rgba(132, 204, 22, 0.15);
+
+            /* Subject-matched Glow Shadows on Hover */
+            --glow-english: 0 10px 30px rgba(59, 130, 246, 0.25);
+            --glow-bm: 0 10px 30px rgba(139, 92, 246, 0.25);
+            --glow-math: 0 10px 30px rgba(236, 72, 153, 0.25);
+            --glow-science: 0 10px 30px rgba(16, 185, 129, 0.25);
+            --glow-chinese: 0 10px 30px rgba(239, 68, 68, 0.25);
+            --glow-sejarah: 0 10px 30px rgba(217, 119, 6, 0.25);
+            --glow-chemistry: 0 10px 30px rgba(6, 182, 212, 0.25);
+            --glow-physics: 0 10px 30px rgba(99, 102, 241, 0.25);
+            --glow-biology: 0 10px 30px rgba(132, 204, 22, 0.25);
+
+            /* Hero Mesh Gradient Settings */
+            --hero-bg: radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
+                       radial-gradient(at 50% 0%, rgba(118, 75, 162, 0.25) 0, transparent 50%),
+                       radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0, transparent 50%),
+                       #080c14;
+
             --font-main: 'Outfit', sans-serif;
             --font-serif: 'Playfair Display', serif;
         }
@@ -58,39 +85,106 @@
 
         /* Hero Section */
         header {
-            background: var(--gradient-hero);
-            padding: 80px 20px 100px;
+            background: var(--hero-bg);
+            padding: 120px 20px 140px;
             text-align: center;
-            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
             position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         header h1 {
             font-family: var(--font-serif);
             font-size: 3.5rem;
             margin-bottom: 20px;
-            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            color: #ffffff;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
             animation: fadeInDown 0.8s ease-out;
+            position: relative;
+            z-index: 2;
         }
 
         header p {
             font-size: 1.25rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text-secondary);
             max-width: 600px;
             margin: 0 auto;
             animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            position: relative;
+            z-index: 2;
         }
 
         .level-badge {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            padding: 8px 18px;
             border-radius: 50px;
             font-size: 0.9rem;
             margin-top: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             animation: fadeInUp 0.8s ease-out 0.4s backwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Drifting Neon Background Blobs */
+        .hero-bg-blobs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float-blob 25s infinite alternate ease-in-out;
+        }
+        .hero-blob-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--sub-english);
+            top: -10%;
+            left: 10%;
+        }
+        .hero-blob-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--sub-math);
+            top: 20%;
+            right: 15%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+        }
+        .hero-blob-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--sub-science);
+            bottom: -10%;
+            left: 40%;
+            animation-delay: -10s;
+            animation-duration: 22s;
+        }
+
+        @keyframes float-blob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(60px, 40px) scale(1.1);
+            }
+            100% {
+                transform: translate(-40px, -60px) scale(0.95);
+            }
         }
 
         /* Main Container */
@@ -106,40 +200,50 @@
         .tabs-container {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-bottom: 50px;
+            gap: 8px;
+            margin-bottom: 40px;
             flex-wrap: wrap;
             animation: fadeInUp 0.8s ease-out 0.3s backwards;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
         }
 
         .tab-btn {
-            background: var(--card-bg);
+            background: transparent;
             color: var(--text-secondary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
+            border: 1px solid transparent;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
             font-family: var(--font-main);
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            gap: 8px;
+            box-shadow: none;
         }
 
         .tab-btn:hover {
             color: var(--text-primary);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: none;
         }
 
         .tab-btn.active {
-            background: var(--gradient-hero);
-            color: white;
-            border-color: transparent;
-            box-shadow: 0 8px 20px rgba(118, 75, 162, 0.4);
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
         }
 
         /* Syllabus Content Wrapper */
@@ -192,24 +296,56 @@
 
         /* Card Styles */
         .card {
-            background: var(--card-bg);
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
             border-radius: 20px;
             padding: 30px;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
+            box-shadow: var(--glass-shadow);
         }
 
         .card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-8px);
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
         }
+
+        /* Color-matched glass outlines and glows on hover */
+        .card.sub-english { border-color: var(--border-english); }
+        .card.sub-english:hover { border-color: rgba(59, 130, 246, 0.4); box-shadow: var(--glow-english); }
+
+        .card.sub-bm { border-color: var(--border-bm); }
+        .card.sub-bm:hover { border-color: rgba(139, 92, 246, 0.4); box-shadow: var(--glow-bm); }
+
+        .card.sub-math { border-color: var(--border-math); }
+        .card.sub-math:hover { border-color: rgba(236, 72, 153, 0.4); box-shadow: var(--glow-math); }
+
+        .card.sub-science { border-color: var(--border-science); }
+        .card.sub-science:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: var(--glow-science); }
+
+        .card.sub-chinese { border-color: var(--border-chinese); }
+        .card.sub-chinese:hover { border-color: rgba(239, 68, 68, 0.4); box-shadow: var(--glow-chinese); }
+
+        .card.sub-sejarah { border-color: var(--border-sejarah); }
+        .card.sub-sejarah:hover { border-color: rgba(217, 119, 6, 0.4); box-shadow: var(--glow-sejarah); }
+
+        .card.sub-chemistry { border-color: var(--border-chemistry); }
+        .card.sub-chemistry:hover { border-color: rgba(6, 182, 212, 0.4); box-shadow: var(--glow-chemistry); }
+
+        .card.sub-physics { border-color: var(--border-physics); }
+        .card.sub-physics:hover { border-color: rgba(99, 102, 241, 0.4); box-shadow: var(--glow-physics); }
+
+        .card.sub-biology { border-color: var(--border-biology); }
+        .card.sub-biology:hover { border-color: rgba(132, 204, 22, 0.4); box-shadow: var(--glow-biology); }
 
         .card::before {
             content: '';
@@ -300,15 +436,18 @@
 
         /* Locked Card */
         .card-locked {
-            opacity: 0.6;
-            filter: grayscale(1);
+            opacity: 0.45;
+            filter: grayscale(0.8);
             cursor: not-allowed;
-            background: repeating-linear-gradient(45deg, #1e293b, #1e293b 10px, #253346 10px, #253346 20px);
+            background: rgba(15, 23, 42, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.03) !important;
+            pointer-events: none;
         }
 
         .card-locked:hover {
             transform: none;
-            box-shadow: none;
+            box-shadow: var(--glass-shadow);
+            border-color: rgba(255, 255, 255, 0.03) !important;
         }
 
         /* Subject Specific Classes */
@@ -476,11 +615,12 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(5, 8, 16, 0.6);
             z-index: 9999;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
         .modal-overlay.open {
@@ -488,8 +628,10 @@
         }
 
         .modal-box {
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 32px;
             width: 90%;
@@ -498,6 +640,7 @@
             overflow-y: auto;
             position: relative;
             animation: fadeInDown 0.25s ease;
+            box-shadow: var(--glass-shadow);
         }
 
         .modal-box h2 {
@@ -626,21 +769,41 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(5, 8, 16, 0.65);
             z-index: 99999;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .pin-modal-box {
-            background: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
             border-radius: 16px;
             padding: 30px;
             width: 90%;
             max-width: 400px;
             text-align: center;
             position: relative;
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* Input Elements Enhancements (Cohesive visual language) */
+        .modal-box input, .modal-box select, .modal-box textarea,
+        .pin-modal-box input, .pin-modal-box select, .pin-modal-box textarea {
+            background: rgba(8, 12, 20, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #f8fafc !important;
+            border-radius: 8px !important;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-box input:focus, .modal-box select:focus, .modal-box textarea:focus,
+        .pin-modal-box input:focus, .pin-modal-box select:focus, .pin-modal-box textarea:focus {
+            border-color: rgba(96, 165, 250, 0.5) !important;
+            box-shadow: 0 0 12px rgba(96, 165, 250, 0.15) !important;
         }
         .pin-input {
             width: 100%;
@@ -806,6 +969,12 @@
 <body>
 
     <header>
+        <!-- Drifting background blobs -->
+        <div class="hero-bg-blobs">
+            <div class="hero-blob hero-blob-1"></div>
+            <div class="hero-blob hero-blob-2"></div>
+            <div class="hero-blob hero-blob-3"></div>
+        </div>
         <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
             <button id="studentDashboardBtn" class="tab-btn"
                 style="padding: 8px 20px; font-size: 0.95rem; margin:0; background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.3); color: white; display:flex; align-items:center; gap: 8px;"
