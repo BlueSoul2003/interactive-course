@@ -16,18 +16,49 @@
 
 
 -- ──────────────────────────────────────────────────────────────────
--- SECTION 1: user_profiles patches
+-- SECTION 1: user_profiles table and policies
 -- ──────────────────────────────────────────────────────────────────
 
--- 1a. Add unlocked_modules column if it doesn't exist yet
+-- Create user_profiles table explicitly if it doesn't exist
+CREATE TABLE IF NOT EXISTS public.user_profiles (
+  id               UUID                     PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email            TEXT                     NOT NULL,
+  tier             TEXT                     DEFAULT 'member',
+  tier_level       INTEGER                  DEFAULT 1,
+  fullname         TEXT,
+  phone            TEXT,
+  syllabus         TEXT,
+  age              INTEGER,
+  gender           TEXT,
+  role             TEXT,
+  unlocked_modules TEXT[]                   DEFAULT '{}',
+  created_at       TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+ALTER TABLE public.user_profiles ENABLE ROW LEVEL SECURITY;
+
+-- Ensure all required columns exist in case the table already existed with a partial schema
 DO $$
 BEGIN
-    IF NOT EXISTS (
-        SELECT 1 FROM information_schema.columns
-        WHERE table_schema = 'public'
-          AND table_name   = 'user_profiles'
-          AND column_name  = 'unlocked_modules'
-    ) THEN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='fullname') THEN
+        ALTER TABLE public.user_profiles ADD COLUMN fullname TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='phone') THEN
+        ALTER TABLE public.user_profiles ADD COLUMN phone TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='syllabus') THEN
+        ALTER TABLE public.user_profiles ADD COLUMN syllabus TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='age') THEN
+        ALTER TABLE public.user_profiles ADD COLUMN age INTEGER;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='gender') THEN
+        ALTER TABLE public.user_profiles ADD COLUMN gender TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='role') THEN
+        ALTER TABLE public.user_profiles ADD COLUMN role TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='user_profiles' AND column_name='unlocked_modules') THEN
         ALTER TABLE public.user_profiles ADD COLUMN unlocked_modules TEXT[] DEFAULT '{}';
     END IF;
 END $$;
@@ -59,6 +90,88 @@ BEGIN
         FOR UPDATE USING (auth.uid() = id);
     END IF;
 END $$;
+
+-- 1d. RLS: Users can SELECT their own profile row (required to read credentials & upsert)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies
+        WHERE tablename  = 'user_profiles'
+          AND policyname = 'Users can read their own profile'
+    ) THEN
+        CREATE POLICY "Users can read their own profile"
+        ON public.user_profiles
+        FOR SELECT
+        USING (auth.uid() = id);
+    END IF;
+END $$;
+
+-- ──────────────────────────────────────────────────────────────────
+-- SECTION 1.5: auth.users insert trigger
+-- ──────────────────────────────────────────────────────────────────
+
+-- Automates profile creation, especially when email verification is enabled.
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_syllabus TEXT;
+    v_unlocked_modules TEXT[];
+BEGIN
+    v_syllabus := NEW.raw_user_meta_data->>'syllabus';
+    IF v_syllabus IS NOT NULL AND v_syllabus <> '' THEN
+        v_unlocked_modules := ARRAY[v_syllabus];
+    ELSE
+        v_unlocked_modules := ARRAY[]::TEXT[];
+    END IF;
+
+    INSERT INTO public.user_profiles (
+        id, 
+        email, 
+        tier, 
+        tier_level, 
+        fullname, 
+        phone, 
+        syllabus, 
+        age, 
+        gender, 
+        role,
+        unlocked_modules
+    )
+    VALUES (
+        NEW.id, 
+        NEW.email, 
+        'member', 
+        1,
+        NEW.raw_user_meta_data->>'fullname',
+        NEW.raw_user_meta_data->>'phone',
+        v_syllabus,
+        (NEW.raw_user_meta_data->>'age')::INTEGER,
+        NEW.raw_user_meta_data->>'gender',
+        NEW.raw_user_meta_data->>'role',
+        v_unlocked_modules
+    )
+    ON CONFLICT (id) DO UPDATE SET
+        email = EXCLUDED.email,
+        fullname = COALESCE(user_profiles.fullname, EXCLUDED.fullname),
+        phone = COALESCE(user_profiles.phone, EXCLUDED.phone),
+        syllabus = COALESCE(user_profiles.syllabus, EXCLUDED.syllabus),
+        age = COALESCE(user_profiles.age, EXCLUDED.age),
+        gender = COALESCE(user_profiles.gender, EXCLUDED.gender),
+        role = COALESCE(user_profiles.role, EXCLUDED.role),
+        unlocked_modules = COALESCE(user_profiles.unlocked_modules, EXCLUDED.unlocked_modules);
+    RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE PROCEDURE public.handle_new_user();
 
 
 -- ──────────────────────────────────────────────────────────────────
