@@ -142,6 +142,15 @@ const AuthAccess = {
         return await window.supabaseClient.auth.signOut();
     },
 
+    async sendPasswordResetEmail(email) {
+        const redirectTo = window.location.origin + window.location.pathname;
+        return await window.supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
+    },
+
+    async updatePassword(password) {
+        return await window.supabaseClient.auth.updateUser({ password });
+    },
+
     // ── PIN Redemption ────────────────────────────────────────────────────────
     // Returns: { success, newly_unlocked: string[], all_unlocked: string[] }
     async redeemPin(pinCode, targetModule = null) {
