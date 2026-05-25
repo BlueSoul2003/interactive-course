@@ -2394,6 +2394,11 @@
                     <input type="password" id="authPassword" placeholder="Password..."
                         style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
                     
+                    <!-- Forgot Password Link -->
+                    <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: -4px; margin-bottom: 2px;">
+                        <a href="javascript:void(0)" onclick="toggleAuthMode('forgot')" style="font-size: 0.8rem; color: #3b82f6; text-decoration: none;">Forgot Password?</a>
+                    </div>
+                    
                     <div id="registerFields" style="display: none; flex-direction: column; gap: 10px;">
                         <select id="authRole" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
                             <option value="" id="optRolePlaceholder">Account Role...</option>
@@ -2528,9 +2533,9 @@
 
     <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/auth-access.js"></script>
-    <script src="js/progress-tracker.js"></script>
-    <script src="js/feedback.js"></script>
+    <script src="js/auth-access.js?v=1.0.1"></script>
+    <script src="js/progress-tracker.js?v=1.0.1"></script>
+    <script src="js/feedback.js?v=1.0.1"></script>
     <script>
         // ── i18n Translations ────────────────────────
         const authTranslations = {
@@ -2635,24 +2640,51 @@
             const registerFields = document.getElementById('registerFields');
             const submitBtn = document.getElementById('submitAuthBtn');
             const msgEl = document.getElementById('authMessage');
+            const emailInput = document.getElementById('authEmail');
+            const passwordInput = document.getElementById('authPassword');
+            const forgotLink = document.getElementById('forgotPasswordLinkContainer');
+            const tabsContainer = tabLogin.parentElement;
             
             msgEl.innerText = "";
             
             const curLang = document.getElementById('authLangSelect').value || 'en';
+            
+            // Restore default displays
+            tabsContainer.style.display = "flex";
+            emailInput.style.display = "block";
+            passwordInput.style.display = "block";
+            forgotLink.style.display = "block";
+            registerFields.style.display = "none";
+            emailInput.placeholder = authTranslations[curLang].emailPlaceholder;
+            passwordInput.placeholder = authTranslations[curLang].passwordPlaceholder;
+            
             if(mode === 'login') {
                 tabLogin.style.color = "white";
                 tabLogin.style.borderBottomColor = "var(--sub-english)";
                 tabRegister.style.color = "var(--text-secondary)";
                 tabRegister.style.borderBottomColor = "transparent";
-                registerFields.style.display = "none";
                 submitBtn.innerText = authTranslations[curLang].btnSubmitLogin;
-            } else {
+            } else if (mode === 'register') {
                 tabRegister.style.color = "white";
                 tabRegister.style.borderBottomColor = "var(--sub-english)";
                 tabLogin.style.color = "var(--text-secondary)";
                 tabLogin.style.borderBottomColor = "transparent";
                 registerFields.style.display = "flex";
                 submitBtn.innerText = authTranslations[curLang].btnSubmitRegister;
+            } else if (mode === 'forgot') {
+                tabsContainer.style.display = "none";
+                passwordInput.style.display = "none";
+                forgotLink.style.display = "none";
+                submitBtn.innerText = curLang === 'zh' ? '發送重置鏈接' : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
+                
+                msgEl.style.color = "var(--text-secondary)";
+                msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+            } else if (mode === 'reset') {
+                tabsContainer.style.display = "none";
+                emailInput.style.display = "none";
+                forgotLink.style.display = "none";
+                passwordInput.placeholder = curLang === 'zh' ? '請輸入新密碼...' : (curLang === 'ms' ? 'Sila masukkan kata laluan baru...' : 'Enter new password...');
+                submitBtn.innerText = curLang === 'zh' ? '更新密碼' : (curLang === 'ms' ? 'Kemas Kini Kata Laluan' : 'Update Password');
             }
         }
 
@@ -2660,9 +2692,81 @@
             const email = document.getElementById('authEmail').value.trim();
             const password = document.getElementById('authPassword').value.trim();
             const msgEl = document.getElementById('authMessage');
+            const curLang = document.getElementById('authLangSelect').value || 'en';
             
-            if(!email || !password) {
-                msgEl.innerText = "Email and password are required.";
+            // 1. Email format validation (for login, register, and forgot modes)
+            if (currentAuthMode !== 'reset') {
+                if(!email) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱。" : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
+                    return;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵箱地址。" : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
+                    return;
+                }
+            }
+            
+            // 2. Forgot password request flow
+            if (currentAuthMode === 'forgot') {
+                msgEl.innerText = curLang === 'zh' ? "正在發送重置鏈接..." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
+                msgEl.style.color = "var(--text-secondary)";
+                
+                try {
+                    const result = await window.AuthAccess.sendPasswordResetEmail(email);
+                    if (result.error) {
+                        msgEl.style.color = "#ef4444";
+                        msgEl.innerText = result.error.message;
+                    } else {
+                        msgEl.style.color = "#10b981";
+                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請檢查您的郵箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                            `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                    }
+                } catch (err) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = err.message || "An unexpected error occurred.";
+                }
+                return;
+            }
+            
+            // 3. Password reset update flow
+            if (currentAuthMode === 'reset') {
+                if(!password) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入新密碼。" : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
+                    return;
+                }
+                msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
+                msgEl.style.color = "var(--text-secondary)";
+                
+                try {
+                    const result = await window.AuthAccess.updatePassword(password);
+                    if (result.error) {
+                        msgEl.style.color = "#ef4444";
+                        msgEl.innerText = result.error.message;
+                    } else {
+                        msgEl.style.color = "#10b981";
+                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        setTimeout(() => {
+                            toggleAuthMode('login');
+                            document.getElementById('authPassword').value = '';
+                            closeStudentModal();
+                            updateAuthUI();
+                        }, 2000);
+                    }
+                } catch (err) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = err.message || "An unexpected error occurred.";
+                }
+                return;
+            }
+            
+            // 4. Standard Login & Register flows
+            if(!password) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = curLang === 'zh' ? "請輸入密碼。" : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
                 return;
             }
             
@@ -2676,34 +2780,40 @@
                 const role = document.getElementById('authRole').value;
                 
                 if(!fullname || !phone || !syllabus || !age || !gender || !role) {
-                    msgEl.innerText = "All demographic fields and role are required.";
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "所有個人資料欄位均為必填。" : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
                     return;
                 }
                 profileData = { fullname, phone, syllabus, age: parseInt(age), gender, role };
             }
             
-            msgEl.innerText = currentAuthMode === 'login' ? "Logging in..." : "Creating account...";
+            msgEl.innerText = currentAuthMode === 'login' ? (curLang === 'zh' ? "正在登入..." : (curLang === 'ms' ? "Log masuk..." : "Logging in...")) : (curLang === 'zh' ? "正在創建帳戶..." : (curLang === 'ms' ? "Mencipta akaun..." : "Creating account..."));
             msgEl.style.color = "var(--text-secondary)";
             
-            let result;
-            if (currentAuthMode === 'login') {
-                result = await window.AuthAccess.signIn(email, password);
-            } else {
-                result = await window.AuthAccess.signUp(email, password, profileData);
-            }
-
-            if(result.error) {
-                msgEl.style.color = "#ef4444";
-                const errMsg = result.error.message;
-                if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
-                    msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">If you deleted your profile, please <strong>Login</strong> instead to restore it!</span>`;
+            try {
+                let result;
+                if (currentAuthMode === 'login') {
+                    result = await window.AuthAccess.signIn(email, password);
                 } else {
-                    msgEl.innerText = errMsg;
+                    result = await window.AuthAccess.signUp(email, password, profileData);
                 }
-            } else {
-                msgEl.innerText = "";
-                await updateAuthUI();
-                closeStudentModal(); // close on success
+
+                if(result.error) {
+                    msgEl.style.color = "#ef4444";
+                    const errMsg = result.error.message;
+                    if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
+                        msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">${curLang === 'zh' ? '如果您之前刪除了個人資料，請使用<strong>登錄</strong>來自動修復與還原它！' : (curLang === 'ms' ? 'Sekiranya anda telah memadamkan profil anda, sila <strong>Log Masuk</strong> untuk memulihkannya!' : 'If you deleted your profile, please <strong>Login</strong> instead to restore it!')}</span>`;
+                    } else {
+                        msgEl.innerText = errMsg;
+                    }
+                } else {
+                    msgEl.innerText = "";
+                    await updateAuthUI();
+                    closeStudentModal(); // close on success
+                }
+            } catch (err) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = err.message || "An unexpected error occurred.";
             }
         }
 
@@ -2753,7 +2863,20 @@
         }
 
         // Initialize user state on load
-        window.addEventListener('DOMContentLoaded', updateAuthUI);
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+
+            // Listen for password recovery event
+            if (window.supabaseClient) {
+                window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                    if (event === 'PASSWORD_RECOVERY') {
+                        // Open the modal and switch to reset password mode
+                        document.getElementById('studentModalOverlay').classList.add('open');
+                        toggleAuthMode('reset');
+                    }
+                });
+            }
+        });
     </script>
     <!-- PIN Top-up Modal -->
     <div id="pin-topup-modal" class="pin-modal-overlay">
