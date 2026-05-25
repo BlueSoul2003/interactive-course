@@ -2750,6 +2750,8 @@
                         msgEl.style.color = "#10b981";
                         msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
                         setTimeout(() => {
+                            toggleAuthMode('login');
+                            document.getElementById('authPassword').value = '';
                             closeStudentModal();
                             updateAuthUI();
                         }, 2000);
