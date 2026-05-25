@@ -24,11 +24,40 @@ const AuthAccess = {
         const { data: { user }, error } = await window.supabaseClient.auth.getUser();
         if (error || !user) return null;
 
-        const { data: profile } = await window.supabaseClient
+        let { data: profile } = await window.supabaseClient
             .from('user_profiles')
             .select('tier, tier_level, unlocked_modules')
             .eq('id', user.id)
-            .single();
+            .maybeSingle();
+
+        // Self-healing: if the user exists in auth.users but their public.user_profiles row is missing
+        if (!profile) {
+            const meta = user.user_metadata || {};
+            const v_syllabus = meta.syllabus;
+            const profileRecord = {
+                id:         user.id,
+                email:      user.email,
+                tier:       'member',
+                tier_level: 1,
+                fullname:   meta.fullname || null,
+                phone:      meta.phone || null,
+                syllabus:   v_syllabus || null,
+                age:        meta.age ? parseInt(meta.age) : null,
+                gender:     meta.gender || null,
+                role:       meta.role || null,
+                unlocked_modules: v_syllabus ? [v_syllabus] : []
+            };
+
+            const { data: newProfile, error: insertError } = await window.supabaseClient
+                .from('user_profiles')
+                .insert([profileRecord])
+                .select('tier, tier_level, unlocked_modules')
+                .maybeSingle();
+
+            if (!insertError && newProfile) {
+                profile = newProfile;
+            }
+        }
 
         return { 
             user, 
