@@ -175,6 +175,32 @@ CREATE TRIGGER on_auth_user_created
 
 
 -- ──────────────────────────────────────────────────────────────────
+-- SECTION 1.6: user_profiles deletion trigger
+-- ──────────────────────────────────────────────────────────────────
+
+-- Automatically deletes the corresponding auth.users row when a row in
+-- public.user_profiles is deleted, maintaining sync between authentication
+-- and the public database.
+CREATE OR REPLACE FUNCTION public.handle_deleted_profile()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+    DELETE FROM auth.users WHERE id = OLD.id;
+    RETURN OLD;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS on_profile_deleted ON public.user_profiles;
+CREATE TRIGGER on_profile_deleted
+    AFTER DELETE ON public.user_profiles
+    FOR EACH ROW
+    EXECUTE PROCEDURE public.handle_deleted_profile();
+
+
+-- ──────────────────────────────────────────────────────────────────
 -- SECTION 2: activation_pins table
 -- ──────────────────────────────────────────────────────────────────
 
