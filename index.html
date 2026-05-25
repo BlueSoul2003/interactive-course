@@ -2694,7 +2694,12 @@
 
             if(result.error) {
                 msgEl.style.color = "#ef4444";
-                msgEl.innerText = result.error.message;
+                const errMsg = result.error.message;
+                if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
+                    msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">If you deleted your profile, please <strong>Login</strong> instead to restore it!</span>`;
+                } else {
+                    msgEl.innerText = errMsg;
+                }
             } else {
                 msgEl.innerText = "";
                 await updateAuthUI();
