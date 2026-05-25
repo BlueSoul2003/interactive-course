@@ -2694,26 +2694,44 @@
             const msgEl = document.getElementById('authMessage');
             const curLang = document.getElementById('authLangSelect').value || 'en';
             
-            if (currentAuthMode === 'forgot') {
+            // 1. Email format validation (for login, register, and forgot modes)
+            if (currentAuthMode !== 'reset') {
                 if(!email) {
                     msgEl.style.color = "#ef4444";
                     msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱。" : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
                     return;
                 }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵箱地址。" : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
+                    return;
+                }
+            }
+            
+            // 2. Forgot password request flow
+            if (currentAuthMode === 'forgot') {
                 msgEl.innerText = curLang === 'zh' ? "正在發送重置鏈接..." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
                 msgEl.style.color = "var(--text-secondary)";
-                const result = await window.AuthAccess.sendPasswordResetEmail(email);
-                if (result.error) {
+                
+                try {
+                    const result = await window.AuthAccess.sendPasswordResetEmail(email);
+                    if (result.error) {
+                        msgEl.style.color = "#ef4444";
+                        msgEl.innerText = result.error.message;
+                    } else {
+                        msgEl.style.color = "#10b981";
+                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請檢查您的郵箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                            `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                    }
+                } catch (err) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = result.error.message;
-                } else {
-                    msgEl.style.color = "#10b981";
-                    msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請檢查您的郵箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
-                        `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                    msgEl.innerText = err.message || "An unexpected error occurred.";
                 }
                 return;
             }
             
+            // 3. Password reset update flow
             if (currentAuthMode === 'reset') {
                 if(!password) {
                     msgEl.style.color = "#ef4444";
@@ -2722,24 +2740,31 @@
                 }
                 msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
                 msgEl.style.color = "var(--text-secondary)";
-                const result = await window.AuthAccess.updatePassword(password);
-                if (result.error) {
+                
+                try {
+                    const result = await window.AuthAccess.updatePassword(password);
+                    if (result.error) {
+                        msgEl.style.color = "#ef4444";
+                        msgEl.innerText = result.error.message;
+                    } else {
+                        msgEl.style.color = "#10b981";
+                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        setTimeout(() => {
+                            closeStudentModal();
+                            updateAuthUI();
+                        }, 2000);
+                    }
+                } catch (err) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = result.error.message;
-                } else {
-                    msgEl.style.color = "#10b981";
-                    msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
-                    setTimeout(() => {
-                        closeStudentModal();
-                        updateAuthUI();
-                    }, 2000);
+                    msgEl.innerText = err.message || "An unexpected error occurred.";
                 }
                 return;
             }
             
-            if(!email || !password) {
+            // 4. Standard Login & Register flows
+            if(!password) {
                 msgEl.style.color = "#ef4444";
-                msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱和密碼。" : (curLang === 'ms' ? "Emel dan kata laluan diperlukan." : "Email and password are required.");
+                msgEl.innerText = curLang === 'zh' ? "請輸入密碼。" : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
                 return;
             }
             
@@ -2763,25 +2788,30 @@
             msgEl.innerText = currentAuthMode === 'login' ? (curLang === 'zh' ? "正在登入..." : (curLang === 'ms' ? "Log masuk..." : "Logging in...")) : (curLang === 'zh' ? "正在創建帳戶..." : (curLang === 'ms' ? "Mencipta akaun..." : "Creating account..."));
             msgEl.style.color = "var(--text-secondary)";
             
-            let result;
-            if (currentAuthMode === 'login') {
-                result = await window.AuthAccess.signIn(email, password);
-            } else {
-                result = await window.AuthAccess.signUp(email, password, profileData);
-            }
-
-            if(result.error) {
-                msgEl.style.color = "#ef4444";
-                const errMsg = result.error.message;
-                if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
-                    msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">${curLang === 'zh' ? '如果您之前刪除了個人資料，請使用<strong>登錄</strong>來自動修復與還原它！' : (curLang === 'ms' ? 'Sekiranya anda telah memadamkan profil anda, sila <strong>Log Masuk</strong> untuk memulihkannya!' : 'If you deleted your profile, please <strong>Login</strong> instead to restore it!')}</span>`;
+            try {
+                let result;
+                if (currentAuthMode === 'login') {
+                    result = await window.AuthAccess.signIn(email, password);
                 } else {
-                    msgEl.innerText = errMsg;
+                    result = await window.AuthAccess.signUp(email, password, profileData);
                 }
-            } else {
-                msgEl.innerText = "";
-                await updateAuthUI();
-                closeStudentModal(); // close on success
+
+                if(result.error) {
+                    msgEl.style.color = "#ef4444";
+                    const errMsg = result.error.message;
+                    if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
+                        msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">${curLang === 'zh' ? '如果您之前刪除了個人資料，請使用<strong>登錄</strong>來自動修復與還原它！' : (curLang === 'ms' ? 'Sekiranya anda telah memadamkan profil anda, sila <strong>Log Masuk</strong> untuk memulihkannya!' : 'If you deleted your profile, please <strong>Login</strong> instead to restore it!')}</span>`;
+                    } else {
+                        msgEl.innerText = errMsg;
+                    }
+                } else {
+                    msgEl.innerText = "";
+                    await updateAuthUI();
+                    closeStudentModal(); // close on success
+                }
+            } catch (err) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = err.message || "An unexpected error occurred.";
             }
         }
 
