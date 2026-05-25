@@ -518,3 +518,70 @@ WITH CHECK (auth.uid() = user_id);
 --   SELECT COUNT(*) FROM public.student_progress; -- 0 initially
 --   \d public.student_progress                    -- check columns
 -- ──────────────────────────────────────────────────────────────────
+
+
+-- ──────────────────────────────────────────────────────────────────
+-- SECTION 8: Database Constraint Synchronizations (idempotent)
+-- ──────────────────────────────────────────────────────────────────
+
+-- Ensure activation_pins foreign key correctly references auth.users with ON DELETE CASCADE
+DO $$
+BEGIN
+    -- Drop old foreign key if it exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'activation_pins_used_by_fkey'
+          AND table_name = 'activation_pins'
+    ) THEN
+        ALTER TABLE public.activation_pins DROP CONSTRAINT activation_pins_used_by_fkey;
+    END IF;
+
+    -- Create or recreate constraint
+    ALTER TABLE public.activation_pins
+        ADD CONSTRAINT activation_pins_used_by_fkey
+        FOREIGN KEY (used_by)
+        REFERENCES auth.users(id)
+        ON DELETE CASCADE;
+END $$;
+
+-- Ensure student_progress foreign key correctly references auth.users with ON DELETE CASCADE
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'student_progress_user_id_fkey'
+          AND table_name = 'student_progress'
+    ) THEN
+        ALTER TABLE public.student_progress DROP CONSTRAINT student_progress_user_id_fkey;
+    END IF;
+
+    ALTER TABLE public.student_progress
+        ADD CONSTRAINT student_progress_user_id_fkey
+        FOREIGN KEY (user_id)
+        REFERENCES auth.users(id)
+        ON DELETE CASCADE;
+END $$;
+
+-- Ensure user_feedback foreign key correctly references auth.users with ON DELETE SET NULL (only if user_feedback table exists)
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.tables 
+        WHERE table_schema = 'public' 
+          AND table_name = 'user_feedback'
+    ) THEN
+        IF EXISTS (
+            SELECT 1 FROM information_schema.table_constraints
+            WHERE constraint_name = 'user_feedback_user_id_fkey'
+              AND table_name = 'user_feedback'
+        ) THEN
+            ALTER TABLE public.user_feedback DROP CONSTRAINT user_feedback_user_id_fkey;
+        END IF;
+
+        ALTER TABLE public.user_feedback
+            ADD CONSTRAINT user_feedback_user_id_fkey
+            FOREIGN KEY (user_id)
+            REFERENCES auth.users(id)
+            ON DELETE SET NULL;
+    END IF;
+END $$;
