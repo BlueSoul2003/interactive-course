@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, user-scalable=no, width=device-width">
+    <title>Year 6 Unit 4 - Interactive English</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Nunito:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+            touch-action: manipulation;
+            background: radial-gradient(circle at top left, #e0f7fa, #fce4ec, #e8f5e9);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        h1, h2, .comic-font {
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        .section-card {
+            border-radius: 1.5rem;
+            border-width: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        
+        .dict-word {
+            text-decoration: underline dashed #3b82f6 2px;
+            text-underline-offset: 4px;
+            cursor: pointer;
+            position: relative;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            background-color: #334155;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 6px 10px;
+            position: absolute;
+            z-index: 50;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.875rem;
+            white-space: nowrap;
+            font-family: 'Nunito', sans-serif;
+            font-weight: normal;
+        }
+        
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #334155 transparent transparent transparent;
+        }
+        
+        .dict-word:active .tooltip, .dict-word.active .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .animate-pop-in { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        .animate-bounce-short { animation: bounceShort 0.5s ease-in-out; }
+        @keyframes bounceShort { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+        .dropzone {
+            min-height: 2.5rem;
+            min-width: 4rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            vertical-align: middle;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .word-block { cursor: pointer; touch-action: manipulation; }
+
+        /* iMessage 風格對話框 */
+        .msg-bubble-left {
+            background-color: #e5e7eb; color: #1f2937; border-radius: 1.2rem; border-bottom-left-radius: 0.2rem;
+            padding: 0.75rem 1rem; max-width: 85%; align-self: flex-start; margin-bottom: 1rem; position: relative;
+        }
+        .msg-bubble-right {
+            background-color: #3b82f6; color: white; border-radius: 1.2rem; border-bottom-right-radius: 0.2rem;
+            padding: 0.75rem 1rem; max-width: 85%; align-self: flex-end; margin-bottom: 1rem; position: relative;
+        }
+
+        /* 原生下拉選單美化 */
+        select.smart-select {
+            appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1em; padding-right: 2rem;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div id="start-screen" class="fixed inset-0 bg-white/95 z-50 flex flex-col items-center justify-center backdrop-blur-sm">
+        <h1 class="text-5xl md:text-6xl text-center text-blue-600 mb-8 font-bold drop-shadow-md">Year 6 - Unit 4 🚀</h1>
+        <p class="text-xl text-gray-700 mb-8 font-bold text-center">Interactive English Adventure<br><span class="text-sm font-normal text-gray-500">Sections A to J Ultimate Edition</span></p>
+        <button id="start-btn" class="bg-gradient-to-r from-blue-500 to-purple-500 text-white font-bold text-2xl py-4 px-12 rounded-full shadow-xl transform hover:scale-105 active:scale-95 transition-all border-4 border-white">
+            Start Learning! 🎮
+        </button>
+        <p class="mt-6 text-sm text-gray-500 text-center px-8 bg-gray-100 py-2 rounded-lg">啟動以解鎖語音與音效功能<br>(Tap to unlock audio for iPad)</p>
+    </div>
+
+    <div id="app-content" class="max-w-4xl mx-auto hidden pb-20">
+        <div class="bg-white/90 backdrop-blur-md rounded-2xl p-4 mb-8 shadow-sm flex items-center justify-between sticky top-4 z-40 border-2 border-white overflow-x-auto">
+            <div class="font-bold text-gray-700 mr-4 whitespace-nowrap">🏆 Badges:</div>
+            <div id="badges-container" class="flex gap-2 text-2xl">
+                <span id="badge-sectionA" class="grayscale opacity-50 transition-all duration-300 inline-block">🛶</span>
+                <span id="badge-sectionB" class="grayscale opacity-50 transition-all duration-300 inline-block">🚗</span>
+                <span id="badge-sectionC" class="grayscale opacity-50 transition-all duration-300 inline-block">✨</span>
+                <span id="badge-sectionD" class="grayscale opacity-50 transition-all duration-300 inline-block">⚖️</span>
+                <span id="badge-sectionE" class="grayscale opacity-50 transition-all duration-300 inline-block">🖼️</span>
+                <span id="badge-sectionF" class="grayscale opacity-50 transition-all duration-300 inline-block">🌡️</span>
+                <span id="badge-sectionG" class="grayscale opacity-50 transition-all duration-300 inline-block">📖</span>
+                <span id="badge-sectionH" class="grayscale opacity-50 transition-all duration-300 inline-block">💬</span>
+                <span id="badge-sectionI" class="grayscale opacity-50 transition-all duration-300 inline-block">📧</span>
+                <span id="badge-sectionJ" class="grayscale opacity-50 transition-all duration-300 inline-block">🗂️</span>
+            </div>
+        </div>
+        <div id="sections-container"></div>
+    </div>
+
+    <script>
+        const dict = (word, meaning) => `<span class="dict-word" onclick="toggleTooltip(this)">${word}<span class="tooltip">${meaning}</span></span>`;
+
+        const sectionA = {
+            title: "Section A: Transportation Spelling 🛶", instructions: "Fill in the blanks to spell the transport described.", instructionsZh: "填入缺少的字母，拼出正確的交通工具",
+            bgColor: "bg-pink-50", borderColor: "border-pink-300",
+            questions: [
+                { id: 'a1', text: `A small boat that you move using ${dict('paddles', '船槳 🚣')} or oars.`, target: "Rowboat", template: "R _ _ _ _ _ _", zh: "一艘用槳移動的小船。" },
+                { id: 'a2', text: `A huge plane used to carry boxes but not people.`, target: "Cargo jet", template: "C _ _ _ _ j _ _", zh: "一架用來載貨但不載人的巨型飛機。" },
+                { id: 'a3', text: `A ${dict('vehicle', '車輛/交通工具 🚗')} that flies high in the sky and takes you to other countries quickly.`, target: "Plane", template: "P _ _ _ _", zh: "一種在高空飛行，能快速帶你到其他國家的交通工具。" },
+                { id: 'a4', text: `A two-wheeled vehicle that ${dict('requires', '需要 ❗️')} you to ${dict('pedal', '踩踏板 🦶')} with your feet to make it move.`, target: "Bicycle", template: "B _ _ _ _ _ _", zh: "一種有兩個輪子，需要你用腳踩踏板才能移動的交通工具。" },
+                { id: 'a5', text: `A boat that carries people and cars across a river or sea.`, target: "Ferry", template: "F _ _ _ _", zh: "一艘載著人和車子過河或過海的船。" },
+                { id: 'a6', text: `A vehicle with big ${dict('blades', '螺旋槳葉片 🚁')} on top that can go straight up into the air.`, target: "Helicopter", template: "H _ _ _ _ _ _ _ _ _", zh: "一種頂部有大葉片，可以直飛上天的交通工具。" },
+                { id: 'a7', text: `A vehicle that floats in the sky using heated air and moves slowly with the wind.`, target: "Hot air balloon", template: "H _ _ a _ _ b _ _ _ _ _ _", zh: "一種利用熱空氣漂浮在空中，隨風緩慢移動的交通工具。" },
+                { id: 'a8', text: `A small flying machine controlled by a ${dict('remote', '遙控器 🎮')}, often used for taking photos.`, target: "Drone", template: "D _ _ _ _", zh: "一種由遙控器控制的小型飛行器，常用來拍照。" },
+                { id: 'a9', text: `A giant ship used to move ${dict('containers', '貨櫃 📦')} full of goods across oceans.`, target: "Cargo ship", template: "C _ _ _ _ s _ _ _", zh: "一艘用來在海洋上運送裝滿貨物的貨櫃的巨型船。" },
+                { id: 'a10', text: `A big vehicle that ${dict('transports', '運輸 🚚')} groups of people, often running on fixed ${dict('routes', '路線 📍')} and ${dict('schedules', '時刻表 ⏰')}.`, target: "Bus", template: "B _ _", zh: "一種運輸群眾的大型交通工具，通常按照固定的路線和時刻表行駛。" },
+                { id: 'a11', text: `A common vehicle with four wheels that families use to go places.`, target: "Car", template: "C _ _", zh: "一種家庭用來去各個地方的常見四輪交通工具。" },
+                { id: 'a12', text: `A ${dict('fancy', '豪華的 ✨')} boat people use for fun or holidays on the water.`, target: "Yacht", template: "Y _ _ _ _", zh: "一種人們用來在水上娛樂或度假的豪華船隻。" },
+                { id: 'a13', text: `A vehicle that moves on ${dict('tracks', '軌道 🛤️')} and can carry people or goods across great ${dict('distances', '距離 📏')}.`, target: "Train", template: "T _ _ _ _", zh: "一種在軌道上移動，能載人或貨物跨越長距離的交通工具。" },
+                { id: 'a14', text: `A special water vehicle that can travel deep under the sea.`, target: "Submarine", template: "S _ _ _ _ _ _ _ _", zh: "一種能在海底深處航行的特殊水上交通工具。" },
+                { id: 'a15', text: `A strong vehicle used by farmers to pull heavy things on farms.`, target: "Tractor", template: "T _ _ _ _ _ _", zh: "一種農夫用來在農場上拉重物的強壯車輛。" }
+            ]
+        };
+
+        const sectionB = {
+            title: "Section B: Action Verbs 🏃", instructions: "Tap a verb to select it, then tap the blank to fill it in.", instructionsZh: "點擊泡泡選擇動詞，再點擊底線填空 (Tap & Place)",
+            bgColor: "bg-blue-50", borderColor: "border-blue-300", verbs: ["are flying", "driving", "took", "ride", "go"],
+            questions: [
+                { id: 'b1', text: "My family and I [drop] to Australia for the holidays.", answer: "are flying", zh: "我和家人將飛往澳洲度假。" },
+                { id: 'b2', text: "At what age can you start [drop] in Malaysia?", answer: "driving", zh: "在馬來西亞，幾歲可以開始開車？" },
+                { id: 'b3', text: "Melissa [drop] a cable car up to the mountains last weekend.", answer: "took", zh: "梅麗莎上週末搭纜車上山。" },
+                { id: 'b4', text: "It isn't wise to [drop] in private vehicles with strangers.", answer: "ride", zh: "跟陌生人共乘私家車是不明智的。" },
+                { id: 'b5', text: "Let's just [drop] on foot. It'll be quicker.", answer: "go", zh: "我們就走路去吧。會比較快。" }
+            ]
+        };
+
+        const sectionC = {
+            title: "Section C: Suffixes '-less' or '-ful' ✨", instructions: "Check if the suffix is used correctly. If wrong, pick the correct one!", instructionsZh: "檢查字尾是否正確。如果有錯，選出正確的字！",
+            bgColor: "bg-green-50", borderColor: "border-green-300",
+            questions: [
+                { id: 'c1', text: `The captain kept a <strong class="text-blue-700">watchful</strong> eye on the icebergs around the ship.`, isCorrect: true, answer: "watchful", zh: "船長密切注視著船周圍的冰山。" },
+                { id: 'c2', text: `It pays to be <strong class="text-red-600 underline">careless</strong> when crossing the road.`, isCorrect: false, options: ["careful", "careless"], answer: "careful", zh: "過馬路時要小心駛得萬年船。" },
+                { id: 'c3', text: `It's very <strong class="text-red-600 underline">stressless</strong> to drive in the city.`, isCorrect: false, options: ["stressful", "stressless"], answer: "stressful", zh: "在城市裡開車壓力很大。" },
+                { id: 'c4', text: `Let's have a <strong class="text-red-600 underline">restless</strong> sleep tonight before our long hike tomorrow morning.`, isCorrect: false, options: ["restful", "restless"], answer: "restful", zh: "今晚我們好好睡一覺，為明早的長途健行做準備。" },
+                { id: 'c5', text: `Kieran's caravan is so <strong class="text-blue-700">colourful</strong>.`, isCorrect: true, answer: "colourful", zh: "基倫的露營車非常色彩繽紛。" },
+                { id: 'c6', text: `William found it <strong class="text-blue-700">hopeless</strong> to paddle his kayak against the strong river current.`, isCorrect: true, answer: "hopeless", zh: "威廉發現要逆著強烈的河水划獨木舟是沒有希望的。" }
+            ]
+        };
+
+        const sectionD = {
+            title: "Section D: Comparative Phrases ⚖️", instructions: "Tap the blocks to build the correct sentence using 'not as...as' or 'just as...as'.", instructionsZh: "點擊積木，用 'not as...as' 或 'just as...as' 排出正確的句子。",
+            bgColor: "bg-yellow-50", borderColor: "border-yellow-400",
+            questions: [
+                { id: 'd1', text: "The sedan is small. The station wagon is bigger. (big)", answer: "The sedan is not as big as the station wagon.", blocks: ["The sedan", "is", "not as big as", "the station wagon."], zh: "轎車沒有休旅車大。" },
+                { id: 'd2', text: "Riding a hot-air balloon is fun. Riding a cable car is also fun. (fun)", answer: "Riding a hot-air balloon is just as fun as riding a cable car.", blocks: ["Riding a hot-air balloon", "is", "just as fun as", "riding a cable car."], zh: "搭熱氣球和搭纜車一樣好玩。" },
+                { id: 'd3', text: "The bus has 48 seats. The tram has 48 seats. (many)", answer: "The bus has just as many seats as the tram.", blocks: ["The bus", "has", "just as many seats as", "the tram."], zh: "公車的座位和路面電車一樣多。" },
+                { id: 'd4', text: "The waves are choppier today than it was yesterday. (choppy)", answer: "The waves were not as choppy yesterday as they are today.", blocks: ["The waves", "were", "not as choppy", "yesterday", "as they are today."], zh: "昨天的海浪沒有今天那麼波濤洶湧。" },
+                { id: 'd5', text: "Taking the taxi to Main Street takes 6 minutes. Taking the MRT to Main Street is also 6 minutes. (fast)", answer: "Taking the taxi to Main Street is just as fast as taking the MRT.", blocks: ["Taking the taxi to Main Street", "is", "just as fast as", "taking the MRT."], zh: "搭計程車去主街跟搭捷運一樣快。" },
+                { id: 'd6', text: "The subway is extremely crowded today. The subway wasn't crowded yesterday. (crowded)", answer: "The subway was not as crowded yesterday as it is today.", blocks: ["The subway", "was", "not as crowded", "yesterday", "as it is today."], zh: "昨天的地鐵沒有今天那麼擁擠。" }
+            ]
+        };
+
+        const sectionE = {
+            title: "Section E: Picture Sentences 🖼️", instructions: "Build a meaningful sentence to describe the picture.", instructionsZh: "點擊積木造句，描述圖片。",
+            bgColor: "bg-orange-50", borderColor: "border-orange-300",
+            questions: [
+                { id: 'e1', text: "Words: taking - cruise - amazing - plane", answer: "Taking a cruise is just as amazing as taking a plane.", blocks: ["Taking a cruise", "is", "just as amazing as", "taking a plane."], zh: "搭郵輪跟搭飛機一樣令人驚豔。" },
+                { id: 'e2', text: "Words: riding - bike - tiring - walking", answer: "Riding a bike is not as tiring as walking.", blocks: ["Riding a bike", "is", "not as tiring as", "walking."], zh: "騎腳踏車沒有走路那麼累。" }
+            ]
+        };
+
+        const sectionF = {
+            title: "Section F: Adverbs (too / not enough) 🌡️", instructions: "Tap the blanks to choose the correct words.", instructionsZh: "點擊底線切換，選出正確的字 (too / not enough)",
+            bgColor: "bg-teal-50", borderColor: "border-teal-300",
+            questions: [
+                { id: 'f1', text: `He wore a sweater because it was [blank1] [blank2].`, blanks: [{ options: ["...", "too", "enough"], answer: "too" }, { options: ["...", "hot", "cold"], answer: "cold" }], zh: "他穿了件毛衣因為天氣太冷了。" },
+                { id: 'f2', text: `She does [blank1] have [blank2] [blank3] to buy a ticket.`, blanks: [{ options: ["...", "not", "too"], answer: "not" }, { options: ["...", "enough", "too"], answer: "enough" }, { options: ["...", "time", "money"], answer: "money" }], zh: "她沒有足夠的錢買票。" },
+                { id: 'f3', text: `He is hungry now because he did [blank1] eat [blank2] [blank3].`, blanks: [{ options: ["...", "not", "too"], answer: "not" }, { options: ["...", "enough", "too"], answer: "enough" }, { options: ["...", "dinner", "breakfast"], answer: "breakfast" }], zh: "他現在肚子餓是因為早餐吃不夠。" },
+                { id: 'f4', text: `The man is driving [blank1] [blank2].`, blanks: [{ options: ["...", "too", "enough"], answer: "too" }, { options: ["...", "slow", "fast"], answer: "fast" }], zh: "這個男人開車太快了。" },
+                { id: 'f5', text: `There is [blank1] [blank2] [blank3] in the tank.`, blanks: [{ options: ["...", "not", "too"], answer: "not" }, { options: ["...", "enough", "too"], answer: "enough" }, { options: ["...", "water", "petrol"], answer: "petrol" }], zh: "油箱裡的汽油不夠了。" },
+                { id: 'f6', text: `There are [blank1] many [blank2] on the street.`, blanks: [{ options: ["...", "too", "enough"], answer: "too" }, { options: ["...", "cars", "people"], answer: "people" }], zh: "街上的人太多了。" }
+            ]
+        };
+
+        const sectionG = {
+            title: "Section G: Dialogue Comprehension 📖",
+            instructions: "Read the chat and answer the questions using the smart dropdowns.", instructionsZh: "閱讀對話，並使用下拉選單回答問題。",
+            bgColor: "bg-indigo-50", borderColor: "border-indigo-300",
+            dialogue: [
+                { sender: 'Shi Wei', text: "Mala! What are you doing here? It's 2.00 p.m." },
+                { sender: 'Mala', text: "I'm doing some reading." },
+                { sender: 'Shi Wei', text: "Have you found a suitable topic for our English presentation this Friday?" },
+                { sender: 'Mala', text: "Yes, I was just looking it up on the internet. I'm going to talk about the Venetian gondola." },
+                { sender: 'Shi Wei', text: "What's that?" },
+                { sender: 'Mala', text: "Well, it's a narrow and long rowing boat. The boat is steered by a gondolier. He uses a long oar to do so. The gondola glides along the canals. Did you know that Venice has over 170 canals?" },
+                { sender: 'Shi Wei', text: "Wow! No, I didn't before. That's a lot of canals. Who rides the gondolas?" },
+                { sender: 'Mala', text: "Well, according to the articles I've read, gondolas were the main means of transport a long time ago. Today, they carry tourists who want to have a feel of what it's like to ride the gondola." },
+                { sender: 'Shi Wei', text: "How much does a gondola ride cost?" },
+                { sender: 'Mala', text: "It's very expensive. A half-an-hour ride can cost almost 100 USD. It gets pricier when night falls. Oh, gondoliers have to wear a sort of uniform. They're usually recognisable by their striped T-shirt (black and white) and a straw boater's hat with a black band." },
+                { sender: 'Shi Wei', text: "Ah, that rings a bell. I think I've come across some pictures of them. Well, I'd better return my book at the counter." }
+            ],
+            mcq: [
+                { id: 'g1', text: "1. What's Mala doing?", options: ["Reading an encyclopaedia", "Surfing the net", "Borrowing a book"], answer: "Surfing the net" },
+                { id: 'g2', text: "2. When are the girls having their presentation?", options: ["At 2.00 p.m", "In the evening", "On Friday"], answer: "On Friday" },
+                { id: 'g3', text: "3. The following idioms can be used to describe the phrase 'It's very expensive', EXCEPT:", options: ["as sound as a dollar", "costs an arm and a leg", "costs a pretty penny"], answer: "as sound as a dollar" },
+                { id: 'g4', text: "4. Which of the following do you think is a gondola?", options: ["A. Sailboat ⛵", "B. Gondola 🛶", "C. Rubber dinghy 🚤"], answer: "B. Gondola 🛶" }
+            ],
+            blanks: [
+                { id: 'g5', text: "5. 'it's a narrow and long rowing boat' — The word 'it' refers to the [b1].", selects: [{ id: 'b1', options: ["...", "Venetian gondola", "straw hat", "counter"], answer: "Venetian gondola" }] },
+                { id: 'g6', text: "6. 'They're usually recognisable by their striped T-shirt' — The word 'They' refers to the [b1].", selects: [{ id: 'b1', options: ["...", "tourists", "gondoliers", "canals"], answer: "gondoliers" }] },
+                { id: 'g7', text: "7. Difference: In the past, gondolas were the [b1]. Today, they carry [b2].", selects: [{ id: 'b1', options: ["...", "main means of transport", "most expensive boats", "toys for children"], answer: "main means of transport" }, { id: 'b2', options: ["...", "only goods", "local fishermen", "tourists"], answer: "tourists" }] },
+                { id: 'g8', text: "8. 'It gets pricier when night falls' means the ride becomes [b1] during the night.", selects: [{ id: 'b1', options: ["...", "more dangerous", "more expensive", "much darker"], answer: "more expensive" }] },
+                { id: 'g9', text: "9. They are at a [b1] because Shi Wei wants to [b2] at the counter.", selects: [{ id: 'b1', options: ["...", "supermarket", "library", "stadium"], answer: "library" }, { id: 'b2', options: ["...", "buy a ticket", "return her book", "meet a friend"], answer: "return her book" }] }
+            ]
+        };
+
+        const sectionH = {
+            title: "Section H: Scenario Responses 💬",
+            instructions: "Choose the most meaningful question or response to complete the comic scenario.", instructionsZh: "選擇最適合的句子來完成漫畫情境對話。",
+            bgColor: "bg-purple-50", borderColor: "border-purple-300",
+            questions: [
+                { id: 'h1', prompt: "Yes, there's one just about a 15-minute walk away.", isQuestionMissing: true, options: ["Is there a convenience shop nearby?", "What time does the shop open?", "How much is this?"], answer: "Is there a convenience shop nearby?", zh: "附近有便利商店嗎？" },
+                { id: 'h2', prompt: "You're on Jalan Pinang right now.", isQuestionMissing: true, options: ["Excuse me, what is the quickest way?", "Excuse me, could you tell me where I am?", "Is this your house?"], answer: "Excuse me, could you tell me where I am?", zh: "請問我現在在哪裡？" },
+                { id: 'h3', prompt: "What's the quickest way to the town library?", isQuestionMissing: false, options: ["Take the bus number 5.", "It is closed today.", "I am reading a book."], answer: "Take the bus number 5.", zh: "搭 5 號公車。" },
+                { id: 'h4', prompt: "Does this bus take me to the stadium?", isQuestionMissing: false, options: ["Yes, I like soccer.", "No, you need to take the bus on the opposite side.", "The stadium is very big."], answer: "No, you need to take the bus on the opposite side.", zh: "不，你需要到對面搭車。" },
+                { id: 'h5', prompt: "Train 4213G departs from platform 5B.", isQuestionMissing: true, options: ["How much is the train ticket?", "Which platform does train 4213G depart from?", "When does the bus leave?"], answer: "Which platform does train 4213G depart from?", zh: "4213G 號火車從第幾月台出發？" },
+                { id: 'h6', prompt: "Excuse me, may I know if flight AV67 from Jakarta has landed?", isQuestionMissing: false, options: ["Jakarta is a beautiful city.", "I am waiting for my friend.", "Yes, it landed 10 minutes ago."], answer: "Yes, it landed 10 minutes ago.", zh: "是的，它 10 分鐘前降落了。" }
+            ]
+        };
+
+        const sectionI = {
+            title: "Section I: 150-Word Email Composer 📧",
+            instructions: "Use the smart dropdowns to write a 150-word email about your first kayaking experience!", instructionsZh: "使用智慧選單，完成一篇 150 字的完美獨木舟體驗 Email！",
+            bgColor: "bg-rose-50", borderColor: "border-rose-300",
+            id: 'email1',
+            emailData: {
+                to: "danusharavi@mail.com",
+                subject: "My First Ever Kayaking Experience!",
+                bodyHtml: `Hi Danu,<br><br>How have you been? I hope everything is going well with you. I am writing to tell you about my weekend. I've just completed my first ever kayaking experience, and I couldn't wait to share it with you!<br><br>On Saturday morning, I went to <select id="sel-loc" class="smart-select bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded border-2 border-blue-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Location ▾ ]</option><option value="lake">the beautiful lake at the national park</option><option value="river">the calm river near my hometown</option><option value="mangrove">the mangrove forest in Langkawi</option></select> with my <select id="sel-who" class="smart-select bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded border-2 border-blue-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Companions ▾ ]</option><option value="family">parents and my younger brother</option><option value="friends">best friends from school</option><option value="cousins">cousins who were visiting us</option></select>. The weather was absolutely perfect—the sun was shining brightly and there was a gentle breeze. When we first got into the kayak, I felt <select id="sel-feel1" class="smart-select bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded border-2 border-blue-400 outline-none w-full md:w-auto my-1"><option value="">[ Initial feeling ▾ ]</option><option value="nervous">extremely nervous and terrified</option><option value="anxious">quite anxious but excited</option><option value="worried">a bit worried about falling in</option></select>. It was quite wobbly, and holding the double-bladed paddle properly was harder than I thought! However, after a few minutes of practicing, we managed to glide smoothly across the water.<br><br>The scenery was breathtaking. We paddled past lush green trees and even saw some <select id="sel-wild" class="smart-select bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded border-2 border-blue-400 outline-none w-full md:w-auto my-1"><option value="">[ Wildlife ▾ ]</option><option value="birds">colorful birds and small monkeys</option><option value="fish">silver fish jumping out of the water</option><option value="dragon">beautiful dragonflies resting on leaves</option></select>. It was such a peaceful way to enjoy nature close-up. By the end of the trip, my arms were incredibly sore, but I felt <select id="sel-feel2" class="smart-select bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded border-2 border-blue-400 outline-none w-full md:w-auto my-1"><option value="">[ Final feeling ▾ ]</option><option value="exhausted">absolutely exhausted but incredibly happy</option><option value="proud">so proud of myself for doing it</option><option value="relaxed">completely relaxed and refreshed</option></select>. It was a fantastic workout and a memorable adventure.<br><br>I really hope we can go together next time! Let me know when you are free.<br><br><select id="sel-sign" class="smart-select bg-blue-100 text-blue-800 font-bold px-2 py-1 rounded border-2 border-blue-400 outline-none w-full md:w-auto my-1"><option value="">[ Sign-off ▾ ]</option><option value="best">Best regards,</option><option value="yours">Yours truly,</option><option value="talk">Talk soon,</option></select><br>Your Friend`
+            }
+        };
+
+        const sectionJ = {
+            title: "Section J: Means of Transport 🗂️",
+            instructions: "Read the descriptions and assign the correct letter (A/B/C) to each statement by tapping.", instructionsZh: "閱讀介紹，點擊按鈕切換，為每個句子分類 (A: 渡輪 / B: 獨木舟 / C: 潛艇)",
+            bgColor: "bg-cyan-50", borderColor: "border-cyan-300",
+            texts: [
+                { letter: 'A', name: 'Ferry', icon: '⛴️', text: "A ferry is a large boat that carries people, vehicles and goods across rivers, lakes or seas. It operates on scheduled routes and is used for regular commuting or tourism. Ferries are important for connecting islands or places separated by water and can transport many passengers at once." },
+                { letter: 'B', name: 'Kayak', icon: '🛶', text: "A kayak is a small, narrow watercraft that is propelled by a double-bladed paddle. It's often used for recreation, exercise or exploring rivers and lakes. Kayaking requires physical strength and balance and can be done alone or in pairs. It is popular for its quietness and closeness to nature." },
+                { letter: 'C', name: 'Submarine', icon: '⚓', text: "A submarine is a specialised underwater vessel used for exploring deep oceans or for military purposes. It can dive to great depths and stay submerged for long periods. Submarines are equipped with advanced technology and require skilled operators. They provide unique opportunities to study marine life or conduct secret missions." }
+            ],
+            questions: [
+                { id: 'j1', text: "1. This transport carries many passengers and vehicles regularly.", answer: 'A' },
+                { id: 'j2', text: "2. This transport allows people to explore underwater for research.", answer: 'C' },
+                { id: 'j3', text: "3. This transport requires paddling and physical effort.", answer: 'B' },
+                { id: 'j4', text: "4. This transport operates on fixed routes and schedules.", answer: 'A' },
+                { id: 'j5', text: "5. This transport can dive deep beneath the water surface.", answer: 'C' },
+                { id: 'j6', text: "6. This transport is small and often used for fun or exercise.", answer: 'B' },
+                { id: 'j7', text: "7. This transport provides a quiet way to enjoy nature close-up.", answer: 'B' },
+                { id: 'j8', text: "8. This transport helps connect communities separated by water.", answer: 'A' },
+                { id: 'j9', text: "9. This transport requires a crew with technical skills to operate safely.", answer: 'C' }
+            ]
+        };
+
+        let audioCtx;
+        let progress = { sectionA: 0, sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0, sectionF: 0, sectionG: 0, sectionH: 0, sectionI: 0, sectionJ: 0 };
+
+        function unlockAudio() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    oscillator.type = 'sine'; oscillator.frequency.value = 440; oscillator.connect(audioCtx.destination);
+                    oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.01);
+                }
+            } catch(e) { console.warn("AudioContext unable to start", e); }
+        }
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                
+                if (type === 'ding') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+                } else if (type === 'tada') {
+                    osc.type = 'square'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(554, audioCtx.currentTime + 0.1); osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.2); osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.6);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+                } else if (type === 'pop') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.05);
+                    gain.gain.setValueAtTime(0.2, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+                }
+            } catch(e) {}
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US'; utterance.rate = 0.85; 
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        window.toggleTooltip = function(element) {
+            document.querySelectorAll('.dict-word').forEach(el => { if(el !== element) el.classList.remove('active'); });
+            element.classList.toggle('active');
+            if(element.classList.contains('active')) setTimeout(() => element.classList.remove('active'), 3000);
+        };
+
+        window.toggleTranslation = function(id) {
+            const el = document.getElementById(`zh-${id}`);
+            if (el.classList.contains('hidden')) { el.classList.remove('hidden'); el.classList.add('animate-pop-in'); } 
+            else { el.classList.add('hidden'); }
+        };
+
+        function checkSectionComplete(sectionKey, total) {
+            progress[sectionKey]++;
+            if (progress[sectionKey] >= total) {
+                const badge = document.getElementById(`badge-${sectionKey}`);
+                if (badge) {
+                    badge.classList.remove('grayscale', 'opacity-50');
+                    badge.classList.add('scale-125');
+                    setTimeout(() => badge.classList.remove('scale-125'), 300);
+                }
+                const check = document.getElementById(`check-${sectionKey}`);
+                if(check) check.classList.remove('hidden');
+                
+                playSound('tada');
+                try { if (typeof confetti === 'function') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } } catch(e) {}
+            }
+        }
+
+        function markElementCorrect(el) {
+            if (!el || el.dataset.solved === 'true') return true;
+            el.dataset.solved = 'true';
+            const indicator = document.createElement('span'); indicator.innerHTML = '✅';
+            indicator.className = 'absolute -left-6 top-1/2 -translate-y-1/2 animate-pop-in text-xl z-10';
+            el.style.position = 'relative'; el.appendChild(indicator);
+            return false;
+        }
+
+        function triggerCorrectAction(elementId, sectionKey, totalQuestions) {
+            const el = document.getElementById(elementId);
+            const wasSolved = markElementCorrect(el);
+            if (!wasSolved) { playSound('ding'); checkSectionComplete(sectionKey, totalQuestions); }
+        }
+
+        function generateSectionHeader(key, data, contentHTML) {
+            return `
+                <div id="${key}" class="section-card ${data.bgColor} ${data.borderColor} relative">
+                    <div id="check-${key}" class="absolute -top-4 -right-4 bg-green-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-3xl shadow-lg border-4 border-white hidden animate-pop-in z-10">✅</div>
+                    <h2 class="text-3xl font-bold mb-2 text-gray-800">${data.title}</h2>
+                    <p class="text-lg text-gray-700 mb-1 font-semibold">${data.instructions}</p>
+                    <p class="text-sm text-gray-500 mb-6 bg-white/50 inline-block px-3 py-1 rounded-lg">${data.instructionsZh}</p>
+                    <div class="space-y-6">${contentHTML}</div>
+                </div>
+            `;
+        }
+
+        function generateToolBar(id, text, zhText) {
+            if(!zhText) return '';
+            let cleanTextForAudio = text.replace(/<[^>]*>?/gm, '').replace(/["']/g, '');
+            return `
+                <div class="flex gap-2 mt-2 relative z-10">
+                    <button onclick="speakText('${cleanTextForAudio}')" class="btn-audio bg-blue-100 border-2 border-blue-300 text-blue-600 rounded-full w-10 h-10 flex items-center justify-center text-xl shadow-sm hover:bg-blue-200 active:scale-95 transition-transform">🔊</button>
+                    <button onclick="toggleTranslation('${id}')" class="btn-audio bg-red-100 border-2 border-red-300 text-red-600 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg shadow-sm hover:bg-red-200 active:scale-95 transition-transform">中</button>
+                </div>
+                <div id="zh-${id}" class="hidden mt-2 p-3 bg-white/80 rounded-xl border border-gray-200 text-gray-700 font-semibold text-md shadow-inner text-blue-800 relative z-10">🇹🇼 ${zhText}</div>
+            `;
+        }
+
+        function renderSectionA(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let targetNoSpaces = q.target.replace(/ /g, ''); let letterIndex = 0;
+                let slotsHTML = q.template.split('').map((char) => {
+                    if (char === ' ') return `<span class="w-2 inline-block"></span>`; 
+                    if (char === '_') {
+                        letterIndex++;
+                        return `<span class="letter-box slot border-b-4 border-gray-400 w-6 md:w-8 h-10 md:h-12 inline-flex items-center justify-center font-bold text-xl md:text-2xl mx-1 bg-white/50 rounded-t-md text-blue-600"></span>`;
+                    }
+                    letterIndex++;
+                    return `<span class="letter-box w-6 md:w-8 h-10 md:h-12 inline-flex items-center justify-center font-bold text-xl md:text-2xl mx-1 text-gray-800">${char}</span>`;
+                }).join('');
+
+                const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                let letters = q.target.replace(/ /g, '').toUpperCase().split('');
+                while (letters.length < 12) {
+                    let r = alphabet[Math.floor(Math.random() * alphabet.length)];
+                    if(!letters.includes(r)) letters.push(r);
+                }
+                letters = letters.sort(() => Math.random() - 0.5);
+                let kbHTML = letters.map(l => `<button onclick="handleKeyboardTap(this, '${q.id}', '${l}')" class="bg-white border-2 border-gray-300 rounded-lg w-10 h-10 md:w-12 md:h-12 font-bold text-lg hover:bg-gray-100 shadow-sm active:scale-90 transition-transform">${l}</button>`).join('');
+
+                html += `
+                    <div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-pink-200 text-pink-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div>
+                            <div class="flex-1">
+                                <p class="text-lg text-gray-800 leading-relaxed">${q.text}</p>
+                                ${generateToolBar(q.id, q.text, q.zh)}
+                                <div class="mt-4 mb-4 flex flex-wrap" id="slots-${q.id}" data-target="${q.target.toUpperCase()}">${slotsHTML}</div>
+                                <div id="kb-${q.id}" class="flex flex-wrap gap-2 mt-4 bg-gray-50 p-3 rounded-xl border border-gray-200 max-w-sm">${kbHTML}</div>
+                                <button onclick="resetSlots('${q.id}')" class="mt-2 text-sm text-gray-500 underline bg-gray-100 px-3 py-1 rounded">Reset</button>
+                            </div>
+                        </div>
+                    </div>`;
+            }); return html;
+        }
+        window.handleKeyboardTap = function(btn, qId, letter) {
+            playSound('pop'); const container = document.getElementById(`slots-${qId}`);
+            if (container.parentElement.parentElement.parentElement.dataset.solved === 'true') return; 
+            const slots = Array.from(container.querySelectorAll('.slot')).filter(s => s.innerText === '');
+            if (slots.length > 0) slots[0].innerText = letter;
+            const allSlots = container.querySelectorAll('.slot');
+            if (Array.from(allSlots).every(s => s.innerText !== '')) {
+                const answer = Array.from(container.querySelectorAll('.letter-box')).map(s => s.innerText).join('');
+                const safeTarget = container.dataset.target.replace(/\s+/g, ''); 
+                if (answer.toUpperCase() === safeTarget) {
+                    triggerCorrectAction(qId, 'sectionA', sectionA.questions.length); document.getElementById(`kb-${qId}`).classList.add('hidden');
+                } else {
+                    playSound('error'); container.classList.add('animate-bounce-short');
+                    setTimeout(() => container.classList.remove('animate-bounce-short'), 500);
+                    setTimeout(() => { Array.from(allSlots).forEach(s => s.innerText = ''); }, 500);
+                }
+            }
+        };
+        window.resetSlots = function(qId) { const container = document.getElementById(`slots-${qId}`); if(container.parentElement.parentElement.parentElement.dataset.solved !== 'true') container.querySelectorAll('.slot').forEach(s => s.innerText = ''); };
+
+        let selectedVerbElement = null;
+        window.selectVerb = function(verbElement) { playSound('pop'); document.querySelectorAll('.word-block').forEach(el => { el.classList.remove('ring-4', 'ring-blue-500', 'scale-110'); }); verbElement.classList.add('ring-4', 'ring-blue-500', 'scale-110'); selectedVerbElement = verbElement; };
+        window.placeVerb = function(dropzoneId) {
+            if (!selectedVerbElement) return; const dropzone = document.getElementById(dropzoneId);
+            if(dropzone.parentElement.parentElement.parentElement.dataset.solved === 'true') return;
+            const draggedText = selectedVerbElement.innerText; dropzone.innerText = draggedText;
+            dropzone.classList.remove('bg-gray-100', 'border-dashed', 'text-gray-400'); dropzone.classList.add('bg-blue-100', 'text-blue-800', 'border-solid', 'border-blue-400');
+            if (draggedText.trim().toLowerCase() === dropzone.dataset.answer.trim().toLowerCase()) {
+                triggerCorrectAction(dropzone.dataset.id, 'sectionB', sectionB.questions.length); selectedVerbElement.classList.add('hidden'); selectedVerbElement = null;
+            } else {
+                playSound('error'); dropzone.classList.add('bg-red-100', 'border-red-400', 'text-red-600');
+                setTimeout(() => { dropzone.innerText = 'Tap to place'; dropzone.classList.remove('bg-red-100', 'border-red-400', 'text-red-600', 'bg-blue-100', 'text-blue-800', 'border-solid'); dropzone.classList.add('bg-gray-100', 'border-dashed', 'text-gray-400'); }, 1000);
+            }
+        };
+        function renderSectionB(data) {
+            let verbsHtml = data.verbs.map(v => `<span class="word-block inline-block bg-white border-2 border-blue-400 text-blue-700 font-bold px-4 py-2 rounded-full shadow-sm hover:shadow-md m-1 transition-all" onclick="selectVerb(this)">${v}</span>`).join('');
+            let html = `<div class="bg-blue-100/50 p-4 rounded-xl border border-blue-200 mb-6 text-center" id="verb-bank"><p class="text-sm font-bold text-blue-600 mb-2">1. Tap a bubble to select it 👇</p><div class="flex flex-wrap justify-center min-h-[4rem]">${verbsHtml}</div></div>`;
+            data.questions.forEach((q, index) => {
+                let parts = q.text.split('[drop]');
+                let sentenceHtml = `<span class="text-lg leading-loose">${parts[0]}</span><span id="drop-${q.id}" class="dropzone bg-gray-100 border-2 border-dashed border-gray-400 rounded-lg px-4 py-1 mx-1 text-gray-400 font-bold hover:bg-gray-200" onclick="placeVerb('drop-${q.id}')" data-answer="${q.answer}" data-id="${q.id}">Tap to place</span><span class="text-lg leading-loose">${parts[1]}</span>`;
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent"><div class="flex items-start gap-3"><div class="bg-blue-200 text-blue-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div><div class="flex-1"><div class="mb-2">${sentenceHtml}</div>${generateToolBar(q.id, q.text.replace('[drop]', '___'), q.zh)}</div></div></div>`;
+            }); return html;
+        }
+
+        function renderSectionC(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let correctionHtml = '';
+                if (!q.isCorrect) {
+                    let btns = q.options.map(opt => `<button onclick="selectCorrection('${q.id}', '${opt}')" class="bg-white border-2 border-green-300 text-green-700 px-4 py-2 rounded-lg font-bold hover:bg-green-50 m-1 active:scale-95 transition-transform">${opt}</button>`).join('');
+                    correctionHtml = `<div id="correct-${q.id}" class="hidden mt-4 p-4 bg-green-100/50 rounded-xl border border-green-200"><p class="text-sm text-green-800 mb-2 font-bold">What is the correct word?</p><div class="flex gap-2">${btns}</div></div>`;
+                }
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent transition-all"><div class="flex items-start gap-3"><div class="bg-green-200 text-green-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div><div class="flex-1"><p class="text-lg text-gray-800 mb-3 leading-relaxed">${q.text}</p><div class="flex gap-2" id="toggle-${q.id}"><button onclick="handleCheck('${q.id}', true)" class="flex-1 bg-white border-2 border-gray-300 text-gray-600 font-bold py-2 rounded-xl hover:bg-gray-50 flex justify-center items-center gap-1 transition-colors active:scale-95"><span class="text-xl">✅</span> Correct</button><button onclick="handleCheck('${q.id}', false)" class="flex-1 bg-white border-2 border-gray-300 text-gray-600 font-bold py-2 rounded-xl hover:bg-gray-50 flex justify-center items-center gap-1 transition-colors active:scale-95"><span class="text-xl">❌</span> Wrong</button></div>${correctionHtml}${generateToolBar(q.id, q.text, q.zh)}</div></div></div>`;
+            }); return html;
+        }
+        window.handleCheck = function(qId, userChoice) {
+            const q = sectionC.questions.find(x => x.id === qId); const container = document.getElementById(qId); const btns = document.getElementById(`toggle-${qId}`).children;
+            if(container.dataset.solved === 'true') return;
+            if (userChoice === q.isCorrect) {
+                if (q.isCorrect) { triggerCorrectAction(qId, 'sectionC', sectionC.questions.length); btns[0].classList.add('bg-green-100', 'border-green-500', 'text-green-700'); btns[1].classList.add('opacity-50'); } 
+                else { playSound('ding'); btns[1].classList.add('bg-red-100', 'border-red-500', 'text-red-700'); btns[0].classList.add('opacity-50'); const correctPanel = document.getElementById(`correct-${qId}`); correctPanel.classList.remove('hidden'); correctPanel.classList.add('animate-pop-in'); }
+            } else { playSound('error'); container.classList.add('animate-bounce-short'); setTimeout(() => container.classList.remove('animate-bounce-short'), 500); }
+        };
+        window.selectCorrection = function(qId, selectedWord) {
+            const q = sectionC.questions.find(x => x.id === qId);
+            if (selectedWord === q.answer) { triggerCorrectAction(qId, 'sectionC', sectionC.questions.length); document.getElementById(`correct-${qId}`).innerHTML = `<p class="text-green-700 font-bold text-lg">✨ Correct: ${q.answer}</p>`; } 
+            else { playSound('error'); document.getElementById(`correct-${qId}`).classList.add('animate-bounce-short'); setTimeout(() => document.getElementById(`correct-${qId}`).classList.remove('animate-bounce-short'), 500); }
+        };
+
+        function renderSentenceBuilder(data, sectionKey) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let blocksHtml = [...q.blocks].sort(() => Math.random() - 0.5).map(b => `<span class="inline-block bg-blue-100 text-blue-700 border-2 border-blue-300 px-3 py-2 rounded-lg font-bold m-1 cursor-pointer shadow-sm active:scale-95 transition-transform" onclick="moveBlock(this, '${q.id}')">${b}</span>`).join('');
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent"><div class="flex items-start gap-3"><div class="bg-yellow-200 text-yellow-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div><div class="flex-1 w-full overflow-hidden"><p class="text-lg text-gray-800 mb-3 font-semibold leading-relaxed">${q.text}</p><div class="mb-4"><p class="text-sm text-gray-500 mb-1">Tap blocks to move them down:</p><div id="bank-${q.id}" class="min-h-[3.5rem] bg-gray-50 border border-gray-200 rounded-xl p-2 flex flex-wrap items-center">${blocksHtml}</div></div><div><p class="text-sm text-gray-500 mb-1">Your Sentence:</p><div id="dropzone-${q.id}" class="min-h-[3.5rem] bg-yellow-50 border-2 border-dashed border-yellow-300 rounded-xl p-2 flex flex-wrap items-center"></div></div><div class="mt-4 flex gap-2"><button onclick="checkSentenceBuilder('${q.id}', '${sectionKey}')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-xl shadow-md active:scale-95 transition-transform">Check</button><button onclick="resetSentence('${q.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-xl active:scale-95 transition-transform">Reset</button></div>${generateToolBar(q.id, q.text, q.zh)}</div></div></div>`;
+            }); return html;
+        }
+        window.moveBlock = function(block, qId) {
+            const container = document.getElementById(qId); if(container.dataset.solved === 'true') return; playSound('pop');
+            const bank = document.getElementById(`bank-${qId}`); const dropzone = document.getElementById(`dropzone-${qId}`);
+            if (block.parentElement.id === `bank-${qId}`) dropzone.appendChild(block); else bank.appendChild(block);
+        };
+        window.resetSentence = function(qId) {
+            const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            const bank = document.getElementById(`bank-${qId}`); const dropzone = document.getElementById(`dropzone-${qId}`);
+            while (dropzone.firstChild) bank.appendChild(dropzone.firstChild);
+        };
+        window.checkSentenceBuilder = function(qId, sectionKey) {
+            const dropzone = document.getElementById(`dropzone-${qId}`); const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            const currentSentenceParts = Array.from(dropzone.children).map(c => c.innerText); const currentSentence = currentSentenceParts.join(' ');
+            let q = sectionKey === 'sectionD' ? sectionD.questions.find(x => x.id === qId) : sectionE.questions.find(x => x.id === qId);
+            const cleanStr = (str) => str.replace(/\s+/g, ' ').trim().toLowerCase().replace(/\.$/, '');
+            if (cleanStr(currentSentence) === cleanStr(q.answer) && currentSentenceParts.length > 0) {
+                let total = sectionKey === 'sectionD' ? sectionD.questions.length : sectionE.questions.length;
+                triggerCorrectAction(qId, sectionKey, total);
+                Array.from(dropzone.children).forEach(c => { c.classList.remove('bg-blue-100', 'text-blue-700', 'border-blue-300'); c.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'pointer-events-none'); });
+            } else { playSound('error'); dropzone.classList.add('animate-bounce-short'); setTimeout(() => dropzone.classList.remove('animate-bounce-short'), 500); }
+        };
+
+        function renderSectionF(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let sentenceHtml = q.text;
+                q.blanks.forEach((b, i) => { const btnHtml = `<button onclick="toggleBlank(this, '${q.id}', ${i})" class="blank-toggle bg-gray-100 border-b-2 border-gray-400 text-gray-400 font-bold px-2 py-1 mx-1 min-w-[3rem] rounded-t-md hover:bg-gray-200 active:bg-gray-300 transition-colors">${b.options[0]}</button>`; sentenceHtml = sentenceHtml.replace(`[blank${i+1}]`, btnHtml); });
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent"><div class="flex items-start gap-3"><div class="bg-teal-200 text-teal-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div><div class="flex-1"><p class="text-xl text-gray-800 leading-loose mb-3" id="f-blanks-${q.id}">${sentenceHtml}</p>${generateToolBar(q.id, q.text.replace(/\[blank\d\]/g, '___'), q.zh)}</div></div></div>`;
+            }); return html;
+        }
+        window.toggleBlank = function(btn, qId, index) {
+            const el = document.getElementById(qId); const container = document.getElementById(`f-blanks-${qId}`); if (el.dataset.solved === 'true') return;
+            playSound('pop'); const q = sectionF.questions.find(x => x.id === qId); const options = q.blanks[index].options;
+            let nextIndex = options.indexOf(btn.innerText) + 1; if (nextIndex >= options.length) nextIndex = 0;
+            btn.innerText = options[nextIndex]; btn.classList.remove('text-gray-400', 'bg-gray-100', 'border-gray-400'); btn.classList.add('text-teal-700', 'bg-teal-50', 'border-teal-500');
+            
+            let allCorrect = true; let allFilled = true; const blanks = container.querySelectorAll('.blank-toggle');
+            blanks.forEach((b, i) => {
+                if(b.innerText.trim().toLowerCase() === '...') allFilled = false;
+                if (b.innerText.trim().toLowerCase() !== q.blanks[i].answer.trim().toLowerCase()) allCorrect = false;
+            });
+            if (allCorrect && allFilled) {
+                blanks.forEach(b => { b.classList.remove('bg-teal-50', 'border-teal-500', 'text-teal-700'); b.classList.add('bg-green-200', 'border-green-500', 'text-green-800', 'pointer-events-none'); });
+                triggerCorrectAction(qId, 'sectionF', sectionF.questions.length);
+            }
+        };
+
+        function renderSectionG(data) {
+            let html = `<div class="bg-white rounded-xl p-4 md:p-6 mb-8 border-2 border-indigo-200 shadow-inner max-h-96 overflow-y-auto">`;
+            data.dialogue.forEach(msg => {
+                const isMala = msg.sender === 'Mala';
+                html += `<div class="flex flex-col ${isMala ? 'items-end' : 'items-start'}">
+                            <span class="text-xs text-gray-500 font-bold mb-1 mx-2">${msg.sender}</span>
+                            <div class="${isMala ? 'msg-bubble-right' : 'msg-bubble-left'} shadow-sm text-lg">${msg.text}</div>
+                         </div>`;
+            });
+            html += `</div><div class="space-y-8">`;
+
+            data.mcq.forEach((q, i) => {
+                let optionsHtml = q.options.map(opt => `<button onclick="checkG_MCQ(this, '${q.id}', '${opt}', '${q.answer}')" class="w-full text-left bg-white border-2 border-indigo-200 text-gray-700 font-semibold px-4 py-3 rounded-xl hover:bg-indigo-50 active:scale-95 transition-transform mb-2">${opt}</button>`).join('');
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                            <p class="text-xl font-bold text-gray-800 mb-4">${q.text}</p>
+                            <div class="options-container">${optionsHtml}</div>
+                         </div>`;
+            });
+
+            data.blanks.forEach((q, i) => {
+                let sentenceHtml = q.text;
+                q.selects.forEach((sel) => {
+                    let selHtml = `<select id="sel-${q.id}-${sel.id}" onchange="checkG_Blank('${q.id}')" class="smart-select bg-indigo-100 text-indigo-800 font-bold px-2 py-1 mx-1 rounded border-2 border-indigo-400 outline-none my-1">`;
+                    sel.options.forEach(opt => { selHtml += `<option value="${opt}">${opt}</option>`; });
+                    selHtml += `</select>`;
+                    sentenceHtml = sentenceHtml.replace(`[${sel.id}]`, selHtml);
+                });
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                            <p class="text-xl text-gray-800 leading-loose">${sentenceHtml}</p>
+                         </div>`;
+            });
+            html += `</div>`;
+            return html;
+        }
+
+        window.checkG_MCQ = function(btn, qId, selected, correct) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return;
+            if(selected === correct) {
+                btn.classList.remove('bg-white', 'border-indigo-200', 'text-gray-700');
+                btn.classList.add('bg-green-100', 'border-green-500', 'text-green-800');
+                Array.from(btn.parentElement.children).forEach(c => c.classList.add('pointer-events-none'));
+                triggerCorrectAction(qId, 'sectionG', sectionG.mcq.length + sectionG.blanks.length);
+            } else {
+                playSound('error');
+                btn.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                setTimeout(() => btn.classList.remove('bg-red-100', 'border-red-400', 'text-red-700'), 800);
+            }
+        };
+
+        window.checkG_Blank = function(qId) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return;
+            playSound('pop');
+            
+            const q = sectionG.blanks.find(x => x.id === qId);
+            let allCorrect = true; let allFilled = true;
+            
+            q.selects.forEach(sel => {
+                const selectEl = document.getElementById(`sel-${qId}-${sel.id}`);
+                const val = selectEl.value;
+                if (val === "...") allFilled = false;
+                if (val !== sel.answer) allCorrect = false;
+            });
+
+            if (allFilled && allCorrect) {
+                q.selects.forEach(sel => {
+                    const selectEl = document.getElementById(`sel-${qId}-${sel.id}`);
+                    selectEl.classList.remove('bg-indigo-100', 'border-indigo-400', 'text-indigo-800');
+                    selectEl.classList.add('bg-green-200', 'border-green-500', 'text-green-800', 'pointer-events-none');
+                });
+                triggerCorrectAction(qId, 'sectionG', sectionG.mcq.length + sectionG.blanks.length);
+            }
+        };
+
+        function renderSectionH(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let optionsHtml = q.options.map(opt => `<button onclick="checkH(this, '${q.id}', '${opt.replace(/'/g, "\\'")}', '${q.answer.replace(/'/g, "\\'")}')" class="w-full text-left bg-white border-2 border-purple-200 text-gray-700 font-semibold px-4 py-2 rounded-xl hover:bg-purple-50 active:scale-95 transition-transform mb-2 text-sm md:text-base">${opt}</button>`).join('');
+                
+                let topBubble = q.isQuestionMissing ? `<div class="bg-gray-100 border-2 border-dashed border-gray-400 p-3 rounded-2xl rounded-bl-none text-gray-500 font-bold min-h-[3rem] flex items-center justify-center relative mb-4" id="bubble-${q.id}">[ Tap an option below ]<div class="absolute -bottom-2 left-4 w-4 h-4 bg-gray-100 border-b-2 border-r-2 border-dashed border-gray-400 transform rotate-45"></div></div>` : `<div class="bg-purple-100 border-2 border-purple-300 p-3 rounded-2xl rounded-bl-none text-purple-900 font-bold mb-4 relative shadow-sm">${q.prompt}<div class="absolute -bottom-2 left-4 w-4 h-4 bg-purple-100 border-b-2 border-r-2 border-purple-300 transform rotate-45"></div></div>`;
+                
+                let bottomBubble = !q.isQuestionMissing ? `<div class="bg-gray-100 border-2 border-dashed border-gray-400 p-3 rounded-2xl rounded-tr-none text-gray-500 font-bold min-h-[3rem] flex items-center justify-center relative mt-4" id="bubble-${q.id}">[ Tap an option below ]<div class="absolute -top-2 right-4 w-4 h-4 bg-gray-100 border-t-2 border-l-2 border-dashed border-gray-400 transform rotate-45"></div></div>` : `<div class="bg-blue-100 border-2 border-blue-300 p-3 rounded-2xl rounded-tr-none text-blue-900 font-bold mt-4 relative shadow-sm">${q.prompt}<div class="absolute -top-2 right-4 w-4 h-4 bg-blue-100 border-t-2 border-l-2 border-blue-300 transform rotate-45"></div></div>`;
+
+                html += `
+                    <div id="${q.id}" class="bg-white/80 p-4 rounded-xl border-2 border-transparent shadow-sm flex flex-col md:flex-row gap-4 items-center">
+                        <div class="w-full md:w-1/2 flex flex-col items-center">
+                            <div class="bg-white border-4 border-gray-200 rounded-xl p-4 w-full max-w-sm relative shadow-inner">
+                                <span class="absolute -top-3 -left-3 bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold border-2 border-white shadow-md z-10">${index + 1}</span>
+                                ${topBubble}
+                                <div class="flex justify-center text-4xl opacity-50 py-2">🧍 🧍‍♀️</div>
+                                ${bottomBubble}
+                            </div>
+                            ${generateToolBar(q.id, q.prompt, q.zh)}
+                        </div>
+                        <div class="w-full md:w-1/2 options-container p-2">
+                            <p class="text-sm font-bold text-purple-600 mb-2">Choose the best response:</p>
+                            ${optionsHtml}
+                        </div>
+                    </div>
+                `;
+            });
+            return html;
+        }
+
+        window.checkH = function(btn, qId, selected, correct) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return;
+            
+            if (selected === correct) {
+                const bubble = document.getElementById(`bubble-${qId}`);
+                bubble.innerText = selected;
+                bubble.classList.remove('bg-gray-100', 'border-dashed', 'border-gray-400', 'text-gray-500');
+                bubble.classList.add('bg-green-100', 'border-solid', 'border-green-400', 'text-green-900');
+                
+                btn.classList.remove('bg-white', 'border-purple-200');
+                btn.classList.add('bg-green-500', 'text-white', 'border-green-600');
+                Array.from(btn.parentElement.children).forEach(c => { if(c !== btn && c.tagName==='BUTTON') c.classList.add('opacity-50', 'pointer-events-none'); });
+                
+                triggerCorrectAction(qId, 'sectionH', sectionH.questions.length);
+            } else {
+                playSound('error');
+                btn.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+                setTimeout(() => btn.classList.remove('bg-red-100', 'border-red-400', 'text-red-700'), 800);
+            }
+        };
+
+        function renderSectionI(data) {
+            return `
+                <div id="${data.id}" class="bg-white rounded-2xl border-2 border-rose-200 overflow-hidden shadow-lg relative">
+                    <!-- Browser Chrome -->
+                    <div class="bg-gray-200 px-4 py-2 flex items-center gap-2 border-b border-gray-300">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        <div class="flex-1 text-center text-xs font-bold text-gray-500">New Message</div>
+                    </div>
+                    <!-- Email Header -->
+                    <div class="p-4 border-b border-gray-100 space-y-2 text-sm md:text-base">
+                        <div class="flex"><span class="w-20 text-gray-400 font-bold">To:</span> <span class="font-semibold text-gray-800">${data.emailData.to}</span></div>
+                        <div class="flex"><span class="w-20 text-gray-400 font-bold">Subject:</span> <span class="font-bold text-gray-800">${data.emailData.subject}</span></div>
+                    </div>
+                    <!-- Email Body -->
+                    <div class="p-4 md:p-6 text-lg text-gray-700 leading-relaxed font-medium" id="email-body-container">
+                        ${data.emailData.bodyHtml}
+                    </div>
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                        <button id="send-btn-${data.id}" class="bg-gray-300 text-gray-500 font-bold py-2 px-6 rounded-lg transition-colors cursor-not-allowed flex items-center gap-2">
+                            <span>Send</span> ✈️
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkEmailProgress() {
+            const container = document.getElementById('email1');
+            if(container.dataset.solved === 'true') return;
+            
+            const selects = container.querySelectorAll('.smart-select');
+            let allFilled = true;
+            selects.forEach(sel => { if(sel.value === "") allFilled = false; });
+            
+            const sendBtn = document.getElementById(`send-btn-email1`);
+            if (allFilled) {
+                sendBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                sendBtn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'text-white', 'cursor-pointer', 'shadow-md');
+                sendBtn.onclick = () => {
+                    playSound('tada');
+                    selects.forEach(sel => {
+                        sel.classList.remove('bg-blue-100', 'text-blue-800', 'border-blue-400');
+                        sel.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'pointer-events-none');
+                    });
+                    sendBtn.innerHTML = "Sent! ✅";
+                    sendBtn.classList.replace('bg-rose-500', 'bg-green-500');
+                    sendBtn.classList.replace('hover:bg-rose-600', 'hover:bg-green-600');
+                    sendBtn.onclick = null;
+                    triggerCorrectAction('email1', 'sectionI', 1);
+                };
+            } else {
+                sendBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                sendBtn.classList.remove('bg-rose-500', 'hover:bg-rose-600', 'text-white', 'cursor-pointer', 'shadow-md');
+                sendBtn.onclick = null;
+            }
+        }
+
+        // Attach event listener for Email selects
+        document.addEventListener('change', function(e) {
+            if(e.target && e.target.classList.contains('smart-select') && e.target.id.startsWith('sel-')) {
+                playSound('pop');
+                if(e.target.closest('#email-body-container')) {
+                    checkEmailProgress();
+                }
+            }
+        });
+
+        function renderSectionJ(data) {
+            let cardsHtml = data.texts.map(t => `
+                <div class="bg-white p-4 rounded-xl border-2 border-cyan-200 shadow-sm flex-1 min-w-[200px]">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="bg-cyan-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg">${t.letter}</span>
+                        <h3 class="text-xl font-bold text-gray-800">${t.name} ${t.icon}</h3>
+                    </div>
+                    <p class="text-sm text-gray-600 leading-relaxed">${t.text}</p>
+                </div>
+            `).join('');
+
+            let html = `
+                <div class="flex flex-wrap gap-4 mb-6">${cardsHtml}</div>
+                <div class="bg-white/60 p-4 rounded-xl border-2 border-cyan-100 shadow-inner space-y-3">
+            `;
+
+            data.questions.forEach((q, index) => {
+                html += `
+                    <div id="${q.id}" class="flex items-center gap-3 p-2 hover:bg-white/80 rounded-lg transition-colors relative">
+                        <button onclick="cycleTransportBtn(this, '${q.id}', '${q.answer}')" class="w-14 h-14 shrink-0 bg-gray-200 border-4 border-gray-300 text-gray-500 font-bold text-2xl rounded-xl hover:bg-gray-300 active:scale-90 transition-transform flex items-center justify-center" data-val="">?</button>
+                        <p class="text-lg text-gray-800 font-medium">${q.text}</p>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            return html;
+        }
+
+        window.cycleTransportBtn = function(btn, qId, correctVal) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return;
+            
+            playSound('pop');
+            const states = [
+                { val: '', text: '?', classes: 'bg-gray-200 border-gray-300 text-gray-500' },
+                { val: 'A', text: 'A', classes: 'bg-cyan-100 border-cyan-400 text-cyan-800' },
+                { val: 'B', text: 'B', classes: 'bg-green-100 border-green-400 text-green-800' },
+                { val: 'C', text: 'C', classes: 'bg-indigo-100 border-indigo-400 text-indigo-800' }
+            ];
+            
+            let currentVal = btn.dataset.val;
+            let nextIdx = states.findIndex(s => s.val === currentVal) + 1;
+            if (nextIdx >= states.length) nextIdx = 1; // Skip '?' on recycle
+            
+            let newState = states[nextIdx];
+            btn.dataset.val = newState.val;
+            btn.innerText = newState.text;
+            btn.className = `w-14 h-14 shrink-0 font-bold text-2xl rounded-xl active:scale-90 transition-transform flex items-center justify-center border-4 ${newState.classes}`;
+
+            if (newState.val === correctVal) {
+                // Instantly correct
+                triggerCorrectAction(qId, 'sectionJ', sectionJ.questions.length);
+                btn.classList.remove('active:scale-90');
+                btn.classList.add('cursor-default');
+                btn.innerHTML = `${newState.text} <span class="absolute -top-2 -right-2 text-sm bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center border border-white">✓</span>`;
+            }
+        };
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            unlockAudio();
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            
+            const container = document.getElementById('sections-container');
+            container.innerHTML = `
+                ${generateSectionHeader('sectionA', sectionA, renderSectionA(sectionA))}
+                ${generateSectionHeader('sectionB', sectionB, renderSectionB(sectionB))}
+                ${generateSectionHeader('sectionC', sectionC, renderSectionC(sectionC))}
+                ${generateSectionHeader('sectionD', sectionD, renderSentenceBuilder(sectionD, 'sectionD'))}
+                ${generateSectionHeader('sectionE', sectionE, renderSentenceBuilder(sectionE, 'sectionE'))}
+                ${generateSectionHeader('sectionF', sectionF, renderSectionF(sectionF))}
+                ${generateSectionHeader('sectionG', sectionG, renderSectionG(sectionG))}
+                ${generateSectionHeader('sectionH', sectionH, renderSectionH(sectionH))}
+                ${generateSectionHeader('sectionI', sectionI, renderSectionI(sectionI))}
+                ${generateSectionHeader('sectionJ', sectionJ, renderSectionJ(sectionJ))}
+            `;
+            playSound('ding');
+        });
+
+    </script>
+</body>
+</html>
