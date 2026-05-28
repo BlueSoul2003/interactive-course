@@ -475,7 +475,8 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p6-en-unit2',           'Unit 2: Interactive Reading',                'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit3',           'Unit 3: Outdoor Activities',                 'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit4',           'Unit 4: Interactive Worksheet',              'kssr', 'english', 'kssr_p6_english', 'Primary6'),
-('kssr-p6-en-unit5',           'Unit 5: Interactive English',                'kssr', 'english', 'kssr_p6_english', 'Primary6');
+('kssr-p6-en-unit5',           'Unit 5: Interactive English',                'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit6',           'Unit 6: Interactive English Adventure',      'kssr', 'english', 'kssr_p6_english', 'Primary6');
 
 -- ──────────────────────────────────────────────────────────────────
 -- VERIFICATION QUERIES (run manually after applying):
