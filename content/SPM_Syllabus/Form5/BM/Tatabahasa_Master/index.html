@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPM Tatabahasa Quiz</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nunito', sans-serif; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-5px) rotate(-1deg); }
+            40% { transform: translateX(5px) rotate(1deg); }
+            60% { transform: translateX(-5px) rotate(-1deg); }
+            80% { transform: translateX(5px) rotate(1deg); }
+        }
+        .animate-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop-in {
+            animation: popIn 0.5s ease-out forwards;
+        }
+
+        @keyframes bounce-correct {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-bounce-correct {
+            animation: bounce-correct 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(30px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .slide-in-right {
+            animation: slideInRight 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 40px -10px rgba(108, 99, 255, 0.12);
+        }
+
+        /* Customize scrollbar for options if needed */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdf4ff; rounded: 4px;}
+        ::-webkit-scrollbar-thumb { background: #d8b4fe; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c084fc; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 min-h-screen text-gray-700 selection:bg-purple-200">
+
+    <!-- Global Home Button -->
+    <a href="../../../../../index.html" class="fixed top-4 left-4 bg-white/90 backdrop-blur shadow-md text-gray-700 p-3 rounded-full hover:bg-gray-50 z-50 flex items-center justify-center border border-gray-200 transition-all hover:scale-105 active:scale-95" title="Back to Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+    </a>
+
+    <div class="container mx-auto px-4 py-8 max-w-3xl flex flex-col min-h-screen">
+        
+        <!-- Header / Progress Area -->
+        <header class="mb-8 slide-in-right">
+            <div class="flex justify-between items-center mb-3">
+                <h1 class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 tracking-tight">SPM Tatabahasa Master</h1>
+                <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-5 py-1.5 rounded-full font-bold text-sm md:text-base shadow-md shadow-pink-200">
+                    Skor: <span id="scoreDisplay">0</span> / 50
+                </div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/60 rounded-full h-3 md:h-4 shadow-sm overflow-hidden p-0.5 border border-white">
+                <div id="progressBar" class="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 h-full rounded-full transition-all duration-700 ease-out" style="width: 0%"></div>
+            </div>
+            <div class="text-right text-xs text-purple-400 mt-2 font-bold tracking-wide uppercase">Soalan <span id="questionCount">1</span> daripada 50</div>
+        </header>
+
+        <!-- Main Quiz Container -->
+        <main id="quizContainer" class="flex-grow glass-panel rounded-[2.5rem] p-6 md:p-10 slide-in-right relative">
+            
+            <!-- Question -->
+            <div id="questionWrapper" class="mb-8">
+                <h2 id="questionText" class="text-lg md:text-xl font-bold leading-relaxed text-gray-800">
+                    <!-- Question will be injected here -->
+                </h2>
+                <p id="hintText" class="text-sm text-pink-500 mt-3 italic hidden flex items-center font-semibold">
+                    <svg class="w-4 h-4 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span><!-- Hint here --></span>
+                </p>
+            </div>
+
+            <!-- Options -->
+            <div id="optionsContainer" class="space-y-4 md:space-y-5 mb-8">
+                <!-- Options injected here -->
+            </div>
+
+            <!-- Rationale / Feedback Box (Hidden initially) -->
+            <div id="feedbackBox" class="hidden rounded-xl p-5 mb-6 transform transition-all">
+                <div class="flex items-start">
+                    <div id="feedbackIcon" class="flex-shrink-0 mt-0.5 mr-3"></div>
+                    <div>
+                        <h3 id="feedbackTitle" class="font-bold text-lg mb-1"></h3>
+                        <p id="feedbackRationale" class="text-sm md:text-base text-gray-700 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="flex justify-end mt-4">
+                <button id="nextBtn" class="hidden bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-2xl shadow-[0_8px_20px_rgba(217,70,239,0.3)] hover:shadow-[0_10px_25px_rgba(217,70,239,0.4)] transition-all transform hover:-translate-y-1 focus:outline-none flex items-center">
+                    Seterusnya <span class="ml-2 text-xl leading-none">&rarr;</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- Result Screen (Hidden initially) -->
+        <div id="resultScreen" class="hidden flex-grow glass-panel rounded-[2.5rem] p-8 md:p-12 flex flex-col items-center justify-center text-center slide-in-right">
+            <div class="text-7xl mb-6 animate-bounce-correct">🏆</div>
+            <h2 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500 mb-3">Tahniah! Ujian Tamat.</h2>
+            <p class="text-gray-500 mb-8 text-lg font-semibold">Anda telah melengkapkan 50 soalan SPM Tatabahasa.</p>
+            
+            <div class="bg-white/80 rounded-[2rem] p-8 w-full max-w-sm mb-10 shadow-lg border-2 border-pink-50 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-purple-400 to-pink-400"></div>
+                <div class="text-sm text-purple-500 font-extrabold uppercase tracking-widest mb-2">Skor Akhir</div>
+                <div class="text-6xl font-black text-gray-800"><span id="finalScore">0</span> <span class="text-3xl text-gray-400">/ 50</span></div>
+                <div id="performanceMsg" class="mt-5 font-bold text-gray-600 text-lg"></div>
+            </div>
+
+            <button onclick="location.reload()" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-10 rounded-2xl shadow-[0_8px_20px_rgba(217,70,239,0.3)] hover:shadow-[0_10px_25px_rgba(217,70,239,0.4)] transition-all transform hover:-translate-y-1 flex items-center text-lg">
+                Cuba Lagi <span class="ml-2 text-2xl leading-none">↺</span>
+            </button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-8 text-center text-sm text-gray-400 pb-4">
+            <p>Dibina untuk kecemerlangan SPM &middot; Single File HTML App</p>
+        </footer>
+    </div>
+
+    <!-- Application Logic -->
+    <script>
+        // --- 1. Sound Synthesis Engine (Web Audio API) ---
+        // No external audio files needed. Procedurally generated sounds!
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playTone(freq, type, duration, vol = 0.1) {
+            if (!audioCtx) return;
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = type;
+            oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + duration);
+        }
+
+        // Correct Sound Effects
+        const sfxCorrect = [
+            function() { // Bright Chime
+                playTone(523.25, 'sine', 0.1); // C5
+                setTimeout(() => playTone(659.25, 'sine', 0.2), 100); // E5
+            },
+            function() { // Mario Coin style
+                playTone(987.77, 'square', 0.08, 0.05); // B5
+                setTimeout(() => playTone(1318.51, 'square', 0.3, 0.05), 80); // E6
+            },
+            function() { // Soft Bell Arpeggio
+                playTone(440, 'sine', 0.1); // A4
+                setTimeout(() => playTone(554.37, 'sine', 0.1), 80); // C#5
+                setTimeout(() => playTone(659.25, 'sine', 0.3), 160); // E5
+            }
+        ];
+
+        // Wrong Sound Effects
+        const sfxWrong = [
+            function() { // Low Buzzer
+                playTone(150, 'sawtooth', 0.3, 0.1);
+            },
+            function() { // Descending Slide
+                playTone(300, 'square', 0.15, 0.05);
+                setTimeout(() => playTone(250, 'square', 0.2, 0.05), 150);
+            },
+            function() { // Thud
+                playTone(100, 'triangle', 0.2, 0.2);
+                setTimeout(() => playTone(80, 'triangle', 0.2, 0.2), 100);
+            }
+        ];
+
+        function playRandomSound(isCorrect) {
+            initAudio();
+            const pool = isCorrect ? sfxCorrect : sfxWrong;
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            pool[randomIndex]();
+        }
+
+        function playEndSound() {
+            initAudio();
+            // Fanfare
+            let time = 0;
+            [523.25, 523.25, 523.25, 659.25, 783.99, 659.25, 783.99].forEach((freq, i) => {
+                let duration = (i === 4 || i === 6) ? 0.4 : 0.15;
+                let delay = (i === 6) ? 0.2 : 0;
+                setTimeout(() => playTone(freq, 'square', duration, 0.05), time * 1000);
+                time += duration + delay + 0.02;
+            });
+        }
+
+
+        // --- 2. Quiz Data (Compact Format) ---
+        const rawData = [
+            { q: "\"______ akan bertolak ke Kuala Lumpur pada pagi esok,\" kata Ali dan Abu kepada Cikgu Tan.", opts: [ {t:"Kami", r:"表示“我们”（不包括听话者），适合Ali和Abu对老师说话的情境。", c:true}, {t:"Kita", r:"表示“我们”（包括听话者），用在这里会让老师也变成出发的人。", c:false}, {t:"Mereka", r:"表示“他们”，这是第三人称，不适合用作自称。", c:false}, {t:"Kalian", r:"表示“你们”，这是第二人称，不适合用作自称。", c:false} ], h: "注意说话者是两个人（Ali和Abu），且他们并没有把听话者（Cikgu Tan）包括在内。" },
+            { q: "Sultan Mansur Syah telah memerintahkan laksamana ______ supaya belayar ke Majapahit.", opts: [ {t:"beliau", r:"用于受尊敬的普通人物，不适用于苏丹或皇室的代词。", c:false}, {t:"baginda", r:"是专用于皇室成员（如苏丹、国王）的第三人称代词。", c:true}, {t:"nya", r:"是一般的第三人称代词，不够尊敬，不适用于皇室。", c:false}, {t:"dia", r:"是一般的第三人称代词，对苏丹使用显得不敬。", c:false} ], h: "提到苏丹（Sultan）时，必须使用专门的皇室代词。" },
+            { q: "\"Ampun Tuanku, sembah ______ harap diampun,\" kata Hang Tuah kepada Sultan.", opts: [ {t:"beta", r:"这是皇室成员的自称，臣子不能使用。", c:false}, {t:"hamba", r:"是古代平民之间的自称，对苏丹说话时显得不够正式。", c:false}, {t:"patik", r:"是臣民对皇室成员说话时的自称。", c:true}, {t:"saya", r:"是现代通用的第一人称，在古代宫廷用语中不适用。", c:false} ], h: "在古代宫廷中，臣子对君王自称时有专属的词汇。" },
+            { q: "Penduduk kampung itu bergotong-royong membersihkan balai raya. ______ berharap balai raya itu dapat digunakan segera.", opts: [ {t:"Mereka", r:"指代前文提到的群体“Penduduk kampung”（村民们）。", c:true}, {t:"Kami", r:"表示“我们”，句子是以第三人称视角叙述，不能用第一人称。", c:false}, {t:"Kalian", r:"表示“你们”，不符合叙述语境。", c:false}, {t:"Beliau", r:"用于单数受尊敬的人物，这里是群体。", c:false} ], h: "需要一个代词来指代前面提到的复数名词“村民们”。" },
+            { q: "______kah nama tokoh yang merasmikan kempen kesedaran alam sekitar itu?", opts: [ {t:"Apa", r:"通常用于问事物或动物的名字，不用来问人的名字。", c:false}, {t:"Siapa", r:"专门用于询问人物的名字或身份。", c:true}, {t:"Mana", r:"用于询问地点或选择，不符合题意。", c:false}, {t:"Berapa", r:"用于询问数量，不符合题意。", c:false} ], h: "你想知道的是一个“人”的名字（tokoh）。" },
+            { q: "Ibu membeli tiga ______ sayur sawi dan beberapa ______ cili merah di pasar.", opts: [ {t:"ikat ... biji", r:"“ikat”用于捆绑成束的蔬菜，“biji”用于颗粒状或圆形的物体如辣椒。", c:true}, {t:"cekak ... butir", r:"“cekak”是指用手虎口握住的分量，通常用于长条状物；“butir”多用于细小颗粒如米、珍珠。", c:false}, {t:"genggam ... batang", r:"“batang”用于长条形且较硬的物体，辣椒不适合用batang。", c:false}, {t:"potong ... ulas", r:"“ulas”用于橘子瓣或蒜瓣，不适用于辣椒。", c:false} ], h: "想想青菜通常是怎么卖的，以及辣椒的形状类似于什么量词。" },
+            { q: "Nelayan itu menggunakan se______ jala untuk menangkap ikan di sungai.", opts: [ {t:"bidang", r:"用于宽阔平坦的东西如土地、布，不适用于渔网。", c:false}, {t:"rawan", r:"是专门用于渔网（jala, pukat）的量词。", c:true}, {t:"lembar", r:"用于细长或薄片状的物体如纸张、丝线。", c:false}, {t:"utas", r:"用于长条且柔软的物体如绳子、项链。", c:false} ], h: "渔网（jala）有一个非常专属的特殊量词，不常用于其他物品。" },
+            { q: "Ayah menghadiahi ibu se______ cincin berlian sempena ulang tahun perkahwinan mereka.", opts: [ {t:"bentuk", r:"专门用于弯曲或环状的小物件，如戒指、鱼钩。", c:true}, {t:"butir", r:"用于小颗粒状物体，如果是单指钻石（berlian）可以用，但这里是指戒指（cincin）。", c:false}, {t:"urat", r:"用于细长如线的物体。", c:false}, {t:"keping", r:"用于扁平的物体，如饼干、硬币。", c:false} ], h: "戒指（cincin）是环状的物体，有特定的量词。" },
+            { q: "Posmen itu menyerahkan se______ surat berdaftar kepada Encik Muthu.", opts: [ {t:"helai", r:"用于薄片状的物体，如衣服、纸张，但不用于信件的单位。", c:false}, {t:"keping", r:"用于硬纸板、照片等，信件通常不用此量词。", c:false}, {t:"pucuk", r:"专门用于信件（surat）或枪械（pistol）。", c:true}, {t:"naskhah", r:"用于报纸、杂志或书籍等出版物。", c:false} ], h: "信件（surat）和枪械共用同一个特别的量词。" },
+            { q: "Pak Ali menyembelih beberapa ______ ayam untuk kenduri malam ini.", opts: [ {t:"kawan", r:"用于成群的动物，这里是说宰杀几“只”，不适合用“群”。", c:false}, {t:"ekor", r:"是所有动物的通用量词。", c:true}, {t:"buah", r:"用于体积较大或没有特定量词的物体，不能用于动物。", c:false}, {t:"biji", r:"用于圆形或较小的物体，不能用于动物。", c:false} ], h: "动物（ayam）有最基础、最通用的量词。" },
+            { q: "Pekerja itu membersihkan longkang ______ menyanyi kecil.", opts: [ {t:"lalu", r:"表示连续发生的动作，不适合同时发生的动作。", c:false}, {t:"sambil", r:"表示同一个人同时进行两个动作（清理沟渠和哼歌）。", c:true}, {t:"sementara", r:"通常用于两个人分别做不同的事，或表示“暂时”。", c:false}, {t:"kerana", r:"表示原因，这里没有因果关系。", c:false} ], h: "一个人在做某件事的“同时”也在做另一件事。" },
+            { q: "Dia sering datang lewat ke sekolah ______ rumahnya terletak jauh di pedalaman.", opts: [ {t:"agar", r:"表示目的（以便），这里是解释原因。", c:false}, {t:"kerana", r:"引出原因，解释为什么他迟到（因为家很远）。", c:true}, {t:"hingga", r:"表示程度或时间，意为“直到”。", c:false}, {t:"tetapi", r:"表示转折，这里没有转折的意思。", c:false} ], h: "后半句解释了前半句发生的原因。" },
+            { q: "Ahmad mengambil tuala ______ mandi di bilik air.", opts: [ {t:"lalu", r:"表示一个动作紧接着另一个动作发生（拿了毛巾接着去洗澡）。", c:true}, {t:"malahan", r:"表示递进，意为“甚至/反而”，不符合语境。", c:false}, {t:"atau", r:"表示选择，拿毛巾和洗澡不是选择关系。", c:false}, {t:"sambil", r:"表示同时进行，拿毛巾和洗澡无法同时发生，有先后顺序。", c:false} ], h: "这两个动作有明显的先后顺序，做完一个紧接着做另一个。" },
+            { q: "Raju berbadan gemuk ______ abangnya sangat kurus.", opts: [ {t:"walaupun", r:"通常放在句首或从句前表示让步（虽然），不适合用来直接对比两个人。", c:false}, {t:"manakala", r:"用于对比两方的情况（Raju胖，而哥哥瘦）。", c:true}, {t:"apabila", r:"表示时间（当……时）。", c:false}, {t:"supaya", r:"表示目的，不符合语境。", c:false} ], h: "句子在对比两个不同的人的体型特征。" },
+            { q: "Pelajar itu mengulang kaji pelajaran setiap malam ______ lulus dengan cemerlang dalam peperiksaan.", opts: [ {t:"supaya", r:"表示目的，意为“以便/为了”，复习是为了及格。", c:true}, {t:"sebab", r:"通常用作名词，作为连词时后面通常接原因，不如supaya合适表达目的。", c:false}, {t:"bahawa", r:"用于连接说明性从句，意为“说明……”。", c:false}, {t:"ketika", r:"表示时间，意为“在……的时候”。", c:false} ], h: "后半句是前半句动作所想要达到的目标。" },
+            { q: "Hadiah ini adalah ______ ibu sempena Hari Ibu.", opts: [ {t:"kepada", r:"通常用于表示动作的接受者（给），但如果是“作为给某人的东西”，通常用untuk。", c:false}, {t:"untuk", r:"表示用途或归属，意为“给/为了”（khusus untuk ibu）。", c:true}, {t:"pada", r:"用于时间或无生命的物体。", c:false}, {t:"daripada", r:"表示来源（从……那里来），这里是送出去的礼物。", c:false} ], h: "这个介词表示礼物的接收者或用途（给妈妈的）。" },
+            { q: "Siva berasal ______ Kuala Lumpur dan kini menetap di Johor.", opts: [ {t:"dari", r:"表示方向、地点或时间的来源（Arah, Tempat, Masa - ATM）。", c:true}, {t:"daripada", r:"表示人、比较或事物的来源，不能用于地点。", c:false}, {t:"di", r:"表示所在的地点（在），不能表示“来自”。", c:false}, {t:"ke", r:"表示前往的方向（去）。", c:false} ], h: "表示来自某个“地点”时，有一个特定的介词（记住ATM法则）。" },
+            { q: "Pasu bunga itu diperbuat ______ tanah liat.", opts: [ {t:"dari", r:"只用于方向、地点和时间。", c:false}, {t:"daripada", r:"表示事物的来源或成分（由黏土制成）。", c:true}, {t:"dengan", r:"表示方式或工具，用于材料时不如daripada准确。", c:false}, {t:"pada", r:"用于时间或位置，不表示材质。", c:false} ], h: "表示某物品的制作材料或成分时，使用这个介词。" },
+            { q: "Pertandingan melukis itu akan diadakan ______ hari Sabtu ini.", opts: [ {t:"di", r:"只用于地点，不能用于时间。", c:false}, {t:"pada", r:"用于时间前面（如日期、星期）。", c:true}, {t:"hingga", r:"表示“直到”，不符合句意。", c:false}, {t:"kepada", r:"用于人或情感的指向，不用于时间。", c:false} ], h: "在马来文中，连接时间（如星期几、日期）有专属的介词。" },
+            { q: "Buku rujukan itu ada ______ Cikgu Fatimah.", opts: [ {t:"pada", r:"当表示某物在某人那里时，必须用 pada 而不能用 di。", c:true}, {t:"di", r:"di 只能接地点名词，不能接人名。", c:false}, {t:"kepada", r:"表示动作的指向（给……），这里是表示“在……那里”。", c:false}, {t:"dengan", r:"表示“和……一起”，不符合表示所属位置的语境。", c:false} ], h: "东西“在”某人那里时，不能把人当成地点（di）。" },
+            { q: "Ibu sedang ______ daging ayam itu kecil-kecil untuk dimasak sup.", opts: [ {t:"mencencang", r:"意为剁碎/切得很细碎，符合煮汤前把肉切小的动作。", c:true}, {t:"menetak", r:"使用刀背或重器大力砍，不适合切肉煮汤的情境。", c:false}, {t:"menghiris", r:"切成薄片，通常用于切洋葱或肉片，这里强调kecil-kecil（细碎）。", c:false}, {t:"membelah", r:"劈开成两半，如劈柴。", c:false} ], h: "注意后面写着“kecil-kecil”（细细碎碎），需要用“剁”的动词。" },
+            { q: "Nenek ______ tikar mengkuang itu di ruang tamu rumahnya.", opts: [ {t:"menganyam", r:"意为编织（用草、藤等），符合制作草席的动作。", c:true}, {t:"menenun", r:"意为纺织（用线），用于布料如kain sutera。", c:false}, {t:"menyulam", r:"意为刺绣。", c:false}, {t:"menjahit", r:"意为缝纫，用于缝衣服。", c:false} ], h: "制作草席（tikar）的工艺是“编织”。" },
+            { q: "Anjing itu ______ tulang yang dijumpainya di tepi jalan.", opts: [ {t:"menggigit", r:"普通的咬，但对于狗咬着骨头走，有更准确的词汇。", c:false}, {t:"menggonggong", r:"意为用嘴巴叼着（常用于动物叼着食物）。", c:true}, {t:"mematuk", r:"蛇咬或鸟啄。", c:false}, {t:"mengunyah", r:"咀嚼，是在嘴里嚼碎的过程。", c:false} ], h: "动物用嘴巴“叼”着东西的专用动词。" },
+            { q: "Lelaki yang disyaki mencuri itu telah ______ oleh pihak polis.", opts: [ {t:"ditangkap", r:"意为被逮捕/抓捕，符合警察抓小偷的情境。", c:true}, {t:"dipegang", r:"意为被握住，程度不够。", c:false}, {t:"diambil", r:"意为被拿走，不用于逮捕犯人。", c:false}, {t:"ditarik", r:"意为被拉扯。", c:false} ], h: "警察对嫌疑犯采取的行动是“逮捕”。" },
+            { q: "Pak Cik Leman sedang ______ parang kesayangannya supaya tajam semula.", opts: [ {t:"mengasah", r:"意为磨利（刀具）。", c:true}, {t:"menggilap", r:"意为抛光、擦亮（鞋子、金属表面），不是为了变利。", c:false}, {t:"mencuci", r:"清洗，不能让刀变利。", c:false}, {t:"memberus", r:"用刷子刷。", c:false} ], h: "为了让刀（parang）变利（tajam），你需要做什么动作？" },
+            { q: "Pilih ayat yang menggunakan perkataan bergaris dengan betul. \nI. Pasukan bola sepak sekolah telah melakar sejarah.\nII. Mata pelajaran sejarah amat diminatinya.\nIII. Budak itu menceritakan sejarah hidupnya.\nIV. Bapa membeli buku sejarah baharu.", opts: [ {t:"I dan II sahaja", r:"III 和 IV 的用法也是正确的。Sejarah 可指历史事件、科目、背景或书籍。", c:false}, {t:"I, II dan III sahaja", r:"漏掉了 IV，买历史书的用法也是对的。", c:false}, {t:"II, III dan IV sahaja", r:"漏掉了 I，创造历史 (melakar sejarah) 也是正确的搭配。", c:false}, {t:"I, II, III dan IV", r:"四个句子中的 sejarah（历史/背景/科目）用法都完全正确。", c:true} ], h: "仔细判断 'sejarah' （历史）这个词是否能用于这四个不同的语境（创造历史、历史科目、身世背景、历史书）。" },
+            { q: "Pilih ayat yang betul.", opts: [ {t:"Adik menangis bila ditinggalkan sendirian.", r:"“bila”是疑问词，在这里应该用连词“apabila”。", c:false}, {t:"Setengah murid tidak hadir ke sekolah hari ini.", r:"“Setengah”指一半（1/2），表示“一些”应该用“Sesetengah”。", c:false}, {t:"Dia memberikan seutas jam tangan kepada ibunya.", r:"语法完全正确，jam tangan（手表）的量词是 utas。", c:true}, {t:"Oleh kerana hujan, perlawanan itu dibatalkan.", r:"正确的搭配是“Oleh sebab”或直接用“Kerana”，“Oleh kerana”是语法错误。", c:false} ], h: "注意常见语法陷阱：bila vs apabila, setengah vs sesetengah, oleh kerana (salah)。" },
+            { q: "Pilih ayat yang betul.", opts: [ {t:"Beribu-ribu orang penonton membanjiri stadium itu.", r:"Beribu-ribu已经是复数，不需要加orang这个量词在前面。正确用法是Beribu-ribu penonton。", c:false}, {t:"Para-para guru sedang bermesyuarat di bilik gerakan.", r:"Para 已经是复数，不需要重叠变成 Para-para。正确是 Para guru。", c:false}, {t:"Semua pelajar-pelajar diminta berhimpun di dewan.", r:"Semua 已经是复数，后面的名词不能再重叠。正确是 Semua pelajar。", c:false}, {t:"Senarai nama peserta yang menyertai pertandingan itu ada pada saya.", r:"语法结构完全正确，“在……那里”用了正确的介词 pada。", c:true} ], h: "复数指示词（Semua, Para）后面不能再放重叠词（pelajar-pelajar, guru-guru）。" },
+            { q: "Pilih peribahasa yang sesuai untuk situasi berikut: \nSikap Ali yang sombong dan tidak mahu menerima teguran orang lain itu, ibarat...", opts: [ {t:"katak di bawah tempurung", r:"指见识浅薄，井底之蛙，不代表骄傲不听劝。", c:false}, {t:"mencurahkan air ke daun keladi", r:"白费心机，忠言逆耳，非常符合形容别人不听劝告的状况。", c:true}, {t:"kera mendapat bunga", r:"不懂得珍惜好东西。", c:false}, {t:"anjing dengan kucing", r:"形容两人常常吵架。", c:false} ], h: "想想看，水倒在某种叶子上会直接滑落，不留痕迹，用来形容别人听不进劝告。" },
+            { q: "Hubungan antara Aminah dan kawan baiknya sangat rapat, bagai...", opts: [ {t:"isi dengan kuku", r:"指关系非常密切，不可分离。", c:true}, {t:"langit dengan bumi", r:"形容差别非常大。", c:false}, {t:"aur dengan tebing", r:"指互相帮忙，虽然也可以形容关系好，但“isi dengan kuku”更强调亲密无间。", c:false}, {t:"pahat dengan penukul", r:"形容被动，推一下才动一下。", c:false} ], h: "肉和指甲连在一起，非常难分开。" },
+            { q: "Pemuda itu dituduh menggelapkan wang syarikat. Perkataan 'menggelapkan' dalam ayat ini membawa maksud...", opts: [ {t:"memadamkan lampu", r:"字面意思，关灯。", c:false}, {t:"menyembunyikan kebenaran", r:"掩盖真相，虽然有这个意思，但在金钱语境下不准确。", c:false}, {t:"menyalahgunakan wang untuk kepentingan sendiri", r:"中饱私囊/挪用公款，符合“menggelapkan wang”的意思。", c:true}, {t:"mewarnakan dengan warna gelap", r:"字面意思，涂黑。", c:false} ], h: "这个词在这个语境中是比喻用法，和挪用公款有关。" },
+            { q: "Hati ibu ______ apabila mendengar berita kemalangan yang menimpa abang.", opts: [ {t:"hancur lebur", r:"粉碎，符合心碎/悲痛欲绝的语境。", c:true}, {t:"kusut-masai", r:"通常形容头发乱七八糟。", c:false}, {t:"kelam-kabut", r:"形容情况混乱或手忙脚乱。", c:false}, {t:"lintang-pukang", r:"形容逃跑时狼狈不堪的样子。", c:false} ], h: "听到坏消息时，心里会有什么感觉？" },
+            { q: "Kuih lapis itu sungguh ______ kerana mengandungi terlalu banyak gula.", opts: [ {t:"pahit", r:"苦。", c:false}, {t:"masin", r:"咸。", c:false}, {t:"manis leting", r:"形容非常甜，糖放太多。", c:true}, {t:"tawar", r:"淡。", c:false} ], h: "后面提到了糖（gula），所以味道一定是甜的，注意甜的强化词（kata penguat）。" },
+            { q: "Warna baju itu ______ dan tidak sesuai dipakai pada waktu malam.", opts: [ {t:"gelap-gelita", r:"通常形容环境非常暗，不常用来形容衣服颜色。", c:false}, {t:"terang-benderang", r:"形容光线明亮，不形容衣服颜色。", c:false}, {t:"hitam legam", r:"形容非常黑，衣服太黑晚上穿不安全，符合逻辑。", c:true}, {t:"putih melepak", r:"形容非常白，白衣服晚上穿其实很显眼，不符合语境。", c:false} ], h: "什么颜色的衣服在晚上穿会看不见、很危险？" },
+            { q: "Jalan raya di kawasan pergunungan itu ______ dan berbahaya kepada pemandu.", opts: [ {t:"lekuk-lekak", r:"形容路面凹凸不平，也可以造成危险，但接下来的选项更贴切形容山路。", c:false}, {t:"bengkang-bengkok", r:"形容弯弯曲曲，非常符合山路（pergunungan）的特征。", c:true}, {t:"simpang-siur", r:"形容交通繁忙、交错。", c:false}, {t:"turun naik", r:"起伏，虽然山路也有，但bengkang-bengkok最常用来形容山路危险的主因。", c:false} ], h: "山区（pergunungan）的马路通常形状是怎样的？" },
+            { q: "Kakak ______ sayur kangkung itu di dalam kuali yang panas.", opts: [ {t:"merebus", r:"水煮，通常用水而不是热锅直接描述。", c:false}, {t:"menggoreng", r:"炒/炸，符合在热锅（kuali yang panas）中煮空心菜的动作。", c:true}, {t:"mengukus", r:"蒸，不需要直接接触kuali panas。", c:false}, {t:"memanggang", r:"烤，不适用于蔬菜。", c:false} ], h: "在热锅（kuali）里烹煮蔬菜最常见的动作是什么？" },
+            { q: "Datuk menggunakan se______ parang untuk membersihkan semak-samun di kebun.", opts: [ {t:"bilah", r:"专门用于锋利的武器或工具（如刀、剑、巴冷刀）。", c:true}, {t:"batang", r:"用于长条形的物体，巴冷刀虽然长，但其锋利属性决定了用 bilah 更准确。", c:false}, {t:"pucuk", r:"用于枪械或信件。", c:false}, {t:"laras", r:"用于带有长管的武器，如大炮或长枪。", c:false} ], h: "锋利的刀具（parang, pisau, pedang）都有特定的量词。" },
+            { q: "______kah yang kamu lakukan di dalam bilik ini sejak tadi?", opts: [ {t:"Bagaimana", r:"询问方式（如何），不符合语境。", c:false}, {t:"Kenapa", r:"询问原因（为什么）。", c:false}, {t:"Apa", r:"询问事物或动作（做“什么”），符合语境。", c:true}, {t:"Siapa", r:"询问人（谁）。", c:false} ], h: "你想知道对方在进行的“事情”或“动作”。" },
+            { q: "Pesakit itu disahkan menghidap denggi ______ dimasukkan ke hospital semalam.", opts: [ {t:"lalu", r:"表示两个动作紧接着发生，且通常是同一个主语主动去做。这里是被动送入医院。", c:false}, {t:"sejak", r:"表示时间的起点（自从昨天入院后被确诊，或从昨天开始就入院了）。", c:true}, {t:"hingga", r:"直到。", c:false}, {t:"agar", r:"以便。", c:false} ], h: "后半句提供了一个时间点（昨天入院）。" },
+            { q: "Rumah besar di atas bukit itu adalah milik ______?", opts: [ {t:"siapa", r:"询问所属的人（谁的）。", c:true}, {t:"mana", r:"询问地点（哪里）。", c:false}, {t:"apa", r:"询问事物（什么）。", c:false}, {t:"mengapa", r:"询问原因（为什么）。", c:false} ], h: "你想知道这栋房子的主人是“哪个人”。" },
+            { q: "Kata majmuk yang manakah dieja dengan betul?", opts: [ {t:"Tanggung jawab", r:"这是固定要连写的15个合成词之一，正确拼写是 tanggungjawab。", c:false}, {t:"Urusetia", r:"正确拼写是 urus setia（分开写）。", c:false}, {t:"Antarabangsa", r:"这是固定连写的合成词，拼写完全正确。", c:true}, {t:"Olah raga", r:"正确拼写是 olahraga（连写）。", c:false} ], h: "马来文中有 15 个被当做例外、必须连在一起写的 Kata Majmuk Mantap。" },
+            { q: "Pilih imbuhan apitan yang betul bagi tempat kosong: Kerajaan sedang ______ kemudahan awam di kawasan luar bandar.", opts: [ {t:"mempertingkat", r:"没有加上后缀，语法不完整。", c:false}, {t:"mempertingkatkan", r:"正确的构词法，memper-...-kan 用于提升某事物的程度。", c:true}, {t:"dipertingkatkan", r:"这是被动语态，这里句子是主动的。", c:false}, {t:"mempertingkati", r:"不存在这个后缀搭配。", c:false} ], h: "政府主动地（主动语态）去提升公共设施的水平。" },
+            { q: "Kesalahan bahasa: \"Di dalam hal ini, kita mestilah bersatu padu.\" Apakah kesalahan dalam ayat tersebut?", opts: [ {t:"Penggunaan 'Di dalam' sepatutnya 'Dalam'", r:"'Di dalam' 用于具体的物理空间，'Dalam' 用于抽象概念。hal 是抽象的。", c:true}, {t:"Penggunaan 'mestilah' sepatutnya 'mesti'", r:"加 -lah 是强调语气，语法上没有错。", c:false}, {t:"Penggunaan 'kita' sepatutnya 'kami'", r:"如果呼吁大家团结，用 kita（包括听话者）是正确的。", c:false}, {t:"Perkataan 'bersatu padu' sepatutnya dirapatkan", r:"bersatu padu 是分开写的词组，没错。", c:false} ], h: "注意介词 di dalam 和 dalam 的区别，一个是物理空间，一个是抽象概念。" },
+            { q: "Aminah tidak dapat hadir ke sekolah ______ demam panas.", opts: [ {t:"oleh sebab", r:"这是正确的因果连词搭配。", c:true}, {t:"oleh kerana", r:"这是 SPM 中常见的错误搭配，kerana 不能接在 oleh 后面。", c:false}, {t:"disebabkan oleh", r:"这个词组通常用在被动句中，这里不适合。", c:false}, {t:"kerana oleh", r:"语法完全错误。", c:false} ], h: "在规范的马来语法中，'oleh' 后面只能接名词性质的词（如 sebab），不能接连词（如 kerana）。" },
+            { q: "Pilih pasangan kata ganda yang betul.", opts: [ {t:"batu-batan (batu yang pelbagai jenis/banyak)", r:"这是正确的 kata ganda berentak，形容各种各样的石头。", c:true}, {t:"kuih-muih (kuih yang satu jenis)", r:"kuih-muih 指的是各种各样的糕点，不是单一种类。", c:false}, {t:"lauk-pauk (sayur-sayuran sahaja)", r:"lauk-pauk 包括肉类等各种菜肴，不仅仅是蔬菜。", c:false}, {t:"gunung-ganang (gunung yang rendah)", r:"指的是群山起伏，不是指低矮的山。", c:false} ], h: "想想 Batu-batan 这个重叠词所表达的真正意思是什么？" },
+            { q: "\"Tolong letakkan fail ini ______ atas meja saya,\" arah majikan itu.", opts: [ {t:"di", r:"表示所在的地点。放在桌子“上”（atas meja）。", c:true}, {t:"ke", r:"表示移动的方向，但 letak（放）是一个静态结果，通常搭配 di atas。", c:false}, {t:"dari", r:"表示来源。", c:false}, {t:"pada", r:"不用于位置的前置词（如 atas, bawah）。", c:false} ], h: "表达在某物品的上面、下面、里面时，前置介词该用什么？" },
+            { q: "Perdana Menteri ______ rakyat agar terus bersatu padu demi keamanan negara.", opts: [ {t:"menyuruh", r:"命令，用于下级，但首相通常用更温和、正式的词汇呼吁人民。", c:false}, {t:"menyeru", r:"呼吁，常用于领袖对民众发出号召，非常符合语境。", c:true}, {t:"meminta", r:"要求，语气较轻。", c:false}, {t:"memaksa", r:"强迫，不符合民主国家的语境。", c:false} ], h: "国家领袖对人民讲话时，通常会发出“呼吁”。" },
+            { q: "Kami akan membincangkan perkara ini dengan ______.", opts: [ {t:"panjang lebar", r:"指详尽地（讨论/解释）。", c:true}, {t:"besar hati", r:"指高兴、自豪。", c:false}, {t:"putih mata", r:"指失望。", c:false}, {t:"berat sebelah", r:"指偏心。", c:false} ], h: "形容讨论或讲解得非常详细和深入。" },
+            { q: "Pilih ejaan yang betul.", opts: [ {t:"Mee goreng", r:"正确的规范拼写是 mi。", c:false}, {t:"Murtabak", r:"正确的规范拼写是 martabak。", c:false}, {t:"Koetiau", r:"这是粿条在 Dewan Bahasa dan Pustaka (DBP) 中的正确规范拼写。", c:true}, {t:"Briyani", r:"正确的规范拼写是 beriani。", c:false} ], h: "想想马来文词典 (DBP) 中外来语的规范拼音，常常和我们平常招牌上看到的不一样哦。" },
+            { q: "Kereta itu dipandu dengan ______ sebelum merempuh sebatang pokok.", opts: [ {t:"kuat", r:"通常形容声音大或力量大，不形容车速。", c:false}, {t:"kencang", r:"通常形容风速（angin kencang）。", c:false}, {t:"laju", r:"专门形容交通工具的速度快。", c:true}, {t:"deras", r:"通常形容水流急（air deras）。", c:false} ], h: "形容交通工具（如汽车）速度快，有专属的形容词。" }
+        ];
+
+        // Shuffle options for each question
+        const questions = rawData.map(q => {
+            // Fisher-Yates shuffle for options
+            let shuffledOpts = [...q.opts];
+            for (let i = shuffledOpts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledOpts[i], shuffledOpts[j]] = [shuffledOpts[j], shuffledOpts[i]];
+            }
+            return { ...q, opts: shuffledOpts };
+        });
+
+        // --- 3. App State & Logic ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let hasAnswered = false;
+
+        // DOM Elements
+        const DOM = {
+            scoreDisplay: document.getElementById('scoreDisplay'),
+            progressBar: document.getElementById('progressBar'),
+            questionCount: document.getElementById('questionCount'),
+            questionText: document.getElementById('questionText'),
+            hintText: document.getElementById('hintText'),
+            optionsContainer: document.getElementById('optionsContainer'),
+            feedbackBox: document.getElementById('feedbackBox'),
+            feedbackIcon: document.getElementById('feedbackIcon'),
+            feedbackTitle: document.getElementById('feedbackTitle'),
+            feedbackRationale: document.getElementById('feedbackRationale'),
+            nextBtn: document.getElementById('nextBtn'),
+            quizContainer: document.getElementById('quizContainer'),
+            resultScreen: document.getElementById('resultScreen'),
+            finalScore: document.getElementById('finalScore'),
+            performanceMsg: document.getElementById('performanceMsg')
+        };
+
+        const icons = {
+            check: `<svg class="w-8 h-8 text-emerald-500 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>`,
+            cross: `<svg class="w-8 h-8 text-rose-500 drop-shadow-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>`
+        };
+
+        function loadQuestion() {
+            hasAnswered = false;
+            const q = questions[currentQuestionIndex];
+            
+            // Update Header
+            DOM.questionCount.innerText = currentQuestionIndex + 1;
+            DOM.progressBar.style.width = `${((currentQuestionIndex) / questions.length) * 100}%`;
+            
+            // Re-trigger animation
+            DOM.quizContainer.classList.remove('slide-in-right');
+            void DOM.quizContainer.offsetWidth; // trigger reflow
+            DOM.quizContainer.classList.add('slide-in-right');
+
+            // Render Text (Fixed color to match pastel theme)
+            DOM.questionText.innerHTML = q.q.replace(/______/g, '<span class="text-purple-500 border-b-2 border-purple-300 px-2 inline-block min-w-[3rem]"></span>');
+            
+            // Render Hint
+            DOM.hintText.classList.remove('hidden');
+            DOM.hintText.querySelector('span').innerText = q.h;
+
+            // Render Options
+            DOM.optionsContainer.innerHTML = '';
+            q.opts.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-5 rounded-3xl border-2 border-white/60 bg-white/60 shadow-sm hover:shadow-md hover:border-purple-300 hover:bg-purple-50/80 font-bold text-gray-600 transition-all duration-300 focus:outline-none flex items-center group`;
+                btn.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="w-10 h-10 flex items-center justify-center rounded-2xl bg-purple-100 text-purple-600 mr-4 font-extrabold group-hover:bg-purple-500 group-hover:text-white transition-all shadow-sm">${String.fromCharCode(65 + index)}</span>
+                        <span class="text-lg opt-text leading-tight">${opt.t}</span>
+                    </div>
+                `;
+                btn.onclick = () => selectOption(btn, opt);
+                DOM.optionsContainer.appendChild(btn);
+            });
+
+            // Reset UI
+            DOM.feedbackBox.classList.add('hidden');
+            DOM.feedbackBox.className = 'hidden rounded-xl p-5 mb-6 transform transition-all'; // Reset classes
+            DOM.nextBtn.classList.add('hidden');
+        }
+
+        function selectOption(clickedBtn, optData) {
+            if (hasAnswered) return;
+            hasAnswered = true;
+            
+            // Initialize audio on first user interaction
+            initAudio();
+
+            const isCorrect = optData.c;
+            
+            // Update Score
+            if (isCorrect) {
+                score++;
+                DOM.scoreDisplay.innerText = score;
+            }
+
+            // Play Sound & trigger animations
+            playRandomSound(isCorrect);
+            
+            // Style all buttons
+            Array.from(DOM.optionsContainer.children).forEach(btn => {
+                btn.disabled = true;
+                btn.classList.remove('hover:border-purple-300', 'hover:bg-purple-50/80', 'cursor-pointer', 'shadow-sm', 'hover:shadow-md');
+                
+                // Find correct option and highlight it regardless of user choice
+                const btnText = btn.querySelector('.opt-text').innerText;
+                const isThisBtnCorrect = questions[currentQuestionIndex].opts.find(o => o.t === btnText).c;
+                
+                const badge = btn.querySelector('span');
+                badge.classList.remove('group-hover:bg-purple-500', 'group-hover:text-white');
+
+                if (isThisBtnCorrect) {
+                    btn.classList.add('border-emerald-400', 'bg-emerald-50', 'text-emerald-900', 'shadow-md');
+                    badge.classList.replace('bg-purple-100', 'bg-emerald-500');
+                    badge.classList.replace('text-purple-600', 'text-white');
+                } else {
+                    btn.classList.add('opacity-40', 'bg-gray-50/50');
+                }
+            });
+
+            // Style clicked button with specific animations
+            if (isCorrect) {
+                clickedBtn.classList.add('animate-bounce-correct');
+            } else {
+                clickedBtn.classList.remove('opacity-40', 'bg-gray-50/50');
+                clickedBtn.classList.add('border-rose-400', 'bg-rose-50', 'text-rose-900', 'animate-shake', 'shadow-md');
+                const badge = clickedBtn.querySelector('span');
+                badge.classList.replace('bg-purple-100', 'bg-rose-500');
+                badge.classList.replace('text-purple-600', 'text-white');
+            }
+
+            // Show Feedback
+            DOM.feedbackIcon.innerHTML = isCorrect ? icons.check : icons.cross;
+            DOM.feedbackTitle.innerText = isCorrect ? "Ngam! Betul tu." : "Alamak! Salah lah.";
+            DOM.feedbackTitle.className = `font-extrabold text-xl mb-1 ${isCorrect ? 'text-emerald-700' : 'text-rose-700'}`;
+            DOM.feedbackRationale.innerText = optData.r;
+            
+            DOM.feedbackBox.classList.remove('hidden');
+            DOM.feedbackBox.classList.add('animate-pop-in');
+            DOM.feedbackBox.classList.add(isCorrect ? 'bg-emerald-50/80' : 'bg-rose-50/80');
+            DOM.feedbackBox.classList.add(isCorrect ? 'border-emerald-200' : 'border-rose-200');
+            DOM.feedbackBox.classList.add('border-2');
+
+            // Fill in the blank with correct answer visually (Smart mapping for " ... ")
+            const correctOpt = questions[currentQuestionIndex].opts.find(o => o.c);
+            const answerParts = correctOpt.t.split(/\s*\.\.\.\s*/); // Split the answer by " ... "
+            let blankIndex = 0;
+            
+            DOM.questionText.innerHTML = questions[currentQuestionIndex].q.replace(/______/g, (match) => {
+                // Get the corresponding part, if it doesn't exist (data error), fallback to full text
+                const part = answerParts[blankIndex] !== undefined ? answerParts[blankIndex] : correctOpt.t;
+                blankIndex++;
+                return `<span class="text-emerald-600 font-bold border-b-2 border-emerald-400 px-2">${part}</span>`;
+            });
+
+            // Show Next Button
+            DOM.nextBtn.classList.remove('hidden');
+            DOM.nextBtn.classList.add('animate-pop-in');
+        }
+
+        function endQuiz() {
+            DOM.quizContainer.classList.add('hidden');
+            DOM.resultScreen.classList.remove('hidden');
+            DOM.progressBar.style.width = '100%';
+            
+            DOM.finalScore.innerText = score;
+            
+            // Save progress to Supabase
+            if (window.ProgressTracker) {
+                window.ProgressTracker.save({ completed: 1, score: score });
+            }
+            
+            let msg = "";
+            if (score === 50) msg = "Power gila! Cikgu Tatabahasa pun surrender dengan you! 🎉";
+            else if (score >= 40) msg = "A- Level! Sikit lagi nak perfect. Mantap! 🔥";
+            else if (score >= 25) msg = "Not bad leh, tapi boleh polish lagi. Ganbatte! 💪";
+            else msg = "Kena banyak buat latihan lagi ni. Don't give up! 📚";
+            
+            DOM.performanceMsg.innerText = msg;
+
+            playEndSound();
+
+            // Confetti Effect
+            if (typeof confetti === 'function') {
+                var duration = 3000;
+                var end = Date.now() + duration;
+
+                (function frame() {
+                    confetti({
+                        particleCount: 5,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#4f46e5', '#10b981', '#f59e0b']
+                    });
+                    confetti({
+                        particleCount: 5,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#4f46e5', '#10b981', '#f59e0b']
+                    });
+
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            }
+        }
+
+        DOM.nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                endQuiz();
+            }
+        });
+
+        // Initialize first question
+        window.onload = loadQuestion;
+    </script>
+
+    <!-- Supabase & Progress Tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="spm-f5-bm-tatabahasa-master"
+            data-module-name="SPM BM Tatabahasa Master"
+            data-module-url="content/SPM_Syllabus/Form5/BM/Tatabahasa_Master/index.html">
+    </script>
+</body>
+</html>

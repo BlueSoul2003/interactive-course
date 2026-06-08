@@ -424,6 +424,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('spm-bm-rumusan',             'Rumusan 极简通关训练',                          'spm', 'bm',      'spm_form5', 'Form5'),
 ('spm-bm-reading-comprehension','SPM 阅读理解黑客 V7',                          'spm', 'bm',      'spm_form5', 'Form5'),
 ('spm-bm-imbuhan-alchemy',     'Imbuhan Alchemy (词缀炼金术)',                  'spm', 'bm',      'spm_form5', 'Form5'),
+('spm-bm-tatabahasa-master',   'SPM Tatabahasa Master',                       'spm', 'bm',      'spm_form5', 'Form5'),
 
 -- ── SPM Mathematics (Form 2) ──────────────────────────────────────
 ('spm-math-kssm-revision1',    'KSSM Form 2 Math: Intensive Revision 1',      'spm', 'math',    'spm_form2', 'Form2'),
