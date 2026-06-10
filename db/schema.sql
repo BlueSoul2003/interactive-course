@@ -440,6 +440,9 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('uec-en-master-negotiator',   'The Master Negotiator',                       'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-rich-teen-simulator', 'Rich Teen Simulator',                         'uec', 'english', 'uec_senior', 'Senior'),
 
+-- ── IGCSE English ──────────────────────────────────────────
+('igcse-en-ceo-masterclass',   'CEO Masterclass (Time Heist)',               'igcse', 'english', 'igcse_english', 'IGCSE'),
+
 -- ── IGCSE Science Year 4 ──────────────────────────────────────────
 ('igcse-y4-sci-topic1',        'Topic 1: Life Processes & Ecosystems',        'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic2',        'Topic 2: Living Things in Their Environment', 'igcse', 'science', 'igcse_y4_science', 'Year4'),
@@ -471,6 +474,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p3-en-unit2',           'Unit 2: City Heroes',                        'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit3',           'Unit 3: Housework',                          'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit4',           'Unit 4: The Four Seasons',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit5',           'Unit 5: My House Adventure',                 'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 
 -- ── KSSR English Primary 6 ────────────────────────────────────────
 ('kssr-p6-en-unit1',           'Unit 1: Scenario Practice',                  'kssr', 'english', 'kssr_p6_english', 'Primary6'),
