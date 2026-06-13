@@ -45,7 +45,7 @@ const AuthAccess = {
                 age:        meta.age ? parseInt(meta.age) : null,
                 gender:     meta.gender || null,
                 role:       meta.role || null,
-                unlocked_modules: v_syllabus ? [v_syllabus] : []
+                unlocked_modules: []
             };
 
             const { data: newProfile, error: insertError } = await window.supabaseClient
@@ -117,9 +117,6 @@ const AuthAccess = {
                     gender:   profileData.gender,
                     role:     profileData.role,
                 });
-                if (profileData.syllabus) {
-                    profileRecord.unlocked_modules = [profileData.syllabus];
-                }
             }
 
             const { error: profileError } = await window.supabaseClient
