@@ -20,7 +20,7 @@ import re
 import os
 import glob
 
-ROOT = r"c:\Users\hong0\Desktop\interactive-course-main"
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 PATTERN = os.path.join(ROOT, "content", "**", "index.html")
 
 # ── Already-fixed modules (skip these) ─────────────────────────────────────

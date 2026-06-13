@@ -5,7 +5,7 @@ import re
 # Force UTF-8 stdout
 sys.stdout.reconfigure(encoding='utf-8')
 
-ROOT = r"c:\Users\hong0\Desktop\interactive-course-main"
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 content_dir = os.path.join(ROOT, "content")
 
 with open("index_links_report.txt", "w", encoding="utf-8") as out:

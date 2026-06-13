@@ -1,6 +1,8 @@
 import os
 
-with open(r'c:\Users\hong0\Desktop\lesson5.html', 'r', encoding='utf-8') as f:
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+input_file = os.path.join(os.path.expanduser('~'), 'Desktop', 'lesson5.html')
+with open(input_file, 'r', encoding='utf-8') as f:
     text = f.read()
 
 tracking_script = """
@@ -70,7 +72,7 @@ text = text.replace('<div class="container">', '<div class="container">' + badge
 back_link_html = """    <a href="../../../../../index.html" style="display:inline-block; margin-bottom:20px; color:var(--primary); text-decoration:none; font-weight:bold;">&larr; Back to Home</a>"""
 text = text.replace('<div class="container">', '<div class="container">\n' + back_link_html)
 
-out_dir = r"c:\Users\hong0\Desktop\interactive-course-main\content\SPM_Syllabus\Form5\English\Speech_Writing"
+out_dir = os.path.join(ROOT, "content", "SPM_Syllabus", "Form5", "English", "Speech_Writing")
 os.makedirs(out_dir, exist_ok=True)
 out_path = os.path.join(out_dir, 'index.html')
 

@@ -240,7 +240,7 @@ Every time you add a new module, verify you have hit all 5 pillars:
 <details>
 <summary><b>Appendix: Database Schema & RLS Policies (One-Time Configuration)</b></summary>
 
-If the database is ever reset or you deploy to a new Supabase instance, please run the SQL statements located in [db/schema.sql](file:///c:/Users/hong0/Desktop/interactive-course-main/db/schema.sql) in your Supabase SQL Editor.
+If the database is ever reset or you deploy to a new Supabase instance, please run the SQL statements located in [db/schema.sql](./db/schema.sql) in your Supabase SQL Editor.
 
-Additionally, make sure to apply the updates in [db/migrations/fix_registration_and_progress.sql](file:///c:/Users/hong0/Desktop/interactive-course-main/db/migrations/fix_registration_and_progress.sql) to add the RLS SELECT policy on `user_profiles` and set up the automatic profile creation trigger `handle_new_user()` which supports email-confirmation signup flows.
+Additionally, make sure to apply the updates in [db/migrations/fix_registration_and_progress.sql](./db/migrations/fix_registration_and_progress.sql) to add the RLS SELECT policy on `user_profiles` and set up the automatic profile creation trigger `handle_new_user()` which supports email-confirmation signup flows.
 </details>
