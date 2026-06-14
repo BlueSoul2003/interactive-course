@@ -51,6 +51,17 @@ Your module exists, but students need a button to click it from the main menu.
 
 *Instead, use a `<div class="sub-[subject]">` grid wrapper layout as shown below in Pillar 5.*
 
+### Step 4.5: Special Case - University Modules (3-Tier Architecture)
+Unlike the K-12 section, the **University Portal** operates on a deep 3-tier architecture to handle massive faculty expansion:
+1. **Tier 1 (Gateway):** `university.html` uses a draggable Pill UI. This connects to Tier 2.
+2. **Tier 2 (Faculty Hub):** e.g., `uni-hub-physics.html`. This is a dedicated dashboard for the faculty. **You must add your `.card` to this specific hub file, NOT the main `index.html`.**
+3. **Tier 3 (Module):** Your actual simulator/module.
+
+**How to add a University Module:**
+- If the Faculty Hub already exists (e.g., `uni-hub-physics.html`), just open it and add your `.card` there.
+- If it's a completely new faculty (e.g., Computer Science), you must first clone `uni-hub-physics.html` into `uni-hub-cs.html`. Then, go to `university.html` and add a new Pill linking to `uni-hub-cs.html`.
+- **CRITICAL Routing Rule:** When setting the "Home" button in a University module (Pillar 3), it must point back to the **Tier 2 Faculty Hub** (e.g., `../../../../uni-hub-physics.html`), NOT `university.html` or `index.html`.
+
 ---
 
 ## Pillar 3: Local Navigation (Exit)
@@ -59,7 +70,7 @@ Your module exists, but students need a button to click it from the main menu.
 Once a student is inside the module, they need a way to get back to the Grand Landing Page.
 1. Open your new module's `index.html` file.
 2. Add a Home Button link near the top of your `<body>`.
-3. You must calculate the relative path back to the root folder. For example, if your module is 4 folders deep (`content/Subject/Year/Topic/index.html`), you need four `../`.
+3. You must calculate the relative path back to the parent hub. For K-12 modules, this is `index.html`. **For University modules, this is the Faculty Hub (e.g., `uni-hub-physics.html`).** For example, if your module is 4 folders deep, you need four `../`.
 
 > [!WARNING]
 > **⚠️ Memo: Always Style Your Home Button Consistently!**
