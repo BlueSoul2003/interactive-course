@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastery Academy | University Portal</title>
+    <title>Mastery Academy | Global Syllabus Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -971,9 +971,9 @@
     <header>
         <!-- Drifting background blobs -->
         <div class="hero-bg-blobs">
-            <div class="hero-blob hero-blob-1"></div>
-            <div class="hero-blob hero-blob-2"></div>
-            <div class="hero-blob hero-blob-3"></div>
+            
+            
+            
         </div>
         <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
             <button id="studentDashboardBtn" class="tab-btn"
@@ -983,292 +983,43 @@
                 <span id="activeStudentLabel">Student: None</span>
             </button>
         </div>
-        <a href="index.html" class="level-badge" style="text-decoration:none;">⬅️ Back to Main Academy</a><br><div class="level-badge" style="margin-top:10px;">University Portal</div>
-        <h1>Higher Education & Beyond</h1>
-        <p>Advanced modules, interactive simulators, and deep-dive notes for university students.</p>
+        <div class="level-badge">Global Syllabus Portal</div>
+        <h1>Department of Physics</h1>
+        <p>Select your syllabus pathway and master your subjects through First Principles learning.</p>
     </header>
 
-    
-    
-    <style>
-        /* Honeycomb Window Styles */
-        .honeycomb-window {
-            width: 100%;
-            height: 60vh;
-            min-height: 500px;
-            background: rgba(17, 24, 39, 0.2);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            cursor: grab;
-            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
-            margin-bottom: 40px;
-        }
-        .honeycomb-window:active {
-            cursor: grabbing;
-        }
-        
-        .honeycomb-canvas {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 3000px;
-            height: 3000px;
-            /* Center the 3000x3000 canvas around the 0,0 origin using margins */
-            margin-left: -1500px;
-            margin-top: -1500px;
-            transform: translate(0px, 0px);
-            /* Enable hardware acceleration */
-            will-change: transform;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hex-row {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            transition: transform 0.1s ease-out; /* For parallax smooth scroll */
-        }
-        
-        .hex-row:nth-child(even) {
-            transform: translateX(110px);
-        }
-        .hex-row:nth-child(odd) {
-            transform: translateX(0px);
-        }
-
-        .hex-cell {
-            width: 220px;
-            height: 70px;
-            margin: 0 10px;
-            background: var(--glass-bg);
-            border-radius: 50px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            text-align: left;
-            color: var(--text-primary);
-            font-family: var(--font-main);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
-            padding: 2px;
-            animation: fluid-float 5s ease-in-out infinite;
-        }
-
-        .hex-row:nth-child(1) .hex-cell { animation-delay: 0s; }
-        .hex-row:nth-child(2) .hex-cell { animation-delay: 0.8s; }
-        .hex-row:nth-child(3) .hex-cell { animation-delay: 1.6s; }
-        .hex-row:nth-child(4) .hex-cell { animation-delay: 2.4s; }
-
-        @keyframes fluid-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .hex-inner {
-            width: 100%;
-            height: 100%;
-            background: rgba(17, 24, 39, 0.85);
-            border-radius: 50px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 0 20px;
-            box-sizing: border-box;
-            backdrop-filter: blur(10px);
-        }
-
-        .hex-cell:hover {
-            transform: scale(1.05);
-            z-index: 10;
-        }
-        .hex-cell:hover .hex-inner {
-            background: rgba(99, 102, 241, 0.3); /* Indigo tint on hover */
-        }
-
-        .hex-icon {
-            font-size: 1.5rem;
-            margin-right: 12px;
-            margin-bottom: 0;
-        }
-        .hex-title {
-            font-size: 0.85rem;
-            font-weight: 600;
-            line-height: 1.2;
-        }
-
-        /* Specific subject colors (subtle glow on hover) */
-        .hex-physics:hover { filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.8)); }
-        .hex-cs:hover { filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8)); }
-        .hex-math:hover { filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.8)); }
-        .hex-business:hover { filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.8)); }
-        .hex-arts:hover { filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.8)); }
-        .hex-med:hover { filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.8)); }
-
-    </style>
-
     <main>
-        <div class="honeycomb-window" id="honeycomb-window">
-            <div class="honeycomb-canvas" id="honeycomb-canvas">
+    <div class="syllabus-content active">
+        <h2 class="section-title">
+            <div class="section-icon" style="border-color: var(--border-physics); color: var(--border-physics);">⚛️</div>
+            Core Physics Modules
+        </h2>
+        <div class="grid">
+            <a href="content/University_Syllabus/Physics/Kinematics_Simulator/index.html" class="card sub-physics" data-module-id="uni-phys-kinematics">
+                <div class="card-tag">University Core</div>
+                <h3>Kinematics & Dynamics Lab</h3>
+                <p>Interactive 2D physics simulator featuring real-time vector analysis, trajectory prediction, and collision mechanics.</p>
                 
-                <!-- Row 1 -->
-                <div class="hex-row">
-                    <a href="#" class="hex-cell hex-arts">
-                        <div class="hex-inner">
-                            <div class="hex-icon">🎨</div>
-                            <div class="hex-title">Fine Arts</div>
-                        </div>
-                    </a>
-                    <a href="#" class="hex-cell hex-med">
-                        <div class="hex-inner">
-                            <div class="hex-icon">🧬</div>
-                            <div class="hex-title">Medicine</div>
-                        </div>
-                    </a>
+                <div class="progress-bar-container" style="display: none;">
+                    <div class="progress-bar-fill"></div>
                 </div>
-
-                <!-- Row 2 -->
-                <div class="hex-row">
-                    <a href="#" class="hex-cell hex-math">
-                        <div class="hex-inner">
-                            <div class="hex-icon">📐</div>
-                            <div class="hex-title">Mathematics</div>
-                        </div>
-                    </a>
-                    <a href="uni-hub-physics.html" class="hex-cell hex-physics" style="background: rgba(99,102,241,0.5);">
-                        <div class="hex-inner">
-                            <div class="hex-icon">⚛️</div>
-                            <div class="hex-title">Physics Lab</div>
-                        </div>
-                    </a>
-                    <a href="#" class="hex-cell hex-business">
-                        <div class="hex-inner">
-                            <div class="hex-icon">📈</div>
-                            <div class="hex-title">Business</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Row 3 -->
-                <div class="hex-row">
-                    <a href="#" class="hex-cell hex-cs">
-                        <div class="hex-inner">
-                            <div class="hex-icon">💻</div>
-                            <div class="hex-title">Computer Science</div>
-                        </div>
-                    </a>
-                    <a href="#" class="hex-cell hex-arts">
-                        <div class="hex-inner">
-                            <div class="hex-icon">📚</div>
-                            <div class="hex-title">Literature</div>
-                        </div>
-                    </a>
-                </div>
-
-                <!-- Row 4 -->
-                <div class="hex-row">
-                    <a href="#" class="hex-cell">
-                        <div class="hex-inner">
-                            <div class="hex-icon">➕</div>
-                            <div class="hex-title">Add Module</div>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
+            </a>
+            
+            <!-- Future Modules Stub -->
+            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;" onclick="event.preventDefault(); alert('Coming Soon!');">
+                <div class="card-tag">Upcoming</div>
+                <h3>Quantum Mechanics Lab</h3>
+                <p>Wavefunction collapse and Schrodinger equation visualizations.</p>
+            </a>
+            
+            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;" onclick="event.preventDefault(); alert('Coming Soon!');">
+                <div class="card-tag">Upcoming</div>
+                <h3>Electromagnetism Simulator</h3>
+                <p>Maxwell\'s equations and 3D magnetic field simulations.</p>
+            </a>
         </div>
-    </main>
-
-    <!-- Honeycomb Panning Script -->
-    <script>
-        const windowEl = document.getElementById('honeycomb-window');
-        const canvasEl = document.getElementById('honeycomb-canvas');
-        
-        let isDragging = false;
-        let startX, startY;
-        let currentX = 0, currentY = 0;
-        let initialX, initialY;
-
-        // Prevent default drag behaviors on links
-        document.querySelectorAll('.hex-cell').forEach(cell => {
-            cell.addEventListener('dragstart', e => e.preventDefault());
-        });
-
-        function onPointerDown(e) {
-            isDragging = true;
-            windowEl.style.cursor = 'grabbing';
-            
-            // Handle both mouse and touch
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            initialX = clientX - currentX;
-            initialY = clientY - currentY;
-            
-            // Small threshold to distinguish click from drag
-            startX = clientX;
-            startY = clientY;
-        }
-
-        function onPointerMove(e) {
-            if (!isDragging) return;
-            e.preventDefault(); // Prevent scrolling on mobile
-            
-            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-            
-            currentX = clientX - initialX;
-            currentY = clientY - initialY;
-            
-            canvasEl.style.transform = 	ranslate(px, px);
-        }
-
-        function onPointerUp(e) {
-            isDragging = false;
-            windowEl.style.cursor = 'grab';
-        }
-
-        // Mouse events
-        windowEl.addEventListener('mousedown', onPointerDown);
-        window.addEventListener('mousemove', onPointerMove);
-        window.addEventListener('mouseup', onPointerUp);
-
-        // Touch events
-        windowEl.addEventListener('touchstart', onPointerDown, {passive: false});
-        window.addEventListener('touchmove', onPointerMove, {passive: false});
-        window.addEventListener('touchend', onPointerUp);
-
-        // Click interceptor: if moved more than 5px, don't trigger click on links
-        windowEl.addEventListener('click', function(e) {
-            if (e.target.closest('a')) {
-                const dist = Math.sqrt(Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2));
-                if (dist > 5) {
-                    e.preventDefault();
-                }
-            }
-        });
-
-        // Parallax Scroll Effect for the flowing feel
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const rows = document.querySelectorAll('.hex-row');
-            rows.forEach((row, index) => {
-                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
-                // Move rows slightly at different speeds based on index
-                const parallaxY = scrollY * (0.1 + (index * 0.02));
-                row.style.transform = 	ranslate(px, px);
-            });
-        });
-    </script>
-
-
+    </div>
+</main>
 
     <footer>
         <div class="footer-inner">
@@ -1506,18 +1257,6 @@
                 document.getElementById('primary-tabs').querySelector('.tab-btn').click();
             }
         }
-
-        // Parallax Scroll Effect for the flowing feel
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const rows = document.querySelectorAll('.hex-row');
-            rows.forEach((row, index) => {
-                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
-                // Move rows slightly at different speeds based on index
-                const parallaxY = scrollY * (0.1 + (index * 0.02));
-                row.style.transform = 	ranslate(px, px);
-            });
-        });
     </script>
 
     <!-- ==========================================
@@ -2029,18 +1768,6 @@
                 });
             }
         });
-
-        // Parallax Scroll Effect for the flowing feel
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const rows = document.querySelectorAll('.hex-row');
-            rows.forEach((row, index) => {
-                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
-                // Move rows slightly at different speeds based on index
-                const parallaxY = scrollY * (0.1 + (index * 0.02));
-                row.style.transform = 	ranslate(px, px);
-            });
-        });
     </script>
     <!-- PIN Top-up Modal -->
     <div id="pin-topup-modal" class="pin-modal-overlay">
@@ -2336,18 +2063,6 @@
                     await window.AuthAccess.renderModuleAccessibility();
                 }
             }, 500); 
-        });
-
-        // Parallax Scroll Effect for the flowing feel
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const rows = document.querySelectorAll('.hex-row');
-            rows.forEach((row, index) => {
-                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
-                // Move rows slightly at different speeds based on index
-                const parallaxY = scrollY * (0.1 + (index * 0.02));
-                row.style.transform = 	ranslate(px, px);
-            });
         });
     </script>
     

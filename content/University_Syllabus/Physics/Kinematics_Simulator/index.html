@@ -36,11 +36,24 @@
             margin-bottom: 30px;
         }
         h1 { margin: 0; font-size: 2.5rem; color: var(--text-primary); }
-        .back-link {
-            color: var(--accent);
+        .home-btn-fixed {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 30px;
             text-decoration: none;
-            display: inline-block;
-            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: 99999;
+            font-weight: 600;
+        }
+        .home-btn-fixed:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
         .container {
             background: var(--glass-bg);
@@ -114,7 +127,7 @@
 </head>
 <body>
 
-    <a href="../../../../university.html" class="back-link">← Back to University Portal</a>
+    <a href="../../../../uni-hub-physics.html" class="home-btn-fixed">🏠 Back to Physics Hub</a>
     
     <header>
         <h1>Kinematics & Dynamics Lab</h1>
