@@ -1,7 +1,9 @@
 import json
 import re
 
-md_path = r"C:\Users\hong0\Desktop\interactive-course-main\content\SPM_Syllabus\Form5\BM\KOMSAS\Novel_Silir_Daksina\Sinopsis_ikut_bab.md"
+import os
+ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+md_path = os.path.join(ROOT, "content", "SPM_Syllabus", "Form5", "BM", "KOMSAS", "Novel_Silir_Daksina", "Sinopsis_ikut_bab.md")
 
 with open(md_path, 'r', encoding='utf-8') as f:
     text = f.read()
@@ -441,7 +443,7 @@ html_content = """<!DOCTYPE html>
 
 html_content = html_content.replace('__DOC_DATA__', json.dumps(chapters, ensure_ascii=False))
 
-out_path = r"C:\Users\hong0\Desktop\interactive-course-main\content\SPM_Syllabus\Form5\BM\KOMSAS\Novel_Silir_Daksina\index.html"
+out_path = os.path.join(ROOT, "content", "SPM_Syllabus", "Form5", "BM", "KOMSAS", "Novel_Silir_Daksina", "index.html")
 with open(out_path, 'w', encoding='utf-8') as f:
     f.write(html_content)
 

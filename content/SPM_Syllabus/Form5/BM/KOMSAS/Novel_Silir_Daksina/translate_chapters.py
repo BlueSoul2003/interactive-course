@@ -8,7 +8,7 @@ except ImportError:
     print("deep_translator not installed")
     exit(1)
 
-input_file = r"C:\Users\hong0\Desktop\interactive-course-main\content\SPM_Syllabus\Form5\BM\KOMSAS\Novel_Silir_Daksina\chapters.js"
+input_file = os.path.join(os.path.dirname(__file__), "chapters.js")
 
 with open(input_file, 'r', encoding='utf-8') as f:
     text = f.read()

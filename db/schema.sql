@@ -424,6 +424,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('spm-bm-rumusan',             'Rumusan 极简通关训练',                          'spm', 'bm',      'spm_form5', 'Form5'),
 ('spm-bm-reading-comprehension','SPM 阅读理解黑客 V7',                          'spm', 'bm',      'spm_form5', 'Form5'),
 ('spm-bm-imbuhan-alchemy',     'Imbuhan Alchemy (词缀炼金术)',                  'spm', 'bm',      'spm_form5', 'Form5'),
+('spm-bm-tatabahasa-master',   'SPM Tatabahasa Master',                       'spm', 'bm',      'spm_form5', 'Form5'),
 
 -- ── SPM Mathematics (Form 2) ──────────────────────────────────────
 ('spm-math-kssm-revision1',    'KSSM Form 2 Math: Intensive Revision 1',      'spm', 'math',    'spm_form2', 'Form2'),
@@ -438,6 +439,9 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('uec-en-pricing-strategy',    'The Profit Playbook Pro',                     'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-master-negotiator',   'The Master Negotiator',                       'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-rich-teen-simulator', 'Rich Teen Simulator',                         'uec', 'english', 'uec_senior', 'Senior'),
+
+-- ── IGCSE English ──────────────────────────────────────────
+('igcse-en-ceo-masterclass',   'CEO Masterclass (Time Heist)',               'igcse', 'english', 'igcse_english', 'IGCSE'),
 
 -- ── IGCSE Science Year 4 ──────────────────────────────────────────
 ('igcse-y4-sci-topic1',        'Topic 1: Life Processes & Ecosystems',        'igcse', 'science', 'igcse_y4_science', 'Year4'),
@@ -455,6 +459,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y8-sci-ch4',           'Chapter 4: Ecosystems',                      'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch5',           'Chapter 5: Materials and Cycles on Earth',   'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch6',           'Chapter 6: Light and Space',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
+('igcse-y8-sci-ch7',           'Chapter 7: Diet and Growth',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
 
 -- ── Singapore Math Year 4 ─────────────────────────────────────────
 ('sg-y4-math-whole-number',    'Chapter 2: Whole Numbers (Part 2)',           'sg', 'math', 'sg_y4_math', 'Year4'),
@@ -469,13 +474,18 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p3-en-unit2',           'Unit 2: City Heroes',                        'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit3',           'Unit 3: Housework',                          'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit4',           'Unit 4: The Four Seasons',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit5',           'Unit 5: My House Adventure',                 'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 
 -- ── KSSR English Primary 6 ────────────────────────────────────────
 ('kssr-p6-en-unit1',           'Unit 1: Scenario Practice',                  'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit2',           'Unit 2: Interactive Reading',                'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit3',           'Unit 3: Outdoor Activities',                 'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit4',           'Unit 4: Interactive Worksheet',              'kssr', 'english', 'kssr_p6_english', 'Primary6'),
-('kssr-p6-en-unit5',           'Unit 5: Interactive English',                'kssr', 'english', 'kssr_p6_english', 'Primary6');
+('kssr-p6-en-unit5',           'Unit 5: Interactive English',                'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit6',           'Unit 6: Interactive English Adventure',      'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+
+-- ── University Physics ──────────────────────────────────────────
+('uni-phys-kinematics',        'Kinematics & Dynamics Lab',                  'university', 'physics', 'uni-science-core', 'University');
 
 -- ──────────────────────────────────────────────────────────────────
 -- VERIFICATION QUERIES (run manually after applying):

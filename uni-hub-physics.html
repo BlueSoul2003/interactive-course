@@ -1,0 +1,2110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastery Academy | Global Syllabus Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            /* Theme Colors (Obsidian Dark Mode) */
+            --bg-color: #080c14;
+            --card-bg: #111827;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+
+            /* Glassmorphism System Tokens */
+            --glass-bg: rgba(17, 24, 39, 0.45);
+            --glass-bg-hover: rgba(17, 24, 39, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --glass-border-hover: rgba(255, 255, 255, 0.12);
+            --glass-blur: 16px;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+            /* Subject Accent Colors */
+            --sub-english: #3b82f6;     /* Blue */
+            --sub-bm: #8b5cf6;          /* Violet */
+            --sub-math: #ec4899;        /* Pink */
+            --sub-science: #10b981;     /* Emerald */
+            --sub-chinese: #ef4444;     /* Red */
+            --sub-sejarah: #d97706;     /* Amber */
+            --sub-chemistry: #06b6d4;   /* Cyan */
+            --sub-physics: #6366f1;     /* Indigo */
+            --sub-biology: #84cc16;     /* Lime */
+
+            /* Subject-matched Glass Borders (Subtle tinted outlines) */
+            --border-english: rgba(59, 130, 246, 0.15);
+            --border-bm: rgba(139, 92, 246, 0.15);
+            --border-math: rgba(236, 72, 153, 0.15);
+            --border-science: rgba(16, 185, 129, 0.15);
+            --border-chinese: rgba(239, 68, 68, 0.15);
+            --border-sejarah: rgba(217, 119, 6, 0.15);
+            --border-chemistry: rgba(6, 182, 212, 0.15);
+            --border-physics: rgba(99, 102, 241, 0.15);
+            --border-biology: rgba(132, 204, 22, 0.15);
+
+            /* Subject-matched Glow Shadows on Hover */
+            --glow-english: 0 10px 30px rgba(59, 130, 246, 0.25);
+            --glow-bm: 0 10px 30px rgba(139, 92, 246, 0.25);
+            --glow-math: 0 10px 30px rgba(236, 72, 153, 0.25);
+            --glow-science: 0 10px 30px rgba(16, 185, 129, 0.25);
+            --glow-chinese: 0 10px 30px rgba(239, 68, 68, 0.25);
+            --glow-sejarah: 0 10px 30px rgba(217, 119, 6, 0.25);
+            --glow-chemistry: 0 10px 30px rgba(6, 182, 212, 0.25);
+            --glow-physics: 0 10px 30px rgba(99, 102, 241, 0.25);
+            --glow-biology: 0 10px 30px rgba(132, 204, 22, 0.25);
+
+            /* Hero Mesh Gradient Settings */
+            --hero-bg: radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
+                       radial-gradient(at 50% 0%, rgba(118, 75, 162, 0.25) 0, transparent 50%),
+                       radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.15) 0, transparent 50%),
+                       #080c14;
+
+            --font-main: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section */
+        header {
+            background: var(--hero-bg);
+            padding: 120px 20px 140px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        header h1 {
+            font-family: var(--font-serif);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+            z-index: 2;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        .level-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 0.8s ease-out 0.4s backwards;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Drifting Neon Background Blobs */
+        .hero-bg-blobs {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: float-blob 25s infinite alternate ease-in-out;
+        }
+        .hero-blob-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--sub-english);
+            top: -10%;
+            left: 10%;
+        }
+        .hero-blob-2 {
+            width: 350px;
+            height: 350px;
+            background: var(--sub-math);
+            top: 20%;
+            right: 15%;
+            animation-delay: -5s;
+            animation-duration: 30s;
+        }
+        .hero-blob-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--sub-science);
+            bottom: -10%;
+            left: 40%;
+            animation-delay: -10s;
+            animation-duration: 22s;
+        }
+
+        @keyframes float-blob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(60px, 40px) scale(1.1);
+            }
+            100% {
+                transform: translate(-40px, -60px) scale(0.95);
+            }
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: -60px auto 0;
+            padding: 0 20px 60px;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.3s backwards;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px;
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid transparent;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: none;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            transform: none;
+        }
+
+        .tab-btn.active {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
+        }
+
+        /* Syllabus Content Wrapper */
+        .syllabus-content {
+            display: none;
+            animation: fadeSlideUp 0.5s ease-out forwards;
+        }
+
+        .syllabus-content.active {
+            display: block;
+        }
+
+        /* Section Headings */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0 40px;
+            font-size: 2rem;
+            color: var(--text-primary);
+            font-family: var(--font-serif);
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--card-bg);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Grid Layout */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Color-matched glass outlines and glows on hover */
+        .card.sub-english { border-color: var(--border-english); }
+        .card.sub-english:hover { border-color: rgba(59, 130, 246, 0.4); box-shadow: var(--glow-english); }
+
+        .card.sub-bm { border-color: var(--border-bm); }
+        .card.sub-bm:hover { border-color: rgba(139, 92, 246, 0.4); box-shadow: var(--glow-bm); }
+
+        .card.sub-math { border-color: var(--border-math); }
+        .card.sub-math:hover { border-color: rgba(236, 72, 153, 0.4); box-shadow: var(--glow-math); }
+
+        .card.sub-science { border-color: var(--border-science); }
+        .card.sub-science:hover { border-color: rgba(16, 185, 129, 0.4); box-shadow: var(--glow-science); }
+
+        .card.sub-chinese { border-color: var(--border-chinese); }
+        .card.sub-chinese:hover { border-color: rgba(239, 68, 68, 0.4); box-shadow: var(--glow-chinese); }
+
+        .card.sub-sejarah { border-color: var(--border-sejarah); }
+        .card.sub-sejarah:hover { border-color: rgba(217, 119, 6, 0.4); box-shadow: var(--glow-sejarah); }
+
+        .card.sub-chemistry { border-color: var(--border-chemistry); }
+        .card.sub-chemistry:hover { border-color: rgba(6, 182, 212, 0.4); box-shadow: var(--glow-chemistry); }
+
+        .card.sub-physics { border-color: var(--border-physics); }
+        .card.sub-physics:hover { border-color: rgba(99, 102, 241, 0.4); box-shadow: var(--glow-physics); }
+
+        .card.sub-biology { border-color: var(--border-biology); }
+        .card.sub-biology:hover { border-color: rgba(132, 204, 22, 0.4); box-shadow: var(--glow-biology); }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--accent-color, #ccc);
+        }
+
+        .card-tag {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-color, #ccc);
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            font-family: var(--font-serif);
+            line-height: 1.2;
+        }
+
+        .card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+            flex-grow: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .start-link {
+            font-weight: 600;
+            color: var(--accent-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: gap 0.2s;
+        }
+
+        .card:hover .start-link {
+            gap: 10px;
+        }
+
+        /* View Layers for Nested Navigation */
+        .view-layer {
+            display: none;
+            animation: fadeSlideUp 0.4s ease-out forwards;
+        }
+
+        .view-layer.active {
+            display: block;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-family: var(--font-main);
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+        }
+
+        /* Locked Card */
+        .card-locked {
+            opacity: 0.45;
+            filter: grayscale(0.8);
+            cursor: not-allowed;
+            background: rgba(15, 23, 42, 0.6) !important;
+            border-color: rgba(255, 255, 255, 0.03) !important;
+            pointer-events: none;
+        }
+
+        .card-locked:hover {
+            transform: none;
+            box-shadow: var(--glass-shadow);
+            border-color: rgba(255, 255, 255, 0.03) !important;
+        }
+
+        /* Subject Specific Classes */
+        .sub-english {
+            --accent-color: var(--sub-english);
+        }
+
+        .sub-bm {
+            --accent-color: var(--sub-bm);
+        }
+
+        .sub-math {
+            --accent-color: var(--sub-math);
+        }
+
+        .sub-science {
+            --accent-color: var(--sub-science);
+        }
+
+        .sub-chinese {
+            --accent-color: var(--sub-chinese);
+        }
+
+        .sub-sejarah {
+            --accent-color: var(--sub-sejarah);
+        }
+
+        .sub-chemistry {
+            --accent-color: var(--sub-chemistry);
+        }
+
+        .sub-physics {
+            --accent-color: var(--sub-physics);
+        }
+
+        .sub-biology {
+            --accent-color: var(--sub-biology);
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-container {
+                flex-direction: column;
+                padding: 0 20px;
+            }
+
+            .tab-btn {
+                justify-content: center;
+            }
+        }
+
+        /* ── Footer ──────────────────────────────────────────────── */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            margin-top: 60px;
+            background: #080f1d;
+            padding: 48px 40px 28px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .footer-col a,
+        .footer-col button.footer-link {
+            display: block;
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 0.875rem;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            font-family: inherit;
+            text-align: left;
+        }
+
+        .footer-col a:hover,
+        .footer-col button.footer-link:hover {
+            color: #f1f5f9;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 32px auto 0;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        @media (max-width: 768px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+        }
+
+        /* ── PDF Modal ───────────────────────────────────────────────── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 8, 16, 0.6);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 32px;
+            width: 90%;
+            max-width: 560px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: fadeInDown 0.25s ease;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .modal-box h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #f1f5f9;
+        }
+
+        .modal-box .modal-subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 24px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.4rem;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #f1f5f9;
+        }
+
+        .pdf-group-header {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #475569;
+            margin: 20px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .pdf-group-header:first-of-type {
+            margin-top: 0;
+        }
+
+        .pdf-subject-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            margin: 12px 0 6px 4px;
+            font-weight: 600;
+        }
+
+        .pdf-download-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            margin-bottom: 6px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 8px;
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .pdf-download-btn:hover {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.4);
+            color: #a5b4fc;
+        }
+
+        .pdf-download-btn .icon {
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        .pdf-empty {
+            text-align: center;
+            padding: 32px;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+        /* --- RBAC UI DIM & LOCK CSS --- */
+        .module-active {
+            opacity: 1;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .module-locked {
+            opacity: 0.55;
+            background: #f4f4f4 !important;
+            filter: grayscale(80%);
+            cursor: pointer !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05) !important;
+        }
+        
+        .module-locked:hover {
+            opacity: 0.7;
+            filter: grayscale(60%);
+            transform: none !important;
+        }
+        
+        .module-locked * {
+            pointer-events: none;
+            user-select: none;
+            color: #555 !important;
+        }
+        
+        .module-locked::after {
+            content: "🔒";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            opacity: 0.9;
+            z-index: 10;
+        }
+
+        /* Modal styling overrides */
+        .pin-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(5, 8, 16, 0.65);
+            z-index: 99999;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .pin-modal-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* Input Elements Enhancements (Cohesive visual language) */
+        .modal-box input, .modal-box select, .modal-box textarea,
+        .pin-modal-box input, .pin-modal-box select, .pin-modal-box textarea {
+            background: rgba(8, 12, 20, 0.6) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            color: #f8fafc !important;
+            border-radius: 8px !important;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .modal-box input:focus, .modal-box select:focus, .modal-box textarea:focus,
+        .pin-modal-box input:focus, .pin-modal-box select:focus, .pin-modal-box textarea:focus {
+            border-color: rgba(96, 165, 250, 0.5) !important;
+            box-shadow: 0 0 12px rgba(96, 165, 250, 0.15) !important;
+        }
+        .pin-input {
+            width: 100%;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #333;
+            background: #0f172a;
+            color: white;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+        .pin-btn {
+            background:#3b82f6; 
+            color:white; 
+            border:none; 
+            padding:12px 24px; 
+            border-radius:30px; 
+            font-weight:bold; 
+            cursor:pointer; 
+            width: 100%;
+        }
+        .pin-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ── Feedback Modal & FAB Styling ──────────────────────────────── */
+        #feedback-fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(16, 185, 129, 0.2);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 12px 24px;
+            border-radius: 30px;
+            z-index: 999;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-family: var(--font-main);
+        }
+        #feedback-fab:hover {
+            background: rgba(16, 185, 129, 0.4);
+            border-color: #34d399;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.25);
+        }
+        /* Admin tab styles */
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 8px;
+        }
+        .admin-tab-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-weight: 600;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        .admin-tab-btn.active {
+            color: white;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        /* Feedback item styles */
+        .feedback-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            text-align: left;
+        }
+        .feedback-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 6px;
+        }
+        .feedback-badge {
+            font-size: 0.75rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .badge-bug {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        .badge-request {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .badge-general {
+            background: rgba(59, 130, 246, 0.15);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        .feedback-meta {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        .feedback-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .feedback-btn-action {
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            font-weight: 600;
+        }
+        .feedback-btn-resolve {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .feedback-btn-resolve:hover {
+            background: #10b981;
+            color: white;
+        }
+        .feedback-btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+        .feedback-btn-delete:hover {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <!-- Drifting background blobs -->
+        <div class="hero-bg-blobs">
+            
+            
+            
+        </div>
+        <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+            <button id="studentDashboardBtn" class="tab-btn"
+                style="padding: 8px 20px; font-size: 0.95rem; margin:0; background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.3); color: white; display:flex; align-items:center; gap: 8px;"
+                onclick="openStudentModal()">
+                <span style="font-size: 1.2rem;">👤</span>
+                <span id="activeStudentLabel">Student: None</span>
+            </button>
+        </div>
+        <a href="university.html" class="level-badge" style="text-decoration:none;">⬅️ Back to Faculties</a><br><div class="level-badge" style="margin-top:10px;">Physics Department</div>
+        <h1>Department of Physics</h1>
+        <p>University-level Physics Modules and Simulators.</p>
+    </header>
+
+    <main>
+    <div class="syllabus-content active">
+        <h2 class="section-title">
+            <div class="section-icon" style="border-color: var(--border-physics); color: var(--border-physics);">⚛️</div>
+            Core Physics Modules
+        </h2>
+        <div class="grid">
+            <a href="content/University_Syllabus/Physics/Kinematics_Simulator/index.html" class="card sub-physics" data-module-id="uni-phys-kinematics">
+                <div class="card-tag">University Core</div>
+                <h3>Kinematics & Dynamics Lab</h3>
+                <p>Interactive 2D physics simulator featuring real-time vector analysis, trajectory prediction, and collision mechanics.</p>
+                
+                <div class="progress-bar-container" style="display: none;">
+                    <div class="progress-bar-fill"></div>
+                </div>
+            </a>
+            
+            <!-- Future Modules Stub -->
+            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;" onclick="event.preventDefault(); alert('Coming Soon!');">
+                <div class="card-tag">Upcoming</div>
+                <h3>Quantum Mechanics Lab</h3>
+                <p>Wavefunction collapse and Schrodinger equation visualizations.</p>
+            </a>
+            
+            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;" onclick="event.preventDefault(); alert('Coming Soon!');">
+                <div class="card-tag">Upcoming</div>
+                <h3>Electromagnetism Simulator</h3>
+                <p>Maxwell\'s equations and 3D magnetic field simulations.</p>
+            </a>
+        </div>
+    </div>
+</main>
+
+    <footer>
+        <div class="footer-inner">
+            <!-- Resources -->
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <button class="footer-link" onclick="openPdfModal()">📄 Download PDF Notes</button>
+            </div>
+
+            <!-- Contact -->
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <a href="mailto:admin@masteryacademy.edu">✉️ admin@masteryacademy.edu</a>
+                <a href="#">💬 WhatsApp Support</a>
+                <a href="#">📣 Telegram Community</a>
+            </div>
+
+            <!-- About -->
+            <div class="footer-col">
+                <h4>Mastery Academy</h4>
+                <p style="font-size:0.875rem; line-height:1.7; color:#64748b;">
+                    A first-principles learning platform built for SPM, UEC, IGCSE, and Singapore syllabus students.
+                </p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 Mastery Academy &mdash; Designed for First Principles Excellence.
+        </div>
+    </footer>
+
+    <!-- ── PDF Download Modal ──────────────────────────────────────────────── -->
+    <div class="modal-overlay" id="pdf-modal" onclick="closePdfModal(event)">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closePdfModalDirect()">&times;</button>
+            <h2>📥 Download PDF Notes</h2>
+            <p class="modal-subtitle">Click any file below to download course materials.</p>
+            <div id="pdf-list"></div>
+        </div>
+    </div>
+
+    <!-- Script to handle Tab Switching and Layer Navigation -->
+    <script>
+        // ── PDF Resources Data ────────────────────────────────────────────────────
+        // To add a new PDF: add an entry to this array and drop the file in the
+        // corresponding subfolder under resources/pdf/. See DEVELOPER_GUIDE.md.
+        const pdfResources = [
+            // ── SPM ──────────────────────────────────────────────────────────────
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Peribahasa Notes", file: "resources/pdf/SPM/BM/Peribahasa_Notes.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Kata Terbitan Notes", file: "resources/pdf/SPM/BM/Kata_Terbitan_Notes.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Nota KOMSAS - Silir Daksina", file: "resources/pdf/SPM/BM/SPM_Komsas_F5_Silir Daksina.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Modul Kuasa Karangan SPM (IMBAKUP)", file: "resources/pdf/SPM/BM/SPM_BM_Modul_Kuasa_Karangan_IMBAKUP.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Rumusan 实体通关特训讲义", file: "resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf" },
+            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 – Student Version", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Student.pdf" },
+            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 – Answer Key (Teacher)", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Answers.pdf" },
+            { syllabus: "SPM", subject: "Science (Form 3 KSSM)", label: "Form 3 Science Bab 1 – Student Version", file: "hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab1_Student.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM 2021 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2021_chemistry_paper_2.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM 2022 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2022_chemistry_paper_2.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM 2023 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2023_chemistry_paper_2.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM 2024 Chemistry Paper 1", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2024_chemistry_paper_1.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM 2024 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2024_chemistry_paper_2.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry 2026 May Revision (Student)", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_chemistry_2026_may_revision_student.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry 2026 May Revision (Teacher)", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_chemistry_2026_may_revision_teacher.pdf" },
+            { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry Worksheet", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/SPM_Chemistry_Worksheet.pdf" },
+            // ── UEC ──────────────────────────────────────────────────────────────
+            { syllabus: "UEC", subject: "English", label: "Reading Comprehension Guide", file: "resources/pdf/UEC/English/Reading_Guide.pdf" },
+            { syllabus: "UEC", subject: "English", label: "Summary Writing Workshop", file: "resources/pdf/UEC/English/Summary_Writing.pdf" },
+            // ── IGCSE ────────────────────────────────────────────────────────────
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Energy: The Superpower All Around Us", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Energy_Superpower.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 3: The Magic of Matter (Slides)", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch3_States_of_Matter.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 3 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch3_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 3 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch3_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 1: Life Processes & Ecosystems (Slides)", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T1_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 1 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T1_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 1 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T1_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 4: Energy and Light (Slides)", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T4_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 4 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T4_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 4 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T4_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 5: Electricity and Circuits (Slides)", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T5_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 5 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T5_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 5 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T5_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 6: Planet Earth (Slides)", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T6_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 6 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T6_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 6 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T6_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 7: Earth and Space (Slides)", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T7_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 7 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T7_Worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 7 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T7_Answer_Key.pdf" },
+            { syllabus: "IGCSE", subject: "Mathematics (Stage 7)", label: "Stage 7 Math Revision (Answers)", file: "resources/pdf/IGCSE/Math/IGCSE_Math_Stage7_Revision_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Mathematics (Stage 7)", label: "Stage 7 Math Revision (Student)", file: "resources/pdf/IGCSE/Math/IGCSE_Math_Stage7_Revision_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.1 Respiration)", label: "Respiration Worksheet – Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.1 Respiration)", label: "Respiration Worksheet – Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.1 Respiration)", label: "Presentation: Breath to Energy (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.2 Properties of Materials)", label: "Presentation: Properties of Materials – Solutions (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet – Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet – Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.4 Ecosystems)", label: "Ecosystems Worksheet", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.4 Ecosystems)", label: "Ecosystems Answer Key", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet – Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet – Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.6 Light and Space)", label: "Chapter 6 Worksheet – Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.6 Light and Space)", label: "Chapter 6 Worksheet – Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet – Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet – Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Answers.pdf" },
+            // ── Singapore ────────────────────────────────────────────────────────
+            { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Whole Numbers Review", file: "resources/pdf/Singapore/Math/Whole_Numbers_Review.pdf" },
+            { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Year 4 Math Clear Revision", file: "resources/pdf/Singapore/Math/Singapore_Y4_Math_Clear_Revision.pdf" },
+            { syllabus: "Singapore", subject: "Science (Y4)", label: "April Science Revision Worksheet (Student)", file: "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_student.pdf" },
+            { syllabus: "Singapore", subject: "Science (Y4)", label: "April Science Revision Worksheet (Teacher)", file: "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_teacher.pdf" },
+        ];
+
+        // ── PDF Modal Logic ───────────────────────────────────────────────────────
+        function openPdfModal() {
+            const modal = document.getElementById('pdf-modal');
+            const list = document.getElementById('pdf-list');
+
+            // Group resources by syllabus → subject
+            const grouped = {};
+            pdfResources.forEach(r => {
+                if (!grouped[r.syllabus]) grouped[r.syllabus] = {};
+                if (!grouped[r.syllabus][r.subject]) grouped[r.syllabus][r.subject] = [];
+                grouped[r.syllabus][r.subject].push(r);
+            });
+
+            if (pdfResources.length === 0) {
+                list.innerHTML = '<p class="pdf-empty">No PDF files have been added yet.</p>';
+            } else {
+                let html = '';
+                Object.keys(grouped).forEach(syllabus => {
+                    html += `<div class="pdf-group-header">${syllabus}</div>`;
+                    Object.keys(grouped[syllabus]).forEach(subject => {
+                        html += `<div class="pdf-subject-label">${subject}</div>`;
+                        grouped[syllabus][subject].forEach(item => {
+                            html += `<a class="pdf-download-btn" href="${item.file}" download target="_blank">
+                                        <span class="icon">⬇️</span>
+                                        <span>${item.label}</span>
+                                     </a>`;
+                        });
+                    });
+                });
+                list.innerHTML = html;
+            }
+
+            modal.classList.add('open');
+        }
+
+        function closePdfModal(event) {
+            // Only close if clicking the overlay background, not the modal box itself
+            if (event.target === document.getElementById('pdf-modal')) {
+                document.getElementById('pdf-modal').classList.remove('open');
+            }
+        }
+
+        function closePdfModalDirect() {
+            document.getElementById('pdf-modal').classList.remove('open');
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') closePdfModalDirect();
+        });
+
+        // ── Existing Navigation Logic ─────────────────────────────────────────────
+        function switchSyllabus(event, syllabusId) {
+            // Remove 'active' only from the currently visible syllabus tab row,
+            // NOT from the level-switcher buttons (Secondary / Primary).
+            const secondaryTabs = document.getElementById('secondary-tabs');
+            const primaryTabs   = document.getElementById('primary-tabs');
+            const activeTabsContainer = secondaryTabs.style.display !== 'none'
+                ? secondaryTabs
+                : primaryTabs;
+            activeTabsContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            // Add 'active' class to the clicked button
+            event.currentTarget.classList.add('active');
+
+            // Hide all syllabus content sections
+            const contents = document.querySelectorAll('.syllabus-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Show the targeted syllabus content
+            const activeContent = document.getElementById(syllabusId);
+            activeContent.classList.add('active');
+
+            // Reset the internal layer to show the subjects (Layer 2) whenever a tab is clicked
+            showSubjects(syllabusId);
+        }
+
+        // Layer 2 to Layer 3 Navigation: Go from Subjects to specific Lessons
+        function showLessons(syllabusId, lessonContainerId) {
+            const syllabusContainer = document.getElementById(syllabusId);
+
+            // Hide all layers inside this syllabus
+            const layers = syllabusContainer.querySelectorAll('.view-layer');
+            layers.forEach(layer => layer.classList.remove('active'));
+
+            // Show specific lesson layer
+            const targetLessonLayer = document.getElementById(lessonContainerId);
+            if (targetLessonLayer) {
+                targetLessonLayer.classList.add('active');
+            }
+        }
+
+        // Layer 3 to Layer 2 Navigation: Go "Back" to Subjects list
+        function showSubjects(syllabusId) {
+            const syllabusContainer = document.getElementById(syllabusId);
+
+            // Hide all layers inside this syllabus
+            const layers = syllabusContainer.querySelectorAll('.view-layer');
+            layers.forEach(layer => layer.classList.remove('active'));
+
+            // Show the main subjects layer for this syllabus
+            const targetSubjectLayer = document.getElementById(syllabusId + '-subjects');
+            if (targetSubjectLayer) {
+                targetSubjectLayer.classList.add('active');
+            }
+        }
+
+        // Switch between Secondary and Primary levels
+        function switchLevel(level) {
+            // Update level buttons
+            document.getElementById('btn-level-secondary').classList.toggle('active', level === 'secondary');
+            document.getElementById('btn-level-primary').classList.toggle('active', level === 'primary');
+
+            // Toggle tabs containers
+            document.getElementById('secondary-tabs').style.display = level === 'secondary' ? 'flex' : 'none';
+            document.getElementById('primary-tabs').style.display = level === 'primary' ? 'flex' : 'none';
+
+            // Click the first tab of the selected level to naturally switch the content
+            if (level === 'secondary') {
+                document.getElementById('secondary-tabs').querySelector('.tab-btn').click();
+            } else {
+                document.getElementById('primary-tabs').querySelector('.tab-btn').click();
+            }
+        }
+    </script>
+
+    <!-- ==========================================
+         STUDENT DASHBOARD MODAL
+    =========================================== -->
+    <div id="studentModalOverlay" class="modal-overlay">
+        <div class="modal-box" style="animation-duration: 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
+            <select id="authLangSelect" onchange="changeAuthLanguage(this.value)" style="position: absolute; top: 16px; left: 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 4px 8px; font-size: 0.85rem; outline: none; cursor:pointer; z-index:10;">
+                <option value="en" style="color: black;">EN</option>
+                <option value="ms" style="color: black;">MS</option>
+                <option value="zh" style="color: black;">中文</option>
+            </select>
+            <button class="modal-close" onclick="closeStudentModal()">&times;</button>
+            <h2 id="authTitle" style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px; margin-top: 25px;">Student Dashboard</h2>
+            <div id="authSubtitle" class="modal-subtitle" style="margin-bottom: 25px;">Manage student profiles and resume progress across modules</div>
+
+            <div id="authFormArea"
+                style="margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="display:flex; justify-content:center; gap:30px; margin-bottom:20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom:10px;">
+                    <button id="tabLogin" onclick="toggleAuthMode('login')" style="background:none; border:none; color:white; font-size:1.1rem; cursor:pointer; font-weight:bold; border-bottom: 2px solid var(--sub-english);">Login</button>
+                    <button id="tabRegister" onclick="toggleAuthMode('register')" style="background:none; border:none; color:var(--text-secondary); font-size:1.1rem; cursor:pointer; font-weight:bold; border-bottom: 2px solid transparent;">Register</button>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <input type="email" id="authEmail" placeholder="Email address..."
+                        style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                    <input type="password" id="authPassword" placeholder="Password..."
+                        style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                    
+                    <!-- Forgot Password Link -->
+                    <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: -4px; margin-bottom: 2px;">
+                        <a href="javascript:void(0)" onclick="toggleAuthMode('forgot')" style="font-size: 0.8rem; color: #3b82f6; text-decoration: none;">Forgot Password?</a>
+                    </div>
+                    
+                    <div id="registerFields" style="display: none; flex-direction: column; gap: 10px;">
+                        <select id="authRole" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
+                            <option value="" id="optRolePlaceholder">Account Role...</option>
+                            <option value="Student" id="optRoleStudent">Student</option>
+                            <option value="Teacher" id="optRoleTeacher">Teacher</option>
+                            <option value="Parent" id="optRoleParent">Parent</option>
+                            
+                        </select>
+                        <input type="text" id="authFullName" placeholder="Full Name..."
+                            style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <input type="tel" id="authPhone" placeholder="Phone Number..."
+                            style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <select id="authSyllabus" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
+                            <option value="" id="optSyllabusPlaceholder">Select Syllabus...</option>
+                            <option value="spm">SPM</option>
+                            <option value="uec">UEC</option>
+                            <option value="igcse">IGCSE</option>
+                            <option value="sg">Singapore Syllabus</option>
+                            <option value="kssr">KSSR (Primary)</option>
+                        </select>
+                        <div style="display: flex; gap: 10px;">
+                            <input type="number" id="authAge" placeholder="Age..." min="5" max="100"
+                                style="width: 40%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                            <select id="authGender" style="width: 60%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
+                                <option value="" id="optGenderPlaceholder">Gender...</option>
+                                <option value="Male" id="optGenderMale">Male</option>
+                                <option value="Female" id="optGenderFemale">Female</option>
+                                <option value="Other" id="optGenderOther">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <button id="submitAuthBtn" onclick="handleAuth()"
+                            style="flex-grow: 1; padding: 12px 20px; border-radius: 8px; font-size: 1rem; background: var(--sub-english); color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Login</button>
+                    </div>
+                    <div id="authMessage" style="color: #ef4444; font-size: 0.85rem; text-align: center; margin-top: 10px; min-height: 20px;"></div>
+                </div>
+            </div>
+
+            <!-- Active Student Progress Area -->
+            <div id="activeAuthInfo"
+                style="display: none; margin-top: 30px; padding-top: 25px; border-top: 1px dashed rgba(255,255,255,0.15);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="font-size: 1.25rem; color: #f1f5f9; font-family: var(--font-serif);"><span
+                            id="progressStudentName" style="color: var(--sub-science);"></span></h3>
+                    <button onclick="handleLogout()"
+                        style="background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 6px 14px; font-size: 0.85rem; cursor: pointer; font-weight: 600; transition: all 0.2s;">Logout</button>
+                </div>
+
+                <div id="progressList"
+                    style="display: flex; flex-direction: column; gap: 12px; max-height: 280px; overflow-y: auto; padding-right: 5px;">
+                    <!-- Filled via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Floating Feedback & Subject Requests Widget ── -->
+    <button id="feedback-fab" onclick="openFeedbackModal()">
+        <span>💬</span> Help & Feedback
+    </button>
+
+    <!-- ==========================================
+         FEEDBACK & REQUEST MODAL
+    =========================================== -->
+    <div id="feedbackModalOverlay" class="modal-overlay" onclick="closeFeedbackModal(event)">
+        <div class="modal-box" style="animation-duration: 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-width: 480px; width: 90%;">
+            <button class="modal-close" onclick="closeFeedbackModalDirect()">&times;</button>
+            <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; margin-top: 15px; display: flex; align-items: center; gap: 10px; justify-content: center;">
+                <span>💬</span> Feedback & Requests
+            </h2>
+            <div class="modal-subtitle" style="margin-bottom: 20px; color: #94a3b8; text-align: center;">
+                Help us build the ultimate learning portal or request a subject module!
+            </div>
+
+            <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <!-- Feedback Type Selection -->
+                    <div>
+                        <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">I want to...</label>
+                        <select id="feedbackType" onchange="toggleFeedbackTypeFields(this.value)" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; cursor: pointer;">
+                            <option value="subject_request">Request a New Subject / Module</option>
+                            <option value="bug_report">Report a Bug / Issue</option>
+                            <option value="general">Submit a General Suggestion</option>
+                        </select>
+                    </div>
+
+                    <!-- Contact details -->
+                    <div style="display: flex; gap: 10px;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Your Name</label>
+                            <input type="text" id="feedbackName" placeholder="Name (optional)" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Email Address</label>
+                            <input type="email" id="feedbackEmail" placeholder="Email (optional)" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        </div>
+                    </div>
+
+                    <!-- Subject Request Fields (shown by default) -->
+                    <div id="subjectRequestFields" style="display: flex; gap: 10px; flex-direction: row;">
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Syllabus</label>
+                            <select id="feedbackSyllabus" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; cursor: pointer;">
+                                <option value="spm">🇲🇾 SPM</option>
+                                <option value="uec">🎓 UEC</option>
+                                <option value="igcse">🌏 IGCSE</option>
+                                <option value="sg">🇸🇬 Singapore</option>
+                                <option value="kssr">🇲🇾 KSSR (Primary)</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Subject Name</label>
+                            <input type="text" id="feedbackSubject" placeholder="e.g. Physics, History" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        </div>
+                    </div>
+
+                    <!-- Feedback Details -->
+                    <div>
+                        <label id="feedbackDetailsLabel" style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Describe what you need</label>
+                        <textarea id="feedbackDetails" placeholder="Tell us which topic or chapter you want us to add next..." rows="4" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; resize: vertical;"></textarea>
+                    </div>
+
+                    <!-- Submit & Status -->
+                    <button id="submitFeedbackBtn" onclick="handleFeedbackSubmit()" style="width: 100%; padding: 12px; border-radius: 8px; font-size: 1rem; background: #10b981; color: white; border: none; cursor: pointer; font-weight: 600; transition: all 0.2s;">Submit Feedback</button>
+                    <div id="feedbackSubmitMessage" style="font-size: 0.85rem; text-align: center; margin-top: 5px; min-height: 20px; color: #10b981;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SDKs -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/auth-access.js?v=1.0.1"></script>
+    <script src="js/progress-tracker.js?v=1.0.1"></script>
+    <script src="js/feedback.js?v=1.0.1"></script>
+    <script>
+        // ── i18n Translations ────────────────────────
+        const authTranslations = {
+            en: {
+                title: "Student Dashboard", subtitle: "Manage student profiles and resume progress across modules",
+                tabLogin: "Login", tabRegister: "Register",
+                emailPlaceholder: "Email address...", passwordPlaceholder: "Password...",
+                rolePlaceholder: "Account Role...", roleStudent: "Student", roleTeacher: "Teacher", roleParent: "Parent", roleAdmin: "Admin",
+                namePlaceholder: "Full Name...", phonePlaceholder: "Phone Number...", syllabusPlaceholder: "Select Syllabus...",
+                agePlaceholder: "Age...", genderPlaceholder: "Gender...", genderMale: "Male", genderFemale: "Female", genderOther: "Other",
+                btnSubmitLogin: "Login", btnSubmitRegister: "Create Account"
+            },
+            ms: {
+                title: "Papan Pemuka", subtitle: "Urus profil dan teruskan pembelajaran untuk modul",
+                tabLogin: "Log Masuk", tabRegister: "Daftar",
+                emailPlaceholder: "Alamat emel...", passwordPlaceholder: "Kata laluan...",
+                rolePlaceholder: "Peranan Akaun...", roleStudent: "Pelajar", roleTeacher: "Guru", roleParent: "Ibu Bapa", roleAdmin: "Pentadbir",
+                namePlaceholder: "Nama Penuh...", phonePlaceholder: "Nombor Telefon...", syllabusPlaceholder: "Pilih Silibus...",
+                agePlaceholder: "Umur...", genderPlaceholder: "Jantina...", genderMale: "Lelaki", genderFemale: "Perempuan", genderOther: "Lain-lain",
+                btnSubmitLogin: "Log Masuk", btnSubmitRegister: "Buat Akaun"
+            },
+            zh: {
+                title: "账户主页", subtitle: "管理您的个人资料并继续学习进度",
+                tabLogin: "登录", tabRegister: "注册",
+                emailPlaceholder: "电子邮箱...", passwordPlaceholder: "密码...",
+                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理员",
+                namePlaceholder: "全名...", phonePlaceholder: "电话号码...", syllabusPlaceholder: "选择课程大纲...",
+                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "男", genderFemale: "女", genderOther: "其他",
+                btnSubmitLogin: "登录", btnSubmitRegister: "创建账户"
+            }
+        };
+
+        function changeAuthLanguage(lang) {
+            const t = authTranslations[lang];
+            if(!t) return;
+            document.getElementById('authTitle').innerText = t.title;
+            document.getElementById('authSubtitle').innerText = t.subtitle;
+            document.getElementById('tabLogin').innerText = t.tabLogin;
+            document.getElementById('tabRegister').innerText = t.tabRegister;
+            document.getElementById('authEmail').placeholder = t.emailPlaceholder;
+            document.getElementById('authPassword').placeholder = t.passwordPlaceholder;
+            document.getElementById('optRolePlaceholder').innerText = t.rolePlaceholder;
+            document.getElementById('optRoleStudent').innerText = t.roleStudent;
+            document.getElementById('optRoleTeacher').innerText = t.roleTeacher;
+            document.getElementById('optRoleParent').innerText = t.roleParent;
+            
+            document.getElementById('authFullName').placeholder = t.namePlaceholder;
+            document.getElementById('authPhone').placeholder = t.phonePlaceholder;
+            document.getElementById('optSyllabusPlaceholder').innerText = t.syllabusPlaceholder;
+            document.getElementById('authAge').placeholder = t.agePlaceholder;
+            document.getElementById('optGenderPlaceholder').innerText = t.genderPlaceholder;
+            document.getElementById('optGenderMale').innerText = t.genderMale;
+            document.getElementById('optGenderFemale').innerText = t.genderFemale;
+            document.getElementById('optGenderOther').innerText = t.genderOther;
+            
+            const submitBtn = document.getElementById('submitAuthBtn');
+            if(window.currentAuthMode === 'login') {
+                submitBtn.innerText = t.btnSubmitLogin;
+            } else {
+                submitBtn.innerText = t.btnSubmitRegister;
+            }
+        }
+
+        // ── Auth & Dashboard Logic (Supabase-powered RBAC) ────────────────────────
+
+        async function updateAuthUI() {
+            const authInfo = await window.AuthAccess.getCurrentUser();
+            const labelBtn = document.getElementById('activeStudentLabel');
+
+            if (authInfo && authInfo.user) {
+                labelBtn.innerText = `👤 ${authInfo.user.email.split('@')[0]} [${authInfo.tier.toUpperCase()}]`;
+                document.getElementById('authFormArea').style.display = 'none';
+                document.getElementById('activeAuthInfo').style.display = 'block';
+                document.getElementById('progressStudentName').innerText = `${authInfo.user.email} (Tier: ${authInfo.tier.toUpperCase()})`;
+                
+                // Keep compatibility with ProgressTracker
+                if(window.ProgressTracker) {
+                    ProgressTracker.setActiveStudent(authInfo.user.email);
+                    await loadProgressList(authInfo.user.email);
+                }
+            } else {
+                labelBtn.innerText = 'Account: Guest';
+                document.getElementById('authFormArea').style.display = 'block';
+                document.getElementById('activeAuthInfo').style.display = 'none';
+                if(window.ProgressTracker) {
+                    ProgressTracker.clearActiveStudent();
+                }
+            }
+            
+            // Re-render UI locks and Admin Panel
+            if (window.AuthAccess && window.AuthAccess.renderModuleAccessibility) {
+                await window.AuthAccess.renderModuleAccessibility();
+            }
+        }
+
+        let currentAuthMode = 'login';
+        
+        function toggleAuthMode(mode) {
+            currentAuthMode = mode;
+            const tabLogin = document.getElementById('tabLogin');
+            const tabRegister = document.getElementById('tabRegister');
+            const registerFields = document.getElementById('registerFields');
+            const submitBtn = document.getElementById('submitAuthBtn');
+            const msgEl = document.getElementById('authMessage');
+            const emailInput = document.getElementById('authEmail');
+            const passwordInput = document.getElementById('authPassword');
+            const forgotLink = document.getElementById('forgotPasswordLinkContainer');
+            const tabsContainer = tabLogin.parentElement;
+            
+            msgEl.innerText = "";
+            
+            const curLang = document.getElementById('authLangSelect').value || 'en';
+            
+            // Restore default displays
+            tabsContainer.style.display = "flex";
+            emailInput.style.display = "block";
+            passwordInput.style.display = "block";
+            forgotLink.style.display = "block";
+            registerFields.style.display = "none";
+            emailInput.placeholder = authTranslations[curLang].emailPlaceholder;
+            passwordInput.placeholder = authTranslations[curLang].passwordPlaceholder;
+            
+            if(mode === 'login') {
+                tabLogin.style.color = "white";
+                tabLogin.style.borderBottomColor = "var(--sub-english)";
+                tabRegister.style.color = "var(--text-secondary)";
+                tabRegister.style.borderBottomColor = "transparent";
+                submitBtn.innerText = authTranslations[curLang].btnSubmitLogin;
+            } else if (mode === 'register') {
+                tabRegister.style.color = "white";
+                tabRegister.style.borderBottomColor = "var(--sub-english)";
+                tabLogin.style.color = "var(--text-secondary)";
+                tabLogin.style.borderBottomColor = "transparent";
+                registerFields.style.display = "flex";
+                submitBtn.innerText = authTranslations[curLang].btnSubmitRegister;
+            } else if (mode === 'forgot') {
+                tabsContainer.style.display = "none";
+                passwordInput.style.display = "none";
+                forgotLink.style.display = "none";
+                submitBtn.innerText = curLang === 'zh' ? '發送重置鏈接' : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
+                
+                msgEl.style.color = "var(--text-secondary)";
+                msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+            } else if (mode === 'reset') {
+                tabsContainer.style.display = "none";
+                emailInput.style.display = "none";
+                forgotLink.style.display = "none";
+                passwordInput.placeholder = curLang === 'zh' ? '請輸入新密碼...' : (curLang === 'ms' ? 'Sila masukkan kata laluan baru...' : 'Enter new password...');
+                submitBtn.innerText = curLang === 'zh' ? '更新密碼' : (curLang === 'ms' ? 'Kemas Kini Kata Laluan' : 'Update Password');
+            }
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const msgEl = document.getElementById('authMessage');
+            const curLang = document.getElementById('authLangSelect').value || 'en';
+            
+            // 1. Email format validation (for login, register, and forgot modes)
+            if (currentAuthMode !== 'reset') {
+                if(!email) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱。" : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
+                    return;
+                }
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵箱地址。" : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
+                    return;
+                }
+            }
+            
+            // 2. Forgot password request flow
+            if (currentAuthMode === 'forgot') {
+                msgEl.innerText = curLang === 'zh' ? "正在發送重置鏈接..." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
+                msgEl.style.color = "var(--text-secondary)";
+                
+                try {
+                    const result = await window.AuthAccess.sendPasswordResetEmail(email);
+                    if (result.error) {
+                        msgEl.style.color = "#ef4444";
+                        msgEl.innerText = result.error.message;
+                    } else {
+                        msgEl.style.color = "#10b981";
+                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請檢查您的郵箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                            `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                    }
+                } catch (err) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = err.message || "An unexpected error occurred.";
+                }
+                return;
+            }
+            
+            // 3. Password reset update flow
+            if (currentAuthMode === 'reset') {
+                if(!password) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "請輸入新密碼。" : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
+                    return;
+                }
+                msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
+                msgEl.style.color = "var(--text-secondary)";
+                
+                try {
+                    const result = await window.AuthAccess.updatePassword(password);
+                    if (result.error) {
+                        msgEl.style.color = "#ef4444";
+                        msgEl.innerText = result.error.message;
+                    } else {
+                        msgEl.style.color = "#10b981";
+                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        setTimeout(() => {
+                            toggleAuthMode('login');
+                            document.getElementById('authPassword').value = '';
+                            closeStudentModal();
+                            updateAuthUI();
+                        }, 2000);
+                    }
+                } catch (err) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = err.message || "An unexpected error occurred.";
+                }
+                return;
+            }
+            
+            // 4. Standard Login & Register flows
+            if(!password) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = curLang === 'zh' ? "請輸入密碼。" : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
+                return;
+            }
+            
+            let profileData = null;
+            if (currentAuthMode === 'register') {
+                const fullname = document.getElementById('authFullName').value.trim();
+                const phone = document.getElementById('authPhone').value.trim();
+                const syllabus = document.getElementById('authSyllabus').value;
+                const age = document.getElementById('authAge').value;
+                const gender = document.getElementById('authGender').value;
+                const role = document.getElementById('authRole').value;
+                
+                if(!fullname || !phone || !syllabus || !age || !gender || !role) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "所有個人資料欄位均為必填。" : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
+                    return;
+                }
+                profileData = { fullname, phone, syllabus, age: parseInt(age), gender, role };
+            }
+            
+            msgEl.innerText = currentAuthMode === 'login' ? (curLang === 'zh' ? "正在登入..." : (curLang === 'ms' ? "Log masuk..." : "Logging in...")) : (curLang === 'zh' ? "正在創建帳戶..." : (curLang === 'ms' ? "Mencipta akaun..." : "Creating account..."));
+            msgEl.style.color = "var(--text-secondary)";
+            
+            try {
+                let result;
+                if (currentAuthMode === 'login') {
+                    result = await window.AuthAccess.signIn(email, password);
+                } else {
+                    result = await window.AuthAccess.signUp(email, password, profileData);
+                }
+
+                if(result.error) {
+                    msgEl.style.color = "#ef4444";
+                    const errMsg = result.error.message;
+                    if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
+                        msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">${curLang === 'zh' ? '如果您之前刪除了個人資料，請使用<strong>登錄</strong>來自動修復與還原它！' : (curLang === 'ms' ? 'Sekiranya anda telah memadamkan profil anda, sila <strong>Log Masuk</strong> untuk memulihkannya!' : 'If you deleted your profile, please <strong>Login</strong> instead to restore it!')}</span>`;
+                    } else {
+                        msgEl.innerText = errMsg;
+                    }
+                } else {
+                    msgEl.innerText = "";
+                    await updateAuthUI();
+                    closeStudentModal(); // close on success
+                }
+            } catch (err) {
+                msgEl.style.color = "#ef4444";
+                msgEl.innerText = err.message || "An unexpected error occurred.";
+            }
+        }
+
+        async function handleLogout() {
+            await window.AuthAccess.signOut();
+            await updateAuthUI();
+        }
+
+        async function loadProgressList(student) {
+            const container = document.getElementById('progressList');
+            container.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; padding: 20px 0;">Loading...</p>';
+
+            const rows = await ProgressTracker.getAllProgressForStudent(student);
+
+            container.innerHTML = '';
+
+            if (!rows || rows.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-secondary); font-size: 0.9rem; text-align: center; padding: 20px 0;">No progress saved yet. Start a module to track progress.</p>';
+                return;
+            }
+
+            rows.forEach(row => {
+                const el = document.createElement('div');
+                el.style.cssText = 'background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07); border-radius: 10px; padding: 15px; display: flex; justify-content: space-between; align-items: center; gap: 12px;';
+
+                const d = new Date(row.updated_at);
+                const timeStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                el.innerHTML = `
+                    <div style="min-width: 0;">
+                        <div style="font-weight: 600; color: #f8fafc; margin-bottom: 4px; font-size: 1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${row.module_name || row.module_id}</div>
+                        <div style="font-size: 0.82rem; color: var(--text-secondary);">Last studied: ${timeStr}</div>
+                    </div>
+                    <a href="${row.module_url}" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6; border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px; padding: 8px 16px; text-decoration: none; font-size: 0.85rem; font-weight: 600; white-space: nowrap; flex-shrink: 0;">Resume &rarr;</a>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        async function openStudentModal() {
+            document.getElementById('studentModalOverlay').classList.add('open');
+            await updateAuthUI();
+        }
+
+        function closeStudentModal() {
+            document.getElementById('studentModalOverlay').classList.remove('open');
+        }
+
+        // Initialize user state on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateAuthUI();
+
+            // Listen for password recovery event
+            if (window.supabaseClient) {
+                window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+                    if (event === 'PASSWORD_RECOVERY') {
+                        // Open the modal and switch to reset password mode
+                        document.getElementById('studentModalOverlay').classList.add('open');
+                        toggleAuthMode('reset');
+                    }
+                });
+            }
+        });
+    </script>
+    <!-- PIN Top-up Modal -->
+    <div id="pin-topup-modal" class="pin-modal-overlay">
+        <div class="pin-modal-box">
+            <button class="pin-close" onclick="document.getElementById('pin-topup-modal').style.display='none'">&times;</button>
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+            <h2 style="color: white; font-family: var(--font-serif);">Module Locked</h2>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 10px;">Enter your Activation PIN to unlock this content.</p>
+            <input type="text" id="pin-input-field" class="pin-input" placeholder="e.g. VIP-MATH-123">
+            <button class="pin-btn" onclick="submitPin()">Unlock Module</button>
+            <p id="pin-error-msg" style="color: #ef4444; margin-top: 10px; font-size: 0.8rem; display:none;"></p>
+        </div>
+    </div>
+    
+    <script>
+        async function submitPin() {
+            const btn = document.querySelector('.pin-btn');
+            const err = document.getElementById('pin-error-msg');
+            const pinCode = document.getElementById('pin-input-field').value.trim();
+            if(!pinCode) return;
+            
+            try {
+                btn.innerText = "Verifying...";
+                btn.disabled = true;
+                err.style.display = 'none';
+                
+                if(!window.AuthAccess || !window.AuthAccess.redeemPin) {
+                    throw new Error("Auth system not loaded or connected.");
+                }
+                
+                const targetModule = document.getElementById('pin-topup-modal').getAttribute('data-target-module');
+                await window.AuthAccess.redeemPin(pinCode, targetModule);
+                
+                alert("Success! Module Unlocked.");
+                document.getElementById('pin-topup-modal').style.display='none';
+                
+                // Re-render modules
+                await window.AuthAccess.renderModuleAccessibility();
+            } catch(error) {
+                err.innerText = error.message;
+                err.style.display = 'block';
+            } finally {
+                btn.innerText = "Unlock Module";
+                btn.disabled = false;
+            }
+        }
+
+        // ── Feedback System Modal & Form Logic ──────────────────────────────
+        function openFeedbackModal() {
+            const nameInput = document.getElementById('feedbackName');
+            const emailInput = document.getElementById('feedbackEmail');
+            const msgEl = document.getElementById('feedbackSubmitMessage');
+            if (msgEl) msgEl.innerText = '';
+            
+            // Default to subject request type and show fields
+            document.getElementById('feedbackType').value = 'subject_request';
+            toggleFeedbackTypeFields('subject_request');
+
+            if (window.AuthAccess) {
+                window.AuthAccess.getCurrentUser().then(authInfo => {
+                    if (authInfo && authInfo.user) {
+                        if (emailInput) emailInput.value = authInfo.user.email;
+                        if (nameInput) nameInput.value = authInfo.user.email.split('@')[0];
+                    }
+                });
+            }
+            document.getElementById('feedbackModalOverlay').classList.add('open');
+        }
+
+        function closeFeedbackModalDirect() {
+            document.getElementById('feedbackModalOverlay').classList.remove('open');
+        }
+
+        function closeFeedbackModal(event) {
+            if (event.target === document.getElementById('feedbackModalOverlay')) {
+                closeFeedbackModalDirect();
+            }
+        }
+
+        function toggleFeedbackTypeFields(type) {
+            const subjectFields = document.getElementById('subjectRequestFields');
+            const label = document.getElementById('feedbackDetailsLabel');
+            const detailsTextarea = document.getElementById('feedbackDetails');
+            
+            if (type === 'subject_request') {
+                subjectFields.style.display = 'flex';
+                label.innerText = 'Describe what you need';
+                detailsTextarea.placeholder = 'Tell us which topic or chapter you want us to add next...';
+            } else if (type === 'bug_report') {
+                subjectFields.style.display = 'none';
+                label.innerText = 'Steps to reproduce / Issue details';
+                detailsTextarea.placeholder = 'Please describe the bug, what happened, and how to trigger it...';
+            } else {
+                subjectFields.style.display = 'none';
+                label.innerText = 'Your Suggestion / Comments';
+                detailsTextarea.placeholder = 'Help us improve with your suggestions...';
+            }
+        }
+
+        async function handleFeedbackSubmit() {
+            const btn = document.getElementById('submitFeedbackBtn');
+            const msgEl = document.getElementById('feedbackSubmitMessage');
+            const feedback_type = document.getElementById('feedbackType').value;
+            const fullname = document.getElementById('feedbackName').value.trim();
+            const email = document.getElementById('feedbackEmail').value.trim();
+            const syllabus = document.getElementById('feedbackSyllabus').value;
+            const subject = document.getElementById('feedbackSubject').value.trim();
+            const details = document.getElementById('feedbackDetails').value.trim();
+
+            if (!details) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = 'Description is required.';
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = 'Submitting...';
+            msgEl.innerText = '';
+
+            try {
+                const res = await window.FeedbackSystem.submitFeedback({
+                    feedback_type,
+                    fullname,
+                    email,
+                    syllabus: feedback_type === 'subject_request' ? syllabus : null,
+                    subject: feedback_type === 'subject_request' ? subject : null,
+                    details
+                });
+
+                if (res.success) {
+                    msgEl.style.color = '#10b981';
+                    msgEl.innerText = 'Thank you! Your feedback has been submitted successfully.';
+                    document.getElementById('feedbackDetails').value = '';
+                    document.getElementById('feedbackSubject').value = '';
+                    
+                    // Re-render accessibility which triggers badge update if admin is logged in
+                    if (window.AuthAccess && window.AuthAccess.renderModuleAccessibility) {
+                        await window.AuthAccess.renderModuleAccessibility();
+                    }
+                    
+                    setTimeout(closeFeedbackModalDirect, 2000);
+                } else {
+                    msgEl.style.color = '#ef4444';
+                    msgEl.innerText = res.error || 'Failed to submit feedback.';
+                }
+            } catch (err) {
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = err.message || 'An error occurred.';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Submit Feedback';
+            }
+        }
+
+        // ── Admin Panel Tab & Console Logic ───────────────────────────────
+        async function switchAdminTab(tab) {
+            document.getElementById('btnAdminTabPins').classList.toggle('active', tab === 'pins');
+            document.getElementById('btnAdminTabFeedback').classList.toggle('active', tab === 'feedback');
+            
+            const pinsContent = document.getElementById('admin-tab-pins-content');
+            const feedbackContent = document.getElementById('admin-tab-feedback-content');
+            
+            if (tab === 'pins') {
+                pinsContent.style.display = 'block';
+                feedbackContent.style.display = 'none';
+            } else {
+                pinsContent.style.display = 'none';
+                feedbackContent.style.display = 'block';
+                await loadAdminFeedbackList();
+            }
+        }
+
+        async function loadAdminFeedbackList() {
+            const listContainer = document.getElementById('admin-feedback-list');
+            listContainer.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem; text-align: center; padding: 20px 0;">Loading feedback...</p>';
+            
+            if (!window.FeedbackSystem || !window.FeedbackSystem.getAllFeedback) {
+                listContainer.innerHTML = '<p style="color: #ef4444; font-size: 0.9rem; text-align: center; padding: 20px 0;">Feedback system not loaded.</p>';
+                return;
+            }
+
+            const feedbacks = await window.FeedbackSystem.getAllFeedback();
+            
+            // Update badge count
+            const activeFeedbacks = feedbacks.filter(f => f.status !== 'resolved');
+            const badge = document.getElementById('admin-feedback-badge');
+            if (badge) badge.innerText = activeFeedbacks.length;
+
+            if (feedbacks.length === 0) {
+                listContainer.innerHTML = '<p style="color: #94a3b8; font-size: 0.9rem; text-align: center; padding: 20px 0;">No feedback entries found.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = '';
+            feedbacks.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'feedback-item';
+                
+                let badgeClass = 'badge-general';
+                let typeLabel = 'Suggestion';
+                if (item.feedback_type === 'bug_report') {
+                    badgeClass = 'badge-bug';
+                    typeLabel = 'Bug';
+                } else if (item.feedback_type === 'subject_request') {
+                    badgeClass = 'badge-request';
+                    typeLabel = `Request: ${item.syllabus?.toUpperCase()} - ${item.subject || 'Unknown Subject'}`;
+                }
+
+                const d = new Date(item.created_at);
+                const dateStr = d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                const nameLabel = item.fullname || 'Anonymous';
+                const emailLink = item.email ? `<a href="mailto:${item.email}" style="color: #3b82f6; text-decoration: none; margin-left: 5px;">(${item.email})</a>` : '';
+                
+                let actionsHtml = '';
+                if (item.status !== 'resolved') {
+                    actionsHtml = `
+                        <div class="feedback-actions">
+                            <button class="feedback-btn-action feedback-btn-resolve" onclick="resolveFeedback('${item.id}', this)">Mark Resolved</button>
+                            <button class="feedback-btn-action feedback-btn-delete" onclick="deleteFeedback('${item.id}', this)">Delete</button>
+                        </div>
+                    `;
+                } else {
+                    actionsHtml = `
+                        <div class="feedback-meta" style="color: #10b981; font-weight: bold; margin-top: 8px;">✓ Resolved</div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="feedback-item-header">
+                        <span class="feedback-badge ${badgeClass}">${typeLabel}</span>
+                        <span style="color: #64748b; font-size: 0.75rem;">${dateStr}</span>
+                    </div>
+                    <div style="color: #f1f5f9; font-weight: bold; margin-bottom: 6px;">From: ${nameLabel}${emailLink}</div>
+                    <div style="color: #cbd5e1; word-break: break-word; line-height: 1.4; white-space: pre-wrap;">${item.details}</div>
+                    ${actionsHtml}
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        async function resolveFeedback(id, btn) {
+            btn.disabled = true;
+            btn.innerText = 'Resolving...';
+            const res = await window.FeedbackSystem.updateFeedbackStatus(id, 'resolved');
+            if (res.success) {
+                await loadAdminFeedbackList();
+            } else {
+                alert('Failed to resolve feedback: ' + (res.error || 'unknown error'));
+                btn.disabled = false;
+                btn.innerText = 'Mark Resolved';
+            }
+        }
+
+        async function deleteFeedback(id, btn) {
+            if (!confirm('Are you sure you want to permanently delete this feedback?')) return;
+            btn.disabled = true;
+            btn.innerText = 'Deleting...';
+            const res = await window.FeedbackSystem.deleteFeedback(id);
+            if (res.success) {
+                await loadAdminFeedbackList();
+            } else {
+                alert('Failed to delete feedback: ' + (res.error || 'unknown error'));
+                btn.disabled = false;
+                btn.innerText = 'Delete';
+            }
+        }
+        
+        // Execute render on load after a slight delay to ensure DOM and Auth scripts are ready
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(async () => {
+                if(window.AuthAccess && window.AuthAccess.renderModuleAccessibility) {
+                    // Hook into renderModuleAccessibility to fetch feedback badge count
+                    const originalRender = window.AuthAccess.renderModuleAccessibility;
+                    window.AuthAccess.renderModuleAccessibility = async function() {
+                        await originalRender.call(window.AuthAccess);
+                        
+                        const authInfo = await window.AuthAccess.getCurrentUser();
+                        const isAdmin = authInfo && authInfo.tier === 'admin';
+                        
+                        if (isAdmin && window.FeedbackSystem && window.FeedbackSystem.getAllFeedback) {
+                            try {
+                                const feedbacks = await window.FeedbackSystem.getAllFeedback();
+                                const activeFeedbacks = feedbacks.filter(f => f.status !== 'resolved');
+                                const badge = document.getElementById('admin-feedback-badge');
+                                if (badge) badge.innerText = activeFeedbacks.length;
+                            } catch(e) {
+                                console.error('[FeedbackSystem] failed to load feedback count:', e);
+                            }
+                        }
+                    };
+
+                    await window.AuthAccess.renderModuleAccessibility();
+                }
+            }, 500); 
+        });
+    </script>
+    
+    <!-- Admin PIN Generator Toggle Button -->
+    <button id="admin-pin-toggle-btn" onclick="const p = document.getElementById('admin-pin-generator'); p.style.display = p.style.display === 'none' ? 'block' : 'none';" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #3b82f6; color: white; width: 60px; height: 60px; border-radius: 50%; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: none; cursor: pointer; font-size: 1.8rem; align-items: center; justify-content: center;">⚙️</button>
+
+    <!-- Admin Control Panel (Tabbed) -->
+    <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 480px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>⚡</span> Admin Control Panel</h3>
+            <button onclick="document.getElementById('admin-pin-generator').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+
+        <!-- Tab Switcher -->
+        <div class="admin-tabs">
+            <button class="admin-tab-btn active" id="btnAdminTabPins" onclick="switchAdminTab('pins')">🔑 PINs</button>
+            <button class="admin-tab-btn" id="btnAdminTabFeedback" onclick="switchAdminTab('feedback')">💬 Feedback & Requests (<span id="admin-feedback-badge">0</span>)</button>
+        </div>
+
+        <!-- Tab content: PINs -->
+        <div id="admin-tab-pins-content">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Select modules or syllabus to include in the PIN.</p>
+            
+            <input type="text" id="admin-pin-code" placeholder="PIN Code (e.g., VIP2026)" style="width:100%; margin-bottom: 15px; padding: 10px; border-radius: 6px; border: 1px solid #333; background: #0f172a; color: white;">
+            
+            <div id="admin-pin-modules-list" style="background: #0f172a; padding: 15px; border-radius: 6px; border: 1px solid #333; margin-bottom: 15px; max-height: 250px; overflow-y: auto;">
+                <!-- Rendered via JS -->
+                Loading syllabus structure...
+            </div>
+
+            <button onclick="AdminTools.createPin()" style="background:#3b82f6; border:none; padding:12px; color:white; border-radius:6px; cursor:pointer; width: 100%; font-weight: bold;">Generate Secure PIN</button>
+        </div>
+
+        <!-- Tab content: Feedback -->
+        <div id="admin-tab-feedback-content" style="display: none;">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Student suggestions, bug reports, and module requests.</p>
+            <div id="admin-feedback-list" style="max-height: 400px; overflow-y: auto; background: #0f172a; padding: 10px; border-radius: 6px; border: 1px solid #333;">
+                Loading feedback submissions...
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

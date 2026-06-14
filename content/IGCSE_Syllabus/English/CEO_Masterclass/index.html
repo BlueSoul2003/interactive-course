@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24小时大劫案模拟器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #c084fc 0%, #ec4899 100%);
+            background-attachment: fixed;
+            /* 保证页面满屏且不会出现双滚动条，主要依靠内部容器滚动 */
+            height: 100vh;
+            overflow: hidden;
+            touch-action: none; 
+        }
+
+        /* 极致的毛玻璃质感 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        /* 动画：淡入效果，代替绝对定位带来的排版崩溃 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* 拖拽元素的物理反馈 */
+        .draggable {
+            touch-action: none;
+            cursor: grab;
+        .drop-zone.drag-over {
+            background: rgba(255, 255, 255, 0.5) !important;
+            border-color: #c084fc !important;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.5) !important;
+        }
+
+        /* 新增：翻译文本隐藏/显示引擎 */
+        .translation-text {
+            display: none;
+            color: #fbcfe8; /* pink-200 */
+            font-size: 0.95rem;
+            margin-top: 0.75rem;
+            font-weight: 500;
+        }
+        .translation-text.show {
+            display: block;
+            animation: fadeInUp 0.3s ease-in-out forwards;
+        }
+
+        /* 自定义滚动条，美观不突兀 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { 
+            background: rgba(255,255,255,0.5); 
+            border-radius: 10px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.8); }
+
+        .word-btn {
+            transition: all 0.2s;
+        }
+        .word-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .word-btn:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body class="text-gray-900 antialiased p-2 md:p-6 flex justify-center items-center">
+
+    <!-- 顶部防卡关提示 (Toast) -->
+    <div id="toast" class="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 glass-panel text-white px-8 py-4 rounded-full opacity-0 pointer-events-none transition-opacity duration-300 font-bold shadow-2xl flex items-center gap-3 text-lg">
+        <i class="fas fa-info-circle text-yellow-300"></i> <span id="toast-msg"></span>
+    </div>
+
+    <!-- 超大宽屏容器，确保内容不挤压 -->
+    <div class="relative w-full max-w-6xl h-full flex flex-col bg-white/10 backdrop-blur-3xl rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-white/30 overflow-hidden">
+        
+        <!-- 头部栏 (固定不滚动) -->
+        <div class="p-6 flex justify-between items-center border-b border-white/20 shrink-0 bg-black/5 z-20">
+            <div class="flex items-center gap-4">
+                <a href="../../../../index.html" class="w-12 h-12 rounded-2xl bg-white/20 hover:bg-white/40 flex items-center justify-center text-white text-xl font-bold shadow-lg transition" title="Back to Home">
+                    <i class="fas fa-home"></i>
+                </a>
+                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-purple-600 text-2xl font-bold shadow-lg">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div>
+                    <h2 class="font-extrabold text-white tracking-widest text-xl drop-shadow-md">CEO MASTERCLASS</h2>
+                    <p class="text-white/80 text-sm font-semibold tracking-wide">IGCSE ESL / Attention Engineering</p>
+                </div>
+            </div>
+            <!-- 进度点 -->
+            <div class="hidden md:flex gap-3" id="progress-dots">
+                <div class="w-4 h-4 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.9)]"></div>
+                <div class="w-4 h-4 rounded-full bg-white/30"></div>
+                <div class="w-4 h-4 rounded-full bg-white/30"></div>
+                <div class="w-4 h-4 rounded-full bg-white/30"></div>
+            </div>
+        </div>
+
+        <!-- 内部滚动区域，彻底解决内容被砍掉的 Bug -->
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 relative">
+            
+            <!-- ==================== SCREEN 0: THE HOOK ==================== -->
+            <div id="screen-0" class="screen-content h-full flex flex-col justify-center max-w-5xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-10 items-center">
+                    
+                    <!-- 左侧：安全的电影级视频封面 -->
+                    <div class="w-full md:w-3/5 flex flex-col relative group cursor-pointer" onclick="playVideo()">
+                        <span class="px-4 py-1.5 bg-white/30 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-4 border border-white/40 w-max shadow-sm backdrop-blur-sm">Phase 1: The Hook</span>
+                        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-6 drop-shadow-xl">时间大劫案 🧨</h1>
+                        
+                        <div class="w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white/50 bg-gray-900 relative transition-transform duration-300 group-hover:scale-[1.02]">
+                            <!-- 封面图 -->
+                            <img src="https://img.youtube.com/vi/FWTNMzK9vG4/maxresdefault.jpg" alt="Video Thumbnail" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                            <!-- 居中播放按钮 -->
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center group-hover:bg-white/40 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                                    <i class="fas fa-play text-white text-3xl ml-1"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：任务说明 -->
+                    <div class="w-full md:w-2/5 flex flex-col mt-4 md:mt-0">
+
+                        <div class="glass-panel p-6 rounded-2xl text-left w-full mb-8 relative overflow-hidden group hover:bg-white/30 transition-all">
+                            <div class="absolute -right-4 -top-4 text-7xl text-white/20 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12"><i class="fas fa-crosshairs"></i></div>
+                            <h3 class="font-bold text-white mb-2 text-xl drop-shadow-sm"><i class="fas fa-search text-yellow-300 mr-2"></i> 观影任务 (Mission):</h3>
+                            <p class="text-base text-white/90 font-medium leading-relaxed">点击左侧播放视频。留意提到的学术词汇。是什么大脑结构让你在面对压力时选择“逃避”？</p>
+                        </div>
+
+                        <!-- 播放视频后解锁的按钮 -->
+                        <button id="btn-next-0" onclick="nextScreen()" class="w-full py-5 bg-white/50 text-white rounded-2xl font-bold text-xl transition-all duration-300 flex justify-center items-center gap-3 cursor-not-allowed border border-white/50" disabled>
+                            <i class="fas fa-lock"></i> 先看视频解锁挑战
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== SCREEN 1: VOCAB MATCH ==================== -->
+            <div id="screen-1" class="screen-content hidden min-h-full flex flex-col max-w-5xl mx-auto">
+                <div class="text-center mb-8 shrink-0">
+                    <span class="px-5 py-2 bg-white/30 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Phase 2: 抓捕脑细胞</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white drop-shadow-xl tracking-tight">匹配词汇消除危机！</h2>
+                    <div class="mt-4 flex flex-wrap justify-center items-center gap-4">
+                        <p class="text-white text-lg font-medium bg-black/10 px-6 py-2 rounded-full border border-white/20">将上方的英文高级词汇，拖拽到下方对应的日常作死场景中。</p>
+                        <!-- 新增翻译 Toggle 按钮 -->
+                        <button onclick="toggleTranslations()" class="glass-panel text-white px-5 py-2 rounded-full font-bold hover:bg-white/30 transition shadow-md active:scale-95 flex items-center gap-2">
+                            <i class="fas fa-language text-xl"></i> 开启中文辅助
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 词汇库 -->
+                <div class="flex flex-wrap gap-4 justify-center mb-8 shrink-0" id="vocab-bank">
+                    <div class="draggable glass-panel bg-white/90 hover:bg-white px-8 py-4 rounded-2xl font-extrabold text-purple-700 text-xl shadow-lg" data-word="amygdala">Amygdala</div>
+                    <div class="draggable glass-panel bg-white/90 hover:bg-white px-8 py-4 rounded-2xl font-extrabold text-purple-700 text-xl shadow-lg" data-word="perfectionism">Perfectionism</div>
+                    <div class="draggable glass-panel bg-white/90 hover:bg-white px-8 py-4 rounded-2xl font-extrabold text-purple-700 text-xl shadow-lg" data-word="apathy">Apathy</div>
+                    <div class="draggable glass-panel bg-white/90 hover:bg-white px-8 py-4 rounded-2xl font-extrabold text-purple-700 text-xl shadow-lg" data-word="irrational">Irrational</div>
+                </div>
+
+                <!-- 填空区 (使用 Grid，大屏双列，小屏单列) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20" id="vocab-zones">
+                    <!-- JavaScript 动态生成 -->
+                </div>
+                
+                <div class="mt-8 flex justify-center pb-10">
+                    <button id="btn-next-1" onclick="nextScreen()" class="px-14 py-5 bg-white text-purple-700 rounded-full font-extrabold text-2xl shadow-2xl transition-all duration-500 opacity-0 pointer-events-none transform translate-y-4 hover:scale-105 active:scale-95">
+                        进入下一关 <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==================== SCREEN 2: EISENHOWER MATRIX ==================== -->
+            <div id="screen-2" class="screen-content hidden min-h-full flex flex-col max-w-5xl mx-auto">
+                <div class="text-center mb-6 shrink-0">
+                    <span class="px-5 py-2 bg-white/30 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Phase 3: 优先级大乱斗</span>
+                    <h2 class="text-3xl md:text-5xl font-extrabold text-white drop-shadow-xl tracking-tight">Eisenhower Matrix 矩阵</h2>
+                    <p class="text-white text-lg mt-3 font-medium bg-black/10 inline-block px-6 py-2 rounded-full border border-white/20">快！把上方掉落的任务拖进正确的格子里，拯救崩盘的日常！</p>
+                </div>
+
+                <!-- 任务掉落区 -->
+                <div class="h-32 w-full max-w-3xl mx-auto relative mb-8 shrink-0 flex justify-center items-center border-4 border-dashed border-white/50 rounded-3xl bg-black/10 shadow-inner backdrop-blur-sm" id="task-spawn-zone">
+                    <span class="text-white/60 text-xl absolute animate-pulse font-bold tracking-widest">🚨 新任务将在这里出现 🚨</span>
+                </div>
+
+                <!-- 四象限矩阵 (充满视口高度) -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1 min-h-[400px]">
+                    <div class="drop-zone-matrix bg-red-500/20 rounded-3xl border-2 border-red-300/50 p-5 flex flex-col relative transition-all shadow-lg backdrop-blur-md" data-quadrant="1">
+                        <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-2">
+                            <span class="text-lg font-extrabold text-white uppercase tracking-wider drop-shadow-md">🔥 Do First (重要/紧急)</span>
+                        </div>
+                        <div class="matrix-content flex-1 flex flex-col gap-3 min-h-[100px]"></div>
+                    </div>
+                    <div class="drop-zone-matrix bg-blue-500/20 rounded-3xl border-2 border-blue-300/50 p-5 flex flex-col relative transition-all shadow-lg backdrop-blur-md" data-quadrant="2">
+                        <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-2">
+                            <span class="text-lg font-extrabold text-white uppercase tracking-wider drop-shadow-md">📅 Schedule (重要/不紧急)</span>
+                        </div>
+                        <div class="matrix-content flex-1 flex flex-col gap-3 min-h-[100px]"></div>
+                    </div>
+                    <div class="drop-zone-matrix bg-yellow-500/20 rounded-3xl border-2 border-yellow-300/50 p-5 flex flex-col relative transition-all shadow-lg backdrop-blur-md" data-quadrant="3">
+                        <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-2">
+                            <span class="text-lg font-extrabold text-white uppercase tracking-wider drop-shadow-md">🤝 Delegate (不重要/紧急)</span>
+                        </div>
+                        <div class="matrix-content flex-1 flex flex-col gap-3 min-h-[100px]"></div>
+                    </div>
+                    <div class="drop-zone-matrix bg-gray-500/20 rounded-3xl border-2 border-gray-300/50 p-5 flex flex-col relative transition-all shadow-lg backdrop-blur-md" data-quadrant="4">
+                        <div class="flex justify-between items-center mb-4 border-b border-white/20 pb-2">
+                            <span class="text-lg font-extrabold text-white uppercase tracking-wider drop-shadow-md">🗑️ Delete (不重要/不紧急)</span>
+                        </div>
+                        <div class="matrix-content flex-1 flex flex-col gap-3 min-h-[100px]"></div>
+                    </div>
+                </div>
+                
+                <div class="mt-8 flex justify-center pb-10 shrink-0">
+                    <button id="btn-next-2" onclick="nextScreen()" class="px-14 py-5 bg-white text-purple-700 rounded-full font-extrabold text-2xl shadow-2xl transition-all duration-500 opacity-0 pointer-events-none hover:scale-105">
+                        进入最后一关 <i class="fas fa-flag-checkered ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ==================== SCREEN 3: SENTENCE REORDER ==================== -->
+            <div id="screen-3" class="screen-content hidden min-h-full flex flex-col justify-center max-w-4xl mx-auto">
+                <div class="text-center mb-10 shrink-0">
+                    <span class="px-5 py-2 bg-white/30 text-white rounded-full text-xs font-bold uppercase tracking-wider mb-4 inline-block shadow-sm">Phase 4: 高情商拒绝法</span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white drop-shadow-xl tracking-tight">拼凑完美 IGCSE 句型！</h2>
+                    
+                    <!-- 新增 10题 进度条 UI -->
+                    <div class="mt-4 inline-block bg-white/20 px-6 py-2 rounded-full border border-white/30 font-bold text-white text-lg shadow-md tracking-widest mb-2">
+                        PROGRESS: <span id="sentence-progress" class="text-yellow-300 text-xl ml-2 drop-shadow-md">1 / 10</span>
+                    </div>
+
+                    <div class="mt-2 bg-black/20 p-6 rounded-3xl border border-white/20 shadow-inner backdrop-blur-md">
+                        <p class="text-white text-xl font-medium leading-relaxed">
+                            <i class="fas fa-quote-left text-pink-300 opacity-80 mr-2 text-2xl"></i>
+                            顾客死缠烂打催急单，但你要专注备考。别发幼稚的 "I no time"，点击下方词块，拼出具备高级学术语调 (Academic Tone) 的拒绝信！
+                            <i class="fas fa-quote-right text-pink-300 opacity-80 ml-2 text-2xl"></i>
+                        </p>
+                    </div>
+                </div>
+
+                <div id="sentence-drop" class="glass-panel min-h-[160px] w-full rounded-[2rem] border-4 border-dashed border-white/70 flex flex-wrap content-start gap-4 p-8 mb-12 shadow-[0_10px_30px_rgba(0,0,0,0.1)] text-2xl">
+                    <!-- Clicked words go here -->
+                </div>
+
+                <div id="word-bank" class="flex flex-wrap gap-4 justify-center pb-20">
+                    <!-- JavaScript 动态生成 -->
+                </div>
+            </div>
+
+            <!-- ==================== SCREEN 4: SUCCESS ==================== -->
+            <div id="screen-4" class="screen-content hidden min-h-full flex flex-col justify-center items-center text-center max-w-3xl mx-auto pb-10">
+                <div class="text-9xl mb-6 drop-shadow-2xl hover:scale-110 transition-transform cursor-pointer">🎉</div>
+                <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-6 drop-shadow-2xl tracking-tighter">Mission Passed!</h1>
+                <p class="text-white text-2xl mb-12 font-medium">干得漂亮！你成功拯救了爆炸的行程表！<br>这一堂课的 IGCSE 考点已经深度植入你的大脑。</p>
+                
+                <div class="glass-panel p-10 rounded-[2.5rem] w-full text-left mb-12 bg-white/90 shadow-2xl">
+                    <h3 class="font-extrabold text-3xl mb-6 text-purple-800 border-b-2 border-purple-200 pb-4 flex items-center">
+                        <i class="fas fa-book-open text-pink-500 mr-4"></i> 核心复习金库 (Takeaways)
+                    </h3>
+                    <ul class="space-y-5 text-xl font-medium text-gray-800">
+                        <li class="flex items-start gap-4"><i class="fas fa-check-circle text-green-500 mt-1 text-2xl"></i> <span><b>Amygdala (杏仁核)</b> 会在压力下绑架你的大脑，让你产生畏难情绪。</span></li>
+                        <li class="flex items-start gap-4"><i class="fas fa-check-circle text-green-500 mt-1 text-2xl"></i> <span>拖延往往不是因为懒，而是被 <b>Perfectionism (完美主义)</b> 吓退。</span></li>
+                        <li class="flex items-start gap-4"><i class="fas fa-check-circle text-green-500 mt-1 text-2xl"></i> <span>面对破事，优先处理 <b>Important & Urgent</b>，把不重要的 <b>Delegate</b> 委派出去。</span></li>
+                        <li class="flex items-start gap-4"><i class="fas fa-check-circle text-green-500 mt-1 text-2xl"></i> <span>用 <i>"Due to unforeseen conflicts..."</i> 来优雅降维拒绝，IGCSE 写作绝对拿 A*！</span></li>
+                    </ul>
+                </div>
+
+                <button onclick="location.reload()" class="px-14 py-6 bg-purple-700 text-white rounded-full font-extrabold text-2xl shadow-[0_15px_30px_rgba(126,34,206,0.4)] hover:bg-purple-600 transition transform hover:-translate-y-2 active:scale-95 flex items-center gap-4">
+                    <i class="fas fa-redo"></i> 开启下一段商业实战
+                </button>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // 核心状态机
+        let currentScreen = 0;
+        let mistakes = 0;
+        let audioCtx = null;
+
+        // 纯 JS 音效引擎 (懒加载避免沙盒报错)
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'ding') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+            } else if (type === 'pop') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            }
+        }
+
+        // 防卡关 Toast 提示
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.className = `fixed top-5 left-1/2 transform -translate-x-1/2 z-50 text-white px-8 py-4 rounded-full font-bold shadow-2xl flex items-center gap-3 text-lg transition-all duration-300 ${isError ? 'bg-red-500/90' : 'glass-panel'} opacity-100`;
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'pointer-events-none');
+            }, 4000);
+        }
+
+        // 丝滑切换关卡
+        function nextScreen() {
+            initAudio();
+            playSound('pop');
+            
+            document.querySelectorAll('.screen-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('animate-fade-in');
+            });
+            
+            currentScreen++;
+            const nextEl = document.getElementById(`screen-${currentScreen}`);
+            if (nextEl) {
+                nextEl.classList.remove('hidden');
+                // 触发重绘以重新开始动画
+                void nextEl.offsetWidth; 
+                nextEl.classList.add('animate-fade-in');
+            }
+
+            // 更新顶部进度点
+            const dots = document.querySelectorAll('#progress-dots div');
+            dots.forEach((dot, index) => {
+                if (index <= currentScreen) {
+                    dot.className = "w-4 h-4 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,0.9)]";
+                } else {
+                    dot.className = "w-4 h-4 rounded-full bg-white/30";
+                }
+            });
+
+            if (currentScreen === 1) initPhase2();
+            if (currentScreen === 2) initPhase3();
+            if (currentScreen === 3) initPhase4();
+            if (currentScreen === 4) {
+                playSound('ding'); // Victory
+                if (window.markModuleComplete) window.markModuleComplete('igcse-en-ceo-masterclass');
+            }
+        }
+
+        // Phase 1: 点击看视频
+        function playVideo() {
+            initAudio();
+            window.open('https://www.youtube.com/watch?v=FWTNMzK9vG4', '_blank');
+            
+            const btn = document.getElementById('btn-next-0');
+            btn.disabled = false;
+            btn.className = "w-full py-5 bg-dark text-white rounded-2xl font-extrabold text-xl shadow-[0_10px_20px_rgba(0,0,0,0.4)] hover:bg-gray-800 transition transform hover:-translate-y-2 active:scale-95 flex justify-center items-center gap-3 animate-pulse border-2 border-green-400";
+            btn.innerHTML = '已掌握核心机密，进入实战 <i class="fas fa-bolt text-yellow-300"></i>';
+        }
+
+        // 核心 Drag & Drop 与 Click-to-Match 双引擎
+        let draggedEl = null;
+        let selectedDraggable = null; // 新增：用于保存点击选中的元素
+        let startX, startY;
+        let activeDropZones = [];
+
+        function setupDrag(draggables, dropSelector, onDropSuccess) {
+            // 1. 绑定目标区域的 "点选匹配" 逻辑 (Click-to-Match)
+            document.querySelectorAll(dropSelector).forEach(zone => {
+                if (!zone.dataset.clickBound) {
+                    zone.dataset.clickBound = "true";
+                    zone.style.cursor = 'pointer'; // 提示此区域可点击
+                    zone.addEventListener('click', () => {
+                        if (selectedDraggable) {
+                            const dropped = onDropSuccess(selectedDraggable, zone);
+                            if (dropped) {
+                                selectedDraggable.dataset.locked = "true";
+                                clearSelection();
+                            } else {
+                                playSound('error');
+                                clearSelection();
+                            }
+                        }
+                    });
+                }
+            });
+
+            draggables.forEach(el => {
+                let isDragging = false;
+
+                // 2. 点击选中逻辑 (高亮)
+                el.addEventListener('click', (e) => {
+                    if (el.dataset.locked === "true" || isDragging) return;
+                    initAudio();
+                    
+                    if (selectedDraggable === el) {
+                        clearSelection(); // 再次点击取消选中
+                    } else {
+                        clearSelection(); // 清除之前的选中
+                        selectedDraggable = el;
+                        // 添加发光和悬浮特效
+                        el.classList.add('ring-4', 'ring-yellow-300', 'scale-110', 'z-50', 'shadow-2xl');
+                        playSound('pop');
+                    }
+                });
+
+                // 3. 无偏移的拖拽逻辑
+                el.addEventListener('pointerdown', (e) => {
+                    if (el.dataset.locked === "true") return;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    isDragging = false;
+                    
+                    // 记录真实的渲染位置和尺寸
+                    const rect = el.getBoundingClientRect();
+                    el.dataset.origX = rect.left;
+                    el.dataset.origY = rect.top;
+                    el.dataset.origW = rect.width;
+                    el.dataset.origH = rect.height;
+                    
+                    el.setPointerCapture(e.pointerId);
+                });
+
+                el.addEventListener('pointermove', (e) => {
+                    if (el.dataset.locked === "true" || !el.hasPointerCapture(e.pointerId)) return;
+                    
+                    const dx = e.clientX - startX;
+                    const dy = e.clientY - startY;
+                    
+                    // 阈值：移动超过 5px 才视为拖拽，否则依然视为点击
+                    if (!isDragging && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) {
+                        isDragging = true;
+                        initAudio();
+                        clearSelection(); // 开始拖拽时取消点击状态
+                        draggedEl = el;
+                        activeDropZones = Array.from(document.querySelectorAll(dropSelector));
+                        
+                        // 精准定位修复：直接继承真实的坐标和宽高，消除偏移弹跳 Bug
+                        el.style.position = 'fixed';
+                        el.style.left = el.dataset.origX + 'px';
+                        el.style.top = el.dataset.origY + 'px';
+                        el.style.width = el.dataset.origW + 'px';
+                        el.style.height = el.dataset.origH + 'px';
+                        el.style.margin = '0';
+                        el.style.zIndex = '9999';
+                        el.classList.add('dragging');
+                    }
+
+                    if (isDragging) {
+                        e.preventDefault();
+                        el.style.transform = `translate(${dx}px, ${dy}px) scale(1.05) rotate(-2deg)`;
+
+                        const elRect = el.getBoundingClientRect();
+                        activeDropZones.forEach(zone => {
+                            const zoneRect = zone.getBoundingClientRect();
+                            if (isIntersecting(elRect, zoneRect)) {
+                                zone.classList.add('drag-over');
+                            } else {
+                                zone.classList.remove('drag-over');
+                            }
+                        });
+                    }
+                });
+
+                el.addEventListener('pointerup', (e) => {
+                    if (el.dataset.locked === "true") return;
+                    el.releasePointerCapture(e.pointerId);
+                    
+                    if (isDragging) {
+                        let dropped = false;
+                        const elRect = el.getBoundingClientRect();
+                        
+                        activeDropZones.forEach(zone => {
+                            zone.classList.remove('drag-over');
+                            if (!dropped) {
+                                const zoneRect = zone.getBoundingClientRect();
+                                if (isIntersecting(elRect, zoneRect)) {
+                                    dropped = onDropSuccess(el, zone);
+                                    if (dropped) el.dataset.locked = "true";
+                                }
+                            }
+                        });
+
+                        if (!dropped && el.dataset.locked !== "true") {
+                            resetDraggable(el);
+                            playSound('error');
+                        }
+                        
+                        el.classList.remove('dragging');
+                        draggedEl = null;
+                        
+                        // 延迟复位 isDragging，防止松手瞬间误触 click 事件
+                        setTimeout(() => isDragging = false, 50);
+                    }
+                });
+            });
+        }
+
+        function clearSelection() {
+            if (selectedDraggable) {
+                selectedDraggable.classList.remove('ring-4', 'ring-yellow-300', 'scale-110', 'z-50', 'shadow-2xl');
+                selectedDraggable = null;
+            }
+        }
+
+        function resetDraggable(el) {
+            el.style.position = '';
+            el.style.transform = '';
+            el.style.width = '';
+            el.style.height = '';
+            el.style.left = '';
+            el.style.top = '';
+            el.style.margin = '';
+            el.style.zIndex = '';
+        }
+
+        function isIntersecting(r1, r2) {
+            return !(r2.left > r1.right || r2.right < r1.left || r2.top > r1.bottom || r2.bottom < r1.top);
+        }
+
+        // Phase 2: 填空 (数据结构升级：带入中文翻译)
+        const vocabQuestions = [
+            { id: "amygdala", text: "When facing an overdue essay, the brain's ___ triggers a fear response, making you want to avoid the task.", zh: "当面对逾期的论文时，大脑的 ___ 会触发恐惧反应，让你想要逃避这项任务。" },
+            { id: "perfectionism", text: "She didn't start making the nails because she feared they wouldn't be flawless. This is called ___.", zh: "她迟迟不开始制作穿戴甲，因为她害怕做得不够完美。这被称为 ___。" },
+            { id: "apathy", text: "Laziness is marked by low energy and ___, whereas procrastinators actually care too much.", zh: "懒惰的特征是低能量和 ___，而拖延症患者其实是在乎得太多。" },
+            { id: "irrational", text: "It is ___ to do something you expect to harm you, like scrolling TikTok instead of studying.", zh: "做那些明知会伤害自己的事情是 ___ 的，比如不去学习而是刷 TikTok。" }
+        ];
+
+        let phase2Completed = 0;
+        let showTranslation = false;
+
+        function toggleTranslations() {
+            showTranslation = !showTranslation;
+            document.querySelectorAll('.translation-text').forEach(el => {
+                if (showTranslation) el.classList.add('show');
+                else el.classList.remove('show');
+            });
+            playSound('pop');
+        }
+
+        function initPhase2() {
+            const zones = document.getElementById('vocab-zones');
+            zones.innerHTML = ''; 
+            mistakes = 0;
+            phase2Completed = 0;
+            showTranslation = false;
+            
+            vocabQuestions.sort(() => Math.random() - 0.5).forEach(q => {
+                const zone = document.createElement('div');
+                zone.className = "glass-panel rounded-3xl p-6 flex flex-col justify-between relative border-2 border-white/20 shadow-lg min-h-[160px]";
+                zone.dataset.answer = q.id;
+                
+                let textHTML = q.text.replace('___', '<span class="blank-spot inline-block w-20 border-b-4 border-white/60 relative top-1"></span>');
+
+                zone.innerHTML = `
+                    <div>
+                        <p class="text-white text-lg font-medium leading-relaxed">${textHTML}</p>
+                        <!-- 隐藏的中文层 -->
+                        <p class="translation-text">${q.zh.replace('___', '<span class="text-white/50 underline">___</span>')}</p>
+                    </div>
+                    <div class="target-box h-14 mt-4 rounded-2xl border-4 border-dashed border-white/50 bg-black/10 flex items-center justify-center text-white/70 text-base font-bold transition-all">放入此处</div>
+                `;
+                zones.appendChild(zone);
+            });
+
+            setupDrag(document.querySelectorAll('#vocab-bank .draggable'), '.target-box', (el, targetBox) => {
+                const zone = targetBox.parentElement;
+                if (el.dataset.word === zone.dataset.answer) {
+                    playSound('ding');
+                    resetDraggable(el); // 彻底清空临时物理样式
+                    el.style.width = '100%';
+                    el.className = "bg-green-400 text-white px-4 py-3 rounded-xl font-extrabold text-center w-full shadow-md border border-green-300 mt-2 text-xl";
+                    
+                    const blankSpot = zone.querySelector('.blank-spot');
+                    if (blankSpot) {
+                        blankSpot.outerHTML = `<span class="text-green-300 font-extrabold text-xl drop-shadow-md"> ${el.dataset.word.toUpperCase()} </span>`;
+                    }
+                    
+                    targetBox.replaceWith(el);
+                    phase2Completed++;
+                    if (phase2Completed >= 4) {
+                        const btn = document.getElementById('btn-next-1');
+                        btn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-4');
+                        btn.classList.add('opacity-100', 'translate-y-0');
+                    }
+                    return true;
+                } else {
+                    mistakes++;
+                    if (mistakes >= 3) showToast("提示：Amygdala(杏仁核)管恐惧，Perfectionism怕失败", true);
+                    return false;
+                }
+            });
+        }
+
+        // Phase 3: Eisenhower Matrix (题库翻倍，中英双语)
+        const matrixTasks = [
+            { text: "明天截止的 IGCSE ESL 写作", quad: "1", color: "text-red-700" },
+            { text: "Reply to an angry customer (Urgent order)", quad: "1", color: "text-red-700" },
+            { text: "Website crashed! Fix it now", quad: "1", color: "text-red-700" },
+            { text: "构思下个月的新款穿戴甲", quad: "2", color: "text-blue-700" },
+            { text: "Research IG competitors for inspiration", quad: "2", color: "text-blue-700" },
+            { text: "Workout at the gym (30 mins)", quad: "2", color: "text-blue-700" },
+            { text: "复习下周的物理小测", quad: "2", color: "text-blue-700" },
+            { text: "闺蜜找你八卦别人的感情史", quad: "3", color: "text-yellow-700" },
+            { text: "打包包裹贴快递单", quad: "3", color: "text-yellow-700" },
+            { text: "Answer a random unknown phone call", quad: "3", color: "text-yellow-700" },
+            { text: "Organize the messy desk drawer", quad: "3", color: "text-yellow-700" },
+            { text: "刷两个小时的 TikTok", quad: "4", color: "text-gray-700" },
+            { text: "Binge-watch 3 episodes of Netflix", quad: "4", color: "text-gray-700" },
+            { text: "纠结今天要喝 ZUS 还是 Starbucks", quad: "4", color: "text-gray-700" }
+        ];
+
+        let currentTaskIndex = 0;
+
+        function initPhase3() {
+            mistakes = 0;
+            currentTaskIndex = 0;
+            
+            // 打乱矩阵任务顺序 (Shuffle Array)
+            matrixTasks.sort(() => Math.random() - 0.5);
+
+            document.querySelectorAll('.matrix-content').forEach(el => el.innerHTML = '');
+            spawnTask();
+        }
+
+        function spawnTask() {
+            if (currentTaskIndex >= matrixTasks.length) {
+                const btn = document.getElementById('btn-next-2');
+                btn.classList.remove('opacity-0', 'pointer-events-none');
+                btn.classList.add('opacity-100');
+                document.getElementById('task-spawn-zone').innerHTML = '<span class="text-green-400 text-2xl font-extrabold">🎉 分类完毕！</span>';
+                return;
+            }
+
+            const task = matrixTasks[currentTaskIndex];
+            const tEl = document.createElement('div');
+            tEl.className = `draggable bg-white ${task.color} px-5 py-3 rounded-xl font-extrabold text-base md:text-lg shadow-[0_10px_20px_rgba(0,0,0,0.15)] absolute`;
+            tEl.innerText = task.text;
+            tEl.dataset.quad = task.quad;
+
+            const spawnZone = document.getElementById('task-spawn-zone');
+            spawnZone.innerHTML = '';
+            spawnZone.appendChild(tEl);
+
+            setupDrag([tEl], '.drop-zone-matrix', (el, zone) => {
+                if (el.dataset.quad === zone.dataset.quadrant) {
+                    playSound('ding');
+                    resetDraggable(el); // 彻底清空临时物理样式
+                    el.style.width = '100%';
+                    el.classList.remove('absolute', 'draggable', 'text-red-700', 'text-blue-700', 'text-yellow-700', 'text-gray-700', 'bg-white');
+                    el.classList.add('mb-2', 'bg-white/40', 'text-white', 'border-none', 'shadow-sm', 'backdrop-blur-sm', 'text-sm', 'md:text-base');
+                    zone.querySelector('.matrix-content').appendChild(el);
+                    currentTaskIndex++;
+                    setTimeout(spawnTask, 300);
+                    return true;
+                } else {
+                    mistakes++;
+                    if (mistakes >= 3) showToast("提示：马上交/急客放 Do First，未来计划放 Schedule，八卦/闲聊放 Delegate！", true);
+                    return false;
+                }
+            });
+        }
+
+        // Phase 4: 拼句子 (扩容为 10 句高阶金库)
+        const sentencePool = [
+            ["Due", "to", "unforeseen", "scheduling", "conflicts,", "I", "must", "decline", "at", "this", "time."],
+            ["I", "appreciate", "the", "offer,", "but", "my", "current", "workload", "is", "full."],
+            ["Let", "me", "review", "my", "schedule", "and", "get", "back", "to", "you."],
+            ["I", "am", "currently", "focusing", "on", "my", "studies", "and", "cannot", "commit."],
+            ["Thank", "you", "for", "thinking", "of", "me,", "however,", "I", "am", "unavailable."],
+            ["Could", "we", "possibly", "reschedule", "this", "for", "a", "more", "convenient", "time?"],
+            ["I", "am", "fully", "committed", "to", "other", "urgent", "projects", "right", "now."],
+            ["Unfortunately,", "I", "cannot", "accommodate", "your", "request", "at", "this", "moment."],
+            ["I", "need", "to", "prioritize", "my", "upcoming", "IGCSE", "examinations", "this", "week."],
+            ["Please", "contact", "my", "assistant", "for", "any", "urgent", "business", "inquiries."]
+        ];
+        
+        let currentSentenceIndex = 0;
+        let currentBuild = [];
+
+        function initPhase4() {
+            mistakes = 0;
+            currentSentenceIndex = 0;
+            loadSentence();
+        }
+
+        function loadSentence() {
+            currentBuild = [];
+            document.getElementById('sentence-drop').innerHTML = '';
+            document.getElementById('sentence-progress').innerText = `${currentSentenceIndex + 1} / 10`;
+            
+            const bank = document.getElementById('word-bank');
+            bank.innerHTML = '';
+            
+            let targetSentence = sentencePool[currentSentenceIndex];
+            // 洗牌当前句子的词汇
+            let shuffled = [...targetSentence].sort(() => Math.random() - 0.5);
+            
+            shuffled.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = "word-btn bg-white/90 text-purple-700 px-6 py-3 rounded-2xl font-extrabold text-xl shadow-md border-2 border-transparent hover:border-purple-300";
+                btn.innerText = word;
+                btn.onclick = () => selectWord(btn, word);
+                bank.appendChild(btn);
+            });
+        }
+
+        function selectWord(btn, word) {
+            initAudio();
+            const targetSentence = sentencePool[currentSentenceIndex];
+            const expectedWord = targetSentence[currentBuild.length];
+            
+            if (word === expectedWord) {
+                playSound('ding');
+                btn.classList.add('hidden');
+                currentBuild.push(word);
+                
+                const dropZone = document.getElementById('sentence-drop');
+                const wordSpan = document.createElement('span');
+                wordSpan.className = "bg-green-400 text-white px-4 py-2 rounded-xl font-bold shadow-sm animate-fade-in";
+                wordSpan.innerText = word;
+                dropZone.appendChild(wordSpan);
+
+                if (currentBuild.length === targetSentence.length) {
+                    playSound('pop');
+                    currentSentenceIndex++;
+                    
+                    if (currentSentenceIndex < 10) {
+                        // 稍微停留 1.2 秒，让她欣赏一下拼好的完美句子，再加载下一句
+                        setTimeout(() => {
+                            loadSentence();
+                        }, 1200);
+                    } else {
+                        // 10 句全部拼完，进入胜利大结局！
+                        setTimeout(() => nextScreen(), 1500);
+                    }
+                }
+            } else {
+                playSound('error');
+                mistakes++;
+                btn.classList.add('bg-red-200', 'text-red-700');
+                setTimeout(() => btn.classList.remove('bg-red-200', 'text-red-700'), 500);
+                
+                // 动态 Hint：告诉你下一个到底该选哪个词！
+                if (mistakes >= 3) {
+                    showToast(`提示：下一个词是 "${expectedWord}"`, true);
+                    mistakes = 0; // 重置容错计数，允许继续提示
+                }
+            }
+        }
+
+        // Initialize on load
+        window.onload = () => {
+            // Screen 0 is already visible initially by not having 'hidden'
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../auth-access.js"></script>
+    <script src="../../../../progress-tracker.js"></script>
+</body>
+</html>

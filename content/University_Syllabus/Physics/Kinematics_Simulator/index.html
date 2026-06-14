@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinematics Lab | Mastery Academy</title>
+    
+    <!-- AI Metadata (for module_automator.py) -->
+    <meta name="ai-folder" content="University_Syllabus/Physics/Kinematics_Simulator">
+    <meta name="ai-title" content="Kinematics & Dynamics Lab">
+    <meta name="ai-desc" content="Interactive 2D physics sandbox. Experiment with projectile motion, vectors, forces, and friction in real-time.">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #080c14;
+            --card-bg: #111827;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(17, 24, 39, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.06);
+            --accent: #6366f1; /* Physics Indigo */
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 { margin: 0; font-size: 2.5rem; color: var(--text-primary); }
+        .home-btn-fixed {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            z-index: 99999;
+            font-weight: 600;
+        }
+        .home-btn-fixed:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .container {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 900px;
+            width: 100%;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        canvas {
+            background: #0f172a;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            width: 100%;
+            height: 400px;
+            cursor: crosshair;
+        }
+        .controls {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="range"] {
+            accent-color: var(--accent);
+        }
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+        .dashboard {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: monospace;
+            display: flex;
+            justify-content: space-around;
+        }
+        #success-msg {
+            color: #10b981;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+        }
+    </style>
+
+    <!-- Supabase CDN & SDKs -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../js/auth-access.js"></script>
+    <script src="../../../../js/progress-tracker.js"></script>
+</head>
+<body>
+
+    <a href="../../../../uni-hub-physics.html" class="home-btn-fixed">🏠 Back to Physics Hub</a>
+    
+    <header>
+        <h1>Kinematics & Dynamics Lab</h1>
+        <p style="color: var(--text-secondary);">Set angle and velocity to hit the target block.</p>
+    </header>
+
+    <div class="container">
+        <canvas id="simCanvas" width="840" height="400"></canvas>
+        
+        <div class="dashboard">
+            <div>Angle: <span id="valAngle">45</span>°</div>
+            <div>Velocity: <span id="valVel">50</span> m/s</div>
+            <div>Time: <span id="valTime">0.00</span> s</div>
+        </div>
+
+        <div class="controls">
+            <div class="control-group">
+                <label>Launch Angle (θ)</label>
+                <input type="range" id="inpAngle" min="0" max="90" value="45" oninput="document.getElementById('valAngle').innerText=this.value; drawInitial()">
+            </div>
+            <div class="control-group">
+                <label>Initial Velocity (v₀)</label>
+                <input type="range" id="inpVel" min="10" max="100" value="50" oninput="document.getElementById('valVel').innerText=this.value; drawInitial()">
+            </div>
+            <button onclick="launch()">Launch Projectile 🚀</button>
+            <button onclick="resetSim()" style="background: #ef4444;">Reset</button>
+        </div>
+
+        <div id="success-msg">Target Hit! Progress Saved. 🎯</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('simCanvas');
+        const ctx = canvas.getContext('2d');
+        const g = 9.81;
+        let animationId;
+        
+        // Sim state
+        let t = 0;
+        let x0 = 50, y0 = 350;
+        let target = { x: 700, y: 300, w: 60, h: 60 };
+        let hasHit = false;
+
+        function drawInitial() {
+            cancelAnimationFrame(animationId);
+            t = 0; hasHit = false;
+            document.getElementById('valTime').innerText = "0.00";
+            document.getElementById('success-msg').style.display = "none";
+            render(x0, y0);
+            
+            // Draw predictive path
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+            ctx.setLineDash([5, 5]);
+            let angle = document.getElementById('inpAngle').value * (Math.PI / 180);
+            let v = document.getElementById('inpVel').value;
+            for(let i=0; i<3; i+=0.1) {
+                let px = x0 + v * Math.cos(angle) * i * 5;
+                let py = y0 - (v * Math.sin(angle) * i - 0.5 * g * i * i) * 5;
+                if(i===0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function render(x, y) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Ground
+            ctx.fillStyle = '#1e293b';
+            ctx.fillRect(0, 350, canvas.width, 50);
+
+            // Target
+            ctx.fillStyle = hasHit ? '#10b981' : '#ec4899';
+            ctx.fillRect(target.x, target.y, target.w, target.h);
+
+            // Projectile
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI*2);
+            ctx.fillStyle = '#6366f1';
+            ctx.fill();
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = '#6366f1';
+        }
+
+        function launch() {
+            cancelAnimationFrame(animationId);
+            t = 0;
+            hasHit = false;
+            document.getElementById('success-msg').style.display = "none";
+            
+            let angle = document.getElementById('inpAngle').value * (Math.PI / 180);
+            let v = document.getElementById('inpVel').value;
+            let vx = v * Math.cos(angle);
+            let vy = v * Math.sin(angle);
+
+            function update() {
+                t += 0.05;
+                document.getElementById('valTime').innerText = t.toFixed(2);
+                
+                // Scale factor for visuals
+                let x = x0 + vx * t * 5;
+                let y = y0 - (vy * t - 0.5 * g * t * t) * 5;
+
+                render(x, y);
+
+                // Collision detection
+                if (x > target.x && x < target.x + target.w && y > target.y && y < target.y + target.h) {
+                    hasHit = true;
+                    render(x, y); // Final render with green target
+                    document.getElementById('success-msg').style.display = "block";
+                    ProgressTracker.autoSave('uni-phys-kinematics', { target_hit: true });
+                    return;
+                }
+
+                if (y < 350 && x < canvas.width) {
+                    animationId = requestAnimationFrame(update);
+                }
+            }
+            update();
+        }
+
+        function resetSim() {
+            drawInitial();
+        }
+
+        window.addEventListener('load', function() {
+            ProgressTracker.init(async function(tracker) {
+                const saved = await tracker.load();
+                if (saved && saved.target_hit) {
+                    document.getElementById('success-msg').innerText = "Target Hit! (Previously Completed) 🎯";
+                    document.getElementById('success-msg').style.display = "block";
+                }
+                drawInitial();
+            });
+        });
+    </script>
+</body>
+</html>
