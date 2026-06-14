@@ -22,7 +22,7 @@ This document tracks the ongoing development, recent milestones, and unresolved 
 - Resolved syllabus mapping mismatches.
 
 ### 4. Codebase Structural Cleanup
-- **Root Directory Sweep:** Moved all temporary AI scripts, parsing utilities, and output logs from the project root into a newly organized `tools/batch_operations/` directory to maintain structural cleanliness.
+- **Root Directory Sweep:** Moved all temporary AI scripts, parsing utilities, and output logs from the project root into a newly organized `tools/batch_operations/` directory to maintain structural cleanliness (recently including `implement_honeycomb.py`, `patch_pill.py`, `patch_uni.py`, and `scaffold_hub.py`).
 - **Documentation Migration:** Relocated operational logs (`DEVELOPMENT_LOG.md`, `SYSTEM_LOG.md`) to a dedicated `docs/` folder.
 
 ### 5. Higher Education Expansion (University Portal)
