@@ -186,12 +186,12 @@
                 optionBtns[optionIdx].className += " bg-green-600 border-green-400 text-white shadow-[0_0_15px_#4ade80]";
                 score += 10;
                 let fb = document.getElementById('feedback');
-                fb.innerHTML = \`<div class="absolute inset-0 flex items-center justify-center rounded-lg bg-opacity-95 backdrop-blur-sm bg-[#D3A625]/30 text-green-800"><div class="text-center font-bold text-2xl drop-shadow-md">\${GreenTick} \${i18n[lang].correct}</div></div>\`;
+                fb.innerHTML = `<div class="absolute inset-0 flex items-center justify-center rounded-lg bg-opacity-95 backdrop-blur-sm bg-[#D3A625]/30 text-green-800"><div class="text-center font-bold text-2xl drop-shadow-md">${GreenTick} ${i18n[lang].correct}</div></div>`;
                 document.getElementById('module_question').classList.add('magic-flash');
             } else {
                 optionBtns[optionIdx].className += " bg-red-800 border-red-500 text-gray-300";
                 let fb = document.getElementById('feedback');
-                fb.innerHTML = \`<div class="absolute inset-0 flex items-center justify-center rounded-lg bg-opacity-95 backdrop-blur-sm bg-red-900/90 text-red-100"><div class="text-center font-bold text-2xl drop-shadow-md">\${RedCross} <span class="text-xl mb-1">\${i18n[lang].wrong}</span> <span class="text-3xl">\${q.correctAnswer}</span></div></div>\`;
+                fb.innerHTML = `<div class="absolute inset-0 flex items-center justify-center rounded-lg bg-opacity-95 backdrop-blur-sm bg-red-900/90 text-red-100"><div class="text-center font-bold text-2xl drop-shadow-md">${RedCross} <span class="text-xl mb-1">${i18n[lang].wrong}</span> <span class="text-3xl">${q.correctAnswer}</span></div></div>`;
                 document.getElementById('module_question').classList.add('animate-shake');
             }
 
@@ -207,8 +207,8 @@
             }, 1500);
         }
 
-        const GreenTick = \`<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-green-700"><polyline points="20 6 9 17 4 12"></polyline></svg>\`;
-        const RedCross = \`<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-red-300"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>\`;
+        const GreenTick = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-green-700"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+        const RedCross = `<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2 text-red-300"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
 
         function dragElement(elm) {
             var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -248,40 +248,40 @@
 
             let optionsHtml = '';
             q.options.forEach((opt, idx) => {
-                optionsHtml += \`<button onclick="handleAnswer(\${idx})" class="py-4 px-2 rounded-lg text-2xl font-bold transition-all duration-200 border-2 shadow-sm bg-[#faf0d9] border-[#c19a6b] text-[#740001] hover:bg-[#D3A625] hover:text-white hover:-translate-y-1">\${opt}</button>\`;
+                optionsHtml += `<button onclick="handleAnswer(${idx})" class="py-4 px-2 rounded-lg text-2xl font-bold transition-all duration-200 border-2 shadow-sm bg-[#faf0d9] border-[#c19a6b] text-[#740001] hover:bg-[#D3A625] hover:text-white hover:-translate-y-1">${opt}</button>`;
             });
 
-            const html = \`
+            const html = `
             <div class="absolute top-4 right-4 z-[100]">
                 <button onclick="toggleLang()" class="bg-[#D3A625] text-[#740001] px-4 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-transform flex items-center gap-2 border-2 border-[#740001]">
-                    \${lang === 'zh' ? 'English' : '中文'}
+                    ${lang === 'zh' ? 'English' : '中文'}
                 </button>
             </div>
 
             <div id="module_score" class="draggable absolute cursor-move bg-parchment border-2 border-[#c19a6b] shadow-xl rounded-lg p-4 w-48 z-20" style="top: 20px">
                 <div class="text-center font-serif text-[#740001]">
-                    <h3 class="font-bold border-b border-[#c19a6b] pb-2 mb-2">\${t.scoreLabel}</h3>
-                    <p class="text-4xl font-bold" id="scoreText">\${score}</p>
-                    <p class="text-xs text-gray-600 mt-2">\${t.progressLabel}: \${currentQIndex + 1}/\${ROUND_SIZE}</p>
+                    <h3 class="font-bold border-b border-[#c19a6b] pb-2 mb-2">${t.scoreLabel}</h3>
+                    <p class="text-4xl font-bold" id="scoreText">${score}</p>
+                    <p class="text-xs text-gray-600 mt-2">${t.progressLabel}: ${currentQIndex + 1}/${ROUND_SIZE}</p>
                 </div>
             </div>
 
             <div id="module_question" class="draggable absolute cursor-move bg-parchment border-2 border-[#c19a6b] shadow-xl rounded-lg p-4 w-[90vw] max-w-[400px] z-10" style="top: 150px; left: 10px;">
                 <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#740001] text-[#D3A625] px-4 py-1 rounded-full text-xs font-bold border border-[#D3A625] shadow-md whitespace-nowrap">
-                    \${q.type === 'uchi' ? t.uchiTag : t.sotoTag}
+                    ${q.type === 'uchi' ? t.uchiTag : t.sotoTag}
                 </div>
                 <p class="text-gray-900 font-serif text-xl leading-relaxed text-center mt-4 font-medium min-h-[100px] flex items-center justify-center">
-                    \${lang === 'zh' ? q.situationZh : q.situationEn}
+                    ${lang === 'zh' ? q.situationZh : q.situationEn}
                 </p>
                 <div id="feedback"></div>
             </div>
 
             <div id="module_options" class="draggable absolute cursor-move bg-parchment border-2 border-[#c19a6b] shadow-xl rounded-lg p-4 w-[90vw] max-w-[360px] z-10" style="top: 400px; left: 10px;">
                 <div id="options" class="grid grid-cols-2 gap-3">
-                    \${optionsHtml}
+                    ${optionsHtml}
                 </div>
             </div>
-        \`;
+        `;
             document.getElementById('app').innerHTML = html;
             if (!isMobile) {
                 document.getElementById('module_score').style.left = (window.innerWidth - 250) + "px";
@@ -301,27 +301,27 @@
             else if (score >= 75) gradeData = t.grades.A;
             else if (score >= 45) gradeData = t.grades.P;
 
-            const html = \`
+            const html = `
             <div class="absolute inset-0 flex items-center justify-center">
                 <div class="bg-parchment text-gray-900 w-full max-w-md p-8 rounded-lg shadow-2xl border-4 border-[#D3A625] relative animate-fade-in text-center">
                     <button onclick="toggleLang()" class="absolute -top-5 -right-5 bg-[#D3A625] text-[#740001] px-4 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition-transform border-2 border-[#740001]">
-                        \${lang === 'zh' ? 'English' : '中文'}
+                        ${lang === 'zh' ? 'English' : '中文'}
                     </button>
-                    <h2 class="text-3xl font-serif font-bold border-b-2 border-gray-400 pb-4 mb-4 text-[#740001]">\${t.resultTitle}</h2>
-                    <p class="text-lg">\${t.finalScore}</p>
-                    <p class="text-7xl font-bold text-[#D3A625] drop-shadow-md my-2">\${score}</p>
+                    <h2 class="text-3xl font-serif font-bold border-b-2 border-gray-400 pb-4 mb-4 text-[#740001]">${t.resultTitle}</h2>
+                    <p class="text-lg">${t.finalScore}</p>
+                    <p class="text-7xl font-bold text-[#D3A625] drop-shadow-md my-2">${score}</p>
 
                     <div class="bg-white/50 p-4 rounded-md mt-4 border border-[#c19a6b]">
-                        <p class="text-sm text-gray-600 mb-1">\${t.gradeLabel}</p>
-                        <p class="text-2xl font-bold text-[#740001]">\${gradeData.grade}</p>
+                        <p class="text-sm text-gray-600 mb-1">${t.gradeLabel}</p>
+                        <p class="text-2xl font-bold text-[#740001]">${gradeData.grade}</p>
                     </div>
-                    <p class="font-serif italic mt-4 text-gray-800">"\${gradeData.msg}"</p>
+                    <p class="font-serif italic mt-4 text-gray-800">"${gradeData.msg}"</p>
                     <button onclick="renderStart()" class="w-full flex justify-center items-center gap-2 bg-[#740001] text-[#D3A625] font-bold px-8 py-3 rounded-lg transition-transform hover:scale-105 mt-8 shadow-md border border-[#D3A625]">
-                        \${t.restart}
+                        ${t.restart}
                     </button>
                 </div>
             </div>
-        \`;
+        `;
             document.getElementById('app').innerHTML = html;
         }
 
