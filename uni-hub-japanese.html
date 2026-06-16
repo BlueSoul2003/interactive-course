@@ -544,7 +544,7 @@
             }
         }
 
-        /* 鈹€鈹€ Footer 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+        /*  Footer  */
         footer {
             border-top: 1px solid rgba(255, 255, 255, 0.07);
             margin-top: 60px;
@@ -610,7 +610,7 @@
             }
         }
 
-        /* 鈹€鈹€ PDF Modal 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+        /*  PDF Modal  */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -754,7 +754,7 @@
         }
         
         .module-locked::after {
-            content: "馃敀";
+            content: "🔒";
             position: absolute;
             top: 50%;
             left: 50%;
@@ -837,7 +837,7 @@
             cursor: pointer;
         }
 
-        /* 鈹€鈹€ Feedback Modal & FAB Styling 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+        /*  Feedback Modal & FAB Styling  */
         #feedback-fab {
             position: fixed;
             bottom: 20px;
@@ -979,19 +979,19 @@
             <button id="studentDashboardBtn" class="tab-btn"
                 style="padding: 8px 20px; font-size: 0.95rem; margin:0; background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,0.3); color: white; display:flex; align-items:center; gap: 8px;"
                 onclick="openStudentModal()">
-                <span style="font-size: 1.2rem;">馃懁</span>
+                <span style="font-size: 1.2rem;">👤</span>
                 <span id="activeStudentLabel">Student: None</span>
             </button>
         </div>
-        <a href="university.html" class="level-badge" style="text-decoration:none;">猬咃笍 Back to Faculties</a><br><div class="level-badge" style="margin-top:10px;">Physics Department</div>
-        <h1>Department of Physics</h1>
-        <p>University-level Physics Modules and Simulators.</p>
+        <a href="university.html" class="level-badge" style="text-decoration:none;">⬅️ Back to Faculties</a><br><div class="level-badge" style="margin-top:10px;">Japanese Department</div>
+        <h1>Department of Japanese</h1>
+        <p>University-level Japanese Modules and Language Learning.</p>
     </header>
 
     <main>
     <div class="syllabus-content active">
         <h2 class="section-title">
-            <div class="section-icon" style="border-color: #D3A625; color: #D3A625;">🌸</div>
+            <div class="section-icon" style="border-color: #D3A625; color: #D3A625;"></div>
             Core Japanese Modules
         </h2>
         <div class="grid">
@@ -1026,15 +1026,15 @@
             <!-- Resources -->
             <div class="footer-col">
                 <h4>Resources</h4>
-                <button class="footer-link" onclick="openPdfModal()">馃搫 Download PDF Notes</button>
+                <button class="footer-link" onclick="openPdfModal()">📄 Download PDF Notes</button>
             </div>
 
             <!-- Contact -->
             <div class="footer-col">
                 <h4>Contact</h4>
-                <a href="mailto:admin@masteryacademy.edu">鉁夛笍 admin@masteryacademy.edu</a>
-                <a href="#">馃挰 WhatsApp Support</a>
-                <a href="#">馃摚 Telegram Community</a>
+                <a href="mailto:admin@masteryacademy.edu">✉️ admin@masteryacademy.edu</a>
+                <a href="#">💬 WhatsApp Support</a>
+                <a href="#">📣 Telegram Community</a>
             </div>
 
             <!-- About -->
@@ -1050,11 +1050,11 @@
         </div>
     </footer>
 
-    <!-- 鈹€鈹€ PDF Download Modal 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ -->
+    <!--  PDF Download Modal  -->
     <div class="modal-overlay" id="pdf-modal" onclick="closePdfModal(event)">
         <div class="modal-box">
             <button class="modal-close" onclick="closePdfModalDirect()">&times;</button>
-            <h2>馃摜 Download PDF Notes</h2>
+            <h2>📥 Download PDF Notes</h2>
             <p class="modal-subtitle">Click any file below to download course materials.</p>
             <div id="pdf-list"></div>
         </div>
@@ -1062,19 +1062,19 @@
 
     <!-- Script to handle Tab Switching and Layer Navigation -->
     <script>
-        // 鈹€鈹€ PDF Resources Data 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  PDF Resources Data 
         // To add a new PDF: add an entry to this array and drop the file in the
         // corresponding subfolder under resources/pdf/. See DEVELOPER_GUIDE.md.
         const pdfResources = [
-            // 鈹€鈹€ SPM 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+            //  SPM 
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Peribahasa Notes", file: "resources/pdf/SPM/BM/Peribahasa_Notes.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Kata Terbitan Notes", file: "resources/pdf/SPM/BM/Kata_Terbitan_Notes.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Nota KOMSAS - Silir Daksina", file: "resources/pdf/SPM/BM/SPM_Komsas_F5_Silir Daksina.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Modul Kuasa Karangan SPM (IMBAKUP)", file: "resources/pdf/SPM/BM/SPM_BM_Modul_Kuasa_Karangan_IMBAKUP.pdf" },
-            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Rumusan 瀹炰綋閫氬叧鐗硅璁蹭箟", file: "resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf" },
-            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 鈥?Student Version", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Student.pdf" },
-            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 鈥?Answer Key (Teacher)", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Answers.pdf" },
-            { syllabus: "SPM", subject: "Science (Form 3 KSSM)", label: "Form 3 Science Bab 1 鈥?Student Version", file: "hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab1_Student.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Rumusan 实体通关特讲义", file: "resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf" },
+            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 ?Student Version", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Student.pdf" },
+            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 ?Answer Key (Teacher)", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Answers.pdf" },
+            { syllabus: "SPM", subject: "Science (Form 3 KSSM)", label: "Form 3 Science Bab 1 ?Student Version", file: "hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab1_Student.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM 2021 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2021_chemistry_paper_2.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM 2022 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2022_chemistry_paper_2.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM 2023 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2023_chemistry_paper_2.pdf" },
@@ -1083,10 +1083,10 @@
             { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry 2026 May Revision (Student)", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_chemistry_2026_may_revision_student.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry 2026 May Revision (Teacher)", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_chemistry_2026_may_revision_teacher.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry Worksheet", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/SPM_Chemistry_Worksheet.pdf" },
-            // 鈹€鈹€ UEC 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+            //  UEC 
             { syllabus: "UEC", subject: "English", label: "Reading Comprehension Guide", file: "resources/pdf/UEC/English/Reading_Guide.pdf" },
             { syllabus: "UEC", subject: "English", label: "Summary Writing Workshop", file: "resources/pdf/UEC/English/Summary_Writing.pdf" },
-            // 鈹€鈹€ IGCSE 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+            //  IGCSE 
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Worksheet.pdf" },
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Answer_Key.pdf" },
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Energy: The Superpower All Around Us", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Energy_Superpower.pdf" },
@@ -1110,33 +1110,33 @@
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 7 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T7_Answer_Key.pdf" },
             { syllabus: "IGCSE", subject: "Mathematics (Stage 7)", label: "Stage 7 Math Revision (Answers)", file: "resources/pdf/IGCSE/Math/IGCSE_Math_Stage7_Revision_Answers.pdf" },
             { syllabus: "IGCSE", subject: "Mathematics (Stage 7)", label: "Stage 7 Math Revision (Student)", file: "resources/pdf/IGCSE/Math/IGCSE_Math_Stage7_Revision_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.1 Respiration)", label: "Respiration Worksheet 鈥?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.1 Respiration)", label: "Respiration Worksheet 鈥?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Answers.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.1 Respiration)", label: "Presentation: Breath to Energy (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.2 Properties of Materials)", label: "Presentation: Properties of Materials 鈥?Solutions (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Slides.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet 鈥?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet 鈥?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Answers.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.4 Ecosystems)", label: "Ecosystems Worksheet", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.4 Ecosystems)", label: "Ecosystems Answer Key", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/answer_worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet 鈥?Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet 鈥?Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/answer_worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.6 Light and Space)", label: "Chapter 6 Worksheet 鈥?Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.6 Light and Space)", label: "Chapter 6 Worksheet 鈥?Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/answer_worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet 鈥?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 鈥?Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet 鈥?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Answers.pdf" },
-            // 鈹€鈹€ Singapore 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.1 Respiration)", label: "Respiration Worksheet ?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.1 Respiration)", label: "Respiration Worksheet ?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.1 Respiration)", label: "Presentation: Breath to Energy (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.2 Properties of Materials)", label: "Presentation: Properties of Materials ?Solutions (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet ?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet ?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.4 Ecosystems)", label: "Ecosystems Worksheet", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.4 Ecosystems)", label: "Ecosystems Answer Key", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet ?Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet ?Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.6 Light and Space)", label: "Chapter 6 Worksheet ?Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.6 Light and Space)", label: "Chapter 6 Worksheet ?Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet ?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet ?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Answers.pdf" },
+            //  Singapore 
             { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Whole Numbers Review", file: "resources/pdf/Singapore/Math/Whole_Numbers_Review.pdf" },
             { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Year 4 Math Clear Revision", file: "resources/pdf/Singapore/Math/Singapore_Y4_Math_Clear_Revision.pdf" },
             { syllabus: "Singapore", subject: "Science (Y4)", label: "April Science Revision Worksheet (Student)", file: "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_student.pdf" },
             { syllabus: "Singapore", subject: "Science (Y4)", label: "April Science Revision Worksheet (Teacher)", file: "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_teacher.pdf" },
         ];
 
-        // 鈹€鈹€ PDF Modal Logic 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  PDF Modal Logic 
         function openPdfModal() {
             const modal = document.getElementById('pdf-modal');
             const list = document.getElementById('pdf-list');
 
-            // Group resources by syllabus 鈫?subject
+            // Group resources by syllabus ?subject
             const grouped = {};
             pdfResources.forEach(r => {
                 if (!grouped[r.syllabus]) grouped[r.syllabus] = {};
@@ -1154,7 +1154,7 @@
                         html += `<div class="pdf-subject-label">${subject}</div>`;
                         grouped[syllabus][subject].forEach(item => {
                             html += `<a class="pdf-download-btn" href="${item.file}" download target="_blank">
-                                        <span class="icon">猬囷笍</span>
+                                        <span class="icon">⬇️</span>
                                         <span>${item.label}</span>
                                      </a>`;
                         });
@@ -1182,7 +1182,7 @@
             if (e.key === 'Escape') closePdfModalDirect();
         });
 
-        // 鈹€鈹€ Existing Navigation Logic 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  Existing Navigation Logic 
         function switchSyllabus(event, syllabusId) {
             // Remove 'active' only from the currently visible syllabus tab row,
             // NOT from the level-switcher buttons (Secondary / Primary).
@@ -1267,7 +1267,7 @@
             <select id="authLangSelect" onchange="changeAuthLanguage(this.value)" style="position: absolute; top: 16px; left: 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 4px 8px; font-size: 0.85rem; outline: none; cursor:pointer; z-index:10;">
                 <option value="en" style="color: black;">EN</option>
                 <option value="ms" style="color: black;">MS</option>
-                <option value="zh" style="color: black;">涓枃</option>
+                <option value="zh" style="color: black;">世</option>
             </select>
             <button class="modal-close" onclick="closeStudentModal()">&times;</button>
             <h2 id="authTitle" style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px; margin-top: 25px;">Student Dashboard</h2>
@@ -1348,9 +1348,9 @@
         </div>
     </div>
 
-    <!-- 鈹€鈹€ Floating Feedback & Subject Requests Widget 鈹€鈹€ -->
+    <!--  Floating Feedback & Subject Requests Widget  -->
     <button id="feedback-fab" onclick="openFeedbackModal()">
-        <span>馃挰</span> Help & Feedback
+        <span>💬</span> Help & Feedback
     </button>
 
     <!-- ==========================================
@@ -1360,7 +1360,7 @@
         <div class="modal-box" style="animation-duration: 0.3s; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); max-width: 480px; width: 90%;">
             <button class="modal-close" onclick="closeFeedbackModalDirect()">&times;</button>
             <h2 style="font-family: var(--font-serif); font-size: 1.8rem; color: #fff; margin-bottom: 5px; margin-top: 15px; display: flex; align-items: center; gap: 10px; justify-content: center;">
-                <span>馃挰</span> Feedback & Requests
+                <span>💬</span> Feedback & Requests
             </h2>
             <div class="modal-subtitle" style="margin-bottom: 20px; color: #94a3b8; text-align: center;">
                 Help us build the ultimate learning portal or request a subject module!
@@ -1395,11 +1395,11 @@
                         <div style="flex: 1;">
                             <label style="display: block; font-size: 0.85rem; color: #94a3b8; margin-bottom: 5px; font-weight: 600; text-align: left;">Syllabus</label>
                             <select id="feedbackSyllabus" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; cursor: pointer;">
-                                <option value="spm">馃嚥馃嚲 SPM</option>
-                                <option value="uec">馃帗 UEC</option>
-                                <option value="igcse">馃審 IGCSE</option>
-                                <option value="sg">馃嚫馃嚞 Singapore</option>
-                                <option value="kssr">馃嚥馃嚲 KSSR (Primary)</option>
+                                <option value="spm">🇲🇾 SPM</option>
+                                <option value="uec">🎓 UEC</option>
+                                <option value="igcse">🌏 IGCSE</option>
+                                <option value="sg">🇸🇬 Singapore</option>
+                                <option value="kssr">🇲🇾 KSSR (Primary)</option>
                             </select>
                         </div>
                         <div style="flex: 1;">
@@ -1428,7 +1428,7 @@
     <script src="js/progress-tracker.js?v=1.0.1"></script>
     <script src="js/feedback.js?v=1.0.1"></script>
     <script>
-        // 鈹€鈹€ i18n Translations 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  i18n Translations 
         const authTranslations = {
             en: {
                 title: "Student Dashboard", subtitle: "Manage student profiles and resume progress across modules",
@@ -1449,13 +1449,13 @@
                 btnSubmitLogin: "Log Masuk", btnSubmitRegister: "Buat Akaun"
             },
             zh: {
-                title: "璐︽埛涓婚〉", subtitle: "绠＄悊鎮ㄧ殑涓汉璧勬枡骞剁户缁涔犺繘搴?,
-                tabLogin: "鐧诲綍", tabRegister: "娉ㄥ唽",
-                emailPlaceholder: "鐢靛瓙閭...", passwordPlaceholder: "瀵嗙爜...",
-                rolePlaceholder: "璐︽埛瑙掕壊...", roleStudent: "瀛︾敓", roleTeacher: "鏁欏笀", roleParent: "瀹堕暱", roleAdmin: "绠＄悊鍛?,
-                namePlaceholder: "鍏ㄥ悕...", phonePlaceholder: "鐢佃瘽鍙风爜...", syllabusPlaceholder: "閫夋嫨璇剧▼澶х翰...",
-                agePlaceholder: "骞撮緞...", genderPlaceholder: "鎬у埆...", genderMale: "鐢?, genderFemale: "濂?, genderOther: "鍏朵粬",
-                btnSubmitLogin: "鐧诲綍", btnSubmitRegister: "鍒涘缓璐︽埛"
+                title: "账户主页", subtitle: "管理您的为资料并继习进?,
+                tabLogin: "登录", tabRegister: "注册",
+                emailPlaceholder: "电子...", passwordPlaceholder: "密码...",
+                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理?,
+                namePlaceholder: "全名...", phonePlaceholder: "电话号码...", syllabusPlaceholder: "选择课程大纲...",
+                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "?, genderFemale: "?, genderOther: "其他",
+                btnSubmitLogin: "登录", btnSubmitRegister: "创建账户"
             }
         };
 
@@ -1490,14 +1490,14 @@
             }
         }
 
-        // 鈹€鈹€ Auth & Dashboard Logic (Supabase-powered RBAC) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  Auth & Dashboard Logic (Supabase-powered RBAC) 
 
         async function updateAuthUI() {
             const authInfo = await window.AuthAccess.getCurrentUser();
             const labelBtn = document.getElementById('activeStudentLabel');
 
             if (authInfo && authInfo.user) {
-                labelBtn.innerText = `馃懁 ${authInfo.user.email.split('@')[0]} [${authInfo.tier.toUpperCase()}]`;
+                labelBtn.innerText = `👤 ${authInfo.user.email.split('@')[0]} [${authInfo.tier.toUpperCase()}]`;
                 document.getElementById('authFormArea').style.display = 'none';
                 document.getElementById('activeAuthInfo').style.display = 'block';
                 document.getElementById('progressStudentName').innerText = `${authInfo.user.email} (Tier: ${authInfo.tier.toUpperCase()})`;
@@ -1566,16 +1566,16 @@
                 tabsContainer.style.display = "none";
                 passwordInput.style.display = "none";
                 forgotLink.style.display = "none";
-                submitBtn.innerText = curLang === 'zh' ? '鐧奸€侀噸缃張鎺? : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
+                submitBtn.innerText = curLang === 'zh' ? '發重罏? : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
                 
                 msgEl.style.color = "var(--text-secondary)";
-                msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '杩斿洖鐧婚寗' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
             } else if (mode === 'reset') {
                 tabsContainer.style.display = "none";
                 emailInput.style.display = "none";
                 forgotLink.style.display = "none";
-                passwordInput.placeholder = curLang === 'zh' ? '璜嬭几鍏ユ柊瀵嗙⒓...' : (curLang === 'ms' ? 'Sila masukkan kata laluan baru...' : 'Enter new password...');
-                submitBtn.innerText = curLang === 'zh' ? '鏇存柊瀵嗙⒓' : (curLang === 'ms' ? 'Kemas Kini Kata Laluan' : 'Update Password');
+                passwordInput.placeholder = curLang === 'zh' ? '請輸入新密碼...' : (curLang === 'ms' ? 'Sila masukkan kata laluan baru...' : 'Enter new password...');
+                submitBtn.innerText = curLang === 'zh' ? '更新密碼' : (curLang === 'ms' ? 'Kemas Kini Kata Laluan' : 'Update Password');
             }
         }
 
@@ -1589,20 +1589,20 @@
             if (currentAuthMode !== 'reset') {
                 if(!email) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "璜嬭几鍏ラ浕瀛愰兊绠便€? : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
+                    msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱? : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
                     return;
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "璜嬭几鍏ユ湁鏁堢殑闆诲瓙閮电鍦板潃銆? : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
+                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵地址? : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
                     return;
                 }
             }
             
             // 2. Forgot password request flow
             if (currentAuthMode === 'forgot') {
-                msgEl.innerText = curLang === 'zh' ? "姝ｅ湪鐧奸€侀噸缃張鎺?.." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
+                msgEl.innerText = curLang === 'zh' ? "正在發重罏?.." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
                 msgEl.style.color = "var(--text-secondary)";
                 
                 try {
@@ -1612,8 +1612,8 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerHTML = (curLang === 'zh' ? "瀵嗙⒓閲嶇疆閺堟帴宸茬櫦閫侊紒璜嬫鏌ユ偍鐨勯兊绠便€? : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
-                            `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '杩斿洖鐧婚寗' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請查您的郵箱? : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                            `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
                     }
                 } catch (err) {
                     msgEl.style.color = "#ef4444";
@@ -1626,10 +1626,10 @@
             if (currentAuthMode === 'reset') {
                 if(!password) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "璜嬭几鍏ユ柊瀵嗙⒓銆? : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
+                    msgEl.innerText = curLang === 'zh' ? "請輸入新密碼? : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
                     return;
                 }
-                msgEl.innerText = curLang === 'zh' ? "姝ｅ湪鏇存柊瀵嗙⒓..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
+                msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
                 msgEl.style.color = "var(--text-secondary)";
                 
                 try {
@@ -1639,7 +1639,7 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerText = curLang === 'zh' ? "瀵嗙⒓鏇存柊鎴愬姛锛佹鍦ㄧ櫥鍏?.." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！在登?.." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
                         setTimeout(() => {
                             toggleAuthMode('login');
                             document.getElementById('authPassword').value = '';
@@ -1657,7 +1657,7 @@
             // 4. Standard Login & Register flows
             if(!password) {
                 msgEl.style.color = "#ef4444";
-                msgEl.innerText = curLang === 'zh' ? "璜嬭几鍏ュ瘑纰笺€? : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
+                msgEl.innerText = curLang === 'zh' ? "請輸入密碼? : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
                 return;
             }
             
@@ -1672,13 +1672,13 @@
                 
                 if(!fullname || !phone || !syllabus || !age || !gender || !role) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "鎵€鏈夊€嬩汉璩囨枡娆勪綅鍧囩偤蹇呭～銆? : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
+                    msgEl.innerText = curLang === 'zh' ? "有人資料欄位均為必填? : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
                     return;
                 }
                 profileData = { fullname, phone, syllabus, age: parseInt(age), gender, role };
             }
             
-            msgEl.innerText = currentAuthMode === 'login' ? (curLang === 'zh' ? "姝ｅ湪鐧诲叆..." : (curLang === 'ms' ? "Log masuk..." : "Logging in...")) : (curLang === 'zh' ? "姝ｅ湪鍓靛缓甯虫埗..." : (curLang === 'ms' ? "Mencipta akaun..." : "Creating account..."));
+            msgEl.innerText = currentAuthMode === 'login' ? (curLang === 'zh' ? "正在登入..." : (curLang === 'ms' ? "Log masuk..." : "Logging in...")) : (curLang === 'zh' ? "正在創建帳戶..." : (curLang === 'ms' ? "Mencipta akaun..." : "Creating account..."));
             msgEl.style.color = "var(--text-secondary)";
             
             try {
@@ -1693,7 +1693,7 @@
                     msgEl.style.color = "#ef4444";
                     const errMsg = result.error.message;
                     if (errMsg.toLowerCase().includes("already registered") || errMsg.toLowerCase().includes("already exists")) {
-                        msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">${curLang === 'zh' ? '濡傛灉鎮ㄤ箣鍓嶅埅闄や簡鍊嬩汉璩囨枡锛岃珛浣跨敤<strong>鐧婚寗</strong>渚嗚嚜鍕曚慨寰╄垏閭勫師瀹冿紒' : (curLang === 'ms' ? 'Sekiranya anda telah memadamkan profil anda, sila <strong>Log Masuk</strong> untuk memulihkannya!' : 'If you deleted your profile, please <strong>Login</strong> instead to restore it!')}</span>`;
+                        msgEl.innerHTML = `${errMsg}.<br><span style="font-size:0.85em;color:#cbd5e1;display:block;margin-top:4px;">${curLang === 'zh' ? '如果您之前刪除了個人資料，請使用<strong>登錄</strong>來自動修復與還原它！' : (curLang === 'ms' ? 'Sekiranya anda telah memadamkan profil anda, sila <strong>Log Masuk</strong> untuk memulihkannya!' : 'If you deleted your profile, please <strong>Login</strong> instead to restore it!')}</span>`;
                     } else {
                         msgEl.innerText = errMsg;
                     }
@@ -1773,7 +1773,7 @@
     <div id="pin-topup-modal" class="pin-modal-overlay">
         <div class="pin-modal-box">
             <button class="pin-close" onclick="document.getElementById('pin-topup-modal').style.display='none'">&times;</button>
-            <div style="font-size: 3rem; margin-bottom: 10px;">馃敀</div>
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
             <h2 style="color: white; font-family: var(--font-serif);">Module Locked</h2>
             <p style="color: #94a3b8; font-size: 0.9rem; margin-top: 10px;">Enter your Activation PIN to unlock this content.</p>
             <input type="text" id="pin-input-field" class="pin-input" placeholder="e.g. VIP-MATH-123">
@@ -1815,7 +1815,7 @@
             }
         }
 
-        // 鈹€鈹€ Feedback System Modal & Form Logic 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  Feedback System Modal & Form Logic 
         function openFeedbackModal() {
             const nameInput = document.getElementById('feedbackName');
             const emailInput = document.getElementById('feedbackEmail');
@@ -1922,7 +1922,7 @@
             }
         }
 
-        // 鈹€鈹€ Admin Panel Tab & Console Logic 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+        //  Admin Panel Tab & Console Logic 
         async function switchAdminTab(tab) {
             document.getElementById('btnAdminTabPins').classList.toggle('active', tab === 'pins');
             document.getElementById('btnAdminTabFeedback').classList.toggle('active', tab === 'feedback');
@@ -1992,7 +1992,7 @@
                     `;
                 } else {
                     actionsHtml = `
-                        <div class="feedback-meta" style="color: #10b981; font-weight: bold; margin-top: 8px;">鉁?Resolved</div>
+                        <div class="feedback-meta" style="color: #10b981; font-weight: bold; margin-top: 8px;">?Resolved</div>
                     `;
                 }
 
@@ -2067,19 +2067,19 @@
     </script>
     
     <!-- Admin PIN Generator Toggle Button -->
-    <button id="admin-pin-toggle-btn" onclick="const p = document.getElementById('admin-pin-generator'); p.style.display = p.style.display === 'none' ? 'block' : 'none';" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #3b82f6; color: white; width: 60px; height: 60px; border-radius: 50%; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: none; cursor: pointer; font-size: 1.8rem; align-items: center; justify-content: center;">鈿欙笍</button>
+    <button id="admin-pin-toggle-btn" onclick="const p = document.getElementById('admin-pin-generator'); p.style.display = p.style.display === 'none' ? 'block' : 'none';" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #3b82f6; color: white; width: 60px; height: 60px; border-radius: 50%; z-index: 10000; box-shadow: 0 4px 12px rgba(0,0,0,0.5); border: none; cursor: pointer; font-size: 1.8rem; align-items: center; justify-content: center;">⚙️</button>
 
     <!-- Admin Control Panel (Tabbed) -->
     <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 480px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>鈿?/span> Admin Control Panel</h3>
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>?/span> Admin Control Panel</h3>
             <button onclick="document.getElementById('admin-pin-generator').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
 
         <!-- Tab Switcher -->
         <div class="admin-tabs">
-            <button class="admin-tab-btn active" id="btnAdminTabPins" onclick="switchAdminTab('pins')">馃攽 PINs</button>
-            <button class="admin-tab-btn" id="btnAdminTabFeedback" onclick="switchAdminTab('feedback')">馃挰 Feedback & Requests (<span id="admin-feedback-badge">0</span>)</button>
+            <button class="admin-tab-btn active" id="btnAdminTabPins" onclick="switchAdminTab('pins')">🔑 PINs</button>
+            <button class="admin-tab-btn" id="btnAdminTabFeedback" onclick="switchAdminTab('feedback')">💬 Feedback & Requests (<span id="admin-feedback-badge">0</span>)</button>
         </div>
 
         <!-- Tab content: PINs -->

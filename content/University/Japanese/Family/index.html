@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,113 +26,77 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Wand2, BookOpen, Scroll, Award, Sparkles, XCircle, CheckCircle, RotateCcw, GripHorizontal, Volume2, Globe }
 from 'lucide-react';
 
-// --- 鏁版嵁鍖猴細瀹朵汉绉板懠璇嶅簱 ---
+// --- 数据区：家人称呼词库 ---
 const familyData = [
-{ zh: '鐖风埛/澶栧叕', en: 'Grandfather', uchi: '銇濄伒', soto: '銇娿仒銇勩仌銈? },
-{ zh: '濂跺ザ/澶栧﹩', en: 'Grandmother', uchi: '銇濄伡', soto: '銇娿伆銇傘仌銈? },
-{ zh: '鐖哥埜', en: 'Father', uchi: '銇°仭', soto: '銇娿仺銇嗐仌銈? },
-{ zh: '濡堝', en: 'Mother', uchi: '銇伅', soto: '銇娿亱銇傘仌銈? },
-{ zh: '鍝ュ摜', en: 'Older Brother', uchi: '銇傘伀', soto: '銇娿伀銇勩仌銈? },
-{ zh: '濮愬', en: 'Older Sister', uchi: '銇傘伃', soto: '銇娿伃銇堛仌銈? },
-{ zh: '寮熷紵', en: 'Younger Brother', uchi: '銇娿仺銇嗐仺', soto: '銇娿仺銇嗐仺銇曘倱' },
-{ zh: '濡瑰', en: 'Younger Sister', uchi: '銇勩倐銇嗐仺', soto: '銇勩倐銇嗐仺銇曘倱' },
+{ zh: '爷爷/外公', en: 'Grandfather', uchi: 'そふ', soto: 'おじいさん' },
+{ zh: '奶奶/外婆', en: 'Grandmother', uchi: 'そぼ', soto: 'おばあさん' },
+{ zh: '爸爸', en: 'Father', uchi: 'ちち', soto: 'おとうさん' },
+{ zh: '妈妈', en: 'Mother', uchi: 'はは', soto: 'おかあさん' },
+{ zh: '哥哥', en: 'Older Brother', uchi: 'あに', soto: 'おにいさん' },
+{ zh: '姐姐', en: 'Older Sister', uchi: 'あね', soto: 'おねえさん' },
+{ zh: '弟弟', en: 'Younger Brother', uchi: 'おとうと', soto: 'おとうとさん' },
+{ zh: '妹妹', en: 'Younger Sister', uchi: 'いもうと', soto: 'いもうとさん' },
 ];
 
-// --- 鎿村厖鎯呭椤屽韩锛氬ぇ骞呭鍔犻瓟娉曚笘鐣岃鎯呭锛岄伩鍏嶉噸瑜囨劅 ---
 const uchiPrompts = [
-{ zh: "鍦ㄩ瓟鑽涓婏紝鏂唴鏅暀鎺堟壒璇勪綘鐨勮嵂姘撮鑹蹭笉瀵癸紝浣犲皬澹板槦鍥旇浣犵殑銆恵zh}銆戝钩鏃跺湪瀹跺氨鏄繖涔堢啲鐨?..", en: "In Potions class, Snape criticizes your potion's color.
-You mutter that your [{en}] always brews it this way at home..." },
-{ zh: "鏀跺埌鍚煎彨淇★紒鏁翠釜澶у爞閮藉畨闈欎簡锛屼綘灏村艾鍦版崅浣忚劯锛岄偅鏄綘鐨勩€恵zh}銆戝瘎鏉ラ獋浣犱笉鍙婃牸鐨?..", en: "A Howler! The Great Hall goes silent. You cover your face in
-embarrassment as your [{en}] yells at you for failing..." },
-{ zh: "闈㈠鍗氭牸鐗规椂锛屽崥鏍肩壒鍙樻垚浜嗕綘鏈€瀹虫€曠殑涓滆タ鈥斺€斾綘鐢熸皵鐨勩€恵zh}銆?..", en: "Facing a Boggart, it turns into your greatest fear: your angry
-[{en}]..." },
-{ zh: "鍦ㄥ巹閲屾柉榄旈暅鍓嶏紝浣犵湅鍒颁簡鑷繁鏈€娣卞垏鐨勬复鏈涳細浣犲拰浣犵殑銆恵zh}銆戝紑蹇冨湴绔欏湪涓€璧?..", en: "In the Mirror of Erised, you see your deepest desire: standing
-happily with your [{en}]..." },
-{ zh: "瀛︿範鍛肩鎶ゅ崼鏃讹紝浣犻渶瑕佸洖蹇嗘渶蹇箰鐨勪簨鎯呫€備綘闂笂鐪肩潧锛屾兂璧蜂簡浣犵殑銆恵zh}銆?..", en: "Learning the Patronus Charm, you recall your happiest memory: a
-moment with your [{en}]..." },
-{ zh: "鍦ｈ癁鑺傛棭鏅紝浣犳媶寮€鐚ご楣伴€佹潵鐨勫寘瑁癸紝浣犵殑銆恵zh}銆戝張缁欎綘缁囦簡涓€浠跺甫棣栧瓧姣嶇殑涓戞瘺琛?..", en: "On Christmas morning, you open a parcel: another ugly sweater
-knitted by your [{en}]..." },
-{ zh: "鍦ㄩ湇鏍艰帿寰锋潙鐨勮渹铚滃叕鐖电硸鏋滃簵锛屼綘姝ｇ姽璞涓嶈缁欎綘鐨勩€恵zh}銆戜拱涓€鐩掕鑵ュ懗妫掓绯?..", en: "At Honeydukes, you hesitate whether to buy blood-flavored
-lollipops for your [{en}]..." },
-{ zh: "鎶ュ悕涓夊己浜夐湼璧涘悗锛屼綘绱у紶鍦扮粰瀹堕噷鍐欎俊锛屽憡璇変綘鐨勩€恵zh}銆戣繖涓柉鐙傜殑鍐冲畾...", en: "After entering the Triwizard Tournament, you nervously write to
-tell your [{en}] about this crazy decision..." },
-{ zh: "鍒嗛櫌甯藉湪浣犵殑澶翠笂鐘硅鲍涓嶅喅锛屼綘蹇冮噷榛橀粯绁堢シ鑳藉垎鍒版牸鍏拌姮澶氾紝鍥犱负浣犵殑銆恵zh}銆戞浘鏄偅閲岀殑绾ч暱...", en: "The Sorting Hat hesitates. You pray for Gryffindor
-because your [{en}] used to be a prefect there..." },
-{ zh: "榛戦瓟娉曢槻寰℃湳璇句笂锛屼綘鎴愬姛鏂藉睍浜嗕竴涓即姊板拻锛屼綘楠勫偛鍦板悜鍚屽鐐€€杩欐槸浣犵殑銆恵zh}銆戞暀浣犵殑...", en: "You successfully cast a Disarming Charm and proudly tell
-classmates your [{en}] taught you..." },
-{ zh: "浣犲湪榄佸湴濂囨瘮璧涗腑鎶撲綇浜嗛噾鑹查璐硷紝璧涘悗浣犲叴濂嬪湴缁欎綘鐨勩€恵zh}銆戝啓鐚ご楣颁俊鎶ュ枩...", en: "You catch the Golden Snitch! You excitedly send an owl to your
-[{en}] with the good news..." },
-{ zh: "鍦ㄤ繚鎶ょ濂囧姩鐗╄涓婏紝娴锋牸灞曠ず浜嗕竴鍙拱澶撮┈韬湁缈煎吔锛屼綘鍛婅瘔娴锋牸浣犵殑銆恵zh}銆戜篃鏇惧吇杩囦竴鍙?..", en: "In Care of Magical Creatures, you tell Hagrid your [{en}]
-also used to keep a Hippogriff..." },
-{ zh: "鍗犲崪璇句笂锛岀壒閲屽姵濡暀鎺堢绁炲彣鍙ㄥ湴棰勮█浣犲閲屼細鏈夌伨闅撅紝浣犳媴蹇у湴鎯宠捣浜嗕綘鐨勩€恵zh}銆?..", en: "Professor Trelawney predicts a family disaster. You
-worryingly think of your [{en}]..." },
-{ zh: "鍥犱负澶滄父绂佹灄琚垂灏斿鎶撲綇鍏崇闂紝浣犱竴杈规摝濂栨澂涓€杈规兂锛岃鏄綘鐨勩€恵zh}銆戠煡閬撲簡涓€瀹氫細澶у彂闆烽渾...", en: "Serving detention with Filch, you scrub trophies and
-think how furious your [{en}] would be..." },
-{ zh: "鑸炰細鍓嶅锛屼綘鏃犲鍦拌瘯绌垮寘瑁归噷瀵勬潵鐨勮€佸紡澶╅箙缁掔ぜ鏈嶏紝杩欐槸浣犵殑銆恵zh}銆戠壒鎰忎负浣犳寫閫夌殑...", en: "Before the Yule Ball, you sigh while trying on the
-old-fashioned velvet robes your [{en}] picked for you..." }
+{ zh: "在魔药课上，斯内普教授批评你的药水颜色不对，你小声嘟囔你的【{zh}】平时在家就是这么熬的...", en: "In Potions class, Snape criticizes your potion's color. You mutter that your [{en}] always brews it this way at home..." },
+{ zh: "收到吼叫信！整个大堂都安静了，你尴尬地捂住脸，那是你的【{zh}】寄来骂你不及格的...", en: "A Howler! The Great Hall goes silent. You cover your face in embarrassment as your [{en}] yells at you for failing..." },
+{ zh: "面对博格特时，博格特变成了你最害怕的东西——你生气的【{zh}】...", en: "Facing a Boggart, it turns into your greatest fear: your angry [{en}]..." },
+{ zh: "在厄里斯魔镜前，你看到了自己最深切的渴望：你和你的【{zh}】开心地站在一起...", en: "In the Mirror of Erised, you see your deepest desire: standing happily with your [{en}]..." },
+{ zh: "学习呼神护卫时，你需要回忆最快乐的事情，你闭上眼睛，想起了你的【{zh}】...", en: "Learning the Patronus Charm, you recall your happiest memory: a moment with your [{en}]..." },
+{ zh: "圣诞节早上，你拆开猫头鹰寄来的包裹，你的【{zh}】又给你织了件带首字母的丑毛衣...", en: "On Christmas morning, you open a parcel: another ugly sweater knitted by your [{en}]..." },
+{ zh: "在霍格莫德村的蜂蜜公爵糖果店，你正犹豫要不要给你的【{zh}】买盒血腥味棒棒糖...", en: "At Honeydukes, you hesitate whether to buy blood-flavored lollipops for your [{en}]..." },
+{ zh: "报名三强争霸赛后，你紧张地给家里写信，告诉你的【{zh}】这个疯狂的决定...", en: "After entering the Triwizard Tournament, you nervously write to tell your [{en}] about this crazy decision..." },
+{ zh: "分院帽在你的头上犹豫不决，你心里默默祈祷能分到格兰芬多，因为你的【{zh}】曾经是那里的级长...", en: "The Sorting Hat hesitates. You pray for Gryffindor because your [{en}] used to be a prefect there..." },
+{ zh: "黑魔法防御术课上，你成功施展了一个缴械咒，你骄傲地向同学炫耀这是你的【{zh}】教你的...", en: "You successfully cast a Disarming Charm and proudly tell classmates your [{en}] taught you..." },
+{ zh: "你在魁地奇比赛中抓住了金色飞贼，赛后你兴奋地给你的【{zh}】写猫头鹰信报喜...", en: "You catch the Golden Snitch! You excitedly send an owl to your [{en}] with the good news..." },
+{ zh: "在保护神奇动物课上，海格展示了一头鹰马，你告诉海格你的【{zh}】也曾养过一头...", en: "In Care of Magical Creatures, you tell Hagrid your [{en}] also used to keep a Hippogriff..." },
+{ zh: "占卜课上，特里劳妮教授神叨叨地预言你家里会有灾难，你担忧地想起了你的【{zh}】...", en: "Professor Trelawney predicts a family disaster. You worryingly think of your [{en}]..." },
+{ zh: "因为夜游禁林被费尔奇抓住关禁闭，你一边擦奖杯一边想，要是你的【{zh}】知道了肯定会大发雷霆...", en: "Serving detention with Filch, you scrub trophies and think how furious your [{en}] would be..." },
+{ zh: "舞会前，你无奈地试穿包裹里寄来的老式天鹅绒礼服，这是你的【{zh}】特意为你挑选的...", en: "Before the Yule Ball, you sigh while trying on the old-fashioned velvet robes your [{en}] picked for you..." }
 ];
 
 const sotoPrompts = [
-{ zh: "浣犲湪鍥界帇鍗佸瓧杞︾珯鐨?戮绔欏彴閬囧埌鍚屽锛屼綘璧颁笂鍓嶇ぜ璨屽湴鍚戜粬鐨勩€恵zh}銆戦棶濂?..", en: "At Platform 9戮, you step forward to politely greet your
-classmate's [{en}]..." },
-{ zh: "璧晱鍦ㄥ浘涔﹂鐤媯缈婚槄楹荤摐鍘嗗彶涔︼紝浣犲ソ濂囧湴璧拌繃鍘伙紝璇㈤棶濂圭殑銆恵zh}銆戞槸涓嶆槸涔熸噦杩欎簺...", en: "Hermione is devouring Muggle history books. You ask if her
-[{en}] also understands this stuff..." },
-{ zh: "缃楁仼鏀跺埌浜嗕竴鍙牬鐑傜殑鏃х尗澶撮拱锛屼綘瀹夋叞浠栵紝骞堕『渚块棶鍊欎簡浠栫殑銆恵zh}銆?..", en: "Ron receives a battered old owl. You comfort him and ask how his
-[{en}] is doing..." },
-{ zh: "椹皵绂忓張鍦ㄨ蛋寤婁笂澶у０鐐€€浠栧澶氭湁閽憋紝浣犵炕浜嗕釜鐧界溂锛屼絾杩樻槸铏氫吉鍦板じ濂栦簡浠栫殑銆恵zh}銆戝嚑鍙?..", en: "Malfoy brags about his wealth again. You roll your eyes
-but falsely praise his [{en}]..." },
-{ zh:
-// --- 澶氳瑷€瀛楀吀 (i18n) ---锟界殑鍗楃摐棣呴ゼ锛屼綘灏濅簡涓€鍙ｅ悗锛岃浠栦唬涓烘劅璋粬鐨勩€恵zh}銆?..", en: "At the Halloween feast, your friend shares family-sent
-pumpkin pasties. You ask him to thank his [{en}]..." },
-{ zh: "鍦ㄥ瑙掑贩鐨勫ゥ鍒╁嚒寰烽瓟鏉栧簵锛屾伆濂介亣鍒版柊鐢熸潵涔伴瓟鏉栵紝浣犱互鍓嶈緢鐨勮韩浠藉井绗戠潃鍚戜粬鐨勩€恵zh}銆戣嚧鎰?..", en: "At Ollivanders, you see a new student buying a wand. You
-smile and greet his [{en}] as a senior..." }},
-{ zh: "濉炲痉閲屽厠鍦ㄤ笁寮轰簤闇歌禌涓〃鐜板嚭鑹诧紝浣犻亣鍒颁粬鏃讹紝绉拌禐浠栫殑銆恵zh}銆戜竴瀹氫細涓轰粬鎰熷埌楠勫偛...", en: "You praise Cedric's Tournament performance, saying his [{en}]
-must be incredibly proud..." },
-{ zh: "鍗㈠鍛婅瘔浣犲集瑙掗季鍏芥槸鐪熺殑瀛樺湪锛屼綘寰瑧鐫€闄勫拰锛屽苟闂ス鐨勩€恵zh}銆戞槸涓嶆槸涔熺浉淇?..", en: "Luna says Crumple-Horned Snorkacks are real. You smile and ask
-if her [{en}] believes it too..." },
-{ zh: "瑗胯帿鍦ㄧ粌涔犳偓娴拻鏃跺張鎶婄窘姣涚偢浜嗭紝浣犱竴杈瑰府浠栫伃鐏竴杈归棶锛屼粬鐨勩€恵zh}銆戞槸涓嶆槸涔熶細杩欑鈥滅垎鐮撮瓟娉曗€?..", en: "Seamus blows up his feather. Helping him extinguish
-it, you ask if his [{en}] also uses 'explosion magic'..." },
-{ zh: "涓伮锋墭椹柉鍦ㄧ敾涓€寮犲法澶х殑瑗挎眽濮嗚仈闃熸捣鎶ワ紝浣犻棶浠栨槸涓嶆槸浠栫殑銆恵zh}銆戝甫浠栧叆鍧戠殑...", en: "Dean is drawing a huge West Ham poster. You ask if his [{en}]
-got him into the team..." },
-{ zh: "甯曠摝钂傜┛鐫€涓€浠堕潪甯稿崕涓界殑鍗板害浼犵粺绀兼湇鍙傚姞鑸炰細锛屼綘璧炵編濂癸紝骞堕棶鏄笉鏄ス鐨勩€恵zh}銆戝瘎鏉ョ殑...", en: "Parvati wears gorgeous traditional robes to the ball. You
-praise them and ask if her [{en}] sent them..." },
-{ zh: "鍦ㄧ牬閲滈厭鍚ч亣鍒颁綘鐨勫鍙嬩竴瀹讹紝浣犵璧烽粍娌瑰暏閰掞紝鎭暚鍦板悜浠栫殑銆恵zh}銆戞暚浜嗕竴鏉?..", en: "Running into your roommate's family at the Leaky Cauldron, you
-respectfully toast his [{en}] with Butterbeer..." },
-{ zh: "榄佸湴濂囦笘鐣屾澂涓婏紝浣犵宸у潗鍦ㄥ悓瀛︿竴瀹剁殑鏃佽竟锛屼綘鍏村鍦板拰浠栫殑銆恵zh}銆戣璁鸿捣姣旇禌鐨勯槦浼?..", en: "At the Quidditch World Cup, you sit near a classmate's
-family and excitedly discuss teams with their [{en}]..." },
-{ zh: "浣犵殑鏈嬪弸鍥犱负鑰冭瘯涓嶅強鏍煎湪鍏叡浼戞伅瀹ゅ摥娉ｏ紝浣犻€掍笂绾稿肪锛岄棶濂圭殑銆恵zh}銆戜細涓嶄細璐ｆ€ス...", en: "Your friend cries over a failed exam. You hand her a tissue
-and ask if her [{en}] will blame her..." },
-{ zh: "涓囧湥鑺傛櫄瀹翠笂锛屼綘鐨勫悓瀛﹀垎浜簡瀹堕噷瀵勬潵鐨勫崡鐡滈楗硷紝浣犲皾浜嗕竴鍙ｅ悗锛岃浠栦唬涓烘劅璋粬鐨勩€恵zh}銆?..", en: "At the Halloween feast, your friend shares family-sent
-pumpkin pasties. You ask him to thank his [{en}]..." },
-{ zh: "鍦ㄥ瑙掑贩鐨勫ゥ鍒╁嚒寰烽瓟鏉栧簵锛屾伆濂介亣鍒版柊鐢熸潵涔伴瓟鏉栵紝浣犱互鍓嶈緢鐨勮韩浠藉井绗戠潃鍚戜粬鐨勩€恵zh}銆戣嚧鎰?..", en: "At Ollivanders, you see a new student buying a wand. You
-smile and greet his [{en}] as a senior..." }
+{ zh: "你在国王十字车站9¾站台遇到同学，你走上前礼貌地向他的【{zh}】问好...", en: "At Platform 9¾, you step forward to politely greet your classmate's [{en}]..." },
+{ zh: "赫敏正在图书馆翻阅麻瓜历史书，你好奇地走过去，询问她的【{zh}】是不是也懂这些...", en: "Hermione is devouring Muggle history books. You ask if her [{en}] also understands this stuff..." },
+{ zh: "罗恩收到了一只破烂的旧猫头鹰，你安慰他，并顺便问候了他的【{zh}】...", en: "Ron receives a battered old owl. You comfort him and ask how his [{en}] is doing..." },
+{ zh: "马尔福又在走廊上大声炫耀他多有钱，你翻了个白眼，但还是虚伪地夸奖了他的【{zh}】几句...", en: "Malfoy brags about his wealth again. You roll your eyes but falsely praise his [{en}]..." },
+{ zh: "万圣节晚宴上，你的同学分享了家里寄来的南瓜饼，你尝了一口后，让他代为感谢他的【{zh}】...", en: "At the Halloween feast, your friend shares family-sent pumpkin pasties. You ask him to thank his [{en}]..." },
+{ zh: "在对角巷的奥利凡德魔杖店，恰好遇到新生来买魔杖，你以前辈的身份微笑着向他的【{zh}】致意...", en: "At Ollivanders, you see a new student buying a wand. You smile and greet his [{en}] as a senior..." },
+{ zh: "塞德里克在三强争霸赛中表现出色，你遇到他时，称赞他的【{zh}】一定会为他感到骄傲...", en: "You praise Cedric's Tournament performance, saying his [{en}] must be incredibly proud..." },
+{ zh: "卢娜告诉你弯角鼾兽是真的存在，你微笑着附和，并问她的【{zh}】是不是也相信...", en: "Luna says Crumple-Horned Snorkacks are real. You smile and ask if her [{en}] believes it too..." },
+{ zh: "西莫在练习悬浮咒时又把羽毛炸了，你一边帮他灭火一边问，他的【{zh}】是不是也会这种“爆破魔法”...", en: "Seamus blows up his feather. Helping him extinguish it, you ask if his [{en}] also uses 'explosion magic'..." },
+{ zh: "丁·托马斯在画一张巨大的西汉姆联队海报，你问他是不是他的【{zh}】带他入坑的...", en: "Dean is drawing a huge West Ham poster. You ask if his [{en}] got him into the team..." },
+{ zh: "帕瓦蒂穿着一件非常华丽的印度传统礼服参加舞会，你赞美她，并问是不是她的【{zh}】寄来的...", en: "Parvati wears gorgeous traditional robes to the ball. You praise them and ask if her [{en}] sent them..." },
+{ zh: "在破釜酒吧遇到你的室友一家，你举起黄油啤酒，恭敬地向他的【{zh}】敬了一杯...", en: "Running into your roommate's family at the Leaky Cauldron, you respectfully toast his [{en}] with Butterbeer..." },
+{ zh: "魁地奇世界杯上，你碰巧坐在同学一家的旁边，你兴奋地和他的【{zh}】讨论起比赛的队伍...", en: "At the Quidditch World Cup, you sit near a classmate's family and excitedly discuss teams with their [{en}]..." },
+{ zh: "你的朋友因为考试不及格在公共休息室哭泣，你递上纸巾，问她的【{zh}】会不会责骂她...", en: "Your friend cries over a failed exam. You hand her a tissue and ask if her [{en}] will blame her..." }
 ];
 
-// --- 澶氳瑷€瀛楀吀 (i18n) ---
 const i18n = {
 zh: {
-title: "涓滄柟榄斿拻瀛?O.W.L.",
-subtitle: "鐐瑰嚮鎸夐挳寮€鍚祴楠屻€傝繘鍏ュ悗锛孿n浣犲彲浠ヨ嚜鐢辨嫋鎷芥闈笂鏁ｈ惤鐨勭緤鐨焊锛乗n(宸插紑鍚瓟娉曢煶鏁?,
-uchiBtn: "Uchi (璋︾О) 璇曠偧 - 绉板懠鑷繁瀹朵汉",
-sotoBtn: "Soto (灏婄О) 璇曠偧 - 绉板懠鍒汉瀹朵汉",
-mixedBtn: "缁堟瀬 O.W.L. 缁熸祴 (娣峰悎)",
-scoreLabel: "瀛﹂櫌鍒?,
-progressLabel: "杩涘害",
-uchiTag: "鍚戝鎸囧唴 (Uchi)",
-sotoTag: "灏婄О浠栦汉 (Soto)",
-correct: "姝ｇ‘锛?10鍒?,
-wrong: "榄斿拻鍙嶅脊锛佹纭槸:",
-resultTitle: "O.W.L. 鎴愮哗鍗?,
-finalScore: "鏈€缁堝緱鍒?,
-gradeLabel: "缁煎悎璇勭骇",
-restart: "閲嶆柊鍙傚姞鑰冭瘯",
-resetNotice: "棰樺簱宸查噸缃礂鐗岋紒",
+title: "东方魔咒 O.W.L.",
+subtitle: "点击按钮开始试炼，\n你可以自由拖拽散落的羊皮纸！\n(已开启魔法音效)",
+uchiBtn: "Uchi (谦称) 试炼 - 称呼自己家人",
+sotoBtn: "Soto (尊称) 试炼 - 称呼别人家人",
+mixedBtn: "终极 O.W.L. 统测 (混合)",
+scoreLabel: "学院加分",
+progressLabel: "进度",
+uchiTag: "自己家人 (Uchi)",
+sotoTag: "别人家人 (Soto)",
+correct: "正确！+10分",
+wrong: "魔咒反弹！正确:",
+resultTitle: "O.W.L. 成绩单",
+finalScore: "最终得分",
+gradeLabel: "综合评级",
+restart: "重新参加考试",
+resetNotice: "题库已重置洗牌！",
 grades: {
-O: { grade: 'O (浼樼 Outstanding)', msg: "澶己浜唋oh锛佹鏋楃殑鑳″瓙锛屽畬缇庣殑榄斿拻鏂藉睍锛? },
-E: { grade: 'E (鑹ソ Exceeds Expectations)', msg: "骞插緱涓嶉敊leh锛佷綘鍦ㄩ瓟娉曢儴鐨勭ぞ浜ゅ満鍚堢粷瀵逛笉浼氶椆绗戣瘽銆? },
-A: { grade: 'A (鍙婃牸 Acceptable)', msg: "鍕夊己鍙婃牸锛佽櫧鐒舵湁浜涚纾曠粖缁婏紝浣嗚嚦灏戞病鐖嗙偢銆? },
-P: { grade: 'P (宸姴 Poor)', msg: "涓嶈leh锛屼綘闇€瑕佽姳鏇村鏃堕棿鍦ㄥ浘涔﹂澶嶄範浜嗭紒" },
-T: { grade: 'T (宸ㄦ€?Troll)', msg: "Aiyo锛佷綘鎶婂埆浜虹殑鐖哥埜鍙垚鑷繁鐨勭埜鐖镐簡鍟︼紒蹇幓澶嶄範锛? }
+O: { grade: 'O (优秀 Outstanding)', msg: "太棒了loh！梅林的胡子，完美的魔咒施展！" },
+E: { grade: 'E (良好 Exceeds Expectations)', msg: "干得不错leh！你在魔法部的社交场合绝对不会闹笑话！" },
+A: { grade: 'A (及格 Acceptable)', msg: "勉强及格！虽然有些磕磕绊绊，但至少没爆炸。" },
+P: { grade: 'P (差劲 Poor)', msg: "不行leh，你要花更多时间在图书馆复习了！" },
+T: { grade: 'T (巨怪 Troll)', msg: "Aiyo！你把别人的爸爸当成自己的爸爸了啦！赶快去复习！" }
 }
 },
 en: {
@@ -164,7 +128,7 @@ T: { grade: 'T (Troll)', msg: "Blimey! You called someone else's father your own
 
 const shuffleArray = (array) => [...array].sort(() => Math.random() - 0.5);
 
-// --- 闊虫晥鐢熸垚鍣?(Web Audio API) ---
+// --- 音效生成?(Web Audio API) ---
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 const playTone = (freq, type, duration, vol = 0.1) => {
@@ -196,14 +160,14 @@ playTone(200, 'sawtooth', 0.2, 0.1);
 setTimeout(() => playTone(150, 'sawtooth', 0.4, 0.1), 150);
 };
 
-// --- 鍙嫋鎷界粍浠跺寘瑁呭櫒 ---
+// --- 友拽组件包装器 ---
 const DraggableParchment = ({ children, initialPos, id, activeId, setActiveId, className = "" }) => {
 const [pos, setPos] = useState(initialPos);
 const [isDragging, setIsDragging] = useState(false);
 const dragRef = useRef(null);
 
 const handlePointerDown = (e) => {
-// 濡傛灉鐐瑰嚮鐨勬槸鎸夐挳锛屼笉瑙﹀彂鎷栨嫿
+// 如果点击的是按钮，不触发拖拽
 if (e.target.closest('button')) return;
 
 setActiveId(id);
@@ -214,7 +178,7 @@ const offsetY = e.clientY - rect.top;
 const handlePointerMove = (moveEvent) => {
 let newX = moveEvent.clientX - offsetX;
 let newY = moveEvent.clientY - offsetY;
-// 闃叉瀹屽叏鎷栧嚭灞忓箷
+// 防完全拖出屏幕
 newX = Math.max(-50, Math.min(window.innerWidth - 100, newX));
 newY = Math.max(-50, Math.min(window.innerHeight - 100, newY));
 setPos({ x: newX, y: newY });
@@ -249,7 +213,7 @@ return (
 };
 
 function HogwartsJapaneseExam() {
-const [lang, setLang] = useState('zh'); // 鏂板锛氳瑷€鐘舵€?
+const [lang, setLang] = useState('zh'); // 新：状?
 const [currentScreen, setCurrentScreen] = useState('start');
 const [mode, setMode] = useState(null);
 const [questions, setQuestions] = useState([]);
@@ -260,12 +224,12 @@ const [selectedAns, setSelectedAns] = useState(null);
 const [isTransitioning, setIsTransitioning] = useState(false);
 const [activeWindowId, setActiveWindowId] = useState('start');
 
-// 鏂板锛氶搴郴绲辩媭鎱?
+// 新：庳統狀?
 const [showRefreshNotice, setShowRefreshNotice] = useState(false);
 const remainingPools = useRef({ uchi: [], soto: [], mixed: [] });
 const ROUND_SIZE = 15;
 
-// 鏂板锛氬缓绔嬪畬鏁?40 椤岀殑椤屽韩閭忚集
+// 新：建立完?40 題的題庫邏輯
 const buildPool = (type) => {
 const pool = [];
 const prompts = type === 'uchi' ? uchiPrompts : sotoPrompts;
@@ -288,7 +252,7 @@ pool.push({ type, targetZh: member.zh, targetEn: member.en, situationZh, situati
 return shuffleArray(pool);
 };
 
-// 鍒濆鍖?CSS
+// 初?CSS
 useEffect(() => {
 const style = document.createElement('style');
 style.innerHTML = `
@@ -328,14 +292,14 @@ playClick();
 
 let isRefreshed = false;
 
-// 濡傛灉瑭叉ā寮忓墿涓嬬殑椤岀洰灏戞柤涓€杓渶瑕佺殑鏁搁噺锛屽氨閲嶆柊鐢熸垚濉豢椤屽韩
+// 如果該模式剩下的題目少於輜要的數量，就重新生成塻題庫
 if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true; if (selectedMode==='mixed' ) {
     remainingPools.current.mixed=shuffleArray([...buildPool('uchi'), ...buildPool('soto')]); } else {
-    remainingPools.current[selectedMode]=buildPool(selectedMode); } } // 寰為搴腑鎶藉嚭 15 椤?const
-    nextQuestions=remainingPools.current[selectedMode].slice(0, ROUND_SIZE); // 鏇存柊鍓╀笅鐨勯搴?
+    remainingPools.current[selectedMode]=buildPool(selectedMode); } } // 從庸抽出 15 ?const
+    nextQuestions=remainingPools.current[selectedMode].slice(0, ROUND_SIZE); // 更新剩下的?
     remainingPools.current[selectedMode]=remainingPools.current[selectedMode].slice(ROUND_SIZE);
     setQuestions(nextQuestions); setCurrentQIndex(0); setScore(0); setMode(selectedMode); setCurrentScreen('playing');
-    setActiveWindowId('question'); // Bring question to front // 椤ず椤屽韩鍒锋柊鎻愮ず if (isRefreshed) { setShowRefreshNotice(true);
+    setActiveWindowId('question'); // Bring question to front // 顤題庫刷新提示 if (isRefreshed) { setShowRefreshNotice(true);
     setTimeout(()=> setShowRefreshNotice(false), 3000);
     }
     };
@@ -368,7 +332,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
         }, 1500);
         };
 
-        // 1. 寮€濮嬬晫闈?
+        // 1. 始界?
         const renderStartScreen = () => {
         const t = i18n[lang];
         return (
@@ -404,13 +368,13 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
         </div>
         )};
 
-        // 2. 娓哥帺鐣岄潰 (鑷敱鎷栨嫿鐗?
+        // 2. 游玩界面 (臔拖拽?
         const renderPlayingScreen = () => {
         const t = i18n[lang];
         const currentQ = questions[currentQIndex];
-        // 鏍规嵁灞忓箷瀹藉害缁欎釜澶ф鐨勫垵濮嬩綅缃紝閬垮厤鎵嬫満涓婅窇鍒板睆骞曞
+        // 根据屏幕宽度给个大的初始位罼避免手机上跑到屏幕
         const isMobile = window.innerWidth < 768; return ( <>
-            {/* 椤屽韩閲嶇疆閫氱煡 */}
+            {/* 題庫重置通知 */}
             {showRefreshNotice && (
             <div
                 className="absolute top-4 left-1/2 -translate-x-1/2 bg-[#D3A625] text-[#740001] px-6 py-2 rounded-full font-bold shadow-lg z-[100] transition-opacity flex items-center gap-2">
@@ -418,7 +382,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
             </div>
             )}
 
-            {/* 妯″潡1锛氳鍒嗘澘 */}
+            {/* 模块1：分板 */}
             <DraggableParchment id="score" activeId={activeWindowId} setActiveId={setActiveWindowId} initialPos={{ x:
                 isMobile ? 10 : window.innerWidth - 250, y: 20 }} className="w-48">
                 <div className="text-center font-serif text-[#740001]">
@@ -431,7 +395,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                 </div>
             </DraggableParchment>
 
-            {/* 妯″潡2锛氶鐩澘 */}
+            {/* 模块2：盝 */}
             <DraggableParchment id="question" activeId={activeWindowId} setActiveId={setActiveWindowId} initialPos={{ x:
                 isMobile ? 10 : window.innerWidth/2 - 200, y: isMobile ? 150 : 100 }} className={`w-[90vw] max-w-[400px]
                 ${feedback==='wrong' ? 'animate-shake' : '' } ${feedback==='correct' ? 'magic-flash' : '' }`}>
@@ -444,7 +408,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                     {lang === 'zh' ? currentQ.situationZh : currentQ.situationEn}
                 </p>
 
-                {/* 鍙嶉鍔ㄧ敾灞?*/}
+                {/* 反动画?*/}
                 {feedback && (
                 <div className={`absolute inset-0 flex items-center justify-center rounded-lg bg-opacity-95
                     backdrop-blur-sm ${feedback==='correct' ? 'bg-[#D3A625]/30 text-green-800'
@@ -466,7 +430,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                 )}
             </DraggableParchment>
 
-            {/* 妯″潡3锛氶€夐」鏉?*/}
+            {/* 模块3：项?*/}
             <DraggableParchment id="options" activeId={activeWindowId} setActiveId={setActiveWindowId} initialPos={{ x:
                 isMobile ? 10 : window.innerWidth/2 - 180, y: isMobile ? 380 : 350 }}
                 className="w-[90vw] max-w-[360px]">
@@ -493,7 +457,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
         );
         };
 
-        // 3. 缁撶畻鐣岄潰
+        // 3. 结算界面
         const renderResultScreen = () => {
         const t = i18n[lang];
         let gradeData = t.grades.T;
@@ -537,7 +501,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                 className="absolute top-4 right-4 z-[100] bg-[#D3A625] text-[#740001] px-4 py-2 rounded-full font-bold
                 shadow-lg hover:scale-105 transition-transform flex items-center gap-2 border-2 border-[#740001]"
                 >
-                <Globe size={18} /> {lang === 'zh' ? 'English' : '涓枃'}
+                <Globe size={18} /> {lang === 'zh' ? 'English' : '世'}
             </button>
 
             {currentScreen === 'start' && renderStartScreen()}
