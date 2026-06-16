@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mastery Academy | Global Syllabus Portal</title>
+    <title>Mastery Academy | University Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -544,7 +544,7 @@
             }
         }
 
-        /*  Footer  */
+        /* ── Footer ──────────────────────────────────────────────── */
         footer {
             border-top: 1px solid rgba(255, 255, 255, 0.07);
             margin-top: 60px;
@@ -610,7 +610,7 @@
             }
         }
 
-        /*  PDF Modal  */
+        /* ── PDF Modal ───────────────────────────────────────────────── */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -837,7 +837,7 @@
             cursor: pointer;
         }
 
-        /*  Feedback Modal & FAB Styling  */
+        /* ── Feedback Modal & FAB Styling ──────────────────────────────── */
         #feedback-fab {
             position: fixed;
             bottom: 20px;
@@ -971,9 +971,9 @@
     <header>
         <!-- Drifting background blobs -->
         <div class="hero-bg-blobs">
-            
-            
-            
+            <div class="hero-blob hero-blob-1"></div>
+            <div class="hero-blob hero-blob-2"></div>
+            <div class="hero-blob hero-blob-3"></div>
         </div>
         <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
             <button id="studentDashboardBtn" class="tab-btn"
@@ -983,43 +983,298 @@
                 <span id="activeStudentLabel">Student: None</span>
             </button>
         </div>
-        <a href="university.html" class="level-badge" style="text-decoration:none;">⬅️ Back to Faculties</a><br><div class="level-badge" style="margin-top:10px;">Japanese Department</div>
-        <h1>Department of Japanese</h1>
-        <p>University-level Japanese Modules and Language Learning.</p>
+        <a href="../../index.html" class="level-badge" style="text-decoration:none;">⬅️ Back to Main Academy</a><br><div class="level-badge" style="margin-top:10px;">University Portal</div>
+        <h1>Higher Education & Beyond</h1>
+        <p>Advanced modules, interactive simulators, and deep-dive notes for university students.</p>
     </header>
 
+    
+    
+    <style>
+        /* Honeycomb Window Styles */
+        .honeycomb-window {
+            width: 100%;
+            height: 60vh;
+            min-height: 500px;
+            background: rgba(17, 24, 39, 0.2);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+        }
+        .honeycomb-window:active {
+            cursor: grabbing;
+        }
+        
+        .honeycomb-canvas {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 3000px;
+            height: 3000px;
+            /* Center the 3000x3000 canvas around the 0,0 origin using margins */
+            margin-left: -1500px;
+            margin-top: -1500px;
+            transform: translate(0px, 0px);
+            /* Enable hardware acceleration */
+            will-change: transform;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hex-row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: transform 0.1s ease-out; /* For parallax smooth scroll */
+        }
+        
+        .hex-row:nth-child(even) {
+            transform: translateX(110px);
+        }
+        .hex-row:nth-child(odd) {
+            transform: translateX(0px);
+        }
+
+        .hex-cell {
+            width: 220px;
+            height: 70px;
+            margin: 0 10px;
+            background: var(--glass-bg);
+            border-radius: 50px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            text-align: left;
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            padding: 2px;
+            animation: fluid-float 5s ease-in-out infinite;
+        }
+
+        .hex-row:nth-child(1) .hex-cell { animation-delay: 0s; }
+        .hex-row:nth-child(2) .hex-cell { animation-delay: 0.8s; }
+        .hex-row:nth-child(3) .hex-cell { animation-delay: 1.6s; }
+        .hex-row:nth-child(4) .hex-cell { animation-delay: 2.4s; }
+
+        @keyframes fluid-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .hex-inner {
+            width: 100%;
+            height: 100%;
+            background: rgba(17, 24, 39, 0.85);
+            border-radius: 50px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 20px;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+        }
+
+        .hex-cell:hover {
+            transform: scale(1.05);
+            z-index: 10;
+        }
+        .hex-cell:hover .hex-inner {
+            background: rgba(99, 102, 241, 0.3); /* Indigo tint on hover */
+        }
+
+        .hex-icon {
+            font-size: 1.5rem;
+            margin-right: 12px;
+            margin-bottom: 0;
+        }
+        .hex-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        /* Specific subject colors (subtle glow on hover) */
+        .hex-physics:hover { filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.8)); }
+        .hex-cs:hover { filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8)); }
+        .hex-math:hover { filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.8)); }
+        .hex-business:hover { filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.8)); }
+        .hex-arts:hover { filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.8)); }
+        .hex-med:hover { filter: drop-shadow(0 0 15px rgba(6, 182, 212, 0.8)); }
+
+    </style>
+
     <main>
-    <div class="syllabus-content active">
-        <h2 class="section-title">
-            <div class="section-icon" style="border-color: #D3A625; color: #D3A625;">🌸</div>
-            Core Japanese Modules
-        </h2>
-        <div class="grid">
-            <a href="content/University/Japanese/Family/index.html" class="card" data-module-id="uni-japanese-family">
-                <div class="card-tag">University Core</div>
-                <h3>Japanese Family Vocab</h3>
-                <p>Learn how to properly refer to your own family (Uchi) vs others' family (Soto) in Japanese.</p>
+        <div class="honeycomb-window" id="honeycomb-window">
+            <div class="honeycomb-canvas" id="honeycomb-canvas">
                 
-                <div class="progress-bar-container" style="display: none;">
-                    <div class="progress-bar-fill"></div>
+                <!-- Row 1 -->
+                <div class="hex-row">
+                    <a href="#" class="hex-cell hex-arts">
+                        <div class="hex-inner">
+                            <div class="hex-icon">🎨</div>
+                            <div class="hex-title">Fine Arts</div>
+                        </div>
+                    </a>
+                    <a href="#" class="hex-cell hex-med">
+                        <div class="hex-inner">
+                            <div class="hex-icon">🧬</div>
+                            <div class="hex-title">Medicine</div>
+                        </div>
+                    </a>
                 </div>
-            </a>
-            
-            <!-- Future Modules Stub -->
-            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;" onclick="event.preventDefault(); alert('Coming Soon!');">
-                <div class="card-tag">Upcoming</div>
-                <h3>Quantum Mechanics Lab</h3>
-                <p>Wavefunction collapse and Schrodinger equation visualizations.</p>
-            </a>
-            
-            <a href="#" class="card" style="opacity: 0.5; cursor: not-allowed;" onclick="event.preventDefault(); alert('Coming Soon!');">
-                <div class="card-tag">Upcoming</div>
-                <h3>Electromagnetism Simulator</h3>
-                <p>Maxwell\'s equations and 3D magnetic field simulations.</p>
-            </a>
+
+                <!-- Row 2 -->
+                <div class="hex-row">
+                    <a href="#" class="hex-cell hex-math">
+                        <div class="hex-inner">
+                            <div class="hex-icon">📐</div>
+                            <div class="hex-title">Mathematics</div>
+                        </div>
+                    </a>
+                    <a href="physics-hub.html" class="hex-cell hex-physics" style="background: rgba(99,102,241,0.5);">
+                        <div class="hex-inner">
+                            <div class="hex-icon">⚛️</div>
+                            <div class="hex-title">Physics Lab</div>
+                        </div>
+                    </a>
+                    <a href="#" class="hex-cell hex-business">
+                        <div class="hex-inner">
+                            <div class="hex-icon">📈</div>
+                            <div class="hex-title">Business</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="hex-row">
+                    <a href="#" class="hex-cell hex-cs">
+                        <div class="hex-inner">
+                            <div class="hex-icon">💻</div>
+                            <div class="hex-title">Computer Science</div>
+                        </div>
+                    </a>
+                    <a href="#" class="hex-cell hex-arts">
+                        <div class="hex-inner">
+                            <div class="hex-icon">📚</div>
+                            <div class="hex-title">Literature</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="hex-row">
+                    <a href="japanese-hub.html" class="hex-cell hex-arts">
+                        <div class="hex-inner">
+                            <div class="hex-icon">🌸</div>
+                            <div class="hex-title">Japanese Faculty</div>
+                        </div>
+                    </a>
+                    <a href="#" class="hex-cell">
+                        <div class="hex-inner">
+                            <div class="hex-icon">➕</div>
+                            <div class="hex-title">Add Module</div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
         </div>
-    </div>
-</main>
+    </main>
+
+    <!-- Honeycomb Panning Script -->
+    <script>
+        const windowEl = document.getElementById('honeycomb-window');
+        const canvasEl = document.getElementById('honeycomb-canvas');
+        
+        let isDragging = false;
+        let startX, startY;
+        let currentX = 0, currentY = 0;
+        let initialX, initialY;
+
+        // Prevent default drag behaviors on links
+        document.querySelectorAll('.hex-cell').forEach(cell => {
+            cell.addEventListener('dragstart', e => e.preventDefault());
+        });
+
+        function onPointerDown(e) {
+            isDragging = true;
+            windowEl.style.cursor = 'grabbing';
+            
+            // Handle both mouse and touch
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            initialX = clientX - currentX;
+            initialY = clientY - currentY;
+            
+            // Small threshold to distinguish click from drag
+            startX = clientX;
+            startY = clientY;
+        }
+
+        function onPointerMove(e) {
+            if (!isDragging) return;
+            e.preventDefault(); // Prevent scrolling on mobile
+            
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            
+            currentX = clientX - initialX;
+            currentY = clientY - initialY;
+            
+            canvasEl.style.transform = 	ranslate(px, px);
+        }
+
+        function onPointerUp(e) {
+            isDragging = false;
+            windowEl.style.cursor = 'grab';
+        }
+
+        // Mouse events
+        windowEl.addEventListener('mousedown', onPointerDown);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('mouseup', onPointerUp);
+
+        // Touch events
+        windowEl.addEventListener('touchstart', onPointerDown, {passive: false});
+        window.addEventListener('touchmove', onPointerMove, {passive: false});
+        window.addEventListener('touchend', onPointerUp);
+
+        // Click interceptor: if moved more than 5px, don't trigger click on links
+        windowEl.addEventListener('click', function(e) {
+            if (e.target.closest('a')) {
+                const dist = Math.sqrt(Math.pow(e.clientX - startX, 2) + Math.pow(e.clientY - startY, 2));
+                if (dist > 5) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Parallax Scroll Effect for the flowing feel
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const rows = document.querySelectorAll('.hex-row');
+            rows.forEach((row, index) => {
+                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
+                // Move rows slightly at different speeds based on index
+                const parallaxY = scrollY * (0.1 + (index * 0.02));
+                row.style.transform = 	ranslate(px, px);
+            });
+        });
+    </script>
+
+
 
     <footer>
         <div class="footer-inner">
@@ -1050,7 +1305,7 @@
         </div>
     </footer>
 
-    <!--  PDF Download Modal  -->
+    <!-- ── PDF Download Modal ──────────────────────────────────────────────── -->
     <div class="modal-overlay" id="pdf-modal" onclick="closePdfModal(event)">
         <div class="modal-box">
             <button class="modal-close" onclick="closePdfModalDirect()">&times;</button>
@@ -1062,19 +1317,19 @@
 
     <!-- Script to handle Tab Switching and Layer Navigation -->
     <script>
-        //  PDF Resources Data 
+        // ── PDF Resources Data ────────────────────────────────────────────────────
         // To add a new PDF: add an entry to this array and drop the file in the
         // corresponding subfolder under resources/pdf/. See DEVELOPER_GUIDE.md.
         const pdfResources = [
-            //  SPM 
+            // ── SPM ──────────────────────────────────────────────────────────────
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Peribahasa Notes", file: "resources/pdf/SPM/BM/Peribahasa_Notes.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Kata Terbitan Notes", file: "resources/pdf/SPM/BM/Kata_Terbitan_Notes.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Nota KOMSAS - Silir Daksina", file: "resources/pdf/SPM/BM/SPM_Komsas_F5_Silir Daksina.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Modul Kuasa Karangan SPM (IMBAKUP)", file: "resources/pdf/SPM/BM/SPM_BM_Modul_Kuasa_Karangan_IMBAKUP.pdf" },
-            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Rumusan 实体通关特讲义", file: "resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf" },
-            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 ?Student Version", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Student.pdf" },
-            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 ?Answer Key (Teacher)", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Answers.pdf" },
-            { syllabus: "SPM", subject: "Science (Form 3 KSSM)", label: "Form 3 Science Bab 1 ?Student Version", file: "hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab1_Student.pdf" },
+            { syllabus: "SPM", subject: "Bahasa Melayu", label: "Rumusan 实体通关特训讲义", file: "resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf" },
+            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 – Student Version", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Student.pdf" },
+            { syllabus: "SPM", subject: "Mathematics (Form 2 KSSM)", label: "Form 2 Math Revision 1 – Answer Key (Teacher)", file: "hardcopy/SPM_Syllabus/Form2/Math/Form2_Math_KSSM_Revision1_Answers.pdf" },
+            { syllabus: "SPM", subject: "Science (Form 3 KSSM)", label: "Form 3 Science Bab 1 – Student Version", file: "hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab1_Student.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM 2021 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2021_chemistry_paper_2.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM 2022 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2022_chemistry_paper_2.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM 2023 Chemistry Paper 2", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_2023_chemistry_paper_2.pdf" },
@@ -1083,10 +1338,10 @@
             { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry 2026 May Revision (Student)", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_chemistry_2026_may_revision_student.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry 2026 May Revision (Teacher)", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/spm_chemistry_2026_may_revision_teacher.pdf" },
             { syllabus: "SPM", subject: "Chemistry", label: "SPM Chemistry Worksheet", file: "hardcopy/SPM_Syllabus/Form5/Chemistry/SPM_Chemistry_Worksheet.pdf" },
-            //  UEC 
+            // ── UEC ──────────────────────────────────────────────────────────────
             { syllabus: "UEC", subject: "English", label: "Reading Comprehension Guide", file: "resources/pdf/UEC/English/Reading_Guide.pdf" },
             { syllabus: "UEC", subject: "English", label: "Summary Writing Workshop", file: "resources/pdf/UEC/English/Summary_Writing.pdf" },
-            //  IGCSE 
+            // ── IGCSE ────────────────────────────────────────────────────────────
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Worksheet", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Worksheet.pdf" },
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 2 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Ch2_Answer_Key.pdf" },
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Energy: The Superpower All Around Us", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_Energy_Superpower.pdf" },
@@ -1110,33 +1365,33 @@
             { syllabus: "IGCSE", subject: "Science (Y4)", label: "Topic 7 Answer Key", file: "resources/pdf/IGCSE/Science/IGCSE_Y4_Science_T7_Answer_Key.pdf" },
             { syllabus: "IGCSE", subject: "Mathematics (Stage 7)", label: "Stage 7 Math Revision (Answers)", file: "resources/pdf/IGCSE/Math/IGCSE_Math_Stage7_Revision_Answers.pdf" },
             { syllabus: "IGCSE", subject: "Mathematics (Stage 7)", label: "Stage 7 Math Revision (Student)", file: "resources/pdf/IGCSE/Math/IGCSE_Math_Stage7_Revision_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.1 Respiration)", label: "Respiration Worksheet ?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.1 Respiration)", label: "Respiration Worksheet ?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Answers.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.1 Respiration)", label: "Presentation: Breath to Energy (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.2 Properties of Materials)", label: "Presentation: Properties of Materials ?Solutions (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Slides.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet ?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet ?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Answers.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.4 Ecosystems)", label: "Ecosystems Worksheet", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.4 Ecosystems)", label: "Ecosystems Answer Key", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/answer_worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet ?Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet ?Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/answer_worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.6 Light and Space)", label: "Chapter 6 Worksheet ?Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.6 Light and Space)", label: "Chapter 6 Worksheet ?Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/answer_worksheet.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet ?Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Student.pdf" },
-            { syllabus: "IGCSE", subject: "Science (Y8 ?Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet ?Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Answers.pdf" },
-            //  Singapore 
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.1 Respiration)", label: "Respiration Worksheet – Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.1 Respiration)", label: "Respiration Worksheet – Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Worksheet_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.1 Respiration)", label: "Presentation: Breath to Energy (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch1_Respiration_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.2 Properties of Materials)", label: "Presentation: Properties of Materials – Solutions (Slides)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Slides.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet – Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.2 Properties of Materials)", label: "Chapter 2 Worksheet – Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch2_Solutions_Worksheet_Answers.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.4 Ecosystems)", label: "Ecosystems Worksheet", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.4 Ecosystems)", label: "Ecosystems Answer Key", file: "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet – Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.5 Materials and Cycles)", label: "Chapter 5 Worksheet – Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.6 Light and Space)", label: "Chapter 6 Worksheet – Student Version", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.6 Light and Space)", label: "Chapter 6 Worksheet – Answer Key (Teacher)", file: "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/answer_worksheet.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet – Student Version", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Student.pdf" },
+            { syllabus: "IGCSE", subject: "Science (Y8 – Ch.7 Diet and Growth)", label: "Chapter 7 Worksheet – Answer Key (Teacher)", file: "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch7_Diet_Worksheet_Answers.pdf" },
+            // ── Singapore ────────────────────────────────────────────────────────
             { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Whole Numbers Review", file: "resources/pdf/Singapore/Math/Whole_Numbers_Review.pdf" },
             { syllabus: "Singapore", subject: "Mathematics (Y4)", label: "Year 4 Math Clear Revision", file: "resources/pdf/Singapore/Math/Singapore_Y4_Math_Clear_Revision.pdf" },
             { syllabus: "Singapore", subject: "Science (Y4)", label: "April Science Revision Worksheet (Student)", file: "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_student.pdf" },
             { syllabus: "Singapore", subject: "Science (Y4)", label: "April Science Revision Worksheet (Teacher)", file: "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_teacher.pdf" },
         ];
 
-        //  PDF Modal Logic 
+        // ── PDF Modal Logic ───────────────────────────────────────────────────────
         function openPdfModal() {
             const modal = document.getElementById('pdf-modal');
             const list = document.getElementById('pdf-list');
 
-            // Group resources by syllabus ?subject
+            // Group resources by syllabus → subject
             const grouped = {};
             pdfResources.forEach(r => {
                 if (!grouped[r.syllabus]) grouped[r.syllabus] = {};
@@ -1182,7 +1437,7 @@
             if (e.key === 'Escape') closePdfModalDirect();
         });
 
-        //  Existing Navigation Logic 
+        // ── Existing Navigation Logic ─────────────────────────────────────────────
         function switchSyllabus(event, syllabusId) {
             // Remove 'active' only from the currently visible syllabus tab row,
             // NOT from the level-switcher buttons (Secondary / Primary).
@@ -1257,6 +1512,18 @@
                 document.getElementById('primary-tabs').querySelector('.tab-btn').click();
             }
         }
+
+        // Parallax Scroll Effect for the flowing feel
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const rows = document.querySelectorAll('.hex-row');
+            rows.forEach((row, index) => {
+                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
+                // Move rows slightly at different speeds based on index
+                const parallaxY = scrollY * (0.1 + (index * 0.02));
+                row.style.transform = 	ranslate(px, px);
+            });
+        });
     </script>
 
     <!-- ==========================================
@@ -1267,7 +1534,7 @@
             <select id="authLangSelect" onchange="changeAuthLanguage(this.value)" style="position: absolute; top: 16px; left: 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 4px 8px; font-size: 0.85rem; outline: none; cursor:pointer; z-index:10;">
                 <option value="en" style="color: black;">EN</option>
                 <option value="ms" style="color: black;">MS</option>
-                <option value="zh" style="color: black;">世</option>
+                <option value="zh" style="color: black;">中文</option>
             </select>
             <button class="modal-close" onclick="closeStudentModal()">&times;</button>
             <h2 id="authTitle" style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px; margin-top: 25px;">Student Dashboard</h2>
@@ -1348,7 +1615,7 @@
         </div>
     </div>
 
-    <!--  Floating Feedback & Subject Requests Widget  -->
+    <!-- ── Floating Feedback & Subject Requests Widget ── -->
     <button id="feedback-fab" onclick="openFeedbackModal()">
         <span>💬</span> Help & Feedback
     </button>
@@ -1424,11 +1691,11 @@
 
     <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/auth-access.js?v=1.0.1"></script>
-    <script src="js/progress-tracker.js?v=1.0.1"></script>
-    <script src="js/feedback.js?v=1.0.1"></script>
+    <script src="../../js/auth-access.js?v=1.0.1"></script>
+    <script src="../../js/progress-tracker.js?v=1.0.1"></script>
+    <script src="../../js/feedback.js?v=1.0.1"></script>
     <script>
-        //  i18n Translations 
+        // ── i18n Translations ────────────────────────
         const authTranslations = {
             en: {
                 title: "Student Dashboard", subtitle: "Manage student profiles and resume progress across modules",
@@ -1449,12 +1716,12 @@
                 btnSubmitLogin: "Log Masuk", btnSubmitRegister: "Buat Akaun"
             },
             zh: {
-                title: "账户主页", subtitle: "管理您的为资料并继习进?,
+                title: "账户主页", subtitle: "管理您的个人资料并继续学习进度",
                 tabLogin: "登录", tabRegister: "注册",
-                emailPlaceholder: "电子...", passwordPlaceholder: "密码...",
-                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理?,
+                emailPlaceholder: "电子邮箱...", passwordPlaceholder: "密码...",
+                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理员",
                 namePlaceholder: "全名...", phonePlaceholder: "电话号码...", syllabusPlaceholder: "选择课程大纲...",
-                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "?, genderFemale: "?, genderOther: "其他",
+                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "男", genderFemale: "女", genderOther: "其他",
                 btnSubmitLogin: "登录", btnSubmitRegister: "创建账户"
             }
         };
@@ -1490,7 +1757,7 @@
             }
         }
 
-        //  Auth & Dashboard Logic (Supabase-powered RBAC) 
+        // ── Auth & Dashboard Logic (Supabase-powered RBAC) ────────────────────────
 
         async function updateAuthUI() {
             const authInfo = await window.AuthAccess.getCurrentUser();
@@ -1566,7 +1833,7 @@
                 tabsContainer.style.display = "none";
                 passwordInput.style.display = "none";
                 forgotLink.style.display = "none";
-                submitBtn.innerText = curLang === 'zh' ? '發重罏? : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
+                submitBtn.innerText = curLang === 'zh' ? '發送重置鏈接' : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
                 
                 msgEl.style.color = "var(--text-secondary)";
                 msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
@@ -1589,20 +1856,20 @@
             if (currentAuthMode !== 'reset') {
                 if(!email) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱? : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
+                    msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱。" : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
                     return;
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵地址? : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
+                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵箱地址。" : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
                     return;
                 }
             }
             
             // 2. Forgot password request flow
             if (currentAuthMode === 'forgot') {
-                msgEl.innerText = curLang === 'zh' ? "正在發重罏?.." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
+                msgEl.innerText = curLang === 'zh' ? "正在發送重置鏈接..." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
                 msgEl.style.color = "var(--text-secondary)";
                 
                 try {
@@ -1612,7 +1879,7 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請查您的郵箱? : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請檢查您的郵箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
                             `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
                     }
                 } catch (err) {
@@ -1626,7 +1893,7 @@
             if (currentAuthMode === 'reset') {
                 if(!password) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "請輸入新密碼? : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
+                    msgEl.innerText = curLang === 'zh' ? "請輸入新密碼。" : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
                     return;
                 }
                 msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
@@ -1639,7 +1906,7 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！在登?.." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
                         setTimeout(() => {
                             toggleAuthMode('login');
                             document.getElementById('authPassword').value = '';
@@ -1657,7 +1924,7 @@
             // 4. Standard Login & Register flows
             if(!password) {
                 msgEl.style.color = "#ef4444";
-                msgEl.innerText = curLang === 'zh' ? "請輸入密碼? : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
+                msgEl.innerText = curLang === 'zh' ? "請輸入密碼。" : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
                 return;
             }
             
@@ -1672,7 +1939,7 @@
                 
                 if(!fullname || !phone || !syllabus || !age || !gender || !role) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "有人資料欄位均為必填? : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
+                    msgEl.innerText = curLang === 'zh' ? "所有個人資料欄位均為必填。" : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
                     return;
                 }
                 profileData = { fullname, phone, syllabus, age: parseInt(age), gender, role };
@@ -1768,6 +2035,18 @@
                 });
             }
         });
+
+        // Parallax Scroll Effect for the flowing feel
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const rows = document.querySelectorAll('.hex-row');
+            rows.forEach((row, index) => {
+                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
+                // Move rows slightly at different speeds based on index
+                const parallaxY = scrollY * (0.1 + (index * 0.02));
+                row.style.transform = 	ranslate(px, px);
+            });
+        });
     </script>
     <!-- PIN Top-up Modal -->
     <div id="pin-topup-modal" class="pin-modal-overlay">
@@ -1815,7 +2094,7 @@
             }
         }
 
-        //  Feedback System Modal & Form Logic 
+        // ── Feedback System Modal & Form Logic ──────────────────────────────
         function openFeedbackModal() {
             const nameInput = document.getElementById('feedbackName');
             const emailInput = document.getElementById('feedbackEmail');
@@ -1922,7 +2201,7 @@
             }
         }
 
-        //  Admin Panel Tab & Console Logic 
+        // ── Admin Panel Tab & Console Logic ───────────────────────────────
         async function switchAdminTab(tab) {
             document.getElementById('btnAdminTabPins').classList.toggle('active', tab === 'pins');
             document.getElementById('btnAdminTabFeedback').classList.toggle('active', tab === 'feedback');
@@ -1992,7 +2271,7 @@
                     `;
                 } else {
                     actionsHtml = `
-                        <div class="feedback-meta" style="color: #10b981; font-weight: bold; margin-top: 8px;">?Resolved</div>
+                        <div class="feedback-meta" style="color: #10b981; font-weight: bold; margin-top: 8px;">✓ Resolved</div>
                     `;
                 }
 
@@ -2064,6 +2343,18 @@
                 }
             }, 500); 
         });
+
+        // Parallax Scroll Effect for the flowing feel
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const rows = document.querySelectorAll('.hex-row');
+            rows.forEach((row, index) => {
+                const baseTranslateX = (index % 2 === 1) ? 110 : 0;
+                // Move rows slightly at different speeds based on index
+                const parallaxY = scrollY * (0.1 + (index * 0.02));
+                row.style.transform = 	ranslate(px, px);
+            });
+        });
     </script>
     
     <!-- Admin PIN Generator Toggle Button -->
@@ -2072,7 +2363,7 @@
     <!-- Admin Control Panel (Tabbed) -->
     <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 480px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>?/span> Admin Control Panel</h3>
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>⚡</span> Admin Control Panel</h3>
             <button onclick="document.getElementById('admin-pin-generator').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
 
