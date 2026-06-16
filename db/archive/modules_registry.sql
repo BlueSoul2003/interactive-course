@@ -104,7 +104,10 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── KSSR English Primary 6 ────────────────────────────────────────
 ('kssr-p6-en-unit1',          'Unit 1: Scenario Practice',          'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit2',          'Unit 2: Interactive Reading',        'kssr', 'english', 'kssr_p6_english', 'Primary6'),
-('kssr-p6-en-unit3',          'Unit 3: Outdoor Activities',         'kssr', 'english', 'kssr_p6_english', 'Primary6');
+('kssr-p6-en-unit3',          'Unit 3: Outdoor Activities',         'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+
+-- ── University Japanese ───────────────────────────────────────────
+('uni-japanese-family',       'Japanese Family Vocab',              'uni', 'japanese', 'uni_japanese', 'University');
 
 -- Verify: SELECT COUNT(*) FROM public.modules;  → should return 40
 
