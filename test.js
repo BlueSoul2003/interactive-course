@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Japanese Family Vocab</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="importmap">
-    {
-      "imports": {
-        "react": "https://esm.sh/react@18.2.0",
-        "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-        "lucide-react": "https://esm.sh/lucide-react@0.292.0"
-      }
-    }
-    </script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-</head>
-<body class="bg-slate-50">
-
-<div id="root"></div>
-
-<script type="text/babel" data-type="module">
+﻿
 import { createRoot } from 'react-dom/client';
 import React, { useState, useEffect, useRef } from 'react';
 import { Wand2, BookOpen, Scroll, Award, Sparkles, XCircle, CheckCircle, RotateCcw, GripHorizontal, Volume2, Globe }
@@ -29,71 +7,71 @@ from 'lucide-react';
 // --- DATA START ---
 const familyData = [
   {
-    "zh": "爷爷/外公",
+    "zh": "鐖风埛/澶栧叕",
     "en": "Grandfather",
-    "uchi": "そふ",
-    "soto": "おじいさん"
+    "uchi": "銇濄伒",
+    "soto": "銇娿仒銇勩仌銈?
   },
   {
-    "zh": "奶奶/外婆",
+    "zh": "濂跺ザ/澶栧﹩",
     "en": "Grandmother",
-    "uchi": "そぼ",
-    "soto": "おばあさん"
+    "uchi": "銇濄伡",
+    "soto": "銇娿伆銇傘仌銈?
   },
   {
-    "zh": "爸爸",
+    "zh": "鐖哥埜",
     "en": "Father",
-    "uchi": "ちち",
-    "soto": "おとうさん"
+    "uchi": "銇°仭",
+    "soto": "銇娿仺銇嗐仌銈?
   },
   {
-    "zh": "妈妈",
+    "zh": "濡堝",
     "en": "Mother",
-    "uchi": "はは",
-    "soto": "おかあさん"
+    "uchi": "銇伅",
+    "soto": "銇娿亱銇傘仌銈?
   },
   {
-    "zh": "哥哥",
+    "zh": "鍝ュ摜",
     "en": "Older Brother",
-    "uchi": "あに",
-    "soto": "おにいさん"
+    "uchi": "銇傘伀",
+    "soto": "銇娿伀銇勩仌銈?
   },
   {
-    "zh": "姐姐",
+    "zh": "濮愬",
     "en": "Older Sister",
-    "uchi": "あね",
-    "soto": "おねえさん"
+    "uchi": "銇傘伃",
+    "soto": "銇娿伃銇堛仌銈?
   },
   {
-    "zh": "弟弟",
+    "zh": "寮熷紵",
     "en": "Younger Brother",
-    "uchi": "おとうと",
-    "soto": "おとうとさん"
+    "uchi": "銇娿仺銇嗐仺",
+    "soto": "銇娿仺銇嗐仺銇曘倱"
   },
   {
-    "zh": "妹妹",
+    "zh": "濡瑰",
     "en": "Younger Sister",
-    "uchi": "いもうと",
-    "soto": "いもうとさん"
+    "uchi": "銇勩倐銇嗐仺",
+    "soto": "銇勩倐銇嗐仺銇曘倱"
   }
 ];
 const uchiPrompts = [
   {
-    "zh": "在魔药课上，斯内普教授批评你的药水颜色不对，你小声嘟囔你的【{zh}】平时在家就是这么熬的...",
+    "zh": "鍦ㄩ瓟鑽涓婏紝鏂唴鏅暀鎺堟壒璇勪綘鐨勮嵂姘撮鑹蹭笉瀵癸紝浣犲皬澹板槦鍥斾綘鐨勩€恵zh}銆戝钩鏃跺湪瀹跺氨鏄繖涔堢啲鐨?..",
     "en": "In Potions class, Snape criticizes your potion's color. You mutter that your [{en}] always brews it this way at home..."
   },
   {
-    "zh": "收到吼叫信！整个大堂都安靜了，你尴尬地捂住脸，那是你的【{zh}】寄来骂你不及格的...",
+    "zh": "鏀跺埌鍚煎彨淇★紒鏁翠釜澶у爞閮藉畨闈滀簡锛屼綘灏村艾鍦版崅浣忚劯锛岄偅鏄綘鐨勩€恵zh}銆戝瘎鏉ラ獋浣犱笉鍙婃牸鐨?..",
     "en": "A Howler! The Great Hall goes silent. You cover your face in embarrassment as your [{en}] yells at you for failing..."
   }
 ];
 const sotoPrompts = [
   {
-    "zh": "你在国王十字车站9¾站台遇到同学，你走上前礼貌地向他的【{zh}】问好...",
+    "zh": "浣犲湪鍥界帇鍗佸瓧杞︾珯9戮绔欏彴閬囧埌鍚屽锛屼綘璧颁笂鍓嶇ぜ璨屽湴鍚戜粬鐨勩€恵zh}銆戦棶濂?..",
     "en": "At Platform 9 3/4, you step forward to politely greet your classmate's [{en}]..."
   },
   {
-    "zh": "赫敏正在图书馆翻阅麻瓜历史书，你好奇地走过去，询问她的【{zh}】是不是也懂这些...",
+    "zh": "璧晱姝ｅ湪鍥句功棣嗙炕闃呴夯鐡滃巻鍙蹭功锛屼綘濂藉鍦拌蛋杩囧幓锛岃闂ス鐨勩€恵zh}銆戞槸涓嶆槸涔熸噦杩欎簺...",
     "en": "Hermione is devouring Muggle history books. You ask if her [{en}] also understands this stuff..."
   }
 ];
@@ -181,7 +159,7 @@ const i18n = {
 };
 
 function HogwartsJapaneseExam() {
-const [lang, setLang] = useState('zh'); // 新：状?
+const [lang, setLang] = useState('zh'); // 鏂帮細鐘?
 const [currentScreen, setCurrentScreen] = useState('start');
 const [mode, setMode] = useState(null);
 const [questions, setQuestions] = useState([]);
@@ -192,12 +170,12 @@ const [selectedAns, setSelectedAns] = useState(null);
 const [isTransitioning, setIsTransitioning] = useState(false);
 const [activeWindowId, setActiveWindowId] = useState('start');
 
-// 新：庳統狀?
+// 鏂帮細搴崇当鐙€?
 const [showRefreshNotice, setShowRefreshNotice] = useState(false);
 const remainingPools = useRef({ uchi: [], soto: [], mixed: [] });
 const ROUND_SIZE = 15;
 
-// 新：建立完?40 題的題庫邏輯
+// 鏂帮細寤虹珛瀹?40 椤岀殑椤屽韩閭忚集
 const buildPool = (type) => {
 const pool = [];
 const prompts = type === 'uchi' ? uchiPrompts : sotoPrompts;
@@ -220,7 +198,7 @@ pool.push({ type, targetZh: member.zh, targetEn: member.en, situationZh, situati
 return shuffleArray(pool);
 };
 
-// 初?CSS
+// 鍒?CSS
 useEffect(() => {
 const style = document.createElement('style');
 style.innerHTML = `
@@ -260,14 +238,14 @@ playClick();
 
 let isRefreshed = false;
 
-// 如果該模式剩下的題目少於輜要的數量，就重新生成塻題庫
+// 濡傛灉瑭叉ā寮忓墿涓嬬殑椤岀洰灏戞柤杓滆鐨勬暩閲忥紝灏遍噸鏂扮敓鎴愬』椤屽韩
 if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true; if (selectedMode==='mixed' ) {
     remainingPools.current.mixed=shuffleArray([...buildPool('uchi'), ...buildPool('soto')]); } else {
-    remainingPools.current[selectedMode]=buildPool(selectedMode); } } // 從庸抽出 15 ?const
-    nextQuestions=remainingPools.current[selectedMode].slice(0, ROUND_SIZE); // 更新剩下的?
+    remainingPools.current[selectedMode]=buildPool(selectedMode); } } // 寰炲焊鎶藉嚭 15 ?const
+    nextQuestions=remainingPools.current[selectedMode].slice(0, ROUND_SIZE); // 鏇存柊鍓╀笅鐨?
     remainingPools.current[selectedMode]=remainingPools.current[selectedMode].slice(ROUND_SIZE);
     setQuestions(nextQuestions); setCurrentQIndex(0); setScore(0); setMode(selectedMode); setCurrentScreen('playing');
-    setActiveWindowId('question'); // Bring question to front // 顤題庫刷新提示 if (isRefreshed) { setShowRefreshNotice(true);
+    setActiveWindowId('question'); // Bring question to front // 椤ら搴埛鏂版彁绀?if (isRefreshed) { setShowRefreshNotice(true);
     setTimeout(()=> setShowRefreshNotice(false), 3000);
     }
     };
@@ -300,7 +278,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
         }, 1500);
         };
 
-        // 1. 始界?
+        // 1. 濮嬬晫?
         const renderStartScreen = () => {
         const t = i18n[lang];
         return (
@@ -336,13 +314,13 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
         </div>
         )};
 
-        // 2. 游玩界面 (臔拖拽?
+        // 2. 娓哥帺鐣岄潰 (鑷旀嫋鎷?
         const renderPlayingScreen = () => {
         const t = i18n[lang];
         const currentQ = questions[currentQIndex];
-        // 根据屏幕宽度给个大的初始位罼避免手机上跑到屏幕
+        // 鏍规嵁灞忓箷瀹藉害缁欎釜澶х殑鍒濆浣嶇郊閬垮厤鎵嬫満涓婅窇鍒板睆骞?
         const isMobile = window.innerWidth < 768; return ( <>
-            {/* 題庫重置通知 */}
+            {/* 椤屽韩閲嶇疆閫氱煡 */}
             {showRefreshNotice && (
             <div
                 className="absolute top-4 left-1/2 -translate-x-1/2 bg-[#D3A625] text-[#740001] px-6 py-2 rounded-full font-bold shadow-lg z-[100] transition-opacity flex items-center gap-2">
@@ -350,7 +328,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
             </div>
             )}
 
-            {/* 模块1：分板 */}
+            {/* 妯″潡1锛氬垎鏉?*/}
             <DraggableParchment id="score" activeId={activeWindowId} setActiveId={setActiveWindowId} initialPos={{ x:
                 isMobile ? 10 : window.innerWidth - 250, y: 20 }} className="w-48">
                 <div className="text-center font-serif text-[#740001]">
@@ -363,7 +341,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                 </div>
             </DraggableParchment>
 
-            {/* 模块2：盝 */}
+            {/* 妯″潡2锛氱洕 */}
             <DraggableParchment id="question" activeId={activeWindowId} setActiveId={setActiveWindowId} initialPos={{ x:
                 isMobile ? 10 : window.innerWidth/2 - 200, y: isMobile ? 150 : 100 }} className={`w-[90vw] max-w-[400px]
                 ${feedback==='wrong' ? 'animate-shake' : '' } ${feedback==='correct' ? 'magic-flash' : '' }`}>
@@ -376,7 +354,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                     {lang === 'zh' ? currentQ.situationZh : currentQ.situationEn}
                 </p>
 
-                {/* 反动画?*/}
+                {/* 鍙嶅姩鐢?*/}
                 {feedback && (
                 <div className={`absolute inset-0 flex items-center justify-center rounded-lg bg-opacity-95
                     backdrop-blur-sm ${feedback==='correct' ? 'bg-[#D3A625]/30 text-green-800'
@@ -398,7 +376,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                 )}
             </DraggableParchment>
 
-            {/* 模块3：项?*/}
+            {/* 妯″潡3锛氶」?*/}
             <DraggableParchment id="options" activeId={activeWindowId} setActiveId={setActiveWindowId} initialPos={{ x:
                 isMobile ? 10 : window.innerWidth/2 - 180, y: isMobile ? 380 : 350 }}
                 className="w-[90vw] max-w-[360px]">
@@ -425,7 +403,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
         );
         };
 
-        // 3. 结算界面
+        // 3. 缁撶畻鐣岄潰
         const renderResultScreen = () => {
         const t = i18n[lang];
         let gradeData = t.grades.T;
@@ -469,7 +447,7 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
                 className="absolute top-4 right-4 z-[100] bg-[#D3A625] text-[#740001] px-4 py-2 rounded-full font-bold
                 shadow-lg hover:scale-105 transition-transform flex items-center gap-2 border-2 border-[#740001]"
                 >
-                <Globe size={18} /> {lang === 'zh' ? 'English' : '世'}
+                <Globe size={18} /> {lang === 'zh' ? 'English' : '涓?}
             </button>
 
             {currentScreen === 'start' && renderStartScreen()}
@@ -481,40 +459,3 @@ if (remainingPools.current[selectedMode].length < ROUND_SIZE) { isRefreshed=true
 
 const root = createRoot(document.getElementById('root'));
 root.render(<HogwartsJapaneseExam />);
-</script>
-
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-}
-.home-btn-fixed:hover {
-  transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.55);
-  color: #fff;
-}
-</style>
-<a href="../../../../index.html" class="home-btn-fixed">&#127968; Home</a>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../../../../js/auth-access.js"></script>
-<script src="../../../../js/progress-tracker.js"
-        data-module-id="uni-japanese-family"
-        data-module-name="Japanese Family Vocab"
-        data-module-url="content/University/Japanese/Family/index.html"></script>
-<script>
-window.addEventListener('load', function() {
-    if (window.ProgressTracker) {
-        ProgressTracker.init(async function(tracker) {
-            const saved = await tracker.load();
-        });
-    }
-});
-</script>
-
-</body>
-</html>
