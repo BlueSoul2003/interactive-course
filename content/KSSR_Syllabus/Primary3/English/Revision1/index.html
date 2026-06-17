@@ -454,6 +454,9 @@
 
         function proceedToNextStage() {
             currentStageIndex++;
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({ currentStageIndex: currentStageIndex });
+            }
             if (currentStageIndex < vocabData.length) {
                 startStage();
             } else {
@@ -717,5 +720,35 @@
         }
 
     </script>
+    
+    <!-- Pillar 4: State Management (SDK) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p3-en-revision1"
+            data-module-name="Revision 1 (Unit 1 & 2)"
+            data-module-url="content/KSSR_Syllabus/Primary3/English/Revision1/index.html"></script>
+
+    <!-- Load Progress -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved) {
+                        console.log("P3 English Revision 1 Progress loaded:", saved);
+                        if (saved.currentStageIndex) {
+                            currentStageIndex = saved.currentStageIndex;
+                            // if they finished everything, we could just show final screen
+                            if(currentStageIndex >= vocabData.length) {
+                                showScreen('screen-final');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
 </body>
 </html>
