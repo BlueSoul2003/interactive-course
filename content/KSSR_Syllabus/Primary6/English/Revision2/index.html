@@ -199,27 +199,175 @@
     <script>
         // Vocabulary Data
         const vocabData = [
-            // Stage 1
-            [
-                {en: "freckles", zh: "雀斑"}, {en: "ponytail", zh: "馬尾"}, {en: "curly", zh: "捲曲的"}, {en: "blonde", zh: "淡黃色的"}, {en: "crinkle", zh: "起皺/瞇起"},
-                {en: "bright", zh: "明亮的"}, {en: "strong", zh: "強壯的"}, {en: "shiny", zh: "閃亮的"}, {en: "fingers", zh: "手指"}, {en: "tall", zh: "高的"}
-            ],
-            // Stage 2
-            [
-                {en: "clay", zh: "黏土"}, {en: "crafts", zh: "手工藝"}, {en: "direction", zh: "方向"}, {en: "piano", zh: "鋼琴"}, {en: "chess", zh: "西洋棋"},
-                {en: "puzzle", zh: "拼圖"}, {en: "skateboard", zh: "滑板"}, {en: "glasses", zh: "眼鏡"}, {en: "keys", zh: "琴鍵"}, {en: "goals", zh: "球門/得分"}
-            ],
-            // Stage 3
-            [
-                {en: "routine", zh: "日常事务"}, {en: "shift", zh: "轮班"}, {en: "rescue", zh: "营救"}, {en: "patient", zh: "病人"}, {en: "tailor", zh: "裁缝"},
-                {en: "librarian", zh: "图书管理员"}, {en: "butcher", zh: "肉贩/屠夫"}, {en: "musician", zh: "音乐家"}, {en: "pilot", zh: "飞行员"}, {en: "carpenter", zh: "木匠"}
-            ],
-            // Stage 4
-            [
-                {en: "sprinkle", zh: "撒落/少量"}, {en: "amazing", zh: "令人驚嘆的"}, {en: "incredibly", zh: "難以置信地"}, {en: "scoring", zh: "得分"}, {en: "beat", zh: "擊敗"},
-                {en: "difficult", zh: "困難的"}, {en: "chef", zh: "厨师"}, {en: "author", zh: "作家"}, {en: "engineer", zh: "工程师"}, {en: "doctor", zh: "医生"}
-            ]
-        ];
+    [
+        {
+            "en": "Because I am hungry.",
+            "zh": "因为我很饿。"
+        },
+        {
+            "en": "Because it is raining.",
+            "zh": "因为正在下雨。"
+        },
+        {
+            "en": "Because I am a boy.",
+            "zh": "因为我是个男孩。"
+        },
+        {
+            "en": "Because I am late for school.",
+            "zh": "因为我上学迟到了。"
+        },
+        {
+            "en": "Because he is hungry.",
+            "zh": "因为他饿了。"
+        },
+        {
+            "en": "Because he is happy.",
+            "zh": "因为他很开心。"
+        },
+        {
+            "en": "Because it is morning.",
+            "zh": "因为现在是早上。"
+        },
+        {
+            "en": "Because I like to play.",
+            "zh": "因为我喜欢玩。"
+        },
+        {
+            "en": "Because I am very tired.",
+            "zh": "因为我非常累。"
+        },
+        {
+            "en": "I don't see it the way he does.",
+            "zh": "我和他的看法不同。"
+        }
+    ],
+    [
+        {
+            "en": "I can't make it to the party.",
+            "zh": "我去不了派对了。"
+        },
+        {
+            "en": "You got an A! Great job!",
+            "zh": "你得了个A！干得好！"
+        },
+        {
+            "en": "Call me anytime you need help.",
+            "zh": "需要帮忙随时打给我。"
+        },
+        {
+            "en": "Let me know if you're coming.",
+            "zh": "告诉我你来不来。"
+        },
+        {
+            "en": "Come visit us when you can!",
+            "zh": "有空就来看看我们吧！"
+        },
+        {
+            "en": "Why is there no 'd' in 'didn't use to'?",
+            "zh": "为什么'use'没有'd'？"
+        },
+        {
+            "en": "Because 'didn't' already stole the past tense!",
+            "zh": "因为'didn't'已经把过去式'偷'走了！"
+        },
+        {
+            "en": "The writer and his family were involved in a shipwreck.",
+            "zh": "作者和他的家人遭遇了海难。"
+        },
+        {
+            "en": "The writer's father and brother were able to build a tree house.",
+            "zh": "作者的父亲和兄弟建了一座树屋。"
+        },
+        {
+            "en": "The family found a vegetable patch near a clearing.",
+            "zh": "这家人在森林空地附近发现了一块菜地。"
+        }
+    ],
+    [
+        {
+            "en": "The family kept a lookout for ships sailing nearby.",
+            "zh": "作者和他的家人一直留意附近航行的船只。"
+        },
+        {
+            "en": "to make an effort to become calm and think more clearly",
+            "zh": "努力冷静下来，想得更清楚"
+        },
+        {
+            "en": "List two purposes of building a fire at night.",
+            "zh": "列出晚上生火的两个目的。"
+        },
+        {
+            "en": "Who do you think were the unwanted guests?",
+            "zh": "你认为“不速之客”是谁？"
+        },
+        {
+            "en": "List four feelings that the writer and his family may have felt.",
+            "zh": "列出作者和他的家人可能有的四种感受。"
+        },
+        {
+            "en": "Build meaningful compound sentences using the words provided.",
+            "zh": "用提供的单词拼出有意义的复合句。"
+        },
+        {
+            "en": "Choose the correct Informal equivalent for each Formal statement.",
+            "zh": "为每个正式句子选择正确的非正式对应句。"
+        },
+        {
+            "en": "Match the interjection to the emotion it represents.",
+            "zh": "将感叹词与其代表的情感进行匹配。"
+        },
+        {
+            "en": "A reaction to something cute or sweet.",
+            "zh": "对可爱或甜蜜事物的反应。"
+        },
+        {
+            "en": "For fear or concern which isn't serious.",
+            "zh": "表示不太严重的恐惧或担忧。"
+        }
+    ],
+    [
+        {
+            "en": "An expression of appreciation for food.",
+            "zh": "表达对食物的欣赏。"
+        },
+        {
+            "en": "To show that one is impressed or amazed.",
+            "zh": "表示印象深刻或惊叹。"
+        },
+        {
+            "en": "Why are you wearing a raincoat?",
+            "zh": "为什么你穿着雨衣？"
+        },
+        {
+            "en": "Why are you running?",
+            "zh": "为什么你在跑步？"
+        },
+        {
+            "en": "Why is the baby crying?",
+            "zh": "为什么宝宝在哭？"
+        },
+        {
+            "en": "Why are you going to bed early?",
+            "zh": "为什么你这么早睡觉？"
+        },
+        {
+            "en": "Click the words in the correct order to build the sentence.",
+            "zh": "根据目标句意，按正确顺序点击单词拼出句子。"
+        },
+        {
+            "en": "The family had run out of food.",
+            "zh": "这家人吃光了食物。"
+        },
+        {
+            "en": "To express congratulations or happiness.",
+            "zh": "表达祝贺或开心。"
+        },
+        {
+            "en": "I felt very cold.",
+            "zh": "我感觉很冷。"
+        }
+    ]
+];
 
         // State variables
         let currentStageIndex = 0;
@@ -314,16 +462,28 @@
                 allBtns.forEach(b => {
                     if (b.innerText === targetZh) b.classList.add('correct');
                 });
+                
+                // Show a clear message so they know the correct answer
+                const qc = document.getElementById('question-container');
+                const feedback = document.createElement('div');
+                feedback.className = 'mt-4 text-xl md:text-2xl font-black text-red-600 bg-red-100 px-6 py-3 rounded-xl w-full text-center pop-anim';
+                feedback.innerHTML = ❌ Wrong! The correct answer is:<br><span class="text-green-700 text-3xl mt-2 block"></span>;
+                qc.insertBefore(feedback, document.getElementById('options-container'));
             }
 
+            // Give them 3 seconds to read the correct answer if they got it wrong, else 1 second
             setTimeout(() => {
+                // remove feedback if exists
+                const fb = document.querySelector('#question-container > div.bg-red-100');
+                if (fb) fb.remove();
+                
                 currentQIndex++;
                 if (currentQIndex < currentQuestions.length) {
                     loadQuestion();
                 } else {
                     endStage();
                 }
-            }, 1000);
+            }, isCorrect ? 1000 : 3000);
         }
 
         function endStage() {
@@ -372,7 +532,7 @@
                         btnNext.innerText = 'Restart Stage 🔄';
                         btnNext.dataset.action = 'restart';
                     }
-                }, 1000);
+                }, isCorrect ? 1000 : 3000);
             }
         }
 
@@ -666,7 +826,7 @@
                     clearInterval(tInt);
                     winMiniGame();
                 }
-            }, 1000);
+            }, isCorrect ? 1000 : 3000);
 
             function loop() {
                 if(!mgActive) return;
