@@ -52,11 +52,19 @@ Every module must be registered in the central database to work with the PIN aut
 4. **Crucial Step:** Run the updated `INSERT INTO public.modules ... ON CONFLICT (id) DO NOTHING;` command in the Supabase SQL Editor.
 
 ### 5. Update the Main Landing Page (`index.html`)
-The new module must be accessible from the main curriculum grid.
+The new module must be accessible from the main curriculum grid. You must strictly adhere to the UI layout to prevent breaking the DOM structure.
+
+**Important UI Structure Rules:**
+When a user clicks a subject (e.g., KSSR English), they are presented with "Year" selector cards (e.g., Year 3, Year 6). Clicking a Year must open a clean `view-layer` containing exactly **two distinct sections**:
+1. **Chapters**: The regular class modules.
+2. **Revision**: The revision mini-games.
+
+To add your new revision module:
 1. Open the root `index.html` file.
-2. Search for the appropriate view-layer ID (e.g., `<div id="kssr-english-y3">`).
-3. Locate the `<h2>` section titled **Revision Mini-Games**.
-4. Add the new `<a class="card">` block containing the correct `href`, `data-module-id`, and `data-bundle` attributes.
+2. Locate the specific Year's view-layer (e.g., `<div id="kssr-english-y3" class="view-layer">`).
+3. Scroll down past the `Chapters` section and locate the `<h2>` section titled **Revision**.
+4. Inside the `<div class="grid">` that immediately follows the Revision `<h2>`, add your new `<a class="card">` block.
+5. **CRITICAL WARNING:** Always ensure that your new `<a class="card">` is placed **inside** the `<div class="grid">` container, and that you do not accidentally remove or misplace the closing `</div>` tags. Misplacing `</div>` tags will cause cards to leak outside the `view-layer` and break the UI layout for other sections.
 
 ## ✅ Verification Checklist
 - [ ] Does the new `index.html` load without console errors?
