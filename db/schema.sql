@@ -460,6 +460,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y8-sci-ch5',           'Chapter 5: Materials and Cycles on Earth',   'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch6',           'Chapter 6: Light and Space',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch7',           'Chapter 7: Diet and Growth',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
+('igcse-y8-sci-ch7-mcq',       'Chapter 7: Diet and Growth (MCQ)',           'igcse', 'science', 'igcse_y8_science', 'Year8'),
 
 -- ── Singapore Math Year 4 ─────────────────────────────────────────
 ('sg-y4-math-whole-number',    'Chapter 2: Whole Numbers (Part 2)',           'sg', 'math', 'sg_y4_math', 'Year4'),
