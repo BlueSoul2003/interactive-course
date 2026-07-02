@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGCSE Y8 Science – Chapter 7: Diet and Growth | Mastery Academy</title>
+    <meta name="description"
+        content="IGCSE Year 8 Science – Chapter 7: Diet and Growth. Interactive quiz with 40 multiple-choice questions to test your knowledge.">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        :root {
+            --accent: #0ea5e9;
+            --accent-dark: #0284c7;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+        }
+
+        /* ── Tab Bar ─────────────────────────────────────────────────── */
+        .tab-bar {
+            display: flex;
+            background: #1e293b;
+            padding: 0 16px;
+            gap: 4px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .tab-item {
+            padding: 14px 22px;
+            color: #94a3b8;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            font-family: inherit;
+            white-space: nowrap;
+        }
+
+        .tab-item.active {
+            color: #38bdf8;
+            border-bottom-color: #38bdf8;
+        }
+
+        .tab-panel {
+            display: none;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* ── Quiz (React) ─────────────────────────────────────────── */
+        #quiz-panel {
+            min-height: calc(100vh - 52px);
+        }
+
+        #quiz-root {
+            min-height: calc(100vh - 52px);
+        }
+
+        /* ── Animations ────────────────────────────────────────────── */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .slide-up {
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0
+            }
+            to {
+                opacity: 1
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        /* ── Home Button ────────────────────────────────────────────── */
+        .home-btn-fixed {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 99999;
+            background: linear-gradient(135deg, #1e3a8a, #764ba2);
+            color: #fff;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+            transition: all 0.3s ease;
+            font-family: "Segoe UI", sans-serif;
+            letter-spacing: 0.5px;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55);
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ════════════ TAB BAR ════════════ -->
+    <div class="tab-bar" id="main-tab-bar">
+        <button class="tab-item active" id="tab-quiz">🧠 Interactive Quiz</button>
+    </div>
+
+    <!-- ════════════ QUIZ PANEL ════════════ -->
+    <div id="quiz-panel" class="tab-panel active">
+        <div id="quiz-root"></div>
+    </div>
+
+    <!-- ════════════ QUIZ (React) ════════════ -->
+    <script>
+console.log("BABEL STARTED");
+const {
+  useState
+} = React;
+const CheckCircle2 = ({
+  className
+}) => /*#__PURE__*/React.createElement("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  className: className
+}, /*#__PURE__*/React.createElement("path", {
+  d: "M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "m9 12 2 2 4-4"
+}));
+const XCircle = ({
+  className
+}) => /*#__PURE__*/React.createElement("svg", {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: "2",
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  className: className
+}, /*#__PURE__*/React.createElement("circle", {
+  cx: "12",
+  cy: "12",
+  r: "10"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "m15 9-6 6"
+}), /*#__PURE__*/React.createElement("path", {
+  d: "m9 9 6 6"
+}));
+const playRandomSound = () => {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const sounds = [() => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const now = ctx.currentTime;
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.setValueAtTime(1760, now + 0.1);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.3, now + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+      osc.start(now);
+      osc.stop(now + 0.3);
+    }, () => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const now = ctx.currentTime;
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.linearRampToValueAtTime(660, now + 0.1);
+      osc.frequency.linearRampToValueAtTime(880, now + 0.2);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.3, now + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+      osc.start(now);
+      osc.stop(now + 0.5);
+    }, () => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      const now = ctx.currentTime;
+      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+      gain.gain.setValueAtTime(0, now);
+      gain.gain.linearRampToValueAtTime(0.2, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+      osc.start(now);
+      osc.stop(now + 0.2);
+    }];
+    sounds[Math.floor(Math.random() * sounds.length)]();
+  } catch (e) {
+    console.error(e);
+  }
+};
+const triggerEmojiCelebration = customEmojis => {
+  const emojis = customEmojis && customEmojis.length > 0 ? customEmojis : ['🎉', '💥', '🚀', '🌟', '🤩', '🔥', '🏆', '✨', '💯', '👏', '🧠'];
+  const container = document.createElement('div');
+  container.style.position = 'fixed';
+  container.style.top = '0';
+  container.style.left = '0';
+  container.style.width = '100vw';
+  container.style.height = '100vh';
+  container.style.pointerEvents = 'none';
+  container.style.zIndex = '999999';
+  container.style.overflow = 'hidden';
+  document.body.appendChild(container);
+  const numEmojis = 40 + Math.floor(Math.random() * 20);
+  for (let i = 0; i < numEmojis; i++) {
+    const el = document.createElement('div');
+    el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    el.style.position = 'absolute';
+    el.style.left = '50vw';
+    el.style.top = '50vh';
+    el.style.fontSize = 2 + Math.random() * 3 + 'rem';
+    el.style.transform = `translate(-50%, -50%) scale(0.1)`;
+    el.style.opacity = '1';
+    el.style.transition = `all ${1 + Math.random() * 1.5}s cubic-bezier(0.1, 0.8, 0.3, 1)`;
+    container.appendChild(el);
+    setTimeout(() => {
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 20 + Math.random() * 60;
+      const endX = 50 + Math.cos(angle) * distance;
+      const endY = 50 + Math.sin(angle) * distance * (window.innerWidth / window.innerHeight);
+      el.style.left = endX + 'vw';
+      el.style.top = endY + 'vh';
+      el.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 720 - 360}deg) scale(${1 + Math.random()})`;
+      el.style.opacity = '0';
+    }, 20);
+  }
+  setTimeout(() => {
+    if (container.parentNode) container.parentNode.removeChild(container);
+  }, 2500);
+};
+const allQuestions = [{
+  "id": 1,
+  "q": "Which type of nutrient is broken down by the body into glucose to provide the main fuel for cellular respiration?",
+  "options": ["Proteins", "Carbohydrates", "Vitamins", "Minerals"],
+  "ans": "Carbohydrates",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc76", "\ud83e\udd54", "\ud83c\udf5e", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83e\udda0", "\ud83c\udf6d", "\u2728", "\ud83c\udf31", "\ud83d\udcc8"]
+}, {
+  "id": 2,
+  "q": "A student wants to build strong muscles and repair body tissues after a heavy workout. Which nutrient is most important for this?",
+  "options": ["Fats", "Carbohydrates", "Protein", "Water"],
+  "ans": "Protein",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83e\udd29", "\ud83d\udcaa", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728"]
+}, {
+  "id": 3,
+  "q": "Fats and oils are very similar, but how do they generally differ at normal room temperature?",
+  "options": ["Fats are liquid, oils are solid.", "Fats are solid, oils are liquid.", "Fats contain energy, oils do not.", "Fats are found in plants, oils are found in animals."],
+  "ans": "Fats are solid, oils are liquid.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udf54", "\ud83e\udd29", "\ud83e\udd53", "\ud83e\uddc8", "\ud83e\udd51", "\u2728"]
+}, {
+  "id": 4,
+  "q": "Which vitamin is particularly important for helping us see in the dark, and is found in green vegetables and carrots?",
+  "options": ["Vitamin A", "Vitamin C", "Vitamin D", "Iron"],
+  "ans": "Vitamin A",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 5,
+  "q": "Historically, sailors on long sea voyages without fresh fruit or vegetables suffered from scurvy, which caused swollen and bleeding gums . Scurvy is caused by a lack of:",
+  "options": ["Calcium", "Vitamin A", "Vitamin C", "Protein"],
+  "ans": "Vitamin C",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 6,
+  "q": "\ud83e\udde0 Thinking Skill: A doctor advises a patient who feels constantly exhausted and tired to eat more red meat and dark green vegetables . What condition is the doctor most likely trying to treat?",
+  "options": ["Rickets", "Scurvy", "Constipation", "Anaemia"],
+  "ans": "Anaemia",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83c\udf57", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd69", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\ud83e\udd5a", "\ud83d\udc1f", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 7,
+  "q": "How does the human body primarily obtain Vitamin D for strong bones and teeth?",
+  "options": ["By eating large amounts of citrus fruits.", "It is made in the skin when sunlight falls onto it.", "By drinking plenty of water.", "By breaking down carbohydrates in the liver."],
+  "ans": "It is made in the skin when sunlight falls onto it.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83d\udc80", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 8,
+  "q": "What is the main biological function of the mineral calcium?",
+  "options": ["To make haemoglobin for red blood cells.", "To act as a solvent for chemical reactions.", "To make bones and teeth strong.", "To prevent constipation."],
+  "ans": "To make bones and teeth strong.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 9,
+  "q": "Why is water considered an essential part of the diet?",
+  "options": ["It provides a long-term store of energy.", "It allows chemicals to dissolve and react in cells, and transports substances in the blood.", "It builds strong bones and cell membranes.", "It is broken down into glucose."],
+  "ans": "It allows chemicals to dissolve and react in cells, and transports substances in the blood.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\udca7", "\ud83d\ude80", "\ud83c\udf0a", "\ud83c\udf4a", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\uddca", "\ud83e\udd55", "\u2728", "\ud83d\udeb0", "\ud83e\udd66"]
+}, {
+  "id": 10,
+  "q": "Fibre is mostly made of cellulose and is not actually digested by the body . Why is it still essential to eat plenty of fibre?",
+  "options": ["It provides a rapid energy spike.", "It helps to prevent constipation by keeping the digestive system healthy.", "It cures anaemia.", "It helps white blood cells fight pathogens."],
+  "ans": "It helps to prevent constipation by keeping the digestive system healthy.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc76", "\ud83e\udd29", "\ud83e\udda0", "\u2728", "\ud83c\udf31", "\ud83d\udcc8"]
+}, {
+  "id": 11,
+  "q": "A student tests a mystery food sample using iodine solution . The solution turns from orange-brown to a very dark blue-black . What does this prove?",
+  "options": ["The food contains protein.", "The food contains Vitamin C.", "The food contains starch.", "The food contains fat."],
+  "ans": "The food contains starch.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd29", "\u2728"]
+}, {
+  "id": 12,
+  "q": "\ud83e\udde0 Thinking Skill: Why does a deficiency in iron directly lead to a lack of energy?",
+  "options": ["Iron is the main fuel burned during respiration.", "Without iron, the body cannot absorb calcium.", "Lack of iron means less haemoglobin is made, so less oxygen is transported to cells for respiration.", "Iron is needed to digest carbohydrates."],
+  "ans": "Lack of iron means less haemoglobin is made, so less oxygen is transported to cells for respiration.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83e\udd54", "\ud83c\udf5e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83e\udd57", "\ud83e\udd55", "\ud83c\udf6d", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 13,
+  "q": "What defines a \"balanced diet\"?",
+  "options": ["Eating only fruits and vegetables every day.", "Eating exactly the same mass of food at every meal.", "A diet that provides all the different kinds of nutrients, and the right amount of energy.", "A diet that eliminates all fats and carbohydrates."],
+  "ans": "A diet that provides all the different kinds of nutrients, and the right amount of energy.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 14,
+  "q": "Which of the following individuals would generally require the highest daily energy intake?",
+  "options": ["An 8-year-old girl.", "A 50-year-old man with a desk job.", "A 15-year-old active teenage boy.", "A 3-month-old baby."],
+  "ans": "A 15-year-old active teenage boy.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd54", "\ud83c\udf5e", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83c\udf6d", "\u2728"]
+}, {
+  "id": 15,
+  "q": "\ud83e\udde0 Thinking Skill: A woman consumes 8 megajoules (MJ) of energy daily but uses 10 MJ of energy due to her highly active job . What biological process will her body initiate to make up the difference?",
+  "options": ["It will break down stored body fat to provide the missing energy.", "It will stop cellular respiration.", "It will convert proteins directly into fibre.", "It will store the 8 MJ as extra fat."],
+  "ans": "It will break down stored body fat to provide the missing energy.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd54", "\ud83c\udf5e", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83c\udf6d", "\u2728"]
+}, {
+  "id": 16,
+  "q": "A pregnant woman needs an increased amount of calcium and protein in her diet . What is the primary reason for this?",
+  "options": ["To increase her own muscle mass.", "To build new cells and bones for her growing baby.", "To improve her night vision.", "To prevent scurvy."],
+  "ans": "To build new cells and bones for her growing baby.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83c\udf57", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd69", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\ud83e\udd5a", "\ud83d\udc1f", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 17,
+  "q": "\ud83e\udde0 Thinking Skill: A student eats a meal of white rice, fried chicken, and a sugary soda. Which dietary component, essential for digestive health, is almost entirely missing from this meal?",
+  "options": ["Protein", "Carbohydrates", "Dietary fibre", "Fats"],
+  "ans": "Dietary fibre",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83d\udcaf", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83c\udf4a", "\ud83d\udead", "\ud83e\udec1", "\ud83e\udd55", "\ud83e\udd66", "\ud83c\udf89", "\ud83d\ude80", "\ud83c\udf5e", "\ud83c\udf5d", "\ud83e\udd57", "\u2728", "\ud83e\udd54", "\ud83d\udca8", "\ud83c\udf5a", "\u26a1", "\ud83d\udeac", "\ud83c\udf6d"]
+}, {
+  "id": 18,
+  "q": "Consuming too much animal fat in your diet increases the risk of developing which condition?",
+  "options": ["Anaemia", "Rickets", "Heart disease", "Scurvy"],
+  "ans": "Heart disease",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83c\udf54", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd53", "\ud83e\udd55", "\ud83e\uddc8", "\ud83e\udd51", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 19,
+  "q": "Consuming excessive amounts of sugar not only causes tooth decay but also increases the risk of which illness?",
+  "options": ["Diabetes", "Constipation", "Low blood pressure", "Malaria"],
+  "ans": "Diabetes",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd54", "\ud83c\udf5e", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83c\udf6d", "\u2728"]
+}, {
+  "id": 20,
+  "q": "In a healthy food triangle, which group of foods should make up the largest proportion of your diet?",
+  "options": ["Sweets and fried foods.", "Meat, fish, and eggs.", "Dairy products like cheese and butter.", "Fresh fruit, vegetables, and whole grains."],
+  "ans": "Fresh fruit, vegetables, and whole grains.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83c\udf4a", "\ud83d\ude80", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83e\udd57", "\ud83e\udd55", "\u2728", "\ud83e\udd66"]
+}, {
+  "id": 21,
+  "q": "\ud83e\udde0 Thinking Skill: Why is it considered healthier to eat whole-grain bread or brown rice rather than white bread or white rice?",
+  "options": ["Whole grains contain absolutely no carbohydrates.", "Whole grains provide more dietary fibre and vitamins.", "White rice contains too much vitamin D.", "White bread is a major source of iron."],
+  "ans": "Whole grains provide more dietary fibre and vitamins.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd29", "\u2728"]
+}, {
+  "id": 22,
+  "q": "If a person constantly eats more carbohydrates and fats than their body uses, what happens to the extra nutrients?",
+  "options": ["They are immediately excreted as fibre.", "They are turned into extra haemoglobin.", "They are turned into fat and stored in the body, leading to weight gain.", "They are converted into calcium for bones."],
+  "ans": "They are turned into fat and stored in the body, leading to weight gain.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd54", "\ud83c\udf5e", "\ud83c\udf54", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83e\udd53", "\ud83e\uddc8", "\ud83c\udf6d", "\u2728", "\ud83e\udd51"]
+}, {
+  "id": 23,
+  "q": "How does a single cell eventually become a fully grown baby?",
+  "options": ["The single cell stretches indefinitely.", "The cell divides into two, and those cells grow and divide again repeatedly.", "The cell absorbs other cells from the mother's body.", "The cell solidifies into a bone."],
+  "ans": "The cell divides into two, and those cells grow and divide again repeatedly.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc76", "\ud83e\udd29", "\ud83e\udda0", "\u2728", "\ud83c\udf31", "\ud83d\udcc8"]
+}, {
+  "id": 24,
+  "q": "\ud83e\udde0 Thinking Skill: While \"growth\" simply means getting bigger, what does biological \"development\" involve?",
+  "options": ["Only an increase in body fat.", "The formation of different tissues, organs, and the gaining of new skills (like walking or talking).", "The shedding of the exoskeleton.", "The process of losing baby teeth."],
+  "ans": "The formation of different tissues, organs, and the gaining of new skills (like walking or talking).",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc76", "\ud83e\udd29", "\ud83e\udda0", "\u2728", "\ud83c\udf31", "\ud83d\udcc8"]
+}, {
+  "id": 25,
+  "q": "Which of the following is a physical benefit of taking regular exercise?",
+  "options": ["It stores extra energy as fat.", "It makes the heart and muscles work hard, so they become strong.", "It slows down the digestive system.", "It decreases the body's need for oxygen."],
+  "ans": "It makes the heart and muscles work hard, so they become strong.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83e\udd29", "\ud83d\udcaa", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728"]
+}, {
+  "id": 26,
+  "q": "Cigarette smoke contains several dangerous substances . Which substance is the addictive stimulant that makes it difficult for smokers to quit?",
+  "options": ["Tar", "Carbon monoxide", "Nicotine", "Particulates"],
+  "ans": "Nicotine",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udead", "\ud83d\udca8", "\ud83e\udec1", "\ud83e\udd29", "\ud83d\udeac", "\u2728"]
+}, {
+  "id": 27,
+  "q": "Which harmful component of cigarette smoke coats the lungs, damages the sweeping hairs (cilia), and causes lung cancer?",
+  "options": ["Nicotine", "Tar", "Carbon monoxide", "Calcium"],
+  "ans": "Tar",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udead", "\ud83d\udca8", "\ud83e\udec1", "\ud83e\udd29", "\ud83d\udeac", "\u2728"]
+}, {
+  "id": 28,
+  "q": "\ud83e\udde0 Thinking Skill: Carbon monoxide is a poisonous gas found in cigarette smoke . It binds to haemoglobin much stronger than oxygen does. How does this specifically harm the smoker's body?",
+  "options": ["It dissolves the stomach lining.", "It prevents red blood cells from carrying enough oxygen to cells for respiration.", "It causes the bones to become soft and bend.", "It makes the blood completely transparent."],
+  "ans": "It prevents red blood cells from carrying enough oxygen to cells for respiration.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udead", "\ud83d\udca8", "\ud83e\udec1", "\ud83e\udd29", "\u2764\ufe0f", "\ud83d\udeac", "\ud83e\ude78", "\u2728", "\ud83e\udec0"]
+}, {
+  "id": 29,
+  "q": "Based on health data, how does smoking during pregnancy heavily impact the unborn baby?",
+  "options": ["It increases the baby's birthweight.", "It significantly increases the chance of having a baby with a low birthweight.", "It causes the baby to grow extra muscles.", "It has absolutely no effect on the baby."],
+  "ans": "It significantly increases the chance of having a baby with a low birthweight.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc76", "\ud83e\udd29", "\ud83e\udda0", "\u2728", "\ud83c\udf31", "\ud83d\udcc8"]
+}, {
+  "id": 30,
+  "q": "\ud83e\udde0 Thinking Skill: If an 8-year-old child's diet severely lacks protein and energy, what is the most likely long-term outcome?",
+  "options": ["They will develop superior night vision.", "They will grow much taller than their peers.", "Their cells will lack the materials and energy to divide, stunting their overall growth.", "Their skeleton will turn into an exoskeleton."],
+  "ans": "Their cells will lack the materials and energy to divide, stunting their overall growth.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf57", "\ud83d\udcaf", "\ud83c\udf4e", "\ud83d\udc8a", "\ud83e\udd29", "\ud83d\udc1f", "\ud83c\udf4a", "\ud83e\udd55", "\ud83e\udd66", "\ud83c\udf89", "\ud83d\ude80", "\ud83c\udf5e", "\ud83e\udd69", "\ud83c\udf5d", "\ud83e\udd57", "\ud83e\udd5a", "\u2728", "\ud83e\udd54", "\ud83c\udf5a", "\u26a1", "\ud83c\udf6d"]
+}, {
+  "id": 31,
+  "q": "What is the main function of the bones known as the cranium (skull) and the sternum (ribcage)?",
+  "options": ["To pump blood around the body.", "To protect delicate internal organs like the brain, heart, and lungs.", "To digest carbohydrates.", "To absorb sunlight for Vitamin D production."],
+  "ans": "To protect delicate internal organs like the brain, heart, and lungs.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc80", "\ud83e\udd29", "\u2728"]
+}, {
+  "id": 32,
+  "q": "Some animals, like insects, have a hard skeleton on the outside of their bodies . What is this called?",
+  "options": ["Endoskeleton", "Exoskeleton", "Vertebral column", "Cartilage"],
+  "ans": "Exoskeleton",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc80", "\ud83e\udd29", "\u2728"]
+}, {
+  "id": 33,
+  "q": "The elbow and the knee allow movement back and forth in only one single direction . What type of joints are these?",
+  "options": ["Ball-and-socket joints", "Hinge joints", "Fixed joints", "Fused joints"],
+  "ans": "Hinge joints",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc80", "\ud83e\udd29", "\u2728"]
+}, {
+  "id": 34,
+  "q": "What type of joint is found at the shoulder and the hip, allowing the arm or leg to move in a complete circle?",
+  "options": ["Hinge joint", "Pivot joint", "Ball-and-socket joint", "Exoskeleton joint"],
+  "ans": "Ball-and-socket joint",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83d\udc80", "\ud83e\udd29", "\u2728"]
+}, {
+  "id": 35,
+  "q": "Muscles are specialized cells that create movement. How do they do this?",
+  "options": ["By expanding and pushing bones away.", "By contracting (making themselves shorter) to produce a pulling force.", "By bending around the joints.", "By vibrating rapidly."],
+  "ans": "By contracting (making themselves shorter) to produce a pulling force.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83d\udc76", "\ud83e\udd29", "\ud83d\udcaa", "\ud83e\udda0", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728", "\ud83c\udf31", "\ud83d\udcc8"]
+}, {
+  "id": 36,
+  "q": "Tough cords of connective tissue attach muscles directly to bones . What are these cords called?",
+  "options": ["Veins", "Cartilage", "Ligaments", "Tendons"],
+  "ans": "Tendons",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83d\udc80", "\ud83e\udd29", "\ud83d\udcaa", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728"]
+}, {
+  "id": 37,
+  "q": "\ud83e\udde0 Thinking Skill: A fundamental rule of biomechanics is that muscles can only pull; they can never push . Because of this, how must muscles be arranged to bend and then straighten a joint?",
+  "options": ["As a single giant muscle that pulls in both directions.", "In antagonistic pairs, where one pulls to bend the joint and the other pulls to straighten it.", "In groups of four that vibrate the bone.", "In a parallel chain that expands the joint."],
+  "ans": "In antagonistic pairs, where one pulls to bend the joint and the other pulls to straighten it.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83d\udc80", "\ud83e\udd29", "\ud83d\udcaa", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728"]
+}, {
+  "id": 38,
+  "q": "When you want to bend your arm at the elbow, what must the biceps and triceps muscles do?",
+  "options": ["Both muscles must contract at the exact same time.", "The triceps contracts and the biceps relaxes.", "The biceps contracts (pulls) and the triceps relaxes.", "Both muscles relax completely."],
+  "ans": "The biceps contracts (pulls) and the triceps relaxes.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83e\udd29", "\ud83d\udcaa", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728"]
+}, {
+  "id": 39,
+  "q": "\ud83e\udde0 Thinking Skill: If a severe injury completely severed the tendon connecting a person's triceps muscle to their ulna bone, what specific movement would they be unable to perform?",
+  "options": ["Bending their arm at the elbow.", "Straightening their arm at the elbow.", "Moving their fingers.", "Rotating their shoulder."],
+  "ans": "Straightening their arm at the elbow.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83e\uddb4", "\ud83d\udcaf", "\ud83d\ude80", "\ud83c\udfcb\ufe0f", "\ud83d\udc80", "\ud83e\udd29", "\ud83d\udcaa", "\ud83c\udfc3\u200d\u2642\ufe0f", "\u2728"]
+}, {
+  "id": 40,
+  "q": "\ud83e\udde0 Thinking Skill: Which sequence accurately describes the flow of energy required for a person to lift a heavy object?",
+  "options": ["Tendon stretches \u2192 bone vibrates \u2192 muscle relaxes.", "Light energy \u2192 thermal energy \u2192 muscle pushes bone.", "Glucose + Oxygen \u2192 aerobic respiration in muscle cells \u2192 muscle contracts \u2192 tendon pulls bone.", "Muscle absorbs water \u2192 expands in size \u2192 joint straightens."],
+  "ans": "Glucose + Oxygen \u2192 aerobic respiration in muscle cells \u2192 muscle contracts \u2192 tendon pulls bone.",
+  "part": "Multiple Choice Questions",
+  "type": "mcq",
+  "emojis": ["\ud83c\udf89", "\ud83d\udcaf", "\ud83d\ude80", "\ud83e\udd54", "\ud83c\udf5e", "\ud83e\udd29", "\ud83c\udf5a", "\ud83c\udf5d", "\u26a1", "\ud83c\udf6d", "\u2728"]
+}];
+function QuizApp() {
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const [answers, setAnswers] = useState({});
+  const [checkedState, setCheckedState] = useState({});
+  const [showResults, setShowResults] = useState(false);
+  const currentQ = allQuestions[currentIdx];
+  const isChecked = checkedState[currentQ.id];
+  const currentAnswer = answers[currentQ.id] || '';
+
+  // Expose index for progress tracker
+  window._quizIdx = currentIdx;
+  const handleInstantCheck = val => {
+    if (isChecked) return;
+    setAnswers(p => ({
+      ...p,
+      [currentQ.id]: val
+    }));
+    setCheckedState(p => ({
+      ...p,
+      [currentQ.id]: true
+    }));
+    const isCorrect = val === currentQ.ans;
+    if (isCorrect && Math.random() < 0.35) {
+      // Roughly 1 in 3 questions
+      playRandomSound();
+      triggerEmojiCelebration(currentQ.emojis);
+    }
+
+    // Auto-save progress
+    if (window.ProgressTracker) {
+      window.ProgressTracker.autoSave({
+        questionIndex: currentIdx + 1,
+        score: calculateObjScore() + (isCorrect ? 1 : 0)
+      });
+    }
+  };
+  const nextQ = () => {
+    if (currentIdx < allQuestions.length - 1) setCurrentIdx(currentIdx + 1);else setShowResults(true);
+  };
+  const prevQ = () => {
+    if (currentIdx > 0) {
+      setCurrentIdx(currentIdx - 1);
+      setShowResults(false);
+    }
+  };
+  const calculateObjScore = () => {
+    let objScore = 0;
+    allQuestions.forEach(q => {
+      if (checkedState[q.id] && answers[q.id] === q.ans) objScore++;
+    });
+    return objScore;
+  };
+  const isCorrectObj = (() => {
+    if (!isChecked) return null;
+    return currentAnswer === currentQ.ans;
+  })();
+  if (showResults) {
+    const totalScore = calculateObjScore();
+    return /*#__PURE__*/React.createElement("div", {
+      className: "min-h-screen bg-slate-100 flex items-center justify-center p-4"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "text-center py-8 fade-in w-full max-w-md"
+    }, /*#__PURE__*/React.createElement("h2", {
+      className: "text-3xl font-bold text-blue-900 mb-6"
+    }, "Evaluation Complete! \uD83C\uDF89"), /*#__PURE__*/React.createElement("div", {
+      className: "bg-blue-50 border border-blue-200 rounded-xl p-8 shadow-sm"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "pt-4 flex justify-between items-center text-2xl font-bold text-blue-900"
+    }, /*#__PURE__*/React.createElement("span", null, "Total Score:"), /*#__PURE__*/React.createElement("span", null, totalScore, " / ", allQuestions.length))), /*#__PURE__*/React.createElement("button", {
+      onClick: () => {
+        setCurrentIdx(0);
+        setShowResults(false);
+        setAnswers({});
+        setCheckedState({});
+      },
+      className: "mt-8 px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-bold transition-colors"
+    }, "Retake Quiz")));
+  }
+  return /*#__PURE__*/React.createElement("div", {
+    className: "min-h-screen bg-slate-100 flex items-center justify-center p-4 md:p-8"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-full max-w-3xl flex flex-col",
+    style: {
+      minHeight: 'calc(100vh - 130px)'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "w-full bg-slate-200 h-2 rounded-t-2xl overflow-hidden shadow-sm"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "bg-sky-500 h-full transition-all duration-300 ease-out",
+    style: {
+      width: `${(currentIdx + 1) / allQuestions.length * 100}%`
+    }
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "bg-white rounded-b-2xl shadow-lg border border-slate-200 p-6 md:p-10 flex-1 overflow-y-auto"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "fade-in slide-up"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "mb-6 flex justify-between items-end"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "text-sm font-bold text-sky-600 uppercase tracking-wider"
+  }, currentQ.part), /*#__PURE__*/React.createElement("span", {
+    className: "text-sm font-medium text-slate-500"
+  }, "Q ", currentIdx + 1, " of ", allQuestions.length)), /*#__PURE__*/React.createElement("h2", {
+    className: "text-2xl font-bold text-slate-800 mb-8 leading-relaxed"
+  }, currentQ.q), /*#__PURE__*/React.createElement("div", {
+    className: "space-y-4 mb-8"
+  }, currentQ.options.map((opt, i) => {
+    let cls = 'bg-white hover:bg-slate-50 border-slate-200';
+    if (isChecked) {
+      if (opt === currentQ.ans) cls = 'bg-green-100 border-green-500 text-green-900';else if (opt === currentAnswer) cls = 'bg-red-100 border-red-500 text-red-900';else cls = 'bg-slate-50 border-slate-200 opacity-50';
+    } else if (currentAnswer === opt) cls = 'bg-sky-50 border-sky-400 text-sky-900';
+    const optionLetter = String.fromCharCode(65 + i);
+    return /*#__PURE__*/React.createElement("button", {
+      key: opt,
+      onClick: () => handleInstantCheck(opt),
+      disabled: isChecked,
+      className: `w-full text-left p-4 border rounded-xl transition-all font-medium text-lg flex justify-between items-center ${cls}`
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "flex-1 pr-4"
+    }, /*#__PURE__*/React.createElement("span", {
+      className: "font-bold mr-2"
+    }, optionLetter, ")"), " ", opt), isChecked && opt === currentQ.ans && /*#__PURE__*/React.createElement(CheckCircle2, {
+      className: "w-6 h-6 text-green-600 shrink-0"
+    }), isChecked && opt === currentAnswer && opt !== currentQ.ans && /*#__PURE__*/React.createElement(XCircle, {
+      className: "w-6 h-6 text-red-600 shrink-0"
+    }));
+  })), isChecked && /*#__PURE__*/React.createElement("div", {
+    className: `p-4 rounded-xl border flex items-center gap-3 fade-in ${isCorrectObj ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`
+  }, isCorrectObj ? /*#__PURE__*/React.createElement(CheckCircle2, {
+    className: "w-8 h-8 text-green-600 shrink-0"
+  }) : /*#__PURE__*/React.createElement(XCircle, {
+    className: "w-8 h-8 text-red-600 shrink-0"
+  }), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: `font-bold ${isCorrectObj ? 'text-green-800' : 'text-red-800'}`
+  }, isCorrectObj ? 'Excellent! Correct.' : 'Incorrect.'), !isCorrectObj && /*#__PURE__*/React.createElement("p", {
+    className: "text-red-600 text-sm mt-1"
+  }, "Correct answer: ", /*#__PURE__*/React.createElement("strong", null, currentQ.ans)))))), /*#__PURE__*/React.createElement("div", {
+    className: "mt-6 flex justify-between items-center px-2"
+  }, /*#__PURE__*/React.createElement("button", {
+    onClick: prevQ,
+    disabled: currentIdx === 0 && !showResults,
+    className: "px-6 py-3 font-bold text-slate-600 disabled:opacity-30 hover:bg-slate-200 rounded-lg transition-colors"
+  }, "\u2190 Previous"), /*#__PURE__*/React.createElement("button", {
+    onClick: nextQ,
+    disabled: showResults,
+    className: "px-8 py-3 bg-slate-800 text-white font-bold rounded-lg hover:bg-slate-900 transition-colors shadow-md disabled:opacity-30"
+  }, currentIdx === allQuestions.length - 1 ? 'Finish' : 'Next →'))));
+}
+ReactDOM.createRoot(document.getElementById('quiz-root')).render(/*#__PURE__*/React.createElement(QuizApp, null));
+console.log("BABEL FINISHED");
+</script>
+
+    <!-- Progress Tracker -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="igcse-y8-sci-ch7"
+            data-module-name="Chapter 7: Diet and Growth"
+            data-module-url="content/IGCSE_Syllabus/Year8/Science/Chapter7_Diet_and_Growth/index.html"></script>
+    <script>
+    window.addEventListener('load', function() {
+        if (!window.ProgressTracker) return;
+        ProgressTracker.init(async function(tracker) {
+            const saved = await tracker.load();
+            if (saved) {
+                window.__savedProgress = saved;
+                window.dispatchEvent(new CustomEvent('progressRestored', { detail: saved }));
+            }
+        });
+    });
+    </script>
+
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
+
+</body>
+
+</html>

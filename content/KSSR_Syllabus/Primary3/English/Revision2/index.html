@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Unit 1 & 2 Revision Module</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        body { font-family: 'Nunito', sans-serif; background-color: #f8fafc; touch-action: manipulation; }
+        .btn-option { transition: all 0.2s ease-in-out; }
+        .btn-option:active { transform: scale(0.95); }
+        .correct { background-color: #22c55e !important; color: white !important; border-color: #166534 !important; }
+        .wrong { background-color: #ef4444 !important; color: white !important; border-color: #991b1b !important; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .shake-anim { animation: shake 0.3s ease-in-out; }
+        @keyframes pop {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .pop-anim { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* Mini Game Styles */
+        #game-canvas { display: block; margin: 0 auto; background: #e0f2fe; border-radius: 16px; border: 4px solid #bae6fd; max-width: 100%; }
+        .mole-hole { aspect-ratio: 1; background: #854d0e; border-radius: 50%; position: relative; overflow: hidden; border: 4px solid #713f12; cursor: pointer; }
+        .mole { width: 80%; height: 80%; background: #a16207; border-radius: 50% 50% 0 0; position: absolute; bottom: -100%; left: 10%; transition: bottom 0.2s; border: 3px solid #713f12; display: flex; justify-content: center; align-items: center; font-size: 2rem;}
+        .mole.up { bottom: 0; }
+    </style>
+</head>
+<body class="min-h-screen text-gray-800 flex flex-col items-center py-6 px-4">
+    <!-- Home Button -->
+    <a href="../../../../../index.html" class="fixed top-4 left-4 z-50 bg-white px-4 py-2 rounded-full shadow-md text-gray-700 font-bold border border-gray-200 hover:scale-105 transition-transform flex items-center gap-2">
+        🏠 Home
+    </a>
+
+    <!-- Container -->
+    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-xl border-4 border-indigo-100 overflow-hidden relative">
+        
+        <!-- Start Screen -->
+        <div id="screen-start" class="p-8 md:p-12 text-center flex flex-col items-center justify-center min-h-[500px]">
+            <div class="text-6xl mb-6">🚀</div>
+            <h1 class="text-3xl md:text-5xl font-black text-indigo-700 mb-4">Word Master Challenge</h1>
+            <p class="text-gray-500 font-bold mb-8">Unit 1 & Unit 2 Revision</p>
+            <p class="text-sm text-gray-400 mb-8 max-w-md">Get full marks (10/10) in each stage to unlock a fun mini-game! Mistakes will cost you time. Ready?</p>
+            <button onclick="startGame()" class="bg-indigo-500 hover:bg-indigo-600 active:bg-indigo-700 text-white font-black text-xl py-4 px-12 rounded-2xl shadow-lg transform active:scale-95 transition-all w-full md:w-auto">
+                START!
+            </button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="screen-quiz" class="hidden flex-col">
+            <!-- Header -->
+            <div class="bg-indigo-50 p-4 border-b-4 border-indigo-100 flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg md:text-xl font-black text-indigo-700" id="ui-stage">Stage 1</h2>
+                    <p class="text-sm font-bold text-gray-500">Question <span id="ui-qnum">1</span>/10</p>
+                </div>
+                <div class="bg-white px-4 py-2 rounded-xl border-2 border-indigo-200 shadow-sm text-center">
+                    <p class="text-xs font-bold text-indigo-400 uppercase">Score</p>
+                    <p class="text-2xl font-black text-indigo-600 leading-none" id="ui-score">0</p>
+                </div>
+            </div>
+            
+            <!-- Question Area -->
+            <div class="p-6 md:p-8 flex-grow flex flex-col items-center pop-anim" id="question-container">
+                <div class="text-5xl md:text-7xl font-black text-gray-800 my-8 md:my-12 text-center w-full break-words" id="q-word">
+                    Word
+                </div>
+                
+                <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto" id="options-container">
+                    <!-- Options injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Stage Summary Screen -->
+        <div id="screen-summary" class="hidden p-8 md:p-12 text-center flex-col items-center justify-center min-h-[500px]">
+            <h2 class="text-3xl font-black text-gray-800 mb-2" id="summary-title">Stage Complete!</h2>
+            <p class="text-xl font-bold text-gray-600 mb-6">You scored</p>
+            <div class="text-6xl md:text-8xl font-black text-indigo-600 mb-8 drop-shadow-sm" id="summary-score">8/10</div>
+            
+            <!-- Punishment Area -->
+            <div id="punishment-area" class="hidden w-full bg-red-50 border-2 border-red-200 rounded-2xl p-6 mb-6">
+                <h3 class="text-red-700 font-bold mb-2">Not quite perfect!</h3>
+                <p class="text-red-500 text-sm mb-4">You need 10/10 to unlock the mini-game. Penalty time:</p>
+                <div class="text-4xl font-black text-red-600 animate-pulse" id="penalty-timer">5s</div>
+            </div>
+
+            <!-- Reward Area -->
+            <div id="reward-area" class="hidden w-full bg-green-50 border-2 border-green-200 rounded-2xl p-6 mb-6 pop-anim">
+                <div class="text-5xl mb-4">🎉</div>
+                <h3 class="text-green-700 font-black text-xl mb-2">Perfect Score!</h3>
+                <p class="text-green-600 text-sm">You unlocked a mini-game reward!</p>
+            </div>
+
+            <button id="btn-next-action" onclick="handleSummaryAction()" class="bg-gray-300 text-gray-500 font-black text-xl py-4 px-8 rounded-2xl shadow-sm transition-all w-full cursor-not-allowed" disabled>
+                Wait...
+            </button>
+        </div>
+
+        <!-- Mini Game Screen -->
+        <div id="screen-minigame" class="hidden flex-col p-6 items-center min-h-[500px]">
+            <h2 class="text-2xl font-black text-indigo-700 mb-2" id="mg-title">Mini Game</h2>
+            <p class="text-gray-500 font-bold mb-4 text-center" id="mg-desc">Play to proceed to the next stage!</p>
+            
+            <!-- Canvas for Games 1, 2, 4 -->
+            <canvas id="game-canvas" width="400" height="400" class="hidden mb-6 shadow-inner"></canvas>
+            
+            <!-- DOM container for Game 3 (Whack-a-mole) -->
+            <div id="mole-grid" class="hidden grid grid-cols-3 gap-3 w-full max-w-[350px] mx-auto mb-6">
+                <!-- 9 holes injected -->
+            </div>
+
+            <div class="w-full flex justify-between items-center mb-4">
+                <span class="font-bold text-gray-500 bg-gray-100 px-4 py-2 rounded-xl" id="mg-score-display">Score: 0</span>
+                <span class="font-bold text-gray-500 bg-gray-100 px-4 py-2 rounded-xl" id="mg-time-display">Time: --</span>
+            </div>
+
+            <button id="btn-mg-start" onclick="startMiniGame()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-black text-lg py-3 px-8 rounded-xl shadow-md w-full mb-2">
+                Start Game
+            </button>
+            <button id="btn-mg-proceed" onclick="proceedToNextStage()" class="hidden bg-green-500 hover:bg-green-600 text-white font-black text-lg py-3 px-8 rounded-xl shadow-md w-full">
+                Proceed to Next Stage ➡️
+            </button>
+        </div>
+        
+        <!-- Final Screen -->
+        <div id="screen-final" class="hidden p-8 md:p-12 text-center flex-col items-center justify-center min-h-[500px]">
+            <div class="text-7xl mb-6">🏆</div>
+            <h1 class="text-3xl md:text-5xl font-black text-yellow-500 mb-4">Champion!</h1>
+            <p class="text-gray-500 font-bold mb-8">You have mastered all the words in Unit 1 and Unit 2!</p>
+            <button onclick="location.reload()" class="bg-indigo-500 hover:bg-indigo-600 text-white font-black text-xl py-4 px-12 rounded-2xl shadow-lg w-full">
+                Play Again
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Audio System -->
+    <script>
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let actx;
+
+        function initAudio() {
+            if (!actx) actx = new AudioContext();
+            if (actx.state === 'suspended') actx.resume();
+        }
+
+        function playTone(freq, type, duration, vol=0.1, delay=0) {
+            if (!actx) return;
+            const osc = actx.createOscillator();
+            const gain = actx.createGain();
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, actx.currentTime + delay);
+            gain.gain.setValueAtTime(vol, actx.currentTime + delay);
+            gain.gain.exponentialRampToValueAtTime(0.01, actx.currentTime + delay + duration);
+            osc.connect(gain);
+            gain.connect(actx.destination);
+            osc.start(actx.currentTime + delay);
+            osc.stop(actx.currentTime + delay + duration);
+        }
+
+        function playCorrect() {
+            initAudio();
+            playTone(523.25, 'sine', 0.1); // C5
+            playTone(659.25, 'sine', 0.2, 0.1, 0.1); // E5
+        }
+
+        function playWrong() {
+            initAudio();
+            playTone(200, 'square', 0.15);
+            playTone(150, 'square', 0.2, 0.1, 0.15);
+        }
+
+        function playLosePenalty() {
+            initAudio();
+            playTone(300, 'sawtooth', 0.3);
+            playTone(250, 'sawtooth', 0.3, 0.1, 0.3);
+            playTone(200, 'sawtooth', 0.6, 0.1, 0.6);
+        }
+
+        function playWinStage() {
+            initAudio();
+            playTone(440, 'sine', 0.1);
+            playTone(554.37, 'sine', 0.1, 0.1, 0.1);
+            playTone(659.25, 'sine', 0.3, 0.1, 0.2);
+            playTone(880, 'sine', 0.4, 0.1, 0.3);
+        }
+
+        function playMgPop() { initAudio(); playTone(800, 'sine', 0.05, 0.05); }
+        function playMgWin() { playWinStage(); }
+    </script>
+
+    <!-- Game Logic -->
+    <script>
+        // Vocabulary Data
+        
+        const vocabData = [
+            // Stage 1: Flash Match (Unit 3)
+            [
+                { en: "Setting", zh: "摆放" }, { en: "Dusting", zh: "除尘" }, { en: "Laundry", zh: "洗衣物" },
+                { en: "Sorting", zh: "分类" }, { en: "Folding", zh: "折叠" }, { en: "Shelves", zh: "架子" },
+                { en: "Vacuuming", zh: "吸尘" }, { en: "Sweeping", zh: "扫" }, { en: "Napkins", zh: "餐巾" },
+                { en: "Gymnastics", zh: "体操" }
+            ],
+            // Stage 2: Bubble Pop (Unit 3 & 4 Mix)
+            [
+                { en: "Racquet", zh: "球拍" }, { en: "Porch", zh: "走廊" }, { en: "Groceries", zh: "杂货" },
+                { en: "Sanitise", zh: "消毒" }, { en: "Dresser", zh: "梳妆台" }, { en: "She's", zh: "She is" },
+                { en: "They're", zh: "They are" }, { en: "Isn't", zh: "Is not" }, { en: "Aren't", zh: "Are not" },
+                { en: "I'm", zh: "I am" }
+            ],
+            // Stage 3: Whack-a-Mole (Unit 4 Seasons & Weather)
+            [
+                { en: "Spring", zh: "春天" }, { en: "Summer", zh: "夏天" }, { en: "Autumn", zh: "秋天" },
+                { en: "Winter", zh: "冬天" }, { en: "Sunny", zh: "晴朗的" }, { en: "Rainy", zh: "下雨的" },
+                { en: "Snowy", zh: "下雪的" }, { en: "Windy", zh: "刮风的" }, { en: "Foggy", zh: "起雾的" },
+                { en: "Tornado", zh: "龙卷风" }
+            ],
+            // Stage 4: Jump! Jump! (Unit 4 Months & Objects)
+            [
+                { en: "January", zh: "一月" }, { en: "February", zh: "二月" }, { en: "March", zh: "三月" },
+                { en: "August", zh: "八月" }, { en: "December", zh: "十二月" }, { en: "Wool", zh: "羊毛" },
+                { en: "Leather", zh: "皮革" }, { en: "Cotton", zh: "棉" }, { en: "Sandcastle", zh: "沙堡" },
+                { en: "Picnic", zh: "野餐" }
+            ]
+        ];
+
+
+        // State variables
+        let currentStageIndex = 0;
+        let currentQuestions = [];
+        let currentQIndex = 0;
+        let currentScore = 0;
+        let isAnswering = false;
+        let penaltyInterval;
+
+        function shuffle(array) {
+            let arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function showScreen(id) {
+            ['screen-start', 'screen-quiz', 'screen-summary', 'screen-minigame', 'screen-final'].forEach(s => {
+                document.getElementById(s).classList.add('hidden');
+                document.getElementById(s).classList.remove('flex');
+            });
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function startGame() {
+            initAudio();
+            currentStageIndex = 0;
+            startStage();
+        }
+
+        function startStage() {
+            currentScore = 0;
+            currentQIndex = 0;
+            currentQuestions = shuffle(vocabData[currentStageIndex]);
+            document.getElementById('ui-stage').innerText = `Stage ${currentStageIndex + 1}`;
+            document.getElementById('ui-score').innerText = '0';
+            showScreen('screen-quiz');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            isAnswering = false;
+            document.getElementById('ui-qnum').innerText = currentQIndex + 1;
+            
+            const q = currentQuestions[currentQIndex];
+            document.getElementById('q-word').innerText = q.en;
+
+            // Generate options
+            let options = [q.zh];
+            // get 3 wrong options from anywhere in vocabData
+            let allZh = vocabData.flat().map(w => w.zh).filter(z => z !== q.zh);
+            allZh = shuffle(allZh);
+            options.push(allZh[0], allZh[1], allZh[2]);
+            options = shuffle(options);
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option w-full bg-white border-4 border-gray-200 hover:border-indigo-400 hover:bg-indigo-50 text-gray-700 font-bold text-lg md:text-xl py-4 md:py-6 px-4 rounded-2xl shadow-sm text-center';
+                btn.innerText = opt;
+                btn.onclick = () => selectAnswer(btn, opt === q.zh, container);
+                container.appendChild(btn);
+            });
+
+            // Re-trigger animation
+            const qc = document.getElementById('question-container');
+            qc.classList.remove('pop-anim');
+            void qc.offsetWidth; // trigger reflow
+            qc.classList.add('pop-anim');
+        }
+
+        function selectAnswer(btn, isCorrect, container) {
+            if (isAnswering) return;
+            isAnswering = true;
+
+            const allBtns = container.querySelectorAll('button');
+            const targetZh = currentQuestions[currentQIndex].zh;
+
+            if (isCorrect) {
+                playCorrect();
+                btn.classList.add('correct');
+                currentScore++;
+                document.getElementById('ui-score').innerText = currentScore;
+            } else {
+                playWrong();
+                btn.classList.add('wrong', 'shake-anim');
+                // Highlight correct one
+                allBtns.forEach(b => {
+                    if (b.innerText === targetZh) b.classList.add('correct');
+                });
+            }
+
+            setTimeout(() => {
+                currentQIndex++;
+                if (currentQIndex < currentQuestions.length) {
+                    loadQuestion();
+                } else {
+                    endStage();
+                }
+            }, 1000);
+        }
+
+        function endStage() {
+            showScreen('screen-summary');
+            document.getElementById('summary-score').innerText = `${currentScore}/10`;
+            const btnNext = document.getElementById('btn-next-action');
+            const punishmentArea = document.getElementById('punishment-area');
+            const rewardArea = document.getElementById('reward-area');
+
+            clearInterval(penaltyInterval);
+            
+            btnNext.disabled = true;
+            btnNext.className = 'bg-gray-300 text-gray-500 font-black text-xl py-4 px-8 rounded-2xl shadow-sm transition-all w-full cursor-not-allowed';
+            btnNext.innerText = 'Wait...';
+
+            if (currentScore === 10) {
+                // Perfect
+                playWinStage();
+                punishmentArea.classList.add('hidden');
+                rewardArea.classList.remove('hidden');
+                
+                btnNext.disabled = false;
+                btnNext.className = 'bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-black text-xl py-4 px-8 rounded-2xl shadow-lg transform active:scale-95 transition-all w-full';
+                btnNext.innerText = 'Play Reward Mini-Game! 🎮';
+                btnNext.dataset.action = 'minigame';
+            } else {
+                // Punishment
+                playLosePenalty();
+                rewardArea.classList.add('hidden');
+                punishmentArea.classList.remove('hidden');
+                
+                let penaltyTime = 5;
+                if (currentScore === 9) penaltyTime = 1;
+                else if (currentScore >= 5) penaltyTime = 3;
+
+                document.getElementById('penalty-timer').innerText = `${penaltyTime}s`;
+                
+                penaltyInterval = setInterval(() => {
+                    penaltyTime--;
+                    document.getElementById('penalty-timer').innerText = `${penaltyTime}s`;
+                    if (penaltyTime <= 0) {
+                        clearInterval(penaltyInterval);
+                        document.getElementById('penalty-timer').innerText = `Ready.`;
+                        btnNext.disabled = false;
+                        btnNext.className = 'bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-black text-xl py-4 px-8 rounded-2xl shadow-lg transform active:scale-95 transition-all w-full pop-anim';
+                        btnNext.innerText = 'Restart Stage 🔄';
+                        btnNext.dataset.action = 'restart';
+                    }
+                }, 1000);
+            }
+        }
+
+        function handleSummaryAction() {
+            const btn = document.getElementById('btn-next-action');
+            if (btn.dataset.action === 'restart') {
+                startStage();
+            } else if (btn.dataset.action === 'minigame') {
+                setupMiniGame();
+            }
+        }
+
+        // ==========================================
+        // MINI GAMES LOGIC
+        // ==========================================
+        let mgInterval, mgAnimFrame;
+        let mgScore = 0;
+        let mgTime = 0;
+        let mgActive = false;
+
+        function setupMiniGame() {
+            showScreen('screen-minigame');
+            document.getElementById('btn-mg-start').classList.remove('hidden');
+            document.getElementById('btn-mg-proceed').classList.add('hidden');
+            document.getElementById('mg-score-display').innerText = 'Score: 0';
+            document.getElementById('mg-time-display').innerText = 'Time: --';
+            
+            const stage = currentStageIndex + 1;
+            const title = document.getElementById('mg-title');
+            const desc = document.getElementById('mg-desc');
+            const canvas = document.getElementById('game-canvas');
+            const moleGrid = document.getElementById('mole-grid');
+
+            canvas.classList.add('hidden');
+            moleGrid.classList.add('hidden');
+
+            if (stage === 1) {
+                title.innerText = 'Catch the Stars 🌟';
+                desc.innerText = 'Drag the basket to catch 10 stars!';
+                canvas.classList.remove('hidden');
+            } else if (stage === 2) {
+                title.innerText = 'Bubble Pop 🫧';
+                desc.innerText = 'Tap/Click to pop 15 bubbles before they escape!';
+                canvas.classList.remove('hidden');
+            } else if (stage === 3) {
+                title.innerText = 'Whack-a-Mole 🐹';
+                desc.innerText = 'Tap the moles quickly! Get 10 points.';
+                moleGrid.classList.remove('hidden');
+                setupMoleGrid();
+            } else if (stage === 4) {
+                title.innerText = 'Jump! Jump! 🏃';
+                desc.innerText = 'Tap to jump over the blocks! Survive 15 seconds.';
+                canvas.classList.remove('hidden');
+            }
+        }
+
+        function startMiniGame() {
+            document.getElementById('btn-mg-start').classList.add('hidden');
+            mgScore = 0;
+            mgActive = true;
+            document.getElementById('mg-score-display').innerText = `Score: 0`;
+
+            const stage = currentStageIndex + 1;
+            if (stage === 1) playMG1();
+            else if (stage === 2) playMG2();
+            else if (stage === 3) playMG3();
+            else if (stage === 4) playMG4();
+        }
+
+        function winMiniGame() {
+            mgActive = false;
+            cancelAnimationFrame(mgAnimFrame);
+            clearInterval(mgInterval);
+            playMgWin();
+            document.getElementById('btn-mg-proceed').classList.remove('hidden');
+            document.getElementById('btn-mg-proceed').classList.add('pop-anim');
+            document.getElementById('mg-title').innerText = 'You Win! 🎉';
+        }
+
+        function proceedToNextStage() {
+            currentStageIndex++;
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.save({ currentStageIndex: currentStageIndex });
+            }
+            if (currentStageIndex < vocabData.length) {
+                startStage();
+            } else {
+                showScreen('screen-final');
+                playWinStage();
+            }
+        }
+
+        // ---------- MG1: Catch Stars ----------
+        function playMG1() {
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            let basket = { x: 150, y: 350, w: 80, h: 20 };
+            let stars = [];
+            
+            function moveBasket(e) {
+                if(!mgActive) return;
+                const rect = canvas.getBoundingClientRect();
+                let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                let x = clientX - rect.left;
+                basket.x = x - basket.w/2;
+                if(basket.x < 0) basket.x = 0;
+                if(basket.x + basket.w > canvas.width) basket.x = canvas.width - basket.w;
+            }
+            
+            canvas.onmousemove = moveBasket;
+            canvas.ontouchmove = moveBasket;
+
+            mgInterval = setInterval(() => {
+                if(mgActive) stars.push({ x: Math.random() * (canvas.width-20), y: -20, size: 20, speed: 2 + Math.random()*3 });
+            }, 800);
+
+            function loop() {
+                if(!mgActive) return;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                
+                // Draw Basket
+                ctx.fillStyle = '#c2410c';
+                ctx.fillRect(basket.x, basket.y, basket.w, basket.h);
+
+                // Draw and move stars
+                for(let i=stars.length-1; i>=0; i--) {
+                    let s = stars[i];
+                    s.y += s.speed;
+                    ctx.fillStyle = '#eab308';
+                    ctx.font = '20px Arial';
+                    ctx.fillText('⭐', s.x, s.y);
+
+                    // Check collision
+                    if (s.y + s.size >= basket.y && s.y <= basket.y + basket.h &&
+                        s.x + s.size >= basket.x && s.x <= basket.x + basket.w) {
+                        stars.splice(i, 1);
+                        mgScore++;
+                        document.getElementById('mg-score-display').innerText = `Score: ${mgScore}/10`;
+                        playMgPop();
+                        if (mgScore >= 10) { winMiniGame(); return; }
+                    } else if (s.y > canvas.height) {
+                        stars.splice(i, 1);
+                    }
+                }
+                mgAnimFrame = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ---------- MG2: Bubble Pop ----------
+        function playMG2() {
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            let bubbles = [];
+
+            function popBubble(e) {
+                if(!mgActive) return;
+                const rect = canvas.getBoundingClientRect();
+                let x = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+                let y = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+
+                for(let i=bubbles.length-1; i>=0; i--) {
+                    let b = bubbles[i];
+                    let dist = Math.hypot(x - b.x, y - b.y);
+                    if (dist < b.r) {
+                        bubbles.splice(i, 1);
+                        mgScore++;
+                        document.getElementById('mg-score-display').innerText = `Score: ${mgScore}/15`;
+                        playMgPop();
+                        if (mgScore >= 15) { winMiniGame(); return; }
+                        break;
+                    }
+                }
+            }
+            canvas.onmousedown = popBubble;
+            canvas.ontouchstart = (e) => { e.preventDefault(); popBubble(e); };
+
+            mgInterval = setInterval(() => {
+                if(mgActive) {
+                    bubbles.push({
+                        x: 30 + Math.random()*(canvas.width-60),
+                        y: canvas.height + 30,
+                        r: 20 + Math.random()*15,
+                        speed: 1 + Math.random()*2,
+                        color: `hsl(${Math.random()*360}, 80%, 70%)`
+                    });
+                }
+            }, 600);
+
+            function loop() {
+                if(!mgActive) return;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                for(let i=bubbles.length-1; i>=0; i--) {
+                    let b = bubbles[i];
+                    b.y -= b.speed;
+                    ctx.beginPath();
+                    ctx.arc(b.x, b.y, b.r, 0, Math.PI*2);
+                    ctx.fillStyle = b.color;
+                    ctx.fill();
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = '#fff';
+                    ctx.stroke();
+
+                    if(b.y + b.r < 0) bubbles.splice(i,1);
+                }
+                mgAnimFrame = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        // ---------- MG3: Whack-a-Mole ----------
+        let moleActiveIndex = -1;
+        function setupMoleGrid() {
+            const grid = document.getElementById('mole-grid');
+            grid.innerHTML = '';
+            for(let i=0; i<9; i++) {
+                let hole = document.createElement('div');
+                hole.className = 'mole-hole';
+                let mole = document.createElement('div');
+                mole.className = 'mole';
+                mole.innerText = '🐹';
+                hole.appendChild(mole);
+                
+                hole.onmousedown = () => hitMole(i, mole);
+                hole.ontouchstart = (e) => { e.preventDefault(); hitMole(i, mole); };
+                
+                grid.appendChild(hole);
+            }
+        }
+        function hitMole(i, moleEl) {
+            if(!mgActive) return;
+            if(i === moleActiveIndex && moleEl.classList.contains('up')) {
+                moleEl.classList.remove('up');
+                moleActiveIndex = -1;
+                mgScore++;
+                document.getElementById('mg-score-display').innerText = `Score: ${mgScore}/10`;
+                playMgPop();
+                if(mgScore >= 10) winMiniGame();
+            }
+        }
+        function playMG3() {
+            const holes = document.querySelectorAll('.mole');
+            function popRandom() {
+                if(!mgActive) return;
+                if(moleActiveIndex !== -1) {
+                    holes[moleActiveIndex].classList.remove('up');
+                }
+                moleActiveIndex = Math.floor(Math.random() * 9);
+                holes[moleActiveIndex].classList.add('up');
+                
+                let delay = 600 + Math.random()*400;
+                setTimeout(() => {
+                    if(mgActive && holes[moleActiveIndex]) holes[moleActiveIndex].classList.remove('up');
+                }, delay - 100);
+
+                if(mgActive) mgInterval = setTimeout(popRandom, delay);
+            }
+            popRandom();
+        }
+
+        // ---------- MG4: Jump! ----------
+        function playMG4() {
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            
+            mgTime = 15;
+            document.getElementById('mg-time-display').innerText = `Time: ${mgTime}s`;
+            
+            let player = { x: 50, y: 300, w: 30, h: 30, vy: 0, gravity: 0.8, jump: -12, grounded: true };
+            let obstacles = [];
+            let frames = 0;
+
+            function doJump(e) {
+                if(e) e.preventDefault();
+                if(!mgActive) return;
+                if(player.grounded) {
+                    player.vy = player.jump;
+                    player.grounded = false;
+                    playMgPop();
+                }
+            }
+            canvas.onmousedown = doJump;
+            canvas.ontouchstart = doJump;
+
+            // Timer
+            let tInt = setInterval(() => {
+                if(!mgActive) { clearInterval(tInt); return; }
+                mgTime--;
+                document.getElementById('mg-time-display').innerText = `Time: ${mgTime}s`;
+                if(mgTime <= 0) {
+                    clearInterval(tInt);
+                    winMiniGame();
+                }
+            }, 1000);
+
+            function loop() {
+                if(!mgActive) return;
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                
+                // Ground
+                ctx.fillStyle = '#65a30d';
+                ctx.fillRect(0, 330, canvas.width, 70);
+
+                // Player logic
+                player.vy += player.gravity;
+                player.y += player.vy;
+                if(player.y + player.h > 330) {
+                    player.y = 330 - player.h;
+                    player.vy = 0;
+                    player.grounded = true;
+                }
+                ctx.fillStyle = '#3b82f6';
+                ctx.fillRect(player.x, player.y, player.w, player.h);
+
+                // Obstacles
+                if(frames % 80 === 0) {
+                    obstacles.push({x: canvas.width, y: 300, w: 20, h: 30, speed: 5});
+                }
+                for(let i=obstacles.length-1; i>=0; i--) {
+                    let ob = obstacles[i];
+                    ob.x -= ob.speed;
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fillRect(ob.x, ob.y, ob.w, ob.h);
+
+                    // Collision
+                    if(player.x < ob.x + ob.w && player.x + player.w > ob.x &&
+                       player.y < ob.y + ob.h && player.y + player.h > ob.y) {
+                        // Hit obstacle -> End game
+                        mgActive = false;
+                        clearInterval(tInt);
+                        document.getElementById('mg-title').innerText = 'Game Over!';
+                        document.getElementById('mg-desc').innerText = 'You hit a block! Try again?';
+                        document.getElementById('btn-mg-start').classList.remove('hidden');
+                        document.getElementById('btn-mg-start').innerText = 'Retry Mini Game';
+                        playWrong();
+                        return;
+                    }
+                    if(ob.x + ob.w < 0) obstacles.splice(i, 1);
+                }
+
+                frames++;
+                mgAnimFrame = requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+    </script>
+    
+    <!-- Pillar 4: State Management (SDK) -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p3-en-revision2"
+            data-module-name="Revision 2 (Unit 3 & 4)"
+            data-module-url="content/KSSR_Syllabus/Primary3/English/Revision2/index.html"></script>
+
+    <!-- Load Progress -->
+    <script>
+        window.addEventListener('load', function() {
+            if (typeof ProgressTracker !== 'undefined') {
+                ProgressTracker.init(async function(tracker) {
+                    const saved = await tracker.load();
+                    if (saved) {
+                        console.log("P3 English Revision 2 Progress loaded:", saved);
+                        if (saved.currentStageIndex) {
+                            currentStageIndex = saved.currentStageIndex;
+                            // if they finished everything, we could just show final screen
+                            if(currentStageIndex >= vocabData.length) {
+                                showScreen('screen-final');
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

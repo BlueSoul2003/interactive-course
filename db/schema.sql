@@ -460,6 +460,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y8-sci-ch5',           'Chapter 5: Materials and Cycles on Earth',   'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch6',           'Chapter 6: Light and Space',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
 ('igcse-y8-sci-ch7',           'Chapter 7: Diet and Growth',                 'igcse', 'science', 'igcse_y8_science', 'Year8'),
+('igcse-y8-sci-ch7-mcq',       'Chapter 7: Diet and Growth (MCQ)',           'igcse', 'science', 'igcse_y8_science', 'Year8'),
 
 -- ── Singapore Math Year 4 ─────────────────────────────────────────
 ('sg-y4-math-whole-number',    'Chapter 2: Whole Numbers (Part 2)',           'sg', 'math', 'sg_y4_math', 'Year4'),
@@ -472,8 +473,10 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── KSSR English Primary 3 ────────────────────────────────────────
 ('kssr-p3-en-unit1',           'Unit 1: Getting Smart',                      'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit2',           'Unit 2: City Heroes',                        'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-revision1',       'Revision 1 (Unit 1 & 2)',                    'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit3',           'Unit 3: Housework',                          'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit4',           'Unit 4: The Four Seasons',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-revision2',       'Revision 2 (Unit 3 & 4)',                    'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit5',           'Unit 5: My House Adventure',                 'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 
 -- ── KSSR English Primary 6 ────────────────────────────────────────
