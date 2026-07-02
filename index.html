@@ -2494,15 +2494,38 @@
                 <div style="display: flex; flex-direction: column; gap: 10px;">
                     <input type="text" id="authEmail" placeholder="Email address or ID..."
                         style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
-                    <input type="password" id="authPassword" placeholder="Password..."
-                        style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
-                    
+                    <!-- Password field with eye-toggle -->
+                    <div id="authPasswordWrapper" style="position: relative;">
+                        <input type="password" id="authPassword" placeholder="Password..."
+                            style="width: 100%; box-sizing: border-box; padding: 12px; padding-right: 44px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <button type="button" onclick="togglePwdVisibility('authPassword', this)" tabindex="-1"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; padding: 0; line-height: 1;"
+                            title="Show / hide password">👁</button>
+                    </div>
+
+                    <!-- Reset mode: Confirm New Password (hidden by default, shown only in reset mode) -->
+                    <div id="resetConfirmPwdWrapper" style="position: relative; display: none;">
+                        <input type="password" id="resetConfirmPassword" placeholder="Confirm new password..."
+                            style="width: 100%; box-sizing: border-box; padding: 12px; padding-right: 44px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                        <button type="button" onclick="togglePwdVisibility('resetConfirmPassword', this)" tabindex="-1"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; padding: 0; line-height: 1;"
+                            title="Show / hide password">👁</button>
+                    </div>
+
                     <!-- Forgot Password Link -->
                     <div id="forgotPasswordLinkContainer" style="text-align: right; margin-top: -4px; margin-bottom: 2px;">
                         <a href="javascript:void(0)" onclick="toggleAuthMode('forgot')" style="font-size: 0.8rem; color: #3b82f6; text-decoration: none;">Forgot Password?</a>
                     </div>
                     
                     <div id="registerFields" style="display: none; flex-direction: column; gap: 10px;">
+                        <!-- Register: Confirm Password (top of extra fields) -->
+                        <div style="position: relative;">
+                            <input type="password" id="registerConfirmPassword" placeholder="Confirm Password..."
+                                style="width: 100%; box-sizing: border-box; padding: 12px; padding-right: 44px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
+                            <button type="button" onclick="togglePwdVisibility('registerConfirmPassword', this)" tabindex="-1"
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 1.1rem; padding: 0; line-height: 1;"
+                                title="Show / hide password">👁</button>
+                        </div>
                         <select id="authRole" style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none; appearance: none;">
                             <option value="" id="optRolePlaceholder">Account Role...</option>
                             <option value="Student" id="optRoleStudent">Student</option>
@@ -2671,6 +2694,19 @@
             }
         };
 
+        // ── Password visibility toggle ──────────────────────────────────────────
+        function togglePwdVisibility(inputId, btn) {
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.textContent = '\ud83d\ude48'; // 🙈
+            } else {
+                input.type = 'password';
+                btn.textContent = '\ud83d\udc41'; // 👁
+            }
+        }
+
         function changeAuthLanguage(lang) {
             const t = authTranslations[lang];
             if(!t) return;
@@ -2738,56 +2774,76 @@
         
         function toggleAuthMode(mode) {
             currentAuthMode = mode;
-            const tabLogin = document.getElementById('tabLogin');
-            const tabRegister = document.getElementById('tabRegister');
-            const registerFields = document.getElementById('registerFields');
-            const submitBtn = document.getElementById('submitAuthBtn');
-            const msgEl = document.getElementById('authMessage');
-            const emailInput = document.getElementById('authEmail');
-            const passwordInput = document.getElementById('authPassword');
-            const forgotLink = document.getElementById('forgotPasswordLinkContainer');
-            const tabsContainer = tabLogin.parentElement;
-            
-            msgEl.innerText = "";
-            
-            const curLang = document.getElementById('authLangSelect').value || 'en';
-            
-            // Restore default displays
-            tabsContainer.style.display = "flex";
-            emailInput.style.display = "block";
-            passwordInput.style.display = "block";
-            forgotLink.style.display = "block";
-            registerFields.style.display = "none";
-            emailInput.placeholder = authTranslations[curLang].emailPlaceholder;
+            const tabLogin          = document.getElementById('tabLogin');
+            const tabRegister       = document.getElementById('tabRegister');
+            const registerFields    = document.getElementById('registerFields');
+            const submitBtn         = document.getElementById('submitAuthBtn');
+            const msgEl             = document.getElementById('authMessage');
+            const emailInput        = document.getElementById('authEmail');
+            const passwordInput     = document.getElementById('authPassword');
+            const pwdWrapper        = document.getElementById('authPasswordWrapper');
+            const resetConfWrapper  = document.getElementById('resetConfirmPwdWrapper');
+            const forgotLink        = document.getElementById('forgotPasswordLinkContainer');
+            const tabsContainer     = tabLogin.parentElement;
+            const curLang           = document.getElementById('authLangSelect').value || 'en';
+
+            // ── Reset common state ───────────────────────────────────────────────
+            msgEl.innerText = '';
+            msgEl.style.color = '#ef4444';
+            submitBtn.disabled = false;
+            submitBtn.style.opacity = '1';
+
+            // Default: restore all elements
+            tabsContainer.style.display    = 'flex';
+            emailInput.style.display       = 'block';
+            pwdWrapper.style.display       = 'block';
+            resetConfWrapper.style.display = 'none';
+            forgotLink.style.display       = 'block';
+            registerFields.style.display   = 'none';
+            emailInput.placeholder    = authTranslations[curLang].emailPlaceholder;
             passwordInput.placeholder = authTranslations[curLang].passwordPlaceholder;
-            
-            if(mode === 'login') {
-                tabLogin.style.color = "white";
-                tabLogin.style.borderBottomColor = "var(--sub-english)";
-                tabRegister.style.color = "var(--text-secondary)";
-                tabRegister.style.borderBottomColor = "transparent";
+
+            // Reset field border highlights
+            [emailInput, passwordInput,
+             document.getElementById('registerConfirmPassword'),
+             document.getElementById('resetConfirmPassword')
+            ].forEach(el => { if (el) el.style.borderColor = 'rgba(255,255,255,0.1)'; });
+
+            if (mode === 'login') {
+                tabLogin.style.color            = 'white';
+                tabLogin.style.borderBottomColor  = 'var(--sub-english)';
+                tabRegister.style.color           = 'var(--text-secondary)';
+                tabRegister.style.borderBottomColor = 'transparent';
                 submitBtn.innerText = authTranslations[curLang].btnSubmitLogin;
+                setTimeout(() => emailInput.focus(), 50);
+
             } else if (mode === 'register') {
-                tabRegister.style.color = "white";
-                tabRegister.style.borderBottomColor = "var(--sub-english)";
-                tabLogin.style.color = "var(--text-secondary)";
-                tabLogin.style.borderBottomColor = "transparent";
-                registerFields.style.display = "flex";
+                tabRegister.style.color             = 'white';
+                tabRegister.style.borderBottomColor = 'var(--sub-english)';
+                tabLogin.style.color               = 'var(--text-secondary)';
+                tabLogin.style.borderBottomColor     = 'transparent';
+                registerFields.style.display         = 'flex';
                 submitBtn.innerText = authTranslations[curLang].btnSubmitRegister;
+                setTimeout(() => emailInput.focus(), 50);
+
             } else if (mode === 'forgot') {
-                tabsContainer.style.display = "none";
-                passwordInput.style.display = "none";
-                forgotLink.style.display = "none";
+                tabsContainer.style.display  = 'none';
+                pwdWrapper.style.display     = 'none';
+                forgotLink.style.display     = 'none';
                 submitBtn.innerText = curLang === 'zh' ? '發送重置鏈接' : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
-                
-                msgEl.style.color = "var(--text-secondary)";
-                msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                msgEl.style.color = 'var(--text-secondary)';
+                msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${ curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
+                setTimeout(() => emailInput.focus(), 50);
+
             } else if (mode === 'reset') {
-                tabsContainer.style.display = "none";
-                emailInput.style.display = "none";
-                forgotLink.style.display = "none";
-                passwordInput.placeholder = curLang === 'zh' ? '請輸入新密碼...' : (curLang === 'ms' ? 'Sila masukkan kata laluan baru...' : 'Enter new password...');
+                tabsContainer.style.display    = 'none';
+                emailInput.style.display       = 'none';
+                forgotLink.style.display       = 'none';
+                resetConfWrapper.style.display = 'block';
+                passwordInput.placeholder = curLang === 'zh' ? '請輸入新密碼 (至少8位)...' : (curLang === 'ms' ? 'Kata laluan baru (min. 8 aksara)...' : 'New password (min. 8 chars)...');
+                document.getElementById('resetConfirmPassword').placeholder = curLang === 'zh' ? '再次確認新密碼...' : (curLang === 'ms' ? 'Sahkan kata laluan baru...' : 'Confirm new password...');
                 submitBtn.innerText = curLang === 'zh' ? '更新密碼' : (curLang === 'ms' ? 'Kemas Kini Kata Laluan' : 'Update Password');
+                setTimeout(() => passwordInput.focus(), 50);
             }
         }
 
@@ -2819,6 +2875,9 @@
             
             // 2. Forgot password request flow
             if (currentAuthMode === 'forgot') {
+                const submitBtnForgot = document.getElementById('submitAuthBtn');
+                submitBtnForgot.disabled = true;
+                submitBtnForgot.style.opacity = '0.6';
                 msgEl.innerText = curLang === 'zh' ? "正在發送重置鏈接..." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
                 msgEl.style.color = "var(--text-secondary)";
                 
@@ -2827,23 +2886,40 @@
                     if (result.error) {
                         msgEl.style.color = "#ef4444";
                         msgEl.innerText = result.error.message;
+                        submitBtnForgot.disabled = false;
+                        submitBtnForgot.style.opacity = '1';
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請檢查您的郵箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                        msgEl.innerHTML = (curLang === 'zh' ? "✅ 密碼重置鏈接已發送！請檢查您的郵筒。" : (curLang === 'ms' ? "✅ Pautan set semula telah dihantar! Sila semak emel anda." : "✅ Reset link sent! Please check your email inbox.")) + 
                             `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
                     }
                 } catch (err) {
                     msgEl.style.color = "#ef4444";
                     msgEl.innerText = err.message || "An unexpected error occurred.";
+                    submitBtnForgot.disabled = false;
+                    submitBtnForgot.style.opacity = '1';
                 }
                 return;
             }
             
             // 3. Password reset update flow
             if (currentAuthMode === 'reset') {
-                if(!password) {
+                const confirmResetPwd = document.getElementById('resetConfirmPassword').value;
+                if (!password) {
                     msgEl.style.color = "#ef4444";
                     msgEl.innerText = curLang === 'zh' ? "請輸入新密碼。" : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
+                    return;
+                }
+                if (password.length < 8) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "新密碼長度不得少於8位。" : (curLang === 'ms' ? "Kata laluan baru mestilah sekurang-kurangnya 8 aksara." : "New password must be at least 8 characters.");
+                    document.getElementById('authPassword').style.borderColor = '#ef4444';
+                    return;
+                }
+                if (password !== confirmResetPwd) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "兩次輸入的密碼不一致。" : (curLang === 'ms' ? "Kata laluan tidak sepadan." : "Passwords do not match.");
+                    document.getElementById('resetConfirmPassword').style.borderColor = '#ef4444';
                     return;
                 }
                 msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
@@ -2856,10 +2932,11 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！正在登入..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        msgEl.innerText = curLang === 'zh' ? "✅ 密碼更新成功！正在登入..." : (curLang === 'ms' ? "✅ Kata laluan berjaya dikemas kini! Log masuk..." : "✅ Password updated! Logging in...");
                         setTimeout(() => {
                             toggleAuthMode('login');
                             document.getElementById('authPassword').value = '';
+                            document.getElementById('resetConfirmPassword').value = '';
                             closeStudentModal();
                             updateAuthUI();
                         }, 2000);
@@ -2880,6 +2957,21 @@
             
             let profileData = null;
             if (currentAuthMode === 'register') {
+                // ── Password strength & match validation ────────────────────────────
+                const confirmPwd = document.getElementById('registerConfirmPassword').value;
+                if (password.length < 8) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "密碼長度不得少於8位。" : (curLang === 'ms' ? "Kata laluan mestilah sekurang-kurangnya 8 aksara." : "Password must be at least 8 characters.");
+                    document.getElementById('authPassword').style.borderColor = '#ef4444';
+                    return;
+                }
+                if (password !== confirmPwd) {
+                    msgEl.style.color = "#ef4444";
+                    msgEl.innerText = curLang === 'zh' ? "兩次輸入的密碼不一致。" : (curLang === 'ms' ? "Kata laluan tidak sepadan. Sila cuba lagi." : "Passwords do not match. Please try again.");
+                    document.getElementById('registerConfirmPassword').style.borderColor = '#ef4444';
+                    return;
+                }
+
                 const fullname = document.getElementById('authFullName').value.trim();
                 const phone = document.getElementById('authPhone').value.trim();
                 const syllabus = document.getElementById('authSyllabus').value;
@@ -2968,6 +3060,14 @@
 
         function closeStudentModal() {
             document.getElementById('studentModalOverlay').classList.remove('open');
+            // Clear all password fields and reset their visibility state
+            ['authPassword', 'registerConfirmPassword', 'resetConfirmPassword'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) { el.value = ''; el.type = 'password'; }
+            });
+            // Reset all eye-toggle icons back to 👁
+            document.querySelectorAll('#studentModalOverlay button[onclick^="togglePwdVisibility"]')
+                .forEach(btn => { btn.textContent = '👁'; });
         }
 
         // Initialize user state on load

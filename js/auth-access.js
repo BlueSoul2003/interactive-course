@@ -140,8 +140,12 @@ const AuthAccess = {
     },
 
     async sendPasswordResetEmail(email) {
-        // Hardcoded to ensure the email link always redirects to the live GitHub Pages site
-        const redirectTo = 'https://bluesoul2003.github.io/interactive-course/index.html';
+        // Dynamic redirect: works for both local dev (http://localhost/...) and live production.
+        // Falls back to the canonical GitHub Pages URL if accessed via file:// protocol.
+        const isHttpContext = window.location.protocol.startsWith('http');
+        const redirectTo = isHttpContext
+            ? (window.location.origin + window.location.pathname)
+            : 'https://bluesoul2003.github.io/interactive-course/index.html';
         return await window.supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
     },
 
