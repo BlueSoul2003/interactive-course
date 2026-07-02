@@ -140,7 +140,8 @@ const AuthAccess = {
     },
 
     async sendPasswordResetEmail(email) {
-        const redirectTo = window.location.origin + window.location.pathname;
+        // Hardcoded to ensure the email link always redirects to the live GitHub Pages site
+        const redirectTo = 'https://bluesoul2003.github.io/interactive-course/index.html';
         return await window.supabaseClient.auth.resetPasswordForEmail(email, { redirectTo });
     },
 

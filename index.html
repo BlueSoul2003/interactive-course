@@ -2492,7 +2492,7 @@
                     <button id="tabRegister" onclick="toggleAuthMode('register')" style="background:none; border:none; color:var(--text-secondary); font-size:1.1rem; cursor:pointer; font-weight:bold; border-bottom: 2px solid transparent;">Register</button>
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 10px;">
-                    <input type="email" id="authEmail" placeholder="Email address..."
+                    <input type="text" id="authEmail" placeholder="Email address or ID..."
                         style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
                     <input type="password" id="authPassword" placeholder="Password..."
                         style="width: 100%; padding: 12px; border-radius: 8px; background: var(--bg-color); border: 1px solid rgba(255,255,255,0.1); color: var(--text-primary); font-family: var(--font-main); outline: none;">
@@ -2792,10 +2792,15 @@
         }
 
         async function handleAuth() {
-            const email = document.getElementById('authEmail').value.trim();
+            let email = document.getElementById('authEmail').value.trim();
             const password = document.getElementById('authPassword').value.trim();
             const msgEl = document.getElementById('authMessage');
             const curLang = document.getElementById('authLangSelect').value || 'en';
+            
+            // Handle legacy admin ID format mapping
+            if (email.toLowerCase() === 'admin') {
+                email = 'admin@masteryacademy.edu';
+            }
             
             // 1. Email format validation (for login, register, and forgot modes)
             if (currentAuthMode !== 'reset') {
