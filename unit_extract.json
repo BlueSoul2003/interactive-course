@@ -1,0 +1,482 @@
+{
+  "unit1": [
+    {
+      "en": "Let's Practice!",
+      "zh": "我们来练习吧"
+    },
+    {
+      "en": "1. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "Build the question:",
+      "zh": "拼出问题"
+    },
+    {
+      "en": "2. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "Build the question:",
+      "zh": "拼出问题"
+    },
+    {
+      "en": "3. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "Build the question:",
+      "zh": "拼出问题"
+    },
+    {
+      "en": "4. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "Build the question:",
+      "zh": "拼出问题"
+    },
+    {
+      "en": "1. Question",
+      "zh": "(问题)"
+    },
+    {
+      "en": "A) Because I am hungry.",
+      "zh": "因为我很饿"
+    },
+    {
+      "en": "B) Because it is raining.",
+      "zh": "因为正在下雨"
+    },
+    {
+      "en": "C) I like apples.",
+      "zh": "我喜欢苹果"
+    },
+    {
+      "en": "2. Question",
+      "zh": "(问题)"
+    },
+    {
+      "en": "A) Because I am a boy.",
+      "zh": "因为我是个男孩"
+    },
+    {
+      "en": "B) Because I am late for school.",
+      "zh": "因为我上学迟到了"
+    },
+    {
+      "en": "C) I am running.",
+      "zh": "我在跑步"
+    },
+    {
+      "en": "3. Question",
+      "zh": "(问题)"
+    },
+    {
+      "en": "A) Because he is hungry.",
+      "zh": "因为他饿了"
+    },
+    {
+      "en": "B) Because he is happy.",
+      "zh": "因为他很开心"
+    },
+    {
+      "en": "C) He is a baby.",
+      "zh": "他是个宝宝"
+    },
+    {
+      "en": "4. Question",
+      "zh": "(问题)"
+    },
+    {
+      "en": "A) Because it is morning.",
+      "zh": "因为现在是早上"
+    },
+    {
+      "en": "B) Because I like to play.",
+      "zh": "因为我喜欢玩"
+    },
+    {
+      "en": "C) Because I am very tired.",
+      "zh": "因为我非常累"
+    },
+    {
+      "en": "1. Scenario",
+      "zh": "(例子)"
+    },
+    {
+      "en": "Build the sentence:",
+      "zh": "拼出句子"
+    },
+    {
+      "en": "2. Scenario",
+      "zh": "(例子)"
+    },
+    {
+      "en": "Build the sentence:",
+      "zh": "拼出句子"
+    },
+    {
+      "en": "3. Scenario",
+      "zh": "(例子)"
+    },
+    {
+      "en": "Build the sentence:",
+      "zh": "拼出句子"
+    },
+    {
+      "en": "4. Scenario",
+      "zh": "(例子)"
+    },
+    {
+      "en": "Build the sentence:",
+      "zh": "拼出句子"
+    },
+    {
+      "en": "1. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "A) I feel hot.",
+      "zh": "我觉得热（注意时态错误）"
+    },
+    {
+      "en": "B) I felt very cold.",
+      "zh": "我感觉很冷"
+    },
+    {
+      "en": "C) I am a student.",
+      "zh": "我是一名学生"
+    },
+    {
+      "en": "2. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "A) I felt angry.",
+      "zh": "我感到生气"
+    },
+    {
+      "en": "B) I feel sad.",
+      "zh": "我感到伤心"
+    },
+    {
+      "en": "C) I felt very happy.",
+      "zh": "我感到非常开心"
+    },
+    {
+      "en": "3. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "A) I felt scared.",
+      "zh": "我感到害怕"
+    },
+    {
+      "en": "B) I felt thirsty.",
+      "zh": "我感到口渴"
+    },
+    {
+      "en": "C) I feel sleepy.",
+      "zh": "我感到困了"
+    },
+    {
+      "en": "4. Scenario",
+      "zh": "(情境)"
+    },
+    {
+      "en": "A) I felt happy.",
+      "zh": "我感到开心"
+    },
+    {
+      "en": "B) I felt sad.",
+      "zh": "我感到伤心"
+    },
+    {
+      "en": "C) I felt hot.",
+      "zh": "我感到热"
+    },
+    {
+      "en": "Build the model sentence:",
+      "zh": "拼出完整句子"
+    },
+    {
+      "en": "Build the model sentence:",
+      "zh": "拼出完整句子"
+    },
+    {
+      "en": "Build the model sentence:",
+      "zh": "拼出完整句子"
+    },
+    {
+      "en": "Build the model sentence:",
+      "zh": "拼出完整句子"
+    },
+    {
+      "en": "Build the model sentence:",
+      "zh": "拼出完整句子"
+    }
+  ],
+  "unit2": [
+    {
+      "en": "1. Identify if the statements are True or False.",
+      "zh": "1. 判断以下陈述是对 (True) 还是错 (False)。"
+    },
+    {
+      "en": "a) The writer and his family were involved in a shipwreck.",
+      "zh": "a) 作者和他的家人遭遇了海难。"
+    },
+    {
+      "en": "b) The writer's father and brother were able to build a tree house.",
+      "zh": "b) 作者的父亲和兄弟建了一座树屋。"
+    },
+    {
+      "en": "c) The family had run out of food.",
+      "zh": "c) 这家人吃光了食物。"
+    },
+    {
+      "en": "d) The family found a vegetable patch near a clearing in the forest.",
+      "zh": "d) 这家人在森林空地附近发现了一块菜地。"
+    },
+    {
+      "en": "e) The writer and his family kept a lookout for ships sailing nearby.",
+      "zh": "e) 作者和他的家人一直留意附近航行的船只。"
+    },
+    {
+      "en": "A) to panic",
+      "zh": "A) 恐慌"
+    },
+    {
+      "en": "B) to calculate the risks before doing something",
+      "zh": "B) 在做某事之前计算风险"
+    },
+    {
+      "en": "C) to make an effort to become calm and think more clearly",
+      "zh": "C) 努力冷静下来，想得更清楚"
+    },
+    {
+      "en": "4. List two purposes of building a fire at night.",
+      "zh": "4. 列出晚上生火的两个目的。"
+    },
+    {
+      "en": "5. Who do you think were the \"unwanted guests\" that tried to make off with the food supply?",
+      "zh": "5. 你认为试图偷走食物的“不速之客”是谁？"
+    },
+    {
+      "en": "7. List four feelings that the writer and his family may have felt.",
+      "zh": "7. 列出作者和他的家人可能有的四种感受。"
+    },
+    {
+      "en": "Why is there no \"d\" in \"didn't use to\"? Because \"didn't\" already stole the past tense!",
+      "zh": "语法秘密：为什么“use”没有“d”？因为“didn't”已经把过去式“偷”走了！"
+    },
+    {
+      "en": "Click the words in the correct order to build the sentence based on the target meaning.",
+      "zh": "根据目标句意，按正确顺序点击单词拼出句子。"
+    },
+    {
+      "en": "Build meaningful compound sentences using the words provided. Don't forget the comma!",
+      "zh": "用提供的单词拼出有意义的复合句。别忘了逗号！"
+    },
+    {
+      "en": "equivalent for each Formal statement.",
+      "zh": "为每个正式句子选择正确的非正式（日常）对应句。"
+    },
+    {
+      "en": "I can't make it to the party.",
+      "zh": "我去不了派对了。"
+    },
+    {
+      "en": "You got an A! Great job!",
+      "zh": "你得了个A！干得好！"
+    },
+    {
+      "en": "Hang in there!",
+      "zh": "坚持住！ / 撑下去！"
+    },
+    {
+      "en": "Call me anytime you need help.",
+      "zh": "需要帮忙随时打给我。"
+    },
+    {
+      "en": "Think about it.",
+      "zh": "考虑一下吧。"
+    },
+    {
+      "en": "Let me know if you're coming.",
+      "zh": "告诉我你来不来。"
+    },
+    {
+      "en": "Come visit us when you can!",
+      "zh": "有空就来看看我们吧！"
+    },
+    {
+      "en": "I don't see it the way he does.",
+      "zh": "我和他的看法不同。"
+    },
+    {
+      "en": "Let me know if you're coming.",
+      "zh": "告诉我你来不来。"
+    },
+    {
+      "en": "Hang in there!",
+      "zh": "坚持住！ / 撑下去！"
+    },
+    {
+      "en": "Think about it.",
+      "zh": "考虑一下吧。"
+    },
+    {
+      "en": "I can't make it to the party.",
+      "zh": "我去不了派对了。"
+    },
+    {
+      "en": "I don't see it the way he does.",
+      "zh": "我和他的看法不同。"
+    },
+    {
+      "en": "Call me anytime you need help.",
+      "zh": "需要帮忙随时打给我。"
+    },
+    {
+      "en": "I can't make it to the party.",
+      "zh": "我去不了派对了。"
+    },
+    {
+      "en": "I don't see it the way he does.",
+      "zh": "我和他的看法不同。"
+    },
+    {
+      "en": "Think about it.",
+      "zh": "考虑一下吧。"
+    },
+    {
+      "en": "You got an A! Great job!",
+      "zh": "你得了个A！干得好！"
+    },
+    {
+      "en": "Let me know if you're coming.",
+      "zh": "告诉我你来不来。"
+    },
+    {
+      "en": "Call me anytime you need help.",
+      "zh": "需要帮忙随时打给我。"
+    },
+    {
+      "en": "Come visit us when you can!",
+      "zh": "有空就来看看我们吧！"
+    },
+    {
+      "en": "I can't make it to the party.",
+      "zh": "我去不了派对了。"
+    },
+    {
+      "en": "Think about it.",
+      "zh": "考虑一下吧。"
+    },
+    {
+      "en": "Hang in there!",
+      "zh": "坚持住！ / 撑下去！"
+    },
+    {
+      "en": "to the emotion it represents.",
+      "zh": "将感叹词与其代表的情感进行匹配。"
+    },
+    {
+      "en": "To express relief",
+      "zh": "表达如释重负 (松了一口气)"
+    },
+    {
+      "en": "A reaction to something cute or sweet",
+      "zh": "对可爱或甜蜜事物的反应"
+    },
+    {
+      "en": "To express disgust",
+      "zh": "表达厌恶或恶心"
+    },
+    {
+      "en": "For fear or concern which isn't serious",
+      "zh": "表示不太严重的恐惧或担忧"
+    },
+    {
+      "en": "To express congratulations",
+      "zh": "表达祝贺"
+    },
+    {
+      "en": "To express alarm or horror",
+      "zh": "表达惊恐或惊吓"
+    },
+    {
+      "en": "An expression of appreciation for food",
+      "zh": "表达对食物的欣赏"
+    },
+    {
+      "en": "To express alarm or horror",
+      "zh": "表达惊恐或惊吓"
+    },
+    {
+      "en": "To express congratulations or happiness",
+      "zh": "表达祝贺或开心"
+    },
+    {
+      "en": "To express relief",
+      "zh": "表达如释重负 (松了一口气)"
+    },
+    {
+      "en": "To express disgust",
+      "zh": "表达厌恶或恶心"
+    },
+    {
+      "en": "For fear or concern which isn't serious",
+      "zh": "表示不太严重的恐惧或担忧"
+    },
+    {
+      "en": "To express congratulations",
+      "zh": "表达祝贺"
+    },
+    {
+      "en": "An expression of appreciation (especially for food)",
+      "zh": "表达欣赏（尤其是对食物）"
+    },
+    {
+      "en": "To express relief",
+      "zh": "表达如释重负 (松了一口气)"
+    },
+    {
+      "en": "To express alarm or horror",
+      "zh": "表达惊恐或惊吓"
+    },
+    {
+      "en": "A reaction to something cute",
+      "zh": "对可爱事物的反应"
+    },
+    {
+      "en": "To show that one is impressed",
+      "zh": "表示印象深刻"
+    },
+    {
+      "en": "To express disgust",
+      "zh": "表达厌恶或恶心"
+    },
+    {
+      "en": "For fear or concern which isn't serious",
+      "zh": "表示不太严重的恐惧或担忧"
+    },
+    {
+      "en": "To show that one is impressed or amazed",
+      "zh": "表示印象深刻或惊叹"
+    },
+    {
+      "en": "A reaction to something cute",
+      "zh": "对可爱事物的反应"
+    },
+    {
+      "en": "To express disgust",
+      "zh": "表达厌恶或恶心"
+    },
+    {
+      "en": "To express relief",
+      "zh": "表达如释重负 (松了一口气)"
+    }
+  ]
+}
