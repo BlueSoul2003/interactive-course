@@ -2659,7 +2659,7 @@
 
     <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/auth-access.js?v=1.0.2"></script>
+    <script src="js/auth-access.js?v=1.0.3"></script>
     <script src="js/progress-tracker.js?v=1.0.2"></script>
     <script src="js/feedback.js?v=1.0.2"></script>
     <script>
@@ -3070,20 +3070,39 @@
                 .forEach(btn => { btn.textContent = '👁'; });
         }
 
-        // Initialize user state on load
-        window.addEventListener('DOMContentLoaded', () => {
-            updateAuthUI();
+        function openPasswordResetMode(errorMessage = '') {
+            document.getElementById('studentModalOverlay').classList.add('open');
+            document.getElementById('authFormArea').style.display = 'block';
+            document.getElementById('activeAuthInfo').style.display = 'none';
+            toggleAuthMode(errorMessage ? 'forgot' : 'reset');
 
+            if (errorMessage) {
+                const msgEl = document.getElementById('authMessage');
+                msgEl.style.color = '#ef4444';
+                msgEl.innerText = errorMessage;
+            }
+        }
+
+        // Initialize user state on load
+        window.addEventListener('DOMContentLoaded', async () => {
             // Listen for password recovery event
             if (window.supabaseClient) {
                 window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
                     if (event === 'PASSWORD_RECOVERY') {
-                        // Open the modal and switch to reset password mode
-                        document.getElementById('studentModalOverlay').classList.add('open');
-                        toggleAuthMode('reset');
+                        openPasswordResetMode();
                     }
                 });
             }
+
+            if (window.AuthAccess && window.AuthAccess.handlePasswordRecoveryRedirect) {
+                const recoveryResult = await window.AuthAccess.handlePasswordRecoveryRedirect();
+                if (recoveryResult.recovery) {
+                    openPasswordResetMode(recoveryResult.error ? recoveryResult.error.message : '');
+                    return;
+                }
+            }
+
+            updateAuthUI();
         });
     </script>
     <!-- PIN Top-up Modal -->

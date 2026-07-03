@@ -139,6 +139,77 @@ const AuthAccess = {
         return await window.supabaseClient.auth.signOut();
     },
 
+    getPasswordRecoveryParams() {
+        const url = new URL(window.location.href);
+        const searchParams = url.searchParams;
+        const hashParams = new URLSearchParams(url.hash.replace(/^#/, ''));
+
+        return {
+            type: searchParams.get('type') || hashParams.get('type'),
+            code: searchParams.get('code') || hashParams.get('code'),
+            tokenHash: searchParams.get('token_hash') || hashParams.get('token_hash'),
+            accessToken: searchParams.get('access_token') || hashParams.get('access_token'),
+            refreshToken: searchParams.get('refresh_token') || hashParams.get('refresh_token')
+        };
+    },
+
+    cleanPasswordRecoveryUrl() {
+        const url = new URL(window.location.href);
+        [
+            'access_token',
+            'code',
+            'error',
+            'error_code',
+            'error_description',
+            'expires_at',
+            'expires_in',
+            'refresh_token',
+            'token_hash',
+            'type'
+        ].forEach(param => url.searchParams.delete(param));
+        url.hash = '';
+
+        const cleanUrl = url.pathname + url.search;
+        const title = typeof document !== 'undefined' ? document.title : '';
+        window.history.replaceState(null, title, cleanUrl);
+    },
+
+    async handlePasswordRecoveryRedirect() {
+        const params = this.getPasswordRecoveryParams();
+        const isRecoveryRedirect = params.type === 'recovery';
+
+        if (!isRecoveryRedirect) {
+            return { recovery: false };
+        }
+
+        let result;
+        if (params.code) {
+            result = await window.supabaseClient.auth.exchangeCodeForSession(params.code);
+        } else if (params.tokenHash) {
+            result = await window.supabaseClient.auth.verifyOtp({
+                token_hash: params.tokenHash,
+                type: 'recovery'
+            });
+        } else if (params.accessToken && params.refreshToken) {
+            result = await window.supabaseClient.auth.setSession({
+                access_token: params.accessToken,
+                refresh_token: params.refreshToken
+            });
+        } else {
+            return {
+                recovery: true,
+                data: null,
+                error: { message: 'Password reset link is missing recovery credentials.' }
+            };
+        }
+
+        if (!result.error) {
+            this.cleanPasswordRecoveryUrl();
+        }
+
+        return { recovery: true, ...result };
+    },
+
     async sendPasswordResetEmail(email) {
         // Dynamic redirect: works for both local dev (http://localhost/...) and live production.
         // Falls back to the canonical GitHub Pages URL if accessed via file:// protocol.
