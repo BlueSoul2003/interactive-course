@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Notes Library | Mastery Academy</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #080c14;
+            --card-bg: #111827;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --glass-bg: rgba(17, 24, 39, 0.48);
+            --glass-bg-hover: rgba(17, 24, 39, 0.68);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.18);
+            --glass-blur: 18px;
+            --glass-shadow: 0 18px 70px rgba(0, 0, 0, 0.38);
+            --accent: #8b5cf6;
+            --accent-2: #06b6d4;
+            --accent-3: #10b981;
+            --hero-bg: radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
+                       radial-gradient(at 55% 0%, rgba(118, 75, 162, 0.25) 0, transparent 50%),
+                       radial-gradient(at 100% 8%, rgba(16, 185, 129, 0.14) 0, transparent 48%),
+                       #080c14;
+            --font-main: 'Outfit', sans-serif;
+            --font-serif: 'Playfair Display', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100dvh;
+            font-family: var(--font-main);
+            color: var(--text-primary);
+            background: var(--bg-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: var(--hero-bg);
+            z-index: -2;
+        }
+
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 48px 48px;
+            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 82%);
+            z-index: -1;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .shell {
+            width: min(1180px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .glass {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
+                var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(165%);
+            box-shadow: var(--glass-shadow);
+        }
+
+        .glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: inherit;
+            background:
+                radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.16), transparent 30%),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 44%, rgba(255, 255, 255, 0.05));
+            pointer-events: none;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 22px 0;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            text-decoration: none;
+        }
+
+        .brand strong {
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+        }
+
+        .brand span,
+        .toplink {
+            color: var(--text-secondary);
+            font-size: 0.82rem;
+        }
+
+        .toplink {
+            text-decoration: none;
+            padding: 9px 14px;
+            border: 1px solid var(--glass-border);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
+            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .toplink:hover {
+            transform: translateY(-1px);
+            color: #fff;
+            border-color: var(--glass-border-hover);
+        }
+
+        .hero {
+            padding: 72px 0 38px;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .hero-copy {
+            padding: 42px;
+        }
+
+        .eyebrow {
+            color: #a5b4fc;
+            font-size: 0.74rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        h1 {
+            font-family: var(--font-serif);
+            font-size: clamp(2.45rem, 7vw, 5.8rem);
+            line-height: 0.96;
+            letter-spacing: 0;
+            color: #fff;
+            margin-bottom: 22px;
+            text-shadow: 0 0 42px rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-copy p {
+            max-width: 62ch;
+            color: var(--text-secondary);
+            font-size: 1.06rem;
+        }
+
+        .hero-stats {
+            display: grid;
+            gap: 12px;
+            padding: 18px;
+        }
+
+        .stat {
+            min-height: 112px;
+            padding: 18px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.045);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .stat span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+        }
+
+        .stat strong {
+            display: block;
+            color: #fff;
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(150px, 0.7fr)) auto;
+            gap: 10px;
+            padding: 14px;
+            margin: 18px 0 20px;
+        }
+
+        .field {
+            min-width: 0;
+            color: #e2e8f0;
+            background: rgba(255, 255, 255, 0.055);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 12px;
+            padding: 12px 13px;
+            font: inherit;
+            outline: none;
+        }
+
+        .field:focus {
+            border-color: rgba(139, 92, 246, 0.65);
+            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.14);
+        }
+
+        .field option {
+            color: #0f172a;
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 0 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: #f8fafc;
+            background: rgba(255, 255, 255, 0.06);
+            font: inherit;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+        }
+
+        .button:hover {
+            transform: translateY(-1px);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .button.primary {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.86), rgba(6, 182, 212, 0.72));
+            border-color: rgba(255, 255, 255, 0.22);
+        }
+
+        .folder-rail {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
+            gap: 12px;
+            margin: 0 0 22px;
+        }
+
+        .folder-card {
+            min-height: 126px;
+            padding: 18px;
+            text-align: left;
+            color: #fff;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+        }
+
+        .folder-card:hover,
+        .folder-card.active {
+            transform: translateY(-2px);
+            border-color: rgba(139, 92, 246, 0.46);
+            background:
+                linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(6, 182, 212, 0.08)),
+                var(--glass-bg-hover);
+        }
+
+        .folder-card span {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .folder-card strong {
+            display: block;
+            margin-top: 9px;
+            font-size: 1.28rem;
+        }
+
+        .folder-card small {
+            display: block;
+            margin-top: 10px;
+            color: var(--text-secondary);
+            font-size: 0.86rem;
+        }
+
+        .section {
+            margin: 22px 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 0 4px 12px;
+        }
+
+        .section-header h2 {
+            font-size: 1.55rem;
+            color: #fff;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .subject-grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .subject-card {
+            padding: 18px;
+        }
+
+        .subject-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            margin-bottom: 6px;
+        }
+
+        .subject-title h3 {
+            color: #f8fafc;
+            font-size: 1.02rem;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 0 10px;
+            border-radius: 999px;
+            color: #c4b5fd;
+            background: rgba(139, 92, 246, 0.12);
+            border: 1px solid rgba(139, 92, 246, 0.22);
+            font-size: 0.76rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .pdf-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .pdf-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+        }
+
+        .pdf-row:last-child {
+            border-bottom: none;
+        }
+
+        .pdf-title {
+            color: #e5e7eb;
+            font-weight: 700;
+            line-height: 1.35;
+        }
+
+        .pdf-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: 6px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+
+        .pdf-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .empty {
+            padding: 34px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .add-folder {
+            margin: 34px 0 54px;
+            padding: 26px;
+        }
+
+        .add-folder-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1.1fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .add-folder h2 {
+            font-size: 1.35rem;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+
+        .add-folder p,
+        .add-folder li {
+            color: var(--text-secondary);
+            font-size: 0.94rem;
+        }
+
+        .add-folder ol {
+            padding-left: 20px;
+            margin-top: 14px;
+        }
+
+        .builder {
+            display: grid;
+            gap: 10px;
+            padding: 16px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+
+        .builder label {
+            display: grid;
+            gap: 6px;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .path-output {
+            padding: 13px;
+            border-radius: 12px;
+            color: #dbeafe;
+            background: rgba(6, 182, 212, 0.09);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+            font-size: 0.82rem;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.07);
+            background: rgba(8, 15, 29, 0.88);
+            padding: 30px 0;
+            color: var(--text-muted);
+            font-size: 0.86rem;
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .hero-grid,
+            .add-folder-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .toolbar .field:first-child,
+            .toolbar .button {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .shell {
+                width: min(100% - 24px, 1180px);
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .hero {
+                padding-top: 28px;
+            }
+
+            .hero-copy {
+                padding: 28px;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header,
+            .subject-title,
+            .pdf-row {
+                align-items: start;
+                grid-template-columns: 1fr;
+            }
+
+            .pdf-actions {
+                width: 100%;
+            }
+
+            .pdf-actions .button {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topbar shell">
+        <a class="brand" href="index.html">
+            <strong>Mastery Academy</strong>
+            <span>Global Syllabus Portal</span>
+        </a>
+        <a class="toplink" href="index.html">Back to Home</a>
+    </nav>
+
+    <header class="hero shell">
+        <div class="hero-grid">
+            <section class="hero-copy glass">
+                <div class="eyebrow">Organized Hardcopy Library</div>
+                <h1>PDF Notes Library</h1>
+                <p>Browse every worksheet, answer key, slide deck, revision note, and past-paper PDF in one glassy library. Open a file in the browser for quick viewing, or download it for printing.</p>
+            </section>
+            <aside class="hero-stats glass" aria-label="Library statistics">
+                <div class="stat">
+                    <span>Total PDFs</span>
+                    <strong id="stat-total">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Syllabi</span>
+                    <strong id="stat-syllabi">0</strong>
+                </div>
+                <div class="stat">
+                    <span>Visible Now</span>
+                    <strong id="stat-visible">0</strong>
+                </div>
+            </aside>
+        </div>
+    </header>
+
+    <main class="shell">
+        <section class="toolbar glass" aria-label="Library filters">
+            <input class="field" id="searchInput" type="search" placeholder="Search topic, subject, level, or filename">
+            <select class="field" id="syllabusFilter" aria-label="Filter by syllabus">
+                <option value="">All syllabi</option>
+            </select>
+            <select class="field" id="subjectFilter" aria-label="Filter by subject">
+                <option value="">All subjects</option>
+            </select>
+            <select class="field" id="typeFilter" aria-label="Filter by document type">
+                <option value="">All types</option>
+            </select>
+            <button class="button" id="resetFilters" type="button">Reset</button>
+        </section>
+
+        <section class="folder-rail" id="folderRail" aria-label="PDF folders"></section>
+
+        <section id="library"></section>
+
+        <section class="add-folder glass" id="add-folder">
+            <div class="add-folder-grid">
+                <div>
+                    <div class="eyebrow">Add Folder</div>
+                    <h2>Static-friendly GitHub workflow</h2>
+                    <p>GitHub Pages cannot create folders from the public website because it has no server write access. This helper gives the folder path to create in GitHub, then the catalogue generator picks up the new PDFs.</p>
+                    <ol>
+                        <li>Create the suggested folder path in GitHub or locally.</li>
+                        <li>Upload the PDFs with clear names using underscores instead of spaces.</li>
+                        <li>Run <strong>python tools/generate_pdf_catalog.py</strong> before publishing, or let a GitHub Action run it later.</li>
+                    </ol>
+                </div>
+                <form class="builder" id="folderBuilder">
+                    <label>
+                        Syllabus
+                        <select class="field" id="builderSyllabus">
+                            <option>SPM</option>
+                            <option>IGCSE</option>
+                            <option>Singapore</option>
+                            <option>UEC</option>
+                        </select>
+                    </label>
+                    <label>
+                        Level
+                        <input class="field" id="builderLevel" type="text" value="Form5" placeholder="Form5, Year8, Stage7">
+                    </label>
+                    <label>
+                        Subject
+                        <input class="field" id="builderSubject" type="text" value="Chemistry" placeholder="Science, Math, BM">
+                    </label>
+                    <div class="path-output" id="folderPath">hardcopy/SPM_Syllabus/Form5/Chemistry/</div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="shell">&copy; 2026 Mastery Academy - Designed for First Principles Excellence.</div>
+    </footer>
+
+    <script>
+        const state = {
+            resources: [],
+            activeFolder: '',
+            filters: {
+                search: '',
+                syllabus: '',
+                subject: '',
+                type: ''
+            }
+        };
+
+        const els = {
+            library: document.getElementById('library'),
+            folderRail: document.getElementById('folderRail'),
+            search: document.getElementById('searchInput'),
+            syllabus: document.getElementById('syllabusFilter'),
+            subject: document.getElementById('subjectFilter'),
+            type: document.getElementById('typeFilter'),
+            reset: document.getElementById('resetFilters'),
+            total: document.getElementById('stat-total'),
+            syllabi: document.getElementById('stat-syllabi'),
+            visible: document.getElementById('stat-visible'),
+            builderSyllabus: document.getElementById('builderSyllabus'),
+            builderLevel: document.getElementById('builderLevel'),
+            builderSubject: document.getElementById('builderSubject'),
+            folderPath: document.getElementById('folderPath')
+        };
+
+        function unique(values) {
+            return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+        }
+
+        function formatBytes(bytes) {
+            if (!bytes) return 'Unknown size';
+            const units = ['B', 'KB', 'MB', 'GB'];
+            let value = bytes;
+            let unit = 0;
+            while (value >= 1024 && unit < units.length - 1) {
+                value /= 1024;
+                unit += 1;
+            }
+            return `${value.toFixed(value >= 10 || unit === 0 ? 0 : 1)} ${units[unit]}`;
+        }
+
+        function makeOption(value) {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            return option;
+        }
+
+        function fillSelect(select, values, firstLabel) {
+            const current = select.value;
+            select.replaceChildren(makeOption(''));
+            select.options[0].textContent = firstLabel;
+            values.forEach((value) => select.appendChild(makeOption(value)));
+            select.value = values.includes(current) ? current : '';
+        }
+
+        function populateFilters() {
+            fillSelect(els.syllabus, unique(state.resources.map((item) => item.syllabus)), 'All syllabi');
+            fillSelect(els.subject, unique(state.resources.map((item) => item.subject)), 'All subjects');
+            fillSelect(els.type, unique(state.resources.map((item) => item.type)), 'All types');
+        }
+
+        function matches(item) {
+            const query = state.filters.search.trim().toLowerCase();
+            const searchable = [
+                item.title,
+                item.file,
+                item.syllabus,
+                item.level,
+                item.subject,
+                item.type,
+                item.audience
+            ].join(' ').toLowerCase();
+
+            return (!state.filters.syllabus || item.syllabus === state.filters.syllabus)
+                && (!state.filters.subject || item.subject === state.filters.subject)
+                && (!state.filters.type || item.type === state.filters.type)
+                && (!query || searchable.includes(query));
+        }
+
+        function groupBy(items, key) {
+            return items.reduce((groups, item) => {
+                const value = item[key] || 'General';
+                groups[value] = groups[value] || [];
+                groups[value].push(item);
+                return groups;
+            }, {});
+        }
+
+        function renderFolders() {
+            const grouped = groupBy(state.resources, 'syllabus');
+            els.folderRail.replaceChildren();
+
+            Object.keys(grouped).sort().forEach((syllabus) => {
+                const card = document.createElement('button');
+                card.type = 'button';
+                card.className = `folder-card glass${state.activeFolder === syllabus ? ' active' : ''}`;
+                card.innerHTML = `
+                    <span>Folder</span>
+                    <strong>${syllabus}</strong>
+                    <small>${grouped[syllabus].length} PDF files</small>
+                `;
+                card.addEventListener('click', () => {
+                    state.activeFolder = state.activeFolder === syllabus ? '' : syllabus;
+                    els.syllabus.value = state.activeFolder;
+                    state.filters.syllabus = state.activeFolder;
+                    render();
+                });
+                els.folderRail.appendChild(card);
+            });
+        }
+
+        function makePdfRow(item) {
+            const row = document.createElement('article');
+            row.className = 'pdf-row';
+
+            const info = document.createElement('div');
+            const title = document.createElement('div');
+            title.className = 'pdf-title';
+            title.textContent = item.title;
+
+            const meta = document.createElement('div');
+            meta.className = 'pdf-meta';
+            const parts = [
+                item.level,
+                item.type,
+                item.audience,
+                item.pages ? `${item.pages} pages` : '',
+                formatBytes(item.sizeBytes)
+            ].filter(Boolean);
+            meta.textContent = parts.join(' / ');
+
+            info.append(title, meta);
+
+            const actions = document.createElement('div');
+            actions.className = 'pdf-actions';
+
+            const view = document.createElement('a');
+            view.className = 'button primary';
+            view.href = encodeURI(item.file);
+            view.target = '_blank';
+            view.rel = 'noopener';
+            view.textContent = 'View PDF';
+
+            const download = document.createElement('a');
+            download.className = 'button';
+            download.href = encodeURI(item.file);
+            download.download = '';
+            download.textContent = 'Download';
+
+            actions.append(view, download);
+            row.append(info, actions);
+            return row;
+        }
+
+        function renderLibrary(filtered) {
+            els.library.replaceChildren();
+            if (filtered.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'empty glass';
+                empty.textContent = 'No PDFs match the current filters.';
+                els.library.appendChild(empty);
+                return;
+            }
+
+            const bySyllabus = groupBy(filtered, 'syllabus');
+            Object.keys(bySyllabus).sort().forEach((syllabus) => {
+                const section = document.createElement('section');
+                section.className = 'section';
+
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                header.innerHTML = `<h2>${syllabus}</h2><p>${bySyllabus[syllabus].length} files</p>`;
+                section.appendChild(header);
+
+                const subjectGrid = document.createElement('div');
+                subjectGrid.className = 'subject-grid';
+                const bySubject = groupBy(bySyllabus[syllabus], 'subject');
+
+                Object.keys(bySubject).sort().forEach((subject) => {
+                    const card = document.createElement('div');
+                    card.className = 'subject-card glass';
+
+                    const title = document.createElement('div');
+                    title.className = 'subject-title';
+                    title.innerHTML = `<h3>${subject}</h3><span class="pill">${bySubject[subject].length} PDFs</span>`;
+
+                    const list = document.createElement('div');
+                    list.className = 'pdf-list';
+                    bySubject[subject]
+                        .sort((a, b) => a.title.localeCompare(b.title))
+                        .forEach((item) => list.appendChild(makePdfRow(item)));
+
+                    card.append(title, list);
+                    subjectGrid.appendChild(card);
+                });
+
+                section.appendChild(subjectGrid);
+                els.library.appendChild(section);
+            });
+        }
+
+        function render() {
+            const filtered = state.resources.filter(matches);
+            els.total.textContent = state.resources.length;
+            els.syllabi.textContent = unique(state.resources.map((item) => item.syllabus)).length;
+            els.visible.textContent = filtered.length;
+            renderFolders();
+            renderLibrary(filtered);
+        }
+
+        function updatePathBuilder() {
+            const syllabus = els.builderSyllabus.value.trim();
+            const level = els.builderLevel.value.trim().replace(/\s+/g, '');
+            const subject = els.builderSubject.value.trim().replace(/\s+/g, '_');
+            const syllabusFolder = syllabus === 'Singapore' ? 'Singapore_Syllabus' : `${syllabus}_Syllabus`;
+            els.folderPath.textContent = `hardcopy/${syllabusFolder}/${level || 'Level'}/${subject || 'Subject'}/`;
+        }
+
+        function wireEvents() {
+            els.search.addEventListener('input', () => {
+                state.filters.search = els.search.value;
+                render();
+            });
+            els.syllabus.addEventListener('change', () => {
+                state.filters.syllabus = els.syllabus.value;
+                state.activeFolder = els.syllabus.value;
+                render();
+            });
+            els.subject.addEventListener('change', () => {
+                state.filters.subject = els.subject.value;
+                render();
+            });
+            els.type.addEventListener('change', () => {
+                state.filters.type = els.type.value;
+                render();
+            });
+            els.reset.addEventListener('click', () => {
+                state.filters = { search: '', syllabus: '', subject: '', type: '' };
+                state.activeFolder = '';
+                els.search.value = '';
+                els.syllabus.value = '';
+                els.subject.value = '';
+                els.type.value = '';
+                render();
+            });
+            [els.builderSyllabus, els.builderLevel, els.builderSubject].forEach((element) => {
+                element.addEventListener('input', updatePathBuilder);
+                element.addEventListener('change', updatePathBuilder);
+            });
+        }
+
+        async function loadCatalog() {
+            try {
+                const response = await fetch('resources/pdf-catalog.json', { cache: 'no-store' });
+                if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
+                const catalog = await response.json();
+                state.resources = (catalog.resources || []).sort((a, b) => a.title.localeCompare(b.title));
+                populateFilters();
+                render();
+            } catch (error) {
+                els.library.innerHTML = `
+                    <div class="empty glass">
+                        The PDF catalogue could not be loaded. Run this site through a local server or publish it to GitHub Pages, then regenerate resources/pdf-catalog.json.
+                    </div>
+                `;
+                console.error(error);
+            }
+        }
+
+        wireEvents();
+        updatePathBuilder();
+        loadCatalog();
+    </script>
+</body>
+
+</html>
