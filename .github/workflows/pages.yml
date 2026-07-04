@@ -28,13 +28,19 @@ jobs:
       - name: Build PDF catalog
         run: python tools/generate_pdf_catalog.py
 
+      - name: Prepare static site artifact
+        run: |
+          mkdir -p _site
+          cp index.html notes.html _site/
+          cp -a content hardcopy js resources _site/
+
       - name: Configure Pages
         uses: actions/configure-pages@v6
 
       - name: Upload static site artifact
         uses: actions/upload-pages-artifact@v5
         with:
-          path: .
+          path: _site
 
       - name: Deploy to GitHub Pages
         id: deployment
