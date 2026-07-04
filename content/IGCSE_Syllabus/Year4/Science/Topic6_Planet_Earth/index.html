@@ -1,37 +1,163 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IGCSE Science: Planet Earth</title>
-    <!-- Tailwind CSS for Styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- React and ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <!-- Babel for JSX compilation -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
+        :root {
+            --accent: #d97706;
+            --accent-dark: #92400e;
+            --accent-soft: #ffedd5;
+            --ink: #0f172a;
+            --muted: #64748b;
+            --surface: rgba(255, 255, 255, 0.88);
+            --line: rgba(15, 23, 42, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8fafc;
+            margin: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--ink);
+            background: #f8fafc;
+        }
+
+        button, input, textarea {
+            font: inherit;
+        }
+
+        .lesson-shell {
+            min-height: 100dvh;
+            position: relative;
+            overflow-x: hidden;
+            background:
+                radial-gradient(circle at 10% 12%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 28rem),
+                radial-gradient(circle at 86% 10%, rgba(14, 165, 233, 0.16), transparent 26rem),
+                linear-gradient(135deg, #f8fafc 0%, #eef2ff 48%, #fff7ed 100%);
+        }
+
+        .topic-earth {
+            background:
+                radial-gradient(circle at 18% 14%, rgba(245, 158, 11, 0.24), transparent 25rem),
+                radial-gradient(circle at 84% 18%, rgba(14, 116, 144, 0.14), transparent 24rem),
+                linear-gradient(135deg, #f8fafc 0%, #f1f5f9 44%, #fff7ed 100%);
+        }
+
+        .topic-space {
+            background:
+                radial-gradient(circle at 16% 15%, rgba(79, 70, 229, 0.25), transparent 25rem),
+                radial-gradient(circle at 82% 20%, rgba(14, 165, 233, 0.18), transparent 24rem),
+                linear-gradient(135deg, #f8fafc 0%, #eef2ff 52%, #ecfeff 100%);
+        }
+
+        .ambient-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.52;
+            background-image:
+                linear-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(15, 23, 42, 0.06) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: linear-gradient(to bottom, black, transparent 78%);
+        }
+
+        .ambient-particle {
+            position: fixed;
+            width: 0.45rem;
+            height: 0.45rem;
+            border-radius: 999px;
+            background: var(--accent);
+            opacity: 0.2;
+            pointer-events: none;
+            animation: particleDrift 8s ease-in-out infinite;
+        }
+
+        .ambient-particle:nth-child(2) { left: 12%; top: 24%; animation-delay: -1s; }
+        .ambient-particle:nth-child(3) { left: 78%; top: 18%; animation-delay: -3s; }
+        .ambient-particle:nth-child(4) { left: 66%; top: 70%; animation-delay: -5s; }
+        .ambient-particle:nth-child(5) { left: 28%; top: 78%; animation-delay: -6s; }
+
+        @keyframes particleDrift {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(18px, -24px, 0) scale(1.7); }
+        }
+
+        .glass-panel {
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            background: var(--surface);
+            box-shadow: 0 24px 80px rgba(15, 23, 42, 0.14);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
         }
 
         .fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.28s ease-out;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .answer-option {
+            transform: translateY(0);
+            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .answer-option:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+        }
+
+        .answer-option:active {
+            transform: translateY(1px) scale(0.99);
+        }
+
+        .answer-shake {
+            animation: answerShake 0.34s ease;
+        }
+
+        @keyframes answerShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(7px); }
+            75% { transform: translateX(-4px); }
+        }
+
+        .visual-burst {
+            position: absolute;
+            inset: -1rem;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: 18px;
+        }
+
+        .visual-burst span {
+            position: absolute;
+            left: var(--x);
+            top: var(--y);
+            width: 0.55rem;
+            height: 0.55rem;
+            border-radius: 999px;
+            background: var(--accent);
+            box-shadow: 0 0 18px color-mix(in srgb, var(--accent) 65%, white);
+            animation: burstPop 760ms ease-out forwards;
+        }
+
+        @keyframes burstPop {
+            from { opacity: 0.95; transform: translateY(0) scale(0.7); }
+            to { opacity: 0; transform: translateY(-44px) scale(2.2); }
         }
 
         .hide-scrollbar::-webkit-scrollbar {
@@ -49,7 +175,168 @@
 
         textarea::-webkit-scrollbar-thumb {
             background-color: #cbd5e1;
-            border-radius: 4px;
+            border-radius: 999px;
+        }
+
+        .scanner {
+            position: relative;
+            min-height: 260px;
+            overflow: hidden;
+            border-radius: 18px;
+            background: linear-gradient(150deg, rgba(15, 23, 42, 0.92), color-mix(in srgb, var(--accent-dark) 54%, #111827));
+            color: white;
+        }
+
+        .scanner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 24% 28%, rgba(255, 255, 255, 0.22), transparent 9rem),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.08) 0 1px, transparent 1px 28px);
+            opacity: 0.75;
+        }
+
+        .scanner::after {
+            content: "";
+            position: absolute;
+            left: -30%;
+            top: 0;
+            width: 24%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+            animation: scanSweep 3.8s ease-in-out infinite;
+        }
+
+        @keyframes scanSweep {
+            0%, 18% { transform: translateX(0); }
+            70%, 100% { transform: translateX(620%); }
+        }
+
+        .earth-core {
+            position: absolute;
+            right: 9%;
+            bottom: 14%;
+            width: 150px;
+            aspect-ratio: 1;
+            border-radius: 999px;
+            background:
+                radial-gradient(circle, #fef3c7 0 16%, #f97316 17% 34%, #92400e 35% 52%, #475569 53% 68%, #e2e8f0 69% 72%, #334155 73% 100%);
+            box-shadow: 0 0 44px rgba(245, 158, 11, 0.44);
+            animation: slowSpin 14s linear infinite;
+        }
+
+        .space-orbit {
+            position: absolute;
+            right: 7%;
+            bottom: 10%;
+            width: 175px;
+            aspect-ratio: 1;
+            border: 1px solid rgba(255, 255, 255, 0.42);
+            border-radius: 999px;
+            animation: slowSpin 13s linear infinite;
+        }
+
+        .space-orbit::before {
+            content: "";
+            position: absolute;
+            left: calc(50% - 24px);
+            top: calc(50% - 24px);
+            width: 48px;
+            height: 48px;
+            border-radius: 999px;
+            background: #facc15;
+            box-shadow: 0 0 38px rgba(250, 204, 21, 0.72);
+        }
+
+        .space-orbit::after {
+            content: "";
+            position: absolute;
+            right: -7px;
+            top: 50%;
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            background: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.72);
+        }
+
+        @keyframes slowSpin {
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-rail {
+            height: 0.7rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.1);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: var(--progress);
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+            transition: width 0.35s ease;
+        }
+
+        .resource-link {
+            color: var(--accent-dark);
+            border: 1px solid color-mix(in srgb, var(--accent) 28%, white);
+            background: rgba(255, 255, 255, 0.76);
+            transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+        }
+
+        .resource-link:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            background: white;
+        }
+
+        .home-btn-fixed {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            z-index: 40;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 88px;
+            padding: 11px 18px;
+            border-radius: 999px;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.22);
+            text-decoration: none;
+            font-weight: 800;
+            transition: transform 0.18s ease, box-shadow 0.18s ease;
+        }
+
+        .home-btn-fixed:hover {
+            transform: translateY(-2px);
+            color: #ffffff;
+            box-shadow: 0 20px 42px rgba(15, 23, 42, 0.28);
+        }
+
+        @media (max-width: 760px) {
+            .scanner {
+                min-height: 220px;
+            }
+
+            .earth-core, .space-orbit {
+                width: 116px;
+                right: 5%;
+                opacity: 0.78;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.001ms !important;
+            }
         }
     </style>
 </head>
@@ -58,14 +345,13 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+        const { useState, useEffect } = React;
 
-        // --- AUDIO ENGINE ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx;
 
         const playCuteSound = (isCorrect) => {
-            if (!audioCtx) audioCtx = new AudioContext();
+            if (!audioCtx || audioCtx.state === 'closed') audioCtx = new AudioContext();
             if (audioCtx.state === 'suspended') audioCtx.resume();
 
             const osc = audioCtx.createOscillator();
@@ -77,28 +363,27 @@
             const rand = Math.floor(Math.random() * 3);
 
             if (isCorrect) {
-                // 3 Different Correct Sounds
-                if (rand === 0) { // Coin / Ping
+                if (rand === 0) {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(987.77, now);
                     osc.frequency.setValueAtTime(1318.51, now + 0.1);
                     gainNode.gain.setValueAtTime(0, now);
-                    gainNode.gain.linearRampToValueAtTime(0.3, now + 0.05);
+                    gainNode.gain.linearRampToValueAtTime(0.22, now + 0.05);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
                     osc.start(now); osc.stop(now + 0.5);
-                } else if (rand === 1) { // Happy Arpeggio
+                } else if (rand === 1) {
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(523.25, now);
                     osc.frequency.setValueAtTime(659.25, now + 0.1);
                     osc.frequency.setValueAtTime(783.99, now + 0.2);
                     osc.frequency.setValueAtTime(1046.50, now + 0.3);
-                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.setValueAtTime(0.18, now);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
                     osc.start(now); osc.stop(now + 0.6);
-                } else { // Chime
+                } else {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(880, now);
-                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.setValueAtTime(0.24, now);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
                     osc.start(now); osc.stop(now + 0.8);
 
@@ -107,38 +392,53 @@
                     osc2.connect(gain2); gain2.connect(audioCtx.destination);
                     osc2.type = 'sine';
                     osc2.frequency.setValueAtTime(1108.73, now + 0.1);
-                    gain2.gain.setValueAtTime(0.2, now + 0.1);
+                    gain2.gain.setValueAtTime(0.16, now + 0.1);
                     gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
                     osc2.start(now + 0.1); osc2.stop(now + 0.8);
                 }
             } else {
-                // 3 Different Wrong Sounds
-                if (rand === 0) { // Boink
+                if (rand === 0) {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(300, now);
                     osc.frequency.exponentialRampToValueAtTime(50, now + 0.4);
-                    gainNode.gain.setValueAtTime(0.4, now);
+                    gainNode.gain.setValueAtTime(0.24, now);
                     gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
                     osc.start(now); osc.stop(now + 0.4);
-                } else if (rand === 1) { // Buzz
+                } else if (rand === 1) {
                     osc.type = 'sawtooth';
                     osc.frequency.setValueAtTime(100, now);
                     osc.frequency.linearRampToValueAtTime(80, now + 0.3);
-                    gainNode.gain.setValueAtTime(0.2, now);
+                    gainNode.gain.setValueAtTime(0.12, now);
                     gainNode.gain.linearRampToValueAtTime(0.01, now + 0.3);
                     osc.start(now); osc.stop(now + 0.3);
-                } else { // Wah-wah
+                } else {
                     osc.type = 'triangle';
                     osc.frequency.setValueAtTime(250, now);
                     osc.frequency.setValueAtTime(200, now + 0.2);
-                    gainNode.gain.setValueAtTime(0.3, now);
+                    gainNode.gain.setValueAtTime(0.18, now);
                     gainNode.gain.linearRampToValueAtTime(0.01, now + 0.5);
                     osc.start(now); osc.stop(now + 0.5);
                 }
             }
         };
 
-        // --- 50 QUESTIONS DATABASE (TOPIC 6: Planet Earth) ---
+        const playTapSound = () => {
+            if (!audioCtx || audioCtx.state === 'closed') audioCtx = new AudioContext();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(420, now);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now);
+            osc.stop(now + 0.08);
+        };
+
+                // --- 50 QUESTIONS DATABASE (TOPIC 6: Planet Earth) ---
         const questionsData = [
             // Set 1: MCQ (0-9)
             { id: 1, type: 'mcq', text: "What is the thinnest layer of the Earth's surface where we live?", options: ["A) Mantle", "B) Core", "C) Crust", "D) Magma"], answer: "C) Crust" },
@@ -231,34 +531,84 @@
             return setObj ? setObj.label : "Questions";
         };
 
-        // --- MAIN APPLICATION COMPONENT ---
-        const App = () => {
-            const [activeTab, setActiveTab] = useState('presentation');
-            const [isDualPane, setIsDualPane] = useState(false);
-            const [pdfUrl1, setPdfUrl1] = useState('');
-            const [pdfUrl2, setPdfUrl2] = useState('');
+        const setDescriptions = {
+            1: 'Choose the strongest answer from four options.',
+            2: 'Decide whether each science statement is true or false.',
+            3: 'Type the missing key term.',
+            4: 'Match each term to its meaning.',
+            5: 'Write a clear short science answer.',
+            6: 'Apply the idea to a practical enquiry.',
+            7: 'Practise exam-style explanation.'
+        };
 
+        const triggerCelebration = () => Array.from({ length: 16 }, (_, i) => ({
+            id: Date.now() + i,
+            x: (8 + Math.random() * 84) + '%',
+            y: (18 + Math.random() * 64) + '%'
+        }));
+
+        const App = () => {
+            const restored = Array.isArray(window.__restoredProgress) ? window.__restoredProgress : [];
             const [currentQIndex, setCurrentQIndex] = useState(0);
             const [userInputs, setUserInputs] = useState({});
-            const [isCompleted, setIsCompleted] = useState({});
+            const [isCompleted, setIsCompleted] = useState(() => restored.reduce((acc, idx) => ({ ...acc, [idx]: true }), {}));
             const [feedback, setFeedback] = useState(null);
             const [showSelfGrade, setShowSelfGrade] = useState(false);
+            const [shakeKey, setShakeKey] = useState(0);
+            const [burst, setBurst] = useState([]);
+            const [soundEnabled, setSoundEnabled] = useState(true);
 
             const q = questionsData[currentQIndex];
+            const completedCount = Object.keys(isCompleted).filter(key => isCompleted[key]).length;
+            const progressPct = Math.round((completedCount / questionsData.length) * 100);
+            const activeSet = getActiveSetId(currentQIndex);
 
             useEffect(() => {
                 setFeedback(null);
                 setShowSelfGrade(false);
+                setBurst([]);
             }, [currentQIndex]);
+
+            useEffect(() => {
+                if (!burst.length) return;
+                const timer = setTimeout(() => setBurst([]), 850);
+                return () => clearTimeout(timer);
+            }, [burst]);
+
+            useEffect(() => {
+                window.__applyRestoredProgress = (completedIndices) => {
+                    if (!Array.isArray(completedIndices)) return;
+                    setIsCompleted(completedIndices.reduce((acc, idx) => ({ ...acc, [idx]: true }), {}));
+                };
+                if (Array.isArray(window.__restoredProgress)) {
+                    window.__applyRestoredProgress(window.__restoredProgress);
+                }
+                return () => {
+                    delete window.__applyRestoredProgress;
+                };
+            }, []);
 
             const handleInput = (val) => {
                 setUserInputs(prev => ({ ...prev, [currentQIndex]: val }));
             };
 
+            const playIfEnabled = (isCorrect) => {
+                if (soundEnabled) playCuteSound(isCorrect);
+            };
+
+            const saveCompletedProgress = (completedState) => {
+                if (typeof ProgressTracker === 'undefined') return;
+                const completedIndices = Object.keys(completedState)
+                    .filter(key => completedState[key])
+                    .map(key => parseInt(key, 10));
+                ProgressTracker.autoSave({ completedIndices, ts: Date.now() }, 1500);
+            };
+
             const checkAnswer = () => {
                 const input = userInputs[currentQIndex];
-                if (!input) {
-                    setFeedback({ type: 'error', msg: 'Please provide an answer first!' });
+                if (!input || (typeof input === 'string' && !input.trim())) {
+                    setFeedback({ type: 'error', msg: 'Please provide an answer first.' });
+                    setShakeKey(prev => prev + 1);
                     return;
                 }
 
@@ -272,18 +622,25 @@
                     else markWrong();
                 } else if (q.type === 'long') {
                     setShowSelfGrade(true);
+                    if (soundEnabled) playTapSound();
                 }
             };
 
             const markCorrect = () => {
-                playCuteSound(true);
-                setFeedback({ type: 'success', msg: 'Correct! Great job!' });
-                setIsCompleted(prev => ({ ...prev, [currentQIndex]: true }));
+                playIfEnabled(true);
+                setFeedback({ type: 'success', msg: 'Correct! Field data confirmed!' });
+                setIsCompleted(prev => {
+                    const next = { ...prev, [currentQIndex]: true };
+                    saveCompletedProgress(next);
+                    return next;
+                });
+                setBurst(triggerCelebration());
             };
 
             const markWrong = () => {
-                playCuteSound(false);
-                setFeedback({ type: 'error', msg: 'Not quite right. Try again!' });
+                playIfEnabled(false);
+                setFeedback({ type: 'error', msg: 'Not quite right. Check the evidence and try again!' });
+                setShakeKey(prev => prev + 1);
             };
 
             const handleSelfGrade = (wasCorrect) => {
@@ -295,146 +652,136 @@
                 }
             };
 
+            const jumpToQuestion = (index) => {
+                if (soundEnabled) playTapSound();
+                setCurrentQIndex(index);
+            };
+
             const nextQuestion = () => {
-                if (currentQIndex < questionsData.length - 1) setCurrentQIndex(currentQIndex + 1);
+                if (currentQIndex < questionsData.length - 1) jumpToQuestion(currentQIndex + 1);
             };
 
             const prevQuestion = () => {
-                if (currentQIndex > 0) setCurrentQIndex(currentQIndex - 1);
+                if (currentQIndex > 0) jumpToQuestion(currentQIndex - 1);
+            };
+
+            const optionClass = (opt) => {
+                const selected = userInputs[currentQIndex] === opt;
+                const complete = isCompleted[currentQIndex];
+                if (selected && complete) return 'border-emerald-500 bg-emerald-50 text-emerald-950';
+                if (selected) return 'border-[var(--accent)] bg-[var(--accent-soft)] text-slate-950';
+                return 'border-slate-200 bg-white/85 text-slate-800 hover:border-[var(--accent)] hover:bg-white';
             };
 
             return (
-                <div className="min-h-screen flex flex-col items-center p-4 md:p-8">
-                    {/* Header */}
-                    <header className="w-full max-w-6xl bg-white rounded-xl shadow-md p-6 mb-6 text-center border-t-4 border-amber-500">
-                        <h1 className="text-3xl font-bold text-slate-800">IGCSE Year 4 Science</h1>
-                        <h2 className="text-xl text-amber-600 mt-2 font-semibold">Topic 6: Planet Earth</h2>
-                    </header>
+                <main className={`lesson-shell topic-earth`}>
+                    <div className="ambient-grid"></div>
+                    <span className="ambient-particle"></span>
+                    <span className="ambient-particle"></span>
+                    <span className="ambient-particle"></span>
+                    <span className="ambient-particle"></span>
 
-                    {/* Navigation Tabs */}
-                    <div className="w-full max-w-6xl flex space-x-2 mb-6">
-                        <button
-                            onClick={() => setActiveTab('presentation')}
-                            className={`flex-1 py-3 rounded-t-lg font-bold text-lg transition-colors border-b-4 ${activeTab === 'presentation' ? 'bg-white text-amber-600 border-amber-500 shadow-md' : 'bg-slate-50 text-gray-500 border-transparent hover:bg-slate-100'}`}>
-                            📺 Presentation View
-                        </button>
-                        <button
-                            onClick={() => setActiveTab('questions')}
-                            className={`flex-1 py-3 rounded-t-lg font-bold text-lg transition-colors border-b-4 ${activeTab === 'questions' ? 'bg-white text-amber-600 border-amber-500 shadow-md' : 'bg-slate-50 text-gray-500 border-transparent hover:bg-slate-100'}`}>
-                            📝 Interactive Questions (50)
-                        </button>
-                    </div>
-
-                    {/* Content Area */}
-                    <div className="w-full max-w-6xl bg-white rounded-b-xl rounded-tr-xl shadow-xl overflow-hidden min-h-[650px] flex flex-col">
-
-                        {/* --- PRESENTATION TAB --- */}
-                        {activeTab === 'presentation' && (
-                            <div className="flex flex-col h-full flex-grow p-6 fade-in">
-                                <div className="flex justify-between items-center mb-4">
-                                    <h3 className="text-xl font-bold text-gray-800">Presentation Materials</h3>
+                    <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-7xl flex-col px-4 py-5 md:px-8 md:py-8">
+                        <header className="mb-5 grid gap-5 lg:grid-cols-[1.05fr_0.95fr] lg:items-stretch">
+                            <section className="glass-panel rounded-[18px] p-5 md:p-7">
+                                <div className="mb-5 flex flex-wrap items-center gap-2">
+                                    <span className="rounded-full bg-white/80 px-3 py-1 text-xs font-black uppercase tracking-[0.18em] text-[var(--accent-dark)]">IGCSE Year 4 Science</span>
                                     <button
-                                        onClick={() => setIsDualPane(!isDualPane)}
-                                        className="bg-slate-100 text-slate-800 px-4 py-2 rounded font-bold hover:bg-slate-200 transition"
+                                        type="button"
+                                        onClick={() => setSoundEnabled(prev => !prev)}
+                                        className="rounded-full border border-slate-200 bg-white/80 px-3 py-1 text-xs font-black text-slate-700 transition hover:border-[var(--accent)]"
                                     >
-                                        {isDualPane ? "Switch to Single Pane View" : "Enable Side-by-Side View"}
+                                        Sound {soundEnabled ? 'On' : 'Off'}
                                     </button>
                                 </div>
+                                <h1 className="text-4xl font-black leading-tight text-slate-950 md:text-5xl">Topic 6: Planet Earth</h1>
+                                <p className="mt-4 max-w-2xl text-base font-medium leading-7 text-slate-600">Geology field station for 50 interactive questions with instant sound feedback and animated progress.</p>
 
-                                <div className={`grid gap-4 mb-4 ${isDualPane ? 'grid-cols-2' : 'grid-cols-1'}`}>
+                                <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                                    <div className="rounded-[14px] border border-slate-200 bg-white/70 p-4">
+                                        <p className="text-2xl font-black text-slate-950">{completedCount}</p>
+                                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Completed</p>
+                                    </div>
+                                    <div className="rounded-[14px] border border-slate-200 bg-white/70 p-4">
+                                        <p className="text-2xl font-black text-slate-950">{currentQIndex + 1}/50</p>
+                                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Current</p>
+                                    </div>
+                                    <div className="rounded-[14px] border border-slate-200 bg-white/70 p-4">
+                                        <p className="text-2xl font-black text-slate-950">{progressPct}%</p>
+                                        <p className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">Progress</p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-5 progress-rail" style={{ '--progress': `${progressPct}%` }}>
+                                    <div className="progress-fill"></div>
+                                </div>
+                            </section>
+
+                            <aside className="scanner p-5 md:p-7">
+                                <div className="relative z-10 flex h-full flex-col justify-between gap-8">
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 mb-1">Document / Simulation URL {isDualPane && "(Left Pane)"}:</label>
-                                        <input
-                                            type="text"
-                                            placeholder="e.g., https://example.com/topic6-notes.pdf"
-                                            className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-amber-500 outline-none"
-                                            value={pdfUrl1}
-                                            onChange={(e) => setPdfUrl1(e.target.value)}
-                                        />
+                                        <p className="text-xs font-black uppercase tracking-[0.2em] text-white/68">Crust, mantle, core</p>
+                                        <h2 className="mt-2 text-2xl font-black text-white">Earth layer scanner</h2>
                                     </div>
-                                    {isDualPane && (
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">Document URL (Right Pane):</label>
-                                            <input
-                                                type="text"
-                                                placeholder="e.g., https://example.com/topic6-tectonic-sim.html"
-                                                className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-amber-500 outline-none"
-                                                value={pdfUrl2}
-                                                onChange={(e) => setPdfUrl2(e.target.value)}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className={`flex-grow flex gap-4 min-h-[500px]`}>
-                                    <div className="flex-1 bg-slate-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative">
-                                        {pdfUrl1 ? (
-                                            <iframe src={pdfUrl1} className="absolute inset-0 w-full h-full border-none" title="Presentation Pane 1"></iframe>
-                                        ) : (
-                                            <span className="text-gray-400 font-medium">Paste URL above to load content</span>
-                                        )}
+                                    <div className="grid gap-2 text-sm font-bold text-white/84">
+                                        <span className="rounded-full border border-white/20 bg-white/10 px-3 py-2">Tectonic plates</span>
+                                        <span className="rounded-full border border-white/20 bg-white/10 px-3 py-2">Volcanoes</span>
+                                        <span className="rounded-full border border-white/20 bg-white/10 px-3 py-2">Earthquakes</span>
                                     </div>
-
-                                    {isDualPane && (
-                                        <div className="flex-1 bg-slate-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden relative">
-                                            {pdfUrl2 ? (
-                                                <iframe src={pdfUrl2} className="absolute inset-0 w-full h-full border-none" title="Presentation Pane 2"></iframe>
-                                            ) : (
-                                                <span className="text-gray-400 font-medium">Paste URL above to load content</span>
-                                            )}
-                                        </div>
-                                    )}
                                 </div>
-                            </div>
-                        )}
+                                <div className="earth-core"></div>
+                            </aside>
+                        </header>
 
-                        {/* --- QUESTIONS TAB --- */}
-                        {activeTab === 'questions' && (
-                            <div className="flex flex-col h-full flex-grow p-6 md:p-10 fade-in">
+                        <nav className="mb-5 flex flex-wrap items-center gap-3">
+                            <a className="resource-link rounded-full px-4 py-2 text-sm font-black" href="Worksheet.pdf" target="_blank">Worksheet</a>
+                            <a className="resource-link rounded-full px-4 py-2 text-sm font-black" href="Answer_Key.pdf" target="_blank">Answer Key</a>
+                            <span className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-bold text-slate-600">Listen for correct-answer chimes.</span>
+                            <span className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-bold text-slate-600">Watch the strata light up as you progress.</span>
+                        </nav>
 
-                                {/* Set Navigation Menu */}
-                                <div className="flex overflow-x-auto space-x-3 pb-4 mb-6 hide-scrollbar border-b border-gray-200">
+                        <section className="grid flex-1 gap-5 lg:grid-cols-[280px_1fr]">
+                            <aside className="glass-panel rounded-[18px] p-4 lg:sticky lg:top-6 lg:h-fit">
+                                <p className="mb-3 text-xs font-black uppercase tracking-[0.18em] text-[var(--accent-dark)]">Question sets</p>
+                                <div className="flex gap-2 overflow-x-auto pb-2 lg:block lg:space-y-2 lg:overflow-visible hide-scrollbar">
                                     {questionSets.map(set => (
                                         <button
                                             key={set.id}
-                                            onClick={() => {
-                                                setCurrentQIndex(set.start);
-                                                setFeedback(null);
-                                                setShowSelfGrade(false);
-                                            }}
-                                            className={`whitespace-nowrap px-4 py-2 rounded-full text-sm font-bold transition-all ${getActiveSetId(currentQIndex) === set.id
-                                                    ? 'bg-amber-500 text-white shadow-md transform scale-105'
-                                                    : 'bg-amber-50 text-amber-700 hover:bg-amber-100 hover:shadow'
-                                                }`}
+                                            onClick={() => jumpToQuestion(set.start)}
+                                            className={`w-full min-w-[190px] rounded-[14px] border px-4 py-3 text-left transition ${activeSet === set.id ? "border-[var(--accent)] bg-[var(--accent-soft)] shadow-sm" : "border-slate-200 bg-white/70 hover:border-[var(--accent)]"}`}
                                         >
-                                            {set.label}
+                                            <span className="block text-sm font-black text-slate-950">{set.label}</span>
+                                            <span className="mt-1 block text-xs font-semibold text-slate-500">{setDescriptions[set.id]}</span>
                                         </button>
                                     ))}
                                 </div>
+                            </aside>
 
-                                {/* Question Header */}
-                                <div className="flex justify-between items-center mb-6">
-                                    <span className="text-amber-600 font-bold uppercase tracking-wider text-lg">{getSetName(currentQIndex)}</span>
-                                    <span className="bg-slate-800 text-white py-1 px-4 rounded-full font-bold text-sm tracking-widest shadow-inner">
-                                        Q: {currentQIndex + 1} / 50
-                                    </span>
+                            <section className="glass-panel relative rounded-[18px] p-5 md:p-8" data-qidx={currentQIndex}>
+                                {burst.length > 0 && (
+                                    <div className="visual-burst" aria-hidden="true">
+                                        {burst.map(dot => <span key={dot.id} style={{ '--x': dot.x, '--y': dot.y }}></span>)}
+                                    </div>
+                                )}
+
+                                <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-5">
+                                    <div>
+                                        <p className="text-sm font-black uppercase tracking-[0.16em] text-[var(--accent-dark)]">{getSetName(currentQIndex)}</p>
+                                        <p className="mt-1 text-sm font-semibold text-slate-500">{setDescriptions[activeSet]}</p>
+                                    </div>
+                                    <span className="rounded-full bg-slate-950 px-4 py-2 text-sm font-black text-white">Q {currentQIndex + 1} of 50</span>
                                 </div>
 
-                                {/* Question Body */}
-                                <div className="flex-grow">
-                                    <h3 className="text-2xl font-semibold text-gray-800 mb-8 whitespace-pre-wrap leading-relaxed">{q.text}</h3>
+                                <div key={shakeKey} className={`fade-in ${feedback && feedback.type === "error" ? "answer-shake" : ""}`}>
+                                    <h3 className="mb-7 whitespace-pre-wrap text-2xl font-black leading-snug text-slate-950 md:text-3xl">{q.text}</h3>
 
-                                    {/* MCQ / Match Options */}
                                     {(q.type === 'mcq' || q.type === 'match') && (
-                                        <div className="space-y-3">
+                                        <div className="grid gap-3">
                                             {q.options.map((opt, i) => (
                                                 <button
                                                     key={i}
                                                     onClick={() => !isCompleted[currentQIndex] && handleInput(opt)}
-                                                    className={`w-full text-left p-4 rounded-lg border-2 font-medium transition-all ${userInputs[currentQIndex] === opt
-                                                            ? (isCompleted[currentQIndex] ? 'bg-green-100 border-green-500 text-green-900' : 'bg-amber-50 border-amber-500 text-amber-900')
-                                                            : 'bg-white border-gray-200 hover:border-amber-300 hover:bg-amber-50'
-                                                        } ${isCompleted[currentQIndex] ? 'cursor-default' : 'cursor-pointer'}`}
+                                                    className={`answer-option w-full rounded-[16px] border-2 p-4 text-left text-base font-bold ${optionClass(opt)} ${isCompleted[currentQIndex] ? "cursor-default" : "cursor-pointer"}`}
                                                 >
                                                     {opt}
                                                 </button>
@@ -442,17 +789,13 @@
                                         </div>
                                     )}
 
-                                    {/* True / False Options */}
                                     {q.type === 'tf' && (
-                                        <div className="flex space-x-6">
+                                        <div className="grid gap-4 sm:grid-cols-2">
                                             {['True', 'False'].map((opt) => (
                                                 <button
                                                     key={opt}
                                                     onClick={() => !isCompleted[currentQIndex] && handleInput(opt)}
-                                                    className={`flex-1 p-6 rounded-lg border-2 text-2xl font-bold transition-all ${userInputs[currentQIndex] === opt
-                                                            ? (isCompleted[currentQIndex] ? 'bg-green-100 border-green-500 text-green-900' : 'bg-amber-50 border-amber-500 text-amber-900')
-                                                            : 'bg-white border-gray-200 hover:border-amber-300'
-                                                        } ${isCompleted[currentQIndex] ? 'cursor-default' : 'cursor-pointer'}`}
+                                                    className={`answer-option rounded-[16px] border-2 p-6 text-center text-2xl font-black ${optionClass(opt)} ${isCompleted[currentQIndex] ? "cursor-default" : "cursor-pointer"}`}
                                                 >
                                                     {opt}
                                                 </button>
@@ -460,71 +803,62 @@
                                         </div>
                                     )}
 
-                                    {/* Fill in the Blanks */}
                                     {q.type === 'fill' && (
-                                        <div>
-                                            <input
-                                                type="text"
-                                                disabled={isCompleted[currentQIndex]}
-                                                placeholder="Type your one-word answer here..."
-                                                value={userInputs[currentQIndex] || ''}
-                                                onChange={(e) => handleInput(e.target.value)}
-                                                className={`w-full p-4 border-2 rounded-lg text-xl focus:outline-none focus:ring-2 focus:ring-amber-500 ${isCompleted[currentQIndex] ? 'bg-green-50 border-green-500 text-green-900 font-bold shadow-inner' : 'border-gray-300'}`}
-                                                onKeyDown={(e) => { if (e.key === 'Enter') checkAnswer(); }}
-                                            />
-                                        </div>
+                                        <input
+                                            type="text"
+                                            disabled={isCompleted[currentQIndex]}
+                                            placeholder="Type your answer here"
+                                            value={userInputs[currentQIndex] || ''}
+                                            onChange={(e) => handleInput(e.target.value)}
+                                            onKeyDown={(e) => { if (e.key === 'Enter') checkAnswer(); }}
+                                            className={`w-full rounded-[16px] border-2 p-4 text-xl font-bold outline-none transition focus:ring-4 focus:ring-[var(--accent-soft)] ${isCompleted[currentQIndex] ? "border-emerald-500 bg-emerald-50 text-emerald-950" : "border-slate-300 bg-white/90 text-slate-950 focus:border-[var(--accent)]"}`}
+                                        />
                                     )}
 
-                                    {/* Long Answer */}
                                     {q.type === 'long' && (
                                         <div>
                                             <textarea
                                                 disabled={isCompleted[currentQIndex] || showSelfGrade}
-                                                placeholder="Explain your reasoning here..."
+                                                placeholder="Explain your scientific reasoning here"
                                                 value={userInputs[currentQIndex] || ''}
                                                 onChange={(e) => handleInput(e.target.value)}
                                                 rows="5"
-                                                className={`w-full p-4 border-2 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none ${isCompleted[currentQIndex] ? 'bg-green-50 border-green-500 text-green-900 font-medium' : 'border-gray-300'}`}
+                                                className={`w-full resize-none rounded-[16px] border-2 p-4 text-lg font-semibold leading-7 outline-none transition focus:ring-4 focus:ring-[var(--accent-soft)] ${isCompleted[currentQIndex] ? "border-emerald-500 bg-emerald-50 text-emerald-950" : "border-slate-300 bg-white/90 text-slate-950 focus:border-[var(--accent)]"}`}
                                             ></textarea>
 
                                             {showSelfGrade && !isCompleted[currentQIndex] && (
-                                                <div className="mt-6 p-6 bg-slate-50 border-l-4 border-slate-500 rounded-r-lg shadow-sm fade-in">
-                                                    <h4 className="font-bold text-slate-700 mb-2 uppercase text-sm tracking-wider">Expected Answer:</h4>
-                                                    <p className="text-slate-900 mb-6 text-lg italic whitespace-pre-wrap">"{q.expected}"</p>
-                                                    <div className="bg-white p-4 rounded border border-slate-200">
-                                                        <p className="font-bold text-gray-800 mb-3 text-center">Did your answer capture this scientific meaning correctly?</p>
-                                                        <div className="flex justify-center space-x-4">
-                                                            <button onClick={() => handleSelfGrade(true)} className="px-6 py-2 bg-green-500 text-white font-bold rounded hover:bg-green-600 transition shadow">Yes, I got it right!</button>
-                                                            <button onClick={() => handleSelfGrade(false)} className="px-6 py-2 bg-red-500 text-white font-bold rounded hover:bg-red-600 transition shadow">No, let me try again</button>
-                                                        </div>
+                                                <div className="mt-6 rounded-[16px] border border-slate-200 bg-white/82 p-5 shadow-sm fade-in">
+                                                    <p className="text-xs font-black uppercase tracking-[0.16em] text-slate-500">Expected answer</p>
+                                                    <p className="mt-3 whitespace-pre-wrap text-lg font-semibold leading-7 text-slate-950">{q.expected}</p>
+                                                    <div className="mt-5 flex flex-wrap items-center gap-3">
+                                                        <button onClick={() => handleSelfGrade(true)} className="rounded-full bg-emerald-600 px-5 py-3 font-black text-white transition hover:bg-emerald-700">Yes, I got it right</button>
+                                                        <button onClick={() => handleSelfGrade(false)} className="rounded-full bg-rose-600 px-5 py-3 font-black text-white transition hover:bg-rose-700">No, let me try again</button>
                                                     </div>
                                                 </div>
                                             )}
                                         </div>
                                     )}
 
-                                    {/* Feedback Message */}
                                     {feedback && (
-                                        <div className={`mt-8 p-4 rounded-lg font-bold text-center text-xl shadow-sm fade-in ${feedback.type === 'success' ? 'bg-green-100 text-green-800 border border-green-300' : 'bg-red-100 text-red-800 border border-red-300'}`}>
-                                            {feedback.type === 'success' ? '✨ ' : '❌ '}{feedback.msg}
+                                        <div className={`mt-7 rounded-[16px] border p-4 text-center text-lg font-black fade-in ${feedback.type === "success" ? "border-emerald-300 bg-emerald-50 text-emerald-800" : "border-rose-300 bg-rose-50 text-rose-800"}`}>
+                                            {feedback.msg}
                                         </div>
                                     )}
                                 </div>
 
-                                {/* Controls */}
-                                <div className="mt-8 flex justify-between items-center pt-6 border-t border-gray-200">
+                                <div className="mt-8 flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row sm:items-center sm:justify-between">
                                     <button
                                         onClick={prevQuestion}
                                         disabled={currentQIndex === 0}
-                                        className={`px-6 py-3 rounded-lg font-bold transition ${currentQIndex === 0 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}`}
+                                        className={`rounded-full px-5 py-3 font-black transition ${currentQIndex === 0 ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-white text-slate-800 hover:bg-slate-100"}`}
                                     >
-                                        &larr; Previous
+                                        Previous
                                     </button>
 
                                     {!isCompleted[currentQIndex] && !showSelfGrade ? (
                                         <button
                                             onClick={checkAnswer}
-                                            className="px-10 py-3 bg-amber-500 text-white rounded-lg font-bold text-lg hover:bg-amber-600 shadow-lg transform hover:scale-105 transition"
+                                            className="rounded-full bg-[var(--accent)] px-8 py-3 text-lg font-black text-white shadow-lg shadow-slate-900/10 transition hover:bg-[var(--accent-dark)] active:translate-y-px"
                                         >
                                             Check Answer
                                         </button>
@@ -532,16 +866,18 @@
                                         <button
                                             onClick={nextQuestion}
                                             disabled={!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1}
-                                            className={`px-10 py-3 rounded-lg font-bold text-lg flex items-center shadow-lg transition ${(!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1) ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-green-500 text-white hover:bg-green-600 transform hover:scale-105 animate-pulse'}`}
+                                            className={`rounded-full px-8 py-3 text-lg font-black transition ${(!isCompleted[currentQIndex] || currentQIndex === questionsData.length - 1) ? "cursor-not-allowed bg-slate-100 text-slate-400" : "bg-emerald-600 text-white shadow-lg shadow-emerald-900/10 hover:bg-emerald-700"}`}
                                         >
-                                            Next Question &rarr;
+                                            Next Question
                                         </button>
                                     )}
                                 </div>
-                            </div>
-                        )}
+                            </section>
+                        </section>
                     </div>
-                </div>
+
+                    <a href="../../../../../index.html" className="home-btn-fixed">Home</a>
+                </main>
             );
         };
 
@@ -557,50 +893,37 @@
             data-module-url="content/IGCSE_Syllabus/Year4/Science/Topic6_Planet_Earth/index.html"></script>
     <script>
     window.addEventListener('load', function() {
-        ProgressTracker.init(async function(tracker) {
-            // Restore saved progress
+        if (typeof ProgressTracker !== 'undefined') {
+            ProgressTracker.init(async function(tracker) {
             const saved = await tracker.load();
             if (saved && saved.completedIndices) {
                 window.__restoredProgress = saved.completedIndices;
+                if (typeof window.__applyRestoredProgress === 'function') {
+                    window.__applyRestoredProgress(saved.completedIndices);
+                }
             }
-        });
+            });
+        }
 
-        // MutationObserver: autosave 2s after any DOM completion event
         let _saveTimer = null;
         const observer = new MutationObserver(function() {
             clearTimeout(_saveTimer);
             _saveTimer = setTimeout(function() {
                 if (!window.ProgressTracker) return;
-                // Collect all green-highlighted (correct) answers across both DOM and React modules
                 const completed = [];
-                // React pattern: isCompleted state reflected as bg-green-100 class on button
-                document.querySelectorAll('.bg-green-100, .bg-emerald-100').forEach(function(el) {
-                    var qEl = el.closest('[class*="max-w"]') || el.parentElement;
-                    if (qEl) {
-                        var idx = qEl.dataset ? qEl.dataset.qidx : null;
-                        if (idx !== null && idx !== undefined) completed.push(parseInt(idx));
+                document.querySelectorAll('.bg-emerald-50, .border-emerald-500').forEach(function(el) {
+                    var qEl = el.closest('[data-qidx]');
+                    if (qEl && qEl.dataset && qEl.dataset.qidx !== undefined) {
+                        completed.push(parseInt(qEl.dataset.qidx, 10));
                     }
                 });
-                ProgressTracker.autoSave({ completedIndices: completed, ts: Date.now() }, 0);
+                ProgressTracker.autoSave({ completedIndices: Array.from(new Set(completed)), ts: Date.now() }, 0);
             }, 2000);
         });
         observer.observe(document.getElementById('root') || document.body,
             { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
     });
     </script>
-<style>
-.home-btn-fixed {
-  position: fixed; bottom: 24px; right: 24px; z-index: 99999;
-  background: linear-gradient(135deg, #1e3a8a, #764ba2);
-  color: #fff; border: none; padding: 11px 20px; border-radius: 50px;
-  font-size: 14px; font-weight: 700; cursor: pointer;
-  text-decoration: none; display: flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.45);
-  transition: all 0.3s ease; font-family: "Segoe UI", sans-serif;
-}
-.home-btn-fixed:hover { transform: translateY(-3px); color: #fff; }
-</style>
-<a href="../../../../../index.html" class="home-btn-fixed">🏠 Home</a>
 </body>
 
 </html>
