@@ -64,6 +64,11 @@ assert.deepStrictEqual(
   { valid: false, level: null, syllabus: null, layer: null }
 );
 
+assert.deepStrictEqual(
+  Object.assign({}, Navigation.parseRouteHash('#/secondary/spm/spm-bm/extra')),
+  { valid: false, level: null, syllabus: null, layer: null }
+);
+
 assert.strictEqual(
   Navigation.formatRoute('secondary', 'spm', 'spm-bm'),
   '#/secondary/spm/spm-bm'

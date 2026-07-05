@@ -22,7 +22,7 @@
         var syllabus = parts[1];
         var layer = parts[2];
 
-        if (parts.length < 2 || !VALID_LEVELS.has(level) || !VALID_SYLLABUSES.has(syllabus)) {
+        if (parts.length < 2 || parts.length > 3 || !VALID_LEVELS.has(level) || !VALID_SYLLABUSES.has(syllabus)) {
             return { valid: false, level: null, syllabus: null, layer: null };
         }
 
