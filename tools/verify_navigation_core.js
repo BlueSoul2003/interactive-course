@@ -131,4 +131,12 @@ assert.strictEqual(
   '../../japanese-hub.html'
 );
 
+assert.strictEqual(
+  Navigation.buildReturnUrl({
+    pathname: '/interactive-course/content/University/Chemistry/Organic/index.html',
+    search: ''
+  }),
+  '../../chemistry-hub.html'
+);
+
 console.log('Navigation core verification passed.');

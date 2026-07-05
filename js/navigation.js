@@ -71,13 +71,10 @@
         var faculty = parts[universityIndex + 1] || '';
         var foldersAfterFaculty = Math.max(parts.length - universityIndex - 3, 0);
         var prefixToUniversity = '../'.repeat(foldersAfterFaculty + 1);
-        var hubMap = {
-            physics: 'physics-hub.html',
-            japanese: 'japanese-hub.html'
-        };
+        var facultyKey = faculty.toLowerCase();
 
-        if (hubMap[faculty.toLowerCase()]) {
-            return prefixToUniversity + hubMap[faculty.toLowerCase()];
+        if (facultyKey) {
+            return prefixToUniversity + facultyKey + '-hub.html';
         }
 
         return prefixToUniversity + 'index.html';
