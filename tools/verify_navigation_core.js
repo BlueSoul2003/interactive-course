@@ -162,4 +162,9 @@ assert.strictEqual(
   'index.html'
 );
 
+assert.strictEqual(typeof Navigation.enhanceModuleLinks, 'function', 'enhanceModuleLinks should exist');
+assert.strictEqual(typeof Navigation.enhanceReturnControls, 'function', 'enhanceReturnControls should exist');
+assert.strictEqual(typeof Navigation.goBack, 'function', 'goBack should exist');
+assert.strictEqual(typeof Navigation.init, 'function', 'init should exist');
+
 console.log('Navigation core verification passed.');

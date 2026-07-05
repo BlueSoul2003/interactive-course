@@ -10,6 +10,7 @@
         sg: 'secondary',
         kssr: 'primary'
     };
+    var initialized = false;
     var ROUTE_PREFIX = '#/';
 
     function normalizeHash(hash) {
@@ -210,6 +211,96 @@
         });
     }
 
+    function getCurrentRouteHash() {
+        var parsed = parseRouteHash(window.location.hash);
+        if (parsed.valid) return formatRoute(parsed.level, parsed.syllabus, parsed.layer);
+        return '';
+    }
+
+    function saveScrollForRoute(routeHash) {
+        if (!routeHash || !window.sessionStorage) return;
+        window.sessionStorage.setItem('navigation-scroll:' + routeHash, String(window.scrollY || 0));
+    }
+
+    function restoreScrollForRoute(routeHash) {
+        if (!routeHash || !window.sessionStorage || !window.setTimeout || !window.scrollTo) return;
+        var value = window.sessionStorage.getItem('navigation-scroll:' + routeHash);
+        if (!value) return;
+        window.setTimeout(function () {
+            window.scrollTo(0, Number(value) || 0);
+        }, 0);
+    }
+
+    function enhanceModuleLinks() {
+        var routeHash = getCurrentRouteHash();
+        if (!routeHash || !document.querySelectorAll) return;
+
+        document.querySelectorAll('a.card[data-module-id]').forEach(function (link) {
+            var originalHref = link.dataset.navigationOriginalHref || link.getAttribute('href');
+            if (!originalHref) return;
+
+            link.dataset.navigationOriginalHref = originalHref;
+            link.setAttribute('href', withSourceContext(originalHref, routeHash));
+
+            if (link.dataset.navigationScrollBound !== 'true') {
+                link.dataset.navigationScrollBound = 'true';
+                link.addEventListener('click', function () {
+                    saveScrollForRoute(getCurrentRouteHash());
+                });
+            }
+        });
+    }
+
+    function getReturnUrl() {
+        return buildReturnUrl({
+            pathname: window.location.pathname,
+            search: window.location.search
+        });
+    }
+
+    function goBack() {
+        window.location.href = getReturnUrl();
+    }
+
+    function shouldEnhanceReturnLink(link) {
+        var className = link.className || '';
+        var text = (link.textContent || '').trim().toLowerCase();
+        return (
+            className.indexOf('home-btn') >= 0 ||
+            className.indexOf('back-link') >= 0 ||
+            ['home', 'exit', 'back to home', 'back to dashboard'].some(function (label) {
+                return text.indexOf(label) >= 0;
+            })
+        );
+    }
+
+    function enhanceReturnControls() {
+        if (stripSitePrefix(window.location.pathname).indexOf('content/') !== 0 || !document.querySelectorAll) return;
+        var returnUrl = getReturnUrl();
+        document.querySelectorAll('a[href]').forEach(function (link) {
+            if (!shouldEnhanceReturnLink(link)) return;
+            link.setAttribute('href', returnUrl);
+            link.setAttribute('data-navigation-return', 'true');
+        });
+    }
+
+    function init() {
+        if (initialized) return;
+        initialized = true;
+
+        var isRootPage = document.querySelector && document.querySelector('.syllabus-content');
+        if (isRootPage) {
+            initRootNavigation();
+            enhanceModuleLinks();
+            var parsed = parseRouteHash(window.location.hash);
+            if (parsed.valid) restoreScrollForRoute(formatRoute(parsed.level, parsed.syllabus, parsed.layer));
+            window.addEventListener('hashchange', enhanceModuleLinks);
+            return;
+        }
+
+        enhanceReturnControls();
+    }
+
     window.Navigation = {
         parseRouteHash: parseRouteHash,
         formatRoute: formatRoute,
@@ -219,6 +310,24 @@
         buildReturnUrl: buildReturnUrl,
         applyRootRoute: applyRootRoute,
         navigateRoot: navigateRoot,
-        initRootNavigation: initRootNavigation
+        initRootNavigation: initRootNavigation,
+        enhanceModuleLinks: enhanceModuleLinks,
+        enhanceReturnControls: enhanceReturnControls,
+        getReturnUrl: getReturnUrl,
+        goBack: goBack,
+        init: init
     };
+
+    if (
+        typeof document !== 'undefined' &&
+        document.addEventListener &&
+        typeof window !== 'undefined' &&
+        stripSitePrefix(window.location.pathname).indexOf('content/') === 0
+    ) {
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    }
 })();

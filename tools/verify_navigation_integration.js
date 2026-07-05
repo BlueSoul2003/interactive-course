@@ -8,7 +8,7 @@ const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 const navJs = fs.readFileSync(path.join(root, 'js', 'navigation.js'), 'utf8');
 
 assert.match(indexHtml, /<script src="js\/navigation\.js\?v=1\.0\.0"><\/script>/, 'index.html should load js/navigation.js before auth-access.js');
-assert.match(indexHtml, /Navigation\.initRootNavigation\(\)/, 'index.html should initialize root navigation');
+assert.match(indexHtml, /Navigation\.init\(\)/, 'index.html should initialize shared navigation');
 assert.match(indexHtml, /Navigation\.navigateRoot\(/, 'legacy wrapper functions should delegate to Navigation.navigateRoot');
 
 const syllabusIds = [...indexHtml.matchAll(/<div id="([^"]+)" class="syllabus-content/g)].map(match => match[1]);
