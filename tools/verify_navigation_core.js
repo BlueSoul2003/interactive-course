@@ -65,6 +65,11 @@ assert.deepStrictEqual(
 );
 
 assert.deepStrictEqual(
+  Object.assign({}, Navigation.parseRouteHash('#/secondary/spm')),
+  { valid: false, level: null, syllabus: null, layer: null }
+);
+
+assert.deepStrictEqual(
   Object.assign({}, Navigation.parseRouteHash('#/secondary/spm/spm-bm/extra')),
   { valid: false, level: null, syllabus: null, layer: null }
 );
@@ -137,6 +142,14 @@ assert.strictEqual(
     search: ''
   }),
   '../../chemistry-hub.html'
+);
+
+assert.strictEqual(
+  Navigation.buildReturnUrl({
+    pathname: '/interactive-course/content/University/index.html',
+    search: ''
+  }),
+  'index.html'
 );
 
 console.log('Navigation core verification passed.');

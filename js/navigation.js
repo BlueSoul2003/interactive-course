@@ -22,7 +22,7 @@
         var syllabus = parts[1];
         var layer = parts[2];
 
-        if (parts.length < 2 || parts.length > 3 || !VALID_LEVELS.has(level) || !VALID_SYLLABUSES.has(syllabus)) {
+        if (parts.length !== 3 || !VALID_LEVELS.has(level) || !VALID_SYLLABUSES.has(syllabus)) {
             return { valid: false, level: null, syllabus: null, layer: null };
         }
 
@@ -69,15 +69,16 @@
         var parts = relativePath.split('/');
         var universityIndex = parts.indexOf('University');
         var faculty = parts[universityIndex + 1] || '';
-        var foldersAfterFaculty = Math.max(parts.length - universityIndex - 3, 0);
-        var prefixToUniversity = '../'.repeat(foldersAfterFaculty + 1);
         var facultyKey = faculty.toLowerCase();
 
-        if (facultyKey) {
-            return prefixToUniversity + facultyKey + '-hub.html';
+        if (!facultyKey || facultyKey.indexOf('.') >= 0) {
+            return 'index.html';
         }
 
-        return prefixToUniversity + 'index.html';
+        var foldersAfterFaculty = Math.max(parts.length - universityIndex - 3, 0);
+        var prefixToUniversity = '../'.repeat(foldersAfterFaculty + 1);
+
+        return prefixToUniversity + facultyKey + '-hub.html';
     }
 
     function getSearchParam(search, key) {
