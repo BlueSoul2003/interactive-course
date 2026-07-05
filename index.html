@@ -2396,77 +2396,36 @@
 
         // ── Existing Navigation Logic ─────────────────────────────────────────────
         function switchSyllabus(event, syllabusId) {
-            // Remove 'active' only from the currently visible syllabus tab row,
-            // NOT from the level-switcher buttons (Secondary / Primary).
             const secondaryTabs = document.getElementById('secondary-tabs');
-            const primaryTabs   = document.getElementById('primary-tabs');
-            const activeTabsContainer = secondaryTabs.style.display !== 'none'
-                ? secondaryTabs
-                : primaryTabs;
-            activeTabsContainer.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-
-            // Add 'active' class to the clicked button
-            event.currentTarget.classList.add('active');
-
-            // Hide all syllabus content sections
-            const contents = document.querySelectorAll('.syllabus-content');
-            contents.forEach(content => {
-                content.classList.remove('active');
-            });
-
-            // Show the targeted syllabus content
-            const activeContent = document.getElementById(syllabusId);
-            activeContent.classList.add('active');
-
-            // Reset the internal layer to show the subjects (Layer 2) whenever a tab is clicked
-            showSubjects(syllabusId);
+            const level = secondaryTabs && secondaryTabs.style.display !== 'none' ? 'secondary' : 'primary';
+            if (window.Navigation) {
+                window.Navigation.navigateRoot(level, syllabusId, syllabusId + '-subjects');
+                return;
+            }
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
         }
 
         // Layer 2 to Layer 3 Navigation: Go from Subjects to specific Lessons
         function showLessons(syllabusId, lessonContainerId) {
-            const syllabusContainer = document.getElementById(syllabusId);
-
-            // Hide all layers inside this syllabus
-            const layers = syllabusContainer.querySelectorAll('.view-layer');
-            layers.forEach(layer => layer.classList.remove('active'));
-
-            // Show specific lesson layer
-            const targetLessonLayer = document.getElementById(lessonContainerId);
-            if (targetLessonLayer) {
-                targetLessonLayer.classList.add('active');
+            const level = syllabusId === 'kssr' ? 'primary' : 'secondary';
+            if (window.Navigation) {
+                window.Navigation.navigateRoot(level, syllabusId, lessonContainerId);
             }
         }
 
         // Layer 3 to Layer 2 Navigation: Go "Back" to Subjects list
         function showSubjects(syllabusId) {
-            const syllabusContainer = document.getElementById(syllabusId);
-
-            // Hide all layers inside this syllabus
-            const layers = syllabusContainer.querySelectorAll('.view-layer');
-            layers.forEach(layer => layer.classList.remove('active'));
-
-            // Show the main subjects layer for this syllabus
-            const targetSubjectLayer = document.getElementById(syllabusId + '-subjects');
-            if (targetSubjectLayer) {
-                targetSubjectLayer.classList.add('active');
+            const level = syllabusId === 'kssr' ? 'primary' : 'secondary';
+            if (window.Navigation) {
+                window.Navigation.navigateRoot(level, syllabusId, syllabusId + '-subjects');
             }
         }
 
         // Switch between Secondary and Primary levels
         function switchLevel(level) {
-            // Update level buttons
-            document.getElementById('btn-level-secondary').classList.toggle('active', level === 'secondary');
-            document.getElementById('btn-level-primary').classList.toggle('active', level === 'primary');
-
-            // Toggle tabs containers
-            document.getElementById('secondary-tabs').style.display = level === 'secondary' ? 'flex' : 'none';
-            document.getElementById('primary-tabs').style.display = level === 'primary' ? 'flex' : 'none';
-
-            // Click the first tab of the selected level to naturally switch the content
-            if (level === 'secondary') {
-                document.getElementById('secondary-tabs').querySelector('.tab-btn').click();
-            } else {
-                document.getElementById('primary-tabs').querySelector('.tab-btn').click();
+            const targetSyllabus = level === 'primary' ? 'kssr' : 'spm';
+            if (window.Navigation) {
+                window.Navigation.navigateRoot(level, targetSyllabus, targetSyllabus + '-subjects');
             }
         }
     </script>
@@ -2659,6 +2618,7 @@
 
     <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/navigation.js?v=1.0.0"></script>
     <script src="js/auth-access.js?v=1.0.3"></script>
     <script src="js/progress-tracker.js?v=1.0.2"></script>
     <script src="js/feedback.js?v=1.0.2"></script>
@@ -3100,6 +3060,10 @@
                     openPasswordResetMode(recoveryResult.error ? recoveryResult.error.message : '');
                     return;
                 }
+            }
+
+            if (window.Navigation) {
+                window.Navigation.initRootNavigation();
             }
 
             updateAuthUI();

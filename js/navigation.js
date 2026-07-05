@@ -103,12 +103,106 @@
         return rootPrefix + 'index.html';
     }
 
+    function getDefaultLevelForSyllabus(syllabus) {
+        return syllabus === 'kssr' ? 'primary' : 'secondary';
+    }
+
+    function setActiveButton(container, selector, predicate) {
+        if (!container) return;
+        container.querySelectorAll(selector).forEach(function (button) {
+            button.classList.toggle('active', predicate(button));
+        });
+    }
+
+    function setLevel(level) {
+        var secondaryTabs = document.getElementById('secondary-tabs');
+        var primaryTabs = document.getElementById('primary-tabs');
+        var secondaryButton = document.getElementById('btn-level-secondary');
+        var primaryButton = document.getElementById('btn-level-primary');
+
+        if (secondaryTabs) secondaryTabs.style.display = level === 'secondary' ? 'flex' : 'none';
+        if (primaryTabs) primaryTabs.style.display = level === 'primary' ? 'flex' : 'none';
+        if (secondaryButton) secondaryButton.classList.toggle('active', level === 'secondary');
+        if (primaryButton) primaryButton.classList.toggle('active', level === 'primary');
+    }
+
+    function activateSyllabusTab(level, syllabus) {
+        var tabs = document.getElementById(level === 'primary' ? 'primary-tabs' : 'secondary-tabs');
+        setActiveButton(tabs, '.tab-btn', function (button) {
+            var onclick = button.getAttribute('onclick') || '';
+            return onclick.indexOf("'" + syllabus + "'") >= 0 || onclick.indexOf('"' + syllabus + '"') >= 0;
+        });
+    }
+
+    function activateSyllabusContent(syllabus) {
+        document.querySelectorAll('.syllabus-content').forEach(function (content) {
+            content.classList.toggle('active', content.id === syllabus);
+        });
+    }
+
+    function activateLayer(syllabus, layer) {
+        var syllabusContainer = document.getElementById(syllabus);
+        if (!syllabusContainer) return false;
+
+        var fallbackLayer = syllabus + '-subjects';
+        var targetId = document.getElementById(layer) ? layer : fallbackLayer;
+
+        syllabusContainer.querySelectorAll('.view-layer').forEach(function (viewLayer) {
+            viewLayer.classList.toggle('active', viewLayer.id === targetId);
+        });
+
+        return true;
+    }
+
+    function applyRootRoute(route) {
+        if (!route || !route.valid) return false;
+        var level = route.level || getDefaultLevelForSyllabus(route.syllabus);
+
+        setLevel(level);
+        activateSyllabusTab(level, route.syllabus);
+        activateSyllabusContent(route.syllabus);
+        return activateLayer(route.syllabus, route.layer || (route.syllabus + '-subjects'));
+    }
+
+    function navigateRoot(level, syllabus, layer, options) {
+        var routeHash = formatRoute(level || getDefaultLevelForSyllabus(syllabus), syllabus, layer);
+        var navOptions = options || {};
+
+        if (window.location.hash === routeHash) {
+            applyRootRoute(parseRouteHash(routeHash));
+            return;
+        }
+
+        if (navOptions.replace) {
+            window.history.replaceState(null, document.title, routeHash);
+            applyRootRoute(parseRouteHash(routeHash));
+            return;
+        }
+
+        window.location.hash = routeHash;
+    }
+
+    function initRootNavigation() {
+        var initialRoute = parseRouteHash(window.location.hash);
+        if (initialRoute.valid) {
+            applyRootRoute(initialRoute);
+        }
+
+        window.addEventListener('hashchange', function () {
+            var route = parseRouteHash(window.location.hash);
+            if (route.valid) applyRootRoute(route);
+        });
+    }
+
     window.Navigation = {
         parseRouteHash: parseRouteHash,
         formatRoute: formatRoute,
         isRootRouteHash: isRootRouteHash,
         withSourceContext: withSourceContext,
         getRelativeRootPrefix: getRelativeRootPrefix,
-        buildReturnUrl: buildReturnUrl
+        buildReturnUrl: buildReturnUrl,
+        applyRootRoute: applyRootRoute,
+        navigateRoot: navigateRoot,
+        initRootNavigation: initRootNavigation
     };
 })();
