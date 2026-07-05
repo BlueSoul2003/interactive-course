@@ -1,4 +1,4 @@
-﻿# 🚀 Interactive Learning Portal (interactive-course)
+# 🚀 Interactive Learning Portal (interactive-course)
 
 A collection of interactive courses and modules designed to accelerate learning through **First Principles thinking**, logical deduction, and interactive scenarios. 
 

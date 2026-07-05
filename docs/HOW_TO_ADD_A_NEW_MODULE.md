@@ -1,4 +1,4 @@
-﻿# The Ultimate Guide: How to Add a New Module
+# The Ultimate Guide: How to Add a New Module
 
 ## First Principles Thinking: What is a Module?
 At its core, a learning module on this platform is simply an interactive web page. For a student to successfully use it, four fundamental pillars must be built:
@@ -53,14 +53,14 @@ Your module exists, but students need a button to click it from the main menu.
 
 ### Step 4.5: Special Case - University Modules (3-Tier Architecture)
 Unlike the K-12 section, the **University Portal** operates on a deep 3-tier architecture to handle massive faculty expansion:
-1. **Tier 1 (Gateway):** `university.html` uses a draggable Pill UI. This connects to Tier 2.
-2. **Tier 2 (Faculty Hub):** e.g., `uni-hub-physics.html`. This is a dedicated dashboard for the faculty. **You must add your `.card` to this specific hub file, NOT the main `index.html`.**
+1. **Tier 1 (Gateway):** `content/University/index.html` connects learners to faculty hubs.
+2. **Tier 2 (Faculty Hub):** e.g., `content/University/physics-hub.html`. This is a dedicated dashboard for the faculty. **You must add your `.card` to this specific hub file, NOT the root `index.html`.**
 3. **Tier 3 (Module):** Your actual simulator/module.
 
 **How to add a University Module:**
-- If the Faculty Hub already exists (e.g., `uni-hub-physics.html`), just open it and add your `.card` there.
-- If it's a completely new faculty (e.g., Computer Science), you must first clone `uni-hub-physics.html` into `uni-hub-cs.html`. Then, go to `university.html` and add a new Pill linking to `uni-hub-cs.html`.
-- **CRITICAL Routing Rule:** When setting the "Home" button in a University module (Pillar 3), it must point back to the **Tier 2 Faculty Hub** (e.g., `../../../../uni-hub-physics.html`), NOT `university.html` or `index.html`.
+- If the Faculty Hub already exists (e.g., `content/University/physics-hub.html`), open it and add your `.card` there.
+- If it's a completely new faculty (e.g., Computer Science), create a matching hub such as `content/University/computer-science-hub.html`, then add the faculty entry to `content/University/index.html`.
+- **Routing Rule:** In the module, load `navigation.js?v=1.0.0` and keep a simple fallback link to the faculty hub, such as `../../physics-hub.html`. The shared helper will replace that fallback with the exact source route when the learner entered from a hub or landing-page layer.
 
 ---
 
@@ -211,7 +211,7 @@ Every time you add a new module, verify you have hit all 5 pillars:
 
 - [ ] **Pillar 1:** File moved from `_drafts` to `content/...` and renamed to `index.html`.
 - [ ] **Pillar 2:** Card added to the Grand Landing Page (using grid wrapper if adding downloads).
-- [ ] **Pillar 3:** Home button added to the module with correct `../../../` relative path.
+- [ ] **Pillar 3:** `navigation.js?v=1.0.0` loaded and a simple Home/Back fallback link kept in the module.
 - [ ] **Pillar 4:** `progress-tracker.js` script tag added with unique `data-module-id`.
 - [ ] **Pillar 4:** `ProgressTracker.load()` implemented on page load.
 - [ ] **Pillar 4:** `ProgressTracker.save()` implemented on student action.
