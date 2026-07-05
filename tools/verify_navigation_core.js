@@ -65,6 +65,16 @@ assert.deepStrictEqual(
 );
 
 assert.deepStrictEqual(
+  Object.assign({}, Navigation.parseRouteHash('#/primary/spm/spm-bm')),
+  { valid: false, level: null, syllabus: null, layer: null }
+);
+
+assert.deepStrictEqual(
+  Object.assign({}, Navigation.parseRouteHash('#/secondary/kssr/kssr-english-y3')),
+  { valid: false, level: null, syllabus: null, layer: null }
+);
+
+assert.deepStrictEqual(
   Object.assign({}, Navigation.parseRouteHash('#/secondary/spm')),
   { valid: false, level: null, syllabus: null, layer: null }
 );

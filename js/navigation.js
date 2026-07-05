@@ -3,6 +3,13 @@
 
     var VALID_LEVELS = new Set(['secondary', 'primary']);
     var VALID_SYLLABUSES = new Set(['spm', 'uec', 'igcse', 'sg', 'kssr']);
+    var SYLLABUS_LEVELS = {
+        spm: 'secondary',
+        uec: 'secondary',
+        igcse: 'secondary',
+        sg: 'secondary',
+        kssr: 'primary'
+    };
     var ROUTE_PREFIX = '#/';
 
     function normalizeHash(hash) {
@@ -22,7 +29,12 @@
         var syllabus = parts[1];
         var layer = parts[2];
 
-        if (parts.length !== 3 || !VALID_LEVELS.has(level) || !VALID_SYLLABUSES.has(syllabus)) {
+        if (
+            parts.length !== 3 ||
+            !VALID_LEVELS.has(level) ||
+            !VALID_SYLLABUSES.has(syllabus) ||
+            SYLLABUS_LEVELS[syllabus] !== level
+        ) {
             return { valid: false, level: null, syllabus: null, layer: null };
         }
 
@@ -145,9 +157,13 @@
         if (!syllabusContainer) return false;
 
         var fallbackLayer = syllabus + '-subjects';
-        var targetId = document.getElementById(layer) ? layer : fallbackLayer;
+        var viewLayers = Array.prototype.slice.call(syllabusContainer.querySelectorAll('.view-layer'));
+        var hasLayerInSyllabus = viewLayers.some(function (viewLayer) {
+            return viewLayer.id === layer;
+        });
+        var targetId = hasLayerInSyllabus ? layer : fallbackLayer;
 
-        syllabusContainer.querySelectorAll('.view-layer').forEach(function (viewLayer) {
+        viewLayers.forEach(function (viewLayer) {
             viewLayer.classList.toggle('active', viewLayer.id === targetId);
         });
 
