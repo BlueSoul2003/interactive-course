@@ -1,4 +1,4 @@
-# 🚀 Interactive Learning Portal (interactive-course)
+﻿# 🚀 Interactive Learning Portal (interactive-course)
 
 A collection of interactive courses and modules designed to accelerate learning through **First Principles thinking**, logical deduction, and interactive scenarios. 
 
@@ -14,6 +14,13 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 ---
 
+## Navigation Routing
+
+The landing page uses hash routes such as `/#/secondary/igcse/igcse-science-y8` to remember the active syllabus and lesson layer. Module cards are enhanced at runtime by `js/navigation.js` so a module can return to the exact list or hub that opened it.
+
+New modules should load `js/navigation.js?v=1.0.0` before `progress-tracker.js` and keep a simple Home/Back fallback link. The helper rewrites that link when source context is available.
+
+---
 ## 🛠️ Portal Expansion Guide (For Developers/Instructors)
 
 This guide explains how to scale the landing page (`grand_landing_page.html`) using the existing HTML/JS architecture. The system uses a "Folder-like" nested structure managed by simple `onclick` JavaScript functions.
@@ -128,3 +135,4 @@ When creating new cards, change the `sub-xxxxx` class to auto-theme the card's a
 * `sub-biology` (Lime Green)
 
 **Pro-Tip:** If a module is locked or under construction, add `card-locked` to the classes and `style="opacity:0.6; filter:grayscale(1);"` to gray it out visually.
+

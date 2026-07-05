@@ -1,4 +1,4 @@
-# The Ultimate Guide: How to Add a New Module
+﻿# The Ultimate Guide: How to Add a New Module
 
 ## First Principles Thinking: What is a Module?
 At its core, a learning module on this platform is simply an interactive web page. For a student to successfully use it, four fundamental pillars must be built:
@@ -66,52 +66,26 @@ Unlike the K-12 section, the **University Portal** operates on a deep 3-tier arc
 
 ## Pillar 3: Local Navigation (Exit)
 
-### Step 5: Add a Persistent Home Button
-Once a student is inside the module, they need a way to get back to the Grand Landing Page.
-1. Open your new module's `index.html` file.
-2. Add a Home Button link near the top of your `<body>`.
-3. You must calculate the relative path back to the parent hub. For K-12 modules, this is `index.html`. **For University modules, this is the Faculty Hub (e.g., `uni-hub-physics.html`).** For example, if your module is 4 folders deep, you need four `../`.
+### Step 5: Add Shared Navigation
+Use the shared navigation helper instead of hand-counting the final Home/Back destination for every module.
 
-> [!WARNING]
-> **⚠️ Memo: Always Style Your Home Button Consistently!**
-> Do not use raw emojis or basic inline styles for your Home button. You must ensure your module's Home button visually matches the rest of the modules in your syllabus block. 
-> 
-> **How to fix this:** Always check another existing module in the same syllabus level (e.g. `Singapore_Syllabus/Year4/...`) and **copy both its Home button HTML code and its CSS class (e.g. `.home-btn-fixed`)** directly into your new module's `<style>` block.
-> 
-> **Important Placement Check:** After adding the button, always verify that it does **not** overlap or block any critical page content (like "Next" buttons or interactive canvas elements). If it does, simply move it to another suitable area (e.g., changing `bottom: 24px; right: 24px;` in the CSS to `top: 24px; left: 24px;`).
-> 
-> Example standard implementation:
-> ```html
-> <style>
-> .home-btn-fixed { position: fixed; bottom: 24px; right: 24px; z-index: 99999; ... }
-> </style>
->
-> <a href="../../../../index.html" class="home-btn-fixed">🏠 Home</a>
-> ```
+Add this script near the bottom of the module, before `progress-tracker.js` when both scripts are present:
 
-> [!WARNING]
-> **⚠️ Memo: Always count folder depth carefully before setting the `../` path!**
->
-> A common mistake is miscounting the number of folders and using the wrong number of `../`. Here's how to count correctly:
->
-> **Method:** Count every folder between the root and your `index.html` file.
->
-> | Level | Folder |
-> |-------|--------|
-> | 1 | `content/` |
-> | 2 | `KSSR_Syllabus/` |
-> | 3 | `Primary3/` |
-> | 4 | `English/` |
-> | 5 | `Unit3/` ← your `index.html` lives here |
->
-> → 5 levels deep = **`../../../../../index.html`**
->
-> A module 4 levels deep would use `../../../../index.html`, a module 5 levels deep uses `../../../../../index.html`, and so on.
->
-> **Quick check:** Open the file path in your head, count each `/` segment after the root folder — that is your depth number.
+```html
+<script src="../../../../../js/navigation.js?v=1.0.0"></script>
+```
+
+The `../` prefix still depends on the module folder depth, but it is now used only to load the shared helper. The helper reads the `from` query parameter added by the landing page and rewrites existing Home/Back links to return to the exact syllabus layer or University hub the learner came from.
+
+For a new module, include one simple fallback link:
+
+```html
+<a href="../../../../../index.html" class="home-btn-fixed">Back</a>
+```
+
+When `navigation.js` loads, it updates that fallback link automatically. If a learner opens the module directly without a source route, the fallback still works. University modules can keep a faculty-hub fallback such as `../../physics-hub.html`; the helper will replace it when stronger source context is available.
 
 ---
-
 ## Pillar 4: State Management (Progress Tracking)
 
 ### Step 6: Add the Supabase & Progress SDKs
@@ -255,3 +229,4 @@ If the database is ever reset or you deploy to a new Supabase instance, please r
 
 Additionally, make sure to apply the updates in [db/migrations/fix_registration_and_progress.sql](./db/migrations/fix_registration_and_progress.sql) to add the RLS SELECT policy on `user_profiles` and set up the automatic profile creation trigger `handle_new_user()` which supports email-confirmation signup flows.
 </details>
+
