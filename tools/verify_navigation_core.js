@@ -118,4 +118,12 @@ assert.strictEqual(
   '../../physics-hub.html'
 );
 
+assert.strictEqual(
+  Navigation.buildReturnUrl({
+    pathname: '/interactive-course/content/University/Japanese/Family/index.html',
+    search: ''
+  }),
+  '../../japanese-hub.html'
+);
+
 console.log('Navigation core verification passed.');
