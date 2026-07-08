@@ -155,10 +155,6 @@ def classify_question(text: str) -> str:
         return "picture_based"
     if re.search(r"\banswer bank\b|\bword bank\b|\bwords? provided\b|\bphrases? from the answer bank\b", compact):
         return "word_bank"
-    if re.search(r"\bmatch\b|\bjoin\b|\bpair\b|\bassign each letter\b|\btheir respective\b", compact):
-        return "matching"
-    if re.search(r"\brearrange\b|\bjumbled\b|\bsequence\b|\border\b|\bascending order\b", compact):
-        return "sequencing"
     if re.search(r"\bfill\s*in the blanks?\b|\bblanks? with\b|_{3,}|\bmissing letters?\b", compact):
         return "fill_blank"
     if re.search(
@@ -171,6 +167,13 @@ def classify_question(text: str) -> str:
         compact,
     ):
         return "grammar_transform"
+    if re.search(r"\brearrange\b|\bjumbled\b|\bsequence\b|\border\b|\bascending order\b", compact):
+        return "sequencing"
+    if re.search(
+        r"\bmatch\b|\bjoin (?:the|each|these|them|sentences?|phrases?|words?|items?)\b|\bpair (?:the|each|these|them|sentences?|phrases?|words?|items?)\b|\bassign each letter\b|\btheir respective\b",
+        compact,
+    ):
+        return "matching"
     if has_multiple_choice_options(text):
         return "multiple_choice"
     if re.search(r"\bread\b.*\banswer\b|\bpassage\b.*\bquestions?\b|\bdialogue\b.*\bquestions?\b|\binfographic\b.*\bquestions?\b", compact):

@@ -45,18 +45,19 @@ Primary 3:
 
 - Units: 10
 - Questions: 80
-- Question type counts: `fill_blank=12`, `grammar_transform=5`, `matching=15`, `picture_based=3`, `read_and_answer=6`, `sequencing=5`, `short_answer=23`, `word_bank=5`, `writing_prompt=6`
+- Question type counts: `fill_blank=12`, `grammar_transform=8`, `matching=10`, `picture_based=3`, `read_and_answer=6`, `sequencing=4`, `short_answer=24`, `word_bank=5`, `writing_prompt=8`
 
 Primary 6:
 
 - Units: 10
 - Questions: 89
-- Question type counts: `fill_blank=17`, `grammar_transform=3`, `matching=18`, `multiple_choice=1`, `picture_based=3`, `read_and_answer=10`, `sequencing=2`, `short_answer=13`, `word_bank=8`, `writing_prompt=14`
+- Question type counts: `fill_blank=20`, `grammar_transform=3`, `matching=9`, `multiple_choice=1`, `picture_based=3`, `read_and_answer=10`, `sequencing=1`, `short_answer=14`, `word_bank=8`, `writing_prompt=20`
 
 ## Caveats
 
 - This is OCR-derived normalization, not final human-corrected content. Each question carries `notesForReviewer` and must be compared with the source PDF in Task 5 before learner-facing HTML is promoted.
 - The normalizer is conservative: it creates page-level review blocks rather than pretending OCR can perfectly split every sub-question. This preserves source order and source pages for manual review.
+- Primary 3 Unit 1 and Unit 2 starts were inferred before the first reliable OCR-detected unit marker; this is recorded in `normalizationSummary.unitStartNotes` and needs human confirmation in Task 5.
 - No answer keys were promoted. All generated questions use `answer: null` and `acceptedAnswers: []`.
 
 ## Commit
