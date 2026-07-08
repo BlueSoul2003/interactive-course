@@ -16,7 +16,7 @@ Status: DONE_WITH_CONCERNS
 C:\Users\hong0\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -m unittest tools.workbook_pipeline.test_normalize_workbook
 ```
 
-Result: passed, 1 test.
+Result: passed, 3 tests.
 
 ```powershell
 C:\Users\hong0\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe tools\workbook_pipeline\normalize_workbook.py --raw _drafts\kssr_english_workbooks\primary3\raw_pages.json --manifest _drafts\kssr_english_workbooks\primary3\source_manifest.json --out _drafts\kssr_english_workbooks\primary3\workbook.json
@@ -62,4 +62,4 @@ Primary 6:
 
 ## Commit
 
-- Task 4 content commit hash: `b6d004d`
+- Task 4 content commits: `b6d004d`, `7804442`
