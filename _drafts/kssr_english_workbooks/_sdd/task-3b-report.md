@@ -106,3 +106,57 @@ Result: no output; no rendered PNGs were left in the repo.
 
 - `_drafts/kssr_english_workbooks/ocr_cache/eng.traineddata` is cached for `tesseract.js`; provenance/license should be reviewed before redistributing it outside this project.
 - 150 DPI OCR is visibly noisy, but it is enough to unblock manual normalization and page-review tooling. Full content extraction still needs human review before it becomes learner-facing material.
+
+## Full OCR continuation
+
+After the Task 3b review was approved, the controller continued the same OCR bridge in chunks to process the rest of both books.
+
+### Primary 3 full run
+
+Processed ranges:
+
+- `4-13`: processed 10 pages, total OCR chars 10683, elapsed 67.9 seconds.
+- `14-23`: processed 10 pages, total OCR chars 19001, elapsed 44.1 seconds.
+- `24-33`: processed 10 pages, total OCR chars 27790, elapsed 49.4 seconds.
+- `34-43`: processed 10 pages, total OCR chars 37322, elapsed 41.8 seconds.
+- `44-53`: processed 10 pages, total OCR chars 44739, elapsed 32.9 seconds.
+- `54-63`: processed 10 pages, total OCR chars 51343, elapsed 38.5 seconds.
+- `64-73`: processed 10 pages, total OCR chars 59151, elapsed 38.0 seconds.
+- `74-83`: processed 10 pages, total OCR chars 69273, elapsed 41.0 seconds.
+- `84-88`: processed 5 pages, total OCR chars 83358, elapsed 32.2 seconds.
+
+Final assertion: Primary 3 has 88 pages, 88 OCR pages with text, zero empty OCR pages, and 83358 total OCR characters.
+
+### Primary 6 full run
+
+Processed ranges:
+
+- `4-13`: processed 10 pages, total OCR chars 12926, elapsed 37.5 seconds.
+- `14-23`: processed 10 pages, total OCR chars 21902, elapsed 43.1 seconds.
+- `24-33`: processed 10 pages, total OCR chars 31058, elapsed 40.6 seconds.
+- `34-43`: processed 10 pages, total OCR chars 40935, elapsed 41.2 seconds.
+- `44-53`: processed 10 pages, total OCR chars 51268, elapsed 41.0 seconds.
+- `54-63`: processed 10 pages, total OCR chars 62384, elapsed 45.4 seconds.
+- `64-73`: processed 10 pages, total OCR chars 71916, elapsed 42.2 seconds.
+- `74-83`: processed 10 pages, total OCR chars 81499, elapsed 42.9 seconds.
+- `84-93`: processed 10 pages, total OCR chars 96908, elapsed 51.4 seconds.
+- `94-98`: processed 5 pages, total OCR chars 111456, elapsed 31.1 seconds.
+
+Final assertion: Primary 6 has 98 pages, 98 OCR pages with text, zero empty OCR pages, and 111456 total OCR characters.
+
+### Final verification
+
+```powershell
+node -e "const fs=require('fs'); for (const [label,file,expected] of [['p3','_drafts/kssr_english_workbooks/primary3/raw_pages.json',88],['p6','_drafts/kssr_english_workbooks/primary6/raw_pages.json',98]]) { const data=JSON.parse(fs.readFileSync(file,'utf8')); const zero=data.pages.filter(p=>!(Number(p.ocrTextChars||0)>0)).map(p=>p.page); const total=data.pages.reduce((s,p)=>s+Number(p.ocrTextChars||0),0); console.log(label, JSON.stringify({pages:data.pages.length, expected, ocrPages:data.pages.length-zero.length, zeroPages:zero, total})); if(data.pages.length!==expected || zero.length) process.exit(1); }"
+```
+
+Result:
+
+- Primary 3: `{"pages":88,"expected":88,"ocrPages":88,"zeroPages":[],"total":83358}`
+- Primary 6: `{"pages":98,"expected":98,"ocrPages":98,"zeroPages":[],"total":111456}`
+
+```powershell
+Get-ChildItem -Recurse -File _drafts\kssr_english_workbooks | Where-Object { $_.Extension -eq '.png' } | Select-Object -ExpandProperty FullName
+```
+
+Result: no output; no rendered PNGs were left in the repo.
