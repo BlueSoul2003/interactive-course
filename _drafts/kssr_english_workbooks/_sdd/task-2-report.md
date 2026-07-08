@@ -33,7 +33,7 @@ Observed result:
 
 ## Notes
 
-- No changes were needed to the Task 2 source files themselves.
+- No changes were needed to the Task 2 source files for the initial brief.
 - I did not modify Task 1 PDFs/manifests, live `content/`, `index.html`, extraction/render scripts, or unrelated files.
 
 ## Fix after review
