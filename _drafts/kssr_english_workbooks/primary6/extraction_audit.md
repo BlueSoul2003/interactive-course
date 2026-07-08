@@ -1,19 +1,22 @@
 # kssr-primary6-english-workbook Extraction Audit
 
 - Source PDF: `hardcopy/KSSR_Syllabus/Primary6/English/source_pdfs/english_p6_workbook.pdf`
-- Expected pages: 98
+- Raw pages file: `C:/GregOS/03_Tutoring_Factory/02_Interactive_Course_Project/interactive-course-main/_drafts/kssr_english_workbooks/primary6/raw_pages.json`
 - Detected pages: 98
 - Embedded text characters: 0
-- Image-only or empty pages: 98
-- OCR command available: no
+- OCR text characters: 2575
+- OCR pages with text: 3
+- OCR language: eng
+- OCR cache path: `C:/GregOS/03_Tutoring_Factory/02_Interactive_Course_Project/interactive-course-main/_drafts/kssr_english_workbooks/ocr_cache`
+- Image-only or empty pages remaining: 95
 
 ## Page Status
 
 | Page | Mode | Embedded chars | OCR chars |
 |---:|---|---:|---:|
-| 1 | image_only_or_empty | 0 | 0 |
-| 2 | image_only_or_empty | 0 | 0 |
-| 3 | image_only_or_empty | 0 | 0 |
+| 1 | ocr_text | 0 | 495 |
+| 2 | ocr_text | 0 | 382 |
+| 3 | ocr_text | 0 | 1698 |
 | 4 | image_only_or_empty | 0 | 0 |
 | 5 | image_only_or_empty | 0 | 0 |
 | 6 | image_only_or_empty | 0 | 0 |

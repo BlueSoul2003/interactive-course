@@ -4,12 +4,17 @@ const path = require("path");
 const { spawnSync } = require("child_process");
 
 const REPO_ROOT = path.resolve(__dirname, "..", "..");
-const POPPLER_BIN = "C:\\Users\\hong0\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin";
+const POPPLER_BIN =
+  process.env.POPPLER_BIN ||
+  "C:\\Users\\hong0\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin";
 const PDFTOPPM_PATH = path.join(POPPLER_BIN, "pdftoppm.exe");
 const PDFINFO_PATH = path.join(POPPLER_BIN, "pdfinfo.exe");
 const TESSERACT_JS_PATH =
+  process.env.TESSERACT_JS_PATH ||
   "C:\\Users\\hong0\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\node_modules\\.pnpm\\tesseract.js@7.0.0\\node_modules\\tesseract.js";
-const OCR_CACHE_DIR = path.join(REPO_ROOT, "_drafts", "kssr_english_workbooks", "ocr_cache");
+const OCR_CACHE_DIR = process.env.OCR_CACHE_DIR
+  ? path.resolve(process.env.OCR_CACHE_DIR)
+  : path.join(REPO_ROOT, "_drafts", "kssr_english_workbooks", "ocr_cache");
 
 function parseArgs(argv) {
   const args = {};

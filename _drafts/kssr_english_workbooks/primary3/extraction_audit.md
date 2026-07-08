@@ -4,19 +4,19 @@
 - Raw pages file: `C:/GregOS/03_Tutoring_Factory/02_Interactive_Course_Project/interactive-course-main/_drafts/kssr_english_workbooks/primary3/raw_pages.json`
 - Detected pages: 88
 - Embedded text characters: 0
-- OCR text characters: 147
-- OCR pages with text: 1
+- OCR text characters: 1858
+- OCR pages with text: 3
 - OCR language: eng
 - OCR cache path: `C:/GregOS/03_Tutoring_Factory/02_Interactive_Course_Project/interactive-course-main/_drafts/kssr_english_workbooks/ocr_cache`
-- Image-only or empty pages remaining: 87
+- Image-only or empty pages remaining: 85
 
 ## Page Status
 
 | Page | Mode | Embedded chars | OCR chars |
 |---:|---|---:|---:|
 | 1 | ocr_text | 0 | 147 |
-| 2 | image_only_or_empty | 0 | 0 |
-| 3 | image_only_or_empty | 0 | 0 |
+| 2 | ocr_text | 0 | 134 |
+| 3 | ocr_text | 0 | 1577 |
 | 4 | image_only_or_empty | 0 | 0 |
 | 5 | image_only_or_empty | 0 | 0 |
 | 6 | image_only_or_empty | 0 | 0 |
