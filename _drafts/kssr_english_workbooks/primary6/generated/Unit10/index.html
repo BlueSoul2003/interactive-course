@@ -1,0 +1,1129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 6 English Unit 10</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #1d4ed8;
+      --surface: #eff6ff;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 6 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Future City</span>
+        <h1>Unit 10</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute future city English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 82, 83, 84, 85, 86, 87, 88, 89, 90</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-082-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-082-heading">Source page 82</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p082-01"
+               data-question-type="fill_blank"
+               data-source-page="82">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 82</span>
+        <span>Fill in the blank</span>
+        <span>unit-10-p082-01</span>
+      </div>
+
+        <h3 id="unit-10-p082-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p082-01-prompt">@ Unit 10
+LUE Er
+rk Vv J
+A’ Fill in the blanks with the missing letters to spell the words described in the
+following statements.
+(1) The place where something illegal happened.
+2] A person who saw a ctime happen.
+@ something that&#x27;s against the law and not allowed. (Tore
+@ A photo taken of someone when they get arrested. Waa
+@ A situation where someone breaks or damages v
+other people’s things on purpose. STE E fr eae
+@ Asituation where someone takes things that don&#x27;t
+belong to them, often using force.
+(7] A person who helps people in court and knows L
+the law well. TI EE
+8] A situation where someone takes a person away K
+and won&#x27;t let them go. RR i Eh
+[9] Giving money or gifts to someone to make them
+do something wrong.
+[10] To secretly bring things or people into a place s
+without permission. Ter oT RTE,
+[11] A meeting in court to decide if someone is guilty T
+or innocent. at
+@® Something unknown that needs to be solved or
+figured out.
+® A place where people stay if they are found guilty J
+of a crime. ERE,
+[14] A person who solves mysteries and finds clues
+about crimes.
+® Proof that someone was somewhere else when a A
+crime happened. ==
+© EPH Publishing (M) Sdn. Bhd. 86
+{Scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p082-01-answer">Your answer</label>
+      <input id="unit-10-p082-01-answer" class="answer-input" data-answer-input="unit-10-p082-01" aria-describedby="unit-10-p082-01-hint">
+      <p id="unit-10-p082-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-083-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-083-heading">Source page 83</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p083-01"
+               data-question-type="read_and_answer"
+               data-source-page="83">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 83</span>
+        <span>Read and answer</span>
+        <span>unit-10-p083-01</span>
+      </div>
+
+        <h3 id="unit-10-p083-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p083-01-prompt">B Read the texts and choose the most suitable answer.
+| During recess, Maya noticed her friend&#x27;s bike was missing. Later, she saw
+&amp;h muddy tyre tracks leading behind the school.
+What might the muddy tyre tracks tell Maya?
+A The tracks belong to a different bike nearby.
+B Someone took the bike and rode it through the mud.
+C The bike was left outside and got muddy in the rain.
+2 While cleaning the classroom, Liam found a torn piece of paper under. the
+&amp; desk. The paper had part of a message saying, ‘Meet me...’
+Why&#x27;s the torn paper important?
+A I&#x27;s probably rubbish.
+B It shows someone wrote a note to the teacher.
+C It might be a secret message someone tried to hide.
+3 During the school play rehearsal, Ella’s costume went missing. She later found
+it hanging in the gym, but parts of it were missing.
+What does this suggest?
+A The costume was stolen to stop Ella from performing.
+B The costume was thrown away because it was no longer needed.
+C The costume had never been lost. Ella’d only imagined it.
+A Tom heard whispering near the library after school. When he looked, he saw
+two pupils passing a small envelope.
+Why might the pupils be passing the envelope secretly?
+A They were giving each other lunch money.
+B They were sharing homework answers quietly.
+C They were exchanging a private note they didn’t want others to see.
+5 Nina found a box in the lost-and-found with her name on it, but it was locked.
+Why do you think the box was locked?
+A It was locked by mistake and should be opened by anyone.
+B It&#x27;s part of a school game where pupils have to find keys.
+C It contains something personal that Nina wanted to keep safe.
+87 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="read-answer-board" data-read-and-answer-board="true">
+        <label class="answer-label" for="unit-10-p083-01-evidence">Text clue</label>
+        <input id="unit-10-p083-01-evidence" class="answer-input" data-answer-input="unit-10-p083-01-evidence">
+
+      <label class="answer-label" for="unit-10-p083-01-answer">Answer after reading</label>
+      <textarea id="unit-10-p083-01-answer" class="answer-box" data-answer-input="unit-10-p083-01" rows="5"></textarea>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-084-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-084-heading">Source page 84</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p084-01"
+               data-question-type="sequencing"
+               data-source-page="84">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 84</span>
+        <span>Sequencing</span>
+        <span>unit-10-p084-01</span>
+      </div>
+
+        <h3 id="unit-10-p084-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p084-01-prompt">(c | Read the story. Then, answer the questions that follow.
+Peterson was attending a friend&#x27;s party. As it was late, he decided to spend the
+night at a nearby hotel. As he was tucking in for the night, he remembered that he
+had forgotten to call and check in with his wife. So, he decided to do so.
+His maid answered the call. She sounded distressed and said Mrs Peterson
+had been taken to the hospital. Peterson was shocked and hurried to the hospital.
+| At the reception counter, he cried out, ‘Who stabbed my wife?’. He was allowed to
+| see his wife who was unconscious in the intensive care unit.
+&amp; Sequence the turn of events correctly in the flow map below.
+Write your answer in the space provided.
+2 Why didn&#x27;t Peterson go home after the party?
+3 Who was the victim of the crime?
+4 When the detective in charge heard Peterson&#x27;s story, he immediately arrested
+8 him. Why?
+© EPH Publishing (M) Sdn. Bhd. 88
+{Scanned with
+| = CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="sequence-board" data-sequence-board="true">
+
+            <label class="sequence-row">
+              <span>Step 1</span>
+              <textarea class="answer-box compact" data-answer-input="unit-10-p084-01-step-1" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 2</span>
+              <textarea class="answer-box compact" data-answer-input="unit-10-p084-01-step-2" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 3</span>
+              <textarea class="answer-box compact" data-answer-input="unit-10-p084-01-step-3" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 4</span>
+              <textarea class="answer-box compact" data-answer-input="unit-10-p084-01-step-4" rows="2"></textarea>
+            </label>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-085-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-085-heading">Source page 85</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p085-01"
+               data-question-type="short_answer"
+               data-source-page="85">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 85</span>
+        <span>Short answer</span>
+        <span>unit-10-p085-01</span>
+      </div>
+
+        <h3 id="unit-10-p085-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p085-01-prompt">*pyg “ups (W) Busiand Hd3 © b8
+[] ‘uoissiw Jay ysijdwooap o} 8|qp jou som uosiad sil 9
+) ‘UMOU3UN BID YJD3P JO SEIUDJSWINDIIO PUD djop suosiad siyl §
+7] inauaidaijus up som uosiad SIylL
+() &quot;0Bp s108f /£§ Inogp paysjupa uosied siyL €
+[a] “JOJDIAD UD SDM UosIad SIL €
+Fal “fiienpys ojul pjos som uosied siyL |
+dnypon uowojos @ Hoyio3 plpwy @) uosdwoyl wir
+“fusishw pb subwal Romo pessod
+8y Moy pup usym ing ‘pooljiny punoibiapun ay} paulol any fiow eH -efie
+oignd ay; jo Jno paddajs dnyuoN ‘usy] &quot;ZS8| Ul PaJOIAUOD jou ng pabipyd
+a1am s1addouppy siH ‘wopaayy siy Buluipbas a1o0jeq sivsf Z| 10) Juswypalisiw
+PUD SUOHIPUOD [DNIQ PBINPUS BY 819YM ‘UINOS UDIUBWY BU} Ul JUSLUSADISUD
+pup UOKONPQD SIY PBJUNOdAl 8Y ‘400q SIY U] ,BAD|S D SIDBA AJM],
+Jlowaw ay} JO JOYIND-0d PUD {SIUOHIOGD UDOUBWY UD SDM dNyHON UOWOJ0S
+dnyuoN uowojog
+&quot;PUNO} JBABU SDM PUD paipaddosip ays ‘UnadQ OID BY} Ul PUD|S] PUDIMOH
+0} paUING maN wou fiauinol Jay UQ &quot;DaUING MBN PUD DIY ‘DISY SSOIOD Jay
+oo} fiauinof JH &quot;pliom ayy punoio diy b UO YO J8S UDUOON Paid PUD HDYIDT
+*LEb| BUN | UO &quot;Solid SNOWD) SOW S,00LBWY JO BUO SDM LDYIDT Dijswy
+Hoy.o3 pjjewy
+_—_——
+*}SO| PaID|OaP SDM BY ‘YoIDas BSudju)
+uo Jay “fiom o Buunp ‘oisfioipyy ‘spupjybiH uosswpy) woyy peioeddosip
+ay ‘2951 Youop 92 ‘fiopung uQ &quot;sp9 pup SOS ays ul Aysnpur y|is 1IDYL ayy
+Buisipjine1 104 SNOWID) SDM OYM UDLISSBUISN] UDDUBWY UD SOM UOSAWOY | wip
+uosdwoyy wip
+‘wey jueseidel jseq joy} sjuewelns
+eu 0} Jaye] yooe ubjss ‘uey |. ‘ejdoed Bujssjw eeiy} INOqD Mojeq Sixe} 6Y} ppey | a
+{Scanned with
+i [cs] CamScanner’</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p085-01-answer">Your answer</label>
+      <textarea id="unit-10-p085-01-answer" class="answer-box" data-answer-input="unit-10-p085-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-086-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-086-heading">Source page 86</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p086-01"
+               data-question-type="grammar_transform"
+               data-source-page="86">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 86</span>
+        <span>Grammar</span>
+        <span>unit-10-p086-01</span>
+      </div>
+
+        <h3 id="unit-10-p086-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p086-01-prompt">(E) Transform the given sentences into questions by including suitable question tags.
+An example has been done for you.
+You&#x27;re a policeman.
+You&#x27;re a policeman, aren’t you? ;
+@ We shouldn&#x27;t make a sound.
+@® There&#x27;s someone in the living room.
+@® That man isn’t innocent.
+@ The authorities have found the missing boat.
+@ Mazlee can work out the puzzle.
+@ This is your cat. i
+(7) You do like mystery novels.
+8] The kidnapper has been caught.
+© You didn&#x27;t scream.
+@ Alfred reads a lot of books. :
+© EPH Publishing (M) Sdn. Bhd. 90
+{scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p086-01-answer">Your answer</label>
+      <input id="unit-10-p086-01-answer" class="answer-input" data-answer-input="unit-10-p086-01" aria-describedby="unit-10-p086-01-hint">
+      <p id="unit-10-p086-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-087-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-087-heading">Source page 87</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p087-01"
+               data-question-type="fill_blank"
+               data-source-page="87">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 87</span>
+        <span>Fill in the blank</span>
+        <span>unit-10-p087-01</span>
+      </div>
+
+        <h3 id="unit-10-p087-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p087-01-prompt">[ F Circle the correct Idioms to complete the following sentences.
+© ———Twon&#x27;ttellanyone about : @ Ifyou don&#x27;t tell Mum the truth now,
+your problem. : you&#x27;llbe later.
+A The cat is out of the bag. i A in hot water
+B My lips are sealed. H B caught off guard
+© Te man after the i: @ The thief tried to
+authorities questioned him ; by planting the evidence in his
+numerous times about the burglary. : colleague&#x27;s coat.
+A came clean : A go the extra mile
+B kept his nose clean : B cover his tracks
+© Theresa _____ in our group. : © John couldn&#x27;t solve the puzzle. He
+He or she must&#x27;ve revealed our : decided to and admit
+game strategy to our opponents. ~~: defeat.
+A fish out of water : A throw in the towel
+B rotten apple : B rain on someone&#x27;s parade
+@ Complete the sentences with the affirmative or negative of the given modals.
+1 ©@ We beable to catch the whodunnit play
+if we head out this very minute. might
+[b) The authorities —_ find important clues to
+the case if the public mess up the crime scene.
+2 (a) Pupils break the school rules.
+should
+© Policemen wear bulletproof vests when
+they go out into the field. pr
+3 (a) You bring your textbooks to school | i
+tomorrow as you&#x27;ll be attending a talk about crime prevention. have to
+1
+(b) We completeourproject before midnight. pn
+ql © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+| cs] CamScanner”</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p087-01-answer">Your answer</label>
+      <input id="unit-10-p087-01-answer" class="answer-input" data-answer-input="unit-10-p087-01" aria-describedby="unit-10-p087-01-hint">
+      <p id="unit-10-p087-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-088-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-088-heading">Source page 88</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p088-01"
+               data-question-type="word_bank"
+               data-source-page="88">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 88</span>
+        <span>Word bank</span>
+        <span>unit-10-p088-01</span>
+      </div>
+
+        <h3 id="unit-10-p088-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p088-01-prompt">H Construct five suitable sentences with the modal verb ‘mustn&#x27;t’ to describe the
+inappropriate behaviours shown in the picture. gh
+&gt; NTA
+oy Ws | TE ——— LP Tea
+EY
+XX NerSSim @ piv 9a e
+Ile — 7a [3
+EE ie OW —
+£7 BN IE ada) NO
+Ds Brrr
+I | Complete the tree map with activities pupils can and cannot do in school. (ERR
+Pupils
+Can Can&#x27;t
+EES a SH a
+J Modify the verbs in the answer bank into suitable nouns by adding the suffix
+‘“ment’. Then, fill in the blanks with the modified words.
+embarrass judge state punish argue
+I The murdererdeservedthe that was meted out to him.
+2 Maurice cringedin when he slipped on a banana peel and fell
+down flat on his face.
+3 Rashidhadtostepinandstopthe between Leo and Mika.
+4 ‘Youdecide.Itrustyour more than mine,’ said Janice to me.
+5 The manager of the jewellery shop gave the policea__ about the
+break-in.
+© EPH Publishing (M) Sdn. Bhd. q2
+{Scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-10-p088-01-words">Words you used</label>
+          <input id="unit-10-p088-01-words" class="answer-input" data-answer-input="unit-10-p088-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-10-p088-01-answer">Write your completed answer</label>
+      <textarea id="unit-10-p088-01-answer" class="answer-box" data-answer-input="unit-10-p088-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-089-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-089-heading">Source page 89</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p089-01"
+               data-question-type="matching"
+               data-source-page="89">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 89</span>
+        <span>Matching</span>
+        <span>unit-10-p089-01</span>
+      </div>
+
+        <h3 id="unit-10-p089-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p089-01-prompt">K&#x27; Match the following elements of a play script fo their correct definitions.
+i d where the pla
+0 Dialogue [a] This tells you when and where the play
+takes place. &#x27;
+(2) Stage direction (b] Lines spoken by the characters in a play.
+(c] People who play the characters in a play.
+(0) Setting (d] A person who fells the audience the story
+or gives a background to the story.
+(5) Actors (0) A set of instructions which tells the actors
+what to do.
+fi L Identify and label the bolded phrases in the play script below.
+Dialogue Stage direction — emotion Character
+Stage direction — movement Scene setting
+I ]
+|[ Act I Scene I — In the forest |
+|| Dusk has fallen. Meng Kee and his family are in the forest
+| camping. They sat around a campfire.
+|
+|| Wei Wei : (rubbing her arms) It&#x27;s chilly. There&#x27;s a breeze.
+|
+|| Father :T&#x27;ll add more wood to the fire. That&#x27;ll keep us
+warm. |
+Meng Kee: I&#x27;ll gather some more dried twigs. eo | |
+| A rustling sound can be heard.
+| |
+|| Wei Wei : (looks around nervously) What&#x27;s that sound? oe |
+Father : (gets up and walks around the perimeter of (5)
+the camp area) Just the wind, I think. |
+q3 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+j{cs) CamScanner |</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-10-p089-01-left" aria-label="Matching left item for unit-10-p089-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-10-p089-01-right" aria-label="Matching right item for unit-10-p089-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-090-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-090-heading">Source page 90</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p090-01"
+               data-question-type="writing_prompt"
+               data-source-page="90">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 10</span>
+        <span>Page 90</span>
+        <span>Writing</span>
+        <span>unit-10-p090-01</span>
+      </div>
+
+        <h3 id="unit-10-p090-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p090-01-prompt">r I)
+(mM Write an email in about 60 fo 80 words using the notes given. &amp;&amp;h
+You want fo participate in an escape room challenge. Write an email to invite your
+friend, Baxter, along. Give him details about the challenge and say why you want him
+fo come along.
+- CODE CRACKERS HQ |
+Level 2, Midtown Games &amp; Adventures 3 |
+Top-secret mission. Hidden clues. One hour fo escape.
+: sk-Ages 10+ :
+2-6 players
+sk 60 minutes
+sk Only RM25 per player !
+Book now at www.codecrackers.my or call 012-3456789.
+| baxterleong@mail.com
+| Subject | Join Me for an Epic Escape Room!
+© EPH Publishing (M) Sdn. Bhd. q4
+4
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p090-01-answer">Your answer</label>
+      <textarea id="unit-10-p090-01-answer" class="answer-box" data-answer-input="unit-10-p090-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary6-english-workbook", "level": "Primary 6", "unitId": "unit-10", "unitNumber": 10, "title": "Unit 10", "questionIds": ["unit-10-p082-01", "unit-10-p083-01", "unit-10-p084-01", "unit-10-p085-01", "unit-10-p086-01", "unit-10-p087-01", "unit-10-p088-01", "unit-10-p089-01", "unit-10-p090-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p6-en-unit10"
+          data-module-name="Primary 6 English Unit 10"
+          data-module-url="content/KSSR_Syllabus/Primary6/English/Unit10/index.html"></script>
+</body>
+</html>

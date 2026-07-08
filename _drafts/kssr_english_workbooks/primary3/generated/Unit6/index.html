@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 3 English Unit 6</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #ca8a04;
+      --surface: #fefce8;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 3 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Sunny Revision</span>
+        <h1>Unit 6</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute sunny revision English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 43, 44, 45, 46, 47, 48, 49, 50</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-043-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-043-heading">Source page 43</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p043-01"
+               data-question-type="matching"
+               data-source-page="43">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 43</span>
+        <span>Matching</span>
+        <span>unit-6-p043-01</span>
+      </div>
+
+        <h3 id="unit-6-p043-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p043-01-prompt">Unit’ 6
+Jeg Unit; 6 Bp
+1 ERY
+(A) Read the texts about three different food types. Then, assign each letter
+to the statement that best represents it.
+Dairy foods are made from milk, which comes from animals like cows
+or goats. This food group includes milk, cheese, yoghurt, butter and
+cream. People often have dairy during breakfast or as snacks. Dairy
+is important because it gives our bodies calcium to help build strong
+bones and teeth.
+Meat comes from animals such as chickens, cows and fish. Some
+[5 |] common types of meat are chicken wings, beef burgers, lamb chops
+and grilled fish. Meat is an important part of many meals around the
+world. It gives us protein, which helps our bodies grow strong and
+repair themselves.
+Legumes are a type of plant that grows in pods. Some examples
+are beans, lentils, chickpeas and peas. They&#x27;re often used in soups,
+stews and vegetarian meals. Legumes are full of fibre and protein,
+making them a healthy and filling choice for many people.
+Dairy O Meat Legumes
+I This food type is often used in meals like dhal or bean stew. ( )
+2 This food type helps build and repair the body with lots of protein. ( )
+3 This food type includes common items eaten at breakfast. ( )
+4 This food type grows in pods and is high in fibre. ( )
+5 This food type includes foods like beef, chicken and fish. ( )
+6 This food type is good for strong bones and teeth. ( )
+41 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-6-p043-01-left" aria-label="Matching left item for unit-6-p043-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-6-p043-01-right" aria-label="Matching right item for unit-6-p043-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-044-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-044-heading">Source page 44</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p044-01"
+               data-question-type="short_answer"
+               data-source-page="44">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 44</span>
+        <span>Short answer</span>
+        <span>unit-6-p044-01</span>
+      </div>
+
+        <h3 id="unit-6-p044-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p044-01-prompt">BE Find your way out of the word maze by circling the names of the correctly
+spelt food items and following that path.
+Start
+EB | ave A : :
+= S Bu FTN am
+=] = Fgl% 1 REO 5 :
+=— ER 0 ED e——— 1
+(=) | = ~~) I ma PT
+= . . 2 .
+pancake : duriyan korn { sandwic bisket
+SLT Hb : Hl =&lt; 2): =)
+Ua! : N=) &lt;7
+ty ERG ANE Ns =
+oy : =&quot; 5
+chocolate : carrots kek : nudels i ais krem
+ACT 70 ~N : -
+| SS
+LL) | | ol
+milke : tomato pumpkin : oniyon : kukumber
+: HEY 5
+Hol NE HER INN :
+302203 o&gt; : (PEN: 7
+CRY) ory | CERRY Hf
+= 00330 | (SBE | SERA
+manko i musroom eggs i greps : pees
+PSR :
+La Pa WR 7
+E&amp;I = 00 4D
+H \ H o . H
+Sle al} = LA
+papper i: chiken : cheese : coconut i banana
+[=r]
+Finish
+© EPH Publishing (M) Sdn. Bhd. 42
+scanned with |
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-6-p044-01-answer">Your answer</label>
+      <textarea id="unit-6-p044-01-answer" class="answer-box" data-answer-input="unit-6-p044-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-045-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-045-heading">Source page 45</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p045-01"
+               data-question-type="matching"
+               data-source-page="45">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 45</span>
+        <span>Matching</span>
+        <span>unit-6-p045-01</span>
+      </div>
+
+        <h3 id="unit-6-p045-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p045-01-prompt">C Match the correct sentence fragments together to describe the food items
+shown.
+: milk : * thejar.
+: carrots: ) : the fridge.
+There&#x27;s Some feeervesenneent in Teele To
+3 honey : . the plate.
+There are some EERE EE REE PE on IEEE REE ERR
+H eggs i . the basket.
+i apples : the bottle.
+0
+Ea |
+ova ——— et a Na
+Ey
+[TRY
+0 —
+Ree,
+-
+3] =
+MILK A SA CS GU iru
+YR
+«| ———mm—
+0 —~
+=
+APN,
+ey | —
+pee i Ch a
+43 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+{@ CamScanner.</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-6-p045-01-left" aria-label="Matching left item for unit-6-p045-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-6-p045-01-right" aria-label="Matching right item for unit-6-p045-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-046-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-046-heading">Source page 46</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p046-01"
+               data-question-type="short_answer"
+               data-source-page="46">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 46</span>
+        <span>Short answer</span>
+        <span>unit-6-p046-01</span>
+      </div>
+
+        <h3 id="unit-6-p046-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p046-01-prompt">Classify the following food items to the categories In the circle maps that
+best represent them. {BID
+crépe i nasikandar : burger i Hokkien mee
+potato soup : hot dog : ice cream : mushroom soup
+chips : chicken soup : waffles : nasi lemak
+banana leaf rice : pizza : lentil soup : pancake
+Local Fast
+food food
+© EPH Publishing (M) Sdn. Bhd. 44
+{Scanned with |
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-6-p046-01-answer">Your answer</label>
+      <textarea id="unit-6-p046-01-answer" class="answer-box" data-answer-input="unit-6-p046-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-047-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-047-heading">Source page 47</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p047-01"
+               data-question-type="short_answer"
+               data-source-page="47">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 47</span>
+        <span>Short answer</span>
+        <span>unit-6-p047-01</span>
+      </div>
+
+        <h3 id="unit-6-p047-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p047-01-prompt">&quot;Pug &quot;UPS (W) Bulys|iand HA3 © st
+: Jubu
+ISD] JupINDiS8) — ay} Jb Jauuip [ngepuom o poy fisyl ZL
+&quot;JUDIND§Sal Poo} §spy D Jp sdiyp swWOS pup ——————__DaP] 9
+‘DWBUIO BY} 40 sw Bulyoyom usym ———————— JDO 0} BNO| OM §
+‘Buluiow sy} IspppaIq Io) — 8wos sh appw iby juny #
+Jspoj Aw uo wp ———————— Joems awos ppaids| ©
+Ye of — awos sfiayuow ay} annb ap 2
+‘ups oy ‘fiids yum pny Roinfo sp ———————————— aul |
+&quot;J UOYO8S WoJj SIemsub Jnofi yum seousjues Bumojjoy eys ejejdwo) | 4
+- + o|ddp 9s99Yd Z
+— ul100 auld 9
+ERE Te a ee 196inq dod S
+-— filleq pos ll
+= nu und €
+= poo} MDS [4
+EE Eek) pad |
+*SpIOM
+punodwoo |nybujubew ULI) Of SPIOM Joos Jo siipd Joeu0o ey; euiquo) [3
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-6-p047-01-answer">Your answer</label>
+      <textarea id="unit-6-p047-01-answer" class="answer-box" data-answer-input="unit-6-p047-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-048-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-048-heading">Source page 48</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p048-01"
+               data-question-type="short_answer"
+               data-source-page="48">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 48</span>
+        <span>Short answer</span>
+        <span>unit-6-p048-01</span>
+      </div>
+
+        <h3 id="unit-6-p048-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p048-01-prompt">{ G | Answer the following questions using ‘Yes, there is/are.’ or ‘No, there isn’t
+/aren’t.’ according to the given grids and coordinates.
+ol Ld i CA TE
+cr STK
+o Og® (&amp; 9%
+° IA
+® (B (CJ
+I Are there any peppers?
+2 Is there any cheese?
+3 Is there any milk? (B; 1]
+4 Are there any potatoes? (B;3]
+5 Is there any cabbage?
+6 Are there any doughnuts? (A, 1]
+7 Is there any bread? (B;2 ]
+8 Are there any walnuts?
+9 Is there any ginger?
+© EPH Publishing (M) Sdn. Bhd. 46
+{Scanned with |
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-6-p048-01-answer">Your answer</label>
+      <textarea id="unit-6-p048-01-answer" class="answer-box" data-answer-input="unit-6-p048-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-049-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-049-heading">Source page 49</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p049-01"
+               data-question-type="matching"
+               data-source-page="49">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 49</span>
+        <span>Matching</span>
+        <span>unit-6-p049-01</span>
+      </div>
+
+        <h3 id="unit-6-p049-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p049-01-prompt">&gt;
+(H| Read the texts about three different types of street food. Then, assign each
+letter to the statement that best represents it.
+Cheeseburger.
+Cheeseburgers are yummy sandwiches that come from America.
+(23) Inside, there&#x27;s a cooked beef patty, which is like a flat, round piece
+of meat. And of course, there&#x27;s cheese! It&#x27;s often melted on top of
+the patty. You can add other things too, like lettuce, tomato, onions,
+and sauces like ketchup or mustard.
+Crepes are like very thin pancakes, and they come from France.
+[8 |] They&#x27;re made with flour, eggs, milk, and butter, and they&#x27;re cooked
+on a flat pan. You can fill them with sweet things, like chocolate, fruit
+or jam. Or, you can put savoury things in them, like cheese, ham or
+vegetables. They are delicious for breakfast, lunch or even dessert!
+Souvlaki is a tasty Greek dish. I&#x27;s made of small pieces of meat,
+like pork, that are grilled on a stick called a skewer. Sometimes they
+add vegetables too! You can eat it right off the skewer, or wrapped
+in a soft bread called pita. They often put lemon, sauces, tomatoes,
+onions and fried potatoes with it.
+Cheeseburger BE) Crepes Souvlaki
+| This street food is made of grilled pieces of meat. ( )
+2 This street food is a delicious treat you can eat any time of day. ( )
+3 This street food is a type of sandwich that comes from America. ( )
+4 This street food is a popular dish from Greece. ( )
+5 This street food is like a very thin pancake. ( )
+6 This street food usually contains a cooked beef patty. ( )
+7 This street food is often served on a stick. ’ ( )
+8 This street food can be filled with chocolate or fruit. ( )
+9 This street food often has melted cheese inside. ( )
+47 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-6-p049-01-left" aria-label="Matching left item for unit-6-p049-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-6-p049-01-right" aria-label="Matching right item for unit-6-p049-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-6-page-050-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-6-page-050-heading">Source page 50</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-6-p050-01"
+               data-question-type="writing_prompt"
+               data-source-page="50">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 6</span>
+        <span>Page 50</span>
+        <span>Writing</span>
+        <span>unit-6-p050-01</span>
+      </div>
+
+        <h3 id="unit-6-p050-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-6-p050-01-prompt">Mm Rewrite the following sentences by incorporating the missing commas and
+the conjunction ‘and’ in the correct places.
+| Julia&#x27;s favourite dishes are sushi pancakes biryani.
+2 Nasi lemak banana leaf rice laksa are Malaysian traditional food.
+3 There are some basil leaves lettuces olives tomatoes in that salad.
+4 Harold&#x27;s favourite drinks are lemonade watermelon juice coffee.
+5 Beef bacon chicken ham are examples of meat products.
+[&amp;7) Write an engaging paragraph about your favourite local food. You may use
+the questions from the table to help you write. &amp;&amp;
+% What is the name of the food and what is it famous for?
+&quot;&lt; What are the ingredients that can be found in the food?
++ What are the ingredients that cannot be found in the food?
+» How does the food look and taste?
+© EPH Publishing (M) Sdn. Bhd. 48
+4
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-6-p050-01-answer">Your answer</label>
+      <textarea id="unit-6-p050-01-answer" class="answer-box" data-answer-input="unit-6-p050-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary3-english-workbook", "level": "Primary 3", "unitId": "unit-6", "unitNumber": 6, "title": "Unit 6", "questionIds": ["unit-6-p043-01", "unit-6-p044-01", "unit-6-p045-01", "unit-6-p046-01", "unit-6-p047-01", "unit-6-p048-01", "unit-6-p049-01", "unit-6-p050-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p3-en-unit6"
+          data-module-name="Primary 3 English Unit 6"
+          data-module-url="content/KSSR_Syllabus/Primary3/English/Unit6/index.html"></script>
+</body>
+</html>

@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 6 English Unit 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #1d4ed8;
+      --surface: #eff6ff;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 6 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Future City</span>
+        <h1>Unit 2</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute future city English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 10, 11, 12, 13, 14, 15, 16, 17, 18</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-010-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-010-heading">Source page 10</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p010-01"
+               data-question-type="fill_blank"
+               data-source-page="10">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 10</span>
+        <span>Fill in the blank</span>
+        <span>unit-2-p010-01</span>
+      </div>
+
+        <h3 id="unit-2-p010-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p010-01-prompt">@ Unity 2
+ADRS: Unity 2 Po
+ns ©) 5
+(A Choose the most suitable answer to fill In the blanks.
+School Life in the Past
+Decades ago, going to school in Malaysia was a very different experience.
+Classrooms were simple, with wooden desks and @) _______ blackboards.
+Pupils often sat on benches and @ their own books and stationery.
+There were no air conditioners or projectors, just fans and open windows.
+Teachers ® — mainly chalk to write, and lessons [4] mostly
+focused on reading, writing and arithmetic.
+During recess, children would run outside to play games like batu seremban
+or (5) __ snacks from the canteen. It was common to hear the school bell
+ringing loudly, and prefects [6] pupils back fo class in neat lines.
+(7) people say school life back then was (8) with fewer
+distractions and a strong sense of discipline. One former pupil shared, ‘We were
+afraid of our teachers, but we also respected them [ o JE Even today,
+many older Malaysians ® ___ fond memories of their early school days.
+I A dusty B dust C dusting
+2 A bring B brought C bringing
+3 A use B uses C used
+4 Ais B was C were
+5 A buys B bought C buy
+6 A guiding B guided C guide
+7 A Much B Many C Little
+8 A strict B stricter C strictly
+9 A barely B minimally C deeply
+10 A hold B holding C holds (
+© EPH Publishing (M) Sdn. Bhd. 14 |
+{scanned with
+i = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-2-p010-01-answer">Your answer</label>
+      <input id="unit-2-p010-01-answer" class="answer-input" data-answer-input="unit-2-p010-01" aria-describedby="unit-2-p010-01-hint">
+      <p id="unit-2-p010-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-011-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-011-heading">Source page 11</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p011-01"
+               data-question-type="fill_blank"
+               data-source-page="11">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 11</span>
+        <span>Fill in the blank</span>
+        <span>unit-2-p011-01</span>
+      </div>
+
+        <h3 id="unit-2-p011-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p011-01-prompt">(B) Circle the correct suffix to form nouns describing occupations and rewrite their
+full forms. Then, match the nouns to the pictures that best depict them.
+0 Per (aJ=&quot; Z |
+Cl I ID SE
+iooor Wh
+12) {oer 0, S0=
+ior A000
+: ve
+© ioer
+Tb heb Los
+iooor
+© Cer © fi
+vir OF 2K
+© Poer © 2&#x27;€;
+nf 5
+© Doerr 0 \
+ior
+[C | Complete the sentences with your answers from Section B.
+I Haroldbecamea___ for the Daily News last October.
+2 The stood in front of the choir and waved his stick in rhythm to
+the music.
+3 Myclass____ has taught in my school for ten years.
+4 Theaccomplished has had her works of art displayed in many art
+galleries around the world.
+5 [I&#x27;m thrilled that my favourite ___ has won an award for the film he
+was in.
+6 The meticulously ensured that the actors delivered their lines
+with precision.
+15 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-2-p011-01-answer">Your answer</label>
+      <input id="unit-2-p011-01-answer" class="answer-input" data-answer-input="unit-2-p011-01" aria-describedby="unit-2-p011-01-hint">
+      <p id="unit-2-p011-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-012-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-012-heading">Source page 12</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p012-01"
+               data-question-type="writing_prompt"
+               data-source-page="12">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 12</span>
+        <span>Writing</span>
+        <span>unit-2-p012-01</span>
+      </div>
+
+        <h3 id="unit-2-p012-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p012-01-prompt">r Be |
+(D) Read the diary entry. Then, answer the following questions.
+© 11m August 1792 3
+* Dear Diary, i
+; It&#x27;s the seventh day we&#x27;ve been stranded on this uninhabited island. We were i
+H shocked at the tum of events. However, we knew that we had to gather our wits :
+¢ tosurvive. i
+i We managed to row back to the shipwreck and retrieve supplies of food, tools :
+: and clothes. Papa and Simon managed fo build a shelter beneath a tree with wood
+H from the wreck. At night, we made a fire to keep ourselves warm and to fend off =
+: unwanted guests that tried to make off with our food supply. Rufus and I spent H
+E the morning trying to catch fish while Mama and Anna gathered fruits and nuts in =
+¢ the forest. Thankfully, we found a stream nearby. Mama also started a vegetable :
+: patch in a clearing, using the seeds from the food we had brought. H
+: Oh, how I long to be back in our brick house in the countryside. So far, we&#x27;ve i
+: yet to spot any ships sailing nearby. When will help come, I wonder? E
+Put a tick (v&#x27;) on the correct answer.
+1 Put a tick (v) on the statements that are true.
+[a] The writer and his family were involved in a shipwreck. 1)
+(b] The writer&#x27;s father and brother were able to build a tree house. LC]
+@® The family had run out of food. ia
+[0] The family found a vegetable patch near a clearing in the forest. |]
+[e] The writer and his family kept a lookout for ships sailing nearby. |)
+2 Theidiom gatherourwitsmeans
+EE —) CT
+to calculate the risks before doing something CO
+to make an effort to become calm and think more clearly )
+© EPH Publishing (M) Sdn. Bhd. 16
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-2-p012-01-answer">Your answer</label>
+      <textarea id="unit-2-p012-01-answer" class="answer-box" data-answer-input="unit-2-p012-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-013-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-013-heading">Source page 13</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p013-01"
+               data-question-type="short_answer"
+               data-source-page="13">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 13</span>
+        <span>Short answer</span>
+        <span>unit-2-p013-01</span>
+      </div>
+
+        <h3 id="unit-2-p013-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p013-01-prompt">&quot;Pug &quot;UPS (W) BusINd HAF @ Ll
+pupis|
+ey} Uo pepunls
+Buieg Hed fijlwng
+SIH pup JejLM
+oui MoH
+‘mojeq dow e|qqnq ayy ul pupsi a
+ay} uo papupyys Bulag iia} eapy fiow fijiwoy sy pup sam ayy joy) sbuleay nog isi 2
+¢fiqupau Bubs a1em yoy; sdiys =
+JO uoKUBHD BY} JODIHD Of Op PIN0D fllWD) SIY PUD JBM BUL Yuly) nofi op Joy 9
+¢fiddns =
+POO} BU} UHM HO SXDW 0} Pau Joy} sjsenb pajupmun ayy 81am yuiyy nofi op oy, §
+“Jybiu Jo aul 0 Buipjing Jo sesodind omy [SR]
+AEE ee en a
+&amp;finwoy sy pup ejum ayy sapisaq
+puD|S| BY} UO 8sje BuO Ou SDM Iau} Ibu} sn iia} fizue fioip ayy uj piom wim €
+‘Paplaoid 8opds ey uy Jomsup inofi lM
+{Scanned with |
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-2-p013-01-answer">Your answer</label>
+      <textarea id="unit-2-p013-01-answer" class="answer-box" data-answer-input="unit-2-p013-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-014-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-014-heading">Source page 14</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p014-01"
+               data-question-type="word_bank"
+               data-source-page="14">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 14</span>
+        <span>Word bank</span>
+        <span>unit-2-p014-01</span>
+      </div>
+
+        <h3 id="unit-2-p014-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p014-01-prompt">| {— «
+(€) Construct meaningful sentences with ‘used to’ or ‘didn’t use fo’ and a suitable verb
+~ from the answer bank to describe the pictures. a
+|
+© 2
+NZ
+SE _
+(2) ®)
+fl 5)
+=| E comme ai i ppg SE ey ei)
+a
+° ®
+LE
+(4] %
+2
+SIAR
+EA
+\
+° SEY
+( pS: %...]
+rm =
+© EPH Publishing (M) Sdn. Bhd. 18
+{Scanned with |
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-2-p014-01-words">Words you used</label>
+          <input id="unit-2-p014-01-words" class="answer-input" data-answer-input="unit-2-p014-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-2-p014-01-answer">Write your completed answer</label>
+      <textarea id="unit-2-p014-01-answer" class="answer-box" data-answer-input="unit-2-p014-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-015-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-015-heading">Source page 15</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p015-01"
+               data-question-type="word_bank"
+               data-source-page="15">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 15</span>
+        <span>Word bank</span>
+        <span>unit-2-p015-01</span>
+      </div>
+
+        <h3 id="unit-2-p015-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p015-01-prompt">[ F) Complete the sentences with ‘used to’ or ‘didn&#x27;t use to’ followed by a suitable verb
+from the answer bank.
+believe ask have like
+fly cry enjoy be
+[1] Mybrother ___ ~~ a lot when he was younger. He was
+nicknamed ‘crybaby’ then.
+2] Whenlwasapupil, I lots of homework to complete
+every day.
+© Marissa our teachers lofs of questions. She doesn&#x27;t
+anymore.
+(4) Thomas late forschool. I wonder why he’s always late
+these days. ]
+(5) MyfamilyandI to Singapore every December for our
+annual holiday. Now, we travel within Malaysia instead.
+® Whenlwaslittle,]___ in Santa Claus. Obviously, I don’t
+anymore.
+@ Damian dogs. Now, he’s got four of them as pets.
+(8) Mysister____ ~~ swimming, but she does now.
+(Ga | Construct suitable questions with ‘use to’ to match the answers provided. Fy
+I, Question: Did .~— ~~ prdoaliogpsadii “salon 2
+Answer : No, he didn’t. Alex was never a prefect at school.
+2.«Questiong—-._ &gt; SA
+Answer : Yes, Anna lived with her aunt in Australia while she was studying there.
+Ce Ty RE S.J] Th Co fs hobs SS SG SS |
+Answer : Yes, Kim Chong used to play the guitar.
+O% Question: ——»— &quot;SB lam tind ee a oe
+Answer : No, my sister didn’t use to have long hair.
+19 © EPH Publishing (M) Sdn. Bhd.
+{scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-2-p015-01-words">Words you used</label>
+          <input id="unit-2-p015-01-words" class="answer-input" data-answer-input="unit-2-p015-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-2-p015-01-answer">Write your completed answer</label>
+      <textarea id="unit-2-p015-01-answer" class="answer-box" data-answer-input="unit-2-p015-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-016-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-016-heading">Source page 16</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p016-01"
+               data-question-type="short_answer"
+               data-source-page="16">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 16</span>
+        <span>Short answer</span>
+        <span>unit-2-p016-01</span>
+      </div>
+
+        <h3 id="unit-2-p016-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p016-01-prompt">{H) Construct meaningful sentences with ‘used to/didn’t use to’ and ‘but’ using the
+phrases given. An example has been done for you. gh
+THEN NOW
+A
+Pa ive in Kuala
+live in Kampar Lumpur Raju used to live in Kampar, but now he
+lives in Kuala Lumpur.
+Gerhwdlkg walk to school
+school
+EE
+ES pr eh
+nil ee ©
+didn’t know how know how to use
+to use a computer it
+didn’t like likes collecting
+collecting stamps stamps
+Fh” a (©
+home
+mE Es
+© EPH Publishing (M) Sdn. Bhd. 20 .
+{Scanned with |
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-2-p016-01-answer">Your answer</label>
+      <textarea id="unit-2-p016-01-answer" class="answer-box" data-answer-input="unit-2-p016-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-017-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-017-heading">Source page 17</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p017-01"
+               data-question-type="matching"
+               data-source-page="17">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 17</span>
+        <span>Matching</span>
+        <span>unit-2-p017-01</span>
+      </div>
+
+        <h3 id="unit-2-p017-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p017-01-prompt">[ [0] Match the formal statements to their informal equivalents.
+@ ! am pleased to inform you that you © 1 can&#x27;t make it fo the
+performed well in your English quiz. party.
+2] Please RSVP at your earliest © Hang in there!
+convenience.
+3] We wound be delighted if you could ® You got an A! Great
+visit us at your convenience. job!
+[4] Kindly take this into careful (d] Call me anytime you
+consideration. need help.
+© I&#x27;m afraid I will not be able to attend ; :
+{Gis bhibdey pal; © Think about it.
+@ 1 would argue against his point of [1] Let me know if you&#x27;re
+view. coming.
+@ Please do not hesitate fo contact me © 1 don&#x27;t see it the way
+should you require assistance. he does.
+(8) May you endure these challenges [h] Come visit us when
+with strength and perseverance. you can!
+(3) Match the interjections to their correct meanings.
+a] For fear or concern which isn’t serious
+(b) To express alarm or horror
+(c] An expression of appreciation (especially for food)
+(d] To express congratulations or happiness
+[@ vim (0) To show that one is impressed or amazed
+(1] To express disgust
+9] A reaction to something cute or sweet
+(h] To express relief
+21 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-2-p017-01-left" aria-label="Matching left item for unit-2-p017-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-2-p017-01-right" aria-label="Matching right item for unit-2-p017-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-2-page-018-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-2-page-018-heading">Source page 18</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-2-p018-01"
+               data-question-type="writing_prompt"
+               data-source-page="18">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 2</span>
+        <span>Page 18</span>
+        <span>Writing</span>
+        <span>unit-2-p018-01</span>
+      </div>
+
+        <h3 id="unit-2-p018-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-2-p018-01-prompt">IF -
+(K&#x27; You recently went on a school trip to Farm in the City. Write a diary entry in about
+60 to 80 words about your day out based on the poster given. &amp;5
+Farm in the City, Seri Kembangan, Selangor |
+An interactive petting zoo and tropical farm |
+* Feed friendly rabbits, raccoons and birds ;
+sx Walk through lush gardens and animal enclosures YT
+sk Learn about Malaysian farm animals and wildlife vo I vo
+sk Fun and safe environment for kids of all ages =, 3 Ri
+sk Guided tours available every hour Wr Ba Pes “Z
+= Group bookings and school trips are welcome hod &amp; Lp Ch
+* Open daily from 9.00 a.m. to 6.00 p.m. By 50 NY |
+A ——————————— ED RD
+© EPH Publishing (M) Sdn. Bhd. 22
+{Scanned with |
+j{cs) CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-2-p018-01-answer">Your answer</label>
+      <textarea id="unit-2-p018-01-answer" class="answer-box" data-answer-input="unit-2-p018-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary6-english-workbook", "level": "Primary 6", "unitId": "unit-2", "unitNumber": 2, "title": "Unit 2", "questionIds": ["unit-2-p010-01", "unit-2-p011-01", "unit-2-p012-01", "unit-2-p013-01", "unit-2-p014-01", "unit-2-p015-01", "unit-2-p016-01", "unit-2-p017-01", "unit-2-p018-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p6-en-unit2"
+          data-module-name="Primary 6 English Unit 2"
+          data-module-url="content/KSSR_Syllabus/Primary6/English/Unit2/index.html"></script>
+</body>
+</html>

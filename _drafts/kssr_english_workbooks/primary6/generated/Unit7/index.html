@@ -1,0 +1,1127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 6 English Unit 7</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #4338ca;
+      --surface: #eef2ff;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 6 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Exam Launchpad</span>
+        <h1>Unit 7</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute exam launchpad English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 55, 56, 57, 58, 59, 60, 61, 62, 63</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-055-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-055-heading">Source page 55</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p055-01"
+               data-question-type="fill_blank"
+               data-source-page="55">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 55</span>
+        <span>Fill in the blank</span>
+        <span>unit-7-p055-01</span>
+      </div>
+
+        <h3 id="unit-7-p055-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p055-01-prompt">» a ee Te ——
+2 Unit; 7
+ue Unity
+ud »
+A Fillin the blanks with the missing letters to spell the music genres described in the
+following statements.
+@ Loud music with strong drums and electric guitars. EE a
+(2) Music that&#x27;s catchy, easy to sing along to, and
+often heard on the radio.
+(3) Music with a strong beat and rhyming words that H -h
+often talks about real life or tells a story. -
+[4] Smooth, bouncy music with instruments like J
+saxophones and trumpets. i Aa
+5] Instrumental music played by orchestras with c
+violins, flutes and pianos. a. T=
+[6] Music that features guitars, banjos and singing c
+about nature, family or home. i ASR | +
+| Q Relaxed, happy music from Jamaica with a steady
+| beat.
+(8) Fast, energetic dance music made using computers
+and beats.
+(9) Danceable music from the 1970s with funky
+basslines and shiny outfits.
+(10) A heavy, loud form of rock music with fast drums,
+strong guitar sounds and intense energy.
+[11] Upbeat and rhythmic music from Latin America, s
+often used for dancing. E ENE
+® Dramatic singing that tells a story, performed
+on stage. Singers use powerful voices and wear | O ___
+costumes.
+59 ©EPH Publishing (M) Sdn. Bhd.
+{scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-7-p055-01-answer">Your answer</label>
+      <input id="unit-7-p055-01-answer" class="answer-input" data-answer-input="unit-7-p055-01" aria-describedby="unit-7-p055-01-hint">
+      <p id="unit-7-p055-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-056-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-056-heading">Source page 56</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p056-01"
+               data-question-type="short_answer"
+               data-source-page="56">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 56</span>
+        <span>Short answer</span>
+        <span>unit-7-p056-01</span>
+      </div>
+
+        <h3 id="unit-7-p056-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p056-01-prompt">(B) Complete the brace map with the correct categories and examples of instruments.
+Use the pictures and words to help you. (ERT
+: : Figen
+Lo : : : Ci on IV
+ne J [ : dD : : Woodwind : 4
+Se |
+v : i : HE = 4
+Percussion : ; p) : Keyboard ;
+: : { PY ( :
+: ove i
+String ©. ut bo sonodgorse
+©: cecum vinemisten |
+0 { Timpani
+fin FRR
+7285/0 ID
+S05 (7)
+= 0 &gt; Brass SEP
+Musical ] 8]
+Instruments i
+(&gt;) { Clarinet
+(5) { Organ
+© EPH Publishing (M) Sdn. Bhd. 60
+{Scanned with
+i = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-7-p056-01-answer">Your answer</label>
+      <textarea id="unit-7-p056-01-answer" class="answer-box" data-answer-input="unit-7-p056-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-057-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-057-heading">Source page 57</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p057-01"
+               data-question-type="fill_blank"
+               data-source-page="57">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 57</span>
+        <span>Fill in the blank</span>
+        <span>unit-7-p057-01</span>
+      </div>
+
+        <h3 id="unit-7-p057-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p057-01-prompt">4 (3) Match the music-related idioms to their correct meanings.
+[1] Blow your own (a) Both parties in a situation are equally
+trumpet responsible for it.
+i brok
+2 Round fia. a broken (b] To boast about one’s own achievements.
+record
+. thi ’S ni
+(3) Play it by ear (c] Something that&#x27;s nice or pleasant to
+hear.
+© Music io my ears ® To keep saying the same thing
+repeatedly.
+(5) Takes two fo fango [0] To gonfrogt unpleasant consequences of
+one’s own actions.
+| (6) Face the music (1) Doing something without special
+preparation.
+Do) Complete the sentences below with the correct idioms from Section C.
+(1) Honestly, you&#x27;rebeginningto___ You&#x27;ve been
+telling the same story for over two hours. ’
+2] Ruth : You&#x27;re always trying to find fault with me.
+Kimmy: You&#x27;re one to talk. People sayitalways
+— You&#x27;re partly to blame too.
+[3] The pupil who broke the expensive flute hadto —
+— when he was found out.
+(4) Radhi : Should we go for a picnic tomorrow?
+Jun Li: Let&#x27;s see what the weatherislikeand — |
+(5) Hearing the news that I&#x27;ve been accepted fo a prestigious university in London
+WQS oe edi canis sb
+(6) Everyone&#x27;s fedupwithRockyfor ~~~ after
+winning the school karaoke competition.
+[J] © EPH Publishing (M) Sdn. Bhd.
+{scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-7-p057-01-answer">Your answer</label>
+      <input id="unit-7-p057-01-answer" class="answer-input" data-answer-input="unit-7-p057-01" aria-describedby="unit-7-p057-01-hint">
+      <p id="unit-7-p057-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-058-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-058-heading">Source page 58</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p058-01"
+               data-question-type="matching"
+               data-source-page="58">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 58</span>
+        <span>Matching</span>
+        <span>unit-7-p058-01</span>
+      </div>
+
+        <h3 id="unit-7-p058-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p058-01-prompt">(E) Underline the correct answers to complete the following sentences.
+I Meg (will / is going to) be 13 years old next year.
+2 The orchestra has started playing. The show (will / is going to) start soon.
+3 We (won&#x27;t/ aren&#x27;t going to) watch Maroon 5 live at Bintang Stadium tomorrow.
+- 4 My baby sister can’t sleep. I (will / am going to) sing a lullaby to help her do so.
+5 Listen! I think you (will / are going to) love this song.
+6 The ballet performance (will / is going to) end at 10.00 p.m.
+7 IP&#x27;s already 7.45 p.m. Gareth (will / isn’t going to) arrive on time for the concert.
+8 My cousin (will / is going to) enrol at the prestigious Juilliard School in New York
+next year.
+( F Identify and match the following sentences to their functions.
+[1] Carina’s leading by 3 points in the
+contest. I think she&#x27;ll win this time. © Promise
+(2] I&#x27;ll book the ticket right now before
+they&#x27;re all sold out. © Prediction based
+Y on personal
+® I&#x27;m going to wear my lucky polka-dot opinions
+dress for the talent show.
+(4) Revin will help you sell the tickets for (c] Expressing
+our musical. future plans
+5] The concert is going to start.
+@® spontaneous
+decision
+© Eliot and Miles are going to start a
+band next year.
+©@ Expressing
+@ 1 think Rob will make it to the finals of something that is
+the America’s Got Talent show. about to happen
+© EPH Publishing (M) Sdn. Bhd. 62
+{scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-7-p058-01-left" aria-label="Matching left item for unit-7-p058-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-7-p058-01-right" aria-label="Matching right item for unit-7-p058-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-059-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-059-heading">Source page 59</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p059-01"
+               data-question-type="picture_based"
+               data-source-page="59">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 59</span>
+        <span>Picture based</span>
+        <span>unit-7-p059-01</span>
+      </div>
+
+        <h3 id="unit-7-p059-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p059-01-prompt">) ) Construct meaningful sentences to describe the given pictures using the future
+form ‘will’ or ‘going to’ and the helping words provided. gag
+: 7)
+7 0 &gt;
+foci 0, ’ AA
+| 5 i
+— camping — friends — — future — live —
+[ H) Rewrite the following sentences in the simple present to describe future events.
+@ The concert is ending at 10.00 p.m.
+® Hurry! The train left the station in ten minutes.
+3] The year-end sales are beginning next month.
+@ The tickets for the concert didn&#x27;t go on sale till August.
+5) King Charles is visiting Kenya tomorrow.
+(6) We expected to see you on Monday at the office.
+(7) Sylvia&#x27;s piano lesson was postponed to next Monday.
+63 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="picture-response" data-picture-response="true">
+        <p>Look closely at the source picture in the workbook, then write your answer here.</p>
+
+      <label class="answer-label" for="unit-7-p059-01-answer">Picture answer</label>
+      <textarea id="unit-7-p059-01-answer" class="answer-box" data-answer-input="unit-7-p059-01" rows="5"></textarea>
+
+        <label class="answer-label" for="unit-7-p059-01-picture-note">Picture note</label>
+        <input id="unit-7-p059-01-picture-note" class="answer-input" data-answer-input="unit-7-p059-01-picture-note">
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-060-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-060-heading">Source page 60</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p060-01"
+               data-question-type="fill_blank"
+               data-source-page="60">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 60</span>
+        <span>Fill in the blank</span>
+        <span>unit-7-p060-01</span>
+      </div>
+
+        <h3 id="unit-7-p060-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p060-01-prompt">{ 1) Complete the bridge map by adding the prefix ‘im-’ or ‘dis-’ to the given words.
+Words perfect ~~ agree A. Mature A please A
+Relating (1) as (2) as (3) as (4) as
+Factor
+belief \ proper /\ like /\. possible
+(5) as 0 as (7) as (5)
+J Fill in the blanks with your answers from Section I fo match the meaning of the
+highlighted sentences.
+@ [| wed better not do anything to make him angry.
+Let&#x27;s notdoanythingto_____ him.
+@ | 1don&#x27;t think BTS is the best K-pop group on this planet. Sass.
+I that BTS is the best K-pop group on this planet.
+© ( Jazz isn&#x27;t my favourite kind of music. Fem
+| lol [17 2
+(4) That&#x27;s such an inappropriate suggestion. as
+I can&#x27;t believe youmadesuchan suggestion.
+5] You won&#x27;t find any front row seats if you&#x27;re late. adorn.
+Ithbe to find any front row seats if you&#x27;re late.
+© | Karen couldn&#x27;t believe her eyes when she saw Taylor Swift while out
+shopping. : Rd é a :
+Karen stared in ______ when she spotted Taylor Swift while out
+shopping.
+© EPH Publishing (M) Sdn. Bhd. 64
+{scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-7-p060-01-answer">Your answer</label>
+      <input id="unit-7-p060-01-answer" class="answer-input" data-answer-input="unit-7-p060-01" aria-describedby="unit-7-p060-01-hint">
+      <p id="unit-7-p060-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-061-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-061-heading">Source page 61</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p061-01"
+               data-question-type="short_answer"
+               data-source-page="61">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 61</span>
+        <span>Short answer</span>
+        <span>unit-7-p061-01</span>
+      </div>
+
+        <h3 id="unit-7-p061-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p061-01-prompt">K Read the passage. Then, complete the graphic organiser with correct information
+from the text.
+Astro is a four-member K-pop boy group. They were formed by Fantagio
+Entertainment and debuted on 23&quot; February 2016 with ‘Hide and Seek’ from their
+album, ‘Spring Up’. They consist of JinJin, MJ, Eunwoo and Sanha with the oldest
+member being MJ and youngest, Sanha. The name Astro, which means ‘star’ in
+Spanish, symbolises the members’ aspiration to become rising stars. Fans of Astro
+call themselves ‘Aroha’. The most popular member of the group is Cha Eunwoo, |
+due to his stunning looks and his roles in several popular Korean dramas. While
+all of them are South Koreans, Cha Eunwoo and Jinjin are known to be good at
+speaking English.
+Reason behind the
+chosen group name:
+Word origin: (2) Total members:
+Astro members who
+can speak English well: Formed by:
+0 Astro 0
+Astro fans refer to A A
+th | First single:
+eMzcivee as: Most popular member: 6
+65 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-7-p061-01-answer">Your answer</label>
+      <textarea id="unit-7-p061-01-answer" class="answer-box" data-answer-input="unit-7-p061-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-062-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-062-heading">Source page 62</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p062-01"
+               data-question-type="matching"
+               data-source-page="62">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 62</span>
+        <span>Matching</span>
+        <span>unit-7-p062-01</span>
+      </div>
+
+        <h3 id="unit-7-p062-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p062-01-prompt">L | Read the texts about three children’s interests. Then, assign each letter to the
+statements that best represent them.
+|
+I like watching musicals. My favourite is The Phantom of the Opera. I had the
+pleasure of watching it in Sydney. I was very lucky my aunt took me to the
+musical as a birthday treat, as tickets fo musicals are usually very expensive.
+I love music. I listen to rock, alternative and pop. I like the band, Coldplay, as
+their music is a mix of these genres. My favourite song is Coloratura. I have all
+their albums. One day, I hope to be able to see them live in concert.
+My favourite subject in school is music. I love it so much. I take piano and violin
+lessons as well. In my free time, I compose songs. One day, I hope to be a
+great composer like Beethoven and Mozart.
+O Lucia © Rupert @® Priya
+I This child hopes to attend his/her favourite band’s concert in future. (]
+2 This child loves classical music. (]
+3 This child has been to Australia. (]
+4 This child likes different genres of music. (]
+5 This child can play two musical instruments. (]
+6 This child is a fan of plays which has music and songs in them. ()
+7 This child&#x27;s aunt gave him/her a treat for his/her birthday. ()
+8 This child enjoys music from the band, Coldplay. re)
+9 This child admires composers from the Classical period. ()
+© EPH Publishing (M) Sdn. Bhd. 66
+{Scanned with |
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-7-p062-01-left" aria-label="Matching left item for unit-7-p062-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-7-p062-01-right" aria-label="Matching right item for unit-7-p062-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-7-page-063-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-7-page-063-heading">Source page 63</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-7-p063-01"
+               data-question-type="matching"
+               data-source-page="63">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 7</span>
+        <span>Page 63</span>
+        <span>Matching</span>
+        <span>unit-7-p063-01</span>
+      </div>
+
+        <h3 id="unit-7-p063-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-7-p063-01-prompt">M&#x27; Read the passage and choose the most suitable answer to the questions below.
+Songs in Films
+Ever watched a film and felt chills when a powerful song started playing? That&#x27;s
+because music helps fell the story. A fast, exciting song can make a chase scene feel
+even more thrilling, while a sad melody can make a goodbye scene more emotional.
+Filmmakers carefully choose songs to match what&#x27;s happening on screen.
+Sometimes, a song becomes famous because of a film that people remember just
+by hearing the tune. .
+For example, the song ‘Let It Go’ from Frozen became a worldwide hit. It helps
+show how Elsa feel: free, strong but afraid at the same time. In action films, music
+often gets louder and faster to build tension before something big happens. Songs
+in films are more than just background sound; they&#x27;re part of the story.
+I Why do filmmakers use music in films?
+A To make the film longer
+B To make scenes more exciting or emotional
+C To help actors remember their lines
+2 Which scene would most likely use slow, gentle music?
+&amp; A Asad goodbye B A funny food fight C A robot battle
+3 How does the song ‘Let It Go’ help tell Elsa’s story?
+A It shows that Elsa was lazy and tired.
+B It explains her feelings and matches her emotions.
+C It helps the film end quickly.
+4 What can you guess about the music in action scenes?
+A It&#x27;s quiet and slow to calm the audience.
+B It&#x27;s removed so we can hear the fights clearly.
+C It&#x27;s loud and fast to build excitement.
+5 Why might someone remember a film just by hearing a song from it?
+A Songs can create strong memories linked fo scenes. ’
+B They memorised the film script.
+C The song has no words.
+6 If a film had no music at all, what might happen?
+5 A The scenes would feel more exciting.
+B The story would still be clear but might feel less emotional.
+C The audience would enjoy it more.
+67 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-7-p063-01-left" aria-label="Matching left item for unit-7-p063-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-7-p063-01-right" aria-label="Matching right item for unit-7-p063-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary6-english-workbook", "level": "Primary 6", "unitId": "unit-7", "unitNumber": 7, "title": "Unit 7", "questionIds": ["unit-7-p055-01", "unit-7-p056-01", "unit-7-p057-01", "unit-7-p058-01", "unit-7-p059-01", "unit-7-p060-01", "unit-7-p061-01", "unit-7-p062-01", "unit-7-p063-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p6-en-unit7"
+          data-module-name="Primary 6 English Unit 7"
+          data-module-url="content/KSSR_Syllabus/Primary6/English/Unit7/index.html"></script>
+</body>
+</html>

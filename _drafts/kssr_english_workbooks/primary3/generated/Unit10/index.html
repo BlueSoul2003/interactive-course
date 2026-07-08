@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 3 English Unit 10</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #2563eb;
+      --surface: #eff6ff;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 3 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Space Picnic</span>
+        <h1>Unit 10</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute space picnic English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 75, 76, 77, 78, 79, 80, 81, 82</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-075-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-075-heading">Source page 75</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p075-01"
+               data-question-type="writing_prompt"
+               data-source-page="75">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 75</span>
+        <span>Writing</span>
+        <span>unit-10-p075-01</span>
+      </div>
+
+        <h3 id="unit-10-p075-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p075-01-prompt">Ld
+1
+Je Unity 10) %
+| Sh @r»
+7 if A Read the diary entry and answer the questions that follow.
+| Dear Diary, EN
+I visited the planetarium today and learnt many interesting facts about
+our solar system. Our solar system consists of the Sun and eight planets.
+The Sun, which is also a star, is located in the middle of the solar system.
+The closest planet to the Sun is Mercury whereas the farthest is Neptune.
+The biggest planet is Jupiter and the smallest is Mercury. The hottest planet
+is Venus, which comes after Mercury whereas the coldest planet is Uranus,
+which is the second farthest planet from the Sun. Earth, which is located
+between Venus and Mars, is the only planet which is habitable. Mars on the
+other hand, is the second smallest planet and is reddish in colour. Saturn,
+which is also known as the most beautiful planet due to its rings, is the second
+biggest planet. There is an asteroid belt between the planets Mars and Jupiter.
+This belt is occupied by millions of asteroids. :
+a Describe the following planets with suitable adjectives from the diary entry.
+Neptune:
+Planets
+‘ 73 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p075-01-answer">Your answer</label>
+      <textarea id="unit-10-p075-01-answer" class="answer-box" data-answer-input="unit-10-p075-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-076-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-076-heading">Source page 76</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p076-01"
+               data-question-type="writing_prompt"
+               data-source-page="76">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 76</span>
+        <span>Writing</span>
+        <span>unit-10-p076-01</span>
+      </div>
+
+        <h3 id="unit-10-p076-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p076-01-prompt">b|
+2 Label the planets in the diagram based on the information from the diary
+entry.
+0) DEE)
+sci TiTm—
+&lt;&amp;0__H—0
+eX FQ ©
+&gt; OPO v
+=
+| =
+{) —Q
+) 0
+o JRE o J
+3 Write True or False for the following statements.
+@® The Sunis a planet. hie is dpi OY |
+@ There are eight planets in our solar system. hand sadio
+@® The asteroid belt is located between Mars and Jupiter.
+@® The Sunis in the comer of the solar system. eaiglag aid
+4 Based on the diagram above, name the celestial object labelled as ‘X&#x27;.
+What is it composed of?
+5 Match the planets given below to their correct degree of adjectives.
+0] Mercury |e o Hot © Saturn fe o| Farthest
+Earth |e | Hottest Uranus |e of Far
+Venus |e o| Hotter Neptune |e o| Farther
+b] Venus |e o| Smaller J) Saturn |e o Big
+Mercury |e | Smallest Uranus |e o| Bigger
+Mars |e o| Small Jupiter |e o| Biggest
+© EPH Publishing (M) Sdn. Bhd. 74
+{scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p076-01-answer">Your answer</label>
+      <textarea id="unit-10-p076-01-answer" class="answer-box" data-answer-input="unit-10-p076-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-077-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-077-heading">Source page 77</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p077-01"
+               data-question-type="grammar_transform"
+               data-source-page="77">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 77</span>
+        <span>Grammar</span>
+        <span>unit-10-p077-01</span>
+      </div>
+
+        <h3 id="unit-10-p077-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p077-01-prompt">| 4
+B Complete the table with the positive, comparative or superlative form of
+the adjectives provided.
+POSITIVE | COMPARATIVE | SUPERLATIVE
+A —
+Rl eR R=
+TI SER ETI
+I RZ
+eT Te mg |
+ET SE IIR
+EE RT
+€ Identify and circle the adjectives in the following sentences. Then, write ‘P’
+for positive form of adjectives or ‘C’ for comparative form of adjectives.
+@ Heisaclever boy. (
+® Amanda is smarter than Allison. J
+© Tom runs very fast. ()
+@ Tyler runs faster than Tom. (1)
+© sheis a good painter. (1)
+® 1am a better artist than her. C1)
+© Today is a hot day. (1)
+® English is easier to learn than Maths. C1)
+75 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+| cs] CamScanner”</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p077-01-answer">Your answer</label>
+      <input id="unit-10-p077-01-answer" class="answer-input" data-answer-input="unit-10-p077-01" aria-describedby="unit-10-p077-01-hint">
+      <p id="unit-10-p077-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-078-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-078-heading">Source page 78</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p078-01"
+               data-question-type="fill_blank"
+               data-source-page="78">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 78</span>
+        <span>Fill in the blank</span>
+        <span>unit-10-p078-01</span>
+      </div>
+
+        <h3 id="unit-10-p078-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p078-01-prompt">(D0) Circle the best answer option from the alternatives given.
+| Yesterday was than 7 The cheetah is the
+today. animal on the planet.
+A hot A fast
+B hotter B faster
+C hottest C fastest
+2 Lesteristhe_____boyinclass. 8 Lastnightwasa night.
+A tall A cold .
+B taller B coldest
+C tallest C colder
+3 Shedrewthe picture. 9 Sheisthe —_ girl at school.
+A beautiful A popular
+B more beautiful B more popular
+C most beautiful C -most popular
+4 Myroomis than hers. 10 Ourclassis — than theirs.
+A big A clean
+B bigger B cleaner *
+C biggest C cleanest
+6 His father buys hima 11 The lion is _____ than the
+bike. mouse.
+A sporty A fierce
+B sportier B fiercer
+C sportiest C fiercest
+6 Irenehasthe ______hairinthe 12 The snail is —___ than the
+class. tortoise.
+A long A slow
+B longer B slower
+C longest C slowest
+© EPH Publishing (M) Sdn. Bhd. 76
+{Scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p078-01-answer">Your answer</label>
+      <input id="unit-10-p078-01-answer" class="answer-input" data-answer-input="unit-10-p078-01" aria-describedby="unit-10-p078-01-hint">
+      <p id="unit-10-p078-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-079-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-079-heading">Source page 79</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p079-01"
+               data-question-type="grammar_transform"
+               data-source-page="79">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 79</span>
+        <span>Grammar</span>
+        <span>unit-10-p079-01</span>
+      </div>
+
+        <h3 id="unit-10-p079-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p079-01-prompt">v
+(E&#x27; Rewrite the following comparative sentences with the correct antonyms of
+the bolded adjectives.
+| The cheetah is slower than the rabbit.
+2 The elephant is smaller than the rhinoceros.
+3 The giraffe is shorter than the horse.
+4 The cow is heavier than the hippopotamus.
+5 The snake is less poisonous than the bee.
+6 The tortoise is faster than the goat.
+[F | Rewrite the following comparative sentences with the correct antonyms of
+the bolded adjectives.
+1 Mercury is the biggest planet in the solar system.
+2 Venus is the coldest planet in the solar system.
+8 Jupiter is the smallest planet in the solar system.
+4 Uranus is the hottest planet in the solar system.
+5 Earth is the least dense planet in the solar system.
+6 Neptune is the least windy planet in the solar system.
+77 © EPH Publishing (M) Sdn. Bhd.
+J
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p079-01-answer">Your answer</label>
+      <input id="unit-10-p079-01-answer" class="answer-input" data-answer-input="unit-10-p079-01" aria-describedby="unit-10-p079-01-hint">
+      <p id="unit-10-p079-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-080-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-080-heading">Source page 80</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p080-01"
+               data-question-type="short_answer"
+               data-source-page="80">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 80</span>
+        <span>Short answer</span>
+        <span>unit-10-p080-01</span>
+      </div>
+
+        <h3 id="unit-10-p080-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p080-01-prompt">4
+(G) Solve the animal riddles in the middle by matching them to the correct
+pictures on the left and names on the right.
+§ fo 3h I&#x27;live in the ocean. I
+4 have hundreds of sharp &lt;&lt;
+| iy teeth. People are afraid
+iu [AA of me. What am I?
+XY I am a very tall animal
+d &#x27; 3
+Cp \) with a very long neck. Shark
+Y &amp; I munch leaves from
+A treetops. What am I?
+I am called the King
+of the Jungle. I have a
+huge mane and my roar Dolphin
+is very loud. What&#x27;.am
+1?
+4 I like to bark. I can live -
+% in your house. Iam :
+) - known fo be a loyal Hen
+fF
+YE] friend. What am 1?
+[id
+A) You can’t have me as
+a @ a pet. I am bigger than
+gia your house. My nose is
+vi . long like a hose. What
+(§
+5 am I?
+1 am a playful animal.
+($%s You can always see
+= 9) me jump out of water to
+DD breathe. What am I?
+© EPH Publishing (M) Sdn. Bhd. 78
+{scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p080-01-answer">Your answer</label>
+      <textarea id="unit-10-p080-01-answer" class="answer-box" data-answer-input="unit-10-p080-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-081-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-081-heading">Source page 81</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p081-01"
+               data-question-type="grammar_transform"
+               data-source-page="81">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 81</span>
+        <span>Grammar</span>
+        <span>unit-10-p081-01</span>
+      </div>
+
+        <h3 id="unit-10-p081-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p081-01-prompt">r
+nH Write ‘True’ for the correct statements and ‘False’ for the incorrect
+statements.
+| The giraffe has the longest neck. [(EE=)
+2 The cat is fiercer than the tiger. (1)
+3 The whale is the heaviest sea animal. =] )
+4 The snail is smaller than the mouse. fw
+5 The sloth is the fastest land animal. 21)
+6 The walrus is fatter than the seal. C7)
+7 The lizard is more poisonous than the scorpion. CC)
+8 The snake is longer than the centipede. =u
+q9 The seahorse is more playful than the dolphin. 1)
+10 The gorilla is weaker than the monkey. =]
+(1) Rewrite the false sentences from Section H by replacing the incorrect
+adjectives in bold with their correct forms.
+[EL (FY WY TR LFS SEL
+PE Cl SS Cs Se NSE SOs
+3 Hi EE SS SS SLI SSP ST UL [U8 10: 2
+[145 RE El PROPS LN LLIN PS Sr: AO. 3 + TE
+NS SPN ibdiect 5 SRNR |.1.4 SUS Fo
+79 © EPH Publishing (M) Sdn. Bhd.
+==</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p081-01-answer">Your answer</label>
+      <input id="unit-10-p081-01-answer" class="answer-input" data-answer-input="unit-10-p081-01" aria-describedby="unit-10-p081-01-hint">
+      <p id="unit-10-p081-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-10-page-082-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-10-page-082-heading">Source page 82</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-10-p082-01"
+               data-question-type="short_answer"
+               data-source-page="82">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 10</span>
+        <span>Page 82</span>
+        <span>Short answer</span>
+        <span>unit-10-p082-01</span>
+      </div>
+
+        <h3 id="unit-10-p082-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-10-p082-01-prompt">(a Compare the following animals by modifying the positive adjectives
+provided to their comparatives.
+Example:
+BR (hairy)
+oh
+rN The orangutan is hairier than the bear.
+Hest Tr Tere Ie eo rile) eine ali EF
+| ~ KILN
+4)
+2 2
+7 (fierce
+dd )
+3
+(young
+CVn | omen emits
+DNA)
+4
+gs: Cate 3)
+HE Naf
+al eam TN
+©EPH Publishing (M) Sdn. Bhd. 80 [
+|
+{Scanned with |
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-10-p082-01-answer">Your answer</label>
+      <textarea id="unit-10-p082-01-answer" class="answer-box" data-answer-input="unit-10-p082-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary3-english-workbook", "level": "Primary 3", "unitId": "unit-10", "unitNumber": 10, "title": "Unit 10", "questionIds": ["unit-10-p075-01", "unit-10-p076-01", "unit-10-p077-01", "unit-10-p078-01", "unit-10-p079-01", "unit-10-p080-01", "unit-10-p081-01", "unit-10-p082-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p3-en-unit10"
+          data-module-name="Primary 3 English Unit 10"
+          data-module-url="content/KSSR_Syllabus/Primary3/English/Unit10/index.html"></script>
+</body>
+</html>
