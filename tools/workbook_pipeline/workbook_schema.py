@@ -121,7 +121,11 @@ def validate_workbook(data: dict) -> list[str]:
                 if question["answer"] is not None and not isinstance(question["acceptedAnswers"], list):
                     errors.append(f"{question_prefix}.acceptedAnswers must be a list when answer exists")
 
-                if question_type == "multiple_choice" and len(question["choices"]) < 2:
-                    errors.append(f"{question_prefix}.choices must contain at least two options")
+                if question_type == "multiple_choice":
+                    choices = question["choices"]
+                    if not isinstance(choices, list):
+                        errors.append(f"{question_prefix}.choices must be a list")
+                    elif len(choices) < 2:
+                        errors.append(f"{question_prefix}.choices must contain at least two options")
 
     return errors
