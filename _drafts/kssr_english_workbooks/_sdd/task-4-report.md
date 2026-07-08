@@ -61,4 +61,4 @@ Primary 6:
 
 ## Commit
 
-- Commit hash: `fbc6282`
+- Task 4 content commit hash: `b6d004d`
