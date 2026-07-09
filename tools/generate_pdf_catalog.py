@@ -16,6 +16,22 @@ IGNORED_DIRS = {".git", "node_modules", ".agents"}
 
 
 CURATED = {
+    "hardcopy/KSSR_Syllabus/Primary3/English/source_pdfs/english_p3_workbook.pdf": {
+        "title": "Primary 3 English Workbook - Source PDF",
+        "syllabus": "KSSR",
+        "level": "Primary 3",
+        "subject": "English",
+        "type": "Workbook",
+        "audience": "Student",
+    },
+    "hardcopy/KSSR_Syllabus/Primary6/English/source_pdfs/english_p6_workbook.pdf": {
+        "title": "Primary 6 English Workbook - Source PDF",
+        "syllabus": "KSSR",
+        "level": "Primary 6",
+        "subject": "English",
+        "type": "Workbook",
+        "audience": "Student",
+    },
     "hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf": {
         "title": "Form 3 Science Bab 5 Thermochemistry - Bilingual Student Notes",
         "syllabus": "SPM",
@@ -107,6 +123,8 @@ def extract_text(path: Path) -> tuple[int | None, str | None, str]:
 
 
 def infer_syllabus(parts: list[str], haystack: str) -> str:
+    if "KSSR_Syllabus" in parts or "KSSR" in parts or "kssr" in haystack:
+        return "KSSR"
     if "IGCSE_Syllabus" in parts or "IGCSE" in parts or "igcse" in haystack:
         return "IGCSE"
     if "SPM_Syllabus" in parts or "SPM" in parts or "kssm" in haystack:
@@ -122,6 +140,9 @@ def infer_syllabus(parts: list[str], haystack: str) -> str:
 
 def infer_level(parts: list[str], haystack: str) -> str:
     for part in parts:
+        match = re.fullmatch(r"Primary(\d+)", part, re.IGNORECASE)
+        if match:
+            return f"Primary {match.group(1)}"
         match = re.fullmatch(r"Year(\d+)", part, re.IGNORECASE)
         if match:
             return f"Year {match.group(1)}"
@@ -132,6 +153,9 @@ def infer_level(parts: list[str], haystack: str) -> str:
     stage = re.search(r"stage\s*([0-9]+)", haystack)
     if stage:
         return f"Stage {stage.group(1)}"
+    primary = re.search(r"\bprimary\s*([0-9]+)\b", haystack)
+    if primary:
+        return f"Primary {primary.group(1)}"
     year = re.search(r"\byear\s*([0-9]+)\b", haystack)
     if year:
         return f"Year {year.group(1)}"
@@ -239,7 +263,9 @@ def main() -> None:
     }
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp_output = OUTPUT.with_suffix(OUTPUT.suffix + ".tmp")
+    temp_output.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    temp_output.replace(OUTPUT)
     print(f"Wrote {OUTPUT.relative_to(ROOT)} with {len(resources)} PDFs.")
 
 

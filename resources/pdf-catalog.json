@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-04T04:49:01.865356+00:00",
-  "fingerprint": "ce01e1c33cacec11",
-  "total": 87,
+  "generatedAt": "2026-07-09T02:31:03.125116+00:00",
+  "fingerprint": "ee1990b645ff5b8b",
+  "total": 89,
   "resources": [
     {
       "id": "content-igcse-syllabus-year4-science-source-pdfs-energy-and-light-dossier-pdf",
@@ -530,6 +530,30 @@
       "type": "Tutor Key",
       "sizeBytes": 255360,
       "pages": 19
+    },
+    {
+      "id": "hardcopy-kssr-syllabus-primary3-english-source-pdfs-english-p3-workbook-pdf",
+      "title": "Primary 3 English Workbook - Source PDF",
+      "file": "hardcopy/KSSR_Syllabus/Primary3/English/source_pdfs/english_p3_workbook.pdf",
+      "syllabus": "KSSR",
+      "level": "Primary 3",
+      "subject": "English",
+      "audience": "Student",
+      "type": "Workbook",
+      "sizeBytes": 42923773,
+      "pages": 88
+    },
+    {
+      "id": "hardcopy-kssr-syllabus-primary6-english-source-pdfs-english-p6-workbook-pdf",
+      "title": "Primary 6 English Workbook - Source PDF",
+      "file": "hardcopy/KSSR_Syllabus/Primary6/English/source_pdfs/english_p6_workbook.pdf",
+      "syllabus": "KSSR",
+      "level": "Primary 6",
+      "subject": "English",
+      "audience": "Student",
+      "type": "Workbook",
+      "sizeBytes": 49471899,
+      "pages": 98
     },
     {
       "id": "hardcopy-singapore-syllabus-year4-science-year4-science-april-revision-student-pdf",
