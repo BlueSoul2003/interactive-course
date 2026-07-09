@@ -1,1194 +1,1063 @@
-﻿<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fun English Unit 3 🌟</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
-
-        body {
-            font-family: 'Nunito', 'Comic Sans MS', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* Tab Transitions */
-        .tab-content {
-            display: none;
-            opacity: 0;
-            transform: translateX(20px);
-            transition: all 0.3s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-            opacity: 1;
-            transform: translateX(0);
-            animation: slideIn 0.3s ease-out forwards;
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes shake {
-
-            0%,
-            100% {
-                transform: translateX(0);
-            }
-
-            25% {
-                transform: translateX(-5px);
-            }
-
-            50% {
-                transform: translateX(5px);
-            }
-
-            75% {
-                transform: translateX(-5px);
-            }
-        }
-
-        .shake {
-            animation: shake 0.4s ease-in-out;
-        }
-
-        @keyframes bounce-sm {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        .bounce-correct {
-            animation: bounce-sm 0.5s ease;
-            border-color: #22c55e !important;
-            background-color: #dcfce7 !important;
-            color: #166534 !important;
-        }
-
-        .error-state {
-            border-color: #ef4444 !important;
-            background-color: #fee2e2 !important;
-            color: #991b1b !important;
-        }
-
-        /* Smooth Horizontal Scrolling for Tabs */
-        .tab-container {
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
-            scroll-snap-type: x mandatory;
-        }
-
-        .tab-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        .tab-btn {
-            scroll-snap-align: center;
-        }
-
-        select {
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 0.5rem center;
-            background-size: 1.5em 1.5em;
-        }
-
-        .word-bubble {
-            transition: transform 0.1s;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .word-bubble:active {
-            transform: scale(0.9);
-        }
-
-        .answered-lock {
-            pointer-events: none;
-            opacity: 0.8;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 3 English Unit 3</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #2563eb;
+      --surface: #eff6ff;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
 </head>
-
-<body class="bg-indigo-50 min-h-screen text-slate-800 pb-24">
-
-    <!-- Pillar 3: Home Button -->
-    <a href="../../../../../index.html" style="position: fixed; bottom: 20px; left: 20px; z-index: 1000; text-decoration: none; font-size: 24px; background: rgba(99,102,241,0.9); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">🏠</a>
-
-    <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-40">
-        <div class="px-4 py-3 bg-indigo-500 text-white flex justify-between items-center">
-            <h1 class="text-xl font-black">🌟 Unit 3: Housework</h1>
-            <span class="text-sm bg-indigo-600 px-3 py-1 rounded-full font-bold shadow-inner">Score: <span
-                    id="total-score">0</span></span>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 3 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Space Picnic</span>
+        <h1>Unit 3</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute space picnic English workbook theme</p>
         </div>
-
-        <!-- Swipeable Tab Bar -->
-        <div class="bg-indigo-50 text-xs text-center text-indigo-400 font-bold py-1 border-b">👈 Swipe to see more tabs
-            👉</div>
-        <div id="tab-scroll-container" class="tab-container flex overflow-x-auto gap-2 px-4 py-3 bg-white shadow-sm">
-            <button onclick="switchTab('tab0', this)"
-                class="tab-btn active shrink-0 px-4 py-2 rounded-full bg-indigo-100 text-indigo-700 font-bold border-2 border-indigo-200 transition-colors">🎮
-                Game</button>
-            <button onclick="switchTab('tab1', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">📖
-                Sec A (Read)</button>
-            <button onclick="switchTab('tab2', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✂️
-                Sec B (Shorts)</button>
-            <button onclick="switchTab('tab3', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✏️
-                Sec C (Fill)</button>
-            <button onclick="switchTab('tab4', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🏠
-                Sec D (Sort)</button>
-            <button onclick="switchTab('tab5', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✅
-                Sec E (True/False)</button>
-            <button onclick="switchTab('tab5_2', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">📝
-                Sec E2 (Write)</button>
-            <button onclick="switchTab('tab6', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🧩
-                Sec F (Jumble)</button>
-            <button onclick="switchTab('tab7', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🏅
-                Sec G (Sports)</button>
-            <button onclick="switchTab('tab8', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">🎸
-                Sec H (Build)</button>
-            <button onclick="switchTab('tab9', this)"
-                class="tab-btn shrink-0 px-4 py-2 rounded-full bg-slate-100 text-slate-500 font-bold border-2 border-transparent transition-colors">✉️
-                Sec I (Email)</button>
+        <div>
+          <span class="source-pill">Source pages 19, 20, 21, 22, 23, 24, 25, 26</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
         </div>
+      </aside>
     </header>
+    <main>
 
-    <main class="p-4 max-w-2xl mx-auto space-y-6 overflow-hidden">
-
-        <!-- TAB 0: MINI GAMES -->
-        <div id="tab0" class="tab-content active">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-indigo-100">
-                <h2 class="text-2xl font-black text-indigo-600 mb-1">Tap & Match 👆</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">点英文，再点华文，配对正确就过关 leh!</p>
-                <div id="match-game" class="grid grid-cols-2 gap-3"></div>
-                <div id="match-feedback" class="mt-4 text-center font-bold text-lg hidden"></div>
-            </div>
+      <section class="practice-section" aria-labelledby="unit-3-page-019-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-019-heading">Source page 19</h2>
         </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
 
-        <!-- TAB 1: SECTION A (READING) -->
-        <div id="tab1" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-sky-100">
-                <h2 class="text-2xl font-black text-sky-600 mb-4">Section A: Read 🏠</h2>
+      <article class="question-card"
+               data-question-id="unit-3-p019-01"
+               data-question-type="matching"
+               data-source-page="19">
 
-                <div class="bg-sky-50 p-4 rounded-2xl mb-4 relative">
-                    <h3 class="font-black text-sky-800 mb-2">1. Setting the Table</h3>
-                    <p class="text-slate-700 leading-relaxed font-bold text-sm">
-                        Setting the table means to place plates, cups, forks, spoons and <span
-                            class="vocab-word text-sky-600 cursor-pointer underline decoration-wavy decoration-sky-300"
-                            onclick="showTip(this, '餐巾')">napkins</span> in the correct spots.
-                    </p>
-                </div>
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 19</span>
+        <span>Matching</span>
+        <span>unit-3-p019-01</span>
+      </div>
 
-                <div class="bg-blue-50 p-4 rounded-2xl mb-6 relative">
-                    <h3 class="font-black text-blue-800 mb-2">2. Doing the Laundry</h3>
-                    <p class="text-slate-700 leading-relaxed font-bold text-sm">
-                        Doing the laundry includes <span
-                            class="vocab-word text-blue-600 cursor-pointer underline decoration-wavy decoration-blue-300"
-                            onclick="showTip(this, '分类')">sorting</span> clothes, putting them into the washing machine,
-                        drying and <span
-                            class="vocab-word text-blue-600 cursor-pointer underline decoration-wavy decoration-blue-300"
-                            onclick="showTip(this, '折叠')">folding</span> them. It may include <span
-                            class="vocab-word text-blue-600 cursor-pointer underline decoration-wavy decoration-blue-300"
-                            onclick="showTip(this, '熨烫')">ironing</span>.
-                    </p>
-                </div>
+        <h3 id="unit-3-p019-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p019-01-prompt">Unit =
+g ind Es Whig 3 @p)
+i © »
+(A) Read the texts about three different housework. Then, assign each letter
+to the statement that best represents it.
+Setting the Table
+Setting the table means to place plates, cups, forks, spoons and
+napkins in the correct spots before a meal. It helps prepare the
+space for eating. This task needs neatness and careful attention to
+where each item should go. It&#x27;s usually done before lunch or dinner
+and can be done by children or adults.
+Doing the Laundry
+Doing the laundry includes sorting clothes, putting them into the
+[8 ] washing machine, drying them and folding them after. This task
+helps keep clothes clean and ready to wear. It may also include
+ironing. It takes time and often needs more than one step.
+Dusting the Shelves
+Dusting the shelves is the task of wiping away dust and dirt from
+shelves and surfaces. It helps keep the home clean and free from
+dust that can build up over time. This job is usually done with a
+cloth or duster and needs to be done gently so that nothing falls or
+breaks.
+; Setting the Table 3 Doing the Laundry C] Dusting the Shelves |
+I This housework is done before meals. ( )
+2 This housework removes small particles from shelves. ( )
+3 This housework involves washing and folding clothes. ( )
+4 This housework needs a careful hand to avoid breaking things. ( )
+5 This housework can include sorting, drying and ironing. ( )
+6 This housework helps prepare the dining area for eating. ( )
+17 © EPH Publishing (M) Sdn. Bhd.
+{scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
 
-                <div class="bg-indigo-50 p-4 rounded-2xl mb-6 relative">
-                    <h3 class="font-black text-indigo-800 mb-2">3. Dusting the Shelves</h3>
-                    <p class="text-slate-700 leading-relaxed font-bold text-sm">
-                        Dusting the shelves is the task of wiping away dust and dirt. This job is done with a cloth or
-                        duster and needs to be done gently.
-                    </p>
-                </div>
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-3-p019-01-left" aria-label="Matching left item for unit-3-p019-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-3-p019-01-right" aria-label="Matching right item for unit-3-p019-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
 
-                <!-- Reading Quiz Pagination -->
-                <div class="bg-slate-50 border-2 border-slate-100 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-black text-slate-700">Which housework is it? 🤔</h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="read-progress">1/6</span>
-                    </div>
-                    <!-- CHANGED ID: reading-quiz-container -> read-container to match JS -->
-                    <div id="read-container" class="min-h-[120px]"></div>
-                    <div class="flex justify-between mt-4">
-                        <button onclick="navQuiz('read', -1)" id="btn-read-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('read', 1)" id="btn-read-next"
-                            class="px-4 py-2 bg-sky-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
         </div>
-
-        <!-- TAB 2: SECTION B (CONTRACTIONS MATCH) -->
-        <div id="tab2" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-emerald-100">
-                <h2 class="text-2xl font-black text-emerald-600 mb-1">Section B: Short Forms ✂️</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Combine the words correctly.</p>
-
-                <div class="bg-emerald-50 border-2 border-emerald-100 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-black text-emerald-800">Combine the words!</h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="cont-progress">1/9</span>
-                    </div>
-                    <!-- CHANGED ID: contractions-container -> cont-container to match JS -->
-                    <div id="cont-container" class="min-h-[100px] flex flex-col justify-center items-center"></div>
-                    <div class="flex justify-between mt-6 w-full">
-                        <button onclick="navQuiz('cont', -1)" id="btn-cont-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('cont', 1)" id="btn-cont-next"
-                            class="px-4 py-2 bg-emerald-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
         </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
 
-        <!-- TAB 3: SECTION C (CONTRACTIONS FILL) -->
-        <div id="tab3" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-teal-100">
-                <h2 class="text-2xl font-black text-teal-600 mb-1">Section C: Fill in Blanks ✏️</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Use the short forms to complete the sentences.</p>
+      </section>
 
-                <div class="bg-teal-50 border-2 border-teal-100 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-black text-teal-800">Fill in the blanks!</h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="contFill-progress">1/9</span>
-                    </div>
-                    <div id="contFill-container" class="min-h-[140px] flex flex-col justify-center"></div>
-                    <div class="flex justify-between mt-6 w-full">
-                        <button onclick="navQuiz('contFill', -1)" id="btn-contFill-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('contFill', 1)" id="btn-contFill-next"
-                            class="px-4 py-2 bg-teal-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+      <section class="practice-section" aria-labelledby="unit-3-page-020-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-020-heading">Source page 20</h2>
         </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
 
-        <!-- TAB 4: SECTION D (CLASSIFY HOUSEWORK) -->
-        <div id="tab4" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-purple-100">
-                <h2 class="text-2xl font-black text-purple-600 mb-1">Section D: Classify 🏠</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Which room does this belong to?</p>
+      <article class="question-card"
+               data-question-id="unit-3-p020-01"
+               data-question-type="fill_blank"
+               data-source-page="20">
 
-                <div class="bg-purple-50 border-2 border-purple-100 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-black text-purple-800">Match to the right room!</h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="classify-progress">1/12</span>
-                    </div>
-                    <div id="classify-container" class="min-h-[160px] flex flex-col justify-center items-center"></div>
-                    <div class="flex justify-between mt-6 w-full">
-                        <button onclick="navQuiz('classify', -1)" id="btn-classify-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('classify', 1)" id="btn-classify-next"
-                            class="px-4 py-2 bg-purple-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 20</span>
+        <span>Fill in the blank</span>
+        <span>unit-3-p020-01</span>
+      </div>
+
+        <h3 id="unit-3-p020-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p020-01-prompt">r
+(B) Circle the correct form of contractions for the combinations given below.
+© Fill in the blanks with the correct form of contractions from Section B.
+| Lindais atthe badmintoncourt. playing badminton.
+2 Theboysarewearinggoggles. going for a swim.
+3 lammakingthebed. washing the car.
+4 lamatthetenniscourt. playing tennis.
+5 Jasoniskickingtheball. playing football.
+6 Gregis doing the washing-up.He baking a cake.
+7 Youareholdingagolfclub. playing golf.
+8 Diana, Michelle andI are atthe volleyballcourt. playing
+volleyball.
+9 Jane and Sandra are wiping the windows. They
+watering the plants.
+© EPH Publishing (M) Sdn. Bhd. 18
+Frail</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-3-p020-01-answer">Your answer</label>
+      <input id="unit-3-p020-01-answer" class="answer-input" data-answer-input="unit-3-p020-01" aria-describedby="unit-3-p020-01-hint">
+      <p id="unit-3-p020-01-hint" class="control-hint">Type your answer, then save it.</p>
+
         </div>
-
-        <!-- TAB 5: SECTION E (AFFIRMATIVE / NEGATIVE) -->
-        <div id="tab5" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-yellow-100">
-                <h2 class="text-2xl font-black text-yellow-600 mb-1">Section E: True/False ✅</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Choose the correct description based on the emoji.</p>
-
-                <div class="bg-yellow-50 border-2 border-yellow-200 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-black text-yellow-800">Affirmative vs Negative</h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="affNeg-progress">1/3</span>
-                    </div>
-                    <div id="affNeg-container" class="min-h-[160px] flex flex-col gap-3"></div>
-                    <div class="flex justify-between mt-6 w-full">
-                        <button onclick="navQuiz('affNeg', -1)" id="btn-affNeg-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('affNeg', 1)" id="btn-affNeg-next"
-                            class="px-4 py-2 bg-yellow-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
         </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
 
-        <!-- TAB 5.2: SECTION E2 (BUILD SENTENCES FOR COPYING) -->
-        <div id="tab5_2" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-lime-100">
-                <h2 class="text-2xl font-black text-lime-600 mb-1">Section E2: Write 📝</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Build the sentences based on the pictures. When you
-                    finish, salin (copy) them into your book loh!</p>
+      </section>
 
-                <!-- Example Block -->
-                <div class="bg-lime-50 border-2 border-lime-200 p-4 rounded-2xl shadow-inner mb-6">
-                    <span
-                        class="text-xs font-black bg-lime-200 text-lime-800 px-2 py-1 rounded mb-2 inline-block">Example</span>
-                    <p class="font-bold text-lime-900 mb-1">Affirmative (Tick ✅): He is reading a book.</p>
-                    <p class="font-bold text-lime-900">Negative (Cross ❌): He isn't playing outside.</p>
-                </div>
-
-                <div id="affNegBuild-container" class="space-y-6">
-                    <!-- Dynamic Non-paginated content goes here -->
-                </div>
-
-                <div id="affNegBuild-success"
-                    class="mt-6 bg-green-100 border-2 border-green-400 p-4 rounded-2xl text-center hidden transition-all">
-                    <h3 class="font-black text-green-700 text-xl mb-1">Wah, Settle All! 🎉</h3>
-                    <p class="text-sm font-bold text-green-800">Cun cun! Now take out your pencil and copy these
-                        sentences into your book slowly ok?</p>
-                </div>
-            </div>
+      <section class="practice-section" aria-labelledby="unit-3-page-021-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-021-heading">Source page 21</h2>
         </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
 
-        <!-- TAB 6: SECTION F (JUMBLED SENTENCES) -->
-        <div id="tab6" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-orange-100">
-                <h2 class="text-2xl font-black text-orange-600 mb-1">Section F: Jumbled 🧩</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold text-orange-800 bg-orange-50 p-2 rounded-lg">💡 小贴士:
-                    Click the words in the correct order to build a sentence!</p>
+      <article class="question-card"
+               data-question-id="unit-3-p021-01"
+               data-question-type="short_answer"
+               data-source-page="21">
 
-                <div class="bg-white border-2 border-orange-100 p-4 rounded-2xl shadow-sm">
-                    <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg border"
-                            id="jumbled-progress">1/12</span>
-                        <button onclick="resetCurrentJumbled()"
-                            class="text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-lg border border-red-100 active:scale-95">🔄
-                            Reset</button>
-                    </div>
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 21</span>
+        <span>Short answer</span>
+        <span>unit-3-p021-01</span>
+      </div>
 
-                    <div id="jumbled-container" class="min-h-[180px]"></div>
+        <h3 id="unit-3-p021-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p021-01-prompt">(D Classify the different types of housework to the correct parts of the house.
+sweeptheporch carry in the groceries : cook and bake
+dust the dresser : sanitise the TV remote : make the bed
+do the washing-up : sweep the room : clean the doormats
+vacuum under the couch : wash the car : wipe the coffee table
+fl 1] ] n f 1] Ii] 2
+GC IR Vi UT aU WT = Ul bs
+£ - ale ad [Fa £3 BE Ape
+3 ges x i; Rs faa 2 el 5 v
+biz Porch od bod pias 73 21:03 feedrooni ideal
+poem | i 5 m= 3 — HER See Sn |
+VUTEC WATER
+SI tdichen WERE | | VTE Living room “HERES
+19 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+{@ CamScanner’</pre>
+        <div class="response-area">
 
-                    <div class="flex justify-between mt-4">
-                        <button onclick="navQuiz('jumbled', -1)" id="btn-jumbled-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('jumbled', 1)" id="btn-jumbled-next"
-                            class="px-4 py-2 bg-orange-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+      <label class="answer-label" for="unit-3-p021-01-answer">Your answer</label>
+      <textarea id="unit-3-p021-01-answer" class="answer-box" data-answer-input="unit-3-p021-01" rows="5"></textarea>
+
         </div>
-
-        <!-- TAB 7: SECTION G (SPORTS) -->
-        <div id="tab7" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-rose-100">
-                <h2 class="text-2xl font-black text-rose-600 mb-1">Section G: Sports 🏅</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Pick the correct words from the dropdowns loh.</p>
-
-                <div class="bg-rose-50 border-2 border-rose-100 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 id="sport-title" class="font-black text-rose-800 text-lg"></h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="sports-progress">1/4</span>
-                    </div>
-
-                    <div id="sports-container" class="min-h-[150px] text-slate-700 leading-9 font-bold text-lg"></div>
-
-                    <div class="flex justify-between mt-6">
-                        <button onclick="navQuiz('sports', -1)" id="btn-sports-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('sports', 1)" id="btn-sports-next"
-                            class="px-4 py-2 bg-rose-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
         </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
 
-        <!-- TAB 8: SECTION H (CUE WORDS SENTENCES) -->
-        <div id="tab8" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-cyan-100">
-                <h2 class="text-2xl font-black text-cyan-600 mb-1">Section H: Build Sentences 🎸</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Tap the correct sentence using the cue words. <br><span
-                        class="text-cyan-700 bg-cyan-50 px-2 py-1 rounded-lg mt-2 inline-block border border-cyan-200">✏️
-                        The answer won't auto-skip! Take your time to salin (copy) it into your book, then tap "Next"
-                        loh!</span></p>
+      </section>
 
-                <div class="bg-cyan-50 border-2 border-cyan-200 p-4 rounded-2xl shadow-inner">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="font-black text-cyan-800">Find the right sentence!</h3>
-                        <span class="text-xs font-bold text-slate-400 bg-white px-2 py-1 rounded-lg border"
-                            id="cue-progress">1/5</span>
-                    </div>
-                    <div id="cue-container" class="min-h-[160px] flex flex-col gap-3"></div>
-                    <div class="flex justify-between mt-6 w-full">
-                        <button onclick="navQuiz('cue', -1)" id="btn-cue-prev"
-                            class="px-4 py-2 bg-white text-slate-500 font-bold rounded-xl border shadow-sm active:scale-95 disabled:opacity-50">⬅️
-                            Prev</button>
-                        <button onclick="navQuiz('cue', 1)" id="btn-cue-next"
-                            class="px-4 py-2 bg-cyan-500 text-white font-bold rounded-xl shadow-sm active:scale-95 disabled:opacity-50">Next
-                            ➡️</button>
-                    </div>
-                </div>
-            </div>
+      <section class="practice-section" aria-labelledby="unit-3-page-022-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-022-heading">Source page 22</h2>
         </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
 
-        <!-- TAB 9: SECTION I (EMAIL) -->
-        <div id="tab9" class="tab-content">
-            <div class="bg-white p-5 rounded-3xl shadow-sm border-2 border-pink-100">
-                <h2 class="text-2xl font-black text-pink-600 mb-1">Section I: Email ✉️</h2>
-                <p class="text-sm text-slate-500 mb-4 font-bold">Help Sohan complete the email to Danny by tapping the
-                    dropdowns.</p>
+      <article class="question-card"
+               data-question-id="unit-3-p022-01"
+               data-question-type="picture_based"
+               data-source-page="22">
 
-                <div
-                    class="bg-pink-50 border-2 border-pink-200 p-4 rounded-2xl shadow-inner text-sm leading-8 font-bold text-slate-700">
-                    <p class="mb-4">Dear Danny,<br>Thank you for your email! My favourite <select id="em-1"
-                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
-                            onchange="checkEmail()">
-                            <option value="" disabled selected>(Tap)</option>
-                            <option value="sport is skateboarding">sport is skateboarding</option>
-                            <option value="What about you?">What about you?</option>
-                        </select>. It's a cool sport where you ride on a board with wheels and do <select id="em-2"
-                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
-                            onchange="checkEmail()">
-                            <option value="" disabled selected>(Tap)</option>
-                            <option value="tricks at the skatepark">tricks at the skatepark</option>
-                            <option value="two years now">two years now</option>
-                        </select> or on the street.</p>
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 22</span>
+        <span>Picture based</span>
+        <span>unit-3-p022-01</span>
+      </div>
 
-                    <p class="mb-4">I like skateboarding because it's exciting and <select id="em-3"
-                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
-                            onchange="checkEmail()">
-                            <option value="" disabled selected>(Tap)</option>
-                            <option value="helps me practice balance">helps me practice balance</option>
-                            <option value="learning new tricks">learning new tricks</option>
-                        </select> and coordination. I've been skateboarding for <select id="em-4"
-                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
-                            onchange="checkEmail()">
-                            <option value="" disabled selected>(Tap)</option>
-                            <option value="two years now">two years now</option>
-                            <option value="tricks at the skatepark">tricks at the skatepark</option>
-                        </select>, and I enjoy <select id="em-5"
-                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
-                            onchange="checkEmail()">
-                            <option value="" disabled selected>(Tap)</option>
-                            <option value="learning new tricks">learning new tricks</option>
-                            <option value="helps me practice balance">helps me practice balance</option>
-                        </select>.</p>
+        <h3 id="unit-3-p022-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p022-01-prompt">¥ DJ
+[13] Construct suitable affirmative and negative present continuous sentences
+based on the given pictures. An example has been done for you.
+E le: &lt; ,
+“andl : AY
+lim UA De)
+ed, Ww; Affirmative: He is reading a book.
+\v/ EE! A FT
+LASS: 6 220% at Sl
+NYS : NW Negative : He isn&#x27;t playing outside.
+== =a TOT Pg AEE
+mm Ed
+/ i —
+0 -
+os : oh
+Pad \\ : I \ Affirmative: ___
+p : gative :
+A : \/
+G1 po
+vr oO: 5 (x)
+e
+D4 4 [&lt;3 : 4 Co i
+fie : oe Affirmative:
+AYR
+Bs : egative. :_._ . _ .
+vB x
+(3) :
+Ln i 1&amp;0 ®
+«0 Lec Affirmative: ____
+RM: NVQ) | Negative :
+Aso Hd
+9: (x)
+© EPH Publishing (M) Sdn. Bhd. 20
+{Scanned with
+i = CamScanner |</pre>
+        <div class="response-area">
 
-                    <p class="mb-4"><select id="em-6"
-                            class="border-b-4 border-pink-400 bg-transparent text-pink-700 outline-none px-1 py-0.5 mx-1 font-black text-center"
-                            onchange="checkEmail()">
-                            <option value="" disabled selected>(Tap)</option>
-                            <option value="What about you?">What about you?</option>
-                            <option value="sport is skateboarding">sport is skateboarding</option>
-                        </select> What is your favourite sport?</p>
-                    <p>Your friend,<br>Sohan</p>
-                </div>
-            </div>
+      <div class="picture-response" data-picture-response="true">
+        <p>Look closely at the source picture in the workbook, then write your answer here.</p>
+
+      <label class="answer-label" for="unit-3-p022-01-answer">Picture answer</label>
+      <textarea id="unit-3-p022-01-answer" class="answer-box" data-answer-input="unit-3-p022-01" rows="5"></textarea>
+
+        <label class="answer-label" for="unit-3-p022-01-picture-note">Picture note</label>
+        <input id="unit-3-p022-01-picture-note" class="answer-input" data-answer-input="unit-3-p022-01-picture-note">
+      </div>
+
         </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-3-page-023-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-023-heading">Source page 23</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-3-p023-01"
+               data-question-type="sequencing"
+               data-source-page="23">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 23</span>
+        <span>Sequencing</span>
+        <span>unit-3-p023-01</span>
+      </div>
+
+        <h3 id="unit-3-p023-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p023-01-prompt">(3) Rearrange the Jumbled words to form sentences about the chores different
+people are doing. Remember to add the missing capital letters and full
+stops.
+| (cake # mum @ baking wis wa ~~ TTT
+4 (laundry he &amp; the w is @ folding &amp; clean ~~ 7)
+§ (brother # washing-up # the &amp; my &amp; is #&amp; doing 7)
+6 (theirs are # pufling_# children &amp; The # Toys &amp; away)
+7 (moKking™# mye sondwiches# skier” 15 TIIIERINND :
+8 (am doing’ my e ie homework TTT
+9 (hele aking &amp; 15 &amp; rubbish &amp; ouf &amp;7ifieTi IID
+lo (Vacuuming fhe &amp; floor he @ is @ Kichen 7)
+11 (dusting # The &amp; cabinets # shelves # and # she # is)
+12 (sweeping # they % are @ the # porch # front
+2] © EPH Publishing (M) Sdn. Bhd.
+==</pre>
+        <div class="response-area">
+
+      <div class="sequence-board" data-sequence-board="true">
+
+            <label class="sequence-row">
+              <span>Step 1</span>
+              <textarea class="answer-box compact" data-answer-input="unit-3-p023-01-step-1" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 2</span>
+              <textarea class="answer-box compact" data-answer-input="unit-3-p023-01-step-2" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 3</span>
+              <textarea class="answer-box compact" data-answer-input="unit-3-p023-01-step-3" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 4</span>
+              <textarea class="answer-box compact" data-answer-input="unit-3-p023-01-step-4" rows="2"></textarea>
+            </label>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-3-page-024-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-024-heading">Source page 24</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-3-p024-01"
+               data-question-type="fill_blank"
+               data-source-page="24">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 24</span>
+        <span>Fill in the blank</span>
+        <span>unit-3-p024-01</span>
+      </div>
+
+        <h3 id="unit-3-p024-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p024-01-prompt">[4 Ea |
+(@) Fill in the blanks with words that best describe the sport shown.
+0 | co
+2) Bes i
+oe 1 2 Shawn is playing @® — Slick
+o AUER He plays with his . skate
+Ca 3.3 Te Itisfunto@®@___ onice. He puck
+4 .
+2 &lt; 2 b. a a@ — to hitthe | ico pockey
+= _Y into the goal. friends
+=&lt; = :
+SLY CORRS SIN CL CL aie URL Sn SS i
+[2] 5 Sally is doing ® It hoop
+\ LT isafun@® ____ She also ball
+ca uses apparatuses such as the gymnastics
+J (c) eA (d]} ERS [os | bb
+g O® ____ Her favourite is the FI0001)
+@ which she loves to rope
+== SS twirl. sport
+Eee ted Sioad iene UNE JP BE JR RNR
+3 ® TN
+| I like playing @ 1 court
+aE I lay at the @
+i= Sees always play a ——— shuttlecocks
+i i = lonlyneeda@®@__ and
+J? 9 some @ I also must rocquel
+a wearproper@____ toavoid = badminton
+a ), == injuries. shoes
+5 TR &lt;
+oO Benjamin’s favourite sport is -
+f
+ADS © __ He usually plays at jog
+eo CF HE the @ —____ Sometimes he ball
+7.7 cds ~~ gets to be the pitcher and throws the baseball
+[2X i ©_____ tothebatter. When it hit
+Ero i ishisturnto @ — the ball, i
+a heusesa@®@ ____ | g
+© EPH Publishing (M) Sdn. Bhd. 22
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-3-p024-01-answer">Your answer</label>
+      <input id="unit-3-p024-01-answer" class="answer-input" data-answer-input="unit-3-p024-01" aria-describedby="unit-3-p024-01-hint">
+      <p id="unit-3-p024-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-3-page-025-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-025-heading">Source page 25</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-3-p025-01"
+               data-question-type="short_answer"
+               data-source-page="25">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 25</span>
+        <span>Short answer</span>
+        <span>unit-3-p025-01</span>
+      </div>
+
+        <h3 id="unit-3-p025-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p025-01-prompt">H Construct suitable sentences in the present continuous tense using the
+given cue words to describe the activities shown.
+o »
+Ee] bs — wash — shoes —
+(re)
+SFA = ee
+Ay
+— PQ : {&quot;&quot;Zjump — trampoline —
+A
+NA ls oe IY EE Ae re
+(5) 5 I
+&amp; ry — play — guitar —
+XE E Fn ATR bepalel
+K] PA)
+LC ——
+2 \g7 an
+Sn
+(1) sug 0 :
+dl j= 2) — watch — cartoon —
+&gt;
+I ee ——
+51
+| &quot; —water— plants —
+FX .le
+1==8
+rs
+see WA ad
+Hoaw
+23 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-3-p025-01-answer">Your answer</label>
+      <textarea id="unit-3-p025-01-answer" class="answer-box" data-answer-input="unit-3-p025-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-3-page-026-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-3-page-026-heading">Source page 26</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-3-p026-01"
+               data-question-type="word_bank"
+               data-source-page="26">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 3</span>
+        <span>Page 26</span>
+        <span>Word bank</span>
+        <span>unit-3-p026-01</span>
+      </div>
+
+        <h3 id="unit-3-p026-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-3-p026-01-prompt">&gt;)
+Complete the email with suitable phrases from the answer bank.
+Your penfriend, Danny, has sent an email asking you what your favourite sport
+is. Write a reply to him. In your email,
+« state and briefly talk about the sport
+« tell him why you like this sport and how long you&#x27;ve played it
+What about you? : learning new tricks : picks athe skatopark
+fwo years now : sport is skateboarding : helps ma practice
+: - balance
+Aa | - dannylow @mail.com- Cl cnaliman Td
+“Subject | My Favourite Sport fi em
+Dear Danny,
+Thank you for your email! My favourite @ —___
+— Its acool sport where you ride on a board with wheels and
+do@icic wow ii Si 00 SK Mi Conithe street.
+I like skateboarding because it&#x27;s exciingand @
+and coordination.
+I&#x27;ve been skateboardingfor @—___ and I enjoy
+(5, TRE i RL J: + W(X.
+(6) What is your favourite sport?
+Your friend, ;
+Sohan
+© EPH Publishing (M) Sdn. Bhd. oq
+{scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-3-p026-01-words">Words you used</label>
+          <input id="unit-3-p026-01-words" class="answer-input" data-answer-input="unit-3-p026-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-3-p026-01-answer">Write your completed answer</label>
+      <textarea id="unit-3-p026-01-answer" class="answer-box" data-answer-input="unit-3-p026-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
     </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary3-english-workbook", "level": "Primary 3", "unitId": "unit-3", "unitNumber": 3, "title": "Unit 3", "questionIds": ["unit-3-p019-01", "unit-3-p020-01", "unit-3-p021-01", "unit-3-p022-01", "unit-3-p023-01", "unit-3-p024-01", "unit-3-p025-01", "unit-3-p026-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
 
-    <!-- Floating Dictionary Button -->
-    <button onclick="openDict()"
-        class="fixed bottom-6 right-6 w-14 h-14 bg-pink-500 text-white rounded-full shadow-lg text-2xl flex items-center justify-center hover:bg-pink-600 active:scale-90 transition-transform z-50 ring-4 ring-pink-200">📖</button>
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
 
-    <!-- Dictionary Modal -->
-    <div id="dict-modal"
-        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
-        <div
-            class="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col max-h-[80vh] border-4 border-pink-400">
-            <div class="bg-pink-500 text-white p-4 flex justify-between items-center">
-                <h3 class="font-black text-lg">📖 魔法字典 (Dictionary)</h3>
-                <button onclick="closeDict()"
-                    class="text-2xl font-black bg-pink-600 w-8 h-8 rounded-full flex items-center justify-center active:scale-90">&times;</button>
-            </div>
-            <div class="p-2 bg-pink-50 text-xs text-center text-pink-700 font-bold border-b border-pink-100">
-                词汇顺序已打乱，自己找找看咯!</div>
-            <div id="dict-content" class="p-4 overflow-y-auto grid grid-cols-2 gap-3 pb-8"></div>
-        </div>
-    </div>
-
-    <!-- Tooltip Element -->
-    <div id="tooltip"
-        class="fixed bg-slate-800 text-white font-bold px-4 py-2 rounded-xl shadow-xl pointer-events-none transition-opacity duration-200 opacity-0 z-50 transform -translate-x-1/2">
-    </div>
-
-    <!-- Feedback Toast Element -->
-    <div id="toast"
-        class="fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-500 text-white font-black px-6 py-3 rounded-full shadow-2xl transition-all duration-300 opacity-0 pointer-events-none z-50 scale-90 text-center w-max max-w-xs">
-    </div>
-
-    <script>
-        // --- UTILS ---
-        const shuffleArray = (arr) => [...arr].sort(() => Math.random() - 0.5);
-
-        let score = 0;
-        function addScore() {
-            document.getElementById('total-score').innerText = ++score;
-            document.getElementById('total-score').classList.add('text-yellow-300');
-            setTimeout(() => document.getElementById('total-score').classList.remove('text-yellow-300'), 300);
-            if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.autoSave({ score: score });
-            }
-        }
-
-        // --- WEB AUDIO API (8-BIT SOUND EFFECTS) ---
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        let audioCtx;
-
-        function playSFX(type) {
-            if (!audioCtx) audioCtx = new AudioContext();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
-            const now = audioCtx.currentTime;
-            const rand = Math.floor(Math.random() * 3);
-
-            if (type === 'correct') {
-                osc.type = 'sine';
-                if (rand === 0) { // Mario Coin
-                    osc.frequency.setValueAtTime(987.77, now);
-                    osc.frequency.setValueAtTime(1318.51, now + 0.1);
-                    gainNode.gain.setValueAtTime(0.3, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                    osc.start(now); osc.stop(now + 0.4);
-                } else if (rand === 1) { // Happy Blip
-                    osc.frequency.setValueAtTime(523.25, now);
-                    osc.frequency.setValueAtTime(659.25, now + 0.1);
-                    osc.frequency.setValueAtTime(783.99, now + 0.2);
-                    gainNode.gain.setValueAtTime(0.3, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                    osc.start(now); osc.stop(now + 0.4);
-                } else { // Magic Chime
-                    osc.frequency.setValueAtTime(1046.50, now);
-                    osc.frequency.setValueAtTime(1567.98, now + 0.1);
-                    gainNode.gain.setValueAtTime(0.2, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
-                    osc.start(now); osc.stop(now + 0.5);
-                }
-            } else {
-                osc.type = 'sawtooth';
-                if (rand === 0) { // Buzz
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.linearRampToValueAtTime(100, now + 0.3);
-                    gainNode.gain.setValueAtTime(0.3, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                    osc.start(now); osc.stop(now + 0.3);
-                } else if (rand === 1) { // Sad Drop
-                    osc.frequency.setValueAtTime(300, now);
-                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.4);
-                    gainNode.gain.setValueAtTime(0.3, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
-                    osc.start(now); osc.stop(now + 0.4);
-                } else { // Error Bonk
-                    osc.type = 'square';
-                    osc.frequency.setValueAtTime(200, now);
-                    osc.frequency.setValueAtTime(150, now + 0.1);
-                    gainNode.gain.setValueAtTime(0.2, now);
-                    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
-                    osc.start(now); osc.stop(now + 0.2);
-                }
-            }
-        }
-
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.className = `fixed top-20 left-1/2 transform -translate-x-1/2 font-black px-6 py-3 rounded-full shadow-2xl transition-all duration-300 z-50 text-center w-max max-w-xs ${type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`;
-            toast.classList.remove('opacity-0', 'scale-90');
-            toast.classList.add('opacity-100', 'scale-100');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'scale-100');
-                toast.classList.add('opacity-0', 'scale-90');
-            }, 1500);
-        }
-
-        // --- DATA STRUCTURES ---
-        const vocabList = [
-            { en: "Setting", zh: "摆放" }, { en: "Dusting", zh: "除尘" }, { en: "Laundry", zh: "洗衣物" },
-            { en: "Sorting", zh: "分类" }, { en: "Folding", zh: "折叠" }, { en: "Shelves", zh: "架子" },
-            { en: "Vacuuming", zh: "吸尘" }, { en: "Sweeping", zh: "扫" }, { en: "Napkins", zh: "餐巾" },
-            { en: "Gymnastics", zh: "体操" }, { en: "Racquet", zh: "球拍" }, { en: "Contractions", zh: "缩写" },
-            { en: "Porch", zh: "走廊" }, { en: "Groceries", zh: "杂货" }, { en: "Sanitise", zh: "消毒" }, { en: "Dresser", zh: "梳妆台" }
-        ];
-
-        // Section A
-        const readingData = [
-            { q: "This housework is done before meals.", ans: "Setting the Table", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
-            { q: "This housework removes small particles from shelves.", ans: "Dusting the Shelves", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
-            { q: "This housework involves washing and folding clothes.", ans: "Doing the Laundry", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
-            { q: "This housework needs a careful hand to avoid breaking things.", ans: "Dusting the Shelves", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
-            { q: "This housework can include sorting, drying and ironing.", ans: "Doing the Laundry", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] },
-            { q: "This housework helps prepare the dining area for eating.", ans: "Setting the Table", opts: ["Setting the Table", "Doing the Laundry", "Dusting the Shelves"] }
-        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
-
-        // Section B
-        const contractionsData = [
-            { q: "She + is", ans: "She's", opts: ["She'm", "She're", "She's"] },
-            { q: "He + is", ans: "He's", opts: ["He's", "He'm", "He're"] },
-            { q: "I + am", ans: "I'm", opts: ["I's", "I'm", "I're"] },
-            { q: "They + are", ans: "They're", opts: ["They's", "They're", "They'm"] },
-            { q: "We + are", ans: "We're", opts: ["We's", "We'm", "We're"] },
-            { q: "You + are", ans: "You're", opts: ["You're", "You'm", "You's"] },
-            { q: "Is + not", ans: "Isn't", opts: ["Aren't", "Is'not", "Isn't"] },
-            { q: "Are + not", ans: "Aren't", opts: ["Isn't", "Aren't", "Are'not"] },
-            { q: "I + am + not", ans: "I'm not", opts: ["I'm not", "Im not", "Imnot"] }
-        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
-
-        // Section C
-        const contFillData = [
-            { q: "Linda is at the badminton court. [X] playing badminton.", ans: "She's", opts: ["She's", "He's", "They're"] },
-            { q: "The boys are wearing goggles. [X] going for a swim.", ans: "They're", opts: ["They're", "We're", "You're"] },
-            { q: "I am making the bed. [X] washing the car.", ans: "I'm not", opts: ["I'm not", "Isn't", "Aren't"] },
-            { q: "I am at the tennis court. [X] playing tennis.", ans: "I'm", opts: ["I'm", "He's", "She's"] },
-            { q: "Jason is kicking the ball. [X] playing football.", ans: "He's", opts: ["He's", "She's", "I'm"] },
-            { q: "Greg is doing the washing-up. He [X] baking a cake.", ans: "isn't", opts: ["isn't", "aren't", "I'm not"] },
-            { q: "You are holding a golf club. [X] playing golf.", ans: "You're", opts: ["You're", "They're", "We're"] },
-            { q: "Diana, Michelle and I are at the volleyball court. [X] playing volleyball.", ans: "We're", opts: ["We're", "They're", "You're"] },
-            { q: "Jane and Sandra are wiping the windows. They [X] watering the plants.", ans: "aren't", opts: ["aren't", "isn't", "I'm not"] }
-        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
-
-        // Section D
-        const classifyData = [
-            { q: "🧹 Sweep the porch", ans: "Porch" }, { q: "🛒 Carry in the groceries", ans: "Kitchen" },
-            { q: "🍳 Cook and bake", ans: "Kitchen" }, { q: "🪞 Dust the dresser", ans: "Bedroom" },
-            { q: "📱 Sanitise the TV remote", ans: "Living room" }, { q: "🛏️ Make the bed", ans: "Bedroom" },
-            { q: "🍽️ Do the washing-up", ans: "Kitchen" }, { q: "🧹 Sweep the room", ans: "Bedroom" },
-            { q: "🧽 Clean the doormats", ans: "Porch" }, { q: "🛋️ Vacuum under the couch", ans: "Living room" },
-            { q: "🚗 Wash the car", ans: "Porch" }, { q: "☕ Wipe the coffee table", ans: "Living room" }
-        ].map(item => ({ ...item, shuffledOpts: shuffleArray(["Porch", "Bedroom", "Kitchen", "Living room"]), status: 'unanswered', selected: null }));
-
-        // Section E (New: Aff/Neg)
-        const affNegData = [
-            { emoji: "🚴 Boy on bicycle", q: "Which sentence is correct?", ans: "He is riding a bicycle.", opts: ["He is riding a bicycle.", "He isn't riding.", "They are walking."] },
-            { emoji: "🏃‍♀️ Girl running", q: "Which sentence is correct?", ans: "She is running.", opts: ["She is running.", "She isn't running.", "He is standing."] },
-            { emoji: "💃 Kids dancing", q: "Which sentence is correct?", ans: "They are dancing.", opts: ["They are dancing.", "They aren't dancing.", "She is studying."] }
-        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
-
-        // Section E2 (Build sentences for copying)
-        const affNegBuildData = [
-            { id: 1, type: "1. Affirmative (Tick ✅):", words: ["He", "is", "riding", "a", "bicycle."], correct: "he is riding a bicycle.", bank: [], ans: [], status: 'unanswered' },
-            { id: 2, type: "1. Negative (Cross ❌):", words: ["He", "isn't", "walking."], correct: "he isn't walking.", bank: [], ans: [], status: 'unanswered' },
-            { id: 3, type: "2. Affirmative (Tick ✅):", words: ["She", "is", "running."], correct: "she is running.", bank: [], ans: [], status: 'unanswered' },
-            { id: 4, type: "2. Negative (Cross ❌):", words: ["She", "isn't", "standing."], correct: "she isn't standing.", bank: [], ans: [], status: 'unanswered' },
-            { id: 5, type: "3. Affirmative (Tick ✅):", words: ["They", "are", "playing", "a", "game."], correct: "they are playing a game.", bank: [], ans: [], status: 'unanswered' },
-            { id: 6, type: "3. Negative (Cross ❌):", words: ["They", "aren't", "dancing."], correct: "they aren't dancing.", bank: [], ans: [], status: 'unanswered' }
-        ];
-        affNegBuildData.forEach(item => {
-            item.shuffledWords = shuffleArray([...item.words]);
-            item.bank = [...item.shuffledWords];
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
         });
+        return values;
+      }
 
-        // Section F
-        const jumbledData = [
-            { words: ["cake", "mum", "baking", "is", "a"], correct: "mum is baking a cake" },
-            { words: ["plants", "the", "the", "girls", "watering", "are"], correct: "the girls are watering the plants" },
-            { words: ["bed", "i", "am", "my", "making"], correct: "i am making my bed" },
-            { words: ["laundry", "he", "the", "is", "folding", "clean"], correct: "he is folding the clean laundry" },
-            { words: ["brother", "washing-up", "the", "my", "is", "doing"], correct: "my brother is doing the washing-up" },
-            { words: ["their", "are", "putting", "children", "the", "toys", "away"], correct: "the children are putting their toys away" },
-            { words: ["making", "my", "sandwiches", "sister", "is"], correct: "my sister is making sandwiches" },
-            { words: ["am", "doing", "my", "i", "homework"], correct: "i am doing my homework" },
-            { words: ["she", "taking", "is", "rubbish", "out", "the"], correct: "she is taking out the rubbish" },
-            { words: ["vacuuming", "the", "floor", "he", "is", "kitchen"], correct: "he is vacuuming the kitchen floor" },
-            { words: ["dusting", "the", "cabinets", "shelves", "and", "she", "is"], correct: "she is dusting the cabinets and shelves" },
-            { words: ["sweeping", "they", "are", "the", "porch", "front"], correct: "they are sweeping the front porch" }
-        ].map(item => ({ ...item, shuffledWords: shuffleArray(item.words), bank: [], ans: [], status: 'unanswered' }));
-        jumbledData.forEach(item => item.bank = [...item.shuffledWords]);
-
-        // Section G
-        const sportsData = [
-            {
-                title: "Ice Hockey 🏒", text: "Shawn is playing [0]. He plays with his [1]. It is fun to [2] on ice. He needs a [3] to hit the [4].",
-                opts: [{ ans: "ice hockey", distractors: ["ball", "gymnastics", "friends"] }, { ans: "friends", distractors: ["stick", "skate", "hoop"] }, { ans: "skate", distractors: ["run", "jump", "twirl"] }, { ans: "stick", distractors: ["bat", "racquet", "rope"] }, { ans: "puck", distractors: ["ball", "shuttlecock", "hoop"] }]
-            },
-            {
-                title: "Gymnastics 🤸‍♀️", text: "Sally is doing [0]. It is a fun [1]. She also uses apparatuses such as the [2], [3] and [4]. Her favourite is the ribbon.",
-                opts: [{ ans: "gymnastics", distractors: ["badminton", "baseball", "ice hockey"] }, { ans: "sport", distractors: ["food", "book", "game"] }, { ans: "hoop", distractors: ["stick", "bat", "racquet"] }, { ans: "ball", distractors: ["puck", "shuttlecock", "shoe"] }, { ans: "rope", distractors: ["court", "field", "net"] }]
-            },
-            {
-                title: "Badminton 🏸", text: "I like playing [0]. I always play at the [1]. I only need a [2] and some [3]. I also must wear proper [4] to avoid injuries.",
-                opts: [{ ans: "badminton", distractors: ["tennis", "baseball", "gymnastics"] }, { ans: "court", distractors: ["field", "ice", "pool"] }, { ans: "racquet", distractors: ["stick", "bat", "rope"] }, { ans: "shuttlecocks", distractors: ["balls", "pucks", "hoops"] }, { ans: "shoes", distractors: ["goggles", "gloves", "hats"] }]
-            },
-            {
-                title: "Baseball ⚾", text: "Benjamin's favourite sport is [0]. He usually plays at the [1]. Sometimes he is the pitcher and throws the [2]. To [3] the ball, he uses a [4].",
-                opts: [{ ans: "baseball", distractors: ["hockey", "badminton", "football"] }, { ans: "field", distractors: ["court", "pool", "rink"] }, { ans: "ball", distractors: ["puck", "shuttlecock", "hoop"] }, { ans: "hit", distractors: ["kick", "catch", "twirl"] }, { ans: "bat", distractors: ["stick", "racquet", "rope"] }]
-            }
-        ].map(item => {
-            let blanks = item.opts.map(opt => ({ ans: opt.ans, shuffledOpts: shuffleArray([opt.ans, ...opt.distractors]), status: 'unanswered', selected: '' }));
-            return { ...item, blanks };
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
         });
+      }
 
-        // Section H (New: Cue words)
-        const cueData = [
-            { cue: "- wash - shoes -", ans: "She is washing her shoes.", opts: ["She is washing her shoes.", "She is wash her shoes.", "He washing his shoes."] },
-            { cue: "- jump - trampoline -", ans: "They are jumping on the trampoline.", opts: ["They are jumping on the trampoline.", "They jump on the trampoline.", "He jumping on the trampoline."] },
-            { cue: "- play - guitar -", ans: "He is playing the guitar.", opts: ["He is playing the guitar.", "He play the guitar.", "They is playing the guitar."] },
-            { cue: "- watch - cartoon -", ans: "They are watching a cartoon.", opts: ["They are watching a cartoon.", "They watching a cartoon.", "She is watch a cartoon."] },
-            { cue: "- water - plants -", ans: "She is watering the plants.", opts: ["She is watering the plants.", "She watering the plants.", "He is water the plants."] }
-        ].map(item => ({ ...item, shuffledOpts: shuffleArray(item.opts), status: 'unanswered', selected: null }));
-
-        // --- STATE & PAGINATION TRACKERS ---
-        let currentIdx = { read: 0, cont: 0, contFill: 0, classify: 0, affNeg: 0, jumbled: 0, sports: 0, cue: 0 };
-        const dataMaps = { read: readingData, cont: contractionsData, contFill: contFillData, classify: classifyData, affNeg: affNegData, jumbled: jumbledData, sports: sportsData, cue: cueData };
-
-        // --- TAB LOGIC ---
-        function switchTab(tabId, btnElem) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('active', 'bg-indigo-100', 'text-indigo-700', 'border-indigo-200');
-                b.classList.add('bg-slate-100', 'text-slate-500', 'border-transparent');
-            });
-            document.getElementById(tabId).classList.add('active');
-
-            if (btnElem) {
-                btnElem.classList.remove('bg-slate-100', 'text-slate-500', 'border-transparent');
-                btnElem.classList.add('active', 'bg-indigo-100', 'text-indigo-700', 'border-indigo-200');
-                // Scroll button into view inside the tab bar smoothly
-                btnElem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-
-            // Render current state for dynamic tabs
-            const typeMap = { 'tab1': 'read', 'tab2': 'cont', 'tab3': 'contFill', 'tab4': 'classify', 'tab5': 'affNeg', 'tab6': 'jumbled', 'tab7': 'sports', 'tab8': 'cue' };
-            if (typeMap[tabId]) renderQuizCard(typeMap[tabId]);
-            if (tabId === 'tab5_2') renderAffNegBuild();
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
         }
-
-        // --- GENERIC RENDERER FOR MULTIPLE CHOICE STYLE QUIZZES ---
-        function renderMCQ(type, containerId, promptHtmlFn, btnClassFn) {
-            const idx = currentIdx[type];
-            const item = dataMaps[type][idx];
-
-            document.getElementById(`${type}-progress`).innerText = `${idx + 1}/${dataMaps[type].length}`;
-            document.getElementById(`btn-${type}-prev`).disabled = idx === 0;
-            document.getElementById(`btn-${type}-next`).disabled = idx === dataMaps[type].length - 1;
-
-            const container = document.getElementById(containerId);
-            let html = promptHtmlFn(item) + `<div class="flex flex-col md:flex-row gap-3 w-full">`;
-
-            item.shuffledOpts.forEach(opt => {
-                let btnClass = btnClassFn(item, opt);
-                let safeOpt = opt.replace(/'/g, "\\'");
-                html += `<button onclick="handleGenericAns('${type}', '${safeOpt}')" class="${btnClass}">${opt}</button>`;
-            });
-            container.innerHTML = html + `</div>`;
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
         }
+      }
 
-        function renderQuizCard(type) {
-            if (['read', 'cont', 'contFill', 'classify', 'affNeg', 'cue'].includes(type)) {
-
-                let promptFn, btnFn, layoutClass;
-
-                if (type === 'read') {
-                    promptFn = item => `<p class="font-black text-lg mb-4 text-sky-900">${item.q}</p>`;
-                    btnFn = (item, opt) => `py-3 px-4 font-bold rounded-xl border-2 transition-all active:scale-95 text-left w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-100 border-green-500 text-green-700 answered-lock' : 'bg-slate-50 border-slate-200 text-slate-400 answered-lock') : 'bg-white border-sky-200 text-sky-700 hover:bg-sky-50'}`;
-                    layoutClass = 'flex-col';
-                } else if (type === 'cont') {
-                    promptFn = item => `<div class="text-3xl font-black text-emerald-600 mb-6 bg-emerald-100 px-6 py-3 rounded-2xl shadow-sm tracking-wider w-full text-center">${item.q} = ?</div>`;
-                    btnFn = (item, opt) => `flex-1 py-4 text-xl font-black rounded-xl border-b-4 transition-all active:scale-95 active:border-b-0 active:translate-y-1 w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-500 border-green-700 text-white answered-lock' : 'bg-slate-200 border-slate-300 text-slate-400 answered-lock') : 'bg-white border-emerald-300 text-emerald-600 hover:bg-emerald-50'}`;
-                } else if (type === 'contFill') {
-                    promptFn = item => `<p class="font-black text-lg mb-4 text-teal-900">${item.q.replace('[X]', '<span class="border-b-4 border-dashed border-teal-400 px-6 text-teal-600">?</span>')}</p>`;
-                    btnFn = (item, opt) => `flex-1 py-3 px-2 font-black rounded-xl border-b-4 transition-all active:scale-95 active:border-b-0 active:translate-y-1 w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-500 border-green-700 text-white answered-lock' : 'bg-slate-200 border-slate-300 text-slate-400 answered-lock') : 'bg-white border-teal-300 text-teal-600 hover:bg-teal-50'}`;
-                } else if (type === 'classify') {
-                    promptFn = item => `<div class="text-xl font-black text-purple-700 mb-6 bg-purple-100 px-6 py-4 rounded-2xl shadow-sm tracking-wide text-center w-full border-2 border-purple-200">${item.q}</div>`;
-                    btnFn = (item, opt) => `flex-1 py-4 text-lg font-black rounded-xl border-b-4 transition-all active:scale-95 active:border-b-0 active:translate-y-1 w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-500 border-green-700 text-white answered-lock' : 'bg-slate-200 border-slate-300 text-slate-400 answered-lock') : 'bg-white border-purple-300 text-purple-600 hover:bg-purple-50'}`;
-                } else if (type === 'affNeg') {
-                    promptFn = item => `<div class="text-4xl text-center mb-2">${item.emoji}</div><p class="font-black text-lg mb-4 text-yellow-900 text-center">${item.q}</p>`;
-                    btnFn = (item, opt) => `py-3 px-4 font-bold rounded-xl border-2 transition-all active:scale-95 text-center w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-100 border-green-500 text-green-700 answered-lock' : 'bg-slate-50 border-slate-200 text-slate-400 answered-lock') : 'bg-white border-yellow-300 text-yellow-700 hover:bg-yellow-50'}`;
-                } else if (type === 'cue') {
-                    promptFn = item => `<div class="text-xl font-black text-cyan-600 mb-4 bg-cyan-100 px-6 py-3 rounded-2xl text-center w-full">${item.cue}</div>`;
-                    btnFn = (item, opt) => `py-3 px-4 font-bold rounded-xl border-2 transition-all active:scale-95 text-left w-full ${item.status === 'correct' ? (item.selected === opt ? 'bg-green-100 border-green-500 text-green-700 answered-lock' : 'bg-slate-50 border-slate-200 text-slate-400 answered-lock') : 'bg-white border-cyan-300 text-cyan-700 hover:bg-cyan-50'}`;
-                }
-
-                // Inject Custom Render structure
-                const idx = currentIdx[type];
-                const item = dataMaps[type][idx];
-                document.getElementById(`${type}-progress`).innerText = `${idx + 1}/${dataMaps[type].length}`;
-                document.getElementById(`btn-${type}-prev`).disabled = idx === 0;
-                document.getElementById(`btn-${type}-next`).disabled = idx === dataMaps[type].length - 1;
-
-                const container = document.getElementById(`${type}-container`);
-                let html = promptFn(item) + `<div class="flex ${type === 'read' || type === 'affNeg' || type === 'cue' ? 'flex-col' : 'flex-wrap sm:flex-nowrap'} gap-3 w-full justify-center">`;
-
-                item.shuffledOpts.forEach(opt => {
-                    let safeOpt = opt.replace(/'/g, "\\'");
-                    html += `<button onclick="handleGenericAns('${type}', '${safeOpt}')" class="${btnFn(item, opt)}">${opt}</button>`;
-                });
-                container.innerHTML = html + `</div>`;
-            }
-
-            if (type === 'jumbled') {
-                const idx = currentIdx.jumbled;
-                const item = jumbledData[idx];
-                document.getElementById(`jumbled-progress`).innerText = `${idx + 1}/${jumbledData.length}`;
-                document.getElementById(`btn-jumbled-prev`).disabled = idx === 0;
-                document.getElementById(`btn-jumbled-next`).disabled = idx === jumbledData.length - 1;
-
-                const container = document.getElementById('jumbled-container');
-                let bankHtml = item.bank.map((w, i) => `<button onclick="moveJumbledWord(${i}, 'bank')" class="word-bubble inline-block bg-orange-100 text-orange-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-orange-300 hover:bg-orange-200 ${item.status === 'correct' ? 'hidden' : ''}">${w}</button>`).join('');
-                let ansHtml = item.ans.map((w, i) => `<button onclick="moveJumbledWord(${i}, 'ans')" class="word-bubble inline-block bg-indigo-100 text-indigo-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-indigo-300 hover:bg-indigo-200 ${item.status === 'correct' ? 'answered-lock bg-green-100 border-green-400 text-green-800' : ''}">${w}</button>`).join('');
-
-                container.innerHTML = `
-                    <div id="jumbled-ans-box" class="min-h-[70px] p-3 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-wrap items-center mb-4 transition-colors ${item.status === 'correct' ? 'border-solid border-green-400 bg-green-50' : ''}">
-                        ${ansHtml.length > 0 ? ansHtml : '<span class="text-slate-400 text-sm font-bold w-full text-center pointer-events-none">Words will appear here...</span>'}
-                    </div>
-                    <div class="min-h-[70px] p-2 flex flex-wrap justify-center items-center">${bankHtml}</div>
-                `;
-            }
-
-            if (type === 'sports') {
-                const idx = currentIdx.sports;
-                const item = sportsData[idx];
-                document.getElementById(`sports-progress`).innerText = `${idx + 1}/${sportsData.length}`;
-                document.getElementById(`btn-sports-prev`).disabled = idx === 0;
-                document.getElementById(`btn-sports-next`).disabled = idx === sportsData.length - 1;
-
-                document.getElementById('sport-title').innerText = item.title;
-                const container = document.getElementById('sports-container');
-                let textHtml = item.text;
-
-                item.blanks.forEach((blank, bIdx) => {
-                    let selectHtml = `<select class="inline-block border-b-4 border-rose-400 bg-transparent font-black text-rose-700 outline-none p-1 mx-1 text-center min-w-[120px] transition-all ${blank.status === 'correct' ? 'answered-lock border-green-500 text-green-600' : ''}" onchange="handleSportsAns(this, ${bIdx})">`;
-                    if (blank.status !== 'correct') selectHtml += `<option value="" disabled ${blank.selected === '' ? 'selected' : ''}>(Tap)</option>`;
-                    blank.shuffledOpts.forEach(opt => selectHtml += `<option value="${opt}" ${blank.selected === opt ? 'selected' : ''}>${opt}</option>`);
-                    selectHtml += `</select>`;
-                    textHtml = textHtml.replace(`[${bIdx}]`, selectHtml);
-                });
-                container.innerHTML = textHtml;
-            }
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
         }
+      }
 
-        // --- GENERIC HANDLER ---
-        function navQuiz(type, dir) { currentIdx[type] += dir; renderQuizCard(type); }
-
-        function handleGenericAns(type, opt) {
-            const item = dataMaps[type][currentIdx[type]];
-            item.selected = opt;
-            if (opt === item.ans) {
-                item.status = 'correct'; addScore();
-                playSFX('correct'); // Trigger success sound
-                showToast(type === 'classify' ? "Wah, you know your house well! 🏠" : "Cun cun! Geng leh! 🎉");
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
             } else {
-                playSFX('wrong'); // Trigger error sound
-                showToast("Aiya, salah! Try again loh! 😅", 'error');
+              field.value = answers[key];
             }
-            renderQuizCard(type);
-
-            // Auto advance for everything EXCEPT Section H ('cue') so they can copy the answer
-            if (item.status === 'correct' && currentIdx[type] < dataMaps[type].length - 1) {
-                if (type !== 'cue') {
-                    setTimeout(() => navQuiz(type, 1), 800);
-                }
-            }
-        }
-
-        // --- SPECIFIC HANDLERS ---
-        function moveJumbledWord(wIdx, from) {
-            const item = jumbledData[currentIdx.jumbled];
-            if (item.status === 'correct') return;
-
-            if (from === 'bank') item.ans.push(item.bank.splice(wIdx, 1)[0]);
-            else item.bank.push(item.ans.splice(wIdx, 1)[0]);
-
-            renderQuizCard('jumbled');
-
-            if (item.bank.length === 0) {
-                const currentStr = item.ans.join(' ').toLowerCase();
-                const box = document.getElementById('jumbled-ans-box');
-
-                if (currentStr === item.correct.toLowerCase()) {
-                    item.status = 'correct'; addScore();
-                    playSFX('correct'); // Trigger success sound
-                    showToast("Wah, sentence cun cun! 👏");
-                    renderQuizCard('jumbled');
-                    if (currentIdx.jumbled < jumbledData.length - 1) setTimeout(() => navQuiz('jumbled', 1), 1500);
-                } else {
-                    playSFX('wrong'); // Trigger error sound
-                    box.classList.add('shake', 'error-state');
-                    showToast("Not quite right leh...", 'error');
-                    setTimeout(() => box.classList.remove('shake', 'error-state'), 500);
-                }
-            }
-        }
-
-        function resetCurrentJumbled() {
-            const item = jumbledData[currentIdx.jumbled];
-            if (item.status === 'correct') return;
-            item.bank = [...item.ans, ...item.bank];
-            item.ans = [];
-            renderQuizCard('jumbled');
-        }
-
-        function handleSportsAns(selectElem, bIdx) {
-            const item = sportsData[currentIdx.sports];
-            const blank = item.blanks[bIdx];
-            blank.selected = selectElem.value;
-
-            if (blank.selected === blank.ans) {
-                blank.status = 'correct'; addScore();
-                playSFX('correct'); // Trigger success sound
-                selectElem.classList.replace('text-rose-700', 'text-green-600');
-                selectElem.classList.add('bounce-correct');
-                if (item.blanks.every(b => b.status === 'correct')) {
-                    showToast("Full combo! Geng! 🌟");
-                    if (currentIdx.sports < sportsData.length - 1) setTimeout(() => navQuiz('sports', 1), 1500);
-                }
-            } else {
-                playSFX('wrong'); // Trigger error sound
-                selectElem.classList.add('shake', 'bg-red-100', 'text-red-600');
-                setTimeout(() => selectElem.classList.remove('shake', 'bg-red-100', 'text-red-600'), 400);
-                selectElem.value = ""; blank.selected = "";
-            }
-            setTimeout(() => renderQuizCard('sports'), 400);
-        }
-
-        let emailCorrectCount = 0;
-        function checkEmail() {
-            let corrects = { "em-1": "sport is skateboarding", "em-2": "tricks at the skatepark", "em-3": "helps me practice balance", "em-4": "two years now", "em-5": "learning new tricks", "em-6": "What about you?" };
-            let allCorrect = true;
-            let triggeredCorrect = false;
-            let triggeredWrong = false;
-
-            for (let id in corrects) {
-                let el = document.getElementById(id);
-                if (el.value === corrects[id]) {
-                    if (!el.classList.contains('answered-lock')) {
-                        el.classList.add('text-green-600', 'border-green-500', 'answered-lock');
-                        el.classList.remove('text-pink-700', 'border-pink-400');
-                        triggeredCorrect = true;
-                    }
-                } else {
-                    if (el.value !== "") {
-                        el.classList.add('shake', 'text-red-600');
-                        setTimeout(() => el.classList.remove('shake', 'text-red-600'), 400);
-                        el.value = "";
-                        triggeredWrong = true;
-                    }
-                    allCorrect = false;
-                }
-            }
-
-            // Play correct/wrong once per interaction
-            if (triggeredWrong) playSFX('wrong');
-            else if (triggeredCorrect) playSFX('correct');
-
-            if (allCorrect) {
-                addScore(); showToast("Email done! Settle! ✉️");
-            }
-        }
-
-        // --- SECTION E2 HANDLERS (NON-PAGINATED JUMBLED) ---
-        function renderAffNegBuild() {
-            const container = document.getElementById('affNegBuild-container');
-            let html = '';
-            let allCorrect = true;
-
-            affNegBuildData.forEach((item, idx) => {
-                if (item.status !== 'correct') allCorrect = false;
-
-                let bankHtml = item.bank.map((w, i) => `<button onclick="moveAffNegBuildWord(${idx}, ${i}, 'bank')" class="word-bubble inline-block bg-lime-100 text-lime-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-lime-300 hover:bg-lime-200 ${item.status === 'correct' ? 'hidden' : ''}">${w}</button>`).join('');
-                let ansHtml = item.ans.map((w, i) => `<button onclick="moveAffNegBuildWord(${idx}, ${i}, 'ans')" class="word-bubble inline-block bg-indigo-100 text-indigo-800 font-bold px-4 py-2 rounded-full m-1 border-b-4 border-indigo-300 hover:bg-indigo-200 ${item.status === 'correct' ? 'answered-lock bg-green-100 border-green-400 text-green-800' : ''}">${w}</button>`).join('');
-
-                html += `
-                    <div class="p-4 bg-white border-2 border-lime-100 rounded-2xl shadow-sm">
-                        <p class="text-sm font-black text-lime-700 mb-2">${item.type}</p>
-                        <div class="min-h-[60px] p-2 bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl flex flex-wrap items-center transition-colors ${item.status === 'correct' ? 'border-solid border-green-400 bg-green-50 mb-0' : 'mb-3'}">
-                            ${ansHtml.length > 0 ? ansHtml : '<span class="text-slate-400 text-sm font-bold w-full text-center pointer-events-none">Tap words to build here...</span>'}
-                        </div>
-                        ${item.status !== 'correct' ? `<div class="min-h-[50px] p-1 flex flex-wrap justify-center items-center">${bankHtml}</div>` : ''}
-                        ${item.status === 'correct' ? `<p class="mt-2 text-green-600 font-bold text-sm text-right">Correct! ✅</p>` : `<button onclick="resetAffNegBuild(${idx})" class="mt-2 text-xs font-bold text-red-500 bg-red-50 px-3 py-1 rounded-lg border border-red-100 active:scale-95">🔄 Reset</button>`}
-                    </div>
-                `;
-            });
-
-            container.innerHTML = html;
-
-            if (allCorrect) {
-                document.getElementById('affNegBuild-success').classList.remove('hidden');
-            }
-        }
-
-        function moveAffNegBuildWord(itemIdx, wIdx, from) {
-            const item = affNegBuildData[itemIdx];
-            if (item.status === 'correct') return;
-
-            if (from === 'bank') item.ans.push(item.bank.splice(wIdx, 1)[0]);
-            else item.bank.push(item.ans.splice(wIdx, 1)[0]);
-
-            renderAffNegBuild();
-
-            if (item.bank.length === 0) {
-                const currentStr = item.ans.join(' ').toLowerCase();
-                if (currentStr === item.correct.toLowerCase()) {
-                    item.status = 'correct'; addScore();
-                    playSFX('correct'); // Trigger success sound
-                    showToast("Sentence cun cun! 👏");
-                    renderAffNegBuild();
-                } else {
-                    playSFX('wrong'); // Trigger error sound
-                    showToast("Aiya, check the order again loh...", 'error');
-                }
-            }
-        }
-
-        function resetAffNegBuild(itemIdx) {
-            const item = affNegBuildData[itemIdx];
-            if (item.status === 'correct') return;
-            item.bank = [...item.ans, ...item.bank];
-            item.ans = [];
-            renderAffNegBuild();
-        }
-
-        // --- GAME: MATCHING ---
-        let matchSelection = [];
-        function initMatchGame() {
-            const gameDiv = document.getElementById('match-game');
-            gameDiv.innerHTML = '';
-            let subset = vocabList.slice(0, 4);
-            let cards = [];
-            subset.forEach(v => {
-                cards.push({ text: v.en, type: 'en', pair: v.en }); cards.push({ text: v.zh, type: 'zh', pair: v.en });
-            });
-            shuffleArray(cards).forEach(c => {
-                let btn = document.createElement('button');
-                btn.className = 'p-4 rounded-2xl font-black border-4 border-indigo-100 bg-white text-indigo-700 shadow-sm transition-all active:scale-90 select-none';
-                btn.innerText = c.text; btn.dataset.type = c.type; btn.dataset.pair = c.pair;
-                btn.onclick = () => handleMatchClick(btn);
-                gameDiv.appendChild(btn);
-            });
-        }
-
-        function handleMatchClick(btn) {
-            if (btn.classList.contains('opacity-0') || btn.classList.contains('bg-indigo-500')) return;
-
-            btn.classList.add('bg-indigo-500', 'text-white', 'border-indigo-600');
-            matchSelection.push(btn);
-
-            if (matchSelection.length === 2) {
-                let [b1, b2] = matchSelection;
-                if (b1.dataset.pair === b2.dataset.pair && b1.dataset.type !== b2.dataset.type) {
-                    playSFX('correct'); // Trigger success sound
-                    setTimeout(() => {
-                        b1.classList.replace('opacity-100', 'opacity-0'); b1.classList.add('invisible');
-                        b2.classList.replace('opacity-100', 'opacity-0'); b2.classList.add('invisible');
-                        addScore(); checkMatchWin();
-                    }, 400);
-                } else {
-                    playSFX('wrong'); // Trigger error sound
-                    setTimeout(() => {
-                        b1.classList.remove('bg-indigo-500', 'text-white', 'border-indigo-600'); b1.classList.add('shake', 'bg-red-100', 'border-red-300', 'text-red-700');
-                        b2.classList.remove('bg-indigo-500', 'text-white', 'border-indigo-600'); b2.classList.add('shake', 'bg-red-100', 'border-red-300', 'text-red-700');
-                        setTimeout(() => {
-                            b1.classList.remove('shake', 'bg-red-100', 'border-red-300', 'text-red-700'); b2.classList.remove('shake', 'bg-red-100', 'border-red-300', 'text-red-700');
-                        }, 400);
-                    }, 200);
-                }
-                matchSelection = [];
-            }
-        }
-        function checkMatchWin() {
-            let remaining = document.querySelectorAll('#match-game button:not(.invisible)');
-            if (remaining.length === 0) {
-                let fb = document.getElementById('match-feedback');
-                fb.innerText = "Wah, geng leh! You matched all! 🎉"; fb.classList.remove('hidden'); fb.classList.add('text-green-600', 'bounce-correct', 'p-3', 'rounded-xl');
-            }
-        }
-
-        // --- DICTIONARY MODAL ---
-        function openDict() {
-            document.getElementById('dict-modal').classList.remove('hidden');
-            const content = document.getElementById('dict-content');
-            content.innerHTML = '';
-            shuffleArray(vocabList).forEach(v => {
-                content.innerHTML += `<div class="bg-white border-2 border-pink-100 p-3 rounded-2xl shadow-sm flex flex-col items-center justify-center"><span class="font-black text-pink-600 text-lg">${v.en}</span><span class="text-sm font-bold text-slate-500 mt-1">${v.zh}</span></div>`;
-            });
-        }
-        function closeDict() { document.getElementById('dict-modal').classList.add('hidden'); }
-
-        // --- TOOLTIP ---
-        let tooltipTimeout;
-        function showTip(elem, text) {
-            const tooltip = document.getElementById('tooltip'); tooltip.innerText = text;
-            const rect = elem.getBoundingClientRect();
-            tooltip.style.left = rect.left + (rect.width / 2) + 'px'; tooltip.style.top = (rect.top - 40) + 'px';
-            tooltip.classList.remove('opacity-0');
-            clearTimeout(tooltipTimeout); tooltipTimeout = setTimeout(() => { tooltip.classList.add('opacity-0'); }, 2500);
-        }
-
-        // Initialize Everything
-        initMatchGame();
-
-        // --- PILLAR 4: PROGRESS TRACKING ---
-
-        window.addEventListener('load', function() {
-            if (typeof ProgressTracker !== 'undefined') {
-                ProgressTracker.init(async function(tracker) {
-                    const saved = await tracker.load();
-                    if (saved) {
-                        const p = saved;
-                        // Restore score if saved
-                        if (p.score) {
-                            score = p.score;
-                            document.getElementById('total-score').innerText = score;
-                        }
-                    }
-                });
-            }
+          });
         });
-    </script>
+      }
 
-    <!-- Progress Tracker -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../../../../../js/auth-access.js"></script>
-    <script src="../../../../../js/progress-tracker.js"
-            data-module-id="kssr-p3-en-unit3"
-            data-module-name="Unit 3: Housework"
-            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit3/index.html"></script>
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
 
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
 
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
 
+      restoreLocal();
+      restoreFields();
+      paintState();
 
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p3-en-unit3"
+          data-module-name="Primary 3 English Unit 3"
+          data-module-url="content/KSSR_Syllabus/Primary3/English/Unit3/index.html"></script>
 </body>
 </html>
