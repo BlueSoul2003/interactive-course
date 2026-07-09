@@ -52,6 +52,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── SPM Bahasa Melayu (Form 5) ────────────────────────────────────
 ('spm-bm-kesalahan-ejaan',    'Sistem特訓: 錯別字 Debug',          'spm', 'bm', 'spm_form5', 'Form5'),
 ('spm-bm-peribahasa',         'Peribahasa Mastery',              'spm', 'bm', 'spm_form5', 'Form5'),
+('spm-bm-karangan-rakan-sebaya', 'Karangan: Rakan Sebaya',       'spm', 'bm', 'spm_form5', 'Form5'),
 ('spm-bm-kata-terbitan',      'Morfologi Mastery',               'spm', 'bm', 'spm_form5', 'Form5'),
 ('spm-bm-komsas-novel',       'Novel Silir Daksina (Interactive)','spm', 'bm', 'spm_form5', 'Form5'),
 ('spm-bm-karangan',           'Modul Karangan SPM 1',            'spm', 'bm', 'spm_form5', 'Form5'),
