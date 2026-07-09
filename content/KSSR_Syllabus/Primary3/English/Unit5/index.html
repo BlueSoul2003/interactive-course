@@ -1,1071 +1,988 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Primary 3 English Unit 5</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      color-scheme: light;
-      --accent: #be123c;
-      --surface: #fff1f2;
-      --ink: #172033;
-      --muted: #526070;
-      --paper: #fffdf8;
-      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
-      --soft-line: #d7dee8;
-      --shadow: 0 18px 42px rgb(23 32 51 / .10);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
-        linear-gradient(180deg, var(--surface), #ffffff 64%);
-      color: var(--ink);
-      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
-      line-height: 1.55;
-    }
-    button, input, textarea, select { font: inherit; }
-    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
-      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
-      outline-offset: 3px;
-    }
-    .shell {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      padding: 18px;
-    }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 6px 0 18px;
-    }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      min-height: 40px;
-      border: 2px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 14px;
-      background: #ffffff;
-      color: var(--accent);
-      font-weight: 800;
-      text-decoration: none;
-    }
-    .book-label {
-      color: var(--muted);
-      font-size: .95rem;
-      font-weight: 800;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
-      gap: 20px;
-      align-items: stretch;
-      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
-      border: 2px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 4vw, 30px);
-    }
-    .theme-pill, .source-pill {
-      display: inline-flex;
-      width: fit-content;
-      border-radius: 999px;
-      border: 2px solid var(--line);
-      background: #ffffff;
-      color: var(--accent);
-      font-size: .82rem;
-      font-weight: 900;
-      letter-spacing: .02em;
-      padding: 6px 10px;
-    }
-    .hero h1 {
-      margin: 12px 0 8px;
-      color: var(--accent);
-      font-size: clamp(2rem, 6vw, 4.35rem);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-    .hero-copy {
-      max-width: 62ch;
-      margin: 0;
-      color: #334155;
-      font-size: 1.04rem;
-    }
-    .hero-panel {
-      border: 2px dashed var(--line);
-      border-radius: 8px;
-      background: #ffffff;
-      padding: 16px;
-      display: grid;
-      align-content: space-between;
-      min-height: 210px;
-    }
-    .hero-panel strong {
-      color: var(--accent);
-      font-size: 1.08rem;
-    }
-    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
-    .progress-wrap {
-      margin-top: 14px;
-      height: 14px;
-      overflow: hidden;
-      border: 1px solid var(--soft-line);
-      border-radius: 999px;
-      background: #eef2f7;
-    }
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--accent);
-      transition: width .25s ease;
-    }
-    .progress-status {
-      margin: 8px 0 0;
-      color: #334155;
-      font-size: .92rem;
-      font-weight: 800;
-    }
-    .practice-section {
-      margin: 26px 0;
-    }
-    .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      border-bottom: 2px solid var(--line);
-      padding-bottom: 8px;
-    }
-    .section-heading p {
-      order: 2;
-      margin: 0;
-      color: var(--muted);
-      font-size: .86rem;
-      font-weight: 800;
-    }
-    h2 {
-      margin: 0;
-      font-size: clamp(1.35rem, 3vw, 2rem);
-      color: #1f2937;
-    }
-    .section-instructions {
-      margin: 10px 0 14px;
-      color: var(--muted);
-    }
-    .question-card {
-      margin: 14px 0;
-      border: 2px solid var(--soft-line);
-      border-left: 7px solid var(--accent);
-      border-radius: 8px;
-      background: #ffffff;
-      padding: clamp(14px, 3vw, 20px);
-    }
-    .question-card[data-saved="true"] {
-      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
-      background: color-mix(in srgb, var(--surface), #ffffff 72%);
-    }
-    .question-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 12px;
-    }
-    .question-meta span {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #ffffff;
-      color: #334155;
-      font-size: .78rem;
-      font-weight: 800;
-      padding: 3px 9px;
-    }
-    h3 {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 1.18rem;
-    }
-    .prompt-text {
-      width: 100%;
-      max-height: 24rem;
-      overflow: auto;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      margin: 0;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      background: #f8fafc;
-      padding: 12px;
-      color: #263447;
-      font: inherit;
-    }
-    .response-area {
-      margin-top: 14px;
-    }
-    .control-group {
-      margin: 0;
-      border: 0;
-      padding: 0;
-    }
-    legend, .answer-label, .interactive-grid label span, .sequence-row span {
-      display: block;
-      margin-bottom: 6px;
-      color: #334155;
-      font-size: .88rem;
-      font-weight: 900;
-    }
-    .choices {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .choice, .word-chip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 44px;
-      border: 2px solid #d7dee8;
-      border-radius: 8px;
-      background: #ffffff;
-      padding: 10px 12px;
-      cursor: pointer;
-    }
-    .choice:has(input:checked), .word-chip:has(input:checked) {
-      border-color: var(--accent);
-      background: var(--surface);
-    }
-    .answer-input, .answer-box {
-      width: 100%;
-      border: 2px solid #cbd5e1;
-      border-radius: 8px;
-      background: #ffffff;
-      color: var(--ink);
-      padding: 11px 12px;
-    }
-    .answer-box {
-      min-height: 116px;
-      resize: vertical;
-    }
-    .answer-box.compact {
-      min-height: 58px;
-    }
-    .control-hint, .picture-response p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-    .interactive-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-    .sequence-board {
-      display: grid;
-      gap: 10px;
-    }
-    .word-bank-board {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-    button {
-      min-height: 42px;
-      border: 0;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    button:active {
-      transform: translateY(1px);
-    }
-    .check-btn {
-      background: var(--accent);
-      color: #ffffff;
-    }
-    .save-btn, .mini-btn {
-      border: 2px solid var(--line);
-      background: #ffffff;
-      color: var(--accent);
-    }
-    .feedback {
-      min-height: 1.5rem;
-      margin: 10px 0 0;
-      color: #334155;
-      font-weight: 900;
-    }
-    @media (max-width: 768px) {
-      .shell { padding: 12px; }
-      .topbar { align-items: flex-start; flex-direction: column; }
-      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
-      .section-heading { display: block; }
-      .hero-panel { min-height: 0; }
-      .prompt-text { max-height: 18rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-      }
-    }
-  </style>
-</head>
-<body>
-  <div class="shell">
-    <nav class="topbar" aria-label="Workbook navigation">
-      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
-      <span class="book-label">Primary 3 English workbook draft</span>
-    </nav>
-    <header class="hero">
-      <div>
-        <span class="theme-pill">Toy Town</span>
-        <h1>Unit 5</h1>
-        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
-      </div>
-      <aside class="hero-panel" aria-label="Unit summary">
-        <div>
-          <strong>Theme note</strong>
-          <p>cute toy town English workbook theme</p>
-        </div>
-        <div>
-          <span class="source-pill">Source pages 35, 36, 37, 38, 39, 40, 41, 42</span>
-          <div class="progress-wrap" aria-label="Progress">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-          <p class="progress-status" id="progressStatus">0 saved</p>
-        </div>
-      </aside>
-    </header>
-    <main>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-035-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-035-heading">Source page 35</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p035-01"
-               data-question-type="matching"
-               data-source-page="35">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 35</span>
-        <span>Matching</span>
-        <span>unit-5-p035-01</span>
-      </div>
-
-        <h3 id="unit-5-p035-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p035-01-prompt">lo y
-@ Unity 5) ,
-AP Ba =A - Ey
-f A Read the texts about three different house parts. Then, assign each letter
-to the statement that best represents it.
-The attic is a space at the top of a house, just under the roof. It&#x27;s
-often used to store old or unused items like boxes, suitcases or
-decorations. Some attics are small and dusty, while others can be
-large enough to turn into a room. People don’t go there often unless
-they need to find something or put things away.
-A balcony is an outdoor space that sticks out from a room, usually
-(B | on an upper floor. It has railings around it and is open to the air.
-People use balconies to get fresh air, relax or grow small plants. It&#x27;s
-a nice spot to enjoy a morning drink or look at the view.
-The living room is a shared space in a home where families spend
-time together. It usually has a sofa, chairs, a coffee table and a TV.
-People use it to relax, watch shows, play games or chat with guests.
-It&#x27;s often the heart of the home.
-[ [A] Attic B] Balcony Living Room
-I This house part is used to store old or unused things. ( )
-2 This house part is where people relax, watch TV or talk to friends. ( )
-3 This house part is outside but still connected to the house. ( )
-4 This house part is often high up and might be dusty or dark. ( )
-5 This house part has furniture like sofas and a coffee table. ( )
-6 This house part is great for enjoying the breeze or planting flowers. ( )
-7 This house part may have boxes filled with holiday decorations. ( )
-8 This house part is often called the heart of the home. ( )
-33 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with
-i = CamScanner</pre>
-        <div class="response-area">
-
-      <div class="interactive-grid matching-board" data-matching-board="true">
-        <label>
-          <span>Left item</span>
-          <input class="answer-input" data-answer-input="unit-5-p035-01-left" aria-label="Matching left item for unit-5-p035-01">
-        </label>
-        <label>
-          <span>Matches with</span>
-          <input class="answer-input" data-answer-input="unit-5-p035-01-right" aria-label="Matching right item for unit-5-p035-01">
-        </label>
-      </div>
-      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-036-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-036-heading">Source page 36</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p036-01"
-               data-question-type="word_bank"
-               data-source-page="36">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 36</span>
-        <span>Word bank</span>
-        <span>unit-5-p036-01</span>
-      </div>
-
-        <h3 id="unit-5-p036-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p036-01-prompt">B Label the numbered house parts with words from the answer bank.
-: :
-(
-0 =i
-TI bh ~o /
-A
-Al | i
-) Ulli 7 L_se |
-HE ball TA TC
-4 0 =
-a el ACC
-LB B Wm —
-BEI] a am =
-Bll | in
-=: = —f
-kitchen : attic i livingroom : garage
-bathroom : dining room : bedroom : study
-@VTLobw bint aclieop dino ois o @) hie if Suitap ir At Sol
-e - _. co@toncoledinaodt Lo
-© EER o J REIRSON
-(7 RSNA doh ddact Mi padi total
-©EPH Publishing (M) Sdn. Bhd. 34
-{scanned with
-| = CamScanner |</pre>
-        <div class="response-area">
-
-      <div class="word-bank-board" data-word-bank-board="true">
-
-          <label class="answer-label" for="unit-5-p036-01-words">Words you used</label>
-          <input id="unit-5-p036-01-words" class="answer-input" data-answer-input="unit-5-p036-01-words">
-
-      </div>
-
-      <label class="answer-label" for="unit-5-p036-01-answer">Write your completed answer</label>
-      <textarea id="unit-5-p036-01-answer" class="answer-box" data-answer-input="unit-5-p036-01" rows="5"></textarea>
-
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-037-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-037-heading">Source page 37</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p037-01"
-               data-question-type="fill_blank"
-               data-source-page="37">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 37</span>
-        <span>Fill in the blank</span>
-        <span>unit-5-p037-01</span>
-      </div>
-
-        <h3 id="unit-5-p037-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p037-01-prompt">{ [) Classify the household objects from the table to the correct house parts.
-fridge : TV : oven : coffee table : shower
-bed * cushions : sink * armchair : toaster
-tub : pillow : toilet * mirror : cupboard
-bedside table : microwave : sofa * blanket kettle
-(caren
-(1) 0 (1) [1]
-(2) (2) (2) (2)
-(3) 13) (3) (3)
-(4) 0 (4) (4)
-6 (5) (5) (5)
-D Fill in the blanks with the missing letters to spell the house parts described
-in the following statements.
-@ 1tis where your clothes are kept. : Bai WT 202s Cu 90 |
-J =e iideietit
-@® tis where you have your meals. : =
-® tis where you brush your teeth. ; =
-(4) It is where meals are prepared. : | SE Sp | ©)
-5S Liimstad orn
-@® tis where you can find an armchair. : R
-® 1t is where smoke escapes from a : :
-fireplace. HAR
-35 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with |
-| = CamScanner |</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-5-p037-01-answer">Your answer</label>
-      <input id="unit-5-p037-01-answer" class="answer-input" data-answer-input="unit-5-p037-01" aria-describedby="unit-5-p037-01-hint">
-      <p id="unit-5-p037-01-hint" class="control-hint">Type your answer, then save it.</p>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-038-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-038-heading">Source page 38</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p038-01"
-               data-question-type="fill_blank"
-               data-source-page="38">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 38</span>
-        <span>Fill in the blank</span>
-        <span>unit-5-p038-01</span>
-      </div>
-
-        <h3 id="unit-5-p038-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p038-01-prompt">-
-(E) Complete the tables with the correct form of singular or plural possessive
-nouns.
-Singular Noun Sige) Plural Noun Plural Possessive
-Possessive
-girls
-EB Fill in the blanks with the correct form of possessive nouns in brackets.
-| This book belongs to Kim. Itis ~~ (Kims’ / Kim’s) book.
-2 CoreyandRyanare ___ (boys’/ boy&#x27;s) names.
-3 My (fathers’/ father&#x27;s) mobile phone is broken.
-4 The_______ (girls’/ girl&#x27;s) new dress is very pretty.
-5 The engine belongs tothe van. Itisthe_____ (vans’/ van’s) engine.
-6 The_____ (students’/ student&#x27;s) names are Xin Rui and Xin Ying.
-7 lamstayingatmy___ (aunt&#x27;s / aunts’) house.
-8 The collar belongs to the dog. Itisthe (dog&#x27;s / dogs’) collar.
-9 The bike belongs to my brother. Itismy____ (brothers’ / brother’s)
-bike.
-10 We washed the clothes that belonged to Anna. We washed ___
-(Anna&#x27;s / Annas’) clothes.
-Il The (women’s/womens’) handbags are on the first floor of the
-mall.
-12 That is the house where my cousins live. Thatismy ____ (cousins’
-/ cousin&#x27;s) house.
-18 Ialwaysaskformy__ (brother&#x27;s / brothers’) help with homework
-because he is very smart.
-14 Those fancy cars belong to my neighbours. They are my
-(neighbours’ / neighbour&#x27;s) cars.
-© EPH Publishing (M) Sdn. Bhd. 36
-{Scanned with
-i = CamScanner ;</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-5-p038-01-answer">Your answer</label>
-      <input id="unit-5-p038-01-answer" class="answer-input" data-answer-input="unit-5-p038-01" aria-describedby="unit-5-p038-01-hint">
-      <p id="unit-5-p038-01-hint" class="control-hint">Type your answer, then save it.</p>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-039-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-039-heading">Source page 39</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p039-01"
-               data-question-type="fill_blank"
-               data-source-page="39">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 39</span>
-        <span>Fill in the blank</span>
-        <span>unit-5-p039-01</span>
-      </div>
-
-        <h3 id="unit-5-p039-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p039-01-prompt">( G Complete the crossword puzzle with the correct adjectives according to
-the contextual clues below.
-© 0 A
-SL | [H]
-| [=] |
-|
-| #81] | |
-[oI |
-I )
-FE] Jul [F[Y]
-= |
-|
-| ‘Ll [al [H] [R]
-@ Theresa___ cushion on the sofa.
-@® Dadplantedmany___ flowers in the garden.
-® Jamie&#x27;shousehasa____ bathtub.
-® Mumremindsmetofeedthe cat.
-Tg)
-® Thereare many trees around the house.
-OQ The obit sad dy bungalow has many rooms.
-(7) I like my pillow because itissoftand |
-(8) Thereisapairof ~~ boots on the shoe rack.
-37 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with
-i [cs] CamScanner</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-5-p039-01-answer">Your answer</label>
-      <input id="unit-5-p039-01-answer" class="answer-input" data-answer-input="unit-5-p039-01" aria-describedby="unit-5-p039-01-hint">
-      <p id="unit-5-p039-01-hint" class="control-hint">Type your answer, then save it.</p>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-040-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-040-heading">Source page 40</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p040-01"
-               data-question-type="matching"
-               data-source-page="40">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 40</span>
-        <span>Matching</span>
-        <span>unit-5-p040-01</span>
-      </div>
-
-        <h3 id="unit-5-p040-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p040-01-prompt">(H) Match the household objects to where they are kept in the house. Then,
-name the house parts in the space provided.
-| 0
-a EHC] ooo
-\ &gt; .
-ea =O .
-2
-pes oo :
-3
-P] A pete ay! 5 +
-os = v
-4
-si IE | iy tari
-L IN B= Opes a
-(30) Circle the correct phrases according to the singular and plural rule.
-1 a set of books in the study. .
-2 cups and saucers on the dining table.
-3 a variety of flowers in the garden.
-4 many decorative items in the living room.
-5 a cat running around in the porch.
-6 people sitting on the sofa.
-© EPH Publishing (M) Sdn. Bhd. 38
-{Scanned with
-{8 CamScanner</pre>
-        <div class="response-area">
-
-      <div class="interactive-grid matching-board" data-matching-board="true">
-        <label>
-          <span>Left item</span>
-          <input class="answer-input" data-answer-input="unit-5-p040-01-left" aria-label="Matching left item for unit-5-p040-01">
-        </label>
-        <label>
-          <span>Matches with</span>
-          <input class="answer-input" data-answer-input="unit-5-p040-01-right" aria-label="Matching right item for unit-5-p040-01">
-        </label>
-      </div>
-      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-041-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-041-heading">Source page 41</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p041-01"
-               data-question-type="picture_based"
-               data-source-page="41">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 41</span>
-        <span>Picture based</span>
-        <span>unit-5-p041-01</span>
-      </div>
-
-        <h3 id="unit-5-p041-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p041-01-prompt">(Oh) Complete the following dialogues with the correct form of possessive
-pronouns according to the given pictures.
-yours ] mine |
-| 2
-Those glovesare{) |
-Arethesesocks@ ____ ? J ©
-They aren&#x27;t @
-Ne 2
-73 4
-ax Y, bos Pa 9)
-gy [ED ETH 22
-No, they arent |} = &gt; [=] a Al)
-Q==x ) a8)
-Lin ER
-3 a
-o N N CE
-( Pi
-YQ hi
-: (A
-Zh, Gzgy
-HL 5) Yes, they are 4] 0 ) No, they aren&#x27;t
-(0) Sy Jl |e
-5 Je
-5 6
-Is this jacket @ _______2|| |Thishatisn&#x27; [ 0 J
-sit@__ 2
-L o BT B
-fn BEY |B) ae
-No, it isn’t \=4) od kd J XO é
-= od
-1 efem
-39 © EPH Publishing (M) Sdn. Bhd.
-{scanned with
-| = CamScanner |</pre>
-        <div class="response-area">
-
-      <div class="picture-response" data-picture-response="true">
-        <p>Look closely at the source picture in the workbook, then write your answer here.</p>
-
-      <label class="answer-label" for="unit-5-p041-01-answer">Picture answer</label>
-      <textarea id="unit-5-p041-01-answer" class="answer-box" data-answer-input="unit-5-p041-01" rows="5"></textarea>
-
-        <label class="answer-label" for="unit-5-p041-01-picture-note">Picture note</label>
-        <input id="unit-5-p041-01-picture-note" class="answer-input" data-answer-input="unit-5-p041-01-picture-note">
-      </div>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-5-page-042-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-5-page-042-heading">Source page 42</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-5-p042-01"
-               data-question-type="word_bank"
-               data-source-page="42">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 3</span>
-        <span>Unit 5</span>
-        <span>Page 42</span>
-        <span>Word bank</span>
-        <span>unit-5-p042-01</span>
-      </div>
-
-        <h3 id="unit-5-p042-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-5-p042-01-prompt">(i K) Complete the email with suitable phrases from the answer bank.
-You just moved into a new condo in Subang Jaya. Write an email to your best
-friend, Giselle, who lives back in your hometown. In your email,
-describe your new home and talk about some house parts
-« give her some details about your new room
-fgkef feel : see the city ‘ the lO&quot;floor : a study desk
-cosy : lights af night :
-eats together orem vialfiong ; space Ie : alot of sunlight
-; day : cooking :
-To gisellechan@mail.com
-‘Subject My New Home
-Hi Giselle,
-I hope you&#x27;re doing well! I just moved into a new condo in Subang Jaya
-and I really like it. The condoison@—
-and has a big living room with a comfy sofa and a TV. There&#x27;s also a small
-balcony wherelcon @ —
-The kitchen is modem and has lotsof @ — |
-We also have a dining area where myfamily@
-My room is my favourite part! I have my own bed, @
-and a tall bookshelf. I put up some posters and fairy
-ligtsto@— There&#x27;s also a window that
-letsin@___ inthe morning. I finally have
-my own space to read and draw!
-Imissyouand hopeyou@_— |
-Love,
-Farhana
-© EPH Publishing (M) Sdn. Bhd. 40 i
-{scanned with
-i = CamScanner ;</pre>
-        <div class="response-area">
-
-      <div class="word-bank-board" data-word-bank-board="true">
-
-          <label class="answer-label" for="unit-5-p042-01-words">Words you used</label>
-          <input id="unit-5-p042-01-words" class="answer-input" data-answer-input="unit-5-p042-01-words">
-
-      </div>
-
-      <label class="answer-label" for="unit-5-p042-01-answer">Write your completed answer</label>
-      <textarea id="unit-5-p042-01-answer" class="answer-box" data-answer-input="unit-5-p042-01" rows="5"></textarea>
-
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-    </main>
-  </div>
-  <script id="unitData" type="application/json">{"bookId": "kssr-primary3-english-workbook", "level": "Primary 3", "unitId": "unit-5", "unitNumber": 5, "title": "Unit 5", "questionIds": ["unit-5-p035-01", "unit-5-p036-01", "unit-5-p037-01", "unit-5-p038-01", "unit-5-p039-01", "unit-5-p040-01", "unit-5-p041-01", "unit-5-p042-01"]}</script>
-  <script>
-    (function () {
-      'use strict';
-
-      var unitData = JSON.parse(document.getElementById('unitData').textContent);
-      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
-      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
-      var progressBar = document.getElementById('progressBar');
-      var progressStatus = document.getElementById('progressStatus');
-      var state = {
-        completed: {},
-        answers: {}
-      };
-
-      function collectCardAnswer(card) {
-        var values = {};
-        card.querySelectorAll('input, textarea, select').forEach(function (field) {
-          var key = field.dataset.answerInput || field.name || field.id;
-          if (!key) return;
-          if (field.type === 'radio') {
-            if (field.checked) values[key] = field.value;
-            return;
-          }
-          if (field.type === 'checkbox') {
-            values[key] = field.checked;
-            return;
-          }
-          values[key] = field.value;
-        });
-        return values;
-      }
-
-      function paintState() {
-        var done = Object.keys(state.completed).filter(function (key) {
-          return state.completed[key];
-        }).length;
-        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
-        progressBar.style.width = percent + '%';
-        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
-        cards.forEach(function (card) {
-          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
-        });
-      }
-
-      function persist(debounce) {
-        try {
-          window.localStorage.setItem(storageKey, JSON.stringify(state));
-        } catch (error) {
-          console.warn('Local progress could not be saved.', error);
-        }
-        paintState();
-        if (window.ProgressTracker) {
-          var payload = {
-            unitId: unitData.unitId,
-            unitNumber: unitData.unitNumber,
-            completed: state.completed,
-            answers: state.answers
-          };
-          if (debounce && window.ProgressTracker.autoSave) {
-            window.ProgressTracker.autoSave(payload, 1200);
-          } else if (window.ProgressTracker.save) {
-            window.ProgressTracker.save(payload);
-          }
-        }
-      }
-
-      function restoreLocal() {
-        try {
-          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
-          if (saved && typeof saved === 'object') {
-            state.completed = saved.completed || {};
-            state.answers = saved.answers || {};
-          }
-        } catch (error) {
-          console.warn('Local progress could not be restored.', error);
-        }
-      }
-
-      function restoreFields() {
-        cards.forEach(function (card) {
-          var answers = state.answers[card.dataset.questionId] || {};
-          card.querySelectorAll('input, textarea, select').forEach(function (field) {
-            var key = field.dataset.answerInput || field.name || field.id;
-            if (!(key in answers)) return;
-            if (field.type === 'radio') {
-              field.checked = answers[key] === field.value;
-            } else if (field.type === 'checkbox') {
-              field.checked = Boolean(answers[key]);
-            } else {
-              field.value = answers[key];
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Unit 5: My House Adventure 🏠</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { comic: ['"Comic Neue"', 'cursive'], nunito: ['Nunito', 'sans-serif'] },
+                    colors: { macaron: { pink: '#FFD1DC', blue: '#D4E6F1', green: '#D5F5E3', yellow: '#FCF3CF', purple: '#E8DAEF' } }
+                }
             }
-          });
-        });
-      }
-
-      function markCard(card, message, debounce) {
-        var qid = card.dataset.questionId;
-        state.answers[qid] = collectCardAnswer(card);
-        state.completed[qid] = true;
-        card.querySelector('.feedback').textContent = message;
-        persist(debounce);
-      }
-
-      document.addEventListener('click', function (event) {
-        var card = event.target.closest('.question-card');
-        if (!card) return;
-        if (event.target.classList.contains('check-btn')) {
-          markCard(card, 'Nice effort. Your answer is saved for review.', false);
         }
-        if (event.target.classList.contains('save-btn')) {
-          markCard(card, 'Saved. Keep going when you are ready.', false);
+    </script>
+
+    <style>
+        body { user-select: none; -webkit-user-select: none; touch-action: manipulation; font-family: 'Nunito', sans-serif; }
+        h1, h2, h3, .font-comic { font-family: '"Comic Neue"', cursive; }
+        .bg-macaron {
+            background: radial-gradient(circle at center, #ffffff 0%, #f0f8ff 100%);
+            background-image: radial-gradient(#D4E6F1 2px, transparent 2px); background-size: 30px 30px;
         }
-        if (event.target.dataset.addRow === 'matching') {
-          var board = card.querySelector('.matching-board');
-          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
-          var left = document.createElement('label');
-          var right = document.createElement('label');
-          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
-          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
-          board.appendChild(left);
-          board.appendChild(right);
+        @keyframes pop { 0% { transform: scale(0.9); opacity: 0; } 50% { transform: scale(1.05); } 100% { transform: scale(1); opacity: 1; } }
+        .animate-pop { animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px) rotate(-2deg); } 75% { transform: translateX(5px) rotate(2deg); } }
+        .animate-shake { animation: shake 0.3s ease-in-out; }
+        .btn-cute { @apply font-comic font-bold rounded-2xl border-b-4 active:border-b-0 active:translate-y-1 transition-all duration-100 flex items-center justify-center gap-2 shadow-sm; }
+        
+        /* 偵探鷹架標記 */
+        .clue-text { background-color: #bfdbfe; cursor: pointer; padding: 0 4px; border-radius: 4px; transition: 0.3s; font-weight: bold; color: #1e3a8a;}
+        .clue-text:hover { background-color: #93c5fd; }
+        .clue-text.found { background-color: #fde047; color: #713f12; box-shadow: 0 2px 4px rgba(0,0,0,0.1); pointer-events: none; }
+        
+        /* 中文翻譯面板 */
+        .trans-panel { max-height: 0; overflow: hidden; transition: all 0.4s ease-out; opacity: 0; }
+        .trans-panel.open { max-height: 300px; padding: 12px; opacity: 1; margin-top: 12px;}
+    </style>
+</head>
+<body class="bg-macaron min-h-screen text-slate-800 overflow-x-hidden flex flex-col">
+
+    <div id="start-screen" class="fixed inset-0 z-[100] bg-blue-500 flex flex-col items-center justify-center p-6 text-white text-center">
+        <div class="text-6xl mb-4 animate-bounce">🏠</div>
+        <h1 class="text-4xl md:text-5xl font-comic mb-6 drop-shadow-lg">My House Adventure</h1>
+        <p class="text-xl mb-8 font-nunito font-bold bg-white/20 p-4 rounded-xl">Unit 5 完整挑戰<br>準備好收集所有徽章了嗎？</p>
+        <button onclick="startGame()" class="bg-yellow-400 hover:bg-yellow-300 text-yellow-900 text-3xl btn-cute px-10 py-4 border-yellow-600 shadow-xl">🚀 START!</button>
+    </div>
+
+    <header class="bg-white/80 backdrop-blur-md border-b-4 border-white shadow-sm p-3 sticky top-0 z-40">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-2">
+            <h2 class="font-comic text-xl text-blue-600 flex items-center gap-2" id="header-title">
+                <a href="../../../../../index.html" class="hover:scale-110 transition-transform" title="Back to Home">🏠</a>
+                Unit 5
+            </h2>
+            <div id="badge-container" class="flex flex-wrap justify-center gap-1 text-xl md:text-2xl filter grayscale opacity-50 transition-all duration-500">
+                <span id="badge-A" title="Section A">🕵️</span>
+                <span id="badge-B" title="Section B">🏷️</span>
+                <span id="badge-C" title="Section C">📦</span>
+                <span id="badge-D" title="Section D">🔤</span>
+                <span id="badge-E" title="Section E">📊</span>
+                <span id="badge-F" title="Section F">🧲</span>
+                <span id="badge-G" title="Section G">✨</span>
+                <span id="badge-H" title="Section H">🔗</span>
+                <span id="badge-I" title="Section I">⚖️</span>
+                <span id="badge-J" title="Section J">💬</span>
+                <span id="badge-K" title="Section K">✉️</span>
+            </div>
+        </div>
+    </header>
+
+    <main id="app-container" class="flex-grow p-4 md:p-6 max-w-3xl mx-auto w-full relative"></main>
+
+    <script>
+        // ==========================================
+        // 核心引擎與音效庫
+        // ==========================================
+        let audioCtx;
+        let ttsSynth = window.speechSynthesis;
+        const state = {
+            currentLevel: 0,
+            sections: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], // 完整 11 關
+            subIndex: 0,
+            isFinalScreen: false
+        };
+        let isTransitioning = false; 
+
+        function unlockAudio() {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            const osc = audioCtx.createOscillator(); osc.connect(audioCtx.destination); osc.start(0); osc.stop(0.01);
+            let u = new SpeechSynthesisUtterance(''); u.volume = 0; ttsSynth.speak(u);
         }
-      });
 
-      document.addEventListener('input', function (event) {
-        var card = event.target.closest('.question-card');
-        if (!card) return;
-        state.answers[card.dataset.questionId] = collectCardAnswer(card);
-        persist(true);
-      });
+        function playTone(freq, type, duration, vol=0.1) {
+            if(!audioCtx) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+            osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + duration);
+        }
 
-      restoreLocal();
-      restoreFields();
-      paintState();
+        const sounds = {
+            ding: () => { playTone(800, 'sine', 0.1); setTimeout(()=>playTone(1200, 'sine', 0.2), 100); },
+            error: () => { playTone(300, 'triangle', 0.1); setTimeout(()=>playTone(250, 'triangle', 0.2), 150); },
+            pop: () => { playTone(600, 'sine', 0.05); },
+            cheer: () => { playTone(500, 'square', 0.1); setTimeout(()=>playTone(600, 'square', 0.1), 100); setTimeout(()=>playTone(800, 'square', 0.3), 200); }
+        };
 
-      window.addEventListener('load', function () {
-        if (!window.ProgressTracker) return;
-        window.ProgressTracker.init(async function (tracker) {
-          var saved = await tracker.load();
-          if (saved && saved.answers) {
-            state.completed = saved.completed || state.completed;
-            state.answers = saved.answers || state.answers;
-            restoreFields();
-            persist(false);
-          }
-        });
-      });
-    })();
-  </script>
-  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../../../../js/auth-access.js"></script>
-  <script src="../../../../../js/progress-tracker.js"
-          data-module-id="kssr-p3-en-unit5"
-          data-module-name="Primary 3 English Unit 5"
-          data-module-url="content/KSSR_Syllabus/Primary3/English/Unit5/index.html"></script>
+        // 讀取 data-text 屬性發音，根絕引號 bug
+        function speakText(text, lang = 'en-US') {
+            ttsSynth.cancel();
+            let u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = 0.85; u.pitch = 1.1; ttsSynth.speak(u);
+        }
+
+        function toggleTrans(id) { sounds.pop(); document.getElementById(id).classList.toggle('open'); }
+
+        function startGame() { unlockAudio(); document.getElementById('start-screen').classList.add('hidden'); renderSection(); }
+
+        function markCurrentComplete() {
+            const card = document.getElementById(`card-${state.currentLevel}-${state.subIndex}`);
+            if(card) card.dataset.completed = "true";
+        }
+
+        function levelComplete(sectionId) {
+            isTransitioning = true;
+            markCurrentComplete();
+            sounds.cheer(); confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            document.getElementById(`badge-${sectionId}`).className = "text-xl md:text-2xl filter-none opacity-100 animate-pop drop-shadow-md";
+            setTimeout(() => {
+                state.currentLevel++; state.subIndex = 0;
+                isTransitioning = false; 
+                if(state.currentLevel < state.sections.length) renderSection(); 
+                else renderFinal();
+            }, 2000);
+        }
+
+        const container = document.getElementById('app-container');
+
+        // DOM 快照緩存機制
+        function renderSection() {
+            Array.from(container.children).forEach(child => child.classList.add('hidden'));
+
+            const sec = state.sections[state.currentLevel];
+            const cardId = `card-${state.currentLevel}-${state.subIndex}`;
+            let card = document.getElementById(cardId);
+
+            if (card && card.dataset.completed === "true") {
+                card.classList.remove('hidden');
+            } else {
+                if (card) card.remove(); 
+                
+                card = document.createElement('div');
+                card.id = cardId;
+                card.className = "bg-white/95 backdrop-blur-sm rounded-[2rem] border-4 shadow-xl p-5 md:p-8 animate-pop relative w-full";
+                
+                if(sec === 'A') renderSecA(card);
+                if(sec === 'B') renderSecB(card);
+                if(sec === 'C') renderSecC(card);
+                if(sec === 'D') renderSecD(card);
+                if(sec === 'E') renderSecE(card);
+                if(sec === 'F') renderSecF(card);
+                if(sec === 'G') renderSecG(card);
+                if(sec === 'H') renderSecH(card);
+                if(sec === 'I') renderSecI(card);
+                if(sec === 'J') renderSecJ(card);
+                if(sec === 'K') renderSecK(card);
+
+                card.innerHTML += `
+                    <div class="flex justify-between items-center mt-8 pt-4 border-t-2 border-slate-100">
+                        <button onclick="navPrev()" class="text-slate-400 hover:text-blue-500 font-bold text-lg flex items-center gap-1 active:scale-95 transition-transform" ${state.currentLevel === 0 && state.subIndex === 0 ? 'style="visibility:hidden"' : ''}>
+                            <span class="text-2xl">⬅️</span> Prev
+                        </button>
+                        <button onclick="navNext()" class="text-slate-400 hover:text-blue-500 font-bold text-lg flex items-center gap-1 active:scale-95 transition-transform">
+                            Next <span class="text-2xl">➡️</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        function getSectionMaxLen(secIndex) {
+            const sec = state.sections[secIndex];
+            if(sec==='A') return dbA.length; // 8
+            if(sec==='B') return 1;          // 1 (all 8 inside)
+            if(sec==='C') return dbC.length; // 20
+            if(sec==='D') return dbD.length; // 8
+            if(sec==='E') return dbE.length; // 8
+            if(sec==='F') return dbF.length; // 14
+            if(sec==='G') return dbG.length; // 8
+            if(sec==='H') return dbH.length; // 8
+            if(sec==='I') return dbI.length; // 8
+            if(sec==='J') return dbJ.length; // 8
+            if(sec==='K') return 2;          // 2 phases (8 pairs + 8 dropdowns)
+            return 1; 
+        }
+
+        function navPrev() {
+            if(isTransitioning) return;
+            ttsSynth.cancel();
+            sounds.pop();
+            
+            if (state.isFinalScreen) {
+                state.isFinalScreen = false;
+                state.currentLevel = state.sections.length - 1;
+                state.subIndex = getSectionMaxLen(state.currentLevel) - 1;
+                renderSection();
+                return;
+            }
+
+            if (state.subIndex > 0) {
+                state.subIndex--;
+            } else if (state.currentLevel > 0) {
+                state.currentLevel--;
+                state.subIndex = getSectionMaxLen(state.currentLevel) - 1; 
+            }
+            renderSection();
+        }
+
+        function navNext() {
+            if(isTransitioning) return; 
+            ttsSynth.cancel();
+            sounds.pop();
+            
+            if (state.isFinalScreen) return;
+
+            let maxLen = getSectionMaxLen(state.currentLevel);
+
+            if (state.subIndex < maxLen - 1) {
+                state.subIndex++;
+                renderSection();
+            } else {
+                if (state.currentLevel < state.sections.length - 1) {
+                    state.currentLevel++;
+                    state.subIndex = 0;
+                    renderSection();
+                } else {
+                    renderFinal();
+                }
+            }
+        }
+
+        // ==========================================
+        // Section A: 閱讀偵探 (8題)
+        // ==========================================
+        const dbA = [
+            { q: "This house part is used to store old or unused things.", ans: "Attic", clueId: "c-attic-1" },
+            { q: "This house part is where people relax, watch TV or talk to friends.", ans: "Living Room", clueId: "c-living-2" },
+            { q: "This house part is outside but still connected to the house.", ans: "Balcony", clueId: "c-balcony-1" },
+            { q: "This house part is often high up and might be dusty or dark.", ans: "Attic", clueId: "c-attic-2" },
+            { q: "This house part has furniture like sofas and a coffee table.", ans: "Living Room", clueId: "c-living-1" },
+            { q: "This house part is great for enjoying the breeze or planting flowers.", ans: "Balcony", clueId: "c-balcony-2" },
+            { q: "This house part may have boxes filled with holiday decorations.", ans: "Attic", clueId: "c-attic-3" },
+            { q: "This house part is often called the heart of the home.", ans: "Living Room", clueId: "c-living-3" }
+        ];
+
+        function renderSecA(card) {
+            card.classList.add('border-pink-300');
+            const data = dbA[state.subIndex];
+            const uid = state.subIndex;
+            
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">🕵️</div>
+                <h2 class="font-comic text-2xl text-pink-500 mb-2 text-center">A: Reading Detective (${state.subIndex+1}/${dbA.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-4">必須點擊和題目「意思相同」的線索才能作答喔！</p>
+                
+                <div class="bg-pink-50 rounded-2xl p-4 mb-4 border-2 border-pink-200 text-sm leading-relaxed relative">
+                    <button onclick="toggleTrans('trans-A-${uid}')" class="absolute top-2 right-2 bg-pink-200 text-pink-700 rounded-full w-7 h-7 font-bold text-xs hover:bg-pink-300 z-10">中</button>
+                    <div class="flex items-start gap-2 mb-3">
+                        <button data-text="The attic is a space at the top. Used to store old or unused items. Some are small and dusty. Keeps boxes and decorations." onclick="speakText(this.dataset.text)" class="text-lg mt-[-2px] hover:scale-110 transition-transform">🔊</button>
+                        <p><strong>🏠 Attic:</strong> Space at the top. Used to <span class="clue-text" data-id="c-attic-1" onclick="checkClue(this, 'A')">store old or unused items</span>. Some are <span class="clue-text" data-id="c-attic-2" onclick="checkClue(this, 'A')">small and dusty</span>. Keeps boxes and <span class="clue-text" data-id="c-attic-3" onclick="checkClue(this, 'A')">decorations</span>.</p>
+                    </div>
+                    <div class="flex items-start gap-2 mb-3">
+                        <button data-text="A balcony is an outdoor space that sticks out. People use it to get fresh air, relax or grow small plants." onclick="speakText(this.dataset.text)" class="text-lg mt-[-2px] hover:scale-110 transition-transform">🔊</button>
+                        <p><strong>🌇 Balcony:</strong> An <span class="clue-text" data-id="c-balcony-1" onclick="checkClue(this, 'A')">outdoor space that sticks out</span>. People use it to <span class="clue-text" data-id="c-balcony-2" onclick="checkClue(this, 'A')">get fresh air, relax or grow small plants</span>.</p>
+                    </div>
+                    <div class="flex items-start gap-2 mb-2">
+                        <button data-text="The living room is a shared space. It has a sofa, chairs, a coffee table. People relax, watch shows, play games or chat. It is the heart of the home." onclick="speakText(this.dataset.text)" class="text-lg mt-[-2px] hover:scale-110 transition-transform">🔊</button>
+                        <p><strong>🛋️ Living Room:</strong> A shared space. It has a <span class="clue-text" data-id="c-living-1" onclick="checkClue(this, 'A')">sofa, chairs, a coffee table</span>. People <span class="clue-text" data-id="c-living-2" onclick="checkClue(this, 'A')">relax, watch shows, play games or chat</span>. It's the <span class="clue-text" data-id="c-living-3" onclick="checkClue(this, 'A')">heart of the home</span>.</p>
+                    </div>
+
+                    <div id="trans-A-${uid}" class="trans-panel bg-white/80 rounded-xl text-slate-600 font-bold flex flex-col gap-3">
+                        <div class="flex items-start gap-2 border-b border-pink-100 pb-2">
+                            <button data-text="閣樓：頂部的空間。用來存放舊物或沒用的東西。有些又小又多灰塵。放箱子和裝飾品。" onclick="speakText(this.dataset.text, 'zh-TW')" class="text-lg mt-[-2px]">🔊</button>
+                            <span>閣樓：頂部的空間。用來存放舊物或沒用的東西。有些又小又多灰塵。放箱子和裝飾品。</span>
+                        </div>
+                        <div class="flex items-start gap-2 border-b border-pink-100 pb-2">
+                            <button data-text="陽台：突出的戶外空間。用來呼吸新鮮空氣、放鬆或種植物。" onclick="speakText(this.dataset.text, 'zh-TW')" class="text-lg mt-[-2px]">🔊</button>
+                            <span>陽台：突出的戶外空間。用來呼吸新鮮空氣、放鬆或種植物。</span>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <button data-text="客廳：共用空間。有沙發、椅子、咖啡桌。讓人放鬆、看電視、玩遊戲或聊天。是家庭的中心。" onclick="speakText(this.dataset.text, 'zh-TW')" class="text-lg mt-[-2px]">🔊</button>
+                            <span>客廳：共用空間。有沙發、椅子、咖啡桌。讓人放鬆、看電視、玩遊戲或聊天。是家庭的中心。</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-4 border-2 border-slate-200 shadow-sm relative">
+                    <div id="q-status-A-${uid}" class="bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full inline-block mb-3 animate-pulse border border-blue-300">
+                        🔍 任務：請在上方文章尋找與題目相符的藍色線索！
+                    </div>
+                    <div class="flex items-start gap-2 mb-4">
+                        <button data-text="${data.q}" onclick="speakText(this.dataset.text)" class="text-xl">🔊</button>
+                        <p class="text-lg font-bold text-slate-700">${data.q}</p>
+                    </div>
+                    <div id="q-options-A-${uid}" class="flex flex-col sm:flex-row gap-3 filter grayscale opacity-50 pointer-events-none transition-all duration-300">
+                        <button onclick="checkA(this, 'Attic', '${data.ans}')" class="flex-1 btn-cute bg-white border-2 border-slate-200 py-2 hover:bg-pink-50 hover:border-pink-300"><span class="text-xl">🏠</span> Attic</button>
+                        <button onclick="checkA(this, 'Balcony', '${data.ans}')" class="flex-1 btn-cute bg-white border-2 border-slate-200 py-2 hover:bg-pink-50 hover:border-pink-300"><span class="text-xl">🌇</span> Balcony</button>
+                        <button onclick="checkA(this, 'Living Room', '${data.ans}')" class="flex-1 btn-cute bg-white border-2 border-slate-200 py-2 hover:bg-pink-50 hover:border-pink-300"><span class="text-xl">🛋️</span> Living</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function checkClue(el, sec) {
+            const uid = state.subIndex;
+            const currentData = dbA[uid];
+            if(el.dataset.id === currentData.clueId) {
+                sounds.ding(); el.classList.add('found');
+                const status = document.getElementById(`q-status-${sec}-${uid}`);
+                status.className = "bg-green-100 text-green-800 text-sm font-bold px-3 py-1 rounded-full inline-block mb-3 border border-green-300";
+                status.innerHTML = "✅ 線索正確！現在請選擇對應的房間：";
+                const options = document.getElementById(`q-options-${sec}-${uid}`);
+                options.classList.remove('grayscale', 'opacity-50', 'pointer-events-none');
+                options.classList.add('animate-pop');
+            } else {
+                sounds.error(); el.classList.add('animate-shake', 'bg-red-200', 'text-red-800');
+                const status = document.getElementById(`q-status-${sec}-${uid}`);
+                status.className = "bg-red-100 text-red-800 text-sm font-bold px-3 py-1 rounded-full inline-block mb-3 border border-red-300";
+                status.innerHTML = "❌ 意思不對喔！請再仔細讀一下題目。";
+                setTimeout(() => {
+                    el.classList.remove('animate-shake', 'bg-red-200', 'text-red-800');
+                    if(status.innerHTML.includes("❌")) {
+                        status.className = "bg-blue-100 text-blue-800 text-sm font-bold px-3 py-1 rounded-full inline-block mb-3 border border-blue-300";
+                        status.innerHTML = "🔍 任務：請在上方文章尋找與題目相符的藍色線索！";
+                    }
+                }, 1500);
+            }
+        }
+
+        function checkA(btn, selected, correct) {
+            const uid = state.subIndex;
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); btn.classList.add('bg-green-100', 'border-green-400');
+                document.getElementById(`q-options-A-${uid}`).classList.add('pointer-events-none');
+                document.getElementById(`q-status-A-${uid}`).innerHTML = "🌟 答對了！準備進入下一題...";
+                setTimeout(() => {
+                    state.subIndex++;
+                    isTransitioning = false;
+                    if(state.subIndex < dbA.length) renderSection(); else levelComplete('A');
+                }, 1200);
+            } else {
+                sounds.error(); btn.classList.add('animate-shake', 'bg-red-50', 'border-red-300');
+                setTimeout(() => btn.classList.remove('animate-shake', 'bg-red-50', 'border-red-300'), 400);
+            }
+        }
+
+        // ==========================================
+        // Section B: 貼紙簿 (8 個空間)
+        // ==========================================
+        const dbB = ['attic', 'bedroom', 'bathroom', 'study', 'living room', 'dining room', 'kitchen', 'garage'];
+        let activeStickerB = null;
+
+        function renderSecB(card) {
+            card.classList.add('border-blue-300');
+            state.bStickers = [...dbB].sort(() => Math.random() - 0.5); 
+            state.bMatched = 0;
+
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">🏷️</div>
+                <h2 class="font-comic text-2xl text-blue-500 mb-2 text-center">B: Label the House</h2>
+                <p class="text-center text-sm text-slate-500 mb-4">點擊下方單字貼紙，貼到正確的房間！</p>
+                <div class="flex flex-wrap justify-center gap-2 mb-6" id="sticker-bank">
+                    ${state.bStickers.map(w => `<button id="stk-${w.replace(' ','')}" data-text="${w}" onclick="selectStickerB(this)" class="btn-cute bg-yellow-100 border-2 border-yellow-300 text-yellow-800 py-1 px-3 text-sm">${w}</button>`).join('')}
+                </div>
+                <div class="grid grid-cols-2 gap-3 bg-blue-50 p-4 rounded-xl border-2 border-blue-200">
+                    ${dbB.map(room => `<div onclick="placeStickerB('${room}')" id="drop-${room.replace(' ','')}" class="border-2 border-dashed border-blue-300 rounded-lg p-3 text-center h-16 flex items-center justify-center bg-white cursor-pointer hover:bg-blue-100 transition-colors"><span class="text-slate-300 font-bold text-xs uppercase">${room} ?</span></div>`).join('')}
+                </div>
+            `;
+        }
+
+        function selectStickerB(btn) {
+            const word = btn.dataset.text;
+            sounds.pop(); speakText(word);
+            document.querySelectorAll('#sticker-bank button').forEach(b => b.classList.remove('ring-4', 'ring-pink-400', 'scale-110'));
+            btn.classList.add('ring-4', 'ring-pink-400', 'scale-110');
+            activeStickerB = word;
+        }
+
+        function placeStickerB(targetRoom) {
+            if(!activeStickerB) return;
+            if(activeStickerB === targetRoom) {
+                sounds.ding();
+                const dropZone = document.getElementById(`drop-${targetRoom.replace(' ','')}`);
+                dropZone.innerHTML = `<span class="font-comic font-bold text-blue-700 text-lg animate-pop">✔️ ${targetRoom}</span>`;
+                dropZone.classList.replace('border-dashed', 'border-solid'); dropZone.classList.replace('border-blue-300', 'border-blue-500'); dropZone.classList.add('bg-blue-100');
+                const stk = document.getElementById(`stk-${activeStickerB.replace(' ','')}`); stk.classList.add('opacity-0', 'pointer-events-none');
+                activeStickerB = null; 
+                state.bMatched++;
+                if(state.bMatched === dbB.length) {
+                    isTransitioning = true;
+                    setTimeout(() => { isTransitioning = false; levelComplete('B'); }, 1000);
+                }
+            } else {
+                sounds.error(); const dropZone = document.getElementById(`drop-${targetRoom.replace(' ','')}`); dropZone.classList.add('animate-shake', 'bg-red-100'); setTimeout(() => dropZone.classList.remove('animate-shake', 'bg-red-100'), 400);
+            }
+        }
+
+        // ==========================================
+        // Section C: 扭蛋機 (20 Items)
+        // ==========================================
+        const dbC = [
+            {w:'fridge', r:'Kitchen'}, {w:'bed', r:'Bedroom'}, {w:'TV', r:'Living Room'}, {w:'cushions', r:'Living Room'},
+            {w:'oven', r:'Kitchen'}, {w:'coffee table', r:'Living Room'}, {w:'shower', r:'Bathroom'}, {w:'sink', r:'Bathroom'},
+            {w:'armchair', r:'Living Room'}, {w:'toaster', r:'Kitchen'}, {w:'tub', r:'Bathroom'}, {w:'pillow', r:'Bedroom'},
+            {w:'toilet', r:'Bathroom'}, {w:'mirror', r:'Bathroom'}, {w:'cupboard', r:'Bedroom'}, {w:'bedside table', r:'Bedroom'},
+            {w:'microwave', r:'Kitchen'}, {w:'sofa', r:'Living Room'}, {w:'blanket', r:'Bedroom'}, {w:'kettle', r:'Kitchen'}
+        ].sort(() => Math.random() - 0.5);
+
+        let activeGacha = null;
+
+        function renderSecC(card) {
+            card.classList.add('border-green-300'); const item = dbC[state.subIndex]; activeGacha = item;
+            const uid = state.subIndex;
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">📦</div>
+                <h2 class="font-comic text-2xl text-green-500 mb-2 text-center">C: Sorting Game (${state.subIndex+1}/${dbC.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-4">聽發音，把家具丟進正確的房間！</p>
+                <div class="flex justify-center mb-6">
+                    <div id="gacha-item-${uid}" data-text="${item.w}" onclick="sounds.pop(); speakText(this.dataset.text); this.classList.add('ring-4','ring-yellow-400');" class="cursor-pointer bg-gradient-to-br from-green-100 to-blue-100 border-4 border-white shadow-lg rounded-full w-28 h-28 flex flex-col items-center justify-center animate-bounce"><span class="text-3xl">❓</span><span class="font-comic font-bold text-green-800 text-center leading-tight px-2">${item.w}</span></div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    ${['Living Room', 'Bedroom', 'Bathroom', 'Kitchen'].map(r => `<div onclick="placeC('${r}')" class="bg-orange-50 border-2 border-orange-200 rounded-xl p-3 text-center cursor-pointer active:scale-95 transition-transform"><div class="font-comic font-bold text-orange-700 text-sm">${r}</div></div>`).join('')}
+                </div>
+            `;
+            setTimeout(()=> speakText(item.w), 300);
+        }
+
+        function placeC(room) {
+            if(!activeGacha) return; 
+            const uid = state.subIndex;
+            const gacha = document.getElementById(`gacha-item-${uid}`);
+            if(activeGacha.r === room) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); gacha.classList.add('scale-0', 'opacity-0', 'transition-all');
+                setTimeout(() => { 
+                    state.subIndex++; 
+                    isTransitioning = false;
+                    if(state.subIndex < dbC.length) renderSection(); else levelComplete('C'); 
+                }, 400);
+            } else {
+                sounds.error(); gacha.classList.add('animate-shake', 'border-red-400'); setTimeout(()=> gacha.classList.remove('animate-shake', 'border-red-400'), 400);
+            }
+        }
+
+        // ==========================================
+        // Section D: 拼字 (擴充至 8題)
+        // ==========================================
+        const dbD = [
+            { hint: "It is where your clothes are kept.", word: "BEDROOM" }, 
+            { hint: "It is where you have your meals.", word: "DINING ROOM" },
+            { hint: "It is where you brush your teeth.", word: "BATHROOM" }, 
+            { hint: "It is where meals are prepared.", word: "KITCHEN" },
+            { hint: "It is where you can find an armchair.", word: "LIVING ROOM" }, 
+            { hint: "It is where smoke escapes from a fireplace.", word: "CHIMNEY" },
+            { hint: "It is an outdoor space that sticks out.", word: "BALCONY" },
+            { hint: "It is where your car is parked.", word: "GARAGE" }
+        ];
+
+        function renderSecD(card) {
+            card.classList.add('border-indigo-300'); const data = dbD[state.subIndex];
+            const uid = state.subIndex;
+            state.dTarget = data.word.replace(' ', ''); state.dInput = Array(state.dTarget.length).fill(""); state.dLetters = state.dTarget.split('').sort(() => Math.random() - 0.5);
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">🔤</div>
+                <h2 class="font-comic text-2xl text-indigo-500 mb-2 text-center">D: Spelling (${state.subIndex+1}/${dbD.length})</h2>
+                <div class="bg-indigo-50 rounded-2xl p-4 text-center mb-6 border-2 border-indigo-200 relative">
+                    <button data-text="${data.hint}" onclick="speakText(this.dataset.text)" class="absolute top-2 right-2 text-xl">🔊</button>
+                    <p class="text-base font-bold text-slate-700 mb-4 mt-2">${data.hint}</p>
+                    <div class="flex justify-center flex-wrap gap-1" id="d-slots-${uid}">
+                        ${state.dInput.map((_, i) => `<div class="w-8 h-10 border-b-4 border-slate-300 flex items-center justify-center text-2xl font-comic font-bold" id="slot-${uid}-${i}"></div>`).join('')}
+                    </div>
+                </div>
+                <div class="flex flex-wrap justify-center gap-2 px-2" id="d-keyboard-${uid}">
+                    ${state.dLetters.map((l, i) => `<button id="key-${uid}-${i}" onclick="typeD('${l}', this)" class="w-10 h-10 rounded-full bg-white border-2 border-indigo-200 text-indigo-600 font-comic text-xl font-bold shadow-sm active:scale-90 transition-all">${l}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        function typeD(letter, btn) {
+            const uid = state.subIndex;
+            const emptyIdx = state.dInput.indexOf(""); if(emptyIdx === -1) return;
+            if(letter === state.dTarget[emptyIdx]) {
+                sounds.pop(); state.dInput[emptyIdx] = letter; const slot = document.getElementById(`slot-${uid}-${emptyIdx}`);
+                slot.innerText = letter; slot.classList.replace('border-slate-300', 'border-indigo-500'); slot.classList.add('text-indigo-700', 'animate-pop'); btn.classList.add('opacity-0', 'pointer-events-none');
+                if(state.dInput.join('') === state.dTarget) {
+                    isTransitioning = true;
+                    markCurrentComplete(); 
+                    sounds.ding(); setTimeout(() => speakText(dbD[state.subIndex].word), 200);
+                    setTimeout(() => { 
+                        state.subIndex++; 
+                        isTransitioning = false;
+                        if(state.subIndex < dbD.length) renderSection(); else levelComplete('D'); 
+                    }, 1200);
+                }
+            } else {
+                sounds.error(); btn.classList.add('animate-shake', 'bg-red-100'); setTimeout(()=>btn.classList.remove('animate-shake', 'bg-red-100'), 400);
+            }
+        }
+
+        // ==========================================
+        // Section E: 所有格轉換表 (8題)
+        // ==========================================
+        const dbE = [
+            { noun: "boy", type: "Singular", opts: ["boy's", "boys'"], ans: "boy's" },
+            { noun: "man", type: "Singular", opts: ["man's", "mans'"], ans: "man's" },
+            { noun: "bird", type: "Singular", opts: ["bird's", "birds'"], ans: "bird's" },
+            { noun: "teacher", type: "Singular", opts: ["teacher's", "teachers'"], ans: "teacher's" },
+            { noun: "girls", type: "Plural", opts: ["girls'", "girl's"], ans: "girls'" },
+            { noun: "rabbits", type: "Plural", opts: ["rabbits'", "rabbit's"], ans: "rabbits'" },
+            { noun: "ladies", type: "Plural", opts: ["ladies'", "lady's"], ans: "ladies'" },
+            { noun: "students", type: "Plural", opts: ["students'", "student's"], ans: "students'" }
+        ];
+
+        function renderSecE(card) {
+            card.classList.add('border-yellow-400');
+            const data = dbE[state.subIndex];
+            const uid = state.subIndex;
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">📊</div>
+                <h2 class="font-comic text-2xl text-yellow-500 mb-2 text-center">E: Possessive Converter (${state.subIndex+1}/${dbE.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-6">將名詞轉換成正確的所有格形式 (Singular 's / Plural s')</p>
+                
+                <div class="bg-yellow-50 rounded-2xl p-6 text-center border-2 border-yellow-200 mb-6 relative">
+                    <button data-text="${data.noun}" onclick="speakText(this.dataset.text)" class="absolute top-2 right-2 text-xl">🔊</button>
+                    <p class="text-xs text-yellow-700 uppercase font-bold tracking-widest mb-1">${data.type} Noun</p>
+                    <p class="text-4xl font-comic font-black text-slate-800 mb-2">${data.noun}</p>
+                    <p class="text-sm text-slate-500 font-bold">👉 選擇正確的所有格：</p>
+                </div>
+
+                <div id="e-opts-${uid}" class="flex flex-col sm:flex-row gap-4 justify-center">
+                    ${data.opts.map(opt => `
+                        <button onclick="checkE(this)" data-val="${opt}" data-ans="${data.ans}" class="flex-1 btn-cute bg-white border-2 border-yellow-200 text-yellow-800 py-3 text-xl hover:bg-yellow-50 active:ring-2 active:ring-yellow-400">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function checkE(btn) {
+            const uid = state.subIndex;
+            const selected = btn.dataset.val;
+            const correct = btn.dataset.ans;
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete();
+                sounds.ding();
+                speakText(selected);
+                btn.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+                document.getElementById(`e-opts-${uid}`).classList.add('pointer-events-none');
+                setTimeout(() => {
+                    state.subIndex++;
+                    isTransitioning = false;
+                    if(state.subIndex < dbE.length) renderSection(); else levelComplete('E');
+                }, 1000);
+            } else {
+                sounds.error();
+                btn.classList.add('animate-shake', 'bg-red-200', 'text-red-800');
+                setTimeout(() => btn.classList.remove('animate-shake', 'bg-red-200', 'text-red-800'), 400);
+            }
+        }
+
+        // ==========================================
+        // Section F: 所有格填充題 (14題完整收錄)
+        // ==========================================
+        const dbF = [
+            { q: "This book belongs to Kim. It is # book.", opts: ["Kims'", "Kim's"], ans: "Kim's" },
+            { q: "Corey and Ryan are # names.", opts: ["boys'", "boy's"], ans: "boys'" },
+            { q: "My # mobile phone is broken.", opts: ["fathers'", "father's"], ans: "father's" },
+            { q: "The # new dress is very pretty.", opts: ["girls'", "girl's"], ans: "girl's" },
+            { q: "The engine belongs to the van. It is the # engine.", opts: ["vans'", "van's"], ans: "van's" },
+            { q: "The # names are Xin Rui and Xin Ying.", opts: ["students'", "student's"], ans: "students'" },
+            { q: "I am staying at my # house.", opts: ["aunt's", "aunts'"], ans: "aunt's" },
+            { q: "The collar belongs to the dog. It is the # collar.", opts: ["dog's", "dogs'"], ans: "dog's" },
+            { q: "The bike belongs to my brother. It is my # bike.", opts: ["brothers'", "brother's"], ans: "brother's" },
+            { q: "We washed the clothes that belonged to Anna. We washed # clothes.", opts: ["Anna's", "Annas'"], ans: "Anna's" },
+            { q: "The # handbags are on the first floor of the mall.", opts: ["women's", "womens'"], ans: "women's" },
+            { q: "That is the house where my cousins live. That is my # house.", opts: ["cousins'", "cousin's"], ans: "cousins'" },
+            { q: "I always ask for my # help with homework because he is very smart.", opts: ["brother's", "brothers'"], ans: "brother's" },
+            { q: "Those fancy cars belong to my neighbours. They are my # cars.", opts: ["neighbours'", "neighbour's"], ans: "neighbours'" }
+        ];
+
+        function renderSecF(card) {
+            card.classList.add('border-purple-300'); const data = dbF[state.subIndex]; const parts = data.q.split('#');
+            const uid = state.subIndex;
+            const speakContent = data.q.replace('#', 'blank');
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">🧲</div>
+                <h2 class="font-comic text-2xl text-purple-500 mb-2 text-center">F: Possessive Sentences (${state.subIndex+1}/${dbF.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-6">根據語境，選擇正確的單複數所有格形式</p>
+                <div class="bg-white rounded-2xl p-5 border-2 border-purple-100 text-center shadow-sm relative">
+                    <button data-text="${speakContent}" onclick="speakText(this.dataset.text)" class="absolute top-2 right-2 text-xl">🔊</button>
+                    <p class="text-xl font-bold text-slate-700 leading-loose mt-4">
+                        ${parts[0]}<span class="inline-flex gap-1 align-middle mx-1" id="f-opts-${uid}">${data.opts.map(opt => `<button onclick="checkF(this)" data-val="${opt}" data-ans="${data.ans}" class="bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-1 rounded-lg border-2 border-purple-300 transition-colors">${opt}</button>`).join('')}</span>${parts[1]}
+                    </p>
+                </div>
+            `;
+        }
+
+        function checkF(btn) {
+            const uid = state.subIndex;
+            const selected = btn.dataset.val;
+            const correct = btn.dataset.ans;
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); const parent = document.getElementById(`f-opts-${uid}`); parent.innerHTML = `<span class="text-green-600 font-bold border-b-2 border-green-500 animate-pop">${selected}</span>`;
+                setTimeout(() => { 
+                    state.subIndex++; 
+                    isTransitioning = false;
+                    if(state.subIndex < dbF.length) renderSection(); else levelComplete('F'); 
+                }, 1000);
+            } else { sounds.error(); btn.classList.add('animate-shake', 'bg-red-200', 'text-red-800'); setTimeout(()=>btn.classList.remove('animate-shake', 'bg-red-200', 'text-red-800'), 400); }
+        }
+
+        // ==========================================
+        // Section G: 形容詞魔法選字 (8題)
+        // ==========================================
+        const dbG = [
+            { q: "There is a # cushion on the sofa.", opts: ["soft", "hard", "angry"], ans: "soft" },
+            { q: "Dad planted many # flowers in the garden.", opts: ["ugly", "beautiful", "sad"], ans: "beautiful" },
+            { q: "Jamie's house has a # bathtub.", opts: ["long", "short", "fast"], ans: "long" },
+            { q: "Mum reminds me to feed the # cat.", opts: ["full", "hungry", "sleepy"], ans: "hungry" },
+            { q: "There are many # trees around the house.", opts: ["lush", "bald", "blue"], ans: "lush" },
+            { q: "The # bungalow has many rooms.", opts: ["big", "tiny", "weak"], ans: "big" },
+            { q: "I like my pillow because it is soft and #.", opts: ["fluffy", "heavy", "spiky"], ans: "fluffy" },
+            { q: "There is a pair of # boots on the shoe rack.", opts: ["leather", "glass", "paper"], ans: "leather" }
+        ];
+
+        function renderSecG(card) {
+            card.classList.add('border-pink-400'); const data = dbG[state.subIndex]; const parts = data.q.split('#');
+            const uid = state.subIndex;
+            const speakContent = data.q.replace('#', 'blank');
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">✨</div>
+                <h2 class="font-comic text-2xl text-pink-500 mb-2 text-center">G: Magic Adjectives (${state.subIndex+1}/${dbG.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-6">為句子選出最合適的形容詞魔法！</p>
+                <div class="bg-pink-50 rounded-2xl p-6 text-center border-2 border-pink-200 mb-6 relative">
+                    <button data-text="${speakContent}" onclick="speakText(this.dataset.text)" class="absolute top-2 right-2 text-xl">🔊</button>
+                    <p class="text-xl font-bold text-slate-700 leading-loose mt-4">
+                        ${parts[0]}<span class="inline-block border-b-4 border-slate-300 w-16 mx-1" id="g-slot-${uid}"></span>${parts[1]}
+                    </p>
+                </div>
+                <div class="flex flex-wrap justify-center gap-3">
+                    ${data.opts.map(opt => `<button onclick="checkG(this, '${opt}', '${data.ans}')" class="btn-cute bg-white border-2 border-pink-200 text-pink-700 px-6 py-2 text-lg hover:bg-pink-100">${opt}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        function checkG(btn, selected, correct) {
+            const uid = state.subIndex;
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); speakText(selected);
+                btn.classList.add('bg-green-100', 'border-green-400');
+                const slot = document.getElementById(`g-slot-${uid}`);
+                slot.innerText = selected;
+                slot.className = "inline-block font-bold text-green-600 border-b-4 border-green-500 mx-1 px-2 animate-pop";
+                Array.from(btn.parentElement.children).forEach(b => b.classList.add('pointer-events-none'));
+                setTimeout(() => { 
+                    state.subIndex++; 
+                    isTransitioning = false;
+                    if(state.subIndex < dbG.length) renderSection(); else levelComplete('G'); 
+                }, 1000);
+            } else { sounds.error(); btn.classList.add('animate-shake', 'bg-red-100', 'text-red-700'); setTimeout(()=>btn.classList.remove('animate-shake', 'bg-red-100', 'text-red-700'), 400); }
+        }
+
+        // ==========================================
+        // Section H: 物品與房間連連看 (8題)
+        // ==========================================
+        const dbH = [
+            { item: "Bed 🛏️", room: "Bedroom" },
+            { item: "Sofa 🛋️", room: "Living Room" },
+            { item: "Fridge 🧊", room: "Kitchen" },
+            { item: "Bathtub 🛁", room: "Bathroom" },
+            { item: "Dining Table 🍽️", room: "Dining Room" },
+            { item: "Car 🚗", room: "Garage" },
+            { item: "Study Desk 📚", room: "Study" },
+            { item: "Old Boxes 📦", room: "Attic" }
+        ];
+
+        function renderSecH(card) {
+            card.classList.add('border-blue-400'); const data = dbH[state.subIndex];
+            const uid = state.subIndex;
+            const rooms = ['Attic', 'Bedroom', 'Bathroom', 'Study', 'Living Room', 'Dining Room', 'Kitchen', 'Garage'];
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">🔗</div>
+                <h2 class="font-comic text-2xl text-blue-500 mb-2 text-center">H: Room Match (${state.subIndex+1}/${dbH.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-4">這個物品通常放在哪個房間呢？</p>
+                <div class="flex justify-center mb-6">
+                    <div id="h-item-${uid}" data-text="${data.item.split(' ')[0]}" onclick="sounds.pop(); speakText(this.dataset.text);" class="cursor-pointer bg-white border-4 border-blue-200 shadow-sm rounded-xl p-4 flex flex-col items-center justify-center animate-bounce">
+                        <span class="text-4xl mb-2">${data.item.split(' ')[1] || '✨'}</span>
+                        <span class="font-comic font-bold text-blue-800 text-xl">${data.item.split(' ')[0]}</span>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    ${rooms.map(r => `<button onclick="checkH(this, '${r}', '${data.room}')" class="btn-cute bg-slate-50 border-2 border-slate-200 text-slate-600 text-sm py-2 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700">${r}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        function checkH(btn, selected, correct) {
+            const uid = state.subIndex;
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); 
+                const item = document.getElementById(`h-item-${uid}`);
+                item.classList.replace('bg-white', 'bg-green-100');
+                item.classList.replace('border-blue-200', 'border-green-400');
+                btn.classList.add('bg-green-100', 'border-green-400', 'text-green-700');
+                Array.from(btn.parentElement.children).forEach(b => b.classList.add('pointer-events-none'));
+                setTimeout(() => { 
+                    state.subIndex++; 
+                    isTransitioning = false;
+                    if(state.subIndex < dbH.length) renderSection(); else levelComplete('H'); 
+                }, 800);
+            } else { sounds.error(); btn.classList.add('animate-shake', 'bg-red-100', 'text-red-700'); setTimeout(()=>btn.classList.remove('animate-shake', 'bg-red-100', 'text-red-700'), 400); }
+        }
+
+        // ==========================================
+        // Section I: Grammar Seesaw (擴充至 8題)
+        // ==========================================
+        const dbI = [
+            { q: "# a set of books in the study.", ans: "There is", rule: "a set = 單數" }, 
+            { q: "# cups and saucers on the dining table.", ans: "There are", rule: "cups = 複數" },
+            { q: "# a variety of flowers in the garden.", ans: "There is", rule: "a variety = 單數" }, 
+            { q: "# many decorative items in the living room.", ans: "There are", rule: "many items = 複數" },
+            { q: "# a cat running around in the porch.", ans: "There is", rule: "a cat = 單數" }, 
+            { q: "# people sitting on the sofa.", ans: "There are", rule: "people = 複數" },
+            { q: "# a pair of shoes near the door.", ans: "There is", rule: "a pair = 單數" }, 
+            { q: "# cushions on the armchair.", ans: "There are", rule: "cushions = 複數" }
+        ];
+
+        function renderSecI(card) {
+            card.classList.add('border-teal-300'); const data = dbI[state.subIndex];
+            const uid = state.subIndex;
+            const speakContent = data.q.replace('#', 'blank');
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">⚖️</div>
+                <h2 class="font-comic text-2xl text-teal-500 mb-2 text-center">I: Grammar Seesaw (${state.subIndex+1}/${dbI.length})</h2>
+                <div class="bg-teal-50 rounded-2xl p-6 text-center mb-6 border-2 border-teal-200 relative">
+                    <button data-text="${speakContent}" onclick="speakText(this.dataset.text)" class="absolute top-2 right-2 text-xl">🔊</button>
+                    <p class="text-xl font-bold text-slate-700 mb-2 mt-4">${data.q.replace('#', '__________')}</p>
+                    <p class="text-xs text-teal-600 font-bold bg-teal-100 inline-block px-2 py-1 rounded-full mt-2 opacity-0 transition-opacity" id="i-hint-${uid}">提示：${data.rule}</p>
+                </div>
+                <div class="flex justify-center gap-4">
+                    <button onclick="checkI(this, 'There is', '${data.ans}')" class="btn-cute bg-white border-2 border-teal-200 text-teal-700 w-32 py-3 text-lg">There is</button>
+                    <button onclick="checkI(this, 'There are', '${data.ans}')" class="btn-cute bg-white border-2 border-teal-200 text-teal-700 w-32 py-3 text-lg">There are</button>
+                </div>
+                <div class="text-center mt-4"><button onclick="document.getElementById('i-hint-${uid}').style.opacity=1" class="text-sm text-slate-400 underline">Need a hint?</button></div>
+            `;
+        }
+
+        function checkI(btn, selected, correct) {
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); 
+                speakText(selected);
+                btn.classList.replace('bg-white', 'bg-green-100'); 
+                btn.classList.replace('border-teal-200', 'border-green-400');
+                btn.parentElement.classList.add('pointer-events-none'); 
+                setTimeout(() => { 
+                    state.subIndex++; 
+                    isTransitioning = false;
+                    if(state.subIndex < dbI.length) renderSection(); else levelComplete('I'); 
+                }, 800);
+            } else { sounds.error(); btn.classList.add('animate-shake', 'bg-red-100'); setTimeout(()=>btn.classList.remove('animate-shake', 'bg-red-100'), 400); }
+        }
+
+        // ==========================================
+        // Section J: Yours or Mine (8題)
+        // ==========================================
+        const dbJ = [
+            { a: "Are these socks #?", b: "No, they aren't mine.", opts: ["yours", "mine"], ans: "yours" },
+            { a: "Those gloves are yours?", b: "They aren't #.", opts: ["yours", "mine"], ans: "mine" },
+            { a: "Are those earrings yours?", b: "Yes, they are #.", opts: ["mine", "yours"], ans: "mine" },
+            { a: "Is this jacket #?", b: "No, it isn't mine.", opts: ["yours", "mine"], ans: "yours" },
+            { a: "Are those shoes yours?", b: "No, they aren't #.", opts: ["mine", "yours"], ans: "mine" },
+            { a: "This hat isn't yours. Is it #?", b: "No, it isn't mine.", opts: ["mine", "yours"], ans: "mine" },
+            { a: "Is that umbrella #?", b: "Yes, it is mine.", opts: ["mine", "yours"], ans: "yours" },
+            { a: "Are these keys yours?", b: "No, they aren't #.", opts: ["yours", "mine"], ans: "mine" }
+        ];
+
+        function renderSecJ(card) {
+            card.classList.add('border-indigo-400'); const data = dbJ[state.subIndex];
+            const uid = state.subIndex;
+            const leftTxt = data.a.replace('#', 'blank');
+            const rightTxt = data.b.replace('#', 'blank');
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">💬</div>
+                <h2 class="font-comic text-2xl text-indigo-500 mb-2 text-center">J: Yours or Mine? (${state.subIndex+1}/${dbJ.length})</h2>
+                <p class="text-center text-sm text-slate-500 mb-6">完成對話：這是你的，還是我的？</p>
+                <div class="flex flex-col gap-4 mb-6">
+                    <div class="flex items-start gap-2">
+                        <div class="text-4xl drop-shadow-sm cursor-pointer hover:scale-110 transition-transform" data-text="${leftTxt}" onclick="speakText(this.dataset.text)">👦🏻</div>
+                        <div class="bg-indigo-50 p-3 rounded-2xl rounded-tl-none border-2 border-indigo-200 text-indigo-900 font-bold max-w-[80%]">
+                            ${data.a.replace('#', `<span id="j-slot-${uid}" class="inline-block border-b-4 border-indigo-300 w-12 mx-1"></span>`)}
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-2 self-end flex-row-reverse">
+                        <div class="text-4xl drop-shadow-sm cursor-pointer hover:scale-110 transition-transform" data-text="${rightTxt}" onclick="speakText(this.dataset.text)">👧🏻</div>
+                        <div class="bg-pink-50 p-3 rounded-2xl rounded-tr-none border-2 border-pink-200 text-pink-900 font-bold max-w-[80%]">
+                            ${data.b.replace('#', `<span id="j-slot-${uid}" class="inline-block border-b-4 border-pink-300 w-12 mx-1"></span>`)}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center gap-4">
+                    ${data.opts.map(opt => `<button onclick="checkJ(this, '${opt}', '${data.ans}')" class="btn-cute bg-white border-2 border-slate-200 text-slate-700 w-28 py-2 text-lg hover:bg-slate-100">${opt}</button>`).join('')}
+                </div>
+            `;
+        }
+
+        function checkJ(btn, selected, correct) {
+            const uid = state.subIndex;
+            if(selected === correct) {
+                isTransitioning = true;
+                markCurrentComplete(); 
+                sounds.ding(); speakText(selected);
+                btn.classList.replace('bg-white', 'bg-green-100'); 
+                btn.classList.replace('border-slate-200', 'border-green-400');
+                const slot = document.getElementById(`j-slot-${uid}`);
+                slot.innerText = selected;
+                slot.className = "inline-block font-bold text-green-600 border-b-4 border-green-500 mx-1 animate-pop";
+                btn.parentElement.classList.add('pointer-events-none'); 
+                setTimeout(() => { 
+                    state.subIndex++; 
+                    isTransitioning = false;
+                    if(state.subIndex < dbJ.length) renderSection(); else levelComplete('J'); 
+                }, 1000);
+            } else { sounds.error(); btn.classList.add('animate-shake', 'bg-red-100'); setTimeout(()=>btn.classList.remove('animate-shake', 'bg-red-100'), 400); }
+        }
+
+
+        // ==========================================
+        // Section K: Email (Phase 1 & 2)
+        // ==========================================
+        const dbK_pairs = [
+            { en: 'the 10th floor', chi: '第 10 層樓' }, { en: 'see the city lights', chi: '看城市燈光' },
+            { en: 'space for cooking', chi: '煮飯的空間' }, { en: 'eats together', chi: '一起吃飯' },
+            { en: 'a study desk', chi: '一張書桌' }, { en: 'make it feel cosy', chi: '感覺溫馨' },
+            { en: 'a lot of sunlight', chi: '充足的陽光' }, { en: 'can visit one day', chi: '能來拜訪' }
+        ];
+        let kMatches = 0; let kLeft = null; let kRight = null;
+
+        function renderSecK(card) {
+            card.classList.add('border-orange-300');
+            if(state.subIndex === 0) renderSecKPhase1(card); 
+            else renderSecKPhase2(card);
+        }
+
+        function renderSecKPhase1(card) {
+            kMatches = 0; kLeft = null; kRight = null; 
+            const uid = state.subIndex;
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">✉️</div>
+                <h2 class="font-comic text-2xl text-orange-500 mb-2 text-center">K: Email (Phase 1)</h2>
+                <p class="text-center text-sm text-slate-500 mb-4">先完成中英片語配對，才能寫信喔！</p>
+                <div class="flex gap-2">
+                    <div class="flex flex-col gap-2 w-1/2">${dbK_pairs.map((p,i) => `<button id="kl-${uid}-${i}" data-text="${p.en}" onclick="selK('l', ${i}, this)" class="btn-cute bg-white border-2 border-orange-200 text-orange-700 py-2 text-xs sm:text-sm text-left pl-2">${p.en}</button>`).join('')}</div>
+                    <div class="flex flex-col gap-2 w-1/2">${[...dbK_pairs].map((p,i)=>({p,i})).sort(()=>Math.random()-0.5).map(obj => `<button id="kr-${uid}-${obj.i}" onclick="selK('r', ${obj.i}, this)" class="btn-cute bg-white border-2 border-indigo-200 text-indigo-700 py-2 text-xs sm:text-sm text-right pr-2">${obj.p.chi}</button>`).join('')}</div>
+                </div>
+            `;
+        }
+
+        function selK(side, id, btn) {
+            const uid = state.subIndex;
+            sounds.pop();
+            document.querySelectorAll(`[id^=k${side}-${uid}-]`).forEach(b => b.classList.remove('ring-4', 'scale-105'));
+            btn.classList.add('ring-4', 'ring-yellow-400', 'scale-105');
+            if(side === 'l') { kLeft = {id, btn}; speakText(btn.dataset.text); } else kRight = {id, btn};
+            if(kLeft && kRight) {
+                if(kLeft.id === kRight.id) {
+                    sounds.ding(); kMatches++;
+                    kLeft.btn.classList.add('opacity-0', 'pointer-events-none'); kRight.btn.classList.add('opacity-0', 'pointer-events-none');
+                    kLeft = null; kRight = null;
+                    if(kMatches === dbK_pairs.length) {
+                        isTransitioning = true;
+                        markCurrentComplete(); 
+                        setTimeout(() => {
+                            state.subIndex = 1; 
+                            isTransitioning = false;
+                            renderSection();
+                        }, 1000);
+                    }
+                } else {
+                    sounds.error(); kLeft.btn.classList.add('animate-shake', 'bg-red-100'); kRight.btn.classList.add('animate-shake', 'bg-red-100');
+                    setTimeout(() => { if(kLeft) { kLeft.btn.classList.remove('ring-4', 'scale-105', 'animate-shake', 'bg-red-100'); kLeft = null; } if(kRight) { kRight.btn.classList.remove('ring-4', 'scale-105', 'animate-shake', 'bg-red-100'); kRight = null; } }, 500);
+                }
+            }
+        }
+
+        function renderSecKPhase2(card) {
+            const uid = state.subIndex;
+            const opts = `<option value="">(Select...)</option>` + dbK_pairs.map(p => `<option value="${p.en}">${p.en}</option>`).join('');
+            card.innerHTML = `
+                <div class="absolute -top-5 -left-3 text-5xl transform -rotate-12 drop-shadow-md">✉️</div>
+                <h2 class="font-comic text-2xl text-orange-500 mb-2 text-center">K: Email (Phase 2)</h2>
+                <div class="bg-[url('https://www.transparenttextures.com/patterns/lined-paper.png')] bg-yellow-50 rounded-xl p-4 border-2 border-yellow-200 shadow-inner font-comic text-sm sm:text-base leading-loose text-slate-700">
+                    <p>Hi Giselle,</p>
+                    <p class="mt-2 indent-4">I moved into a new condo. It is on <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="the 10th floor" onchange="chkK(this)">${opts}</select>. The kitchen has lots of <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="space for cooking" onchange="chkK(this)">${opts}</select>. We have an area where my family <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="eats together" onchange="chkK(this)">${opts}</select>.</p>
+                    <p class="mt-2 indent-4">My room has <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="a study desk" onchange="chkK(this)">${opts}</select>. I put up lights to <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="make it feel cosy" onchange="chkK(this)">${opts}</select>. The window lets in <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="a lot of sunlight" onchange="chkK(this)">${opts}</select>.</p>
+                    <p class="mt-2 indent-4">I hope you <select class="k-sel-${uid} text-orange-600 font-bold border-b-2 outline-none bg-transparent" data-ans="can visit one day" onchange="chkK(this)">${opts}</select>!</p>
+                    <p class="mt-4">Love,<br>Farhana</p>
+                </div>
+                <div class="text-center mt-6"><button id="send-btn-${uid}" onclick="submitK()" class="btn-cute bg-orange-500 text-white px-8 py-3 opacity-50 pointer-events-none">📤 Send Email</button></div>
+            `;
+        }
+
+        function chkK(sel) {
+            const uid = state.subIndex;
+            if(sel.value === sel.dataset.ans) {
+                sounds.ding(); sel.classList.add('text-green-600', 'border-green-500'); sel.disabled = true;
+                const allDone = Array.from(document.querySelectorAll(`.k-sel-${uid}`)).every(s => s.disabled);
+                if(allDone) { document.getElementById(`send-btn-${uid}`).classList.remove('opacity-50', 'pointer-events-none'); document.getElementById(`send-btn-${uid}`).classList.add('animate-bounce'); sounds.cheer(); }
+            } else { sounds.error(); sel.value = ""; sel.classList.add('animate-shake'); setTimeout(()=>sel.classList.remove('animate-shake'),400); }
+        }
+
+        function submitK() {
+            if(isTransitioning) return;
+            const uid = state.subIndex;
+            document.getElementById(`send-btn-${uid}`).innerHTML = "✅ Sent!";
+            document.getElementById(`send-btn-${uid}`).classList.remove('animate-bounce');
+            levelComplete('K'); 
+        }
+
+        // --- 破關畫面 (加入 Review 複習按鈕) ---
+        function renderFinal() {
+            state.isFinalScreen = true;
+            if (window.markModuleComplete) window.markModuleComplete('kssr-p3-en-unit5');
+            Array.from(container.children).forEach(child => child.classList.add('hidden'));
+            
+            let finalCard = document.getElementById('final-card');
+            if (!finalCard) {
+                finalCard = document.createElement('div');
+                finalCard.id = 'final-card';
+                finalCard.className = "bg-white/95 backdrop-blur-sm rounded-[2rem] border-4 border-yellow-400 shadow-2xl p-8 md:p-10 text-center animate-pop w-full";
+                finalCard.innerHTML = `
+                    <div class="text-7xl mb-6 animate-bounce">🏆</div>
+                    <h2 class="font-comic text-4xl text-yellow-500 mb-4">You Did It!</h2>
+                    <p class="text-lg text-slate-600 font-bold mb-8">太棒了！你完美完成了 Unit 5 的所有學習單任務！<br>你現在是房屋單字與文法大師了！</p>
+                    
+                    <div class="flex flex-col gap-4 justify-center items-center">
+                        <button onclick="navPrev()" class="btn-cute bg-orange-500 text-white border-orange-700 py-3 px-8 text-lg md:text-xl w-full max-w-xs transition-transform">
+                            👀 複習我的答案 Review
+                        </button>
+                        <button onclick="location.reload()" class="btn-cute bg-blue-500 text-white border-blue-700 py-3 px-8 text-lg md:text-xl w-full max-w-xs transition-transform">
+                            🔄 再玩一次 Play Again
+                        </button>
+                    </div>
+                `;
+                container.appendChild(finalCard);
+                setInterval(() => confetti({ particleCount: 50, spread: 60, origin: { x: Math.random(), y: Math.random() - 0.2 } }), 1000);
+            } else {
+                finalCard.classList.remove('hidden');
+            }
+        }
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p3-en-unit5"
+            data-module-name="Unit 5: My House Adventure"
+            data-module-url="content/KSSR_Syllabus/Primary3/English/Unit5/index.html"></script>
 </body>
 </html>

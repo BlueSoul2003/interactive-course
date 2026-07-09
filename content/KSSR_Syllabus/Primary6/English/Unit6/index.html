@@ -1,1088 +1,1030 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Primary 6 English Unit 6</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    :root {
-      color-scheme: light;
-      --accent: #4d7c0f;
-      --surface: #f7fee7;
-      --ink: #172033;
-      --muted: #526070;
-      --paper: #fffdf8;
-      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
-      --soft-line: #d7dee8;
-      --shadow: 0 18px 42px rgb(23 32 51 / .10);
-    }
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background:
-        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
-        linear-gradient(180deg, var(--surface), #ffffff 64%);
-      color: var(--ink);
-      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
-      line-height: 1.55;
-    }
-    button, input, textarea, select { font: inherit; }
-    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
-      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
-      outline-offset: 3px;
-    }
-    .shell {
-      width: min(1120px, 100%);
-      margin: 0 auto;
-      padding: 18px;
-    }
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      padding: 6px 0 18px;
-    }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      min-height: 40px;
-      border: 2px solid var(--line);
-      border-radius: 999px;
-      padding: 8px 14px;
-      background: #ffffff;
-      color: var(--accent);
-      font-weight: 800;
-      text-decoration: none;
-    }
-    .book-label {
-      color: var(--muted);
-      font-size: .95rem;
-      font-weight: 800;
-    }
-    .hero {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
-      gap: 20px;
-      align-items: stretch;
-      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
-      border: 2px solid var(--line);
-      border-radius: 8px;
-      box-shadow: var(--shadow);
-      padding: clamp(18px, 4vw, 30px);
-    }
-    .theme-pill, .source-pill {
-      display: inline-flex;
-      width: fit-content;
-      border-radius: 999px;
-      border: 2px solid var(--line);
-      background: #ffffff;
-      color: var(--accent);
-      font-size: .82rem;
-      font-weight: 900;
-      letter-spacing: .02em;
-      padding: 6px 10px;
-    }
-    .hero h1 {
-      margin: 12px 0 8px;
-      color: var(--accent);
-      font-size: clamp(2rem, 6vw, 4.35rem);
-      line-height: 1;
-      letter-spacing: 0;
-    }
-    .hero-copy {
-      max-width: 62ch;
-      margin: 0;
-      color: #334155;
-      font-size: 1.04rem;
-    }
-    .hero-panel {
-      border: 2px dashed var(--line);
-      border-radius: 8px;
-      background: #ffffff;
-      padding: 16px;
-      display: grid;
-      align-content: space-between;
-      min-height: 210px;
-    }
-    .hero-panel strong {
-      color: var(--accent);
-      font-size: 1.08rem;
-    }
-    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
-    .progress-wrap {
-      margin-top: 14px;
-      height: 14px;
-      overflow: hidden;
-      border: 1px solid var(--soft-line);
-      border-radius: 999px;
-      background: #eef2f7;
-    }
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      border-radius: inherit;
-      background: var(--accent);
-      transition: width .25s ease;
-    }
-    .progress-status {
-      margin: 8px 0 0;
-      color: #334155;
-      font-size: .92rem;
-      font-weight: 800;
-    }
-    .practice-section {
-      margin: 26px 0;
-    }
-    .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 16px;
-      border-bottom: 2px solid var(--line);
-      padding-bottom: 8px;
-    }
-    .section-heading p {
-      order: 2;
-      margin: 0;
-      color: var(--muted);
-      font-size: .86rem;
-      font-weight: 800;
-    }
-    h2 {
-      margin: 0;
-      font-size: clamp(1.35rem, 3vw, 2rem);
-      color: #1f2937;
-    }
-    .section-instructions {
-      margin: 10px 0 14px;
-      color: var(--muted);
-    }
-    .question-card {
-      margin: 14px 0;
-      border: 2px solid var(--soft-line);
-      border-left: 7px solid var(--accent);
-      border-radius: 8px;
-      background: #ffffff;
-      padding: clamp(14px, 3vw, 20px);
-    }
-    .question-card[data-saved="true"] {
-      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
-      background: color-mix(in srgb, var(--surface), #ffffff 72%);
-    }
-    .question-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-bottom: 12px;
-    }
-    .question-meta span {
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: #ffffff;
-      color: #334155;
-      font-size: .78rem;
-      font-weight: 800;
-      padding: 3px 9px;
-    }
-    h3 {
-      margin: 0 0 8px;
-      color: var(--accent);
-      font-size: 1.18rem;
-    }
-    .prompt-text {
-      width: 100%;
-      max-height: 24rem;
-      overflow: auto;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-      margin: 0;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      background: #f8fafc;
-      padding: 12px;
-      color: #263447;
-      font: inherit;
-    }
-    .response-area {
-      margin-top: 14px;
-    }
-    .control-group {
-      margin: 0;
-      border: 0;
-      padding: 0;
-    }
-    legend, .answer-label, .interactive-grid label span, .sequence-row span {
-      display: block;
-      margin-bottom: 6px;
-      color: #334155;
-      font-size: .88rem;
-      font-weight: 900;
-    }
-    .choices {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-    .choice, .word-chip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 44px;
-      border: 2px solid #d7dee8;
-      border-radius: 8px;
-      background: #ffffff;
-      padding: 10px 12px;
-      cursor: pointer;
-    }
-    .choice:has(input:checked), .word-chip:has(input:checked) {
-      border-color: var(--accent);
-      background: var(--surface);
-    }
-    .answer-input, .answer-box {
-      width: 100%;
-      border: 2px solid #cbd5e1;
-      border-radius: 8px;
-      background: #ffffff;
-      color: var(--ink);
-      padding: 11px 12px;
-    }
-    .answer-box {
-      min-height: 116px;
-      resize: vertical;
-    }
-    .answer-box.compact {
-      min-height: 58px;
-    }
-    .control-hint, .picture-response p {
-      margin: 7px 0 0;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-    .interactive-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-      margin-bottom: 10px;
-    }
-    .sequence-board {
-      display: grid;
-      gap: 10px;
-    }
-    .word-bank-board {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-    button {
-      min-height: 42px;
-      border: 0;
-      border-radius: 999px;
-      padding: 9px 16px;
-      font-weight: 900;
-      cursor: pointer;
-    }
-    button:active {
-      transform: translateY(1px);
-    }
-    .check-btn {
-      background: var(--accent);
-      color: #ffffff;
-    }
-    .save-btn, .mini-btn {
-      border: 2px solid var(--line);
-      background: #ffffff;
-      color: var(--accent);
-    }
-    .feedback {
-      min-height: 1.5rem;
-      margin: 10px 0 0;
-      color: #334155;
-      font-weight: 900;
-    }
-    @media (max-width: 768px) {
-      .shell { padding: 12px; }
-      .topbar { align-items: flex-start; flex-direction: column; }
-      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
-      .section-heading { display: block; }
-      .hero-panel { min-height: 0; }
-      .prompt-text { max-height: 18rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="maximum-scale=1.0, user-scalable=no, width=device-width">
+    <title>Year 6 Unit 6 - Interactive English</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Nunito:wght@400;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+            touch-action: manipulation;
+            background: radial-gradient(circle at top right, #e8f5e9, #f0fdf4, #e0f2fe);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        h1, h2, .comic-font { font-family: 'Comic Neue', cursive; }
+        
+        .section-card {
+            border-radius: 1.5rem;
+            border-width: 4px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+        }
+        
+        .dict-word {
+            text-decoration: underline dashed #3b82f6 2px;
+            text-underline-offset: 4px;
+            cursor: pointer;
+            position: relative;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        
+        .tooltip {
+            visibility: hidden;
+            background-color: #334155; color: #fff; text-align: center;
+            border-radius: 8px; padding: 6px 10px; position: absolute;
+            z-index: 50; bottom: 125%; left: 50%; transform: translateX(-50%);
+            opacity: 0; transition: opacity 0.3s; font-size: 0.875rem;
+            white-space: nowrap; font-family: 'Nunito', sans-serif; font-weight: normal;
+        }
+        
+        .tooltip::after {
+            content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px;
+            border-width: 5px; border-style: solid; border-color: #334155 transparent transparent transparent;
+        }
+        
+        .dict-word:active .tooltip, .dict-word.active .tooltip { visibility: visible; opacity: 1; }
+
+        .animate-pop-in { animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+
+        .animate-bounce-short { animation: bounceShort 0.5s ease-in-out; }
+        @keyframes bounceShort { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+
+        .smart-select {
+            appearance: none; 
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat; background-position: right 0.5rem center; background-size: 1.2em; 
+            padding-right: 2.5rem; cursor: pointer; text-align: center; text-align-last: center;
+        }
+        
+        .toggle-btn { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .msg-bubble-left { background-color: #e5e7eb; color: #1f2937; border-radius: 1.2rem; border-bottom-left-radius: 0.2rem; padding: 0.75rem 1rem; max-width: 85%; align-self: flex-start; margin-bottom: 1rem; }
+        .msg-bubble-right { background-color: #3b82f6; color: white; border-radius: 1.2rem; border-bottom-right-radius: 0.2rem; padding: 0.75rem 1rem; max-width: 85%; align-self: flex-end; margin-bottom: 1rem; }
+
+    </style>
 </head>
-<body>
-  <div class="shell">
-    <nav class="topbar" aria-label="Workbook navigation">
-      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
-      <span class="book-label">Primary 6 English workbook draft</span>
-    </nav>
-    <header class="hero">
-      <div>
-        <span class="theme-pill">Eco Quest</span>
-        <h1>Unit 6</h1>
-        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
-      </div>
-      <aside class="hero-panel" aria-label="Unit summary">
-        <div>
-          <strong>Theme note</strong>
-          <p>cute eco quest English workbook theme</p>
+<body class="p-4 md:p-8">
+
+    <!-- Global Home Button -->
+    <a href="../../../../../index.html" class="fixed top-4 left-4 bg-white/90 backdrop-blur shadow-md text-gray-700 p-3 rounded-full hover:bg-gray-50 z-50 flex items-center justify-center border border-gray-200 transition-all hover:scale-105 active:scale-95" title="Back to Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+    </a>
+
+    <div id="start-screen" class="fixed inset-0 bg-white/95 z-50 flex flex-col items-center justify-center backdrop-blur-sm">
+        <h1 class="text-5xl md:text-6xl text-center text-green-600 mb-8 font-bold drop-shadow-md">Year 6 - Unit 6 🌿</h1>
+        <p class="text-xl text-gray-700 mb-8 font-bold text-center">Interactive English Adventure<br><span class="text-sm font-normal text-gray-500">Ultimate Edition (Sec A to K)</span></p>
+        <button id="start-btn" class="bg-gradient-to-r from-green-500 to-teal-500 text-white font-bold text-2xl py-4 px-12 rounded-full shadow-xl transform hover:scale-105 active:scale-95 transition-all border-4 border-white">
+            Start Learning! 🎮
+        </button>
+        <p class="mt-6 text-sm text-gray-500 text-center px-8 bg-gray-100 py-2 rounded-lg">啟動以解鎖語音與音效功能<br>(Tap to unlock audio for iPad)</p>
+    </div>
+
+    <div id="app-content" class="max-w-4xl mx-auto hidden pb-20">
+        <!-- Badges Section -->
+        <div class="bg-white/90 backdrop-blur-md rounded-2xl p-4 mb-8 shadow-sm flex items-center justify-between sticky top-4 z-40 border-2 border-white overflow-x-auto">
+            <div class="font-bold text-gray-700 mr-4 whitespace-nowrap">🏆 Badges:</div>
+            <div id="badges-container" class="flex gap-2 text-2xl">
+                <span id="badge-sectionA" class="grayscale opacity-50 transition-all duration-300 inline-block">🧩</span>
+                <span id="badge-sectionB" class="grayscale opacity-50 transition-all duration-300 inline-block">⚖️</span>
+                <span id="badge-sectionC" class="grayscale opacity-50 transition-all duration-300 inline-block">🔄</span>
+                <span id="badge-sectionD" class="grayscale opacity-50 transition-all duration-300 inline-block">🧀</span>
+                <span id="badge-sectionE" class="grayscale opacity-50 transition-all duration-300 inline-block">📧</span>
+                <span id="badge-sectionF" class="grayscale opacity-50 transition-all duration-300 inline-block">🧱</span>
+                <span id="badge-sectionG" class="grayscale opacity-50 transition-all duration-300 inline-block">💬</span>
+                <span id="badge-sectionH" class="grayscale opacity-50 transition-all duration-300 inline-block">🏭</span>
+                <span id="badge-sectionI" class="grayscale opacity-50 transition-all duration-300 inline-block">📰</span>
+                <span id="badge-sectionJ" class="grayscale opacity-50 transition-all duration-300 inline-block">🎋</span>
+                <span id="badge-sectionK" class="grayscale opacity-50 transition-all duration-300 inline-block">🖊️</span>
+            </div>
         </div>
-        <div>
-          <span class="source-pill">Source pages 46, 47, 48, 49, 50, 51, 52, 53, 54</span>
-          <div class="progress-wrap" aria-label="Progress">
-            <div class="progress-bar" id="progressBar"></div>
-          </div>
-          <p class="progress-status" id="progressStatus">0 saved</p>
-        </div>
-      </aside>
-    </header>
-    <main>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-046-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-046-heading">Source page 46</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p046-01"
-               data-question-type="writing_prompt"
-               data-source-page="46">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 46</span>
-        <span>Writing</span>
-        <span>unit-6-p046-01</span>
-      </div>
-
-        <h3 id="unit-6-p046-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p046-01-prompt">Unity 6
-oi @y »
-Write the names of the following objects. Then, match them to the materials they
-are made of and their functions.
-Object Made Of Function
-PANS To add flavour to
-Glass 8
-toast or biscuits
-= For drawing or
-’ ne
-Plastic For keeping fish in
-| vam
-Rey ’
-° £—X To prevent bacteria
-(4) : or viruses from
-\ dn i
-\— W, Strawberries entering nose
-ron oF moth
-\ /)
-Graphite For sitting
-© EPH Publishing (M) Sdn. Bhd. 50
-{Scanned with
-| = CamScanner |</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p046-01-answer">Your answer</label>
-      <textarea id="unit-6-p046-01-answer" class="answer-box" data-answer-input="unit-6-p046-01" rows="5"></textarea>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-047-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-047-heading">Source page 47</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p047-01"
-               data-question-type="short_answer"
-               data-source-page="47">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 47</span>
-        <span>Short answer</span>
-        <span>unit-6-p047-01</span>
-      </div>
-
-        <h3 id="unit-6-p047-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p047-01-prompt">(B) Read the following sentences. Then, write ‘F&quot; for the sentences that are facts and
-© O&#x27; for those that are opinions.
-| Acar has four wheels. )
-2 Butter is made by churning milk. ]
-3 Joe&#x27;s Orange Juice is more delicious than Al&#x27;s Fresh Orange Juice. 1]
-4 The cotton dress looks better on Gina than it does on me. J
-5 Almonds are dangerous for dogs fo eat. iB
-6 It&#x27;s going to be fun to take a tour around a vineyard. fs]
-(c } Put a tick (v) on the correct phrasal verbs to complete the following sentences.
-[1] My favourite pair of jeans is (4) We&#x27;re going to our
-‘2 unn dnc denim. old books to the nearby orphanage.
-CXR (ors
-(rocewin |) (eos | J
-@® Mum&#x27;s asked Jared to { @ Our nasty neighbours finally
-__ herblazer from the of their old brick
-dry-cleaner’s. house.
-CEE (movedon |)
-ow | (ovesovey | J
-@® You must lean how to { (@ Lainie’s on her way to the gym for
-— yoursilkdress. herdaily session.
-COR (rosso |)
-(ew) CI,
-51 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with
-| CamScanner’|</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p047-01-answer">Your answer</label>
-      <textarea id="unit-6-p047-01-answer" class="answer-box" data-answer-input="unit-6-p047-01" rows="5"></textarea>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-048-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-048-heading">Source page 48</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p048-01"
-               data-question-type="fill_blank"
-               data-source-page="48">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 48</span>
-        <span>Fill in the blank</span>
-        <span>unit-6-p048-01</span>
-      </div>
-
-        <h3 id="unit-6-p048-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p048-01-prompt">(D) Choose the most sultable answer to fill in the blanks.
-How Cheese Is Made
-Cheese is a delicious food made from milk. It takes time and care to make, but
-people all over the world [1] _________it. The process begins with fresh milk, which
-is warmed and mixed with rennet. This helps the milk [2] into curds and
-whey.
-The curds are solid pieces, and the whey is the 3] part. The curds
-are cut, stirred and gently heated to help more whey [4] — Then, they&#x27;re
-pressed into moulds to shape the cheese.
-Next, salt is added to give flavour and stop harmful @ from
-growing. Some cheeses are eaten fresh, but others are aged in cool rooms for
-many [J During this time, the flavour grows stronger and the texture
-After aging, the cheese is cut, packed and sent to shops. People enjoy it in
-sandwiches, pasta or even just a] — itsown.
-Even though cheese [ o JE from milk, it goes through many steps
-before it&#x27;s ready to eat. Making cheese teaches us about science, [1 0 J—
-and patience. :
-The next time you eat cheese, think about the (11) behind it—from
-farmto@
-I A hate B eat C enjoy
-2 A separate B shake C melt
-3 A soft B liquid C small
-4 A dy B fall C drain
-5 A animals B bacteria C people
-6 A weeks B minutes C hours
-7 A changes B stops C boils
-8 A from B with C on
-9 A made B comes Cis
-10 A weather B care C noise
-Il A process B mess C smell
-12 A table B bottle C farm
-© EPH Publishing (M) Sdn. Bhd. 52
-{Scammed vin
-i [cs] CamScanner’|</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p048-01-answer">Your answer</label>
-      <input id="unit-6-p048-01-answer" class="answer-input" data-answer-input="unit-6-p048-01" aria-describedby="unit-6-p048-01-hint">
-      <p id="unit-6-p048-01-hint" class="control-hint">Type your answer, then save it.</p>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-049-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-049-heading">Source page 49</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p049-01"
-               data-question-type="writing_prompt"
-               data-source-page="49">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 49</span>
-        <span>Writing</span>
-        <span>unit-6-p049-01</span>
-      </div>
-
-        <h3 id="unit-6-p049-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p049-01-prompt">(E) Your sister is studying overseas and misses your mum&#x27;s famous prawn sambal
-with petal. She has sent an email asking for your mum&#x27;s recipe. Write a reply in
-60 to 80 words detailing the recipe containing a secret ingredient. ah
-= Ele, Sauté the blended Add the prawns and
-3 garlic cloves and S 5 x .
-x Copa paste in hot oil until cook them until they
-10 dried chilies into (Fo TT
-| a smooth paste. ; ren PIT
-Let everything !
-Stir in the sliced fd ek SEodllis cl simmer together.
-&gt; tamarind juice for 3
-petai. Doses Finally, add a dash
-some tanginess.
-of belacan.
-leekarying@mail.com
-| Subject | Mum’s Prawn Sambal with Petai Recipe
-53 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with
-| CamScanner’|</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p049-01-answer">Your answer</label>
-      <textarea id="unit-6-p049-01-answer" class="answer-box" data-answer-input="unit-6-p049-01" rows="5"></textarea>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-050-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-050-heading">Source page 50</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p050-01"
-               data-question-type="grammar_transform"
-               data-source-page="50">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 50</span>
-        <span>Grammar</span>
-        <span>unit-6-p050-01</span>
-      </div>
-
-        <h3 id="unit-6-p050-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p050-01-prompt">(F) Rewrite the following active sentences in their passive forms.
-© Rubiah knits beautiful scarves.
-[2] My grandmother boils the soup.
-© The pupils wear cotton T-shirts.
-PETE
-5] The chef makes delicious kimchi omelettes.
-(6] Many people around the world speak English.
-@ Nancy bakes a carrot cake.
-© Children love sweets.
-© Barbara posts the letter.
-® The woman looks after the vegetable garden.
-@ feed my dog every evening. |
-eR SOR ER
-{Scanned _—
-i = CamScanner |</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p050-01-answer">Your answer</label>
-      <input id="unit-6-p050-01-answer" class="answer-input" data-answer-input="unit-6-p050-01" aria-describedby="unit-6-p050-01-hint">
-      <p id="unit-6-p050-01-hint" class="control-hint">Type your answer, then save it.</p>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-051-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-051-heading">Source page 51</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p051-01"
-               data-question-type="word_bank"
-               data-source-page="51">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 51</span>
-        <span>Word bank</span>
-        <span>unit-6-p051-01</span>
-      </div>
-
-        <h3 id="unit-6-p051-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p051-01-prompt">|
-(@) Complete the dialogue with ‘made of or ‘used for’.
-Siew Chin: Mum, what&#x27;s this?
-Mum : I&#x27;s a microwave oven. It&#x27;s [1] a — heating up food. Come on,
-I need to get a new wok. This looks sturdy.
-Siew Chin:Whatsit@_____ 2
-Mum I&#x27;s @__ metal. &#x27;m going to get it. Look, it comes
-with a spatula. It&#x27;s o_o acacia wood. It can be
-OQ stirring.
-Siew Chin: Aren&#x27;t you going to get some oven mitts as well?
-Mum : I almost forgot. Thanks for reminding me. You can choose a pair.
-Siew Chin: This one. I like the olive green. It&#x27;s so soft! .
-Mum It&#x27;s [oJ cotton. I think we&#x27;d better choose one that&#x27;s
-| [7 I silicone. They last longer.
-Siew Chin: What are they o_
-Mum : They&#x27;re Qu. tec. wx protecting our hands when we’re carrying hot
-food.
-(AH) Incorporate the suffix “tion’ or “sion’ to modify the verbs in the answer bank
-into suitable nouns. Then, fill in the blanks with the modified words.
-compete collide explode add express operate
-I Theloud____ woke the whole neighbourhood up.
-2 The ofthe blue dye creates a marble effect on the cloth.
-3 MrChohadtoundergoan____ for his slipped disc.
-4 Haroldwonthecooking_ organised by his school.
-5 Thetraffic____ atthe junction caused a huge jam.
-6 The on Samad&#x27;s face when he found out he had been
-tricked was hilarious.
-55 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with
-i [cs] CamScanner’|</pre>
-        <div class="response-area">
-
-      <div class="word-bank-board" data-word-bank-board="true">
-
-          <label class="answer-label" for="unit-6-p051-01-words">Words you used</label>
-          <input id="unit-6-p051-01-words" class="answer-input" data-answer-input="unit-6-p051-01-words">
-
-      </div>
-
-      <label class="answer-label" for="unit-6-p051-01-answer">Write your completed answer</label>
-      <textarea id="unit-6-p051-01-answer" class="answer-box" data-answer-input="unit-6-p051-01" rows="5"></textarea>
-
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-052-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-052-heading">Source page 52</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p052-01"
-               data-question-type="short_answer"
-               data-source-page="52">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 52</span>
-        <span>Short answer</span>
-        <span>unit-6-p052-01</span>
-      </div>
-
-        <h3 id="unit-6-p052-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p052-01-prompt">(m Read the advertisements and circle the correct answers.
-AJ AT AT ASAT AT AT AT AT AT UJ AT ALAS AT AJA J
-Thinking of having a ball but don’t know where?
-Look no further! The Majestic Plaza Hotel, located at Jalan Kasih, has 3 ballrooms
-for such occasions. Tables are priced from RM350 per table, and there are over 10
-menus fo choose from. What are you waiting for? Call the Majestic Plaza Hotel at
-03-40212193 now!
-| How many ballrooms are available at the hotel?
-Al B 2 C3
-2 What does ‘ball’ mean in the advertisement?
-A A globe-shaped object that&#x27;s kicked, hit or thrown.
-B A social function or gathering.
-C The round part of the hand at the base of the thumb.
-UU UT UU UR UR TUR ROUIAUY
-Misinformation can be deadly. Recently, misinformation on COVID- 19 vaccinations
-have been spreading like wildfire over social media and the internet.
-We at Infel Radio urge people to know their facts and get vaccinated. The
-vaccines have been scientifically proven to be safe and effective. Failure fo get
-vaccinated may cause harm to you and your loved ones.
-This public service announcement is brought to you by Intel Radio Malaysia.
-8 The phrase spreading like wildfremeans |
-A to move with great speed
-B to move at a moderate pace
-C to move slowly
-4 Which statement is false?
-A People are spreading inaccurate information about COVID- 19 vaccines.
-B Intel Radio calls for people to get vaccinated.
-C COVID-19 vaccines are not safe or effective.
-© EPH Publishing (M) Sdn. Bhd. 56
-{Scanned with
-| CamScanner’|</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p052-01-answer">Your answer</label>
-      <textarea id="unit-6-p052-01-answer" class="answer-box" data-answer-input="unit-6-p052-01" rows="5"></textarea>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-053-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-053-heading">Source page 53</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p053-01"
-               data-question-type="read_and_answer"
-               data-source-page="53">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 53</span>
-        <span>Read and answer</span>
-        <span>unit-6-p053-01</span>
-      </div>
-
-        <h3 id="unit-6-p053-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p053-01-prompt">»
-3 Read the infographic about bamboos and answer the following questions.
-FASCINATING BAMBOO FACTS
-ate * Bamboo is considered a type of grass despite its tree-
-iy RS &amp; like appearance.
-= WL \ 7] [ \&#x27; « Bamboos thrive in Asia, Africa and Latin America.
-7 &#x27;% 7) Si * There are over | 000 species of bamboos.
-an 4 1 lL * Two examples are the giant bamboo (one of the largest
-= bamboo species in the world) and the pleioblastus
-distichus which is the smallest at only | feet in height.
-* Bamboos need little water and don’t require fertiliser.
-Wha can bamboos be u sed for? ;
-Food : Scaffolding : Paper
-$ | :
-_ : =
-ah Is I
-#7 : film :
-Bamboo shoots are used in : Bamboo is eco-friendly : Bamboo pulp can be made
-Asian cuisine. : and cheaper than metal : into bamboo paper.
-: scaffolding. :
-Instruments : Utensils : Medicine
-: &lt; : =
-: @= 5 &gt;
-@ ro EL)
-4 eos co i He
-Musical instruments like : Kitchen utensils such as : In China, black bamboo
-the pan flute are made of : ladles and salt shakers are + shoots are used to treat
-bamboo. : made of bamboo. i kidney diseases.
-Find sentences from the infographic which state the following.
-1 @ Bamboos resemble trees. i
-2 (Tiere oo many diferent igpes of bamboos.
-57 © EPH Publishing (M) Sdn. Bhd.
-{Scanned with |
-{@ CamScanner|</pre>
-        <div class="response-area">
-
-      <div class="read-answer-board" data-read-and-answer-board="true">
-        <label class="answer-label" for="unit-6-p053-01-evidence">Text clue</label>
-        <input id="unit-6-p053-01-evidence" class="answer-input" data-answer-input="unit-6-p053-01-evidence">
-
-      <label class="answer-label" for="unit-6-p053-01-answer">Answer after reading</label>
-      <textarea id="unit-6-p053-01-answer" class="answer-box" data-answer-input="unit-6-p053-01" rows="5"></textarea>
-
-      </div>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-      <section class="practice-section" aria-labelledby="unit-6-page-054-heading">
-        <div class="section-heading">
-          <p>Source page set</p>
-          <h2 id="unit-6-page-054-heading">Source page 54</h2>
-        </div>
-        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
-
-      <article class="question-card"
-               data-question-id="unit-6-p054-01"
-               data-question-type="short_answer"
-               data-source-page="54">
-
-      <div class="question-meta" aria-label="Question details">
-        <span>Primary 6</span>
-        <span>Unit 6</span>
-        <span>Page 54</span>
-        <span>Short answer</span>
-        <span>unit-6-p054-01</span>
-      </div>
-
-        <h3 id="unit-6-p054-01-prompt">Try this question</h3>
-        <pre class="prompt-text" aria-labelledby="unit-6-p054-01-prompt">3 | Bamboos have healing properties.
-4 | Bamboos do not harm the environment.
-Write your answer in the space provided.
-5 List two species of bamboos.
-6 What texture do you think a bamboo shoot has?
-5h
-a Which animal eats bamboo?
-(K You want-to buy a pen for your father as a Father&#x27;s Day present. Which of the
-pens would you buy? Give reasons to support your choice. gh
-Noveau : Mont Noir
-Fountain Pen Roller Pen
-_ RM79.90 _ _RM59.90
-Colours : Pink, royal blue, black, silver Colours : Red, silver, green
-Free : Bottle of black ink Free : Mechanical pencil
-Material : Stainless steel Material : High quality plastic
-Delivery: Free Delivery: Free
-© EPH Publishing (M) Sdn. Bhd. 58
-scanned with
-| CamScanner’|</pre>
-        <div class="response-area">
-
-      <label class="answer-label" for="unit-6-p054-01-answer">Your answer</label>
-      <textarea id="unit-6-p054-01-answer" class="answer-box" data-answer-input="unit-6-p054-01" rows="5"></textarea>
-
-        </div>
-        <div class="actions">
-          <button type="button" class="check-btn">Check</button>
-          <button type="button" class="save-btn">Save</button>
-        </div>
-        <p class="feedback" role="status" aria-live="polite"></p>
-      </article>
-
-      </section>
-
-    </main>
-  </div>
-  <script id="unitData" type="application/json">{"bookId": "kssr-primary6-english-workbook", "level": "Primary 6", "unitId": "unit-6", "unitNumber": 6, "title": "Unit 6", "questionIds": ["unit-6-p046-01", "unit-6-p047-01", "unit-6-p048-01", "unit-6-p049-01", "unit-6-p050-01", "unit-6-p051-01", "unit-6-p052-01", "unit-6-p053-01", "unit-6-p054-01"]}</script>
-  <script>
-    (function () {
-      'use strict';
-
-      var unitData = JSON.parse(document.getElementById('unitData').textContent);
-      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
-      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
-      var progressBar = document.getElementById('progressBar');
-      var progressStatus = document.getElementById('progressStatus');
-      var state = {
-        completed: {},
-        answers: {}
-      };
-
-      function collectCardAnswer(card) {
-        var values = {};
-        card.querySelectorAll('input, textarea, select').forEach(function (field) {
-          var key = field.dataset.answerInput || field.name || field.id;
-          if (!key) return;
-          if (field.type === 'radio') {
-            if (field.checked) values[key] = field.value;
-            return;
-          }
-          if (field.type === 'checkbox') {
-            values[key] = field.checked;
-            return;
-          }
-          values[key] = field.value;
-        });
-        return values;
-      }
-
-      function paintState() {
-        var done = Object.keys(state.completed).filter(function (key) {
-          return state.completed[key];
-        }).length;
-        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
-        progressBar.style.width = percent + '%';
-        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
-        cards.forEach(function (card) {
-          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
-        });
-      }
-
-      function persist(debounce) {
-        try {
-          window.localStorage.setItem(storageKey, JSON.stringify(state));
-        } catch (error) {
-          console.warn('Local progress could not be saved.', error);
-        }
-        paintState();
-        if (window.ProgressTracker) {
-          var payload = {
-            unitId: unitData.unitId,
-            unitNumber: unitData.unitNumber,
-            completed: state.completed,
-            answers: state.answers
-          };
-          if (debounce && window.ProgressTracker.autoSave) {
-            window.ProgressTracker.autoSave(payload, 1200);
-          } else if (window.ProgressTracker.save) {
-            window.ProgressTracker.save(payload);
-          }
-        }
-      }
-
-      function restoreLocal() {
-        try {
-          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
-          if (saved && typeof saved === 'object') {
-            state.completed = saved.completed || {};
-            state.answers = saved.answers || {};
-          }
-        } catch (error) {
-          console.warn('Local progress could not be restored.', error);
-        }
-      }
-
-      function restoreFields() {
-        cards.forEach(function (card) {
-          var answers = state.answers[card.dataset.questionId] || {};
-          card.querySelectorAll('input, textarea, select').forEach(function (field) {
-            var key = field.dataset.answerInput || field.name || field.id;
-            if (!(key in answers)) return;
-            if (field.type === 'radio') {
-              field.checked = answers[key] === field.value;
-            } else if (field.type === 'checkbox') {
-              field.checked = Boolean(answers[key]);
-            } else {
-              field.value = answers[key];
+        <div id="sections-container"></div>
+    </div>
+
+    <script>
+        const dict = (word, meaning) => `<span class="dict-word" onclick="toggleTooltip(this)">${word}<span class="tooltip">${meaning}</span></span>`;
+
+        const sectionA = {
+            title: "Section A: Objects & Materials 🧩",
+            instructions: "Match the objects to the materials they are made of and their functions using the dropdowns.",
+            instructionsZh: "使用下拉選單，將物品與其材質及功能配對起來。",
+            bgColor: "bg-emerald-50", borderColor: "border-emerald-300",
+            materials: ["Glass", "Polypropylene", "Plastic", "Strawberries", "Graphite"],
+            functions: ["To add flavour to toast or biscuits", "For drawing or writing", "For keeping fish in", "To prevent bacteria or viruses from entering the nose or mouth", "For sitting"],
+            questions: [
+                { id: 'a1', object: "✏️ Pencil", mAnswer: "Graphite", fAnswer: "For drawing or writing", zh: "鉛筆" },
+                { id: 'a2', object: "🪑 Chair", mAnswer: "Plastic", fAnswer: "For sitting", zh: "椅子" },
+                { id: 'a3', object: "🍯 Jam", mAnswer: "Strawberries", fAnswer: "To add flavour to toast or biscuits", zh: "果醬" },
+                { id: 'a4', object: "🐠 Fishbowl", mAnswer: "Glass", fAnswer: "For keeping fish in", zh: "魚缸" },
+                { id: 'a5', object: "😷 Mask", mAnswer: "Polypropylene", fAnswer: "To prevent bacteria or viruses from entering the nose or mouth", zh: "口罩" }
+            ]
+        };
+
+        const sectionB = {
+            title: "Section B: Facts vs. Opinions ⚖️",
+            instructions: "Read the sentences and toggle 'F' for facts and 'O' for opinions.",
+            instructionsZh: "閱讀句子，點擊按鈕切換為事實 (F) 或 觀點 (O)。",
+            bgColor: "bg-teal-50", borderColor: "border-teal-300",
+            questions: [
+                { id: 'b1', text: "A car has four wheels.", answer: "F", zh: "一輛車有四個輪子。" },
+                { id: 'b2', text: "Butter is made by churning milk.", answer: "F", zh: "奶油是藉由攪拌牛奶製成的。" },
+                { id: 'b3', text: "Joe's Orange Juice is more delicious than Al's Fresh Orange Juice.", answer: "O", zh: "Joe的柳橙汁比Al的新鮮柳橙汁好喝。" },
+                { id: 'b4', text: "The cotton dress looks better on Gina than it does on me.", answer: "O", zh: "這件棉質洋裝穿在Gina身上比穿在我身上好看。" },
+                { id: 'b5', text: "Almonds are dangerous for dogs to eat.", answer: "F", zh: "狗吃杏仁是很危險的。" },
+                { id: 'b6', text: "It's going to be fun to take a tour around a vineyard.", answer: "O", zh: "去葡萄園參觀一定會很有趣。" }
+            ]
+        };
+
+        const sectionC = {
+            title: "Section C: Phrasal Verbs 🔄",
+            instructions: "Tap the highlighted blanks to toggle the correct phrasal verbs.",
+            instructionsZh: "點擊螢光底線，切換並選擇正確的片語動詞。",
+            bgColor: "bg-cyan-50", borderColor: "border-cyan-300",
+            questions: [
+                { id: 'c1', text: "My favourite pair of jeans is [blank] denim.", options: ["made of", "made with"], answer: "made of", zh: "我最喜歡的牛仔褲是丹寧布做的。" },
+                { id: 'c2', text: "Mum's asked Jared to [blank] her blazer from the dry-cleaner's.", options: ["pick off", "pick up"], answer: "pick up", zh: "媽媽叫Jared去乾洗店拿她的西裝外套。" },
+                { id: 'c3', text: "You must learn how to [blank] your silk dress.", options: ["care by", "care for"], answer: "care for", zh: "妳必須學習如何保養妳的絲綢洋裝。" },
+                { id: 'c4', text: "We're going to [blank] our old books to the nearby orphanage.", options: ["give back", "give away"], answer: "give away", zh: "我們打算把舊書捐給附近的孤兒院。" },
+                { id: 'c5', text: "Our nasty neighbours finally [blank] of their old brick house.", options: ["moved out", "moved away"], answer: "moved out", zh: "我們討厭的鄰居終於搬出了他們的老磚房。" },
+                { id: 'c6', text: "Lainie's on her way to the gym for her daily [blank] session.", options: ["pass out", "work out"], answer: "work out", zh: "Lainie 正在去健身房進行每日鍛鍊的路上。" }
+            ]
+        };
+
+        const sectionD = {
+            title: "Section D: How Cheese Is Made 🧀",
+            instructions: "Choose the most suitable answer from the dropdown to fill in the blanks.",
+            instructionsZh: "從下拉選單中選擇最適合的答案來完成短文。",
+            bgColor: "bg-yellow-50", borderColor: "border-yellow-400",
+            text: `Cheese is a delicious food made from milk. It takes time and care to make, but people all over the world [q1] it. The process begins with fresh milk, which is warmed and mixed with rennet. This helps the milk [q2] into curds and whey.<br><br>The curds are solid pieces, and the whey is the [q3] part. The curds are cut, stirred and gently heated to help more whey [q4]. Then, they're pressed into moulds to shape the cheese.<br><br>Next, salt is added to give flavour and stop harmful [q5] from growing. Some cheeses are eaten fresh, but others are aged in cool rooms for many [q6]. During this time, the flavour grows stronger and the texture [q7].<br><br>After aging, the cheese is cut, packed and sent to shops. People enjoy it in sandwiches, pasta or even just [q8] its own.<br><br>Even though cheese [q9] from milk, it goes through many steps before it's ready to eat. Making cheese teaches us about science, [q10] and patience.<br><br>The next time you eat cheese, think about the [q11] behind it—from farm to [q12].`,
+            questions: [
+                { id: 'q1', options: ["...", "hate", "eat", "enjoy"], answer: "enjoy" },
+                { id: 'q2', options: ["...", "separate", "shake", "melt"], answer: "separate" },
+                { id: 'q3', options: ["...", "soft", "liquid", "small"], answer: "liquid" },
+                { id: 'q4', options: ["...", "dry", "fall", "drain"], answer: "drain" },
+                { id: 'q5', options: ["...", "animals", "bacteria", "people"], answer: "bacteria" },
+                { id: 'q6', options: ["...", "weeks", "minutes", "hours"], answer: "weeks" }, 
+                { id: 'q7', options: ["...", "changes", "stops", "boils"], answer: "changes" },
+                { id: 'q8', options: ["...", "from", "with", "on"], answer: "on" },
+                { id: 'q9', options: ["...", "made", "comes", "is"], answer: "comes" },
+                { id: 'q10', options: ["...", "weather", "care", "noise"], answer: "care" },
+                { id: 'q11', options: ["...", "process", "mess", "smell"], answer: "process" },
+                { id: 'q12', options: ["...", "table", "bottle", "farm"], answer: "table" }
+            ],
+            zh: "起司是由牛奶製成的美味食物。它需要時間和耐心製作，但全世界的人都喜愛它。製作過程從鮮奶開始... (請透過上下文完成克漏字挑戰！)"
+        };
+
+        const sectionE = {
+            title: "Section E: Recipe Email Composer 📧",
+            instructions: "Your sister misses mum's prawn sambal with petai. Write an email detailing the recipe using the smart dropdowns to connect the steps.",
+            instructionsZh: "姊姊在國外想念媽媽的臭豆參巴蝦。使用下拉選單連結食譜步驟，完成這封 Email。",
+            bgColor: "bg-orange-50", borderColor: "border-orange-300",
+            id: 'email-e',
+            emailData: {
+                to: "leekarying@mail.com",
+                subject: "Mum's Prawn Sambal with Petai Recipe",
+                bodyHtml: `Hi Karying,<br><br>I heard you are missing Mum's famous prawn sambal with petai! I asked her for the recipe with the secret ingredient. Here is how you can make it yourself.<br><br>First, you need to <select id="sel-e1" class="smart-select bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded border-2 border-orange-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Step 1 ▾ ]</option><option value="correct">blend 2 onions, 3 garlic cloves and 10 dried chilies into a smooth paste</option><option value="wrong">stir in the sliced petai</option></select>. After that, take a pan and <select id="sel-e2" class="smart-select bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded border-2 border-orange-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Step 2 ▾ ]</option><option value="wrong">add a spoonful of tamarind juice</option><option value="correct">sauté the blended paste in hot oil until fragrant</option></select>.<br><br>Once it smells delicious, it is time to <select id="sel-e3" class="smart-select bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded border-2 border-orange-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Step 3 ▾ ]</option><option value="correct">add the prawns and cook them until they turn pink</option><option value="wrong">let everything simmer together</option></select>. Next, you can <select id="sel-e4" class="smart-select bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded border-2 border-orange-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Step 4 ▾ ]</option><option value="wrong">add a dash of belacan</option><option value="correct">stir in the sliced petai</option></select>. To give it that signature sour kick, <select id="sel-e5" class="smart-select bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded border-2 border-orange-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Step 5 ▾ ]</option><option value="correct">add a spoonful of tamarind juice for some tanginess</option><option value="wrong">blend 2 onions</option></select>.<br><br>Finally, <select id="sel-e6" class="smart-select bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded border-2 border-orange-400 outline-none w-full md:w-auto my-1"><option value="">[ Choose Step 6 ▾ ]</option><option value="correct">let everything simmer together and add a dash of belacan</option><option value="wrong">sauté the blended paste</option></select>. The belacan is Mum's secret ingredient!<br><br>I hope it turns out exactly like Mum's! Enjoy your meal and stay safe overseas.<br><br>Love,<br>Your Sibling`
             }
-          });
+        };
+
+        const sectionF = {
+            title: "Section F: Passive Voice Master 🧱",
+            instructions: "Tap the blocks to build the correct passive form of the active sentence.",
+            instructionsZh: "點擊文字積木，拼湊出正確的「被動語態」句子！",
+            bgColor: "bg-red-50", borderColor: "border-red-300",
+            questions: [
+                { id: 'f1', text: "Rubiah knits beautiful scarves.", answer: "Beautiful scarves are knitted by Rubiah.", blocks: ["Beautiful scarves", "are knitted", "by", "Rubiah."], zh: "美麗的圍巾是由Rubiah織的。" },
+                { id: 'f2', text: "My grandmother boils the soup.", answer: "The soup is boiled by my grandmother.", blocks: ["The soup", "is boiled", "by", "my grandmother."], zh: "湯是我奶奶煮的。" },
+                { id: 'f3', text: "The pupils wear cotton T-shirts.", answer: "Cotton T-shirts are worn by the pupils.", blocks: ["Cotton T-shirts", "are worn", "by", "the pupils."], zh: "棉質T恤是學生們穿的。" },
+                { id: 'f4', text: "The workmen cut down the trees.", answer: "The trees are cut down by the workmen.", blocks: ["The trees", "are cut down", "by", "the workmen."], zh: "樹木被工人們砍倒了。" },
+                { id: 'f5', text: "The chef makes delicious kimchi omelettes.", answer: "Delicious kimchi omelettes are made by the chef.", blocks: ["Delicious kimchi omelettes", "are made", "by", "the chef."], zh: "美味的泡菜煎蛋捲是由主廚製作的。" },
+                { id: 'f6', text: "Many people around the world speak English.", answer: "English is spoken by many people around the world.", blocks: ["English", "is spoken", "by", "many people", "around the world."], zh: "英語被世界上許多人使用。" },
+                { id: 'f7', text: "Nancy bakes a carrot cake.", answer: "A carrot cake is baked by Nancy.", blocks: ["A carrot cake", "is baked", "by", "Nancy."], zh: "胡蘿蔔蛋糕是Nancy烤的。" },
+                { id: 'f8', text: "Children love sweets.", answer: "Sweets are loved by children.", blocks: ["Sweets", "are loved", "by", "children."], zh: "糖果受到孩子們的喜愛。" },
+                { id: 'f9', text: "Barbara posts the letter.", answer: "The letter is posted by Barbara.", blocks: ["The letter", "is posted", "by", "Barbara."], zh: "信是由Barbara寄出的。" },
+                { id: 'f10', text: "The woman looks after the vegetable garden.", answer: "The vegetable garden is looked after by the woman.", blocks: ["The vegetable garden", "is looked after", "by", "the woman."], zh: "菜園由那位婦女照料。" },
+                { id: 'f11', text: "I feed my dog every evening.", answer: "My dog is fed by me every evening.", blocks: ["My dog", "is fed", "by", "me", "every evening."], zh: "我的狗每天傍晚由我餵食。" },
+                { id: 'f12', text: "The scouts set up some tents.", answer: "Some tents are set up by the scouts.", blocks: ["Some tents", "are set up", "by", "the scouts."], zh: "一些帳篷是由童子軍搭建的。" }
+            ]
+        };
+
+        const sectionG = {
+            title: "Section G: Dialogue Completion 💬",
+            instructions: "Read the chat and tap the toggle buttons to choose 'made of' or 'used for'.",
+            instructionsZh: "閱讀對話，點擊按鈕選擇 'made of' (由...製成) 或 'used for' (用來...)。",
+            bgColor: "bg-fuchsia-50", borderColor: "border-fuchsia-300",
+            dialogue: [
+                { sender: 'Siew Chin', text: "Mum, what's this?" },
+                { sender: 'Mum', text: "It's a microwave oven. It's [q1] heating up food. Come on, I need to get a new wok. This looks sturdy." },
+                { sender: 'Siew Chin', text: "What's it [q2]?" },
+                { sender: 'Mum', text: "It's [q3] metal. I'm going to get it. Look, it comes with a spatula. It's [q4] acacia wood. It can be [q5] stir-frying." },
+                { sender: 'Siew Chin', text: "Aren't you going to get some oven mitts as well?" },
+                { sender: 'Mum', text: "I almost forgot. Thanks for reminding me. You can choose a pair." },
+                { sender: 'Siew Chin', text: "This one. I like the olive green. It's so soft!" },
+                { sender: 'Mum', text: "It's [q6] cotton. I think we'd better choose one that's [q7] silicone. They last longer." },
+                { sender: 'Siew Chin', text: "What are they [q8]?" },
+                { sender: 'Mum', text: "They're [q9] protecting our hands when we're carrying hot food." }
+            ],
+            questions: [
+                { id: 'g1', answer: "used for" }, { id: 'g2', answer: "used for" }, { id: 'g3', answer: "made of" },
+                { id: 'g4', answer: "made of" }, { id: 'g5', answer: "used for" }, { id: 'g6', answer: "made of" },
+                { id: 'g7', answer: "made of" }, { id: 'g8', answer: "used for" }, { id: 'g9', answer: "used for" }
+            ],
+            zh: "Mum與Siew Chin在討論各種物品的材質(made of)與用途(used for)。"
+        };
+
+        const sectionH = {
+            title: "Section H: Suffix Factory 🏭",
+            instructions: "Combine the base word with '-tion' or '-sion' to complete the sentences.",
+            instructionsZh: "使用智慧選單，將動詞加上 '-tion' 或 '-sion' 轉換為名詞填空。",
+            bgColor: "bg-indigo-50", borderColor: "border-indigo-300",
+            words: ["compete", "collide", "explode", "add", "express", "operate"],
+            questions: [
+                { id: 'h1', text: "The loud [blank] woke the whole neighbourhood up.", baseAns: "explode", sfxAns: "-sion", word: "explosion", zh: "巨大的爆炸聲吵醒了整個社區。" },
+                { id: 'h2', text: "The [blank] of the blue dye creates a marble effect on the cloth.", baseAns: "add", sfxAns: "-tion", word: "addition", zh: "藍色染料的加入在布料上創造了大理石效果。" },
+                { id: 'h3', text: "Mr Cho had to undergo an [blank] for his slipped disc.", baseAns: "operate", sfxAns: "-tion", word: "operation", zh: "Cho先生必須為他的椎間盤突出動手術。" },
+                { id: 'h4', text: "Harold won the cooking [blank] organised by his school.", baseAns: "compete", sfxAns: "-tion", word: "competition", zh: "Harold贏得了學校舉辦的烹飪比賽。" },
+                { id: 'h5', text: "The traffic [blank] at the junction caused a huge jam.", baseAns: "collide", sfxAns: "-sion", word: "collision", zh: "十字路口的交通事故造成了嚴重的塞車。" },
+                { id: 'h6', text: "The [blank] on Samad's face when he found out he had been tricked was hilarious.", baseAns: "express", sfxAns: "-sion", word: "expression", zh: "Samad發現自己被騙時，臉上的表情非常搞笑。" }
+            ]
+        };
+
+        const sectionI = {
+            title: "Section I: Advertisements Reading 📰",
+            instructions: "Read the texts and answer the questions below.",
+            instructionsZh: "閱讀海報並回答問題。",
+            bgColor: "bg-pink-50", borderColor: "border-pink-300",
+            ads: [
+                { id: 'ad1', text: "<b>Thinking of having a ball but don't know where?</b><br>Look no further! The Majestic Plaza Hotel, located at Jalan Kasih, has 3 ballrooms for such occasions. Tables are priced from RM350 per table, and there are over 10 menus to choose from. What are you waiting for? Call the Majestic Plaza Hotel at 03-40212193 now!" },
+                { id: 'ad2', text: "<b>Misinformation can be deadly.</b> Recently, misinformation on COVID-19 vaccinations have been spreading like wildfire over social media and the internet.<br><br>We at Intel Radio urge people to know their facts and get vaccinated. The vaccines have been scientifically proven to be safe and effective. Failure to get vaccinated may cause harm to you and your loved ones.<br><br>This public service announcement is brought to you by Intel Radio Malaysia." }
+            ],
+            questions: [
+                { id: 'i1', text: "1. How many ballrooms are available at the hotel?", options: ["A. 1", "B. 2", "C. 3"], answer: "C. 3" },
+                { id: 'i2', text: "2. What does 'ball' mean in the advertisement?", options: ["A. A globe-shaped object that's kicked, hit or thrown.", "B. A social function or gathering.", "C. The round part of the hand at the base of the thumb."], answer: "B. A social function or gathering." },
+                { id: 'i3', text: "3. The phrase 'spreading like wildfire' means ______.", options: ["A. to move with great speed", "B. to move at a moderate pace", "C. to move slowly"], answer: "A. to move with great speed" },
+                { id: 'i4', text: "4. Which statement is false?", options: ["A. People are spreading inaccurate information about COVID-19 vaccines.", "B. Intel Radio calls for people to get vaccinated.", "C. COVID-19 vaccines are not safe or effective."], answer: "C. COVID-19 vaccines are not safe or effective." }
+            ]
+        };
+
+        const sectionJ = {
+            title: "Section J: Bamboo Infographic 🎋",
+            instructions: "Read the infographic facts and answer the questions below.",
+            instructionsZh: "閱讀竹子資訊圖表，並完成配對與問答。",
+            bgColor: "bg-lime-50", borderColor: "border-lime-300",
+            facts: [
+                "Bamboo is considered a type of grass despite its tree-like appearance.",
+                "Bamboos thrive in Asia, Africa and Latin America.",
+                "There are over 1,000 species of bamboos.",
+                "Two examples are the giant bamboo (one of the largest bamboo species in the world) and the pleioblastus distichus which is the smallest at only 1 feet in height.",
+                "Bamboos need little water and don't require fertiliser.",
+                "In China, black bamboo shoots are used to treat kidney diseases.",
+                "Bamboo is eco-friendly and cheaper than metal scaffolding."
+            ],
+            uses: [
+                { title: "Food", desc: "Bamboo shoots are used in Asian cuisine.", icon: "🍱" },
+                { title: "Scaffolding", desc: "Bamboo is eco-friendly and cheaper than metal scaffolding.", icon: "🏗️" },
+                { title: "Paper", desc: "Bamboo pulp can be made into bamboo paper.", icon: "📄" },
+                { title: "Instruments", desc: "Musical instruments like the pan flute are made of bamboo.", icon: "🪈" },
+                { title: "Utensils", desc: "Kitchen utensils such as ladles and salt shakers are made of bamboo.", icon: "🥄" },
+                { title: "Medicine", desc: "In China, black bamboo shoots are used to treat kidney diseases.", icon: "💊" }
+            ],
+            qMatch: [
+                { id: 'j1', prompt: "1. Bamboos resemble trees.", answer: "Bamboo is considered a type of grass despite its tree-like appearance." },
+                { id: 'j2', prompt: "2. There are many different types of bamboos.", answer: "There are over 1,000 species of bamboos." },
+                { id: 'j3', prompt: "3. Bamboos have healing properties.", answer: "In China, black bamboo shoots are used to treat kidney diseases." },
+                { id: 'j4', prompt: "4. Bamboos do not harm the environment.", answer: "Bamboo is eco-friendly and cheaper than metal scaffolding." }
+            ],
+            qSpecies: {
+                id: 'j5', prompt: "5. List two species of bamboos.",
+                options: ["giant bamboo", "sunflower", "pleioblastus distichus", "rafflesia"],
+                answers: ["giant bamboo", "pleioblastus distichus"]
+            },
+            qKBAT: [
+                { id: 'j6', prompt: "6. What texture do you think a bamboo shoot has?", options: [{ text: "Soft and fluffy", icon: "☁️" }, { text: "Crunchy and crisp", icon: "🥒" }, { text: "Liquid", icon: "💧" }], answer: "Crunchy and crisp" },
+                { id: 'j7', prompt: "7. Which animal eats bamboo?", options: [{ text: "Lion", icon: "🦁" }, { text: "Panda", icon: "🐼" }, { text: "Koala", icon: "🐨" }], answer: "Panda" }
+            ]
+        };
+
+        const sectionK = {
+            title: "Section K: Decision Making Writing 🖊️",
+            instructions: "You want to buy a pen for your father as a Father's Day present. Which of the pens would you buy? Complete the essay using the dropdowns to ensure your reasons are logically correct.",
+            instructionsZh: "為爸爸選購父親節禮物。請使用下拉選單完成作文，確保你的決策邏輯（價格、材質等）與商品資訊完全一致！",
+            bgColor: "bg-sky-50", borderColor: "border-sky-300",
+            products: [
+                { name: "Noveau Fountain Pen", price: "RM79.90", colors: ["Pink", "royal blue", "black", "silver"], free: "Bottle of black ink", material: "Stainless steel", delivery: "Free" },
+                { name: "Mont Noir Roller Pen", price: "RM59.90", colors: ["Red", "silver", "green"], free: "Mechanical pencil", material: "High quality plastic", delivery: "Free" }
+            ],
+            options: {
+                pens: ["...", "Noveau Fountain Pen", "Mont Noir Roller Pen"],
+                prices: ["...", "RM59.90", "RM79.90", "RM99.90"],
+                materials: ["...", "Stainless steel", "High quality plastic", "Wood"],
+                frees: ["...", "Bottle of black ink", "Mechanical pencil", "Eraser"],
+                colors: ["...", "Pink", "Red", "black", "silver", "green", "royal blue"],
+                deliveries: ["...", "Free", "RM10.00"]
+            }
+        };
+
+        let audioCtx;
+        let progress = { sectionA: 0, sectionB: 0, sectionC: 0, sectionD: 0, sectionE: 0, sectionF: 0, sectionG: 0, sectionH: 0, sectionI: 0, sectionJ: 0, sectionK: 0 };
+
+        function unlockAudio() {
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    oscillator.type = 'sine'; oscillator.frequency.value = 440; oscillator.connect(audioCtx.destination);
+                    oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.01);
+                }
+            } catch(e) { console.warn("AudioContext unable to start", e); }
+        }
+
+        function playSound(type) {
+            try {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                
+                if (type === 'ding') {
+                    osc.type = 'sine'; osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(1760, audioCtx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.3);
+                } else if (type === 'error') {
+                    osc.type = 'sawtooth'; osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.2);
+                } else if (type === 'tada') {
+                    osc.type = 'square'; osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                    osc.frequency.setValueAtTime(554, audioCtx.currentTime + 0.1); osc.frequency.setValueAtTime(659, audioCtx.currentTime + 0.2); osc.frequency.setValueAtTime(880, audioCtx.currentTime + 0.3);
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.6);
+                    osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+                }
+            } catch(e) {}
+        }
+
+        function speakText(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US'; utterance.rate = 0.85; 
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        window.toggleTooltip = function(element) {
+            document.querySelectorAll('.dict-word').forEach(el => { if(el !== element) el.classList.remove('active'); });
+            element.classList.toggle('active');
+            if(element.classList.contains('active')) setTimeout(() => element.classList.remove('active'), 3000);
+        };
+
+        window.toggleTranslation = function(id) {
+            const el = document.getElementById(`zh-${id}`);
+            if (el.classList.contains('hidden')) { el.classList.remove('hidden'); el.classList.add('animate-pop-in'); } 
+            else { el.classList.add('hidden'); }
+        };
+
+        function checkSectionComplete(sectionKey, total) {
+            progress[sectionKey]++;
+            
+            // Save progress to Supabase
+            if (window.ProgressTracker) {
+                window.ProgressTracker.save(progress);
+            }
+
+            if (progress[sectionKey] >= total) {
+                const badge = document.getElementById(`badge-${sectionKey}`);
+                if(badge) {
+                    badge.classList.remove('grayscale', 'opacity-50');
+                    badge.classList.add('scale-125');
+                    setTimeout(() => badge.classList.remove('scale-125'), 300);
+                }
+                const checkMark = document.getElementById(`check-${sectionKey}`);
+                if(checkMark) checkMark.classList.remove('hidden');
+                
+                playSound('tada');
+                try { if (typeof confetti === 'function') { confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } }); } } catch(e) {}
+            }
+        }
+
+        function markElementCorrect(el) {
+            if (!el || el.dataset.solved === 'true') return true;
+            el.dataset.solved = 'true';
+            const indicator = document.createElement('span'); indicator.innerHTML = '✅';
+            indicator.className = 'absolute -left-6 top-1/2 -translate-y-1/2 animate-pop-in text-xl z-10';
+            el.style.position = 'relative'; el.appendChild(indicator);
+            return false;
+        }
+
+        function triggerCorrectAction(elementId, sectionKey, totalQuestions) {
+            const el = document.getElementById(elementId);
+            const wasSolved = markElementCorrect(el);
+            if (!wasSolved) { playSound('ding'); checkSectionComplete(sectionKey, totalQuestions); }
+        }
+
+        function generateSectionHeader(key, data, contentHTML) {
+            return `
+                <div id="${key}" class="section-card ${data.bgColor} ${data.borderColor} relative">
+                    <div id="check-${key}" class="absolute -top-4 -right-4 bg-green-500 text-white w-12 h-12 rounded-full flex items-center justify-center text-3xl shadow-lg border-4 border-white hidden animate-pop-in z-10">✅</div>
+                    <h2 class="text-3xl font-bold mb-2 text-gray-800">${data.title}</h2>
+                    <p class="text-lg text-gray-700 mb-1 font-semibold">${data.instructions}</p>
+                    <p class="text-sm text-gray-500 mb-6 bg-white/50 inline-block px-3 py-1 rounded-lg">${data.instructionsZh}</p>
+                    <div class="space-y-6">${contentHTML}</div>
+                </div>
+            `;
+        }
+
+        function generateToolBar(id, text, zhText) {
+            if(!zhText) return '';
+            let cleanTextForAudio = text.replace(/<[^>]*>?/gm, '').replace(/["']/g, '');
+            return `
+                <div class="flex gap-2 mt-2 relative z-10">
+                    <button onclick="speakText('${cleanTextForAudio}')" class="btn-audio bg-green-100 border-2 border-green-300 text-green-700 rounded-full w-10 h-10 flex items-center justify-center text-xl shadow-sm hover:bg-green-200 active:scale-95 transition-transform">🔊</button>
+                    <button onclick="toggleTranslation('${id}')" class="btn-audio bg-orange-100 border-2 border-orange-300 text-orange-600 rounded-full w-10 h-10 flex items-center justify-center font-bold text-lg shadow-sm hover:bg-orange-200 active:scale-95 transition-transform">中</button>
+                </div>
+                <div id="zh-${id}" class="hidden mt-2 p-3 bg-white/80 rounded-xl border border-gray-200 text-gray-700 font-semibold text-md shadow-inner text-green-800 relative z-10">🇹🇼 ${zhText}</div>
+            `;
+        }
+
+        function renderSectionA(data) {
+            let html = `<div class="bg-white/80 rounded-xl border-2 border-emerald-200 overflow-hidden shadow-sm">
+                            <div class="grid grid-cols-3 bg-emerald-100 font-bold text-emerald-800 p-3 text-center border-b border-emerald-200">
+                                <div>Object</div><div>Made Of</div><div>Function</div>
+                            </div>`;
+            data.questions.forEach((q, index) => {
+                let mSelect = `<select id="a-m-${q.id}" onchange="checkSectionA('${q.id}')" class="smart-select bg-white text-emerald-800 font-bold px-2 py-2 rounded-lg border-2 border-emerald-300 outline-none w-full shadow-sm">
+                                <option value="">[ Material ▾ ]</option>` + data.materials.map(m => `<option value="${m}">${m}</option>`).join('') + `</select>`;
+                let fSelect = `<select id="a-f-${q.id}" onchange="checkSectionA('${q.id}')" class="smart-select bg-white text-emerald-800 font-bold px-2 py-2 rounded-lg border-2 border-emerald-300 outline-none w-full shadow-sm text-sm">
+                                <option value="">[ Function ▾ ]</option>` + data.functions.map(f => `<option value="${f}">${f}</option>`).join('') + `</select>`;
+                
+                html += `<div id="${q.id}" class="grid grid-cols-3 gap-2 p-3 items-center border-b border-emerald-100 transition-colors">
+                            <div class="font-bold text-xl text-center relative flex flex-col items-center gap-1">
+                                <span class="bg-emerald-500 text-white w-6 h-6 rounded-full text-xs flex items-center justify-center absolute -top-2 -left-2">${index+1}</span>
+                                ${q.object}
+                                ${generateToolBar(q.id, q.object, q.zh)}
+                            </div>
+                            <div>${mSelect}</div>
+                            <div>${fSelect}</div>
+                         </div>`;
+            });
+            html += `</div>`; return html;
+        }
+
+        window.checkSectionA = function(qId) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return; playSound('pop');
+            const q = sectionA.questions.find(x => x.id === qId);
+            const mVal = document.getElementById(`a-m-${qId}`).value;
+            const fVal = document.getElementById(`a-f-${qId}`).value;
+            
+            if (mVal !== "" && fVal !== "") {
+                if (mVal === q.mAnswer && fVal === q.fAnswer) {
+                    triggerCorrectAction(qId, 'sectionA', sectionA.questions.length);
+                    document.getElementById(`a-m-${qId}`).classList.add('bg-green-100', 'border-green-400', 'pointer-events-none');
+                    document.getElementById(`a-f-${qId}`).classList.add('bg-green-100', 'border-green-400', 'pointer-events-none');
+                    container.classList.add('bg-green-50/50');
+                } else {
+                    playSound('error'); container.classList.add('animate-bounce-short');
+                    setTimeout(() => container.classList.remove('animate-bounce-short'), 500);
+                }
+            }
+        };
+
+        function renderSectionB(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent flex flex-col md:flex-row items-center gap-4">
+                            <div class="bg-teal-200 text-teal-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0 self-start md:self-center">${index + 1}</div>
+                            <div class="flex-1 w-full"><p class="text-lg text-gray-800 font-medium">${q.text}</p>${generateToolBar(q.id, q.text, q.zh)}</div>
+                            <div class="flex bg-gray-200 rounded-xl p-1 shadow-inner shrink-0 w-full md:w-auto mt-2 md:mt-0" id="toggle-${q.id}">
+                                <button onclick="checkSectionB(this, '${q.id}', 'F')" class="toggle-btn flex-1 md:flex-none px-6 py-2 rounded-lg font-bold text-gray-500 hover:text-gray-700">F (Fact)</button>
+                                <button onclick="checkSectionB(this, '${q.id}', 'O')" class="toggle-btn flex-1 md:flex-none px-6 py-2 rounded-lg font-bold text-gray-500 hover:text-gray-700">O (Opinion)</button>
+                            </div>
+                         </div>`;
+            }); return html;
+        }
+        window.checkSectionB = function(btn, qId, val) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return;
+            const q = sectionB.questions.find(x => x.id === qId);
+            if(val === q.answer) {
+                btn.classList.remove('text-gray-500', 'hover:text-gray-700');
+                btn.classList.add('bg-white', 'text-teal-700', 'shadow-md', 'pointer-events-none');
+                Array.from(btn.parentElement.children).forEach(c => { if(c!==btn) c.classList.add('opacity-30', 'pointer-events-none'); });
+                triggerCorrectAction(qId, 'sectionB', sectionB.questions.length);
+            } else {
+                playSound('error'); btn.parentElement.classList.add('animate-bounce-short');
+                setTimeout(() => btn.parentElement.classList.remove('animate-bounce-short'), 500);
+            }
+        };
+
+        function renderSectionC(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let textHtml = q.text.replace('[blank]', `<button onclick="toggleInlineC(this, '${q.id}')" class="inline-toggle bg-cyan-100 border-b-4 border-cyan-400 text-cyan-800 font-bold px-3 py-1 mx-1 min-w-[6rem] rounded-t-lg shadow-sm hover:bg-cyan-200 active:scale-95 transition-all text-center align-middle" data-val="">[ Tap to Pick ]</button>`);
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-cyan-200 text-cyan-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div>
+                                <div class="flex-1"><p class="text-xl text-gray-800 leading-loose">${textHtml}</p>${generateToolBar(q.id, q.text.replace('[blank]', '___'), q.zh)}</div>
+                            </div>
+                         </div>`;
+            }); return html;
+        }
+        window.toggleInlineC = function(btn, qId) {
+            const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            playSound('pop'); const q = sectionC.questions.find(x => x.id === qId);
+            let currentVal = btn.dataset.val; let nextIdx = q.options.indexOf(currentVal) + 1;
+            if(nextIdx >= q.options.length) nextIdx = 0;
+            let newVal = q.options[nextIdx]; btn.dataset.val = newVal; btn.innerText = newVal;
+            
+            if(newVal === q.answer) {
+                btn.classList.remove('bg-cyan-100', 'border-cyan-400', 'text-cyan-800');
+                btn.classList.add('bg-green-500', 'border-green-600', 'text-white', 'pointer-events-none');
+                triggerCorrectAction(qId, 'sectionC', sectionC.questions.length);
+            }
+        };
+
+        function renderSectionD(data) {
+            let storyHtml = data.text;
+            data.questions.forEach(q => {
+                let selHtml = `<select id="sel-${q.id}" onchange="checkSectionD('${q.id}')" class="smart-select bg-yellow-100 text-yellow-800 font-bold px-2 py-1 mx-1 rounded-lg border-2 border-yellow-400 outline-none text-base shadow-sm">`;
+                q.options.forEach(opt => selHtml += `<option value="${opt}">${opt}</option>`);
+                selHtml += `</select>`; 
+                // BUG FIXED: matches [q1], [q2] correctly
+                storyHtml = storyHtml.replace(`[${q.id}]`, selHtml);
+            });
+            return `
+                <div id="sectionD-wrapper" class="bg-white/80 p-6 rounded-2xl border-2 border-yellow-200 shadow-inner">
+                    <p class="text-xl leading-loose text-gray-800 font-medium">${storyHtml}</p>
+                    ${generateToolBar('d-intro', data.text.replace(/\[q\d+\]/g, '___'), data.zh)}
+                </div>
+            `;
+        }
+        window.checkSectionD = function(qId) {
+            const selectEl = document.getElementById(`sel-${qId}`);
+            if(selectEl.classList.contains('pointer-events-none')) return; playSound('pop');
+            const q = sectionD.questions.find(x => x.id === qId);
+            if(selectEl.value === q.answer) {
+                selectEl.classList.remove('bg-yellow-100', 'border-yellow-400', 'text-yellow-800');
+                selectEl.classList.add('bg-green-200', 'border-green-500', 'text-green-800', 'pointer-events-none');
+                triggerCorrectAction(qId, 'sectionD', sectionD.questions.length);
+            } else if (selectEl.value !== "...") {
+                playSound('error'); selectEl.classList.add('animate-bounce-short', 'bg-red-100', 'text-red-700', 'border-red-400');
+                setTimeout(() => selectEl.classList.remove('animate-bounce-short', 'bg-red-100', 'text-red-700', 'border-red-400'), 800);
+                setTimeout(() => selectEl.value = "...", 800);
+            }
+        };
+
+        function renderSectionE(data) {
+            return `
+                <div id="${data.id}" class="bg-white rounded-2xl border-2 border-orange-200 overflow-hidden shadow-lg relative">
+                    <div class="bg-gray-200 px-4 py-2 flex items-center gap-2 border-b border-gray-300">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div><div class="w-3 h-3 rounded-full bg-yellow-400"></div><div class="w-3 h-3 rounded-full bg-green-400"></div>
+                        <div class="flex-1 text-center text-xs font-bold text-gray-500">New Message</div>
+                    </div>
+                    <div class="p-4 border-b border-gray-100 space-y-2 text-sm md:text-base">
+                        <div class="flex"><span class="w-20 text-gray-400 font-bold">To:</span> <span class="font-semibold text-gray-800">${data.emailData.to}</span></div>
+                        <div class="flex"><span class="w-20 text-gray-400 font-bold">Subject:</span> <span class="font-bold text-gray-800">${data.emailData.subject}</span></div>
+                    </div>
+                    <div class="p-4 md:p-6 text-lg text-gray-700 leading-relaxed font-medium" id="email-body-e">
+                        ${data.emailData.bodyHtml}
+                    </div>
+                    <div class="p-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+                        <button id="send-btn-e" class="bg-gray-300 text-gray-500 font-bold py-2 px-6 rounded-lg transition-colors cursor-not-allowed flex items-center gap-2"><span>Send</span> ✈️</button>
+                    </div>
+                </div>
+            `;
+        }
+        document.addEventListener('change', function(e) {
+            if(e.target && e.target.classList.contains('smart-select') && e.target.id.startsWith('sel-e')) {
+                playSound('pop'); const container = document.getElementById('email-e'); if(container.dataset.solved === 'true') return;
+                const selects = document.querySelectorAll('#email-body-e .smart-select');
+                let allFilled = true; let allCorrect = true;
+                selects.forEach(sel => { if(sel.value === "") allFilled = false; if(sel.value === "wrong") allCorrect = false; });
+                
+                const sendBtn = document.getElementById('send-btn-e');
+                if (allFilled && allCorrect) {
+                    sendBtn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    sendBtn.classList.add('bg-orange-500', 'hover:bg-orange-600', 'text-white', 'cursor-pointer', 'shadow-md');
+                    sendBtn.onclick = () => {
+                        playSound('tada');
+                        selects.forEach(sel => { sel.classList.remove('bg-orange-100', 'text-orange-800', 'border-orange-400'); sel.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'pointer-events-none'); });
+                        sendBtn.innerHTML = "Sent! ✅"; sendBtn.classList.replace('bg-orange-500', 'bg-green-500'); sendBtn.classList.replace('hover:bg-orange-600', 'hover:bg-green-600'); sendBtn.onclick = null;
+                        triggerCorrectAction('email-e', 'sectionE', 1);
+                    };
+                } else {
+                    sendBtn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed'); sendBtn.classList.remove('bg-orange-500', 'hover:bg-orange-600', 'text-white', 'cursor-pointer', 'shadow-md'); sendBtn.onclick = null;
+                }
+            }
         });
-      }
 
-      function markCard(card, message, debounce) {
-        var qid = card.dataset.questionId;
-        state.answers[qid] = collectCardAnswer(card);
-        state.completed[qid] = true;
-        card.querySelector('.feedback').textContent = message;
-        persist(debounce);
-      }
-
-      document.addEventListener('click', function (event) {
-        var card = event.target.closest('.question-card');
-        if (!card) return;
-        if (event.target.classList.contains('check-btn')) {
-          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        function renderSectionF(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let shuffledBlocks = [...q.blocks].sort(() => Math.random() - 0.5);
+                let blocksHtml = shuffledBlocks.map(b => `<span class="inline-block bg-white text-red-700 border-2 border-red-300 px-3 py-2 rounded-lg font-bold m-1 cursor-pointer shadow-sm active:scale-95 transition-transform" onclick="moveBlock(this, '${q.id}')">${b}</span>`).join('');
+                html += `
+                    <div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                        <div class="flex items-start gap-3">
+                            <div class="bg-red-200 text-red-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div>
+                            <div class="flex-1 w-full overflow-hidden">
+                                <p class="text-lg text-gray-800 mb-3 font-semibold leading-relaxed">Active: <span class="italic text-gray-600">${q.text}</span></p>
+                                <div class="mb-4"><p class="text-sm text-gray-500 mb-1">Tap blocks to build Passive voice:</p>
+                                    <div id="bank-${q.id}" class="min-h-[3.5rem] bg-gray-50 border border-gray-200 rounded-xl p-2 flex flex-wrap items-center">${blocksHtml}</div>
+                                </div>
+                                <div><p class="text-sm text-gray-500 mb-1">Your Sentence:</p>
+                                    <div id="dropzone-${q.id}" class="min-h-[3.5rem] bg-red-50 border-2 border-dashed border-red-300 rounded-xl p-2 flex flex-wrap items-center"></div>
+                                </div>
+                                <div class="mt-4 flex gap-2">
+                                    <button onclick="checkSentenceBuilder('${q.id}', 'sectionF')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-xl shadow-md active:scale-95 transition-transform">Check</button>
+                                    <button onclick="resetSentence('${q.id}')" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-xl active:scale-95 transition-transform">Reset</button>
+                                </div>
+                                ${generateToolBar(q.id, q.answer, q.zh)}
+                            </div>
+                        </div>
+                    </div>`;
+            }); return html;
         }
-        if (event.target.classList.contains('save-btn')) {
-          markCard(card, 'Saved. Keep going when you are ready.', false);
+        window.moveBlock = function(block, qId) {
+            const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            playSound('ding'); const bank = document.getElementById(`bank-${qId}`); const dropzone = document.getElementById(`dropzone-${qId}`);
+            if (block.parentElement.id === `bank-${qId}`) dropzone.appendChild(block); else bank.appendChild(block);
+        };
+        window.resetSentence = function(qId) {
+            const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            const bank = document.getElementById(`bank-${qId}`); const dropzone = document.getElementById(`dropzone-${qId}`);
+            while (dropzone.firstChild) bank.appendChild(dropzone.firstChild);
+        };
+        window.checkSentenceBuilder = function(qId, sectionKey) {
+            const dropzone = document.getElementById(`dropzone-${qId}`); const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            const currentParts = Array.from(dropzone.children).map(c => c.innerText); const currentSentence = currentParts.join(' ');
+            let q = sectionF.questions.find(x => x.id === qId);
+            const cleanStr = (str) => str.replace(/\s+/g, ' ').trim().toLowerCase().replace(/\.$/, '');
+            if (cleanStr(currentSentence) === cleanStr(q.answer) && currentParts.length > 0) {
+                triggerCorrectAction(qId, sectionKey, sectionF.questions.length);
+                Array.from(dropzone.children).forEach(c => { c.classList.remove('bg-white', 'text-red-700', 'border-red-300'); c.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'pointer-events-none'); });
+            } else { playSound('error'); dropzone.classList.add('animate-bounce-short'); setTimeout(() => dropzone.classList.remove('animate-bounce-short'), 500); }
+        };
+
+        function renderSectionG(data) {
+            let html = `<div class="bg-white rounded-xl p-4 md:p-6 mb-4 border-2 border-fuchsia-200 shadow-inner max-h-[500px] overflow-y-auto space-y-4 relative">`;
+            data.dialogue.forEach(msg => {
+                const isMum = msg.sender === 'Mum';
+                let textHtml = msg.text;
+                data.questions.forEach((q, i) => {
+                    textHtml = textHtml.replace(`[q${i+1}]`, `<button onclick="toggleG(this, '${q.id}')" class="bg-fuchsia-100 border-b-2 border-fuchsia-400 text-fuchsia-800 font-bold px-3 py-1 mx-1 rounded shadow-sm hover:bg-fuchsia-200 text-sm align-middle" data-val="">[ Tap ]</button>`);
+                });
+                html += `<div class="flex flex-col ${isMum ? 'items-start' : 'items-end'}">
+                            <span class="text-xs text-gray-500 font-bold mb-1 mx-2">${msg.sender}</span>
+                            <div class="${isMum ? 'msg-bubble-left bg-gray-100' : 'msg-bubble-right bg-fuchsia-500'} shadow-sm text-lg">${textHtml}</div>
+                         </div>`;
+            });
+            html += `</div>${generateToolBar('g-all', 'Dialogue about buying kitchenware', data.zh)}`;
+            return html;
         }
-        if (event.target.dataset.addRow === 'matching') {
-          var board = card.querySelector('.matching-board');
-          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
-          var left = document.createElement('label');
-          var right = document.createElement('label');
-          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
-          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
-          board.appendChild(left);
-          board.appendChild(right);
+        window.toggleG = function(btn, qId) {
+            playSound('pop'); const q = sectionG.questions.find(x => x.id === qId);
+            let currentVal = btn.dataset.val; let newVal = currentVal === "made of" ? "used for" : "made of";
+            btn.dataset.val = newVal; btn.innerText = newVal;
+            
+            if(newVal === q.answer) {
+                btn.classList.remove('bg-fuchsia-100', 'border-fuchsia-400', 'text-fuchsia-800');
+                btn.classList.add('bg-green-400', 'border-green-600', 'text-white', 'pointer-events-none');
+                triggerCorrectAction(qId, 'sectionG', sectionG.questions.length);
+            }
+        };
+
+        function renderSectionH(data) {
+            let html = '';
+            data.questions.forEach((q, index) => {
+                let blankHtml = `
+                    <span id="h-blank-${q.id}" class="inline-flex gap-1 items-center mx-1 align-middle">
+                        <select id="h-base-${q.id}" onchange="checkSectionH('${q.id}')" class="smart-select bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded border-2 border-indigo-300 outline-none text-sm"><option value="">[ Base ]</option>${data.words.map(w=>`<option value="${w}">${w}</option>`).join('')}</select>
+                        <span class="text-indigo-400 font-bold">+</span>
+                        <select id="h-sfx-${q.id}" onchange="checkSectionH('${q.id}')" class="smart-select bg-indigo-50 text-indigo-700 font-bold px-2 py-1 rounded border-2 border-indigo-300 outline-none text-sm"><option value="">[ Suffix ]</option><option value="-tion">-tion</option><option value="-sion">-sion</option></select>
+                    </span>
+                `;
+                html += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                            <div class="flex items-start gap-3">
+                                <div class="bg-indigo-200 text-indigo-800 w-8 h-8 rounded-full flex items-center justify-center font-bold shrink-0">${index + 1}</div>
+                                <div class="flex-1"><p class="text-xl text-gray-800 leading-loose">${q.text.replace('[blank]', blankHtml)}</p>${generateToolBar(q.id, q.text.replace('[blank]', q.word), q.zh)}</div>
+                            </div>
+                         </div>`;
+            }); return html;
         }
-      });
+        window.checkSectionH = function(qId) {
+            const container = document.getElementById(`h-blank-${qId}`);
+            if(container.parentElement.parentElement.parentElement.dataset.solved === 'true') return;
+            const q = sectionH.questions.find(x => x.id === qId);
+            const baseVal = document.getElementById(`h-base-${qId}`).value;
+            const sfxVal = document.getElementById(`h-sfx-${qId}`).value;
+            
+            if(baseVal !== "" && sfxVal !== "") {
+                if(baseVal === q.baseAns && sfxVal === q.sfxAns) {
+                    playSound('tada'); triggerCorrectAction(qId, 'sectionH', sectionH.questions.length);
+                    container.innerHTML = `<span class="bg-green-500 text-white px-3 py-1 rounded-lg font-bold shadow-inner inline-block animate-pop-in">${q.word}</span>`;
+                } else {
+                    playSound('error'); container.classList.add('animate-bounce-short');
+                    setTimeout(() => container.classList.remove('animate-bounce-short'), 500);
+                }
+            }
+        };
 
-      document.addEventListener('input', function (event) {
-        var card = event.target.closest('.question-card');
-        if (!card) return;
-        state.answers[card.dataset.questionId] = collectCardAnswer(card);
-        persist(true);
-      });
+        function renderSectionI(data) {
+            let adsHtml = `<div class="flex flex-col gap-6 mb-8">`;
+            data.ads.forEach(ad => {
+                adsHtml += `<div class="bg-white p-6 rounded-xl border-t-8 border-pink-400 shadow-md relative overflow-hidden">
+                                <div class="absolute -top-4 -right-4 w-16 h-16 bg-pink-100 rounded-full opacity-50"></div>
+                                <p class="text-gray-800 text-lg leading-relaxed relative z-10">${ad.text}</p>
+                            </div>`;
+            }); adsHtml += `</div><div class="space-y-6">`;
+            
+            data.questions.forEach((q, i) => {
+                let optionsHtml = q.options.map(opt => `<button onclick="checkI_MCQ(this, '${q.id}', '${opt.charAt(0)}', '${q.answer.charAt(0)}')" class="w-full text-left bg-white border-2 border-pink-200 text-gray-700 font-semibold px-4 py-3 rounded-xl hover:bg-pink-50 active:scale-95 transition-transform mb-2">${opt}</button>`).join('');
+                adsHtml += `<div id="${q.id}" class="bg-white/60 p-4 rounded-xl border-2 border-transparent">
+                                <p class="text-xl font-bold text-gray-800 mb-4">${q.text}</p>
+                                <div class="options-container">${optionsHtml}</div>
+                            </div>`;
+            }); adsHtml += `</div>`; return adsHtml;
+        }
+        window.checkI_MCQ = function(btn, qId, selectedChar, correctChar) {
+            const container = document.getElementById(qId); if(container.dataset.solved === 'true') return;
+            if(selectedChar === correctChar) {
+                btn.classList.remove('bg-white', 'border-pink-200', 'text-gray-700'); btn.classList.add('bg-green-500', 'border-green-600', 'text-white', 'shadow-md');
+                Array.from(btn.parentElement.children).forEach(c => { if(c!==btn) c.classList.add('opacity-50', 'pointer-events-none'); });
+                triggerCorrectAction(qId, 'sectionI', sectionI.questions.length);
+            } else { playSound('error'); btn.classList.add('bg-red-100', 'border-red-400', 'text-red-700'); setTimeout(() => btn.classList.remove('bg-red-100', 'border-red-400', 'text-red-700'), 800); }
+        };
 
-      restoreLocal();
-      restoreFields();
-      paintState();
+        function renderSectionJ(data) {
+            // 1. Infographic UI
+            let infoHtml = `
+                <div class="bg-white rounded-2xl border-2 border-lime-200 overflow-hidden shadow-lg mb-8">
+                    <div class="bg-lime-700 text-white font-bold text-center py-3 text-xl tracking-wider">FASCINATING BAMBOO FACTS</div>
+                    <div class="p-6 bg-lime-50/50">
+                        <ul class="list-disc pl-5 space-y-3 text-gray-800 font-medium text-lg leading-relaxed">
+                            ${data.facts.map(f => `<li>${f}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="bg-lime-600 text-white font-bold text-center py-2 text-lg">What can bamboos be used for?</div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-white">
+                        ${data.uses.map(u => `
+                            <div class="border border-lime-100 rounded-xl p-3 flex flex-col items-center text-center shadow-sm bg-lime-50/30">
+                                <div class="text-4xl mb-2">${u.icon}</div>
+                                <h4 class="font-bold text-lime-800 mb-1">${u.title}</h4>
+                                <p class="text-xs text-gray-600">${u.desc}</p>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
 
-      window.addEventListener('load', function () {
-        if (!window.ProgressTracker) return;
-        window.ProgressTracker.init(async function (tracker) {
-          var saved = await tracker.load();
-          if (saved && saved.answers) {
-            state.completed = saved.completed || state.completed;
-            state.answers = saved.answers || state.answers;
-            restoreFields();
-            persist(false);
-          }
+            // 2. Questions Q1-Q4
+            let q14Html = `<h3 class="text-xl font-bold text-gray-800 mb-4 border-b-2 border-lime-200 pb-2">Find sentences from the infographic which state the following:</h3><div class="space-y-4 mb-8">`;
+            data.qMatch.forEach(q => {
+                let optionsHtml = `<option value="">[ Choose matching sentence ▾ ]</option>` + data.facts.map(f => `<option value="${f}">${f}</option>`).join('');
+                q14Html += `
+                    <div id="${q.id}" class="bg-white/60 p-4 rounded-xl border border-lime-200">
+                        <p class="text-lg font-bold text-gray-800 mb-2 bg-lime-100 inline-block px-3 py-1 rounded-full">${q.prompt}</p>
+                        <select id="sel-${q.id}" onchange="checkJ_Match('${q.id}')" class="smart-select bg-white text-lime-800 font-bold px-3 py-2 rounded-xl border-2 border-lime-300 outline-none w-full shadow-sm truncate">
+                            ${optionsHtml}
+                        </select>
+                    </div>`;
+            });
+            q14Html += `</div>`;
+
+            // 3. Question Q5 (List species)
+            let q5Html = `
+                <div id="${data.qSpecies.id}" class="bg-white/60 p-5 rounded-xl border border-lime-200 mb-8">
+                    <p class="text-xl font-bold text-gray-800 mb-3">${data.qSpecies.prompt}</p>
+                    <p class="text-sm text-lime-600 font-bold mb-3">Tap 2 correct species from the bank:</p>
+                    <div class="flex flex-wrap gap-2 mb-4" id="j5-bank">
+                        ${data.qSpecies.options.map(opt => `<button onclick="toggleJ5('${opt}', this)" class="bg-white border-2 border-lime-300 text-lime-700 font-bold px-4 py-2 rounded-full hover:bg-lime-100 active:scale-95 transition-all shadow-sm">${opt}</button>`).join('')}
+                    </div>
+                    <div class="flex gap-4 items-center font-bold text-lg text-gray-700">
+                        <span>a) <span id="j5-ans-1" class="inline-block min-w-[8rem] border-b-2 border-lime-400 text-lime-700 px-2 text-center h-8"></span></span>
+                        <span>b) <span id="j5-ans-2" class="inline-block min-w-[8rem] border-b-2 border-lime-400 text-lime-700 px-2 text-center h-8"></span></span>
+                    </div>
+                </div>
+            `;
+
+            // 4. Questions Q6-Q7 (KBAT)
+            let qKbatHtml = `<div class="space-y-4">`;
+            data.qKBAT.forEach(q => {
+                let btnsHtml = q.options.map(opt => `<button onclick="checkJ_KBAT(this, '${q.id}', '${opt.text}', '${q.answer}')" class="flex flex-col items-center bg-white border-2 border-lime-200 p-3 rounded-xl hover:bg-lime-50 active:scale-95 transition-transform w-28 shadow-sm"><span class="text-4xl mb-2">${opt.icon}</span><span class="text-sm font-bold text-gray-700 text-center leading-tight">${opt.text}</span></button>`).join('');
+                qKbatHtml += `
+                    <div id="${q.id}" class="bg-white/60 p-4 rounded-xl border border-lime-200 flex flex-col md:flex-row gap-4 items-center justify-between">
+                        <p class="text-lg font-bold text-gray-800 flex-1"><span class="bg-black text-white text-xs px-2 py-1 rounded mr-2">KBAT</span>${q.prompt}</p>
+                        <div class="flex gap-2">${btnsHtml}</div>
+                    </div>`;
+            });
+            qKbatHtml += `</div>`;
+
+            return infoHtml + q14Html + q5Html + qKbatHtml;
+        }
+
+        window.checkJ_Match = function(qId) {
+            const selectEl = document.getElementById(`sel-${qId}`);
+            if(selectEl.classList.contains('pointer-events-none')) return; 
+            const q = sectionJ.qMatch.find(x => x.id === qId);
+            
+            if(selectEl.value === q.answer) {
+                playSound('ding');
+                selectEl.classList.remove('bg-white', 'border-lime-300', 'text-lime-800');
+                selectEl.classList.add('bg-green-100', 'border-green-500', 'text-green-800', 'pointer-events-none');
+                triggerCorrectAction(qId, 'sectionJ', 7); // total 7 points for Section J
+            } else if (selectEl.value !== "") {
+                playSound('error'); 
+                selectEl.classList.add('animate-bounce-short', 'bg-red-50', 'text-red-700', 'border-red-400');
+                setTimeout(() => selectEl.classList.remove('animate-bounce-short', 'bg-red-50', 'text-red-700', 'border-red-400'), 800);
+                setTimeout(() => selectEl.value = "", 800);
+            }
+        };
+
+        let j5Selected = [];
+        window.toggleJ5 = function(val, btn) {
+            const container = document.getElementById('j5');
+            if(container && container.dataset.solved === 'true') return;
+
+            const idx = j5Selected.indexOf(val);
+            if(idx > -1) {
+                playSound('pop');
+                j5Selected.splice(idx, 1);
+                btn.classList.remove('bg-lime-500', 'text-white', 'border-lime-600');
+                btn.classList.add('bg-white', 'text-lime-700', 'border-lime-300');
+            } else if (j5Selected.length < 2) {
+                playSound('pop');
+                j5Selected.push(val);
+                btn.classList.add('bg-lime-500', 'text-white', 'border-lime-600');
+                btn.classList.remove('bg-white', 'text-lime-700', 'border-lime-300');
+            }
+
+            document.getElementById('j5-ans-1').innerText = j5Selected[0] || '';
+            document.getElementById('j5-ans-2').innerText = j5Selected[1] || '';
+
+            if (j5Selected.length === 2) {
+                let isCorrect = sectionJ.qSpecies.answers.every(a => j5Selected.includes(a));
+                if(isCorrect) {
+                    playSound('ding');
+                    triggerCorrectAction('j5', 'sectionJ', 7);
+                    document.getElementById('j5-bank').classList.add('pointer-events-none', 'opacity-50');
+                } else {
+                    playSound('error');
+                    document.getElementById('j5-ans-1').classList.add('text-red-500');
+                    document.getElementById('j5-ans-2').classList.add('text-red-500');
+                    setTimeout(() => {
+                        j5Selected = [];
+                        document.getElementById('j5-ans-1').innerText = ''; document.getElementById('j5-ans-2').innerText = '';
+                        document.getElementById('j5-ans-1').classList.remove('text-red-500'); document.getElementById('j5-ans-2').classList.remove('text-red-500');
+                        Array.from(document.getElementById('j5-bank').children).forEach(c => {
+                            c.classList.remove('bg-lime-500', 'text-white', 'border-lime-600');
+                            c.classList.add('bg-white', 'text-lime-700', 'border-lime-300');
+                        });
+                    }, 1000);
+                }
+            }
+        };
+
+        window.checkJ_KBAT = function(btn, qId, selectedText, correctText) {
+            const container = document.getElementById(qId);
+            if(container.dataset.solved === 'true') return;
+            
+            if(selectedText === correctText) {
+                btn.classList.remove('bg-white', 'border-lime-200');
+                btn.classList.add('bg-green-100', 'border-green-500');
+                Array.from(btn.parentElement.children).forEach(c => { if(c!==btn) c.classList.add('opacity-30', 'pointer-events-none'); });
+                triggerCorrectAction(qId, 'sectionJ', 7);
+            } else {
+                playSound('error');
+                btn.classList.add('bg-red-100', 'border-red-400');
+                setTimeout(() => btn.classList.remove('bg-red-100', 'border-red-400'), 800);
+            }
+        };
+
+        function renderSectionK(data) {
+            let productsHtml = data.products.map(p => `
+                <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm flex-1 flex flex-col items-center text-center">
+                    <div class="w-full h-32 bg-gray-50 rounded-xl border border-gray-100 flex items-center justify-center text-5xl mb-3">🖋️</div>
+                    <h4 class="font-bold text-xl text-sky-800 mb-1">${p.name}</h4>
+                    <p class="text-2xl font-black text-rose-600 mb-3">${p.price}</p>
+                    <div class="w-full text-sm text-gray-600 space-y-1 bg-sky-50 rounded-lg p-2 text-left">
+                        <p><b>Colours:</b> ${p.colors.join(', ')}</p>
+                        <p><b>Free:</b> ${p.free}</p>
+                        <p><b>Material:</b> ${p.material}</p>
+                        <p><b>Delivery:</b> ${p.delivery}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            const sel = (id, arr) => `<select id="sel-k-${id}" class="smart-select bg-sky-100 text-sky-800 font-bold px-2 py-1 mx-1 rounded border-2 border-sky-300 outline-none my-1 shadow-sm"><option value="">[ Select ▾ ]</option>${arr.slice(1).map(x=>`<option value="${x}">${x}</option>`).join('')}</select>`;
+
+            let essayHtml = `For Father's Day, I would buy the ${sel('pen', data.options.pens)}. It costs ${sel('price', data.options.prices)}. I chose this because it is made of ${sel('mat', data.options.materials)}, which is very nice. It also comes with a free ${sel('free', data.options.frees)}. My father's favourite colour is ${sel('col', data.options.colors)}, so this is perfect for him. Best of all, the delivery is ${sel('del', data.options.deliveries)}!`;
+
+            return `
+                <div class="flex flex-col md:flex-row gap-4 mb-8">${productsHtml}</div>
+                <div id="sectionK-logic" class="bg-white rounded-2xl border-2 border-sky-200 shadow-lg p-6 relative">
+                    <p class="text-sm font-bold text-sky-600 mb-4 uppercase tracking-wide">Essay Composer (Logic Check)</p>
+                    <p class="text-lg text-gray-800 leading-loose">${essayHtml}</p>
+                    <div class="mt-6 flex justify-end">
+                        <button id="btn-k-submit" class="bg-gray-300 text-gray-500 font-bold py-2 px-6 rounded-lg transition-colors cursor-not-allowed">Submit Essay</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('change', function(e) {
+            if(e.target && e.target.classList.contains('smart-select') && e.target.id.startsWith('sel-k-')) {
+                playSound('pop'); 
+                const container = document.getElementById('sectionK-logic');
+                if(container.dataset.solved === 'true') return;
+
+                const selects = ['pen', 'price', 'mat', 'free', 'col', 'del'].map(id => document.getElementById(`sel-k-${id}`));
+                let allFilled = selects.every(s => s.value !== "");
+
+                const btn = document.getElementById('btn-k-submit');
+                if(allFilled) {
+                    btn.classList.remove('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    btn.classList.add('bg-sky-500', 'hover:bg-sky-600', 'text-white', 'cursor-pointer', 'shadow-md');
+                    btn.onclick = () => {
+                        // Logic Validation
+                        const vals = {
+                            pen: selects[0].value, price: selects[1].value, mat: selects[2].value, 
+                            free: selects[3].value, col: selects[4].value, del: selects[5].value
+                        };
+                        
+                        const pA = sectionK.products[0]; const pB = sectionK.products[1];
+                        let isValidA = (vals.pen === pA.name && vals.price === pA.price && vals.mat === pA.material && vals.free === pA.free && pA.colors.includes(vals.col) && vals.del === pA.delivery);
+                        let isValidB = (vals.pen === pB.name && vals.price === pB.price && vals.mat === pB.material && vals.free === pB.free && pB.colors.includes(vals.col) && vals.del === pB.delivery);
+
+                        if(isValidA || isValidB) {
+                            playSound('tada');
+                            selects.forEach(s => { s.classList.remove('bg-sky-100', 'border-sky-300'); s.classList.add('bg-green-100', 'border-green-400', 'text-green-800', 'pointer-events-none'); });
+                            btn.innerText = "Excellent! ✅";
+                            btn.classList.replace('bg-sky-500', 'bg-green-500'); btn.classList.replace('hover:bg-sky-600', 'hover:bg-green-600');
+                            triggerCorrectAction('sectionK-logic', 'sectionK', 1);
+                        } else {
+                            playSound('error');
+                            btn.innerText = "Logic Error! Check Product Details";
+                            btn.classList.replace('bg-sky-500', 'bg-red-500'); btn.classList.replace('hover:bg-sky-600', 'hover:bg-red-600');
+                            container.classList.add('animate-bounce-short');
+                            setTimeout(() => {
+                                btn.innerText = "Submit Essay";
+                                btn.classList.replace('bg-red-500', 'bg-sky-500'); btn.classList.replace('hover:bg-red-600', 'hover:bg-sky-600');
+                                container.classList.remove('animate-bounce-short');
+                            }, 1500);
+                        }
+                    };
+                } else {
+                    btn.classList.add('bg-gray-300', 'text-gray-500', 'cursor-not-allowed');
+                    btn.classList.remove('bg-sky-500', 'hover:bg-sky-600', 'text-white', 'cursor-pointer', 'shadow-md');
+                    btn.onclick = null;
+                }
+            }
         });
-      });
-    })();
-  </script>
-  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="../../../../../js/auth-access.js"></script>
-  <script src="../../../../../js/progress-tracker.js"
-          data-module-id="kssr-p6-en-unit6"
-          data-module-name="Primary 6 English Unit 6"
-          data-module-url="content/KSSR_Syllabus/Primary6/English/Unit6/index.html"></script>
+
+        document.getElementById('start-btn').addEventListener('click', () => {
+            unlockAudio();
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            
+            const container = document.getElementById('sections-container');
+            container.innerHTML = `
+                ${generateSectionHeader('sectionA', sectionA, renderSectionA(sectionA))}
+                ${generateSectionHeader('sectionB', sectionB, renderSectionB(sectionB))}
+                ${generateSectionHeader('sectionC', sectionC, renderSectionC(sectionC))}
+                ${generateSectionHeader('sectionD', sectionD, renderSectionD(sectionD))}
+                ${generateSectionHeader('sectionE', sectionE, renderSectionE(sectionE))}
+                ${generateSectionHeader('sectionF', sectionF, renderSectionF(sectionF))}
+                ${generateSectionHeader('sectionG', sectionG, renderSectionG(sectionG))}
+                ${generateSectionHeader('sectionH', sectionH, renderSectionH(sectionH))}
+                ${generateSectionHeader('sectionI', sectionI, renderSectionI(sectionI))}
+                ${generateSectionHeader('sectionJ', sectionJ, renderSectionJ(sectionJ))}
+                ${generateSectionHeader('sectionK', sectionK, renderSectionK(sectionK))}
+            `;
+            playSound('ding');
+        });
+
+    </script>
+
+    <!-- Supabase & Progress Tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="kssr-p6-en-unit6"
+            data-module-name="Year 6 Unit 6 - Interactive English Adventure"
+            data-module-url="content/KSSR_Syllabus/Primary6/English/Unit6/index.html">
+    </script>
 </body>
 </html>

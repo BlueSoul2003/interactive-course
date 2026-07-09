@@ -6,7 +6,14 @@ const EXPECTED_WORKBOOKS = [
   {
     label: 'Primary 3',
     grade: 3,
-    expectedQuestionCount: 80,
+    expectedQuestionCounts: {
+      generated: 80,
+      live: 40,
+    },
+    units: {
+      generated: Array.from({ length: 10 }, (_, index) => `Unit${index + 1}`),
+      live: ['Unit6', 'Unit7', 'Unit8', 'Unit9', 'Unit10'],
+    },
     roots: {
       generated: ['_drafts', 'kssr_english_workbooks', 'primary3', 'generated'],
       live: ['content', 'KSSR_Syllabus', 'Primary3', 'English'],
@@ -15,14 +22,20 @@ const EXPECTED_WORKBOOKS = [
   {
     label: 'Primary 6',
     grade: 6,
-    expectedQuestionCount: 89,
+    expectedQuestionCounts: {
+      generated: 89,
+      live: 36,
+    },
+    units: {
+      generated: Array.from({ length: 10 }, (_, index) => `Unit${index + 1}`),
+      live: ['Unit7', 'Unit8', 'Unit9', 'Unit10'],
+    },
     roots: {
       generated: ['_drafts', 'kssr_english_workbooks', 'primary6', 'generated'],
       live: ['content', 'KSSR_Syllabus', 'Primary6', 'English'],
     },
   },
 ];
-const EXPECTED_UNITS = Array.from({ length: 10 }, (_, index) => `Unit${index + 1}`);
 const FORBIDDEN_MARKERS = ['TODO', 'TBD', 'PLACEHOLDER'];
 const SCOPES = ['generated', 'live', 'all'];
 
@@ -195,7 +208,7 @@ function verifyWorkbookPages(options = {}) {
   for (const scopeName of selectedScopes(scope)) {
     for (const workbook of EXPECTED_WORKBOOKS) {
       const workbookRoot = path.join(root, ...workbook.roots[scopeName]);
-      const expectedFiles = EXPECTED_UNITS.map((unitName) => path.join(workbookRoot, unitName, 'index.html'));
+      const expectedFiles = workbook.units[scopeName].map((unitName) => path.join(workbookRoot, unitName, 'index.html'));
       const existingFiles = expectedFiles.filter((file) => fs.existsSync(file));
       files.push(...existingFiles);
 
@@ -213,9 +226,10 @@ function verifyWorkbookPages(options = {}) {
         workbookQuestionCount += result.questionCount;
       }
 
-      if (existingFiles.length > 0 && workbookQuestionCount !== workbook.expectedQuestionCount) {
+      const expectedQuestionCount = workbook.expectedQuestionCounts[scopeName];
+      if (existingFiles.length > 0 && workbookQuestionCount !== expectedQuestionCount) {
         errors.push(
-          `${workbook.label} ${scopeName}: expected ${workbook.expectedQuestionCount} question cards, found ${workbookQuestionCount}`,
+          `${workbook.label} ${scopeName}: expected ${expectedQuestionCount} question cards, found ${workbookQuestionCount}`,
         );
       }
     }

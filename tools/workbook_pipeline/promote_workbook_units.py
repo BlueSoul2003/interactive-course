@@ -10,11 +10,12 @@ def unit_sort_key(path: Path) -> tuple[int, str]:
     return (int(suffix), path.name) if suffix.isdigit() else (10_000, path.name)
 
 
-def promote(source: Path, target: Path) -> list[tuple[Path, Path]]:
+def promote(source: Path, target: Path, overwrite: bool = False) -> list[tuple[Path, Path]]:
     if not source.exists():
         raise SystemExit(f"Source does not exist: {source}")
 
     promoted: list[tuple[Path, Path]] = []
+    skipped: list[Path] = []
     for unit_dir in sorted(source.glob("Unit*"), key=unit_sort_key):
         if not unit_dir.is_dir():
             continue
@@ -25,11 +26,16 @@ def promote(source: Path, target: Path) -> list[tuple[Path, Path]]:
         target_dir = target / unit_dir.name
         target_dir.mkdir(parents=True, exist_ok=True)
         target_html = target_dir / "index.html"
+        if target_html.exists() and not overwrite:
+            skipped.append(target_html)
+            print(f"Skipped existing {target_html}")
+            continue
+
         shutil.copy2(source_html, target_html)
         promoted.append((source_html, target_html))
         print(f"Promoted {source_html} -> {target_html}")
 
-    if not promoted:
+    if not promoted and not skipped:
         raise SystemExit(f"No Unit*/index.html files found under {source}")
     return promoted
 
@@ -38,8 +44,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Promote reviewed workbook draft unit pages to live content.")
     parser.add_argument("--source", required=True, type=Path)
     parser.add_argument("--target", required=True, type=Path)
+    parser.add_argument("--overwrite", action="store_true", help="Replace existing live Unit*/index.html files.")
     args = parser.parse_args()
-    promote(args.source, args.target)
+    promote(args.source, args.target, overwrite=args.overwrite)
     return 0
 
 
