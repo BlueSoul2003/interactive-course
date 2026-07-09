@@ -33,7 +33,19 @@ Live page verification:
 node tools\verify_kssr_workbook_pages.js
 ```
 
-Result: `PASS verify_kssr_workbook_pages files=20 questions=169`.
+Result: `PASS verify_kssr_workbook_pages scope=generated files=20 questions=169`.
+
+```powershell
+node tools\verify_kssr_workbook_pages.js --scope live
+```
+
+Result: `PASS verify_kssr_workbook_pages scope=live files=20 questions=169`.
+
+```powershell
+node tools\verify_kssr_workbook_pages.js --scope all
+```
+
+Result: `PASS verify_kssr_workbook_pages scope=all files=40 questions=338`.
 
 ```powershell
 C:\Users\hong0\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe tools\verify_kssr_workbook_json.py _drafts\kssr_english_workbooks\primary3\workbook.json _drafts\kssr_english_workbooks\primary6\workbook.json

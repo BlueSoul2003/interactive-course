@@ -6,16 +6,25 @@ const EXPECTED_WORKBOOKS = [
   {
     label: 'Primary 3',
     grade: 3,
-    rootParts: ['_drafts', 'kssr_english_workbooks', 'primary3', 'generated'],
+    expectedQuestionCount: 80,
+    roots: {
+      generated: ['_drafts', 'kssr_english_workbooks', 'primary3', 'generated'],
+      live: ['content', 'KSSR_Syllabus', 'Primary3', 'English'],
+    },
   },
   {
     label: 'Primary 6',
     grade: 6,
-    rootParts: ['_drafts', 'kssr_english_workbooks', 'primary6', 'generated'],
+    expectedQuestionCount: 89,
+    roots: {
+      generated: ['_drafts', 'kssr_english_workbooks', 'primary6', 'generated'],
+      live: ['content', 'KSSR_Syllabus', 'Primary6', 'English'],
+    },
   },
 ];
 const EXPECTED_UNITS = Array.from({ length: 10 }, (_, index) => `Unit${index + 1}`);
 const FORBIDDEN_MARKERS = ['TODO', 'TBD', 'PLACEHOLDER'];
+const SCOPES = ['generated', 'live', 'all'];
 
 function walkHtml(dir) {
   if (!fs.existsSync(dir)) return [];
@@ -50,12 +59,12 @@ function findDuplicates(values) {
 function pageContext(file, root) {
   const relative = path.relative(root, file).split(path.sep).join('/');
   const parts = relative.split('/');
-  const primaryPart = parts.find((part) => /^primary[36]$/.test(part));
+  const primaryPart = parts.find((part) => /^primary[36]$/i.test(part));
   const unitPart = parts.find((part) => /^Unit\d+$/.test(part));
 
   return {
     relative,
-    grade: primaryPart ? Number(primaryPart.replace('primary', '')) : null,
+    grade: primaryPart ? Number(primaryPart.toLowerCase().replace('primary', '')) : null,
     unit: unitPart ? Number(unitPart.replace('Unit', '')) : null,
   };
 }
@@ -170,34 +179,57 @@ function verifyPage(file, root) {
   return { errors, questionCount: questionCards.length };
 }
 
+function selectedScopes(scope) {
+  if (!SCOPES.includes(scope)) {
+    throw new Error(`Unsupported scope "${scope}". Expected one of: ${SCOPES.join(', ')}`);
+  }
+  return scope === 'all' ? ['generated', 'live'] : [scope];
+}
+
 function verifyWorkbookPages(options = {}) {
   const root = options.root || REPO_ROOT;
+  const scope = options.scope || 'generated';
   const errors = [];
   const files = [];
 
-  for (const workbook of EXPECTED_WORKBOOKS) {
-    const generatedRoot = path.join(root, ...workbook.rootParts);
-    const existingFiles = walkHtml(generatedRoot);
-    files.push(...existingFiles);
+  for (const scopeName of selectedScopes(scope)) {
+    for (const workbook of EXPECTED_WORKBOOKS) {
+      const workbookRoot = path.join(root, ...workbook.roots[scopeName]);
+      const expectedFiles = EXPECTED_UNITS.map((unitName) => path.join(workbookRoot, unitName, 'index.html'));
+      const existingFiles = expectedFiles.filter((file) => fs.existsSync(file));
+      files.push(...existingFiles);
 
-    for (const unitName of EXPECTED_UNITS) {
-      const expectedFile = path.join(generatedRoot, unitName, 'index.html');
-      if (!fs.existsSync(expectedFile)) {
-        errors.push(`${workbook.label}: missing generated page ${unitName}/index.html`);
+      for (const expectedFile of expectedFiles) {
+        if (!fs.existsSync(expectedFile)) {
+          const unitName = path.basename(path.dirname(expectedFile));
+          errors.push(`${workbook.label} ${scopeName}: missing workbook page ${unitName}/index.html`);
+        }
+      }
+
+      let workbookQuestionCount = 0;
+      for (const file of existingFiles) {
+        const result = verifyPage(file, root);
+        errors.push(...result.errors);
+        workbookQuestionCount += result.questionCount;
+      }
+
+      if (existingFiles.length > 0 && workbookQuestionCount !== workbook.expectedQuestionCount) {
+        errors.push(
+          `${workbook.label} ${scopeName}: expected ${workbook.expectedQuestionCount} question cards, found ${workbookQuestionCount}`,
+        );
       }
     }
   }
 
   if (files.length === 0) {
-    errors.push('No generated workbook pages found');
+    errors.push(`No ${scope} workbook pages found`);
   }
 
-  let questionCount = 0;
-  for (const file of files.sort((a, b) => a.localeCompare(b, 'en', { numeric: true }))) {
-    const result = verifyPage(file, root);
-    errors.push(...result.errors);
-    questionCount += result.questionCount;
-  }
+  const questionCount = files.reduce((total, file) => {
+    const html = fs.readFileSync(file, 'utf8');
+    const questionCards = html.match(/<article\b(?=[^>]*\bclass="[^"]*\bquestion-card\b[^"]*")[^>]*>/g);
+    return total + (questionCards ? questionCards.length : 0);
+  }, 0);
 
   if (errors.length > 0) {
     const error = new Error(`FAIL verify_kssr_workbook_pages errors=${errors.length}\n${errors.join('\n')}`);
@@ -208,11 +240,28 @@ function verifyWorkbookPages(options = {}) {
   return { fileCount: files.length, questionCount };
 }
 
+function parseArgs(argv) {
+  const options = { scope: 'generated' };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === '--scope') {
+      options.scope = argv[index + 1];
+      index += 1;
+    } else {
+      throw new Error(`Unknown argument: ${arg}`);
+    }
+  }
+
+  return options;
+}
+
 function main() {
   try {
-    const result = verifyWorkbookPages();
+    const options = parseArgs(process.argv.slice(2));
+    const result = verifyWorkbookPages(options);
     console.log(
-      `PASS verify_kssr_workbook_pages files=${result.fileCount} questions=${result.questionCount}`,
+      `PASS verify_kssr_workbook_pages scope=${options.scope} files=${result.fileCount} questions=${result.questionCount}`,
     );
   } catch (error) {
     console.error(error.message);
@@ -227,5 +276,6 @@ if (require.main === module) {
 module.exports = {
   verifyWorkbookPages,
   verifyPage,
+  selectedScopes,
   walkHtml,
 };
