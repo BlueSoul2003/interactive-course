@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "verify:kssr-protected": "node tools/verify_kssr_protected_units.js",
+    "verify:kssr-redesign": "node tools/verify_kssr_classroom_core.js && node tools/verify_auth_access_offline.js && node tools/verify_kssr_protected_units.js && node tools/verify_kssr_unit_redesign.js"
+  },
   "dependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
