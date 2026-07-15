@@ -15,7 +15,9 @@
 const AUTH_SUPABASE_URL = 'https://ycsixsyssbdovpmmhefz.supabase.co';
 const AUTH_SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljc2l4c3lzc2Jkb3ZwbW1oZWZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzOTcyNTEsImV4cCI6MjA5MDk3MzI1MX0.5Ofa771ewzMip8mZaXA09B9O2HPF3ZGoTk3qGkdTkmE';
 
-window.supabaseClient = window.supabase.createClient(AUTH_SUPABASE_URL, AUTH_SUPABASE_KEY);
+window.supabaseClient = window.supabase?.createClient
+    ? window.supabase.createClient(AUTH_SUPABASE_URL, AUTH_SUPABASE_KEY)
+    : null;
 
 const AuthAccess = {
 
