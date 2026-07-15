@@ -1,7 +1,7 @@
 # Sunny Food Market Visual Redesign Specification
 
-**Date:** 2026-07-15  
-**Scope:** KSSR Primary 3 English, Unit 6 only  
+**Date:** 2026-07-15
+**Scope:** KSSR Primary 3 English, Unit 6 only
 **Approved direction:** Emoji-first, cute and simple, with the settings controls collapsed by default
 
 ## Goal
@@ -67,4 +67,3 @@ Sound, Previous, Switch student, Reset view, and Teacher hold stay inside a nati
 - Satay is absent from the street-food prompt as an emoji and appears only as post-success reinforcement.
 - Existing KSSR redesign, protected-unit, authentication, and classroom-core checks remain green.
 - The page is manually checked at tablet and phone widths for overflow, touch targets, and settings-panel behavior.
-

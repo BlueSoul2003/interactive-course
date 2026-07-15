@@ -64,7 +64,7 @@ assert.doesNotMatch(html, /R I C E|B R E A D|C H I C K E N|placeholder="rice,/);
 const streetFood = html.match(/<article[^>]*data-activity-id="unit-6-p049-01"[\s\S]*?<\/article>/)?.[0] || '';
 const beforeFeedback = streetFood.split('<div data-feedback')[0];
 assert.equal(beforeFeedback.includes('🍢'), false, 'Satay emoji appears before the answer is checked');
-assert.match(html, /data-question-type="street_food_matching"[^}]*\[data-feedback\]\[data-type="success"\]::before/);
+assert.match(html, /\.question-card\[data-question-type="street_food_matching"\]\s+\[data-feedback\]\[data-type="success"\]::before/);
 
 console.log('Sunny Food Market visual-safety checks passed.');
 ```
@@ -79,7 +79,7 @@ Append `&& npm run verify:sunny-food-market` to `verify:kssr-redesign` so the co
 
 - [ ] **Step 3: Run the test and verify RED**
 
-Run: `npm run verify:sunny-food-market`  
+Run: `npm run verify:sunny-food-market`
 Expected: FAIL because Unit 6 has no collapsed `settings-menu` yet.
 
 ### Task 2: Add safe learning visuals and collapsed settings
@@ -138,12 +138,12 @@ Use the same semantic pattern for the oranges and three bowls. Convert the spell
 
 - [ ] **Step 4: Run the focused verification and verify GREEN**
 
-Run: `npm run verify:sunny-food-market`  
+Run: `npm run verify:sunny-food-market`
 Expected: `Sunny Food Market visual-safety checks passed.`
 
 - [ ] **Step 5: Run the full KSSR regression suite**
 
-Run: `npm run verify:kssr-redesign`  
+Run: `npm run verify:kssr-redesign`
 Expected: all classroom-core, auth, protected-unit, redesign, and Sunny Food Market checks pass with exit code 0.
 
 ### Task 3: Verify the iPad experience and publish
@@ -159,10 +159,10 @@ Expected: all classroom-core, auth, protected-unit, redesign, and Sunny Food Mar
 
 - [ ] **Step 1: Run static and syntax checks**
 
-Run: `node --check tools/verify_kssr_sunny_food_market.js`  
+Run: `node --check tools/verify_kssr_sunny_food_market.js`
 Expected: exit code 0.
 
-Run: `npm run verify:kssr-redesign`  
+Run: `npm run verify:kssr-redesign`
 Expected: exit code 0 with no failed checks.
 
 - [ ] **Step 2: Inspect the rendered page**
@@ -171,7 +171,7 @@ Serve the repository locally and inspect Unit 6 at tablet and phone widths. Conf
 
 - [ ] **Step 3: Review the exact diff**
 
-Run: `git diff --check` and `git diff --stat`  
+Run: `git diff --check` and `git diff --stat`
 Expected: no whitespace errors and only the approved Unit 6, verification, package, and documentation files are changed.
 
 - [ ] **Step 4: Commit implementation intentionally**
@@ -183,7 +183,7 @@ git commit -m "Redesign Sunny Food Market visuals"
 
 - [ ] **Step 5: Push the feature branch**
 
-Run: `git push -u origin codex/sunny-food-market-visuals`  
+Run: `git push -u origin codex/sunny-food-market-visuals`
 Expected: the remote branch is created and tracks `origin/codex/sunny-food-market-visuals`.
 
 ## Self-review
