@@ -100,16 +100,25 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p3-en-unit1',          'Unit 1: Getting Smart',              'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit2',          'Unit 2: City Heroes',                'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit3',          'Unit 3: Housework',                  'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit6',          'Unit 6: Sunny Food Market',          'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit7',          'Unit 7: Little Safe Town',           'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit8',          'Unit 8: Time-Travel Town',           'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit9',          'Unit 9: Holiday Explorer',           'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit10',         'Unit 10: Space Observatory',         'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 
 -- ── KSSR English Primary 6 ────────────────────────────────────────
 ('kssr-p6-en-unit1',          'Unit 1: Scenario Practice',          'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit2',          'Unit 2: Interactive Reading',        'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit3',          'Unit 3: Outdoor Activities',         'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit7',          'Unit 7: Sound Lab Studio',           'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit8',          'Unit 8: Lantern Story Library',      'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit9',          'Unit 9: The Debate Club',            'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit10',         'Unit 10: Northlight Detective Bureau','kssr', 'english', 'kssr_p6_english', 'Primary6'),
 
 -- ── University Japanese ───────────────────────────────────────────
 ('uni-japanese-family',       'Japanese Family Vocab',              'uni', 'japanese', 'uni_japanese', 'University');
 
--- Verify: SELECT COUNT(*) FROM public.modules;  → should return 40
+-- Verify: SELECT COUNT(*) FROM public.modules;  → should return 49
 
 -- ──────────────────────────────────────────────────────────────────
 -- STEP 3: WIPE ALL BROKEN EXISTING PINs

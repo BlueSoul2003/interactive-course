@@ -4,15 +4,15 @@ const acorn = require('acorn');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
 const TARGETS = [
-  { grade: 3, unit: 6, world: 'food-market', pages: [43, 44, 45, 46, 47, 48, 49, 50], tokens: ['food groups', 'some', 'there are', 'street food', 'comma'] },
-  { grade: 3, unit: 7, world: 'safe-town', pages: [51, 52, 53, 54, 55, 56, 57, 58], tokens: ['sign', 'road safety', 'quarter', 'plural', 'there are'] },
-  { grade: 3, unit: 8, world: 'time-travel-town', pages: [59, 60, 61, 62, 63, 64, 65, 66], tokens: ['postcard', 'simple past', 'was', 'were', 'opposite'] },
-  { grade: 3, unit: 9, world: 'holiday-explorer', pages: [67, 68, 69, 70, 71, 72, 73, 74], tokens: ['holiday', 'trip essentials', 'simple past', 'but', 'beach'] },
-  { grade: 3, unit: 10, world: 'space-observatory', pages: [75, 76, 77, 78, 79, 80, 81, 82], tokens: ['solar system', 'planet', 'comparative', 'superlative', 'animal'] },
-  { grade: 6, unit: 7, world: 'music-studio', pages: [55, 56, 57, 58, 59, 60, 61, 62, 63], tokens: ['music genre', 'instrument', 'idiom', 'going to', 'prefix'] },
-  { grade: 6, unit: 8, world: 'story-library', pages: [64, 65, 66, 67, 68, 69, 70, 71, 72], tokens: ['rose', 'book genre', 'first conditional', 'email', 'golden apple'] },
-  { grade: 6, unit: 9, world: 'debate-club', pages: [73, 74, 75, 76, 77, 78, 79, 80, 81], tokens: ['fact', 'opinion', 'reported speech', 'for', 'against'] },
-  { grade: 6, unit: 10, world: 'detective-bureau', pages: [82, 83, 84, 85, 86, 87, 88, 89, 90], tokens: ['crime', 'clue', 'question tag', 'idiom', 'play script', 'escape room'] },
+  { grade: 3, unit: 6, name: 'Sunny Food Market', world: 'food-market', pages: [43, 44, 45, 46, 47, 48, 49, 50], tokens: ['food groups', 'some', 'there are', 'street food', 'comma'] },
+  { grade: 3, unit: 7, name: 'Little Safe Town', world: 'safe-town', pages: [51, 52, 53, 54, 55, 56, 57, 58], tokens: ['sign', 'road safety', 'quarter', 'plural', 'there are'] },
+  { grade: 3, unit: 8, name: 'Time-Travel Town', world: 'time-travel-town', pages: [59, 60, 61, 62, 63, 64, 65, 66], tokens: ['postcard', 'simple past', 'was', 'were', 'opposite'] },
+  { grade: 3, unit: 9, name: 'Holiday Explorer', world: 'holiday-explorer', pages: [67, 68, 69, 70, 71, 72, 73, 74], tokens: ['holiday', 'trip essentials', 'simple past', 'but', 'beach'] },
+  { grade: 3, unit: 10, name: 'Space Observatory', world: 'space-observatory', pages: [75, 76, 77, 78, 79, 80, 81, 82], tokens: ['solar system', 'planet', 'comparative', 'superlative', 'animal'] },
+  { grade: 6, unit: 7, name: 'Sound Lab Studio', world: 'music-studio', pages: [55, 56, 57, 58, 59, 60, 61, 62, 63], tokens: ['music genre', 'instrument', 'idiom', 'going to', 'prefix'] },
+  { grade: 6, unit: 8, name: 'Lantern Story Library', world: 'story-library', pages: [64, 65, 66, 67, 68, 69, 70, 71, 72], tokens: ['rose', 'book genre', 'first conditional', 'email', 'golden apple'] },
+  { grade: 6, unit: 9, name: 'The Debate Club', world: 'debate-club', pages: [73, 74, 75, 76, 77, 78, 79, 80, 81], tokens: ['fact', 'opinion', 'reported speech', 'for', 'against'] },
+  { grade: 6, unit: 10, name: 'Northlight Detective Bureau', world: 'detective-bureau', pages: [82, 83, 84, 85, 86, 87, 88, 89, 90], tokens: ['crime', 'clue', 'question tag', 'idiom', 'play script', 'escape room'] },
 ];
 
 function getAttribute(tag, name) {
@@ -48,7 +48,6 @@ function assertPage(condition, errors, label, message) {
 
 function verifyScripts(html, errors, label) {
   const requiredOrder = [
-    'js/navigation.js?v=1.0.0',
     '@supabase/supabase-js@2',
     'js/auth-access.js',
     'js/progress-tracker.js',
@@ -98,7 +97,21 @@ function verifyTarget(root, target) {
   const moduleId = `kssr-p${target.grade}-en-unit${target.unit}`;
   const moduleUrl = `content/KSSR_Syllabus/Primary${target.grade}/English/Unit${target.unit}/index.html`;
   assertPage(html.includes(`data-module-id="${moduleId}"`), errors, label, `missing module id ${moduleId}`);
+  assertPage(html.includes(`data-module-name="${target.name}"`), errors, label, `missing module name ${target.name}`);
   assertPage(html.includes(`data-module-url="${moduleUrl}"`), errors, label, `missing module URL ${moduleUrl}`);
+  assertPage(
+    html.includes('data-home-link href="../../../../../index.html"'),
+    errors,
+    label,
+    'Home link must return to the root index.html',
+  );
+
+  [...html.matchAll(/<script\b[^>]*\bsrc="([^"]+)"[^>]*>/gi)].forEach((match) => {
+    const source = match[1].split('?')[0];
+    if (/^(?:https?:)?\/\//i.test(source)) return;
+    const scriptPath = path.resolve(path.dirname(file), source);
+    assertPage(fs.existsSync(scriptPath), errors, label, `missing local script ${match[1]}`);
+  });
 
   const blocks = [...html.matchAll(/<article\b([^>]*\bclass="[^"]*\bquestion-card\b[^"]*"[^>]*)>([\s\S]*?)<\/article>/gi)];
   assertPage(blocks.length === target.pages.length, errors, label, `expected ${target.pages.length} activity cards, found ${blocks.length}`);
@@ -218,6 +231,19 @@ function verifyRedesign(options = {}) {
     const result = verifyTarget(root, target);
     errors.push(...result.errors);
     activityCount += result.activityCount;
+  });
+
+  const portalPath = path.join(root, 'index.html');
+  const schemaPath = path.join(root, 'db', 'schema.sql');
+  const registryPath = path.join(root, 'db', 'archive', 'modules_registry.sql');
+  const portal = fs.existsSync(portalPath) ? fs.readFileSync(portalPath, 'utf8') : '';
+  const schema = fs.existsSync(schemaPath) ? fs.readFileSync(schemaPath, 'utf8') : '';
+  const registry = fs.existsSync(registryPath) ? fs.readFileSync(registryPath, 'utf8') : '';
+  targets.forEach((target) => {
+    const moduleId = `kssr-p${target.grade}-en-unit${target.unit}`;
+    if (!portal.includes(`data-module-id="${moduleId}"`)) errors.push(`Portal missing module card ${moduleId}`);
+    if (!schema.includes(`'${moduleId}'`)) errors.push(`db/schema.sql missing module ${moduleId}`);
+    if (!registry.includes(`'${moduleId}'`)) errors.push(`db/archive/modules_registry.sql missing module ${moduleId}`);
   });
 
   const worlds = targets.map((target) => target.world);

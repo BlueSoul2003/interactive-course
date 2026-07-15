@@ -478,6 +478,11 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p3-en-unit4',           'Unit 4: The Four Seasons',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-revision2',       'Revision 2 (Unit 3 & 4)',                    'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 ('kssr-p3-en-unit5',           'Unit 5: My House Adventure',                 'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit6',           'Unit 6: Sunny Food Market',                  'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit7',           'Unit 7: Little Safe Town',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit8',           'Unit 8: Time-Travel Town',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit9',           'Unit 9: Holiday Explorer',                   'kssr', 'english', 'kssr_p3_english', 'Primary3'),
+('kssr-p3-en-unit10',          'Unit 10: Space Observatory',                 'kssr', 'english', 'kssr_p3_english', 'Primary3'),
 
 -- ── KSSR English Primary 6 ────────────────────────────────────────
 ('kssr-p6-en-unit1',           'Unit 1: Scenario Practice',                  'kssr', 'english', 'kssr_p6_english', 'Primary6'),
@@ -486,13 +491,17 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('kssr-p6-en-unit4',           'Unit 4: Interactive Worksheet',              'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit5',           'Unit 5: Interactive English',                'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 ('kssr-p6-en-unit6',           'Unit 6: Interactive English Adventure',      'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit7',           'Unit 7: Sound Lab Studio',                   'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit8',           'Unit 8: Lantern Story Library',              'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit9',           'Unit 9: The Debate Club',                    'kssr', 'english', 'kssr_p6_english', 'Primary6'),
+('kssr-p6-en-unit10',          'Unit 10: Northlight Detective Bureau',        'kssr', 'english', 'kssr_p6_english', 'Primary6'),
 
 -- ── University Physics ──────────────────────────────────────────
 ('uni-phys-kinematics',        'Kinematics & Dynamics Lab',                  'university', 'physics', 'uni-science-core', 'University');
 
 -- ──────────────────────────────────────────────────────────────────
 -- VERIFICATION QUERIES (run manually after applying):
---   SELECT COUNT(*) FROM public.modules;         -- should be 41
+--   SELECT COUNT(*) FROM public.modules;         -- should be 50
 --   SELECT id FROM public.modules ORDER BY id;   -- full alphabetical list
 --   SELECT COUNT(*) FROM public.activation_pins; -- 0 if you wiped old PINs
 -- ──────────────────────────────────────────────────────────────────
