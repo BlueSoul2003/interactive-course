@@ -122,7 +122,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── University Japanese ───────────────────────────────────────────
 ('uni-japanese-family',       'Japanese Family Vocab',              'uni', 'japanese', 'uni_japanese', 'University');
 
--- Verify: SELECT COUNT(*) FROM public.modules;  → should return 49
+-- Verify: SELECT COUNT(*) FROM public.modules;  → should return 58
 
 -- ──────────────────────────────────────────────────────────────────
 -- STEP 3: WIPE ALL BROKEN EXISTING PINs
@@ -248,7 +248,7 @@ WITH CHECK (
 
 -- ──────────────────────────────────────────────────────────────────
 -- FINAL CHECK — run these after applying:
--- SELECT COUNT(*) FROM public.modules;          → 42
+-- SELECT COUNT(*) FROM public.modules;          → 58
 -- SELECT id FROM public.modules ORDER BY id;    → full list
 -- SELECT COUNT(*) FROM public.activation_pins;  → 0 (all wiped)
 -- ──────────────────────────────────────────────────────────────────
