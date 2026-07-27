@@ -5,6 +5,7 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const exists = (relative) => fs.existsSync(path.join(root, relative));
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const chemistryDir =
   "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry";
@@ -27,13 +28,23 @@ const registry = read("db/archive/modules_registry.sql");
 
 assert.ok(exists("js/navigation.js"), "Missing shared navigation helper");
 assert.ok(portal.includes("js/navigation.js?v=1.0.0"), "Landing page missing navigation helper");
+assert.ok(
+  portal.indexOf("js/navigation.js?v=1.0.0") < portal.indexOf("auth-access.js"),
+  "Landing page has incorrect navigation/auth script order"
+);
 
 for (const [id, modulePath] of [
   [chemistryId, `${chemistryDir}/index.html`],
   [scienceId, `${scienceDir}/index.html`],
 ]) {
-  assert.match(portal, new RegExp(`data-module-id=["']${id}["']`), `Portal missing ${id}`);
-  assert.ok(portal.includes(modulePath), `Portal missing module path ${modulePath}`);
+  assert.match(
+    portal,
+    new RegExp(
+      `<a\\b(?=[^>]*\\bdata-module-id=["']${id}["'])(?=[^>]*\\bhref=["']${escapeRegExp(modulePath)}["'])[^>]*>`,
+      "i"
+    ),
+    `Portal missing ${id} card with module path ${modulePath}`
+  );
   assert.ok(registry.includes(`'${id}'`), `Registry missing ${id}`);
   const moduleHtml = read(modulePath);
   assert.ok(moduleHtml.includes(`data-module-id="${id}"`), `${id} missing tracker ID`);

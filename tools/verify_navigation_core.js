@@ -5,6 +5,7 @@ const vm = require('vm');
 
 const root = path.resolve(__dirname, '..');
 const navPath = path.join(root, 'js', 'navigation.js');
+const indexPath = path.join(root, 'index.html');
 assert.ok(fs.existsSync(navPath), 'js/navigation.js should exist');
 
 const sandbox = {
@@ -166,5 +167,8 @@ assert.strictEqual(typeof Navigation.enhanceModuleLinks, 'function', 'enhanceMod
 assert.strictEqual(typeof Navigation.enhanceReturnControls, 'function', 'enhanceReturnControls should exist');
 assert.strictEqual(typeof Navigation.goBack, 'function', 'goBack should exist');
 assert.strictEqual(typeof Navigation.init, 'function', 'init should exist');
+
+const indexHtml = fs.readFileSync(indexPath, 'utf8');
+assert.match(indexHtml, /window\.Navigation\.init\(\)/, 'index.html should initialize shared navigation');
 
 console.log('Navigation core verification passed.');
