@@ -98,7 +98,8 @@ const moduleAnchor =
   `[\\s\\S]*?<\\/a>`;
 const downloadAnchor = (pdfPath, label) =>
   `<a\\b(?=[^>]*\\bhref=["']${escapeRegExp(pdfPath)}["'])` +
-  `(?=[^>]*\\bdownload(?:\\s*=\\s*(?:["'][^"']*["']|[^\\s>]+))?(?=\\s|>))[^>]*>` +
+  `(?=[^>]*[\\t\\n\\f\\r ]download(?:[\\t\\n\\f\\r ]*=[\\t\\n\\f\\r ]*` +
+  `(?:["'][^"']*["']|[^\\t\\n\\f\\r >]+))?(?=[\\t\\n\\f\\r />]))[^>]*>` +
   `\\s*${escapeRegExp(label)}\\s*(?:<span\\b[^>]*>[\\s\\S]*?<\\/span>\\s*)?<\\/a>`;
 assert.match(
   chemistryLayer,
