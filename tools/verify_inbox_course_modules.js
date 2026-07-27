@@ -23,6 +23,93 @@ const extractDiv = (html, openingPattern, errorMessage) => {
 
   assert.fail(`${errorMessage}: unclosed div`);
 };
+const parseAttributes = (openingTag) => {
+  const attributes = Object.create(null);
+  const source = openingTag
+    .replace(/^<[A-Za-z][^\s/>]*/, "")
+    .replace(/\/?>$/, "");
+  const attribute =
+    /([^\s"'<>\/=]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+)))?/g;
+
+  for (let match = attribute.exec(source); match; match = attribute.exec(source)) {
+    const name = match[1].toLowerCase();
+    assert.ok(
+      !Object.hasOwn(attributes, name),
+      `Duplicate attribute ${name} in ${openingTag}`
+    );
+    attributes[name] = match[2] ?? match[3] ?? match[4] ?? "";
+  }
+
+  return attributes;
+};
+const parseElements = (html) => {
+  const rootElement = { name: "#root", children: [] };
+  const stack = [rootElement];
+  const tagPattern = /<(\/?)([A-Za-z][\w:-]*)([^>]*)>/g;
+  const voidElements = new Set([
+    "area",
+    "base",
+    "br",
+    "col",
+    "embed",
+    "hr",
+    "img",
+    "input",
+    "link",
+    "meta",
+    "param",
+    "source",
+    "track",
+    "wbr",
+  ]);
+
+  for (let match = tagPattern.exec(html); match; match = tagPattern.exec(html)) {
+    const closing = match[1] === "/";
+    const name = match[2].toLowerCase();
+
+    if (closing) {
+      const element = stack.pop();
+      assert.equal(element.name, name, `Malformed HTML near ${match[0]}`);
+      element.closeStart = match.index;
+      element.end = tagPattern.lastIndex;
+      continue;
+    }
+
+    const parent = stack.at(-1);
+    const element = {
+      name,
+      attributes: parseAttributes(match[0]),
+      children: [],
+      parent,
+      start: match.index,
+      openEnd: tagPattern.lastIndex,
+      closeStart: tagPattern.lastIndex,
+      end: tagPattern.lastIndex,
+    };
+    parent.children.push(element);
+
+    if (!voidElements.has(name) && !/\/>$/.test(match[0])) {
+      stack.push(element);
+    }
+  }
+
+  assert.equal(stack.length, 1, "Malformed HTML: unclosed element");
+  return rootElement;
+};
+const descendants = (element) =>
+  element.children.flatMap((child) => [child, ...descendants(child)]);
+const directText = (html, element) => {
+  let cursor = element.openEnd;
+  const chunks = [];
+
+  for (const child of element.children) {
+    chunks.push(html.slice(cursor, child.start));
+    cursor = child.end;
+  }
+  chunks.push(html.slice(cursor, element.closeStart));
+
+  return chunks.join(" ").replace(/\s+/g, " ").trim();
+};
 
 const chemistryDir =
   "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry";
@@ -92,25 +179,43 @@ const chemistryLayer = extractDiv(
 const chemistryModulePath = `${chemistryDir}/index.html`;
 const studentWorkbookPath = `${chemistryDir}/student_workbook.pdf`;
 const teacherSchemePath = `${chemistryDir}/teacher_answer_scheme.pdf`;
-const moduleAnchor =
-  `<a\\b(?=[^>]*\\bdata-module-id=["']${chemistryId}["'])` +
-  `(?=[^>]*\\bhref=["']${escapeRegExp(chemistryModulePath)}["'])[^>]*>` +
-  `[\\s\\S]*?<\\/a>`;
-const downloadAnchor = (pdfPath, label) =>
-  `<a\\b(?=[^>]*\\bhref=["']${escapeRegExp(pdfPath)}["'])` +
-  `(?=[^>]*[\\t\\n\\f\\r ]download(?:[\\t\\n\\f\\r ]*=[\\t\\n\\f\\r ]*` +
-  `(?:["'][^"']*["']|[^\\t\\n\\f\\r >]+))?(?=[\\t\\n\\f\\r />]))[^>]*>` +
-  `\\s*${escapeRegExp(label)}\\s*(?:<span\\b[^>]*>[\\s\\S]*?<\\/span>\\s*)?<\\/a>`;
-assert.match(
-  chemistryLayer,
-  new RegExp(
-    `<div\\b[^>]*>\\s*${moduleAnchor}\\s*` +
-      `${downloadAnchor(studentWorkbookPath, "Download Student Workbook")}\\s*` +
-      `${downloadAnchor(teacherSchemePath, "Download Teacher Answer Scheme")}\\s*<\\/div>`,
-    "i"
-  ),
-  "SPM Chemistry downloads must be labeled sibling anchors with exact PDF paths and download attributes"
+const chemistryElements = parseElements(chemistryLayer);
+const chemistryAnchors = descendants(chemistryElements).filter(
+  (element) => element.name === "a"
 );
+const chemistryModuleCards = chemistryAnchors.filter(
+  (element) =>
+    element.attributes["data-module-id"] === chemistryId &&
+    element.attributes.href === chemistryModulePath
+);
+assert.equal(
+  chemistryModuleCards.length,
+  1,
+  "SPM Chemistry layer must contain exactly one canonical module card"
+);
+const chemistryModuleCard = chemistryModuleCards[0];
+assert.ok(
+  !descendants(chemistryModuleCard).some((element) => element.name === "a"),
+  "SPM Chemistry module card must not contain nested anchors"
+);
+const chemistryWrapperAnchors = chemistryModuleCard.parent.children.filter(
+  (element) => element.name === "a"
+);
+assert.deepEqual(
+  chemistryWrapperAnchors.map((element) => element.attributes.href),
+  [chemistryModulePath, studentWorkbookPath, teacherSchemePath],
+  "SPM Chemistry wrapper must contain the module, student download, and teacher download as ordered sibling anchors"
+);
+for (const [element, label] of [
+  [chemistryWrapperAnchors[1], "Download Student Workbook"],
+  [chemistryWrapperAnchors[2], "Download Teacher Answer Scheme"],
+]) {
+  assert.ok(
+    Object.hasOwn(element.attributes, "download"),
+    `${label} must use a real download attribute`
+  );
+  assert.equal(directText(chemistryLayer, element), label, `${label} is incorrect`);
+}
 assert.match(portal, /8 interactive modules/, "Year 4 Science count was not updated");
 
 console.log("Inbox course module verification passed.");
