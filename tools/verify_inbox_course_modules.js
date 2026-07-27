@@ -117,6 +117,26 @@ const scienceDir =
   "content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre";
 const chemistryId = "spm-chem-ch5-consumer-industrial";
 const scienceId = "igcse-y4-sci-command-centre";
+const modules = [
+  {
+    id: chemistryId,
+    path: `${chemistryDir}/index.html`,
+    name: "Chapter 5: Consumer and Industrial Chemistry",
+    bundle: "spm_form5",
+  },
+  {
+    id: scienceId,
+    path: `${scienceDir}/index.html`,
+    name: "Science Command Centre 4.0",
+    bundle: "igcse_y4_science",
+  },
+];
+const requiredModuleScripts = [
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2",
+  "../../../../../js/auth-access.js",
+  "../../../../../js/navigation.js?v=1.0.0",
+  "../../../../../js/progress-tracker.js",
+];
 
 for (const relative of [
   `${chemistryDir}/index.html`,
@@ -137,30 +157,53 @@ assert.ok(
   "Landing page has incorrect navigation/auth script order"
 );
 
-for (const [id, modulePath] of [
-  [chemistryId, `${chemistryDir}/index.html`],
-  [scienceId, `${scienceDir}/index.html`],
-]) {
-  assert.match(
-    portal,
-    new RegExp(
-      `<a\\b(?=[^>]*\\bdata-module-id=["']${id}["'])(?=[^>]*\\bhref=["']${escapeRegExp(modulePath)}["'])[^>]*>`,
-      "i"
-    ),
-    `Portal missing ${id} card with module path ${modulePath}`
+for (const module of modules) {
+  const cardPattern = new RegExp(
+    `<a\\b(?=[^>]*\\bdata-module-id=["']${module.id}["'])(?=[^>]*\\bhref=["']${escapeRegExp(module.path)}["'])[^>]*>`,
+    "i"
   );
-  assert.ok(registry.includes(`'${id}'`), `Registry missing ${id}`);
-  const moduleHtml = read(modulePath);
-  assert.ok(moduleHtml.includes(`data-module-id="${id}"`), `${id} missing tracker ID`);
-  assert.ok(moduleHtml.includes("navigation.js?v=1.0.0"), `${id} missing navigation helper`);
-  assert.ok(moduleHtml.includes("ProgressTracker.init"), `${id} missing progress restore`);
+  const card = cardPattern.exec(portal);
+  assert.ok(card, `Portal missing ${module.id} card with module path ${module.path}`);
+  const cardAttributes = parseAttributes(card[0]);
+  assert.equal(
+    cardAttributes["data-bundle"],
+    module.bundle,
+    `${module.id} card must use data-bundle="${module.bundle}"`
+  );
+
+  assert.ok(registry.includes(`'${module.id}'`), `Registry missing ${module.id}`);
+  const moduleHtml = read(module.path);
+  let previousScriptIndex = -1;
+  let progressAttributes = null;
+  for (const src of requiredModuleScripts) {
+    const scriptPattern = new RegExp(
+      `<script\\b(?=[^>]*\\bsrc=["']${escapeRegExp(src)}["'])[^>]*>`,
+      "gi"
+    );
+    const scriptTags = [...moduleHtml.matchAll(scriptPattern)];
+    assert.equal(scriptTags.length, 1, `${module.id} must load ${src} exactly once`);
+    assert.ok(
+      scriptTags[0].index > previousScriptIndex,
+      `${module.id} has incorrect Supabase/auth/navigation/progress script order`
+    );
+    previousScriptIndex = scriptTags[0].index;
+    if (src.endsWith("progress-tracker.js")) {
+      progressAttributes = parseAttributes(scriptTags[0][0]);
+    }
+  }
+  assert.deepEqual(
+    {
+      id: progressAttributes["data-module-id"],
+      name: progressAttributes["data-module-name"],
+      url: progressAttributes["data-module-url"],
+    },
+    { id: module.id, name: module.name, url: module.path },
+    `${module.id} progress tracker metadata is incorrect`
+  );
+  assert.ok(moduleHtml.includes("ProgressTracker.init"), `${module.id} missing progress restore`);
   assert.ok(
     moduleHtml.includes("ProgressTracker.autoSave") || moduleHtml.includes("tracker.save"),
-    `${id} missing progress save`
-  );
-  assert.ok(
-    moduleHtml.indexOf("navigation.js?v=1.0.0") < moduleHtml.indexOf("progress-tracker.js"),
-    `${id} has incorrect navigation/progress script order`
+    `${module.id} missing progress save`
   );
 }
 

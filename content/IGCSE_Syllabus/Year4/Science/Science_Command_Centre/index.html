@@ -333,7 +333,7 @@ body.catastrophe{animation:catastropheShake .48s linear}
       <p class="sub">Explore a complete 100-question science vault, unlock scientific words, repair misconceptions and survive the Boss Battle.</p>
       <div class="actions">
         <button class="primary" onclick="startClass()">Begin 60-minute mission</button>
-        <button class="secondary" onclick="showScreen('route')">Preview mission map</button>
+        <button class="secondary" onclick="transitionTo('route')">Preview mission map</button>
       </div>
     </div>
     <div class="card glass">
@@ -349,7 +349,7 @@ body.catastrophe{animation:catastropheShake .48s linear}
 <section id="route" class="screen">
   <div class="section-title">
     <div><div class="topic">Mission map</div><h2>Choose the arena.</h2></div>
-    <button class="secondary" onclick="showScreen('home')">Home</button>
+    <button class="secondary" onclick="transitionTo('home')">Home</button>
   </div>
   <div class="grid" id="missionGrid"></div>
 </section>
@@ -420,7 +420,7 @@ body.catastrophe{animation:catastropheShake .48s linear}
         <button class="tool" onclick="awardFocus()"><strong>+ Focus</strong> attentive answer</button>
         <button class="tool" onclick="showFocusReset()"><strong>Focus reset</strong> 30 seconds</button>
         <button class="tool" onclick="toggleTeacher()"><strong>Teacher view</strong> prompts and answer</button>
-        <button class="tool" onclick="showScreen('route')"><strong>Mission map</strong></button>
+        <button class="tool" onclick="transitionTo('route')"><strong>Mission map</strong></button>
       </div>
     </aside>
   </div>
@@ -639,10 +639,13 @@ let activeQuestions=[],index=0;
 let currentMissionId=null,currentRouteChoice=null,autoAdvanceTimer=null,pendingNextMissionId=null;
 let xp=0,focus=0,streak=0,wrongStreak=0,bestStreak=0,correctCount=0,wrongCount=0;
 let seconds=3600,timerHandle=null,soundOn=true,audioCtx=null;
+const PERSISTED_PHASES=new Set(["home","choice","quiz","exit"]);
+let currentPhase="home";
 const state={};
 
 function progressSnapshot(){
  return{
+  phase:currentPhase,
   missionId:currentMissionId,
   routeChoice:currentRouteChoice,
   questionIds:activeQuestions.map(item=>item.id),
@@ -666,21 +669,47 @@ function saveProgress(){
 
 function renderMissions(){
  document.getElementById("missionGrid").innerHTML=missions.map(m=>`
- <button class="mission" onclick="${m.id==="choice"?"showScreen('choice')":m.id==="exit"?"showScreen('exit')":`launchMission('${m.id}')`}">
+ <button class="mission" onclick="${m.id==="choice"?"transitionTo('choice')":m.id==="exit"?"transitionTo('exit')":`launchMission('${m.id}')`}">
    <div class="num">MISSION ${m.num}</div><h3>${m.title}</h3><p>${m.desc}</p>
  </button>`).join("");
 }
 renderMissions();
 
 function showScreen(id){
+ const safeId=document.getElementById(id)?id:"home";
  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
- document.getElementById(id).classList.add("active");
- if(id==="exit")updateExit();
+ document.getElementById(safeId).classList.add("active");
+ currentPhase=PERSISTED_PHASES.has(safeId)?safeId:"home";
+ if(safeId==="exit"){stopTimer();updateExit()}
+}
+function transitionTo(id){
+ showScreen(id);
+ saveProgress();
+}
+function stopTimer(){
+ if(timerHandle){clearInterval(timerHandle);timerHandle=null}
+}
+function timerTick(){
+ seconds=Math.max(0,seconds-1);
+ updateTimer();
+ if(seconds===0){
+  stopTimer();
+  showScreen("exit");
+  saveProgress();
+  return;
+ }
+ if(seconds%30===0)saveProgress();
 }
 function startTimer(){
  if(!timerHandle&&seconds>0){
-  timerHandle=setInterval(()=>{if(seconds<=0){clearInterval(timerHandle);saveProgress();showScreen("exit");return}seconds--;updateTimer();if(seconds%30===0)saveProgress()},1000);
+  timerHandle=setInterval(timerTick,1000);
  }
+}
+function resolveRestorePhase(phase,hasValidQuestions,remainingSeconds){
+ if(typeof remainingSeconds==="number"&&remainingSeconds<=0)return"exit";
+ if(phase==="choice"||phase==="exit")return phase;
+ if(phase==="quiz"&&hasValidQuestions&&remainingSeconds>0)return"quiz";
+ return"home";
 }
 function startClass(){
  initAudio();
@@ -695,7 +724,7 @@ function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
 function launchMission(id,opts={}){
  initAudio();
  clearAutoAdvance();
- if(id==="choice"){currentMissionId="choice";activeQuestions=[];index=0;showScreen("choice");saveProgress();return}
+ if(id==="choice"){currentMissionId="choice";activeQuestions=[];index=0;transitionTo("choice");return}
  currentMissionId=opts.parentMissionId||id;
  if(opts.routeChoice)currentRouteChoice=opts.routeChoice;
  if(id==="vault") activeQuestions=[...Q];
@@ -705,7 +734,7 @@ function launchMission(id,opts={}){
  else if(id==="duel") activeQuestions=shuffle(Q.filter(x=>x.set.includes("duel")));
  else if(id==="boss") activeQuestions=shuffle(Q.filter(x=>x.set.includes("boss")));
  else activeQuestions=shuffle(Q.filter(x=>x.set.includes(id)));
- index=0;showScreen("quiz");renderQuestion();saveProgress();
+ index=0;showScreen("quiz");renderQuestion();startTimer();saveProgress();
 }
 function current(){return activeQuestions[index]}
 function renderQuestion(){
@@ -833,7 +862,7 @@ function clearAutoAdvance(){
 }
 function finishCurrentMission(){
  const nextId=getNextMissionId(currentMissionId||"speed");
- if(nextId==="exit"){showScreen("exit");return;}
+ if(nextId==="exit"){transitionTo("exit");return;}
  showAdvanceModal(nextId);
 }
 function showAdvanceModal(nextId){
@@ -851,8 +880,8 @@ function continueToNextMission(){
  if(!pendingNextMissionId)return;
  const nextId=pendingNextMissionId;
  clearAutoAdvance();
- if(nextId==="choice")showScreen("choice");
- else if(nextId==="exit")showScreen("exit");
+ if(nextId==="choice")transitionTo("choice");
+ else if(nextId==="exit")transitionTo("exit");
  else launchMission(nextId);
 }
 function cancelAutoAdvance(){clearAutoAdvance()}
@@ -1040,7 +1069,17 @@ window.addEventListener("load",async function(){
    const hasValidQuestions=questionIds.length>0
     &&questionIds.every(id=>typeof id==="string")
     &&restoredQuestions.length===questionIds.length;
-   if(hasValidQuestions){
+   const restorePhase=resolveRestorePhase(saved.phase,hasValidQuestions,seconds);
+   stopTimer();
+   if(restorePhase==="choice"){
+    activeQuestions=[];
+    index=0;
+    showScreen("choice");
+   }else if(restorePhase==="exit"){
+    activeQuestions=[];
+    index=0;
+    showScreen("exit");
+   }else if(restorePhase==="quiz"){
     activeQuestions=restoredQuestions;
     index=Math.max(0,Math.min(activeQuestions.length-1,
      Number.isInteger(saved.questionIndex)?saved.questionIndex:0));
