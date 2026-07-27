@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Eason Science Command Centre 4.0</title>
+<style>
+:root{
+  --bg:#07101d;
+  --glass:rgba(255,255,255,.095);
+  --glass-strong:rgba(255,255,255,.145);
+  --glass-border:rgba(255,255,255,.20);
+  --text:#f7fbff;
+  --muted:rgba(232,243,255,.68);
+  --blue:#7db8ff;
+  --cyan:#66ead4;
+  --yellow:#ffd66b;
+  --green:#75f2a6;
+  --red:#ff7f90;
+  --purple:#b9a1ff;
+  --shadow:0 30px 90px rgba(0,0,0,.40);
+}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg)}
+body{
+  margin:0;min-height:100vh;color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,Segoe UI,Arial,sans-serif;
+  overflow-x:hidden;background:
+  radial-gradient(circle at 10% 10%,rgba(80,150,255,.28),transparent 30%),
+  radial-gradient(circle at 86% 16%,rgba(80,240,208,.22),transparent 28%),
+  radial-gradient(circle at 55% 105%,rgba(176,125,255,.20),transparent 34%),
+  linear-gradient(145deg,#07101d 0%,#0d1c34 54%,#10172a 100%);
+}
+body::before,body::after{
+  content:"";position:fixed;z-index:-1;filter:blur(2px);border-radius:50%;pointer-events:none;
+  animation:floatBlob 13s ease-in-out infinite alternate;
+}
+body::before{width:34vw;height:34vw;left:-9vw;top:30vh;background:rgba(61,128,255,.11)}
+body::after{width:30vw;height:30vw;right:-8vw;bottom:-9vw;background:rgba(96,244,202,.10);animation-delay:-5s}
+@keyframes floatBlob{to{transform:translate(5vw,-3vh) scale(1.08)}}
+button,input{font:inherit}
+button{border:0;color:inherit;cursor:pointer}
+button:disabled{opacity:.35;cursor:not-allowed;transform:none!important}
+.glass{
+  background:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.065));
+  border:1px solid var(--glass-border);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.17);
+  -webkit-backdrop-filter:blur(26px) saturate(155%);
+  backdrop-filter:blur(26px) saturate(155%);
+}
+.app{min-height:100vh;display:grid;grid-template-rows:auto 1fr auto}
+header{
+  position:sticky;top:0;z-index:20;margin:12px 14px 0;padding:11px 14px;
+  display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;border-radius:22px;
+}
+.brand{font-weight:900;letter-spacing:.025em}.brand span{color:var(--cyan)}
+.status{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{
+  border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.11);font-size:13px;color:var(--muted)
+}
+.pill strong{color:var(--yellow)}
+.header-actions{display:flex;gap:8px}
+.icon-btn,.primary,.secondary,.ghost,.answer,.mission,.tool,.choice,.tile-btn{
+  border-radius:16px;transition:transform .16s ease,background .16s ease,box-shadow .16s ease,border-color .16s ease;
+}
+button:hover{transform:translateY(-2px)}
+button:active{transform:scale(.98)}
+.icon-btn{padding:10px 13px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12)}
+main{padding:28px 20px;display:grid;place-items:center}
+.screen{display:none;width:min(1180px,100%)}
+.screen.active{display:block;animation:screenIn .34s cubic-bezier(.2,.8,.2,1)}
+@keyframes screenIn{from{opacity:0;transform:translateY(13px) scale(.99)}to{opacity:1;transform:none}}
+.hero{min-height:72vh;display:grid;grid-template-columns:1.25fr .75fr;gap:22px;align-items:center}
+.hero-copy{padding:18px}
+.card{border-radius:30px;padding:28px}
+h1{margin:0 0 20px;font-size:clamp(44px,7.2vw,89px);line-height:.93;letter-spacing:-.062em}
+h2{margin:0 0 12px;font-size:clamp(30px,4.2vw,50px);letter-spacing:-.035em}
+h3{margin:0 0 9px}p{color:var(--muted);line-height:1.55}
+.sub{font-size:19px;max-width:760px}
+.topic{font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan)}
+.accent{color:var(--cyan)}
+.actions{display:flex;gap:11px;flex-wrap:wrap;margin-top:24px}
+.primary{padding:14px 19px;font-weight:900;color:#06121c;background:linear-gradient(135deg,var(--cyan),var(--blue));box-shadow:0 12px 35px rgba(74,197,220,.22)}
+.secondary{padding:13px 17px;font-weight:800;background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.13)}
+.ghost{padding:11px 14px;background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--muted)}
+.rule{display:flex;gap:12px;align-items:flex-start;margin:15px 0}
+.rule b{min-width:35px;height:35px;display:grid;place-items:center;border-radius:12px;background:rgba(102,234,212,.13);color:var(--cyan)}
+.small{font-size:13px}.section-title{display:flex;justify-content:space-between;gap:15px;align-items:end;margin:0 4px 18px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.mission{
+  text-align:left;padding:22px;min-height:192px;color:var(--text);
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.055));
+  border:1px solid rgba(255,255,255,.17);box-shadow:0 20px 55px rgba(0,0,0,.20);
+  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);
+}
+.mission:hover{border-color:rgba(102,234,212,.55);box-shadow:0 25px 70px rgba(0,0,0,.30),0 0 0 1px rgba(102,234,212,.17)}
+.mission .num{font-size:12px;color:var(--cyan);font-weight:900;letter-spacing:.13em}
+.mission h3{font-size:22px;margin-top:25px}.mission p{margin-bottom:0}
+.choice-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.choice{
+  padding:24px;text-align:left;min-height:205px;color:var(--text);
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.14)
+}
+.choice h3{font-size:25px;margin-top:16px}.choice .primary{margin-top:8px}
+.question-layout{display:grid;grid-template-columns:minmax(0,1fr) 295px;gap:17px;align-items:start}
+.question-card{min-height:570px;position:relative;overflow:hidden}
+.question-meta{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.type-badge{font-size:12px;padding:7px 10px;border-radius:999px;background:rgba(185,161,255,.13);color:#dcd0ff;border:1px solid rgba(185,161,255,.22)}
+.question{font-size:clamp(26px,4vw,50px);line-height:1.13;font-weight:900;margin:24px 0 24px;letter-spacing:-.025em}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.answer{
+  text-align:left;padding:16px 17px;min-height:67px;color:var(--text);
+  background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.13);font-weight:760
+}
+.answer .key{display:inline-grid;place-items:center;width:28px;height:28px;margin-right:9px;border-radius:9px;background:rgba(125,184,255,.14)}
+.answer.selected{border-color:var(--blue);box-shadow:0 0 0 2px rgba(125,184,255,.25)}
+.answer.correct{background:rgba(117,242,166,.14);border-color:var(--green);box-shadow:0 0 0 2px rgba(117,242,166,.18)}
+.answer.wrong{background:rgba(255,127,144,.12);border-color:var(--red);box-shadow:0 0 0 2px rgba(255,127,144,.16)}
+.text-zone{display:grid;gap:13px}
+.text-input{
+  width:100%;padding:17px 18px;border-radius:18px;color:var(--text);outline:none;
+  background:rgba(0,0,0,.15);border:1px solid rgba(255,255,255,.18);font-size:20px;
+}
+.text-input:focus{border-color:var(--blue);box-shadow:0 0 0 4px rgba(125,184,255,.13)}
+.word-bank,.letter-tiles{display:flex;gap:9px;flex-wrap:wrap}
+.word-chip,.letter-chip{padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.085);border:1px solid rgba(255,255,255,.13);font-weight:800}
+.letter-chip{font-size:20px;min-width:42px;text-align:center;color:var(--yellow)}
+.masked-word{font-size:clamp(27px,5vw,54px);letter-spacing:.18em;font-weight:900;color:var(--yellow);margin:9px 0}
+.hint-box{padding:14px 16px;border-radius:17px;background:rgba(185,161,255,.10);border:1px solid rgba(185,161,255,.19)}
+.explanation{
+  display:none;margin-top:17px;padding:15px 17px;border-radius:18px;
+  background:rgba(255,214,107,.09);border:1px solid rgba(255,214,107,.20);border-left:4px solid var(--yellow)
+}
+.explanation.show{display:block;animation:screenIn .22s ease}
+.nav-actions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:21px}
+.nav-group{display:flex;gap:10px;flex-wrap:wrap}
+.side{display:grid;gap:13px}
+.stat,.tools{padding:18px;border-radius:25px}
+.stat .big{font-size:35px;font-weight:900}.bar{height:11px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:10px}
+.bar>div{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--blue),var(--purple));transition:width .35s ease}
+.tools{display:grid;gap:8px}
+.tool{padding:11px 12px;text-align:left;background:rgba(255,255,255,.075);border:1px solid rgba(255,255,255,.10)}
+.tool strong{color:var(--yellow)}
+.kbd{padding:2px 7px;border-radius:7px;background:rgba(255,255,255,.10);color:#e8f4ff;font-size:.86em}
+footer{padding:12px 20px 18px;text-align:center;color:rgba(215,230,245,.47);font-size:12px}
+.teacher-panel{
+  display:none;position:fixed;z-index:60;right:18px;bottom:18px;width:min(430px,calc(100vw - 36px));max-height:78vh;overflow:auto;
+  padding:20px;border-radius:26px;color:#102033;background:rgba(250,253,255,.90);
+  border:1px solid rgba(255,255,255,.85);box-shadow:0 28px 90px rgba(0,0,0,.42);backdrop-filter:blur(22px)
+}
+.teacher-panel.show{display:block}.teacher-panel p,.teacher-panel li{color:#42546b}.teacher-panel button{color:#fff;background:#132238;padding:9px 12px;border-radius:12px}
+.modal{display:none;position:fixed;inset:0;z-index:55;background:rgba(2,8,15,.72);place-items:center;padding:20px;backdrop-filter:blur(12px)}
+.modal.show{display:grid}.modal .card{width:min(650px,100%);text-align:center}.giant{font-size:72px;margin:0}
+.feedback-overlay{position:fixed;inset:0;z-index:80;pointer-events:none;display:grid;place-items:center;opacity:0}
+.feedback-overlay.play{animation:feedbackFade .82s ease forwards}
+.feedback-orb{
+  width:130px;height:130px;border-radius:50%;display:grid;place-items:center;font-size:54px;font-weight:950;
+  backdrop-filter:blur(10px);box-shadow:0 0 60px currentColor;transform:scale(.25)
+}
+.feedback-overlay.correct{color:var(--green);background:radial-gradient(circle,rgba(117,242,166,.20),transparent 52%)}
+.feedback-overlay.wrong{color:var(--red);background:radial-gradient(circle,rgba(255,127,144,.18),transparent 52%)}
+.feedback-overlay.correct .feedback-orb{background:rgba(34,112,68,.45);border:2px solid var(--green)}
+.feedback-overlay.wrong .feedback-orb{background:rgba(130,35,52,.44);border:2px solid var(--red)}
+.feedback-overlay.s1 .feedback-orb{animation:orb1 .78s ease forwards}
+.feedback-overlay.s2 .feedback-orb{animation:orb2 .82s ease forwards}
+.feedback-overlay.s3 .feedback-orb{animation:orb3 .86s ease forwards}
+.feedback-overlay.s4 .feedback-orb{animation:orb4 .9s ease forwards}
+@keyframes feedbackFade{0%{opacity:0}12%,72%{opacity:1}100%{opacity:0}}
+@keyframes orb1{0%{transform:scale(.2)}55%{transform:scale(1.15)}100%{transform:scale(.9)}}
+@keyframes orb2{0%{transform:scale(.2)}55%{transform:scale(2.3)}100%{transform:scale(1.7)}}
+@keyframes orb3{0%{transform:scale(.2)}55%{transform:scale(4.7)}100%{transform:scale(3.8)}}
+@keyframes orb4{0%{transform:scale(.2)}48%{transform:scale(12)}100%{transform:scale(10)}}
+.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-9px)}55%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+.exit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.exit{min-height:190px}
+.result-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.09)}
+@media(max-width:900px){
+  header{grid-template-columns:1fr auto}.status{grid-column:1/-1;justify-content:flex-start}
+  .hero,.question-layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}.side{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:620px){
+  main{padding:18px 12px}.card{padding:21px}.grid,.choice-grid,.exit-grid,.side{grid-template-columns:1fr}
+  .answers{grid-template-columns:1fr}.question-card{min-height:auto}.header-actions{display:none}
+}
+
+/* Level-2 streak celebration: twin confetti cannons */
+#celebrationLayer{
+  position:fixed;inset:0;z-index:96;pointer-events:none;overflow:hidden
+}
+.confetti-piece{
+  position:absolute;bottom:8vh;width:10px;height:18px;border-radius:3px;
+  background:hsl(var(--hue) 92% 62%);opacity:0;
+  box-shadow:0 0 12px hsla(var(--hue),92%,62%,.42);
+  animation:confettiFlight var(--dur) cubic-bezier(.12,.62,.23,1) var(--delay) forwards
+}
+.confetti-piece.left{left:1.5vw}
+.confetti-piece.right{right:1.5vw}
+@keyframes confettiFlight{
+  0%{opacity:0;transform:translate(0,0) rotate(0deg) scale(.4)}
+  8%{opacity:1}
+  68%{opacity:1}
+  100%{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1)}
+}
+.streak-banner{
+  position:fixed;left:50%;top:17%;z-index:97;pointer-events:none;
+  transform:translate(-50%,-50%) scale(.35);opacity:0;
+  padding:13px 24px;border-radius:999px;font-size:clamp(24px,4vw,54px);font-weight:950;
+  color:white;background:rgba(20,32,54,.54);border:1px solid rgba(255,255,255,.34);
+  box-shadow:0 18px 65px rgba(0,0,0,.34),0 0 45px rgba(102,234,212,.36);
+  backdrop-filter:blur(18px) saturate(170%)
+}
+.streak-banner.play{animation:streakBanner 1.45s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes streakBanner{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.35)}
+  18%{opacity:1;transform:translate(-50%,-50%) scale(1.14)}
+  62%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-70%) scale(.85)}
+}
+
+/* Level-2 wrong streak: full-screen crack and collapse */
+.crash-overlay{
+  position:fixed;inset:0;z-index:110;pointer-events:none;display:none;overflow:hidden;
+  background:rgba(255,65,88,0)
+}
+.crash-overlay.play{display:block;animation:redImpact 1.95s ease forwards}
+@keyframes redImpact{
+  0%{background:rgba(255,65,88,0)}
+  9%{background:rgba(255,65,88,.20)}
+  24%{background:rgba(0,0,0,.08)}
+  100%{background:rgba(0,0,0,0)}
+}
+.crack-svg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 0 7px rgba(255,255,255,.85))}
+.crack-line{
+  fill:none;stroke:rgba(245,250,255,.96);stroke-width:3;vector-effect:non-scaling-stroke;
+  stroke-dasharray:1800;stroke-dashoffset:1800
+}
+.crash-overlay.play .crack-line{animation:drawCrack .38s ease-out forwards}
+.crack-line.secondary{stroke:rgba(255,105,125,.86);stroke-width:1.5;animation-delay:.10s!important}
+@keyframes drawCrack{to{stroke-dashoffset:0}}
+.shard-layer{position:absolute;inset:0}
+.screen-shard{
+  position:absolute;inset:-1px;background:
+    radial-gradient(circle at 50% 30%,rgba(255,255,255,.10),transparent 40%),
+    linear-gradient(145deg,rgba(12,25,45,.93),rgba(2,8,16,.97));
+  border:1px solid rgba(240,248,255,.35);
+  transform:translate(0,0) rotate(0deg);opacity:0;
+  box-shadow:0 0 18px rgba(255,90,110,.25);
+  backdrop-filter:blur(20px) saturate(130%)
+}
+.crash-overlay.play .screen-shard{
+  animation:shardCollapse var(--fallDur) cubic-bezier(.35,.02,.8,.3) var(--fallDelay) forwards
+}
+@keyframes shardCollapse{
+  0%,18%{opacity:0;transform:translate(0,0) rotate(0deg)}
+  22%{opacity:1;transform:translate(0,0) rotate(0deg)}
+  100%{opacity:0;transform:translate(var(--fallX),115vh) rotate(var(--fallRot))}
+}
+body.catastrophe{animation:catastropheShake .48s linear}
+@keyframes catastropheShake{
+  0%,100%{transform:none}
+  10%{transform:translate(-9px,5px) rotate(-.25deg)}
+  22%{transform:translate(11px,-7px) rotate(.28deg)}
+  37%{transform:translate(-13px,-3px) rotate(-.18deg)}
+  55%{transform:translate(9px,8px) rotate(.20deg)}
+  75%{transform:translate(-5px,3px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .confetti-piece,.streak-banner.play,.crash-overlay.play .screen-shard,.crash-overlay.play .crack-line{
+    animation-duration:.01ms!important;animation-iteration-count:1!important
+  }
+}
+
+
+/* Mission complete auto-advance */
+.advance-modal{
+  position:fixed;inset:0;display:none;place-items:center;z-index:130;
+  background:rgba(5,10,18,.48);backdrop-filter:blur(18px) saturate(160%);
+  padding:24px
+}
+.advance-modal.show{display:grid}
+.advance-card{
+  width:min(680px,94vw);
+  padding:28px 26px;border-radius:30px;
+  background:linear-gradient(145deg,rgba(255,255,255,.20),rgba(255,255,255,.10));
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 24px 80px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.25);
+  text-align:center;color:var(--white, #fff)
+}
+.advance-card h2{font-size:clamp(28px,4.3vw,54px);margin:8px 0 12px}
+.advance-card p{margin:8px 0;color:rgba(240,246,255,.82)}
+.advance-chip{
+  display:inline-flex;align-items:center;justify-content:center;
+  margin:8px auto 14px;padding:10px 16px;border-radius:999px;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);
+  font-weight:800;letter-spacing:.03em
+}
+.advance-next{
+  font-size:clamp(20px,3vw,34px);font-weight:950;margin:12px 0 8px
+}
+.advance-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.advance-actions button{
+  border:0;border-radius:16px;padding:12px 18px;font:inherit;font-weight:800;cursor:pointer
+}
+.advance-primary{background:linear-gradient(135deg,#79e9d6,#8eb7ff);color:#07121f}
+.advance-secondary{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.28)}
+
+</style>
+</head>
+<body>
+<a class="back-link" href="../../../../../index.html" style="position:fixed;top:16px;left:16px;z-index:100000;padding:10px 16px;border-radius:999px;background:rgba(15,23,42,.92);color:#fff;text-decoration:none;font:700 14px/1.2 Arial,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.3)">← Back</a>
+<div class="app">
+<header class="glass">
+  <div class="brand">SCIENCE <span>COMMAND CENTRE 4.0</span></div>
+  <div class="status">
+    <div class="pill">Time <strong id="timer">60:00</strong></div>
+    <div class="pill">XP <strong id="xp">0</strong></div>
+    <div class="pill">Streak <strong id="streakTop">0</strong> 🔥</div>
+    <div class="pill">Focus <strong id="focus">0</strong> ⚡</div>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
+    <button class="icon-btn" onclick="toggleFullscreen()">⛶</button>
+  </div>
+</header>
+
+<main>
+<section id="home" class="screen active">
+  <div class="hero">
+    <div class="hero-copy">
+      <div class="topic">Cambridge Primary Science • Year 4</div>
+      <h1>Fast answers are<br><span class="accent">only the start.</span></h1>
+      <p class="sub">Explore a complete 100-question science vault, unlock scientific words, repair misconceptions and survive the Boss Battle.</p>
+      <div class="actions">
+        <button class="primary" onclick="startClass()">Begin 60-minute mission</button>
+        <button class="secondary" onclick="showScreen('route')">Preview mission map</button>
+      </div>
+    </div>
+    <div class="card glass">
+      <h3>Mission Rules</h3>
+      <div class="rule"><b>1</b><div><strong>Attempt before notes.</strong><br><span class="small">The brain must retrieve first.</span></div></div>
+      <div class="rule"><b>2</b><div><strong>Use “because”.</strong><br><span class="small">A reason turns an answer into evidence.</span></div></div>
+      <div class="rule"><b>3</b><div><strong>Repair mistakes.</strong><br><span class="small">A corrected model can recover the point.</span></div></div>
+      <div class="rule"><b>4</b><div><strong>Build the streak.</strong><br><span class="small">Correct streaks unlock bigger effects.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="route" class="screen">
+  <div class="section-title">
+    <div><div class="topic">Mission map</div><h2>Choose the arena.</h2></div>
+    <button class="secondary" onclick="showScreen('home')">Home</button>
+  </div>
+  <div class="grid" id="missionGrid"></div>
+</section>
+
+<section id="choice" class="screen">
+  <div class="card glass">
+    <div class="topic">Student choice</div><h2>Choose your specialist route.</h2>
+    <p>You choose the route. The teacher controls the scientific standard.</p>
+    <div class="choice-grid">
+      <button class="choice" onclick="launchMission('electricity',{parentMissionId:'choice',routeChoice:'electricity'})">
+        <div class="topic">Route A</div><h3>⚡ Circuit Detective</h3>
+        <p>Complete circuits, switches, conductors, insulators and fault-finding.</p>
+      </button>
+      <button class="choice" onclick="launchMission('space',{parentMissionId:'choice',routeChoice:'space'})">
+        <div class="topic">Route B</div><h3>🪐 Space Analyst</h3>
+        <p>Rotation, orbits, stars, planets, moons, asteroids and comets.</p>
+      </button>
+      <button class="choice" onclick="launchMission('matter',{parentMissionId:'choice',routeChoice:'matter'})">
+        <div class="topic">Route C</div><h3>🧊 Particle Lab</h3>
+        <p>States of matter, particles and reversible or irreversible changes.</p>
+      </button>
+      <button class="choice" onclick="launchMission('earth',{parentMissionId:'choice',routeChoice:'earth'})">
+        <div class="topic">Route D</div><h3>🌋 Earth Investigator</h3>
+        <p>Earth layers, volcanoes, earthquakes and warning systems.</p>
+      </button>
+    </div>
+  </div>
+</section>
+
+<section id="quiz" class="screen">
+  <div class="question-layout">
+    <div class="card glass question-card" id="questionCard">
+      <div class="question-meta">
+        <div class="topic" id="qTopic">Topic</div>
+        <div class="type-badge" id="qType">Type</div>
+      </div>
+      <div class="question" id="qText">Question</div>
+      <div id="interaction"></div>
+      <div class="explanation" id="explanation"></div>
+      <div class="nav-actions">
+        <div class="nav-group">
+          <button class="secondary" id="prevBtn" onclick="previousQuestion()">← Previous</button>
+          <button class="secondary" onclick="checkAnswer()">Check answer <span class="kbd">Enter</span></button>
+          <button class="ghost" onclick="revealAnswer()">Reveal</button>
+        </div>
+        <div class="nav-group">
+          <button class="primary" onclick="nextQuestion()">Next challenge →</button>
+        </div>
+      </div>
+    </div>
+    <aside class="side">
+      <div class="stat glass">
+        <div class="small">Mission progress</div>
+        <div class="big"><span id="qNum">1</span>/<span id="qTotal">1</span></div>
+        <div class="bar"><div id="progress"></div></div>
+      </div>
+      <div class="stat glass">
+        <div class="small">Correct streak</div>
+        <div class="big"><span id="streak">0</span> 🔥</div>
+        <p class="small">At four correct answers, the effect fills the screen.</p>
+      </div>
+      <div class="stat glass">
+        <div class="small">Accuracy</div>
+        <div class="big"><span id="accuracy">—</span></div>
+        <p class="small"><span id="correctCount">0</span> correct • <span id="wrongCount">0</span> wrong</p>
+      </div>
+      <div class="tools glass">
+        <button class="tool" onclick="awardFocus()"><strong>+ Focus</strong> attentive answer</button>
+        <button class="tool" onclick="showFocusReset()"><strong>Focus reset</strong> 30 seconds</button>
+        <button class="tool" onclick="toggleTeacher()"><strong>Teacher view</strong> prompts and answer</button>
+        <button class="tool" onclick="showScreen('route')"><strong>Mission map</strong></button>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="exit" class="screen">
+  <div class="section-title"><div><div class="topic">Final debrief</div><h2>Mission report</h2></div></div>
+  <div class="exit-grid">
+    <div class="card glass exit"><h3>1. Strongest</h3><p>Which topic can you explain without help?</p></div>
+    <div class="card glass exit"><h3>2. Weakest</h3><p>Which concept still needs one more repair?</p></div>
+    <div class="card glass exit"><h3>3. Proof</h3><p>Teach one fact using the word “because”.</p></div>
+  </div>
+  <div class="card glass" style="margin-top:16px">
+    <h2>Mission complete: <span id="finalXP">0</span> XP</h2>
+    <div class="result-row"><span>Correct answers</span><strong id="finalCorrect">0</strong></div>
+    <div class="result-row"><span>Wrong answers</span><strong id="finalWrong">0</strong></div>
+    <div class="result-row"><span>Best streak</span><strong id="bestStreak">0</strong></div>
+    <div class="actions"><button class="primary" onclick="location.reload()">Reset for next class</button></div>
+  </div>
+</section>
+</main>
+
+<footer>Shortcuts: <span class="kbd">A–D</span> choose • <span class="kbd">Enter</span> check • <span class="kbd">← / →</span> navigate • <span class="kbd">T</span> teacher • <span class="kbd">S</span> sound</footer>
+</div>
+
+<div id="focusModal" class="modal">
+  <div class="card glass">
+    <p class="giant">⚡</p><h2>30-Second Focus Reset</h2>
+    <p>Eyes away from the screen. One slow breath. Then finish:</p>
+    <h3>“The question is asking me to…”</h3>
+    <button class="primary" onclick="closeFocusReset()">Return to mission</button>
+  </div>
+</div>
+
+<div id="teacherPanel" class="teacher-panel">
+  <h3>Teacher Control</h3>
+  <p><strong>Current answer:</strong> <span id="teacherAnswer">—</span></p>
+  <p><strong>Suggested prompt:</strong> <span id="teacherPrompt">Ask for a reason.</span></p>
+  <p><strong>When he rushes:</strong> “Fast is useful only when it stays accurate. Prove it.”</p>
+  <p><strong>When he guesses:</strong> “A guess earns no scientific credit until it has a reason.”</p>
+  <p><strong>When he is wrong:</strong> “Repair the model: I first thought ___, but now I think ___ because ___.”</p>
+  <button onclick="toggleTeacher()">Close</button>
+</div>
+
+<div id="feedbackOverlay" class="feedback-overlay">
+  <div class="feedback-orb" id="feedbackOrb">✓</div>
+</div>
+
+
+<div id="celebrationLayer" aria-hidden="true"></div>
+<div id="streakBanner" class="streak-banner" aria-hidden="true">2 STREAK!</div>
+
+<div id="crashOverlay" class="crash-overlay" aria-hidden="true">
+  <svg class="crack-svg" viewBox="0 0 1000 700" preserveAspectRatio="none">
+    <path class="crack-line" d="M505 0 L494 95 L535 153 L492 217 L521 281 L479 350 L512 417 L472 492 L500 558 L463 628 L455 700"/>
+    <path class="crack-line" d="M500 343 L410 315 L350 253 L270 230 L204 164 L112 138 L34 72"/>
+    <path class="crack-line secondary" d="M494 215 L420 176 L390 112 L322 72 L296 0"/>
+    <path class="crack-line secondary" d="M479 350 L385 380 L322 437 L226 452 L152 523 L57 548 L0 620"/>
+    <path class="crack-line" d="M506 342 L595 300 L660 246 L742 225 L807 157 L904 130 L1000 50"/>
+    <path class="crack-line secondary" d="M520 280 L616 264 L682 198 L780 171 L844 94 L929 68 L968 0"/>
+    <path class="crack-line" d="M512 417 L603 444 L674 506 L766 520 L833 585 L925 609 L1000 675"/>
+    <path class="crack-line secondary" d="M500 558 L584 588 L630 650 L720 700"/>
+  </svg>
+  <div id="shardLayer" class="shard-layer"></div>
+</div>
+
+
+<div id="advanceModal" class="advance-modal" aria-hidden="true">
+  <div class="advance-card">
+    <div class="advance-chip">MISSION COMPLETE</div>
+    <h2 id="advanceTitle">Great work.</h2>
+    <p>You do not need to go back to the home page.</p>
+    <div class="advance-next" id="advanceNext">Next: Mission 02</div>
+    <p id="advanceDesc">Loading the next challenge…</p>
+    <div class="advance-actions">
+      <button class="advance-primary" onclick="continueToNextMission()">Continue now</button>
+      <button class="advance-secondary" onclick="cancelAutoAdvance()">Stay here</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const missions=[
+ {id:"speed",num:"01",title:"Speed Scan",desc:"A focused mixed retrieval sprint across all seven topics."},
+ {id:"wordlab",num:"02",title:"Word Lab",desc:"Scientific word scrambles, missing terms and clue-based guessing."},
+ {id:"choice",num:"03",title:"Choose Your Route",desc:"Electricity, Space, Matter or Planet Earth."},
+ {id:"duel",num:"04",title:"Science Duel",desc:"Judge claims, correct misconceptions and defend each decision."},
+ {id:"boss",num:"05",title:"Boss Battle",desc:"Harder application and reasoning questions for a confident learner."},
+ {id:"marathon",num:"06",title:"Random Marathon",desc:"A shuffled 50-question challenge from the complete bank."},
+ {id:"vault",num:"07",title:"100-Question Vault",desc:"Open the complete question bank in one continuous teacher-controlled mission."},
+ {id:"exit",num:"08",title:"Exit Ticket",desc:"Debrief strengths, weak points and scientific explanations."}
+];
+const missionOrder=["speed","wordlab","choice","duel","boss","marathon","vault","exit"];
+const missionMeta=Object.fromEntries(missions.map(m=>[m.id,m]));
+
+const Q=[
+{id:"bio1",set:["speed","biology","marathon"],topic:"Life Processes and Ecosystems",type:"mcq",q:"Which organism is always at the beginning of a simple food chain?",options:["A predator","A producer","A decomposer","A prey animal"],answer:1,why:"A producer makes its own food and supplies energy to the rest of the food chain."},
+{id:"bio2",set:["biology","duel","marathon"],topic:"Life Processes and Ecosystems",type:"input",q:"Complete the sentence: An animal that eats only plants is a ________.",answers:["herbivore"],why:"A herbivore eats plants."},
+{id:"bio3",set:["wordlab","biology","marathon"],topic:"Life Processes and Ecosystems",type:"scramble",q:"Unscramble this scientific word.",word:"HABITAT",scramble:"T A B I H A T",hint:"The place where an organism lives.",why:"A habitat provides an organism with the conditions and resources it needs."},
+{id:"bio4",set:["biology","duel","marathon"],topic:"Life Processes and Ecosystems",type:"mcq",q:"Which change would most directly reduce food for a rabbit population?",options:["More green plants","Fewer green plants","More rainfall","A larger habitat"],answer:1,why:"Rabbits are herbivores, so fewer green plants means less food."},
+{id:"bio5",set:["wordlab","biology","marathon"],topic:"Life Processes and Ecosystems",type:"guess",q:"Guess the scientific term from the clue.",word:"PREDATOR",hint:"An animal that hunts and eats another animal.",why:"A predator hunts prey."},
+{id:"bio6",set:["boss","marathon"],topic:"Life Processes and Ecosystems",type:"mcq",q:"A plant disappears from a food chain. What is the most reasonable consequence?",options:["Nothing changes","Consumers may receive less food energy","Every predator becomes a producer","The Sun becomes weaker"],answer:1,why:"Removing a producer reduces the energy entering the food chain."},
+{id:"bio7",set:["biology","marathon"],topic:"Life Processes and Ecosystems",type:"input",q:"Complete the food chain term: An animal hunted by another animal is called ________.",answers:["prey"],why:"Prey is hunted by a predator."},
+{id:"bio8",set:["boss","marathon"],topic:"Life Processes and Ecosystems",type:"mcq",q:"Why can a vaccine help prevent a disease?",options:["It trains the body to recognise a pathogen","It gives the body more bones","It removes every microbe from Earth","It changes a virus into food"],answer:0,why:"Vaccines prepare the immune system to respond more effectively to a pathogen."},
+
+{id:"body1",set:["speed","body","marathon"],topic:"Humans and Other Animals",type:"mcq",q:"Which is NOT a main function of the skeleton?",options:["Support the body","Protect organs","Pump blood","Help movement"],answer:2,why:"The heart pumps blood. The skeleton supports, protects, shapes and helps movement."},
+{id:"body2",set:["body","wordlab","marathon"],topic:"Humans and Other Animals",type:"scramble",q:"Unscramble the bone that protects the brain.",word:"SKULL",scramble:"L K U L S",hint:"It forms the hard structure around the brain.",why:"The skull protects the brain."},
+{id:"body3",set:["body","marathon"],topic:"Humans and Other Animals",type:"input",q:"Muscles ________ on bones; they do not push bones.",answers:["pull"],why:"Muscles contract and pull on bones."},
+{id:"body4",set:["body","duel","marathon"],topic:"Humans and Other Animals",type:"mcq",q:"True or false: Muscles pull bones to create movement.",options:["True","False"],answer:0,why:"Muscles contract and pull bones across joints."},
+{id:"body5",set:["body","wordlab","marathon"],topic:"Humans and Other Animals",type:"guess",q:"Guess the scientific term.",word:"JOINT",hint:"A place where two or more bones meet and movement may occur.",why:"A joint connects bones and often allows movement."},
+{id:"body6",set:["boss","marathon"],topic:"Humans and Other Animals",type:"mcq",q:"Why are the rib bones shaped like a cage?",options:["To protect organs while allowing the chest to move","To make blood","To store food","To stop every body movement"],answer:0,why:"The rib cage protects the heart and lungs while still allowing breathing movement."},
+{id:"body7",set:["body","marathon"],topic:"Humans and Other Animals",type:"input",q:"An animal with a backbone is called a ________.",answers:["vertebrate"],why:"Vertebrates have backbones."},
+{id:"body8",set:["body","marathon"],topic:"Humans and Other Animals",type:"mcq",q:"Which structure mainly protects the spinal cord?",options:["Spine","Pelvis","Rib cage","Jaw"],answer:0,why:"The vertebral column surrounds and protects the spinal cord."},
+
+{id:"matter1",set:["speed","matter","marathon"],topic:"States of Matter",type:"mcq",q:"Why does a solid keep its shape?",options:["Its particles are fixed closely in position","It has no particles","Its particles move freely everywhere","Its particles disappear"],answer:0,why:"Solid particles are closely packed and vibrate around fixed positions."},
+{id:"matter2",set:["matter","wordlab","marathon"],topic:"States of Matter",type:"scramble",q:"Unscramble the change from liquid to solid.",word:"FREEZING",scramble:"G E N I Z E R F",hint:"Water undergoes this change to become ice.",why:"Freezing is the change from liquid to solid."},
+{id:"matter3",set:["matter","marathon"],topic:"States of Matter",type:"input",q:"The change from a solid to a liquid is called ________.",answers:["melting"],why:"Melting changes a solid into a liquid."},
+{id:"matter4",set:["matter","duel","marathon"],topic:"States of Matter",type:"mcq",q:"True or false: Melting ice is a reversible change.",options:["True","False"],answer:0,why:"Liquid water can freeze back into ice."},
+{id:"matter5",set:["matter","wordlab","marathon"],topic:"States of Matter",type:"guess",q:"Guess the process.",word:"EVAPORATION",hint:"A liquid changes into a gas, often from its surface.",why:"Evaporation is a liquid-to-gas change."},
+{id:"matter6",set:["boss","marathon"],topic:"States of Matter",type:"mcq",q:"Which observation is the strongest evidence that a chemical reaction formed a new substance?",options:["Ice changes shape","A new gas and colour appear","Water is poured into another cup","A solid is broken into smaller pieces"],answer:1,why:"Gas production and a colour change can indicate that new substances formed."},
+{id:"matter7",set:["matter","marathon"],topic:"States of Matter",type:"input",q:"Gas particles are much more ________ apart than solid particles.",answers:["spread","far","widely spaced"],why:"Gas particles are widely spaced and move freely."},
+{id:"matter8",set:["matter","duel","marathon"],topic:"States of Matter",type:"mcq",q:"Which is irreversible?",options:["Freezing water","Melting chocolate","Burning paper","Condensing steam"],answer:2,why:"Burning forms new substances and cannot easily be reversed."},
+
+{id:"light1",set:["speed","light","marathon"],topic:"Energy and Light",type:"mcq",q:"A shadow forms because…",options:["light bends around every object","an opaque object blocks light","darkness travels from the object","the eye produces a shadow"],answer:1,why:"Light travels in straight lines, and an opaque object blocks it."},
+{id:"light2",set:["light","wordlab","marathon"],topic:"Energy and Light",type:"scramble",q:"Unscramble the word for light bouncing from a surface.",word:"REFLECTION",scramble:"F E C T I O N R L E",hint:"You see this effect in a mirror.",why:"Reflection occurs when light bounces from a surface."},
+{id:"light3",set:["light","marathon"],topic:"Energy and Light",type:"input",q:"Light usually travels in ________ lines.",answers:["straight"],why:"In a uniform medium, light travels in straight lines."},
+{id:"light4",set:["light","duel","marathon"],topic:"Energy and Light",type:"mcq",q:"True or false: The Moon is luminous because it makes its own visible light.",options:["True","False"],answer:1,why:"The Moon reflects sunlight; it does not make its own visible light."},
+{id:"light5",set:["light","wordlab","marathon"],topic:"Energy and Light",type:"guess",q:"Guess the term.",word:"OPAQUE",hint:"Describes a material that does not let light pass through.",why:"Opaque materials block light."},
+{id:"light6",set:["boss","marathon"],topic:"Energy and Light",type:"mcq",q:"Object X gives a darker shadow than object Y. What is the best inference?",options:["X blocks more light","X creates more light","Y must be metal","Both are identical"],answer:0,why:"A darker shadow normally means less light passes through the object."},
+{id:"light7",set:["light","marathon"],topic:"Energy and Light",type:"input",q:"An object that produces its own light is called ________.",answers:["luminous"],why:"A luminous object emits its own light."},
+{id:"light8",set:["light","marathon"],topic:"Energy and Light",type:"mcq",q:"Which surface gives the clearest reflection?",options:["A rough wall","A smooth mirror","A crumpled cloth","A pile of sand"],answer:1,why:"A smooth surface reflects rays in a regular way and forms a clearer image."},
+
+{id:"elec1",set:["speed","electricity","marathon"],topic:"Electricity",type:"mcq",q:"A bulb will light only when…",options:["the circuit has a complete path","one wire is disconnected","the switch creates a gap","plastic connects the cell"],answer:0,why:"Electric current needs a complete conducting path."},
+{id:"elec2",set:["electricity","wordlab","marathon"],topic:"Electricity",type:"scramble",q:"Unscramble the material category that allows electricity to pass.",word:"CONDUCTOR",scramble:"D O C T U C O N R",hint:"Most metals belong to this category.",why:"A conductor allows electrical current to pass through it."},
+{id:"elec3",set:["electricity","marathon"],topic:"Electricity",type:"input",q:"Plastic around a wire is used because plastic is an ________.",answers:["insulator"],why:"An insulator does not allow electric current to pass easily."},
+{id:"elec4",set:["electricity","duel","marathon"],topic:"Electricity",type:"mcq",q:"True or false: An open switch creates a gap in a circuit.",options:["True","False"],answer:0,why:"An open switch breaks the circuit path."},
+{id:"elec5",set:["electricity","wordlab","marathon"],topic:"Electricity",type:"guess",q:"Guess the circuit component.",word:"SWITCH",hint:"It opens or closes a circuit.",why:"A switch controls whether the circuit path is complete."},
+{id:"elec6",set:["electricity","boss","marathon"],topic:"Electricity",type:"mcq",q:"A circuit has a cell, bulb and wires, but the bulb is off. What should you check FIRST?",options:["Whether there is a gap","The colour of the wire","The size of the table","The weather"],answer:0,why:"A gap or loose connection breaks the conducting path."},
+{id:"elec7",set:["electricity","marathon"],topic:"Electricity",type:"input",q:"Two or more cells connected together form a ________.",answers:["battery"],why:"A battery is made from two or more cells."},
+{id:"elec8",set:["electricity","marathon"],topic:"Electricity",type:"mcq",q:"Which pair contains two conductors?",options:["Copper and aluminium","Plastic and rubber","Wood and glass","Rubber and copper"],answer:0,why:"Copper and aluminium are metals and conduct electricity."},
+{id:"elec9",set:["boss","electricity","marathon"],topic:"Electricity",type:"mcq",q:"A student says, “The bulb is off, so the cell must be empty.” What is the best scientific response?",options:["Agree immediately","Check all possible circuit faults first","Replace every component","Say circuits are unpredictable"],answer:1,why:"Several faults are possible, so the circuit should be tested systematically."},
+{id:"elec10",set:["electricity","wordlab","marathon"],topic:"Electricity",type:"scramble",q:"Unscramble the word for a complete route around which current can flow.",word:"CIRCUIT",scramble:"I R C T U I C",hint:"It may contain a cell, wires, bulb and switch.",why:"A circuit is a complete route for electric current."},
+
+{id:"earth1",set:["speed","earth","marathon"],topic:"Planet Earth",type:"mcq",q:"Which layer is the thin outer layer of Earth?",options:["Mantle","Outer core","Crust","Inner core"],answer:2,why:"The crust is Earth's thin, solid outer layer."},
+{id:"earth2",set:["earth","wordlab","marathon"],topic:"Planet Earth",type:"scramble",q:"Unscramble the molten rock below Earth's surface.",word:"MAGMA",scramble:"A M G A M",hint:"When it reaches the surface, it is called lava.",why:"Magma is molten rock beneath Earth's surface."},
+{id:"earth3",set:["earth","marathon"],topic:"Planet Earth",type:"input",q:"Molten rock that reaches Earth's surface is called ________.",answers:["lava"],why:"Magma is called lava after it reaches the surface."},
+{id:"earth4",set:["earth","duel","marathon"],topic:"Planet Earth",type:"mcq",q:"True or false: The mantle is outside the crust.",options:["True","False"],answer:1,why:"The crust is outside; the mantle lies below it."},
+{id:"earth5",set:["earth","wordlab","marathon"],topic:"Planet Earth",type:"guess",q:"Guess the event.",word:"EARTHQUAKE",hint:"A sudden shaking of the ground caused by movement in Earth's crust.",why:"An earthquake is ground shaking caused by energy released in Earth's crust."},
+{id:"earth6",set:["boss","earth","marathon"],topic:"Planet Earth",type:"mcq",q:"Why are earthquake warnings useful even when they give only a short warning?",options:["They provide time for protective action","They stop plate movement","They prevent every injury","They move the epicentre"],answer:0,why:"Even seconds of warning can allow people and systems to take protective action."},
+{id:"earth7",set:["earth","marathon"],topic:"Planet Earth",type:"input",q:"The opening through which volcanic material escapes is called a ________.",answers:["vent"],why:"A volcanic vent is an opening through which magma, ash and gases escape."},
+{id:"earth8",set:["earth","marathon"],topic:"Planet Earth",type:"mcq",q:"Where do many earthquakes and volcanoes occur?",options:["Near plate boundaries","Only at the North Pole","Only in deserts","Inside clouds"],answer:0,why:"Plate movement and interaction are concentrated at plate boundaries."},
+
+{id:"space1",set:["speed","space","marathon"],topic:"Earth and Beyond",type:"mcq",q:"What mainly causes day and night?",options:["The Sun circles Earth once a day","Earth rotates on its axis","The Moon blocks sunlight","Earth stops moving"],answer:1,why:"As Earth rotates, different parts face toward or away from the Sun."},
+{id:"space2",set:["space","wordlab","marathon"],topic:"Earth and Beyond",type:"scramble",q:"Unscramble the movement of Earth turning on its axis.",word:"ROTATION",scramble:"T O T A R I O N",hint:"This movement causes day and night.",why:"Rotation is the spinning of an object on its axis."},
+{id:"space3",set:["space","marathon"],topic:"Earth and Beyond",type:"input",q:"The Sun is a ________, not a planet.",answers:["star"],why:"The Sun is a star that produces light and heat."},
+{id:"space4",set:["space","duel","marathon"],topic:"Earth and Beyond",type:"mcq",q:"True or false: Planets make their own visible light.",options:["True","False"],answer:1,why:"Planets are seen mainly because they reflect light from a star."},
+{id:"space5",set:["space","wordlab","marathon"],topic:"Earth and Beyond",type:"guess",q:"Guess the object.",word:"COMET",hint:"A small icy object that can form a bright tail near the Sun.",why:"A comet is made largely of ice, dust and rock and may form a tail near the Sun."},
+{id:"space6",set:["boss","space","marathon"],topic:"Earth and Beyond",type:"mcq",q:"When Malaysia faces the Sun, what is Malaysia most likely experiencing?",options:["Night","Day","Winter","A solar eclipse every time"],answer:1,why:"The side of Earth facing the Sun experiences daytime."},
+{id:"space7",set:["space","marathon"],topic:"Earth and Beyond",type:"input",q:"The path of one object around another is called an ________.",answers:["orbit"],why:"An orbit is the curved path of an object around another object."},
+{id:"space8",set:["space","marathon"],topic:"Earth and Beyond",type:"mcq",q:"Which object orbits Earth?",options:["The Moon","Every star","Mars","The Sun once every day"],answer:0,why:"The Moon orbits Earth."},
+{id:"space9",set:["boss","space","marathon"],topic:"Earth and Beyond",type:"mcq",q:"A student says the Sun moves across the sky because it travels around Earth each day. What should be corrected?",options:["Earth's rotation creates the apparent daily movement","The Sun is actually the Moon","Earth does not move","Night is caused by clouds"],answer:0,why:"Earth's rotation makes the Sun appear to move across the sky."},
+{id:"space10",set:["space","wordlab","marathon"],topic:"Earth and Beyond",type:"scramble",q:"Unscramble the rocky object that is smaller than a planet and orbits the Sun.",word:"ASTEROID",scramble:"D O I R E T S A",hint:"Many are found in a belt between Mars and Jupiter.",why:"An asteroid is a rocky body orbiting the Sun."},
+
+{id:"duel1",set:["speed","duel","marathon"],topic:"Scientific Thinking",type:"mcq",q:"True or false: A correct answer without a reason always proves full understanding.",options:["True","False"],answer:1,why:"A correct answer may still be a guess. A reason gives evidence of understanding."},
+{id:"duel2",set:["duel","marathon"],topic:"Scientific Thinking",type:"input",q:"Complete the sentence: A fair test changes only one ________ variable at a time.",answers:["independent"],why:"The independent variable is deliberately changed while other relevant variables are controlled."},
+{id:"duel3",set:["boss","marathon"],topic:"Scientific Thinking",type:"mcq",q:"Which response is the most scientific when results do not match a prediction?",options:["Hide the results","Repeat the test and inspect the method","Change the result","Claim the prediction was correct"],answer:1,why:"Scientists examine methods and repeat tests rather than hiding unexpected evidence."},
+{id:"duel4",set:["boss","marathon"],topic:"Scientific Thinking",type:"input",q:"A statement supported by observations and measurements is called ________.",answers:["evidence"],why:"Evidence supports or challenges a scientific explanation."}
+,
+{id:"bio9",set:["biology","marathon"],topic:"Life Processes and Ecosystems",type:"input",q:"A body feature or behaviour that helps an organism survive is called an ________.",answers:["adaptation"],why:"An adaptation helps an organism survive in its habitat."},
+{id:"bio10",set:["biology","duel","marathon"],topic:"Life Processes and Ecosystems",type:"mcq",q:"Which list contains resources normally provided by a habitat?",options:["Food, water, shelter and space","Only sunlight","Only predators","Books, batteries and wires"],answer:0,why:"A suitable habitat provides organisms with food, water, shelter and enough space."},
+{id:"bio11",set:["biology","wordlab","marathon"],topic:"Life Processes and Ecosystems",type:"scramble",q:"Unscramble the medical term.",word:"VACCINE",scramble:"C A V C I N E",hint:"It prepares the body to recognise a particular disease-causing organism.",why:"A vaccine prepares the immune system to respond to a pathogen."},
+{id:"bio12",set:["biology","boss","marathon"],topic:"Life Processes and Ecosystems",type:"mcq",q:"A habitat becomes much drier. Which organism is most likely to survive best?",options:["One with adaptations for saving water","One that needs constant deep water","One with no access to food","Every organism equally"],answer:0,why:"An organism with suitable adaptations is more likely to survive an environmental change."},
+
+{id:"body9",set:["body","marathon"],topic:"Humans and Other Animals",type:"mcq",q:"Which joint allows the knee to bend mainly backwards and forwards?",options:["Hinge joint","Fixed joint","Ball-and-socket joint","No joint"],answer:0,why:"The knee acts mainly as a hinge joint, allowing bending and straightening."},
+{id:"body10",set:["body","marathon"],topic:"Humans and Other Animals",type:"input",q:"A hard supporting structure on the outside of an animal is an ________.",answers:["exoskeleton"],why:"An exoskeleton supports and protects an animal from the outside."},
+{id:"body11",set:["body","wordlab","marathon"],topic:"Humans and Other Animals",type:"scramble",q:"Unscramble the group of bones that supports the lower body.",word:"PELVIS",scramble:"V E P L I S",hint:"It connects the spine to the legs.",why:"The pelvis supports the lower body and connects the spine to the legs."},
+{id:"body12",set:["body","boss","marathon"],topic:"Humans and Other Animals",type:"mcq",q:"When one muscle in an opposing pair contracts, what usually happens to the other?",options:["It relaxes","It turns into bone","It disappears","It contracts in exactly the same direction"],answer:0,why:"Muscles often work in opposing pairs: one contracts while the other relaxes."},
+
+{id:"matter9",set:["matter","marathon"],topic:"States of Matter",type:"input",q:"The change from a gas into a liquid is called ________.",answers:["condensation"],why:"Condensation changes a gas into a liquid."},
+{id:"matter10",set:["matter","duel","marathon"],topic:"States of Matter",type:"mcq",q:"Which statement about a liquid is correct?",options:["It has a fixed volume but takes the container's shape","It has no particles","It always fills the whole room","Its particles cannot move"],answer:0,why:"A liquid has a fixed volume, but it can flow and take the shape of its container."},
+{id:"matter11",set:["matter","wordlab","marathon"],topic:"States of Matter",type:"scramble",q:"Unscramble the tiny units used in the particle model.",word:"PARTICLES",scramble:"T C I P A R L E S",hint:"All solids, liquids and gases are described as being made of these.",why:"The particle model describes matter as being made of particles."},
+{id:"matter12",set:["matter","boss","marathon"],topic:"States of Matter",type:"mcq",q:"A puddle disappears faster on a warm, windy day. What best explains this?",options:["Faster evaporation","Faster freezing","The water becomes solid","The particles stop moving"],answer:0,why:"Warmth and moving air can increase the rate of evaporation."},
+
+{id:"light9",set:["light","marathon"],topic:"Energy and Light",type:"input",q:"The bouncing of light from a surface is called ________.",answers:["reflection"],why:"Reflection occurs when light bounces from a surface."},
+{id:"light10",set:["light","wordlab","marathon"],topic:"Energy and Light",type:"scramble",q:"Unscramble the word for a material that blocks light.",word:"OPAQUE",scramble:"A Q O P U E",hint:"It produces a clear shadow because light cannot pass through it.",why:"An opaque material blocks light."},
+{id:"light11",set:["light","duel","marathon"],topic:"Energy and Light",type:"mcq",q:"Which object is luminous?",options:["A switched-on lamp","The Moon","A mirror","A white wall"],answer:0,why:"A luminous object produces its own light. The others mainly reflect light."},
+{id:"light12",set:["light","boss","marathon"],topic:"Energy and Light",type:"mcq",q:"A toy is moved closer to a torch while the screen stays still. What usually happens to its shadow?",options:["It becomes larger","It disappears completely","It becomes a light source","It must become smaller"],answer:0,why:"Moving an object closer to the light source usually makes its shadow larger on the screen."},
+
+{id:"elec11",set:["electricity","marathon"],topic:"Electricity",type:"input",q:"A material that allows electric current to pass easily is a ________.",answers:["conductor"],why:"A conductor allows electric current to pass through it easily."},
+{id:"elec12",set:["electricity","boss","marathon"],topic:"Electricity",type:"mcq",q:"Two bulbs are in one simple series circuit. One bulb is removed. What will most likely happen?",options:["The circuit is broken and the other bulb goes off","The other bulb becomes a battery","The wire becomes an insulator","Nothing changes"],answer:0,why:"Removing one bulb creates a gap in the single series path, so current cannot flow."},
+
+{id:"earth9",set:["earth","marathon"],topic:"Planet Earth",type:"input",q:"The point on Earth's surface directly above where an earthquake begins is the ________.",answers:["epicentre","epicenter"],why:"The epicentre is the surface point directly above the earthquake focus."},
+{id:"earth10",set:["earth","wordlab","marathon"],topic:"Planet Earth",type:"scramble",q:"Unscramble the bowl-shaped opening at the top of many volcanoes.",word:"CRATER",scramble:"R C A T E R",hint:"Lava, ash and gases may leave through or near it.",why:"A crater is the bowl-shaped opening near the top of a volcano."},
+{id:"earth11",set:["earth","duel","marathon"],topic:"Planet Earth",type:"mcq",q:"Which is Earth's deepest main layer?",options:["Inner core","Crust","Mantle","Ocean floor"],answer:0,why:"The inner core is the deepest of Earth's four main layers."},
+{id:"earth12",set:["earth","boss","marathon"],topic:"Planet Earth",type:"mcq",q:"Which observation gives the strongest warning that a volcano may become more active?",options:["Increasing small earthquakes and gas release","A sunny day","Birds flying normally","A colder classroom"],answer:0,why:"Increasing tremors and gas release can indicate movement of magma beneath a volcano."},
+
+{id:"space11",set:["space","marathon"],topic:"Earth and Beyond",type:"input",q:"The imaginary line around which Earth rotates is its ________.",answers:["axis"],why:"Earth rotates around an imaginary line called its axis."},
+{id:"space12",set:["space","boss","marathon"],topic:"Earth and Beyond",type:"mcq",q:"Which comparison is correct?",options:["Comets contain much ice; asteroids are mainly rocky","Asteroids are stars; comets are planets","Both produce their own light","Comets orbit Earth only"],answer:0,why:"Comets contain much ice and dust, whereas asteroids are mainly rocky or metallic."},
+
+{id:"duel5",set:["duel","marathon"],topic:"Scientific Thinking",type:"input",q:"A sensible statement about what may happen in an investigation is a ________.",answers:["prediction"],why:"A prediction states what is expected to happen, ideally using prior knowledge."},
+{id:"duel6",set:["duel","marathon"],topic:"Scientific Thinking",type:"input",q:"The variable that is measured in an investigation is the ________ variable.",answers:["dependent"],why:"The dependent variable is observed or measured as the result."},
+{id:"duel7",set:["duel","marathon"],topic:"Scientific Thinking",type:"input",q:"Variables kept the same to make a test fair are called ________ variables.",answers:["control","controlled"],why:"Control variables are kept the same so that the test compares the independent variable fairly."},
+{id:"duel8",set:["duel","wordlab","marathon"],topic:"Scientific Thinking",type:"scramble",q:"Unscramble the act of carefully noticing and recording.",word:"OBSERVATION",scramble:"S B O E R V A T I O N",hint:"Scientists make this using their senses or instruments.",why:"An observation is information noticed and recorded during an investigation."},
+{id:"duel9",set:["duel","wordlab","marathon"],topic:"Scientific Thinking",type:"guess",q:"Guess the scientific process.",word:"MEASUREMENT",hint:"Finding a quantity using a standard unit and a suitable instrument.",why:"Measurement compares a quantity with a standard unit."},
+{id:"duel10",set:["duel","marathon"],topic:"Scientific Thinking",type:"mcq",q:"Which action makes a result more reliable?",options:["Repeat measurements and compare them","Use a different method every time","Ignore unusual results","Record only the highest value"],answer:0,why:"Repeated measurements help reveal variation and reduce the effect of random error."},
+{id:"duel11",set:["duel","boss","marathon"],topic:"Scientific Thinking",type:"mcq",q:"In a fair test of how light affects plant growth, what should be changed?",options:["Only the amount of light","Light, water and plant type together","Every condition randomly","The measured result after the test"],answer:0,why:"A fair test changes one independent variable while keeping other relevant variables controlled."},
+{id:"duel12",set:["duel","marathon"],topic:"Scientific Thinking",type:"input",q:"The statement explaining what the results show is the ________.",answers:["conclusion"],why:"A conclusion interprets results and states what they show."},
+{id:"duel13",set:["boss","marathon"],topic:"Scientific Thinking",type:"mcq",q:"Three temperature readings are 21°C, 21°C and 35°C. What is the best next step?",options:["Repeat the measurement and check the method","Delete all readings","Use 35°C because it is largest","Claim the thermometer is perfect"],answer:0,why:"The unusual value should be investigated by repeating the measurement and checking the procedure."},
+{id:"duel14",set:["duel","marathon"],topic:"Scientific Thinking",type:"input",q:"A clear sequence of steps used to carry out an investigation is the ________.",answers:["method","procedure"],why:"The method or procedure describes how the investigation is carried out."},
+{id:"duel15",set:["duel","marathon"],topic:"Scientific Thinking",type:"mcq",q:"Why are tables and graphs useful?",options:["They organise data and reveal patterns","They guarantee every prediction is correct","They replace all measurements","They hide unusual results"],answer:0,why:"Tables and graphs organise results and make patterns or differences easier to see."},
+{id:"duel16",set:["duel","wordlab","marathon"],topic:"Scientific Thinking",type:"guess",q:"Guess the investigation term.",word:"VARIABLE",hint:"A factor that can be changed, measured or kept the same.",why:"A variable is a factor that may change in an investigation."}
+
+];
+
+let activeQuestions=[],index=0;
+let currentMissionId=null,currentRouteChoice=null,autoAdvanceTimer=null,pendingNextMissionId=null;
+let xp=0,focus=0,streak=0,wrongStreak=0,bestStreak=0,correctCount=0,wrongCount=0;
+let seconds=3600,timerHandle=null,soundOn=true,audioCtx=null;
+const state={};
+
+function progressSnapshot(){
+ return{
+  missionId:currentMissionId,
+  routeChoice:currentRouteChoice,
+  questionIds:activeQuestions.map(item=>item.id),
+  questionIndex:index,
+  xp,
+  focus,
+  streak,
+  wrongStreak,
+  bestStreak,
+  correctCount,
+  wrongCount,
+  seconds,
+  responses:state
+ };
+}
+function saveProgress(){
+ if(window.ProgressTracker?.autoSave){
+  ProgressTracker.autoSave(progressSnapshot(),1200);
+ }
+}
+
+function renderMissions(){
+ document.getElementById("missionGrid").innerHTML=missions.map(m=>`
+ <button class="mission" onclick="${m.id==="choice"?"showScreen('choice')":m.id==="exit"?"showScreen('exit')":`launchMission('${m.id}')`}">
+   <div class="num">MISSION ${m.num}</div><h3>${m.title}</h3><p>${m.desc}</p>
+ </button>`).join("");
+}
+renderMissions();
+
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ if(id==="exit")updateExit();
+}
+function startClass(){
+ initAudio();
+ if(!timerHandle){
+  timerHandle=setInterval(()=>{if(seconds<=0){clearInterval(timerHandle);saveProgress();showScreen("exit");return}seconds--;updateTimer();if(seconds%30===0)saveProgress()},1000);
+ }
+ launchMission("speed");
+}
+function updateTimer(){
+ const m=String(Math.floor(seconds/60)).padStart(2,"0"),s=String(seconds%60).padStart(2,"0");
+ document.getElementById("timer").textContent=`${m}:${s}`;
+}
+function shuffle(arr){return [...arr].sort(()=>Math.random()-.5)}
+function launchMission(id,opts={}){
+ initAudio();
+ clearAutoAdvance();
+ if(id==="choice"){currentMissionId="choice";activeQuestions=[];index=0;showScreen("choice");saveProgress();return}
+ currentMissionId=opts.parentMissionId||id;
+ if(opts.routeChoice)currentRouteChoice=opts.routeChoice;
+ if(id==="vault") activeQuestions=[...Q];
+ else if(id==="marathon") activeQuestions=shuffle(Q).slice(0,50);
+ else if(id==="speed") activeQuestions=Q.filter(x=>x.set.includes("speed"));
+ else if(id==="wordlab") activeQuestions=shuffle(Q.filter(x=>x.set.includes("wordlab")));
+ else if(id==="duel") activeQuestions=shuffle(Q.filter(x=>x.set.includes("duel")));
+ else if(id==="boss") activeQuestions=shuffle(Q.filter(x=>x.set.includes("boss")));
+ else activeQuestions=shuffle(Q.filter(x=>x.set.includes(id)));
+ index=0;showScreen("quiz");renderQuestion();saveProgress();
+}
+function current(){return activeQuestions[index]}
+function renderQuestion(){
+ const item=current();if(!item)return;
+ document.getElementById("qTopic").textContent=item.topic;
+ document.getElementById("qType").textContent=typeName(item.type);
+ document.getElementById("qText").textContent=item.q;
+ document.getElementById("qNum").textContent=index+1;
+ document.getElementById("qTotal").textContent=activeQuestions.length;
+ document.getElementById("progress").style.width=`${((index+1)/activeQuestions.length)*100}%`;
+ document.getElementById("prevBtn").disabled=index===0;
+ document.getElementById("explanation").className="explanation";
+ document.getElementById("explanation").innerHTML=`<strong>Scientific explanation:</strong> ${item.why}`;
+ document.getElementById("teacherAnswer").textContent=displayAnswer(item);
+ document.getElementById("teacherPrompt").textContent=promptFor(item);
+ const saved=state[item.id]||{};
+ const zone=document.getElementById("interaction");
+ if(item.type==="mcq"){
+   zone.innerHTML=`<div class="answers">${item.options.map((x,i)=>`<button class="answer ${saved.value===i?"selected":""}" onclick="selectAnswer(${i})"><span class="key">${String.fromCharCode(65+i)}</span>${x}</button>`).join("")}</div>`;
+ }else if(item.type==="input"){
+   zone.innerHTML=`<div class="text-zone"><input id="textAnswer" class="text-input" autocomplete="off" placeholder="Type the missing scientific term…" value="${escapeHtml(saved.value||"")}" oninput="saveText(this.value)"><div class="hint-box">Spell the scientific term as accurately as possible.</div></div>`;
+ }else if(item.type==="scramble"){
+   const letters=item.scramble.split(" ");
+   zone.innerHTML=`<div class="text-zone"><div class="letter-tiles">${letters.map(l=>`<span class="letter-chip">${l}</span>`).join("")}</div><input id="textAnswer" class="text-input" autocomplete="off" placeholder="Unscramble the word…" value="${escapeHtml(saved.value||"")}" oninput="saveText(this.value)"><div class="hint-box"><strong>Clue:</strong> ${item.hint}</div></div>`;
+ }else if(item.type==="guess"){
+   const mask=item.word.split("").map((c,i)=>saved.revealedLetters?.includes(i)?c:"_").join(" ");
+   zone.innerHTML=`<div class="text-zone"><div class="masked-word">${mask}</div><div class="hint-box"><strong>Clue:</strong> ${item.hint}</div><input id="textAnswer" class="text-input" autocomplete="off" placeholder="Guess the scientific word…" value="${escapeHtml(saved.value||"")}" oninput="saveText(this.value)"><div><button class="ghost" onclick="revealLetter()">Reveal one letter</button></div></div>`;
+ }
+ if(saved.checked){
+   applySavedFeedback(item,saved);
+ }
+ setTimeout(()=>document.getElementById("textAnswer")?.focus(),80);
+}
+function typeName(t){return({mcq:"Multiple choice",input:"Fill the blank",scramble:"Word scramble",guess:"Guess the term"})[t]||t}
+function promptFor(item){
+ if(item.type==="mcq")return "After choosing, ask: Why is one other option wrong?";
+ if(item.type==="input")return "Ask the student to use the word in a complete sentence.";
+ if(item.type==="scramble")return "After solving, ask for the definition without reading the clue.";
+ return "Reveal letters only after the student explains what the clue suggests.";
+}
+function displayAnswer(item){
+ if(item.type==="mcq")return `${String.fromCharCode(65+item.answer)} — ${item.options[item.answer]}`;
+ return item.word||item.answers?.[0]||"—";
+}
+function selectAnswer(i){
+ const item=current();state[item.id]={...(state[item.id]||{}),value:i,checked:false};
+ document.querySelectorAll(".answer").forEach((b,j)=>b.classList.toggle("selected",j===i));
+ saveProgress();
+}
+function saveText(v){
+ const item=current();state[item.id]={...(state[item.id]||{}),value:v,checked:false};
+ saveProgress();
+}
+function normalize(s){return String(s||"").trim().toLowerCase().replace(/[^a-z0-9]/g,"")}
+function isCorrect(item,value){
+ if(item.type==="mcq")return value===item.answer;
+ const accepted=item.word?[item.word]:(item.answers||[]);
+ return accepted.some(x=>normalize(x)===normalize(value));
+}
+function checkAnswer(){
+ const item=current();if(!item)return;
+ const st=state[item.id]||{};
+ if(st.value===undefined||st.value===""){pulseCard();return}
+ if(st.checked)return;
+ const ok=isCorrect(item,st.value);
+ st.checked=true;st.correct=ok;state[item.id]=st;
+ if(ok){
+   correctCount++;streak++;wrongStreak=0;bestStreak=Math.max(bestStreak,streak);
+   xp+=10+Math.min(streak-1,4)*3;
+   playCorrect(streak);showFeedback(true,streak);if(streak>=2)launchTwinConfetti(streak);
+ }else{
+   wrongCount++;wrongStreak++;streak=0;
+   playWrong(wrongStreak);showFeedback(false,wrongStreak);pulseCard();if(wrongStreak>=2)triggerScreenCollapse(wrongStreak);
+ }
+ document.getElementById("explanation").classList.add("show");
+ applySavedFeedback(item,st);refreshStats();saveProgress();
+}
+function revealAnswer(){
+ const item=current();if(!item)return;
+ const st=state[item.id]||{};
+ if(item.type==="mcq")st.value=item.answer;
+ else st.value=item.word||item.answers[0];
+ st.checked=true;st.correct=false;st.revealed=true;state[item.id]=st;
+ document.getElementById("explanation").classList.add("show");
+ renderQuestion();saveProgress();
+}
+function applySavedFeedback(item,st){
+ document.getElementById("explanation").classList.add("show");
+ if(item.type==="mcq"){
+   document.querySelectorAll(".answer").forEach((b,j)=>{
+    if(j===item.answer)b.classList.add("correct");
+    if(st.value===j&&j!==item.answer)b.classList.add("wrong");
+   });
+ }else{
+   const input=document.getElementById("textAnswer");
+   if(input){
+    input.style.borderColor=st.correct?"var(--green)":"var(--red)";
+    input.style.boxShadow=st.correct?"0 0 0 4px rgba(117,242,166,.13)":"0 0 0 4px rgba(255,127,144,.12)";
+   }
+ }
+}
+function revealLetter(){
+ const item=current();if(item.type!=="guess")return;
+ const st=state[item.id]||{};st.revealedLetters=st.revealedLetters||[];
+ const hidden=[...item.word].map((_,i)=>i).filter(i=>!st.revealedLetters.includes(i));
+ if(hidden.length){st.revealedLetters.push(hidden[Math.floor(Math.random()*hidden.length)]);state[item.id]=st;playTick();renderQuestion();saveProgress()}
+}
+function previousQuestion(){if(index>0){index--;renderQuestion();saveProgress()}}
+function nextQuestion(){
+ if(index<activeQuestions.length-1){index++;renderQuestion()}
+ else finishCurrentMission();
+ saveProgress();
+}
+
+function getNextMissionId(fromId){
+ const idx=missionOrder.indexOf(fromId);
+ if(idx===-1 || idx>=missionOrder.length-1)return "exit";
+ return missionOrder[idx+1];
+}
+function clearAutoAdvance(){
+ if(autoAdvanceTimer){clearTimeout(autoAdvanceTimer);autoAdvanceTimer=null;}
+ const modal=document.getElementById("advanceModal");
+ if(modal)modal.classList.remove("show");
+ pendingNextMissionId=null;
+}
+function finishCurrentMission(){
+ const nextId=getNextMissionId(currentMissionId||"speed");
+ if(nextId==="exit"){showScreen("exit");return;}
+ showAdvanceModal(nextId);
+}
+function showAdvanceModal(nextId){
+ clearAutoAdvance();
+ pendingNextMissionId=nextId;
+ const current=missionMeta[currentMissionId]||{num:"--",title:"Mission"};
+ const next=missionMeta[nextId]||{num:"--",title:"Next Mission",desc:""};
+ document.getElementById("advanceTitle").textContent=`Mission ${current.num} complete — ${current.title}`;
+ document.getElementById("advanceNext").textContent=`Next: Mission ${next.num} — ${next.title}`;
+ document.getElementById("advanceDesc").textContent=next.desc || "Loading the next challenge…";
+ document.getElementById("advanceModal").classList.add("show");
+ autoAdvanceTimer=setTimeout(()=>continueToNextMission(),1200);
+}
+function continueToNextMission(){
+ if(!pendingNextMissionId)return;
+ const nextId=pendingNextMissionId;
+ clearAutoAdvance();
+ if(nextId==="choice")showScreen("choice");
+ else if(nextId==="exit")showScreen("exit");
+ else launchMission(nextId);
+}
+function cancelAutoAdvance(){clearAutoAdvance()}
+
+function refreshStats(){
+ document.getElementById("xp").textContent=xp;
+ document.getElementById("focus").textContent=focus;
+ document.getElementById("streak").textContent=streak;
+ document.getElementById("streakTop").textContent=streak;
+ document.getElementById("correctCount").textContent=correctCount;
+ document.getElementById("wrongCount").textContent=wrongCount;
+ const total=correctCount+wrongCount;
+ document.getElementById("accuracy").textContent=total?`${Math.round(correctCount/total*100)}%`:"—";
+}
+function awardFocus(){focus++;xp+=3;playTick();refreshStats();saveProgress()}
+function updateExit(){
+ document.getElementById("finalXP").textContent=xp;
+ document.getElementById("finalCorrect").textContent=correctCount;
+ document.getElementById("finalWrong").textContent=wrongCount;
+ document.getElementById("bestStreak").textContent=bestStreak;
+}
+function showFeedback(ok,count){
+ const o=document.getElementById("feedbackOverlay"),orb=document.getElementById("feedbackOrb");
+ o.className=`feedback-overlay ${ok?"correct":"wrong"} s${Math.min(count,4)} play`;
+ orb.textContent=ok?(count>=4?"🔥":"✓"):(count>=4?"⚠":"×");
+ setTimeout(()=>o.className="feedback-overlay",900);
+}
+
+function launchTwinConfetti(level){
+ const layer=document.getElementById("celebrationLayer");
+ const banner=document.getElementById("streakBanner");
+ if(!layer||!banner)return;
+ layer.innerHTML="";
+ const perSide=Math.min(42+level*8,90);
+ ["left","right"].forEach(side=>{
+  for(let i=0;i<perSide;i++){
+   const p=document.createElement("i");
+   p.className=`confetti-piece ${side}`;
+   const outward=10+Math.random()*43;
+   const dx=(side==="left"?1:-1)*outward;
+   const dy=-(34+Math.random()*72);
+   p.style.setProperty("--dx",`${dx}vw`);
+   p.style.setProperty("--dy",`${dy}vh`);
+   p.style.setProperty("--rot",`${(Math.random()>.5?1:-1)*(360+Math.random()*900)}deg`);
+   p.style.setProperty("--hue",`${Math.floor(Math.random()*360)}`);
+   p.style.setProperty("--delay",`${Math.random()*.16}s`);
+   p.style.setProperty("--dur",`${1.15+Math.random()*.75}s`);
+   p.style.width=`${6+Math.random()*7}px`;
+   p.style.height=`${9+Math.random()*16}px`;
+   if(Math.random()>.55)p.style.borderRadius="50%";
+   layer.appendChild(p);
+  }
+ });
+ banner.textContent=level>=5?`${level} STREAK — UNSTOPPABLE!`:`${level} STREAK!`;
+ banner.classList.remove("play");void banner.offsetWidth;banner.classList.add("play");
+ playCelebration(level);
+ setTimeout(()=>{layer.innerHTML="";banner.classList.remove("play")},2200);
+}
+
+function playCelebration(level){
+ tone(659,0,.12,"triangle",.05);
+ tone(784,.07,.14,"triangle",.055);
+ tone(988,.14,.19,"triangle",.06);
+ tone(1319,.24,.28,"sine",.055);
+ if(level>=4)tone(1568,.35,.30,"sine",.05);
+}
+
+function buildCrashShards(){
+ const layer=document.getElementById("shardLayer");
+ if(!layer||layer.children.length)return;
+ const shapes=[
+  "polygon(0 0,30% 0,24% 30%,0 39%)",
+  "polygon(30% 0,52% 0,50% 31%,24% 30%)",
+  "polygon(52% 0,77% 0,82% 28%,50% 31%)",
+  "polygon(77% 0,100% 0,100% 38%,82% 28%)",
+  "polygon(0 39%,24% 30%,31% 62%,0 70%)",
+  "polygon(24% 30%,50% 31%,47% 66%,31% 62%)",
+  "polygon(50% 31%,82% 28%,72% 62%,47% 66%)",
+  "polygon(82% 28%,100% 38%,100% 69%,72% 62%)",
+  "polygon(0 70%,31% 62%,26% 100%,0 100%)",
+  "polygon(31% 62%,47% 66%,52% 100%,26% 100%)",
+  "polygon(47% 66%,72% 62%,78% 100%,52% 100%)",
+  "polygon(72% 62%,100% 69%,100% 100%,78% 100%)"
+ ];
+ shapes.forEach((clip,i)=>{
+  const shard=document.createElement("div");
+  shard.className="screen-shard";
+  shard.style.clipPath=clip;
+  shard.style.setProperty("--fallX",`${-22+Math.random()*44}vw`);
+  shard.style.setProperty("--fallRot",`${-24+Math.random()*48}deg`);
+  shard.style.setProperty("--fallDelay",`${.32+(i%4)*.035+Math.random()*.08}s`);
+  shard.style.setProperty("--fallDur",`${1.08+Math.random()*.42}s`);
+  layer.appendChild(shard);
+ });
+}
+
+function triggerScreenCollapse(level){
+ const overlay=document.getElementById("crashOverlay");
+ if(!overlay||overlay.classList.contains("play"))return;
+ buildCrashShards();
+ overlay.style.filter=`saturate(${1+Math.min(level,6)*.10})`;
+ overlay.classList.add("play");
+ document.body.classList.remove("catastrophe");void document.body.offsetWidth;document.body.classList.add("catastrophe");
+ playCollapse(level);
+ setTimeout(()=>{
+  overlay.classList.remove("play");
+  document.body.classList.remove("catastrophe");
+ },2050);
+}
+
+function playCollapse(level){
+ tone(155,0,.18,"sawtooth",.055);
+ tone(110,.10,.30,"square",.042);
+ tone(82,.27,.50,"sawtooth",.036);
+ if(level>=4)tone(55,.43,.68,"square",.026);
+}
+
+function pulseCard(){
+ const c=document.getElementById("questionCard");c.classList.remove("shake");void c.offsetWidth;c.classList.add("shake");
+}
+function showFocusReset(){document.getElementById("focusModal").classList.add("show");playTick()}
+function closeFocusReset(){document.getElementById("focusModal").classList.remove("show")}
+function toggleTeacher(){document.getElementById("teacherPanel").classList.toggle("show")}
+function toggleFullscreen(){if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()}
+function toggleSound(){soundOn=!soundOn;document.getElementById("soundBtn").textContent=soundOn?"🔊":"🔇";if(soundOn){initAudio();playTick()}}
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume()}
+function tone(freq,start,dur,type="sine",gain=.055){
+ if(!soundOn)return;initAudio();
+ const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime+start);
+ g.gain.setValueAtTime(.0001,audioCtx.currentTime+start);
+ g.gain.exponentialRampToValueAtTime(gain,audioCtx.currentTime+start+.02);
+ g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+start+dur);
+ o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+start);o.stop(audioCtx.currentTime+start+dur+.03);
+}
+function playCorrect(level){
+ tone(523,0,.18,"sine",.05);tone(659,.08,.20,"sine",.05);tone(784,.16,.24,"sine",.06);
+ if(level>=3){tone(1047,.28,.28,"triangle",.055)}if(level>=4){tone(1319,.40,.35,"triangle",.06)}
+}
+function playWrong(level){
+ tone(220,0,.24,"sawtooth",.04);tone(165,.11,.28,"sawtooth",.035);
+ if(level>=3)tone(110,.27,.38,"square",.025);
+}
+function playTick(){tone(680,0,.08,"sine",.025)}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+document.addEventListener("keydown",e=>{
+ if(e.target?.tagName==="INPUT"&&e.key!=="Enter")return;
+ if(["a","b","c","d"].includes(e.key.toLowerCase())&&current()?.type==="mcq"){
+  const i=e.key.toLowerCase().charCodeAt(0)-97;if(i<current().options.length)selectAnswer(i);
+ }
+ if(e.key==="Enter"){e.preventDefault();checkAnswer()}
+ if(e.key==="ArrowLeft"){e.preventDefault();previousQuestion()}
+ if(e.key==="ArrowRight"){e.preventDefault();nextQuestion()}
+ if(e.key.toLowerCase()==="t")toggleTeacher();
+ if(e.key.toLowerCase()==="s")toggleSound();
+});
+document.addEventListener("pointerdown",initAudio,{once:true});
+buildCrashShards();
+refreshStats();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../../../../js/auth-access.js"></script>
+<script src="../../../../../js/navigation.js?v=1.0.0"></script>
+<script src="../../../../../js/progress-tracker.js" data-module-id="igcse-y4-sci-command-centre" data-module-name="Science Command Centre 4.0" data-module-url="content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html"></script>
+<script>
+window.addEventListener("load",async function(){
+ if(!window.ProgressTracker?.init)return;
+ try{
+  await ProgressTracker.init(async function (tracker) {
+   const saved=await tracker.load();
+   if(!saved)return;
+   if(typeof saved.missionId==="string")currentMissionId=saved.missionId;
+   if(typeof saved.routeChoice==="string")currentRouteChoice=saved.routeChoice;
+   if(typeof saved.xp==="number"&&Number.isFinite(saved.xp))xp=saved.xp;
+   if(typeof saved.focus==="number"&&Number.isFinite(saved.focus))focus=saved.focus;
+   if(typeof saved.streak==="number"&&Number.isFinite(saved.streak))streak=saved.streak;
+   if(typeof saved.wrongStreak==="number"&&Number.isFinite(saved.wrongStreak))wrongStreak=saved.wrongStreak;
+   if(typeof saved.bestStreak==="number"&&Number.isFinite(saved.bestStreak))bestStreak=saved.bestStreak;
+   if(typeof saved.correctCount==="number"&&Number.isFinite(saved.correctCount))correctCount=saved.correctCount;
+   if(typeof saved.wrongCount==="number"&&Number.isFinite(saved.wrongCount))wrongCount=saved.wrongCount;
+   if(typeof saved.seconds==="number"&&Number.isFinite(saved.seconds))seconds=saved.seconds;
+   Object.assign(state,saved.responses||{});
+   const questionIds=Array.isArray(saved.questionIds)?saved.questionIds:[];
+   const restoredQuestions=questionIds.map(id=>Q.find(item=>item.id===id)).filter(Boolean);
+   const hasValidQuestions=questionIds.length>0
+    &&questionIds.every(id=>typeof id==="string")
+    &&restoredQuestions.length===questionIds.length;
+   if(hasValidQuestions){
+    activeQuestions=restoredQuestions;
+    index=Math.max(0,Math.min(activeQuestions.length-1,
+     Number.isInteger(saved.questionIndex)?saved.questionIndex:0));
+    showScreen("quiz");
+    renderQuestion();
+   }else{
+    activeQuestions=[];
+    index=0;
+    showScreen("home");
+   }
+   refreshStats();
+   updateTimer();
+  });
+ }catch(e){}
+});
+</script>
+</body>
+</html>
