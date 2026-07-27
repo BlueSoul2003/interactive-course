@@ -63,8 +63,11 @@ All GitHub-deployable edits are implemented and tested in the isolated worktree.
 
 **Files:**
 - Create: `tools/verify_inbox_course_modules.js`
+- Create: `tools/verify_navigation_core.js` from the tested `registration` implementation
+- Create: `js/navigation.js` after its core test fails on the clean branch
 - Modify: `package.json`
 - Test: `tools/verify_inbox_course_modules.js`
+- Test: `tools/verify_navigation_core.js`
 
 **Interfaces:**
 - Consumes: repository root, portal `index.html`, both target module pages, two PDF paths, and `db/archive/modules_registry.sql`
@@ -101,6 +104,9 @@ for (const relative of [
 
 const portal = read("index.html");
 const registry = read("db/archive/modules_registry.sql");
+
+assert.ok(exists("js/navigation.js"), "Missing shared navigation helper");
+assert.ok(portal.includes("js/navigation.js?v=1.0.0"), "Landing page missing navigation helper");
 
 for (const [id, modulePath] of [
   [chemistryId, `${chemistryDir}/index.html`],
@@ -139,6 +145,7 @@ console.log("Inbox course module verification passed.");
 Add this script to `package.json`:
 
 ```json
+"verify:navigation-core": "node tools/verify_navigation_core.js",
 "verify:inbox-course-modules": "node tools/verify_inbox_course_modules.js"
 ```
 
@@ -152,7 +159,27 @@ npm run verify:inbox-course-modules
 
 Expected: failure beginning with `Missing required publication file` because the new module folders do not yet exist.
 
-- [ ] **Step 3: Commit the verifier in the isolated deployment worktree**
+- [ ] **Step 3: Run the navigation test and confirm RED**
+
+Copy `tools/verify_navigation_core.js` from the tested `registration` checkout, then run:
+
+```powershell
+npm run verify:navigation-core
+```
+
+Expected: failure because `js/navigation.js` does not exist on the clean `main` branch.
+
+- [ ] **Step 4: Add the shared navigation helper and confirm GREEN**
+
+Copy the reviewed `js/navigation.js` implementation from the `registration` checkout, load `js/navigation.js?v=1.0.0` on the root landing page before `auth-access.js`, and rerun:
+
+```powershell
+npm run verify:navigation-core
+```
+
+Expected: `Navigation core verification passed.`
+
+- [ ] **Step 5: Commit the verifier and navigation helper in the isolated deployment worktree**
 
 Commit message:
 
@@ -341,7 +368,6 @@ Expected: still fails because the portal and registry have not yet been updated,
 - Modify: `README.md`
 - Modify: `C:\GregOS\03_Tutoring_Factory\Tutoring Factory.md`
 - Modify: `C:\GregOS\03_Tutoring_Factory\02_Interactive_Course_Project\Interactive Course Project.md`
-- Modify: `resources/pdf-catalog.json` through the existing catalog builder
 
 **Interfaces:**
 - Consumes: both module paths, both IDs, and both PDF paths
@@ -410,18 +436,11 @@ Add to IGCSE Year 4:
 
 Update the registry verification count comment from `40` to `42`.
 
-- [ ] **Step 5: Update readmes and rebuild the PDF catalog**
+- [ ] **Step 5: Update readmes and verify the direct PDF registry**
 
 Document both new modules, their IDs, routes, and public downloads in the repository README and the two GregOS tutoring overview notes.
 
-Run:
-
-```powershell
-npm run build:pdf-catalog
-npm run verify:pdf-library
-```
-
-Expected: both commands exit `0`.
+The latest `origin/main` has no generated PDF catalog; its source of truth is the `pdfResources` array in `index.html`. Confirm both new entries point to existing PDFs through `verify_inbox_course_modules.js`.
 
 - [ ] **Step 6: Run the publication contract and commit GREEN**
 
@@ -454,8 +473,8 @@ Run:
 
 ```powershell
 npm run verify:inbox-course-modules
-npm run verify:navigation
-npm run verify:pdf-library
+npm run verify:navigation-core
+npm run verify:kssr-redesign
 ```
 
 Parse each new page's inline JavaScript with Acorn after stripping HTML script tags. Expected: all commands exit `0` with no syntax error.

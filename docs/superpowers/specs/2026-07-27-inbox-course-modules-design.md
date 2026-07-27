@@ -43,6 +43,8 @@ Understand every new file in `99_Inbox`, move it to one canonical GregOS locatio
 
 All links use clean relative paths and remain compatible with the portal's existing hash-route and PIN-lock behavior.
 
+The latest `origin/main` does not yet contain the shared `js/navigation.js` helper that exists on the `registration` checkout. The deployment therefore includes that focused helper and loads it from the root landing page as well as both new modules. Its existing core behavior tests are brought with it so the route-context behavior is verified before publishing.
+
 ## 4. Module Integration
 
 ### Shared requirements
@@ -133,7 +135,7 @@ Automated checks must confirm:
 - required script order is correct;
 - both modules implement load and save hooks;
 - the existing navigation verification suite passes;
-- the PDF catalog is regenerated and its verification suite passes;
+- both PDF entries are present in the landing page's `pdfResources` array, which is the PDF source of truth on the latest `origin/main`;
 - no processed content file remains in `99_Inbox`.
 
 Browser checks must confirm:
