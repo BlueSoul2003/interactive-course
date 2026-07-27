@@ -6,6 +6,23 @@ const root = path.resolve(__dirname, "..");
 const read = (relative) => fs.readFileSync(path.join(root, relative), "utf8");
 const exists = (relative) => fs.existsSync(path.join(root, relative));
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const extractDiv = (html, openingPattern, errorMessage) => {
+  const opening = openingPattern.exec(html);
+  assert.ok(opening, errorMessage);
+
+  const divTag = /<\/?div\b[^>]*>/gi;
+  divTag.lastIndex = opening.index;
+  let depth = 0;
+
+  for (let tag = divTag.exec(html); tag; tag = divTag.exec(html)) {
+    depth += /^<div\b/i.test(tag[0]) ? 1 : -1;
+    if (depth === 0) {
+      return html.slice(opening.index, divTag.lastIndex);
+    }
+  }
+
+  assert.fail(`${errorMessage}: unclosed div`);
+};
 
 const chemistryDir =
   "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry";
@@ -67,7 +84,32 @@ for (const pdf of [
   assert.ok(portal.includes(pdf), `Portal missing public PDF link ${pdf}`);
 }
 
-assert.match(portal, /<div id="spm-chemistry" class="view-layer">/, "Missing SPM Chemistry layer");
+const chemistryLayer = extractDiv(
+  portal,
+  /<div\b(?=[^>]*\bid=["']spm-chemistry["'])(?=[^>]*\bclass=["'][^"']*\bview-layer\b[^"']*["'])[^>]*>/i,
+  "Missing SPM Chemistry layer"
+);
+const chemistryModulePath = `${chemistryDir}/index.html`;
+const studentWorkbookPath = `${chemistryDir}/student_workbook.pdf`;
+const teacherSchemePath = `${chemistryDir}/teacher_answer_scheme.pdf`;
+const moduleAnchor =
+  `<a\\b(?=[^>]*\\bdata-module-id=["']${chemistryId}["'])` +
+  `(?=[^>]*\\bhref=["']${escapeRegExp(chemistryModulePath)}["'])[^>]*>` +
+  `[\\s\\S]*?<\\/a>`;
+const downloadAnchor = (pdfPath, label) =>
+  `<a\\b(?=[^>]*\\bhref=["']${escapeRegExp(pdfPath)}["'])` +
+  `(?=[^>]*\\bdownload(?:\\s*=\\s*(?:["'][^"']*["']|[^\\s>]+))?(?=\\s|>))[^>]*>` +
+  `\\s*${escapeRegExp(label)}\\s*(?:<span\\b[^>]*>[\\s\\S]*?<\\/span>\\s*)?<\\/a>`;
+assert.match(
+  chemistryLayer,
+  new RegExp(
+    `<div\\b[^>]*>\\s*${moduleAnchor}\\s*` +
+      `${downloadAnchor(studentWorkbookPath, "Download Student Workbook")}\\s*` +
+      `${downloadAnchor(teacherSchemePath, "Download Teacher Answer Scheme")}\\s*<\\/div>`,
+    "i"
+  ),
+  "SPM Chemistry downloads must be labeled sibling anchors with exact PDF paths and download attributes"
+);
 assert.match(portal, /8 interactive modules/, "Year 4 Science count was not updated");
 
 console.log("Inbox course module verification passed.");
