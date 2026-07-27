@@ -438,7 +438,7 @@ body.catastrophe{animation:catastropheShake .48s linear}
     <div class="result-row"><span>Correct answers</span><strong id="finalCorrect">0</strong></div>
     <div class="result-row"><span>Wrong answers</span><strong id="finalWrong">0</strong></div>
     <div class="result-row"><span>Best streak</span><strong id="bestStreak">0</strong></div>
-    <div class="actions"><button class="primary" onclick="location.reload()">Reset for next class</button></div>
+    <div class="actions"><button class="primary" onclick="resetForNextClass()">Reset for next class</button></div>
   </div>
 </section>
 </main>
@@ -679,7 +679,7 @@ function showScreen(id){
  const safeId=document.getElementById(id)?id:"home";
  document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
  document.getElementById(safeId).classList.add("active");
- currentPhase=PERSISTED_PHASES.has(safeId)?safeId:"home";
+ if(PERSISTED_PHASES.has(safeId))currentPhase=safeId;
  if(safeId==="exit"){stopTimer();updateExit()}
 }
 function transitionTo(id){
@@ -711,10 +711,48 @@ function resolveRestorePhase(phase,hasValidQuestions,remainingSeconds){
  if(phase==="quiz"&&hasValidQuestions&&remainingSeconds>0)return"quiz";
  return"home";
 }
+function validateSavedSeconds(value){
+ return typeof value==="number"&&Number.isFinite(value)&&value>=0?value:null;
+}
+function restoreSessionState(saved,hasValidQuestions){
+ const restoredSeconds=validateSavedSeconds(saved?.seconds);
+ return{
+  phase:resolveRestorePhase(saved?.phase,hasValidQuestions,restoredSeconds),
+  seconds:restoredSeconds
+ };
+}
 function startClass(){
  initAudio();
  startTimer();
  launchMission("speed");
+}
+async function resetForNextClass(){
+ stopTimer();
+ clearAutoAdvance();
+ currentMissionId=null;
+ currentRouteChoice=null;
+ activeQuestions=[];
+ index=0;
+ xp=0;
+ focus=0;
+ streak=0;
+ wrongStreak=0;
+ bestStreak=0;
+ correctCount=0;
+ wrongCount=0;
+ seconds=3600;
+ Object.keys(state).forEach(key=>delete state[key]);
+ showScreen("home");
+ refreshStats();
+ updateTimer();
+ const cleanSnapshot=progressSnapshot();
+ if(window.ProgressTracker?.autoSave){
+  ProgressTracker.autoSave(cleanSnapshot,0);
+ }
+ if(window.ProgressTracker?.save){
+  try{await ProgressTracker.save(cleanSnapshot)}catch(e){}
+ }
+ location.reload();
 }
 function updateTimer(){
  const m=String(Math.floor(seconds/60)).padStart(2,"0"),s=String(seconds%60).padStart(2,"0");
@@ -1062,14 +1100,15 @@ window.addEventListener("load",async function(){
    if(typeof saved.bestStreak==="number"&&Number.isFinite(saved.bestStreak))bestStreak=saved.bestStreak;
    if(typeof saved.correctCount==="number"&&Number.isFinite(saved.correctCount))correctCount=saved.correctCount;
    if(typeof saved.wrongCount==="number"&&Number.isFinite(saved.wrongCount))wrongCount=saved.wrongCount;
-   if(typeof saved.seconds==="number"&&Number.isFinite(saved.seconds))seconds=saved.seconds;
    Object.assign(state,saved.responses||{});
    const questionIds=Array.isArray(saved.questionIds)?saved.questionIds:[];
    const restoredQuestions=questionIds.map(id=>Q.find(item=>item.id===id)).filter(Boolean);
    const hasValidQuestions=questionIds.length>0
     &&questionIds.every(id=>typeof id==="string")
     &&restoredQuestions.length===questionIds.length;
-   const restorePhase=resolveRestorePhase(saved.phase,hasValidQuestions,seconds);
+   const restoredSession=restoreSessionState(saved,hasValidQuestions);
+   if(restoredSession.seconds!==null)seconds=restoredSession.seconds;
+   const restorePhase=restoredSession.phase;
    stopTimer();
    if(restorePhase==="choice"){
     activeQuestions=[];
