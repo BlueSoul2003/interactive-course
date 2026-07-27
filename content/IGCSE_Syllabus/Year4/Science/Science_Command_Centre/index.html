@@ -677,11 +677,14 @@ function showScreen(id){
  document.getElementById(id).classList.add("active");
  if(id==="exit")updateExit();
 }
-function startClass(){
- initAudio();
- if(!timerHandle){
+function startTimer(){
+ if(!timerHandle&&seconds>0){
   timerHandle=setInterval(()=>{if(seconds<=0){clearInterval(timerHandle);saveProgress();showScreen("exit");return}seconds--;updateTimer();if(seconds%30===0)saveProgress()},1000);
  }
+}
+function startClass(){
+ initAudio();
+ startTimer();
  launchMission("speed");
 }
 function updateTimer(){
@@ -1043,6 +1046,7 @@ window.addEventListener("load",async function(){
      Number.isInteger(saved.questionIndex)?saved.questionIndex:0));
     showScreen("quiz");
     renderQuestion();
+    startTimer();
    }else{
     activeQuestions=[];
     index=0;
