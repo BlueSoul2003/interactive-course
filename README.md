@@ -12,6 +12,15 @@ A collection of interactive courses and modules designed to accelerate learning 
 * **Layered Architecture:** Clean, distraction-free UI utilizing a 3-layer folder structure (Syllabus > Subject > Module).
 * **Zero-Dependency Core:** Built purely with HTML, Vanilla JavaScript, and Tailwind CSS (via CDN) for maximum speed and easy hosting via GitHub Pages.
 
+## New modules — 2026-07-27
+
+- [Chapter 5: Consumer and Industrial Chemistry](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html) — ID `spm-chem-ch5-consumer-industrial`, route `content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html`.
+- [Science Command Centre 4.0](content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html) — ID `igcse-y4-sci-command-centre`, route `content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html`.
+- Chemistry includes public downloads for the [student workbook](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf) and [teacher answer scheme](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/teacher_answer_scheme.pdf).
+- Both modules support Back navigation and saved progress.
+
+> **Registry warning:** `db/archive/modules_registry.sql` is archived reference material. Do not run it wholesale: it truncates and reseeds the modules registry and deletes activation PINs.
+
 ---
 
 ## 🛠️ Portal Expansion Guide (For Developers/Instructors)

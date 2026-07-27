@@ -62,6 +62,9 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── SPM Mathematics (Form 2) ──────────────────────────────────────
 ('spm-math-kssm-revision1',   'KSSM Form 2 Math: Intensive Revision 1', 'spm', 'math', 'spm_form2', 'Form2'),
 
+-- ── SPM Chemistry (Form 5) ────────────────────────────────────────
+('spm-chem-ch5-consumer-industrial', 'Chapter 5: Consumer and Industrial Chemistry', 'spm', 'chemistry', 'spm_form5', 'Form5'),
+
 -- ── UEC English (Senior) ──────────────────────────────────────────
 ('uec-en-reading',            'Reading Comprehension',           'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-grammar',            'Grammar & Usage',                 'uec', 'english', 'uec_senior', 'Senior'),
@@ -81,6 +84,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y4-sci-topic5',       'Topic 5: Electricity and Circuits',          'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic6',       'Topic 6: Planet Earth',                      'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic7',       'Topic 7: Earth and Space',                   'igcse', 'science', 'igcse_y4_science', 'Year4'),
+('igcse-y4-sci-command-centre', 'Science Command Centre 4.0', 'igcse', 'science', 'igcse_y4_science', 'Year4'),
 
 -- ── IGCSE Science Year 8 ──────────────────────────────────────────
 ('igcse-y8-sci-ch1',          'Chapter 1: Respiration & Breathing',         'igcse', 'science', 'igcse_y8_science', 'Year8'),
@@ -244,7 +248,7 @@ WITH CHECK (
 
 -- ──────────────────────────────────────────────────────────────────
 -- FINAL CHECK — run these after applying:
--- SELECT COUNT(*) FROM public.modules;          → 40
+-- SELECT COUNT(*) FROM public.modules;          → 42
 -- SELECT id FROM public.modules ORDER BY id;    → full list
 -- SELECT COUNT(*) FROM public.activation_pins;  → 0 (all wiped)
 -- ──────────────────────────────────────────────────────────────────

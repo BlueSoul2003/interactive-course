@@ -1078,14 +1078,15 @@
                             <div class="start-link">Explore Module <span>&rarr;</span></div>
                         </div>
                     </a>
-                    <a href="#spm_chemistry" class="card sub-chemistry">
+                    <div class="card sub-chemistry" style="cursor: pointer;"
+                        onclick="showLessons('spm', 'spm-chemistry')">
                         <div class="card-tag">SPM STEM</div>
                         <h3>Chemistry</h3>
-                        <p>Explore atomic structures, chemical bonding, and reactions with interactive labs.</p>
+                        <p>Explore Form 5 Chemistry through bilingual interactive lessons and downloadable workbooks.</p>
                         <div class="card-footer">
-                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
                         </div>
-                    </a>
+                    </div>
                     <a href="#spm_physics" class="card sub-physics">
                         <div class="card-tag">SPM STEM</div>
                         <h3>Physics</h3>
@@ -1270,6 +1271,35 @@
                             <div class="start-link">Start Revision <span>&rarr;</span></div>
                         </div>
                     </a>
+                </div>
+            </div>
+
+            <!-- LAYER 3: SPM Chemistry Modules -->
+            <div id="spm-chemistry" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('spm')">&larr; Back to SPM Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon"
+                        style="color: var(--sub-chemistry); border-color: var(--sub-chemistry);">⚗️</div>
+                    SPM Chemistry Modules
+                </h2>
+                <div class="grid">
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html"
+                            class="card sub-chemistry" data-module-id="spm-chem-ch5-consumer-industrial"
+                            data-bundle="spm_form5">
+                            <div class="card-tag">Form 5 · Chapter 5</div>
+                            <h3>Chapter 5: Consumer and Industrial Chemistry</h3>
+                            <p>Learn through a bilingual interactive slideshow and workbook practice, supported by a
+                                teacher answer scheme.</p>
+                            <div class="card-footer">
+                                <div class="start-link">Start Lesson <span>&rarr;</span></div>
+                            </div>
+                        </a>
+                        <a href="content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf"
+                            class="start-link" download>Download Student Workbook <span>&darr;</span></a>
+                        <a href="content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/teacher_answer_scheme.pdf"
+                            class="start-link" download>Download Teacher Answer Scheme <span>&darr;</span></a>
+                    </div>
                 </div>
             </div>
 
@@ -1586,7 +1616,7 @@
                         onclick="showLessons('igcse', 'igcse-science-y4')">
                         <div class="card-tag">IGCSE Science · Year 4</div>
                         <h3>Year 4 Science</h3>
-                        <p>7 interactive modules covering Life Processes, Living Things, States of Matter, Energy &amp; Light, Electricity, Planet Earth, and Earth &amp; Space.</p>
+                        <p>8 interactive modules covering Life Processes, Living Things, States of Matter, Energy &amp; Light, Electricity, Planet Earth, Earth &amp; Space, and comprehensive practice.</p>
                         <div class="card-footer">
                             <div class="start-link">View Modules <span>&rarr;</span></div>
                         </div>
@@ -1676,6 +1706,16 @@
                         <p>Explore the Solar System, day &amp; night, orbits, comets and galaxies through slides and 50 interactive questions.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Module <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                    <a href="content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html"
+                        class="card sub-science" data-module-id="igcse-y4-sci-command-centre"
+                        data-bundle="igcse_y4_science">
+                        <div class="card-tag">Year 4 · Comprehensive Practice</div>
+                        <h3>Science Command Centre 4.0</h3>
+                        <p>Train scientific vocabulary, explanations, misconceptions, and reasoning through a 100-question mission system.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Mission <span>&rarr;</span></div>
                         </div>
                     </a>
                 </div>
@@ -2333,6 +2373,8 @@
         // corresponding subfolder under resources/pdf/. See DEVELOPER_GUIDE.md.
         const pdfResources = [
             // ── SPM ──────────────────────────────────────────────────────────────
+            { syllabus: "SPM", subject: "Chemistry (Form 5)", label: "Chapter 5 Consumer and Industrial Chemistry — Student Workbook", file: "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf" },
+            { syllabus: "SPM", subject: "Chemistry (Form 5)", label: "Chapter 5 Consumer and Industrial Chemistry — Teacher Answer Scheme", file: "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/teacher_answer_scheme.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Peribahasa Notes", file: "resources/pdf/SPM/BM/Peribahasa_Notes.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Kata Terbitan Notes", file: "resources/pdf/SPM/BM/Kata_Terbitan_Notes.pdf" },
             { syllabus: "SPM", subject: "Bahasa Melayu", label: "Nota KOMSAS - Silir Daksina", file: "resources/pdf/SPM/BM/SPM_Komsas_F5_Silir Daksina.pdf" },
