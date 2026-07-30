@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 3 English Unit 8</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #0f766e;
+      --surface: #f0fdfa;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 3 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Rainbow Classroom</span>
+        <h1>Unit 8</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute rainbow classroom English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 59, 60, 61, 62, 63, 64, 65, 66</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-059-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-059-heading">Source page 59</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p059-01"
+               data-question-type="short_answer"
+               data-source-page="59">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 59</span>
+        <span>Short answer</span>
+        <span>unit-8-p059-01</span>
+      </div>
+
+        <h3 id="unit-8-p059-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p059-01-prompt">wo
+Uni; o)
+bf Unit; 8 d
+ARAL Pod
+(A Describe the names of the places according to the given grids and
+coordinates. An example has been done for you.
+AAV, SIV CE aH om TREE
+“Gass mihED Cae
+® Ca Sey Le) w= Zxvirivesd Ei
+FE = SonmnuRET man
+=p gy oR
+BL RE |, res pay
+o| LiF T= = forts
+TEE es aise Wk
+PE A a Qo EEtR IR
+0 £e BY an
+ve SP Sey, | Syme
+(A) (B] (C]
+This is a library.
+[1 JE A a ML A
+0 Mm. ceeewas 0 CE
+© ———— @: ccivoiint Lowowi END
+OF uw oper). CBE
+eo — wv Wl wl
+0. £9: onmomoialy Lo... (GHD
+dee Ah RL ER Sd CI Co
+Or Jo oe
+57 © EPH Publishing (M) Sdn. Bhd.
+scanned with
+i cs] CamScanner”</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p059-01-answer">Your answer</label>
+      <textarea id="unit-8-p059-01-answer" class="answer-box" data-answer-input="unit-8-p059-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-060-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-060-heading">Source page 60</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p060-01"
+               data-question-type="read_and_answer"
+               data-source-page="60">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 60</span>
+        <span>Read and answer</span>
+        <span>unit-8-p060-01</span>
+      </div>
+
+        <h3 id="unit-8-p060-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p060-01-prompt">(B Read the postcard and answer the questions that follow.
+(meen Lb sede
+Hi Rosli, RM
+How was your weekend? As for me, I had l =a) I
+a great time with my family. On Saturday |
+| morning, we were at the shopping centre. It was I
+1 very noisy and crowded. In the afternoon, we
+i were at the zoo and saw many fierce animals. 1
+| It wos scary. In the evening, we were atthe | Roshi, !
+\ toy shop and were excited to play with all the I No 23, Jalan Indah,
+interesting toys. On Sunday morning, we were © Kampung Pasir, I
+at the amusement park. We were nervous fo | Shah Alam, 50100, [
+ride the roller-coaster but we sure had fun! | Selangor.
+In the afternoon, we went to the circus. The |
+clowns made silly faces and were really funny. 1 [
+In the evening, we were at the cinema. The film | |
+was boring but the popcorn was delicious! My I I
+weekend was so fun that I wish it had lasted I
+longer! | l
+Regards, | !
+Steven I |
+| Complete the brace map with the names of places visited by Steven
+«e during the following times of the day.
+In the moming : @
+Saturday In the afternoon : @)
+In the evening : (c) ERY PCR.
+Weekend
+In the morning : @)
+Sunday In the afternoon : @
+In the evening : (+) =
+© EPH Publishing (M) Sdn. Bhd. 58
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <div class="read-answer-board" data-read-and-answer-board="true">
+        <label class="answer-label" for="unit-8-p060-01-evidence">Text clue</label>
+        <input id="unit-8-p060-01-evidence" class="answer-input" data-answer-input="unit-8-p060-01-evidence">
+
+      <label class="answer-label" for="unit-8-p060-01-answer">Answer after reading</label>
+      <textarea id="unit-8-p060-01-answer" class="answer-box" data-answer-input="unit-8-p060-01" rows="5"></textarea>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-061-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-061-heading">Source page 61</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p061-01"
+               data-question-type="sequencing"
+               data-source-page="61">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 61</span>
+        <span>Sequencing</span>
+        <span>unit-8-p061-01</span>
+      </div>
+
+        <h3 id="unit-8-p061-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p061-01-prompt">2 Rearrange the pictures to show the correct order of places visited by
+Steven and his family on the following days.
+0 Saturday:
+BNC os
+[8 HT Carnal sans, eRe] pie
+[Tov s ear Tar FT EEE
+op Eee Ct
+snd 0 PEE ye] I
+3-22 [mR = | a =
+Wi Ele BW Oy iri
+MeREa™ 8 Yee Ge EA TI
+ihn] Rye pr HC
+hey 2 @-—: 80) = @
+[bl] On Sunday: |
+PS TWAT o Wi I
+az Es Wize | DED C974 |
+Is [5 (GR A) Lal El Il
+Ld NRG Fe
+a Lc 3 Lor i | Aorgapasn
+OPEC) O0E00
+3 Complete the bridge map with the adjectives used by Steven to describe
+ED the following places.
+Adjectives (a) Nb) AO A
+Relating Factor 200 6 cinema % amusement ©
+park
+[d) ~O ~0
+as . as .
+toy shop circus shopping
+centre
+4 List three intensifiers that you can find from the postcard.
+oi 0-9 J
+59 © EPH Publishing (M) Sdn. Bhd.
+scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <div class="sequence-board" data-sequence-board="true">
+
+            <label class="sequence-row">
+              <span>Step 1</span>
+              <textarea class="answer-box compact" data-answer-input="unit-8-p061-01-step-1" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 2</span>
+              <textarea class="answer-box compact" data-answer-input="unit-8-p061-01-step-2" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 3</span>
+              <textarea class="answer-box compact" data-answer-input="unit-8-p061-01-step-3" rows="2"></textarea>
+            </label>
+
+            <label class="sequence-row">
+              <span>Step 4</span>
+              <textarea class="answer-box compact" data-answer-input="unit-8-p061-01-step-4" rows="2"></textarea>
+            </label>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-062-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-062-heading">Source page 62</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p062-01"
+               data-question-type="short_answer"
+               data-source-page="62">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 62</span>
+        <span>Short answer</span>
+        <span>unit-8-p062-01</span>
+      </div>
+
+        <h3 id="unit-8-p062-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p062-01-prompt">(© Construct two sentences in the simple past for each picture using the
+information from the tables given below.
+First Sentence | Second Sentence
+He i fat the wet market. | The food : : interesting.
+Thou: wag, “TING restaurant | Te B00K® uns, Woe i500
+She : We&#x27;® atthe library. The film i were: delicious.
+We : : at the cinema. The fish stalls i smelly.
+1 ;
+3 SENN... . i NN.
+Ce
+BRENT Bl -_————
+2
+= A
+NIC) -“- fl
+FEA
+re Vi -_
+ED, Sad
+EY a
+2 Ti
+[ZEEL
+Tl _—
+eb Lc YR]
+al an let
+[52:97 if]
+4 =N ZT
+os bond A CTS SIE SF SS N,
+] © ka -_—
+Eher Sis
+© EPH Publishing (M) Sdn. Bhd. 60
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p062-01-answer">Your answer</label>
+      <textarea id="unit-8-p062-01-answer" class="answer-box" data-answer-input="unit-8-p062-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-063-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-063-heading">Source page 63</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p063-01"
+               data-question-type="short_answer"
+               data-source-page="63">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 63</span>
+        <span>Short answer</span>
+        <span>unit-8-p063-01</span>
+      </div>
+
+        <h3 id="unit-8-p063-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p063-01-prompt">|&lt;
+[5] | Assign the numbers to the correct pictures to show the comparison
+between life in the past and in the present.
+© Top faucet :@ Vacuum cleaner :@ Asphalt road : @ Pen
+© cinema: @ Well water :@ Oil lamp :@ carriage
+© Dirtroad : @ Firewood stove : @) Broomstick : (® Electric lights
+® Theatre :(@ Car © @® Quill :@ Gos stove
+EE CED
+= &gt; [&lt;S ae? FAIA
+_Sqr “of L/D
+eT _ 1
+saat all 17 on EE
+2250) Qi r=20 O
+RY
+E=—aiata 4 = 0p
+Ea __ _ | ©)
+o _Gllidiie P:e
+fon LL ol E——D
+BE li IE iy
+CERRY O O
+Tl PERITImn Fy Wa A
+INL LA TE 7 1
+INSEE finn | CINEMA « d
+N EA I SR (1/7 HA
+lk esa 74ll lol [oe | V/A
+Wy 1 a Swng &amp;
+61 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p063-01-answer">Your answer</label>
+      <textarea id="unit-8-p063-01-answer" class="answer-box" data-answer-input="unit-8-p063-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-064-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-064-heading">Source page 64</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p064-01"
+               data-question-type="fill_blank"
+               data-source-page="64">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 64</span>
+        <span>Fill in the blank</span>
+        <span>unit-8-p064-01</span>
+      </div>
+
+        <h3 id="unit-8-p064-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p064-01-prompt">h |
+(E) Complete the following sentences in the simple past by circling the correct
+forms of auxiliary verbs.
+| There a funny clown 4 There many fierce
+at the circus. animals at the zoo.
+A were C weren&#x27;t A wasn&#x27;t C were
+B was B was
+2 There ____ delicious 5 There any new
+pizzas served in the restaurant. artefacts in the museum.
+A were C wasn&#x27;t A was C weren&#x27;t
+B was B wasn&#x27;t
+3 There a single digital 6 There anycarsinthe
+book in the library back then. early 1800s.
+A wasn’t C was A were C was
+B were B weren&#x27;t
+(BE) Rewrite the following sentences by including the correct types of
+intensifiers before the adjectives in bold.
+very a) So i really =)
+Nr —— Crea = fe —
+| The shopping centre was crowded.
+&quot;2 The film was scary that I was shivering in fear.
+3 The juicy hamburger was tasty.
+4 The jugglers at the circus were talented.
+5 The market was noisy that I couldn’t hear Sandra calling me.
+© EPH Publishing (M) Sdn. Bhd. 62 |
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p064-01-answer">Your answer</label>
+      <input id="unit-8-p064-01-answer" class="answer-input" data-answer-input="unit-8-p064-01" aria-describedby="unit-8-p064-01-hint">
+      <p id="unit-8-p064-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-065-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-065-heading">Source page 65</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p065-01"
+               data-question-type="writing_prompt"
+               data-source-page="65">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 65</span>
+        <span>Writing</span>
+        <span>unit-8-p065-01</span>
+      </div>
+
+        <h3 id="unit-8-p065-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p065-01-prompt">Lr
+(} | Join the incomplete phrases based on the given series of pictures to
+describe the places visited by Linda. Then, rewrite the correct sequence of
+sentences in a paragraph.
+NJ PHAN PRN (0%
+INS AN
+. Sill; 72
+SE oY) esmumer
+&amp; \o ~ i
+Aids &amp; ig © Bes A
+Ui $s
+= Px IHL
+== aren
+Yesterday night, Linda
+bo at iy 9 : restaurant. It was fun.
+Yesterday morning, E—— The food was
+Linda was at the : delicious.
+Yesterday afternoon, shopping twas B
+Linda was at the ] mall. educational.
+Yesterday evening, amusement It was
+Linda was at the park. crowded.
+63 © EPH Publishing (M) Sdn. Bhd
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p065-01-answer">Your answer</label>
+      <textarea id="unit-8-p065-01-answer" class="answer-box" data-answer-input="unit-8-p065-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-066-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-066-heading">Source page 66</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p066-01"
+               data-question-type="matching"
+               data-source-page="66">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 8</span>
+        <span>Page 66</span>
+        <span>Matching</span>
+        <span>unit-8-p066-01</span>
+      </div>
+
+        <h3 id="unit-8-p066-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p066-01-prompt">(H) Match the correct sentence fragments together to describe the adjectives
+shown In the pictures and thelr respective opposites.
+First Sentence Second Sentence
+The market noisy. &quot; : : serious.
+Theclowns : was : boring. * wasn&#x27;t interesting.
+Thechips i were : funny. © werent ! sweet.
+EERE EERE EES EE ARIE They : [oF eecsdocenss
+The film : salty. § : quiet.
+|
+SNP ENED
+DIVES 3
+RE 3
+AR:
+2
+SQ
+5 A OR eC oe
+ied
+baal 7\)
+(7) RES i PT i
+3 5 .
+Oe ely
+Ce |
+&amp;@
+&amp;2
+4
+NN D7 7
+ple ————————————
+© EPH Publishing (M) Sdn. Bhd. 64
+{Scanned with |
+| cs] CamScanner”</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-8-p066-01-left" aria-label="Matching left item for unit-8-p066-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-8-p066-01-right" aria-label="Matching right item for unit-8-p066-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary3-english-workbook", "level": "Primary 3", "unitId": "unit-8", "unitNumber": 8, "title": "Unit 8", "questionIds": ["unit-8-p059-01", "unit-8-p060-01", "unit-8-p061-01", "unit-8-p062-01", "unit-8-p063-01", "unit-8-p064-01", "unit-8-p065-01", "unit-8-p066-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p3-en-unit8"
+          data-module-name="Primary 3 English Unit 8"
+          data-module-url="content/KSSR_Syllabus/Primary3/English/Unit8/index.html"></script>
+</body>
+</html>

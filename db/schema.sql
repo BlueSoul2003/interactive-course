@@ -429,6 +429,9 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── SPM Mathematics (Form 2) ──────────────────────────────────────
 ('spm-math-kssm-revision1',    'KSSM Form 2 Math: Intensive Revision 1',      'spm', 'math',    'spm_form2', 'Form2'),
 
+-- ── SPM Science (Form 3) ──────────────────────────────────────────
+('spm-sci-f3-bab5-termokimia', 'Bab 5: Termokimia (Thermochemistry)',         'spm', 'science', 'spm_form3', 'Form3'),
+
 -- ── UEC English (Senior) ──────────────────────────────────────────
 ('uec-en-reading',             'Reading Comprehension',                       'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-grammar',             'Grammar & Usage',                             'uec', 'english', 'uec_senior', 'Senior'),
@@ -501,7 +504,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 
 -- ──────────────────────────────────────────────────────────────────
 -- VERIFICATION QUERIES (run manually after applying):
---   SELECT COUNT(*) FROM public.modules;         -- should be 50
+--   SELECT COUNT(*) FROM public.modules;         -- should be 51
 --   SELECT id FROM public.modules ORDER BY id;   -- full alphabetical list
 --   SELECT COUNT(*) FROM public.activation_pins; -- 0 if you wiped old PINs
 -- ──────────────────────────────────────────────────────────────────

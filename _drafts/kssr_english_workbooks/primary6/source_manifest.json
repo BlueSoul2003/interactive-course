@@ -1,0 +1,13 @@
+{
+  "bookId": "kssr-primary6-english-workbook",
+  "level": "Primary 6",
+  "subject": "English",
+  "sourcePdf": "hardcopy/KSSR_Syllabus/Primary6/English/source_pdfs/english_p6_workbook.pdf",
+  "originalPath": "C:\\Users\\hong0\\Desktop\\英文小六.pdf",
+  "expectedPages": 98,
+  "textExtractionProbe": {
+    "pagesChecked": [1, 2, 3, 4, 5],
+    "charactersExtracted": 0,
+    "mode": "image_only_pdf"
+  }
+}

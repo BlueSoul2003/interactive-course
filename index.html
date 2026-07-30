@@ -1053,15 +1053,15 @@
                             <div class="start-link">View Modules <span>&rarr;</span></div>
                         </div>
                     </div>
-                    <a href="#spm_science" class="card sub-science">
+                    <div class="card sub-science" style="cursor: pointer;" onclick="showLessons('spm', 'spm-science')">
                         <div class="card-tag">SPM Core</div>
                         <h3>Science</h3>
                         <p>Understand the physical and biological world through interactive daily-life applications.
                         </p>
                         <div class="card-footer">
-                            <div class="start-link">Explore Module <span>&rarr;</span></div>
+                            <div class="start-link">View Modules <span>&rarr;</span></div>
                         </div>
-                    </a>
+                    </div>
                     <a href="#spm_chinese" class="card sub-chinese">
                         <div class="card-tag">SPM Elective</div>
                         <h3>Chinese (华文)</h3>
@@ -1269,6 +1269,28 @@
                             and Chapter 2 (Factorisation &amp; Algebraic Fractions). Includes KBAT challenges.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Revision <span>&rarr;</span></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- LAYER 3: SPM Science Modules -->
+            <div id="spm-science" class="view-layer">
+                <button class="back-btn" onclick="showSubjects('spm')">&larr; Back to SPM Subjects</button>
+                <h2 class="section-title" style="margin-top: 10px;">
+                    <div class="section-icon" style="color: var(--sub-science); border-color: var(--sub-science);">🔬</div>
+                    SPM Science Modules
+                </h2>
+                <div class="grid">
+                    <a href="content/SPM_Syllabus/Form3/Science/Bab5_Termokimia/index.html"
+                        class="card sub-science" data-module-id="spm-sci-f3-bab5-termokimia"
+                        data-bundle="spm_form3">
+                        <div class="card-tag">Tingkatan 3 · Bab 5</div>
+                        <h3>Bab 5: Termokimia (Thermochemistry)</h3>
+                        <p>KSSM Sains Tingkatan 3 textbook topic: Termokimia. Interactive teacher presentation with
+                            fill-in reveals, MCQ answer highlighting, and zoomable slide controls.</p>
+                        <div class="card-footer">
+                            <div class="start-link">Start Presentation <span>&rarr;</span></div>
                         </div>
                     </a>
                 </div>
@@ -2695,9 +2717,9 @@
     <!-- SDKs -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/navigation.js?v=1.0.0"></script>
-    <script src="js/auth-access.js?v=1.0.1"></script>
-    <script src="js/progress-tracker.js?v=1.0.1"></script>
-    <script src="js/feedback.js?v=1.0.1"></script>
+    <script src="js/auth-access.js?v=1.0.3"></script>
+    <script src="js/progress-tracker.js?v=1.0.2"></script>
+    <script src="js/feedback.js?v=1.0.2"></script>
     <script>
         // ── i18n Translations ────────────────────────
         const authTranslations = {
@@ -3025,7 +3047,7 @@
         }
 
         // Initialize user state on load
-        window.addEventListener('DOMContentLoaded', () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             // Listen for password recovery event
             if (window.supabaseClient) {
                 window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
@@ -3035,6 +3057,14 @@
                         toggleAuthMode('reset');
                     }
                 });
+            }
+
+            if (window.AuthAccess && window.AuthAccess.handlePasswordRecoveryRedirect) {
+                const recoveryResult = await window.AuthAccess.handlePasswordRecoveryRedirect();
+                if (recoveryResult.recovery) {
+                    openPasswordResetMode(recoveryResult.error ? recoveryResult.error.message : '');
+                    return;
+                }
             }
 
             if (window.Navigation) {

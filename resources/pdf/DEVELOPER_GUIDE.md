@@ -1,101 +1,85 @@
-# PDF Resources Developer Guide
+# PDF Notes Library Guide
 
-This document explains how to add downloadable PDF notes to the **Mastery Academy** landing page.
+The public notes page is `notes.html`. It is powered by `resources/pdf-catalog.json`, which is generated from every PDF in this repository.
 
----
+## Important GitHub Pages Detail
 
-## 📁 Folder Structure
+GitHub Pages is static hosting. The website cannot create folders or upload PDFs directly from the browser without a backend or authenticated GitHub API flow.
 
-All PDF files must be placed inside the `resources/pdf/` directory, organized by syllabus and subject:
+For this project, the safe workflow is:
 
-```
-interactive-course-main/
-  resources/
-    pdf/
-      SPM/
-        BM/               ← SPM Bahasa Melayu PDFs
-        Math/             ← SPM Mathematics PDFs
-        Science/          ← ...
-      UEC/
-        English/          ← UEC English PDFs
-        Math/
-      IGCSE/
-        English/
-        Math/
-      Singapore/
-        Math/
-        English/
-      DEVELOPER_GUIDE.md  ← This file
-```
+1. Add a folder and PDF files in GitHub or in the local repo.
+2. Run the catalogue generator.
+3. Verify the library.
+4. Publish to GitHub Pages.
 
----
+## Recommended Folder Pattern
 
-## 📄 File Naming Convention
+Use `hardcopy/` for printable notes and worksheets:
 
-Use descriptive names with underscores. No spaces. Example:
-
-| ✅ Good | ❌ Avoid |
-|---|---|
-| `Silir_Daksina_Sinopsis.pdf` | `sinopsis (1).pdf` |
-| `Kata_Terbitan_Notes.pdf`   | `KATA TERBITAN.pdf` |
-| `UEC_Reading_Guide.pdf`     | `notes.pdf` |
-
----
-
-## ➕ How to Add a New PDF Entry
-
-1. **Drop the PDF file** into the correct subfolder under `resources/pdf/`.
-   - Example: `resources/pdf/SPM/BM/Nota_Komsas_Silir_Daksina.pdf`
-
-2. **Open `index.html`** and find the JavaScript array named `pdfResources` (search for `pdfResources`).
-
-3. **Add a new entry object** to the array following this format:
-
-```json
-{
-  "syllabus": "SPM",
-  "subject": "Bahasa Melayu",
-  "label": "Nota KOMSAS - Silir Daksina",
-  "file": "resources/pdf/SPM/BM/Nota_Komsas_Silir_Daksina.pdf"
-}
+```text
+hardcopy/
+  SPM_Syllabus/
+    Form3/
+      Science/
+    Form4/
+      Sains_Komputer/
+    Form5/
+      Chemistry/
+  IGCSE_Syllabus/
+    Year8/
+      Science/
+  Singapore_Syllabus/
+    Year4/
+      Science/
 ```
 
-| Key | Description |
-|---|---|
-| `syllabus` | The top-level group header (e.g. `SPM`, `UEC`, `IGCSE`, `Singapore`) |
-| `subject` | The sub-group shown under the syllabus header |
-| `label` | The user-facing download button text |
-| `file` | Relative path from `index.html` to the PDF file |
+Use clear PDF names with underscores:
 
-4. **Save `index.html`**. The modal will automatically pick up the new entry — no further changes needed.
-
----
-
-## 💡 Example — Full Array Entry Set
-
-```javascript
-const pdfResources = [
-  // ── SPM ──────────────────────────────────────────────
-  { syllabus: "SPM", subject: "Bahasa Melayu", label: "Peribahasa Notes",              file: "resources/pdf/SPM/BM/Peribahasa_Notes.pdf" },
-  { syllabus: "SPM", subject: "Bahasa Melayu", label: "Kata Terbitan Notes",           file: "resources/pdf/SPM/BM/Kata_Terbitan_Notes.pdf" },
-  { syllabus: "SPM", subject: "Bahasa Melayu", label: "Nota KOMSAS - Silir Daksina",  file: "resources/pdf/SPM/BM/Nota_Komsas_Silir_Daksina.pdf" },
-
-  // ── UEC ──────────────────────────────────────────────
-  { syllabus: "UEC", subject: "English", label: "Reading Comprehension Guide",         file: "resources/pdf/UEC/English/Reading_Guide.pdf" },
-  { syllabus: "UEC", subject: "English", label: "Summary Writing Workshop",            file: "resources/pdf/UEC/English/Summary_Writing.pdf" },
-
-  // ── IGCSE ─────────────────────────────────────────────
-  // Add IGCSE entries here...
-
-  // ── Singapore ─────────────────────────────────────────
-  { syllabus: "Singapore", subject: "Mathematics Y4", label: "Whole Numbers Review",  file: "resources/pdf/Singapore/Math/Whole_Numbers_Review.pdf" },
-];
+```text
+Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf
+SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Teacher_Answers.pdf
+IGCSE_Y8_Science_Ch8_Chemical_Reactions_Tutor_Key.pdf
 ```
 
----
+## Generate And Verify
 
-## ⚠️ Notes
+From the repository root:
 
-- The `file` path is **relative to `index.html`**, not to this guide file.
-- If a PDF file doesn't exist yet, the link will still appear but download will fail. Ensure the file exists before publishing.
-- PDFs are served directly as static files — no server-side processing needed.
+```bash
+npm run build:pdf-catalog
+npm run verify:pdf-library
+```
+
+Equivalent direct commands:
+
+```bash
+python tools/generate_pdf_catalog.py
+node tools/verify_pdf_library.js
+```
+
+The generator scans all `.pdf` files under the repo, reads light PDF metadata/text when possible, infers category fields, and writes `resources/pdf-catalog.json`.
+
+## Category Rules
+
+The generator infers:
+
+- `syllabus` from folders such as `SPM_Syllabus`, `IGCSE_Syllabus`, `Singapore_Syllabus`, and `UEC_Syllabus`.
+- `level` from folders such as `Form3`, `Form5`, `Year4`, and `Year8`.
+- `subject` from folder names and PDF content, such as `Science`, `Chemistry`, `Mathematics`, `Bahasa Melayu`, or `Sains Komputer`.
+- `audience` from words such as `Student`, `Teacher`, `Tutor`, `Answers`, `Jawapan`, and `Murid`.
+- `type` from words such as `Worksheet`, `Slides`, `Answer Key`, `Revision`, `Notes`, and `Past Year Paper`.
+
+For files that need exact human naming, add an entry to the `CURATED` map in `tools/generate_pdf_catalog.py`.
+
+## The Imported Desktop PDFs
+
+The five Desktop PDFs were imported into these static GitHub Pages paths:
+
+```text
+hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf
+hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Student.pdf
+hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Teacher_Answers.pdf
+hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Student.pdf
+hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Tutor_Key.pdf
+```

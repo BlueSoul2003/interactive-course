@@ -1,0 +1,1125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 6 English Unit 8</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #0f766e;
+      --surface: #f0fdfa;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 6 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Final Review</span>
+        <h1>Unit 8</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute final review English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 64, 65, 66, 67, 68, 69, 70, 71, 72</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-064-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-064-heading">Source page 64</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p064-01"
+               data-question-type="fill_blank"
+               data-source-page="64">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 64</span>
+        <span>Fill in the blank</span>
+        <span>unit-8-p064-01</span>
+      </div>
+
+        <h3 id="unit-8-p064-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p064-01-prompt">Unity 8
+fo Unity 8) Gp
+PEI oC D
+a 2 of rl
+(A) Circle the correct answers to complete the story.
+The Rose and the Cactus
+Once, there lived a wild rose in an oasis in the middle of a desert. @_____
+petals were a lovely shade of Spanish red. Every day, she would look around the
+plants and declare, ‘I do believe that I&#x27;m the most beautiful plant in this place.’ One day,
+she looked over to her neighbour, a cactus and said, ‘I pity you. You&#x27;re green and full of
+[ &gt; Jaca isl The cactus said, ‘You&#x27;re one to talk. Look at your stems. They&#x27;re
+full of thorns as well! You may be pretty to look at, but I do believe that your beauty
+is only skin deep.”
+The wildrose @____ her nose at the cactus. Each day, the rose
+would look at her neighbour and think to herself, ‘What a O--- plant! It
+can&#x27;t do anything at all. I can’t believe that I&#x27;m his neighbour. How I wish I could
+stand beside the marigold. At least she’s prettier to look at.’
+The cactus heard the rose muttering but he never felt upset. Soon, the warm
+days came. Life became [ 5 J in the oasis as the water began to dry
+up. Rain would not fall from the sky, and there were sandstorms every day. The
+creatures of the oasis would hide beneath the shade of any tree they could find. The
+finches would fly to the cactus and poke holes into the cactus’ stem.
+The wild rose, wilting from heat and thirst, was Ooo seco vo; She asked the
+cactus, @— do the birds do that?’ The cactus explained, ‘They poke
+at me fo get water from my stem. This is how I help them, and this is how I survive
+during a drought.” “You look thirsty. I think a few drops of water [oJ be
+good for you. Would you like a few drops of water for your roots?’ the cactus asked.
+The wild rose felt ashamed at the kindness the cactus showed her. She turned
+her head away, unable to look at him. @____ | the unselfish cactus
+asked the finches to fill their beaks with water from his stem and let the wild rose
+quench her thirst. From that day onwards, the wild rose learnt her lesson and never
+o— on any other plant or creature anymore.
+© EPH Publishing (M) Sdn. Bhd. 68
+{Scammed vin
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p064-01-answer">Your answer</label>
+      <input id="unit-8-p064-01-answer" class="answer-input" data-answer-input="unit-8-p064-01" aria-describedby="unit-8-p064-01-hint">
+      <p id="unit-8-p064-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-065-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-065-heading">Source page 65</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p065-01"
+               data-question-type="multiple_choice"
+               data-source-page="65">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 65</span>
+        <span>Multiple choice</span>
+        <span>unit-8-p065-01</span>
+      </div>
+
+        <h3 id="unit-8-p065-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p065-01-prompt">| A His B Her C Its D Their
+2 A branches B leaves C thorns D flowers
+3 A turned up B turned in C turned down D turned away
+4 A careless B helpless C fearless D useless
+5 A hard B harder C more hard D hardest
+6 A puzzle B puzzles C puzzled D puzzling
+7 A How B Why C Where D When
+8 A must B can&#x27;t C have D might
+9 A Nevertheless B Moreover C Hence D So
+10 A looked up B lookedaway C looked into D looked down
+B 3 Answer the questions based on the story of ‘The Rose and the Cactus’.
+| List two flowers that can be found in the oasis.
+2 Fill in the bubble map with four adjectives that best describe the desert.
+[1-raux]
+BN The :
+= Desert =
+69 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+i cs] CamScanner”</pre>
+        <div class="response-area">
+
+      <fieldset class="control-group choices">
+        <legend>Choose one answer.</legend>
+
+            <label class="choice" for="unit-8-p065-01-choice-1">
+              <input id="unit-8-p065-01-choice-1" type="radio" name="unit-8-p065-01" value="A. His">
+              <span>A. His</span>
+            </label>
+
+            <label class="choice" for="unit-8-p065-01-choice-2">
+              <input id="unit-8-p065-01-choice-2" type="radio" name="unit-8-p065-01" value="B. Her">
+              <span>B. Her</span>
+            </label>
+
+            <label class="choice" for="unit-8-p065-01-choice-3">
+              <input id="unit-8-p065-01-choice-3" type="radio" name="unit-8-p065-01" value="C. Its">
+              <span>C. Its</span>
+            </label>
+
+            <label class="choice" for="unit-8-p065-01-choice-4">
+              <input id="unit-8-p065-01-choice-4" type="radio" name="unit-8-p065-01" value="D. Their 2">
+              <span>D. Their 2</span>
+            </label>
+
+      </fieldset>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-066-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-066-heading">Source page 66</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p066-01"
+               data-question-type="writing_prompt"
+               data-source-page="66">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 66</span>
+        <span>Writing</span>
+        <span>unit-8-p066-01</span>
+      </div>
+
+        <h3 id="unit-8-p066-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p066-01-prompt">3 What did the wild rose think of the cactus af first?
+| J E—————————
+4 What does the phrase beauty is only skin deep mean?
+5 Suggest another proverb that is similar to beauty is only skin deep.
+sh
+6 In the hot and dry weather, the rose plant began to droop and wither. Which
+a phrase in the story shows that?
+© Write a summary for the story in Section A. Use the questions to help you.
+% Who are the main characters?
+% What did they do?
+&amp; What happened?
+% How did it end?
+© EPH Publishing (M) Sdn. Bhd. 70
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p066-01-answer">Your answer</label>
+      <textarea id="unit-8-p066-01-answer" class="answer-box" data-answer-input="unit-8-p066-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-067-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-067-heading">Source page 67</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p067-01"
+               data-question-type="matching"
+               data-source-page="67">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 67</span>
+        <span>Matching</span>
+        <span>unit-8-p067-01</span>
+      </div>
+
+        <h3 id="unit-8-p067-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p067-01-prompt">( D ) Match the books to their respective genres and definitions.
+gr
+V2
+Ai HE @® Stories about magical
+f Vs and imaginary beings and
+“, GY 4 lands.
+2
+| @ Animagined story about
+Ga 0 the future which includes
+hae) technological advances.
+8 MEpile © Stories that contain
+Bee supernatural elements
+RE Whodunnit such as mythical
+_— creatures and creates a
+Foo Cn ug feeling of fear.
+4
+© stories about murder
+/ whereby the identity of the
+0 7; .
+EE murderer is not revealed
+TY) until the end.
+5
+S @ stories that often use
+OO x .
+QE animals as characters and
+Ea AG usually contain a moral to
+NR be learnt.
+6 = © A magozine-like book
+Big, Soi with a story in strip form
+Lok EB with sketches, usually
+fry a / cron featuring the adventures
+b=masa of a superhero or heroine.
+71 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-8-p067-01-left" aria-label="Matching left item for unit-8-p067-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-8-p067-01-right" aria-label="Matching right item for unit-8-p067-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-068-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-068-heading">Source page 68</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p068-01"
+               data-question-type="fill_blank"
+               data-source-page="68">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 68</span>
+        <span>Fill in the blank</span>
+        <span>unit-8-p068-01</span>
+      </div>
+
+        <h3 id="unit-8-p068-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p068-01-prompt">(E) Put a tick (+) on the correct answer to form meaningful first conditional
+| sentences or questions.
+|
+© fyou__ ready, we&#x27;ll waitfor : @ What — you do if you can&#x27;t
+you. : remember the story?
+CR RE = TR
+CT RN CR
+@ The tortoise will ifthe hare © @ Ifyou this book, I&#x27;ll
+— tosleep. : you a new one.
+(oncoming |) (some |)
+none |) (eon |
+(3) If you an emergency, call (9) Ifyou hard, you —
+the doctor immediately. : well in the competition.
+(4] If you wear a costume, you&#x27;ll (10) You&#x27;ll fall if you —
+____the play more interesting. : your vitamins.
+pe [J 0 Gwe
+©! youressayifl @ !liread a book if I sleep
+time to spare. : later.
+esse |) (em)
+EX 9 RA CR
+© Ifyou enoughsleep, youll i (@ If you don’t —____, how will you
+be tired tomorrow. : PEL
+Ca i RE XS
+Ca i CTR
+©EPH Publishing (M) Sdn. Bhd. 72
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p068-01-answer">Your answer</label>
+      <input id="unit-8-p068-01-answer" class="answer-input" data-answer-input="unit-8-p068-01" aria-describedby="unit-8-p068-01-hint">
+      <p id="unit-8-p068-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-069-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-069-heading">Source page 69</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p069-01"
+               data-question-type="short_answer"
+               data-source-page="69">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 69</span>
+        <span>Short answer</span>
+        <span>unit-8-p069-01</span>
+      </div>
+
+        <h3 id="unit-8-p069-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p069-01-prompt">&quot;Pug ‘ups (W) Buysiand HJ3 © €L :
+I T
+Jl
+&quot;paloq (83) 1 SN
+ee of)
+A iS
+—_— fi 6 SV
+PajpIpNyap 490 ||,NOA =
+y 5 o
+i.
+—— fiddoy faa aq im sjuaind s,oysiy
+ONITALLA0LS
+- PHOM Jaji0d fiibH au} ysIA Lem i
+5d (c}
+~~
+B / by! 1)
+EE —— [= TT o R=T-T TRY oT Tq |
+| 74
+(2
+~~
+-_— = )
+P——
+a=
+TEEN ae 1 a1 ever il fom io ipnisLuop nof ji J
+9 @ 0
+‘seinjold ueA|B ey) uo pesnq seduejues [puolpuod sil Buimoj|oy ey; ejejdwod al
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p069-01-answer">Your answer</label>
+      <textarea id="unit-8-p069-01-answer" class="answer-box" data-answer-input="unit-8-p069-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-070-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-070-heading">Source page 70</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p070-01"
+               data-question-type="writing_prompt"
+               data-source-page="70">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 70</span>
+        <span>Writing</span>
+        <span>unit-8-p070-01</span>
+      </div>
+
+        <h3 id="unit-8-p070-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p070-01-prompt">@ Write an email in about 30 to 50 words using the notes given. rm
+You have just read the latest book from your favourite author. Write an email to your
+best friend, Ron, to tell him about it. In your email,
+* summarise the story
+» tell him one lesson you have learnt from the story
+Subject | You Have to Read This Book!
+© EPH Publishing (M) Sdn. Bhd. 74
+{Scanned with |
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-8-p070-01-answer">Your answer</label>
+      <textarea id="unit-8-p070-01-answer" class="answer-box" data-answer-input="unit-8-p070-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-071-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-071-heading">Source page 71</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p071-01"
+               data-question-type="read_and_answer"
+               data-source-page="71">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 71</span>
+        <span>Read and answer</span>
+        <span>unit-8-p071-01</span>
+      </div>
+
+        <h3 id="unit-8-p071-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p071-01-prompt">pe
+{ H | Read the passage and choose the most suitable answer fo the questions below.
+{ The Tale of the Golden Apple Tree 1
+! Once upon a time, in a small village, there was a magical golden apple tree. Every i
+: year, the tree produced one golden apple that could grant a wish. Many villagers :
+H wanted the apple, but only the kindest person could pick it. i
+: One year, two friends, Fina and Keith, decided to try. Fina was selfish and i
+i wanted the apple so she could become rich. Keith, on the other hand, wanted the H
+: apple to help the village&#x27;s poor people. :
+i When they approached the tree, the golden apple appeared only to Keith. i
+¢ Sensing Keith&#x27;s kind heart, the tree granted his wish. The village prospered, and H
+i everyone lived happily ever after. i
+I What did the golden apple do?
+A It gave people money.
+B It granted people a wish.
+C It made people stronger. :
+2 Who wanted the golden apple to make themselves wealthy?
+A Keith B Fina C The villagers
+3 What was Keith&#x27;s wish for the golden apple?
+A To help the poor B To become rich C To have more apples
+4 Who was able to pick-the golden apple?
+A Fina B Keith C Both Fina and Keith
+5 Why did the apple appear to Keith?
+A He was caring. B He was stronger. C He was faster.
+6 What happened to the village after Keith&#x27;s wish?
+A It became poorer. B Nothing changed. C It flourished.
+iT What kind of story is this?
+A A fairy tale B A science story C A biography
+8 What&#x27;s the main message of the story?
+5 A Always take what you want. ;
+B Always be the fastest.
+C Always be kind and think of others.
+75 © EPH Publishing (M) Sdn. Bhd.
+{scanned with
+i = CamScanner’.</pre>
+        <div class="response-area">
+
+      <div class="read-answer-board" data-read-and-answer-board="true">
+        <label class="answer-label" for="unit-8-p071-01-evidence">Text clue</label>
+        <input id="unit-8-p071-01-evidence" class="answer-input" data-answer-input="unit-8-p071-01-evidence">
+
+      <label class="answer-label" for="unit-8-p071-01-answer">Answer after reading</label>
+      <textarea id="unit-8-p071-01-answer" class="answer-box" data-answer-input="unit-8-p071-01" rows="5"></textarea>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-8-page-072-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-8-page-072-heading">Source page 72</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-8-p072-01"
+               data-question-type="read_and_answer"
+               data-source-page="72">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 8</span>
+        <span>Page 72</span>
+        <span>Read and answer</span>
+        <span>unit-8-p072-01</span>
+      </div>
+
+        <h3 id="unit-8-p072-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-8-p072-01-prompt">1
+L 1) Read the narration and choose the most suitable ‘answer to the questions
+below.
+I couldn&#x27;t believe my luck when I found the golden apple hanging on the tree.
+Everyone in the village had wanted it for years. My best friend, Fina, looked at me
+with surprise as I reached out to pick it. I hoped my wish would help everyone.
+| Who&#x27;s the narrator?
+&amp;3% A Fina
+B The golden apple
+C The person picking the apple
+2 What point of view is this narration written in?
+&amp;5 A First person B Second person C Third person
+3 Which sentence shows the narrator&#x27;s feelings?
+5 A ‘Everyone in the village had wanted it for years.’
+B ‘I couldn&#x27;t believe my luck when I found the golden apple.’
+C ‘My best friend, Fina, looked at me with surprise.’
+4 How does this point of view help you understand the story better?
+A lt tells the story from the narrator&#x27;s own feelings and thoughts.
+B It tells the story from an outside view.
+C It tells the story like a news report.
+5 Which of these is a clue indicating the point of view of this narration?
+aa A The use of ‘they’ and ‘she’
+B The use of.T and ‘my’ )
+C The use of ‘you’ and ‘your’
+6 If the story was told from Fina’s point of view, which sentence might she say?
+&amp; A ‘Treached out fo pick the apple.’
+B ‘Everyone wanted the apple.’
+C ‘Iwatched as my friend picked the golden apple.’
+7 Which sentence is not written in first person?
+3 A ‘Thoped my wish would help everyone.’
+B ‘Everyone in the village had wanted it for years.’
+C ‘Icouldn’t believe my luck.’
+©EPH Publishing (M) Sdn. Bhd. 76
+{scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="read-answer-board" data-read-and-answer-board="true">
+        <label class="answer-label" for="unit-8-p072-01-evidence">Text clue</label>
+        <input id="unit-8-p072-01-evidence" class="answer-input" data-answer-input="unit-8-p072-01-evidence">
+
+      <label class="answer-label" for="unit-8-p072-01-answer">Answer after reading</label>
+      <textarea id="unit-8-p072-01-answer" class="answer-box" data-answer-input="unit-8-p072-01" rows="5"></textarea>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary6-english-workbook", "level": "Primary 6", "unitId": "unit-8", "unitNumber": 8, "title": "Unit 8", "questionIds": ["unit-8-p064-01", "unit-8-p065-01", "unit-8-p066-01", "unit-8-p067-01", "unit-8-p068-01", "unit-8-p069-01", "unit-8-p070-01", "unit-8-p071-01", "unit-8-p072-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p6-en-unit8"
+          data-module-name="Primary 6 English Unit 8"
+          data-module-url="content/KSSR_Syllabus/Primary6/English/Unit8/index.html"></script>
+</body>
+</html>

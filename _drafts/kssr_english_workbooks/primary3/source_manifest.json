@@ -1,0 +1,13 @@
+{
+  "bookId": "kssr-primary3-english-workbook",
+  "level": "Primary 3",
+  "subject": "English",
+  "sourcePdf": "hardcopy/KSSR_Syllabus/Primary3/English/source_pdfs/english_p3_workbook.pdf",
+  "originalPath": "C:\\Users\\hong0\\Desktop\\英文小三.pdf",
+  "expectedPages": 88,
+  "textExtractionProbe": {
+    "pagesChecked": [1, 2, 3, 4, 5],
+    "charactersExtracted": 0,
+    "mode": "image_only_pdf"
+  }
+}

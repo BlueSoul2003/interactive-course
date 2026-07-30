@@ -53,65 +53,39 @@ Your module exists, but students need a button to click it from the main menu.
 
 ### Step 4.5: Special Case - University Modules (3-Tier Architecture)
 Unlike the K-12 section, the **University Portal** operates on a deep 3-tier architecture to handle massive faculty expansion:
-1. **Tier 1 (Gateway):** `university.html` uses a draggable Pill UI. This connects to Tier 2.
-2. **Tier 2 (Faculty Hub):** e.g., `uni-hub-physics.html`. This is a dedicated dashboard for the faculty. **You must add your `.card` to this specific hub file, NOT the main `index.html`.**
+1. **Tier 1 (Gateway):** `content/University/index.html` connects learners to faculty hubs.
+2. **Tier 2 (Faculty Hub):** e.g., `content/University/physics-hub.html`. This is a dedicated dashboard for the faculty. **You must add your `.card` to this specific hub file, NOT the root `index.html`.**
 3. **Tier 3 (Module):** Your actual simulator/module.
 
 **How to add a University Module:**
-- If the Faculty Hub already exists (e.g., `uni-hub-physics.html`), just open it and add your `.card` there.
-- If it's a completely new faculty (e.g., Computer Science), you must first clone `uni-hub-physics.html` into `uni-hub-cs.html`. Then, go to `university.html` and add a new Pill linking to `uni-hub-cs.html`.
-- **CRITICAL Routing Rule:** When setting the "Home" button in a University module (Pillar 3), it must point back to the **Tier 2 Faculty Hub** (e.g., `../../../../uni-hub-physics.html`), NOT `university.html` or `index.html`.
+- If the Faculty Hub already exists (e.g., `content/University/physics-hub.html`), open it and add your `.card` there.
+- If it's a completely new faculty (e.g., Computer Science), create a matching hub such as `content/University/computer-science-hub.html`, then add the faculty entry to `content/University/index.html`.
+- **Routing Rule:** In the module, load `navigation.js?v=1.0.0` and keep a simple fallback link to the faculty hub, such as `../../physics-hub.html`. The shared helper will replace that fallback with the exact source route when the learner entered from a hub or landing-page layer.
 
 ---
 
 ## Pillar 3: Local Navigation (Exit)
 
-### Step 5: Add a Persistent Home Button
-Once a student is inside the module, they need a way to get back to the Grand Landing Page.
-1. Open your new module's `index.html` file.
-2. Add a Home Button link near the top of your `<body>`.
-3. You must calculate the relative path back to the parent hub. For K-12 modules, this is `index.html`. **For University modules, this is the Faculty Hub (e.g., `uni-hub-physics.html`).** For example, if your module is 4 folders deep, you need four `../`.
+### Step 5: Add Shared Navigation
+Use the shared navigation helper instead of hand-counting the final Home/Back destination for every module.
 
-> [!WARNING]
-> **⚠️ Memo: Always Style Your Home Button Consistently!**
-> Do not use raw emojis or basic inline styles for your Home button. You must ensure your module's Home button visually matches the rest of the modules in your syllabus block. 
-> 
-> **How to fix this:** Always check another existing module in the same syllabus level (e.g. `Singapore_Syllabus/Year4/...`) and **copy both its Home button HTML code and its CSS class (e.g. `.home-btn-fixed`)** directly into your new module's `<style>` block.
-> 
-> **Important Placement Check:** After adding the button, always verify that it does **not** overlap or block any critical page content (like "Next" buttons or interactive canvas elements). If it does, simply move it to another suitable area (e.g., changing `bottom: 24px; right: 24px;` in the CSS to `top: 24px; left: 24px;`).
-> 
-> Example standard implementation:
-> ```html
-> <style>
-> .home-btn-fixed { position: fixed; bottom: 24px; right: 24px; z-index: 99999; ... }
-> </style>
->
-> <a href="../../../../index.html" class="home-btn-fixed">🏠 Home</a>
-> ```
+Add this script near the bottom of the module, before `progress-tracker.js` when both scripts are present:
 
-> [!WARNING]
-> **⚠️ Memo: Always count folder depth carefully before setting the `../` path!**
->
-> A common mistake is miscounting the number of folders and using the wrong number of `../`. Here's how to count correctly:
->
-> **Method:** Count every folder between the root and your `index.html` file.
->
-> | Level | Folder |
-> |-------|--------|
-> | 1 | `content/` |
-> | 2 | `KSSR_Syllabus/` |
-> | 3 | `Primary3/` |
-> | 4 | `English/` |
-> | 5 | `Unit3/` ← your `index.html` lives here |
->
-> → 5 levels deep = **`../../../../../index.html`**
->
-> A module 4 levels deep would use `../../../../index.html`, a module 5 levels deep uses `../../../../../index.html`, and so on.
->
-> **Quick check:** Open the file path in your head, count each `/` segment after the root folder — that is your depth number.
+```html
+<script src="../../../../../js/navigation.js?v=1.0.0"></script>
+```
+
+The `../` prefix still depends on the module folder depth, but it is now used only to load the shared helper. The helper reads the `from` query parameter added by the landing page and rewrites existing Home/Back links to return to the exact syllabus layer or University hub the learner came from.
+
+For a new module, include one simple fallback link:
+
+```html
+<a href="../../../../../index.html" class="home-btn-fixed">Back</a>
+```
+
+When `navigation.js` loads, it updates that fallback link automatically. If a learner opens the module directly without a source route, the fallback still works. University modules can keep a faculty-hub fallback such as `../../physics-hub.html`; the helper will replace it when stronger source context is available.
 
 ---
-
 ## Pillar 4: State Management (Progress Tracking)
 
 ### Step 6: Add the Supabase & Progress SDKs
@@ -237,7 +211,7 @@ Every time you add a new module, verify you have hit all 5 pillars:
 
 - [ ] **Pillar 1:** File moved from `_drafts` to `content/...` and renamed to `index.html`.
 - [ ] **Pillar 2:** Card added to the Grand Landing Page (using grid wrapper if adding downloads).
-- [ ] **Pillar 3:** Home button added to the module with correct `../../../` relative path.
+- [ ] **Pillar 3:** `navigation.js?v=1.0.0` loaded and a simple Home/Back fallback link kept in the module.
 - [ ] **Pillar 4:** `progress-tracker.js` script tag added with unique `data-module-id`.
 - [ ] **Pillar 4:** `ProgressTracker.load()` implemented on page load.
 - [ ] **Pillar 4:** `ProgressTracker.save()` implemented on student action.
@@ -255,3 +229,4 @@ If the database is ever reset or you deploy to a new Supabase instance, please r
 
 Additionally, make sure to apply the updates in [db/migrations/fix_registration_and_progress.sql](./db/migrations/fix_registration_and_progress.sql) to add the RLS SELECT policy on `user_profiles` and set up the automatic profile creation trigger `handle_new_user()` which supports email-confirmation signup flows.
 </details>
+

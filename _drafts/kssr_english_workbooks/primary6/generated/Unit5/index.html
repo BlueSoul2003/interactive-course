@@ -1,0 +1,1101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 6 English Unit 5</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #be123c;
+      --surface: #fff1f2;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 6 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Travel Journal</span>
+        <h1>Unit 5</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute travel journal English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 37, 38, 39, 40, 41, 42, 43, 44, 45</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-037-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-037-heading">Source page 37</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p037-01"
+               data-question-type="fill_blank"
+               data-source-page="37">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 37</span>
+        <span>Fill in the blank</span>
+        <span>unit-5-p037-01</span>
+      </div>
+
+        <h3 id="unit-5-p037-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p037-01-prompt">-e
+[ a) | : 0)
+N pb i)
+A Fill in the blanks with the missing letters to spell the transport described in the
+following statements.
+(1) A small boat that you mova using paddles oroars. | R—_— __ _
+[2] A huge plane used to carry boxes but notpeople. | Cj
+© A vehicle that flies high in the sky and takes you to Pp
+other countries quickly. Co
+(a) A two-wheeled vehicle that requires you to pedal B
+with your feet to make it move. EE
+5) A boat that carries people and cars across a river a
+or sea. TT
+[6] A vehicle with big blades on top that can go straight H
+up into the air. iit cial
+© A vehicle that floats in the sky using heated airand | Ha. _
+moves slowly with the wind. D a a vo a,
+5) A small flying machine controlled by a remote,
+often used for taking photos.
+(9) A giant ship used to move containers full of goods c g
+across oceans. ee Tee
+10] A big vehicle that transports groups of people,
+often running on fixed routes and schedules.
+[11] A common vehicle with four wheels that families c
+use fo go places. ikl
+® A fancy boat people use for fun or holidays on the y
+water. hin eulb ibn
+® A vehicle that moves on tracks and can carry T
+people or goods across great distances. Tee Se
+® A special water vehicle that can travel deep under s
+the sea. SLEEIE EIR
+® A strong vehicle used by farmers to pull heavy T
+things on farms. reer
+4) © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+{@ CamScanner’</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p037-01-answer">Your answer</label>
+      <input id="unit-5-p037-01-answer" class="answer-input" data-answer-input="unit-5-p037-01" aria-describedby="unit-5-p037-01-hint">
+      <p id="unit-5-p037-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-038-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-038-heading">Source page 38</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p038-01"
+               data-question-type="fill_blank"
+               data-source-page="38">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 38</span>
+        <span>Fill in the blank</span>
+        <span>unit-5-p038-01</span>
+      </div>
+
+        <h3 id="unit-5-p038-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p038-01-prompt">(B) Fill In the blanks with ‘ride’, ‘drive’, ‘take’, ly’ or ‘go’ in their correct verb form.
+I MyfamilyandI____ to Australia for the holidays.
+2 Atwhatagecanyoustat in Malaysia?
+3 Melissa acable car up to the mountains last weekend.
+4 Itisn&#x27;twiseto______ in private vehicles with strangers.
+5 lefsjust____ on foot. Itll be quicker.
+@ Put a tick (v) for the sentences with the correct usage of the suffix “less” or ful’
+and a cross (X) for those with the incorrect usage. Then, rewrite the amended
+version in the space provided.
+(1] The captain kept a watchful eye on the icebergs around the ship. &amp;)
+2] It pays to be careless when crossing the road. 0)
+@ 1&#x27;s very stressless to drive in the city. )
+(4) Let&#x27;s have a restless sleep tonight before our long hike tomorrow morning. )
+@ Kieran&#x27;s caravan is so colourful. )
+(6] William found it hopeless to paddle his kayak against the strong river
+current. J
+© EPH Publishing (M) Sdn. Bhd. 42
+{scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p038-01-answer">Your answer</label>
+      <input id="unit-5-p038-01-answer" class="answer-input" data-answer-input="unit-5-p038-01" aria-describedby="unit-5-p038-01-hint">
+      <p id="unit-5-p038-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-039-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-039-heading">Source page 39</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p039-01"
+               data-question-type="word_bank"
+               data-source-page="39">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 39</span>
+        <span>Word bank</span>
+        <span>unit-5-p039-01</span>
+      </div>
+
+        <h3 id="unit-5-p039-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p039-01-prompt">(D&#x27; Rewrite the sentences using the comparative phrase &#x27;not as...as’ or ‘just as...as’
+and the adjectives provided.
+@ The sedan is small. The station wagon is bigger. &quot;big Ci
+Thesedonis 0000
+© Riding a hot-air balloon is fun. Riding a cable caris also fun.) © fun
+| Riding a hot-air balloonis ~~~ ~~~ 00000
+| @ (The bus hos 48 seats. The fram hos 48 sects DT many
+[ TheBRReE ee RTS
+[ [4] The waves are choppier today than it was yesterday. g J I&quot; choppy 3
+The Waves were eel fo fue sin on ws fil) BUT Ee Je fo (0s MGI TT, Shs. |
+{ (5) Taking the taxi to Main Street takes 6 minutes. Taking the MRT
+| to Main Street is also 6 minutes. I fost
+| Taking the taxi to Main Streetis — ~~~
+| @ The subway is extremely crowded today. The subway wasn&#x27;t ~~
+| crowded yesterday. 1 crowded :
+The SubwoyWwhe cas bos, Laue Ve SONG BuT008 SoMe TER eh Pam EN Wh Se, |
+(E Construct meaningful sentences to describe the pictures using the comparative
+phrase ‘as...as’ and the helping words provided. gi
+Ne 2 : CI AS
+5 VB &amp; AY
+\ : 20)
+- taking — cruise — amazing — plane — : 2 riding — bike — tiring — walking —
+[FERS ER Cal Es he be Nl Lali
+43 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-5-p039-01-words">Words you used</label>
+          <input id="unit-5-p039-01-words" class="answer-input" data-answer-input="unit-5-p039-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-5-p039-01-answer">Write your completed answer</label>
+      <textarea id="unit-5-p039-01-answer" class="answer-box" data-answer-input="unit-5-p039-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-040-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-040-heading">Source page 40</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p040-01"
+               data-question-type="short_answer"
+               data-source-page="40">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 40</span>
+        <span>Short answer</span>
+        <span>unit-5-p040-01</span>
+      </div>
+
+        <h3 id="unit-5-p040-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p040-01-prompt">EF Construct meaningful sentences using the given helping words and adverbs 1o
+1 EE a
+Let
+2 =
+ras —monsy—buy—ticket =
+a
+i pO BR ——
+_ =
+: NES) CERT
+eee eee ———
+a
+2
+lomo -_—
+6 [TT
+21 sd
+AF OI 7
+gee
+a Ea
+© EPH Publishing (M) San. Bhd. 45
+{Scanned with |
+{@ Camscanner</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p040-01-answer">Your answer</label>
+      <textarea id="unit-5-p040-01-answer" class="answer-box" data-answer-input="unit-5-p040-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-041-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-041-heading">Source page 41</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p041-01"
+               data-question-type="read_and_answer"
+               data-source-page="41">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 41</span>
+        <span>Read and answer</span>
+        <span>unit-5-p041-01</span>
+      </div>
+
+        <h3 id="unit-5-p041-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p041-01-prompt">(G) Read the dialogue. Then, answer the following questions.
+a or uccevgasanesoogososaonn,
+$ Shi Wei: Mala! What are you doing here? It&#x27;s 2.00 p.m. Z
+3 Mala : I&#x27;m doing some reading. §
+$ Shi Wei: Have you found a suitable topic for our English presentation this Friday?
+§ Mala : Yes, I was just looking it up on the internet. I&#x27;m going to talk about the
+§ Venetian gondola.
+{Shi Wei: What&#x27;s that? :
+8 Mala : Well, i&#x27;s a narrow and long rowing boat. The boat is steered by a §
+g gondolier. He uses a long oar to do so. The gondola glides along the :
+g canals. Did you know that Venice has over 170 canals? g
+g Shi Wei: Wow! No, I didn’t before. That&#x27;s a lot of canals. Who rides the gondolas? g
+§ Mala : Well, according to the articles I&#x27;ve read, gondolas were the main means :
+: of transport a long time ago. Today, they carry tourists who want to have 8
+8 a feel of what it’s like to ride the gondola. g
+| § Shi Wei: How much does a gondola ride cost? g
+Mala : I&#x27;s very expensive. A half-an-hour ride can cost almost 100 USD. It gets g
+pricier when night falls. Oh, gondoliers have to wear a sort of uniform. §
+g icier whi ight falls. Oh doliers have t f unif
+§ They&#x27;re usually recognisable by their striped T-shirt (black and white) §
+§ and a straw boater’s hat with a black band. g
+% Shi Wei: Ah, that rings a bell. I think I&#x27;ve come across some pictures of them. Well, §
+§ I&#x27;d better return my book at the counter. 8
+Put a tick (v) on the correct answer.
+| What&#x27;s Mala doing?
+Reading an encyclopaedia - 1)
+Surfing the net ]
+Borrowing a book )
+2 When are the girls having their presentation?
+At 2.00 p.m 1)
+In the evening HN
+On Friday |)
+45 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="read-answer-board" data-read-and-answer-board="true">
+        <label class="answer-label" for="unit-5-p041-01-evidence">Text clue</label>
+        <input id="unit-5-p041-01-evidence" class="answer-input" data-answer-input="unit-5-p041-01-evidence">
+
+      <label class="answer-label" for="unit-5-p041-01-answer">Answer after reading</label>
+      <textarea id="unit-5-p041-01-answer" class="answer-box" data-answer-input="unit-5-p041-01" rows="5"></textarea>
+
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-042-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-042-heading">Source page 42</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p042-01"
+               data-question-type="short_answer"
+               data-source-page="42">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 42</span>
+        <span>Short answer</span>
+        <span>unit-5-p042-01</span>
+      </div>
+
+        <h3 id="unit-5-p042-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p042-01-prompt">3 The following idioms can be used to describe the phrase I&#x27;s very expensive.
+(2), (7-1 o) PANE ET
+as sound as a dollar 1)
+costs an arm and a leg |]
+costs a pretty penny uo
+Circle the correct answer.
+4 Which of the following do you think is a gondola?
+A B =
+ell v
+did I
+Ee) INS 3
+EA Soi WARS
+D S—dt =
+=== ~~
+Write what the underlined words refer to.
+5 Well, it&#x27;s a narrow and long rowing boat. C1]
+6 They&#x27;re usually recognisable by their striped T-shirt... proses 1
+Write your answer in the space provided.
+7 What is the difference between how gondolas were used in the past and how they
+£3 are used today?
+&amp; I gets pricier when night fall.
+Explain the phrase in bold.
+8 Where are Shi Wei and Mala? Why do you say that?
+© EPH Publishing (M) Sdn. Bhd. 46
+{scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p042-01-answer">Your answer</label>
+      <textarea id="unit-5-p042-01-answer" class="answer-box" data-answer-input="unit-5-p042-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-043-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-043-heading">Source page 43</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p043-01"
+               data-question-type="writing_prompt"
+               data-source-page="43">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 43</span>
+        <span>Writing</span>
+        <span>unit-5-p043-01</span>
+      </div>
+
+        <h3 id="unit-5-p043-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p043-01-prompt">(H) Write meaningful questions or responses for the following scenarios. FY
+: (pgs i XI
+FN A 7
+HIT! LOY
+AR Ti ADs IF
+ny [i A th i)
+| Ti T a
+Yes, there’s one just about You&#x27;re on Jalan Pinang
+a |5-minute walk away. right now.
+3] What&#x27;s the quickest way (4 Does this bus take me to
+fo the town library? the stadium?
+Sl lq: Oh
+94 ISP ay ! of 3
+SOFTEN b. 2 FA
+2G 5 IA y=zd
+IN] (15
+kei (-—
+~—T TTF
+xcuse me, may I know if flight
+[5] [6] E Tk if fligl
+AV67 from Jakarta has landed?
+Ng %
+i | 4 : OT 10
+XA AE EY
+A Q 0) 1 Ji )
+SENNA Nii 7 “SN 1
+i WY 3
+Train 4213G departs
+from platform 5B.
+47 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p043-01-answer">Your answer</label>
+      <textarea id="unit-5-p043-01-answer" class="answer-box" data-answer-input="unit-5-p043-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-044-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-044-heading">Source page 44</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p044-01"
+               data-question-type="writing_prompt"
+               data-source-page="44">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 44</span>
+        <span>Writing</span>
+        <span>unit-5-p044-01</span>
+      </div>
+
+        <h3 id="unit-5-p044-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p044-01-prompt">(1 Write an email in about 30 to 50 words using the given notes. ith
+You&#x27;ve just completed your first ever kayaking experience. Write an email to your)
+friend, Danu, about your experience. In your email,
+« state the location of the experience { !
++» say who you went with
+* describe your feelings 5h ie
+danusharavi@mail.com
+| Subject | My First Ever Kayaking Experience!
+© EPH Publishing (M) Sdn. Bhd. 48
+{Scanned with
+| CamScanner’|</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p044-01-answer">Your answer</label>
+      <textarea id="unit-5-p044-01-answer" class="answer-box" data-answer-input="unit-5-p044-01" rows="5"></textarea>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-045-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-045-heading">Source page 45</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p045-01"
+               data-question-type="matching"
+               data-source-page="45">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 6</span>
+        <span>Unit 5</span>
+        <span>Page 45</span>
+        <span>Matching</span>
+        <span>unit-5-p045-01</span>
+      </div>
+
+        <h3 id="unit-5-p045-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p045-01-prompt">J Read the texts below about three different means of transport. Then, assign each
+letter to the statement that best represents it.
+A ferry is a large boat that carries people, vehicles and goods across rivers,
+lakes or seas. It operates on scheduled routes and is used for regular commuting
+or tourism. Ferries are important for connecting islands or places separated by
+water and can transport many passengers at once.
+A kayak is a small, narrow watercraft that is propelled by a double-bladed
+[ paddle. It&#x27;s often used for recreation, exercise or exploring rivers and lakes.
+Kayaking requires physical strength and balance and can be done alone or in
+pairs. It is popular for its quietness and closeness to nature.
+A submarine is a specialised underwater vessel used for exploring deep oceans
+or for military purposes. It can dive to great depths and stay subrnerged for
+long periods. Submarines are equipped with advanced technology and require
+i skilled operators. They provide unique opportunities to study marine life or
+conduct secret missions.
+O Femy ® Kayak ® Submarine
+| This transport carries many passengers and vehicles regularly. (1)
+2 This transport allows people to explore underwater for research. (al
+3 This transport requires paddling and physical effort. ()
+4 This transport operates on fixed routes and schedules. ()
+5 This transport can dive deep beneath the water surface. 3
+6 This transport is small and often used for fun or exercise. B
+7 This transport provides a quiet way to enjoy nature close-up. ()
+8 This transport helps connect communities separated by water. (])
+9 This transport requires a crew with technical skills to operate safely. =
+49 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+i [cs] CamScanner’|</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-5-p045-01-left" aria-label="Matching left item for unit-5-p045-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-5-p045-01-right" aria-label="Matching right item for unit-5-p045-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary6-english-workbook", "level": "Primary 6", "unitId": "unit-5", "unitNumber": 5, "title": "Unit 5", "questionIds": ["unit-5-p037-01", "unit-5-p038-01", "unit-5-p039-01", "unit-5-p040-01", "unit-5-p041-01", "unit-5-p042-01", "unit-5-p043-01", "unit-5-p044-01", "unit-5-p045-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p6-en-unit5"
+          data-module-name="Primary 6 English Unit 5"
+          data-module-url="content/KSSR_Syllabus/Primary6/English/Unit5/index.html"></script>
+</body>
+</html>

@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Primary 3 English Unit 5</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --accent: #be123c;
+      --surface: #fff1f2;
+      --ink: #172033;
+      --muted: #526070;
+      --paper: #fffdf8;
+      --line: color-mix(in srgb, var(--accent), #ffffff 72%);
+      --soft-line: #d7dee8;
+      --shadow: 0 18px 42px rgb(23 32 51 / .10);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, color-mix(in srgb, var(--accent), transparent 86%), transparent 28rem),
+        linear-gradient(180deg, var(--surface), #ffffff 64%);
+      color: var(--ink);
+      font-family: ui-rounded, "Trebuchet MS", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, textarea, select { font: inherit; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--accent), white 42%);
+      outline-offset: 3px;
+    }
+    .shell {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 18px;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 6px 0 18px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      border: 2px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      background: #ffffff;
+      color: var(--accent);
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .book-label {
+      color: var(--muted);
+      font-size: .95rem;
+      font-weight: 800;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+      gap: 20px;
+      align-items: stretch;
+      background: color-mix(in srgb, var(--paper), var(--surface) 34%);
+      border: 2px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: clamp(18px, 4vw, 30px);
+    }
+    .theme-pill, .source-pill {
+      display: inline-flex;
+      width: fit-content;
+      border-radius: 999px;
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+      font-size: .82rem;
+      font-weight: 900;
+      letter-spacing: .02em;
+      padding: 6px 10px;
+    }
+    .hero h1 {
+      margin: 12px 0 8px;
+      color: var(--accent);
+      font-size: clamp(2rem, 6vw, 4.35rem);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .hero-copy {
+      max-width: 62ch;
+      margin: 0;
+      color: #334155;
+      font-size: 1.04rem;
+    }
+    .hero-panel {
+      border: 2px dashed var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 16px;
+      display: grid;
+      align-content: space-between;
+      min-height: 210px;
+    }
+    .hero-panel strong {
+      color: var(--accent);
+      font-size: 1.08rem;
+    }
+    .hero-panel p { margin: 6px 0 0; color: var(--muted); }
+    .progress-wrap {
+      margin-top: 14px;
+      height: 14px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 999px;
+      background: #eef2f7;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .25s ease;
+    }
+    .progress-status {
+      margin: 8px 0 0;
+      color: #334155;
+      font-size: .92rem;
+      font-weight: 800;
+    }
+    .practice-section {
+      margin: 26px 0;
+    }
+    .section-heading {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 8px;
+    }
+    .section-heading p {
+      order: 2;
+      margin: 0;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 800;
+    }
+    h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      color: #1f2937;
+    }
+    .section-instructions {
+      margin: 10px 0 14px;
+      color: var(--muted);
+    }
+    .question-card {
+      margin: 14px 0;
+      border: 2px solid var(--soft-line);
+      border-left: 7px solid var(--accent);
+      border-radius: 8px;
+      background: #ffffff;
+      padding: clamp(14px, 3vw, 20px);
+    }
+    .question-card[data-saved="true"] {
+      border-color: color-mix(in srgb, var(--accent), #ffffff 55%);
+      background: color-mix(in srgb, var(--surface), #ffffff 72%);
+    }
+    .question-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-bottom: 12px;
+    }
+    .question-meta span {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #334155;
+      font-size: .78rem;
+      font-weight: 800;
+      padding: 3px 9px;
+    }
+    h3 {
+      margin: 0 0 8px;
+      color: var(--accent);
+      font-size: 1.18rem;
+    }
+    .prompt-text {
+      width: 100%;
+      max-height: 24rem;
+      overflow: auto;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 0;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f8fafc;
+      padding: 12px;
+      color: #263447;
+      font: inherit;
+    }
+    .response-area {
+      margin-top: 14px;
+    }
+    .control-group {
+      margin: 0;
+      border: 0;
+      padding: 0;
+    }
+    legend, .answer-label, .interactive-grid label span, .sequence-row span {
+      display: block;
+      margin-bottom: 6px;
+      color: #334155;
+      font-size: .88rem;
+      font-weight: 900;
+    }
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .choice, .word-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+      border: 2px solid #d7dee8;
+      border-radius: 8px;
+      background: #ffffff;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .choice:has(input:checked), .word-chip:has(input:checked) {
+      border-color: var(--accent);
+      background: var(--surface);
+    }
+    .answer-input, .answer-box {
+      width: 100%;
+      border: 2px solid #cbd5e1;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 11px 12px;
+    }
+    .answer-box {
+      min-height: 116px;
+      resize: vertical;
+    }
+    .answer-box.compact {
+      min-height: 58px;
+    }
+    .control-hint, .picture-response p {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+    .interactive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .sequence-board {
+      display: grid;
+      gap: 10px;
+    }
+    .word-bank-board {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    button {
+      min-height: 42px;
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    button:active {
+      transform: translateY(1px);
+    }
+    .check-btn {
+      background: var(--accent);
+      color: #ffffff;
+    }
+    .save-btn, .mini-btn {
+      border: 2px solid var(--line);
+      background: #ffffff;
+      color: var(--accent);
+    }
+    .feedback {
+      min-height: 1.5rem;
+      margin: 10px 0 0;
+      color: #334155;
+      font-weight: 900;
+    }
+    @media (max-width: 768px) {
+      .shell { padding: 12px; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+      .hero, .choices, .interactive-grid { grid-template-columns: 1fr; }
+      .section-heading { display: block; }
+      .hero-panel { min-height: 0; }
+      .prompt-text { max-height: 18rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Workbook navigation">
+      <a class="back-link home-btn-fixed" href="../../../../../index.html">Back to dashboard</a>
+      <span class="book-label">Primary 3 English workbook draft</span>
+    </nav>
+    <header class="hero">
+      <div>
+        <span class="theme-pill">Toy Town</span>
+        <h1>Unit 5</h1>
+        <p class="hero-copy">Read the source text, try each activity, and save your progress as you go.</p>
+      </div>
+      <aside class="hero-panel" aria-label="Unit summary">
+        <div>
+          <strong>Theme note</strong>
+          <p>cute toy town English workbook theme</p>
+        </div>
+        <div>
+          <span class="source-pill">Source pages 35, 36, 37, 38, 39, 40, 41, 42</span>
+          <div class="progress-wrap" aria-label="Progress">
+            <div class="progress-bar" id="progressBar"></div>
+          </div>
+          <p class="progress-status" id="progressStatus">0 saved</p>
+        </div>
+      </aside>
+    </header>
+    <main>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-035-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-035-heading">Source page 35</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p035-01"
+               data-question-type="matching"
+               data-source-page="35">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 35</span>
+        <span>Matching</span>
+        <span>unit-5-p035-01</span>
+      </div>
+
+        <h3 id="unit-5-p035-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p035-01-prompt">lo y
+@ Unity 5) ,
+AP Ba =A - Ey
+f A Read the texts about three different house parts. Then, assign each letter
+to the statement that best represents it.
+The attic is a space at the top of a house, just under the roof. It&#x27;s
+often used to store old or unused items like boxes, suitcases or
+decorations. Some attics are small and dusty, while others can be
+large enough to turn into a room. People don’t go there often unless
+they need to find something or put things away.
+A balcony is an outdoor space that sticks out from a room, usually
+(B | on an upper floor. It has railings around it and is open to the air.
+People use balconies to get fresh air, relax or grow small plants. It&#x27;s
+a nice spot to enjoy a morning drink or look at the view.
+The living room is a shared space in a home where families spend
+time together. It usually has a sofa, chairs, a coffee table and a TV.
+People use it to relax, watch shows, play games or chat with guests.
+It&#x27;s often the heart of the home.
+[ [A] Attic B] Balcony Living Room
+I This house part is used to store old or unused things. ( )
+2 This house part is where people relax, watch TV or talk to friends. ( )
+3 This house part is outside but still connected to the house. ( )
+4 This house part is often high up and might be dusty or dark. ( )
+5 This house part has furniture like sofas and a coffee table. ( )
+6 This house part is great for enjoying the breeze or planting flowers. ( )
+7 This house part may have boxes filled with holiday decorations. ( )
+8 This house part is often called the heart of the home. ( )
+33 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i = CamScanner</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-5-p035-01-left" aria-label="Matching left item for unit-5-p035-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-5-p035-01-right" aria-label="Matching right item for unit-5-p035-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-036-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-036-heading">Source page 36</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p036-01"
+               data-question-type="word_bank"
+               data-source-page="36">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 36</span>
+        <span>Word bank</span>
+        <span>unit-5-p036-01</span>
+      </div>
+
+        <h3 id="unit-5-p036-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p036-01-prompt">B Label the numbered house parts with words from the answer bank.
+: :
+(
+0 =i
+TI bh ~o /
+A
+Al | i
+) Ulli 7 L_se |
+HE ball TA TC
+4 0 =
+a el ACC
+LB B Wm —
+BEI] a am =
+Bll | in
+=: = —f
+kitchen : attic i livingroom : garage
+bathroom : dining room : bedroom : study
+@VTLobw bint aclieop dino ois o @) hie if Suitap ir At Sol
+e - _. co@toncoledinaodt Lo
+© EER o J REIRSON
+(7 RSNA doh ddact Mi padi total
+©EPH Publishing (M) Sdn. Bhd. 34
+{scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-5-p036-01-words">Words you used</label>
+          <input id="unit-5-p036-01-words" class="answer-input" data-answer-input="unit-5-p036-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-5-p036-01-answer">Write your completed answer</label>
+      <textarea id="unit-5-p036-01-answer" class="answer-box" data-answer-input="unit-5-p036-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-037-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-037-heading">Source page 37</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p037-01"
+               data-question-type="fill_blank"
+               data-source-page="37">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 37</span>
+        <span>Fill in the blank</span>
+        <span>unit-5-p037-01</span>
+      </div>
+
+        <h3 id="unit-5-p037-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p037-01-prompt">{ [) Classify the household objects from the table to the correct house parts.
+fridge : TV : oven : coffee table : shower
+bed * cushions : sink * armchair : toaster
+tub : pillow : toilet * mirror : cupboard
+bedside table : microwave : sofa * blanket kettle
+(caren
+(1) 0 (1) [1]
+(2) (2) (2) (2)
+(3) 13) (3) (3)
+(4) 0 (4) (4)
+6 (5) (5) (5)
+D Fill in the blanks with the missing letters to spell the house parts described
+in the following statements.
+@ 1tis where your clothes are kept. : Bai WT 202s Cu 90 |
+J =e iideietit
+@® tis where you have your meals. : =
+® tis where you brush your teeth. ; =
+(4) It is where meals are prepared. : | SE Sp | ©)
+5S Liimstad orn
+@® tis where you can find an armchair. : R
+® 1t is where smoke escapes from a : :
+fireplace. HAR
+35 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with |
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p037-01-answer">Your answer</label>
+      <input id="unit-5-p037-01-answer" class="answer-input" data-answer-input="unit-5-p037-01" aria-describedby="unit-5-p037-01-hint">
+      <p id="unit-5-p037-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-038-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-038-heading">Source page 38</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p038-01"
+               data-question-type="fill_blank"
+               data-source-page="38">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 38</span>
+        <span>Fill in the blank</span>
+        <span>unit-5-p038-01</span>
+      </div>
+
+        <h3 id="unit-5-p038-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p038-01-prompt">-
+(E) Complete the tables with the correct form of singular or plural possessive
+nouns.
+Singular Noun Sige) Plural Noun Plural Possessive
+Possessive
+girls
+EB Fill in the blanks with the correct form of possessive nouns in brackets.
+| This book belongs to Kim. Itis ~~ (Kims’ / Kim’s) book.
+2 CoreyandRyanare ___ (boys’/ boy&#x27;s) names.
+3 My (fathers’/ father&#x27;s) mobile phone is broken.
+4 The_______ (girls’/ girl&#x27;s) new dress is very pretty.
+5 The engine belongs tothe van. Itisthe_____ (vans’/ van’s) engine.
+6 The_____ (students’/ student&#x27;s) names are Xin Rui and Xin Ying.
+7 lamstayingatmy___ (aunt&#x27;s / aunts’) house.
+8 The collar belongs to the dog. Itisthe (dog&#x27;s / dogs’) collar.
+9 The bike belongs to my brother. Itismy____ (brothers’ / brother’s)
+bike.
+10 We washed the clothes that belonged to Anna. We washed ___
+(Anna&#x27;s / Annas’) clothes.
+Il The (women’s/womens’) handbags are on the first floor of the
+mall.
+12 That is the house where my cousins live. Thatismy ____ (cousins’
+/ cousin&#x27;s) house.
+18 Ialwaysaskformy__ (brother&#x27;s / brothers’) help with homework
+because he is very smart.
+14 Those fancy cars belong to my neighbours. They are my
+(neighbours’ / neighbour&#x27;s) cars.
+© EPH Publishing (M) Sdn. Bhd. 36
+{Scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p038-01-answer">Your answer</label>
+      <input id="unit-5-p038-01-answer" class="answer-input" data-answer-input="unit-5-p038-01" aria-describedby="unit-5-p038-01-hint">
+      <p id="unit-5-p038-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-039-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-039-heading">Source page 39</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p039-01"
+               data-question-type="fill_blank"
+               data-source-page="39">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 39</span>
+        <span>Fill in the blank</span>
+        <span>unit-5-p039-01</span>
+      </div>
+
+        <h3 id="unit-5-p039-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p039-01-prompt">( G Complete the crossword puzzle with the correct adjectives according to
+the contextual clues below.
+© 0 A
+SL | [H]
+| [=] |
+|
+| #81] | |
+[oI |
+I )
+FE] Jul [F[Y]
+= |
+|
+| ‘Ll [al [H] [R]
+@ Theresa___ cushion on the sofa.
+@® Dadplantedmany___ flowers in the garden.
+® Jamie&#x27;shousehasa____ bathtub.
+® Mumremindsmetofeedthe cat.
+Tg)
+® Thereare many trees around the house.
+OQ The obit sad dy bungalow has many rooms.
+(7) I like my pillow because itissoftand |
+(8) Thereisapairof ~~ boots on the shoe rack.
+37 © EPH Publishing (M) Sdn. Bhd.
+{Scanned with
+i [cs] CamScanner</pre>
+        <div class="response-area">
+
+      <label class="answer-label" for="unit-5-p039-01-answer">Your answer</label>
+      <input id="unit-5-p039-01-answer" class="answer-input" data-answer-input="unit-5-p039-01" aria-describedby="unit-5-p039-01-hint">
+      <p id="unit-5-p039-01-hint" class="control-hint">Type your answer, then save it.</p>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-040-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-040-heading">Source page 40</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p040-01"
+               data-question-type="matching"
+               data-source-page="40">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 40</span>
+        <span>Matching</span>
+        <span>unit-5-p040-01</span>
+      </div>
+
+        <h3 id="unit-5-p040-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p040-01-prompt">(H) Match the household objects to where they are kept in the house. Then,
+name the house parts in the space provided.
+| 0
+a EHC] ooo
+\ &gt; .
+ea =O .
+2
+pes oo :
+3
+P] A pete ay! 5 +
+os = v
+4
+si IE | iy tari
+L IN B= Opes a
+(30) Circle the correct phrases according to the singular and plural rule.
+1 a set of books in the study. .
+2 cups and saucers on the dining table.
+3 a variety of flowers in the garden.
+4 many decorative items in the living room.
+5 a cat running around in the porch.
+6 people sitting on the sofa.
+© EPH Publishing (M) Sdn. Bhd. 38
+{Scanned with
+{8 CamScanner</pre>
+        <div class="response-area">
+
+      <div class="interactive-grid matching-board" data-matching-board="true">
+        <label>
+          <span>Left item</span>
+          <input class="answer-input" data-answer-input="unit-5-p040-01-left" aria-label="Matching left item for unit-5-p040-01">
+        </label>
+        <label>
+          <span>Matches with</span>
+          <input class="answer-input" data-answer-input="unit-5-p040-01-right" aria-label="Matching right item for unit-5-p040-01">
+        </label>
+      </div>
+      <button type="button" class="mini-btn" data-add-row="matching">Add another match</button>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-041-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-041-heading">Source page 41</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p041-01"
+               data-question-type="picture_based"
+               data-source-page="41">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 41</span>
+        <span>Picture based</span>
+        <span>unit-5-p041-01</span>
+      </div>
+
+        <h3 id="unit-5-p041-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p041-01-prompt">(Oh) Complete the following dialogues with the correct form of possessive
+pronouns according to the given pictures.
+yours ] mine |
+| 2
+Those glovesare{) |
+Arethesesocks@ ____ ? J ©
+They aren&#x27;t @
+Ne 2
+73 4
+ax Y, bos Pa 9)
+gy [ED ETH 22
+No, they arent |} = &gt; [=] a Al)
+Q==x ) a8)
+Lin ER
+3 a
+o N N CE
+( Pi
+YQ hi
+: (A
+Zh, Gzgy
+HL 5) Yes, they are 4] 0 ) No, they aren&#x27;t
+(0) Sy Jl |e
+5 Je
+5 6
+Is this jacket @ _______2|| |Thishatisn&#x27; [ 0 J
+sit@__ 2
+L o BT B
+fn BEY |B) ae
+No, it isn’t \=4) od kd J XO é
+= od
+1 efem
+39 © EPH Publishing (M) Sdn. Bhd.
+{scanned with
+| = CamScanner |</pre>
+        <div class="response-area">
+
+      <div class="picture-response" data-picture-response="true">
+        <p>Look closely at the source picture in the workbook, then write your answer here.</p>
+
+      <label class="answer-label" for="unit-5-p041-01-answer">Picture answer</label>
+      <textarea id="unit-5-p041-01-answer" class="answer-box" data-answer-input="unit-5-p041-01" rows="5"></textarea>
+
+        <label class="answer-label" for="unit-5-p041-01-picture-note">Picture note</label>
+        <input id="unit-5-p041-01-picture-note" class="answer-input" data-answer-input="unit-5-p041-01-picture-note">
+      </div>
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+      <section class="practice-section" aria-labelledby="unit-5-page-042-heading">
+        <div class="section-heading">
+          <p>Source page set</p>
+          <h2 id="unit-5-page-042-heading">Source page 42</h2>
+        </div>
+        <p class="section-instructions">OCR-derived review block. Confirm boundaries against the source PDF before learner use.</p>
+
+      <article class="question-card"
+               data-question-id="unit-5-p042-01"
+               data-question-type="word_bank"
+               data-source-page="42">
+
+      <div class="question-meta" aria-label="Question details">
+        <span>Primary 3</span>
+        <span>Unit 5</span>
+        <span>Page 42</span>
+        <span>Word bank</span>
+        <span>unit-5-p042-01</span>
+      </div>
+
+        <h3 id="unit-5-p042-01-prompt">Try this question</h3>
+        <pre class="prompt-text" aria-labelledby="unit-5-p042-01-prompt">(i K) Complete the email with suitable phrases from the answer bank.
+You just moved into a new condo in Subang Jaya. Write an email to your best
+friend, Giselle, who lives back in your hometown. In your email,
+describe your new home and talk about some house parts
+« give her some details about your new room
+fgkef feel : see the city ‘ the lO&quot;floor : a study desk
+cosy : lights af night :
+eats together orem vialfiong ; space Ie : alot of sunlight
+; day : cooking :
+To gisellechan@mail.com
+‘Subject My New Home
+Hi Giselle,
+I hope you&#x27;re doing well! I just moved into a new condo in Subang Jaya
+and I really like it. The condoison@—
+and has a big living room with a comfy sofa and a TV. There&#x27;s also a small
+balcony wherelcon @ —
+The kitchen is modem and has lotsof @ — |
+We also have a dining area where myfamily@
+My room is my favourite part! I have my own bed, @
+and a tall bookshelf. I put up some posters and fairy
+ligtsto@— There&#x27;s also a window that
+letsin@___ inthe morning. I finally have
+my own space to read and draw!
+Imissyouand hopeyou@_— |
+Love,
+Farhana
+© EPH Publishing (M) Sdn. Bhd. 40 i
+{scanned with
+i = CamScanner ;</pre>
+        <div class="response-area">
+
+      <div class="word-bank-board" data-word-bank-board="true">
+
+          <label class="answer-label" for="unit-5-p042-01-words">Words you used</label>
+          <input id="unit-5-p042-01-words" class="answer-input" data-answer-input="unit-5-p042-01-words">
+
+      </div>
+
+      <label class="answer-label" for="unit-5-p042-01-answer">Write your completed answer</label>
+      <textarea id="unit-5-p042-01-answer" class="answer-box" data-answer-input="unit-5-p042-01" rows="5"></textarea>
+
+
+        </div>
+        <div class="actions">
+          <button type="button" class="check-btn">Check</button>
+          <button type="button" class="save-btn">Save</button>
+        </div>
+        <p class="feedback" role="status" aria-live="polite"></p>
+      </article>
+
+      </section>
+
+    </main>
+  </div>
+  <script id="unitData" type="application/json">{"bookId": "kssr-primary3-english-workbook", "level": "Primary 3", "unitId": "unit-5", "unitNumber": 5, "title": "Unit 5", "questionIds": ["unit-5-p035-01", "unit-5-p036-01", "unit-5-p037-01", "unit-5-p038-01", "unit-5-p039-01", "unit-5-p040-01", "unit-5-p041-01", "unit-5-p042-01"]}</script>
+  <script>
+    (function () {
+      'use strict';
+
+      var unitData = JSON.parse(document.getElementById('unitData').textContent);
+      var storageKey = 'kssr-workbook-draft:' + unitData.level + ':' + unitData.unitId;
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.question-card'));
+      var progressBar = document.getElementById('progressBar');
+      var progressStatus = document.getElementById('progressStatus');
+      var state = {
+        completed: {},
+        answers: {}
+      };
+
+      function collectCardAnswer(card) {
+        var values = {};
+        card.querySelectorAll('input, textarea, select').forEach(function (field) {
+          var key = field.dataset.answerInput || field.name || field.id;
+          if (!key) return;
+          if (field.type === 'radio') {
+            if (field.checked) values[key] = field.value;
+            return;
+          }
+          if (field.type === 'checkbox') {
+            values[key] = field.checked;
+            return;
+          }
+          values[key] = field.value;
+        });
+        return values;
+      }
+
+      function paintState() {
+        var done = Object.keys(state.completed).filter(function (key) {
+          return state.completed[key];
+        }).length;
+        var percent = cards.length ? Math.round(done / cards.length * 100) : 0;
+        progressBar.style.width = percent + '%';
+        progressStatus.textContent = done + ' of ' + cards.length + ' saved';
+        cards.forEach(function (card) {
+          card.dataset.saved = state.completed[card.dataset.questionId] ? 'true' : 'false';
+        });
+      }
+
+      function persist(debounce) {
+        try {
+          window.localStorage.setItem(storageKey, JSON.stringify(state));
+        } catch (error) {
+          console.warn('Local progress could not be saved.', error);
+        }
+        paintState();
+        if (window.ProgressTracker) {
+          var payload = {
+            unitId: unitData.unitId,
+            unitNumber: unitData.unitNumber,
+            completed: state.completed,
+            answers: state.answers
+          };
+          if (debounce && window.ProgressTracker.autoSave) {
+            window.ProgressTracker.autoSave(payload, 1200);
+          } else if (window.ProgressTracker.save) {
+            window.ProgressTracker.save(payload);
+          }
+        }
+      }
+
+      function restoreLocal() {
+        try {
+          var saved = JSON.parse(window.localStorage.getItem(storageKey) || 'null');
+          if (saved && typeof saved === 'object') {
+            state.completed = saved.completed || {};
+            state.answers = saved.answers || {};
+          }
+        } catch (error) {
+          console.warn('Local progress could not be restored.', error);
+        }
+      }
+
+      function restoreFields() {
+        cards.forEach(function (card) {
+          var answers = state.answers[card.dataset.questionId] || {};
+          card.querySelectorAll('input, textarea, select').forEach(function (field) {
+            var key = field.dataset.answerInput || field.name || field.id;
+            if (!(key in answers)) return;
+            if (field.type === 'radio') {
+              field.checked = answers[key] === field.value;
+            } else if (field.type === 'checkbox') {
+              field.checked = Boolean(answers[key]);
+            } else {
+              field.value = answers[key];
+            }
+          });
+        });
+      }
+
+      function markCard(card, message, debounce) {
+        var qid = card.dataset.questionId;
+        state.answers[qid] = collectCardAnswer(card);
+        state.completed[qid] = true;
+        card.querySelector('.feedback').textContent = message;
+        persist(debounce);
+      }
+
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        if (event.target.classList.contains('check-btn')) {
+          markCard(card, 'Nice effort. Your answer is saved for review.', false);
+        }
+        if (event.target.classList.contains('save-btn')) {
+          markCard(card, 'Saved. Keep going when you are ready.', false);
+        }
+        if (event.target.dataset.addRow === 'matching') {
+          var board = card.querySelector('.matching-board');
+          var rowNumber = board.querySelectorAll('label').length / 2 + 1;
+          var left = document.createElement('label');
+          var right = document.createElement('label');
+          left.innerHTML = '<span>Left item ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-left-' + rowNumber + '">';
+          right.innerHTML = '<span>Matches with ' + rowNumber + '</span><input class="answer-input" data-answer-input="' + card.dataset.questionId + '-right-' + rowNumber + '">';
+          board.appendChild(left);
+          board.appendChild(right);
+        }
+      });
+
+      document.addEventListener('input', function (event) {
+        var card = event.target.closest('.question-card');
+        if (!card) return;
+        state.answers[card.dataset.questionId] = collectCardAnswer(card);
+        persist(true);
+      });
+
+      restoreLocal();
+      restoreFields();
+      paintState();
+
+      window.addEventListener('load', function () {
+        if (!window.ProgressTracker) return;
+        window.ProgressTracker.init(async function (tracker) {
+          var saved = await tracker.load();
+          if (saved && saved.answers) {
+            state.completed = saved.completed || state.completed;
+            state.answers = saved.answers || state.answers;
+            restoreFields();
+            persist(false);
+          }
+        });
+      });
+    })();
+  </script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js"></script>
+  <script src="../../../../../js/progress-tracker.js"
+          data-module-id="kssr-p3-en-unit5"
+          data-module-name="Primary 3 English Unit 5"
+          data-module-url="content/KSSR_Syllabus/Primary3/English/Unit5/index.html"></script>
+</body>
+</html>
