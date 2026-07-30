@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T3 Sains Bab 5: Termokimia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;700;800&family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+
+/* ===========================================
+   CSS CUSTOM PROPERTIES (THEME)
+   Adjust these variables to change the deck look.
+   =========================================== */
+:root {
+    --stage-bg: #101916;
+    --slide-bg: #f8fbf6;
+    --ink: #16221e;
+    --muted: #65776f;
+    --teal: #0b766d;
+    --teal-dark: #084941;
+    --heat: #d9291c;
+    --amber: #e3a62f;
+    --line: #c9dad2;
+    --soft: #eef7f2;
+    --paper: #fffdf7;
+    --shadow: 0 34px 100px rgba(8, 40, 34, .18);
+    --font-display: 'Bricolage Grotesque', 'Noto Sans SC', sans-serif;
+    --font-body: 'Noto Sans SC', 'Bricolage Grotesque', sans-serif;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    --duration-normal: .62s;
+}
+
+/* ===========================================
+   BASE RESET
+   Keeps authored slide dimensions predictable.
+   =========================================== */
+* { box-sizing: border-box; }
+button { font: inherit; }
+
+/* ===========================================
+   FIXED 16:9 STAGE: MANDATORY BASE STYLES
+   Include this ENTIRE file in every presentation.
+   Slides are authored at 1920×1080 and scaled as a whole.
+   =========================================== */
+
+/* 1. Lock the browser viewport */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 2. Full-window deck viewport */
+.deck-viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--stage-bg, #000);
+}
+
+/* 3. Fixed 16:9 design canvas.
+   JavaScript sets transform: translate(...) scale(...). */
+.deck-stage {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    transform-origin: 0 0;
+    background: var(--slide-bg, #fff);
+}
+
+/* 4. Slides stack inside the fixed stage.
+   Content must be laid out at 1920×1080, not reflowed per device. */
+.slide {
+    position: absolute;
+    inset: 0;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    display: block;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--slide-bg, #fff);
+}
+
+.slide.active,
+.slide.visible {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    z-index: 1;
+}
+
+/* 5. Keep media inside authored slide bounds */
+img,
+video,
+canvas,
+svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* 6. Presentation chrome stays outside the slide design system */
+.deck-controls {
+    position: fixed;
+    left: 50%;
+    bottom: 22px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 7. Print one fixed-size slide per page */
+@media print {
+    html,
+    body {
+        width: 1920px;
+        height: auto;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-viewport {
+        position: static;
+        overflow: visible;
+        background: #fff;
+    }
+
+    .deck-stage {
+        position: static;
+        width: auto;
+        height: auto;
+        transform: none !important;
+        background: none;
+    }
+
+    .slide {
+        position: relative;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        width: 1920px;
+        height: 1080px;
+        break-after: page;
+        page-break-after: always;
+    }
+
+    .slide:last-child {
+        break-after: auto;
+        page-break-after: auto;
+    }
+
+    .deck-controls {
+        display: none !important;
+    }
+}
+
+/* 8. Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.2s !important;
+    }
+}
+
+
+/* ===========================================
+   DECK CONTROLS
+   Compact browser chrome outside the 1920x1080 slide canvas.
+   =========================================== */
+.deck-viewport.zoomed { overflow: auto; }
+.deck-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 999px;
+    background: rgba(12, 25, 22, .82);
+    color: #fff;
+    box-shadow: 0 18px 50px rgba(0,0,0,.25);
+    backdrop-filter: blur(16px);
+}
+.deck-controls button {
+    min-width: 42px;
+    height: 36px;
+    border: 0;
+    border-radius: 999px;
+    padding: 0 14px;
+    color: #fff;
+    background: rgba(255,255,255,.11);
+    cursor: pointer;
+}
+.deck-controls button:hover { background: rgba(255,255,255,.2); }
+.deck-status { min-width: 136px; text-align: center; font-size: 14px; color: rgba(255,255,255,.78); }
+.back-link {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 10002;
+    padding: 10px 16px;
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(12, 25, 22, .86);
+    border: 1px solid rgba(255,255,255,.16);
+    text-decoration: none;
+    font: 700 14px/1.2 var(--font-body);
+    box-shadow: 0 18px 46px rgba(0,0,0,.24);
+}
+.back-link:hover { background: rgba(12, 25, 22, .96); }
+.edit-hotzone { position: fixed; top: 0; left: 0; width: 82px; height: 82px; z-index: 10000; }
+.edit-toggle {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 10001;
+    opacity: 0;
+    pointer-events: none;
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 14px;
+    color: #fff;
+    background: rgba(12, 25, 22, .86);
+    transition: opacity .25s ease;
+}
+.edit-toggle.show,.edit-toggle.active { opacity: 1; pointer-events: auto; }
+body.editing .editable { outline: 3px dashed rgba(217,41,28,.35); outline-offset: 4px; cursor: text; }
+
+/* ===========================================
+   SLIDE ATMOSPHERE
+   Thermochemistry-inspired paper, heat, and lab-grid system.
+   =========================================== */
+.slide {
+    color: var(--ink);
+    font-family: var(--font-body);
+    background:
+        radial-gradient(circle at 88% 12%, rgba(217,41,28,.12), transparent 26%),
+        radial-gradient(circle at 10% 86%, rgba(11,118,109,.14), transparent 28%),
+        linear-gradient(135deg, #fbfff9 0%, #f2f8f4 52%, #fff8ea 100%);
+}
+.slide::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: .18;
+    background-image:
+        linear-gradient(rgba(8,73,65,.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,73,65,.16) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+}
+.slide::after {
+    content: '';
+    position: absolute;
+    right: -180px;
+    bottom: -250px;
+    width: 620px;
+    height: 620px;
+    border: 2px solid rgba(217,41,28,.16);
+    border-radius: 46% 54% 48% 52%;
+    transform: rotate(-18deg);
+    pointer-events: none;
+}
+.slide-inner { position: relative; z-index: 1; height: 100%; padding: 86px 116px 78px; }
+.kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 42px;
+    color: var(--teal);
+    font: 800 25px/1 var(--font-display);
+    letter-spacing: .02em;
+}
+.kicker::before { content: ''; width: 42px; height: 4px; border-radius: 999px; background: var(--heat); }
+.slide-title {
+    margin: 24px 0 0;
+    color: var(--ink);
+    font: 800 68px/1.05 var(--font-display);
+    letter-spacing: 0;
+}
+.footer {
+    position: absolute;
+    left: 116px;
+    right: 116px;
+    bottom: 42px;
+    display: flex;
+    justify-content: space-between;
+    color: var(--muted);
+    font-size: 21px;
+}
+
+/* ===========================================
+   SECTION AND TITLE SLIDES
+   Big classroom beats with a scientific identity.
+   =========================================== */
+.section-slide {
+    background:
+        radial-gradient(circle at 80% 18%, rgba(227,166,47,.34), transparent 28%),
+        radial-gradient(circle at 18% 84%, rgba(20,184,166,.28), transparent 30%),
+        linear-gradient(135deg, #082f2a 0%, #0f4f46 46%, #17231f 100%);
+    color: #fff;
+}
+.section-slide::before { opacity: .12; background-size: 78px 78px; }
+.section-slide .slide-inner { display: grid; align-content: center; padding: 110px 132px; }
+.section-slide .kicker { color: rgba(255,255,255,.72); }
+.section-slide .slide-title { max-width: 1080px; color: #fff; font-size: 116px; }
+.section-slide .subtitle { margin-top: 34px; max-width: 1080px; color: rgba(255,255,255,.84); font-size: 40px; line-height: 1.26; }
+.section-slide .footer { color: rgba(255,255,255,.58); }
+
+/* ===========================================
+   CONTENT SLIDES
+   Semantic blocks preserve complete sentences and teaching points.
+   =========================================== */
+.content-wrap { margin-top: 34px; display: grid; gap: 24px; }
+.content-block {
+    position: relative;
+    padding: 28px 34px 28px 38px;
+    border: 1px solid rgba(11,118,109,.18);
+    border-left: 10px solid var(--teal);
+    border-radius: 18px;
+    background: rgba(255,255,255,.78);
+    box-shadow: var(--shadow);
+    font-size: 34px;
+    line-height: 1.34;
+    overflow-wrap: break-word;
+}
+.content-block.long { font-size: 29px; line-height: 1.29; }
+.content-slide.compact .content-block { font-size: 30px; line-height: 1.28; padding: 24px 30px; }
+.content-slide.fit .slide-title { font-size: 58px; }
+.content-slide.fit .content-wrap { gap: 18px; }
+.content-slide.fit .content-block { font-size: 26px; line-height: 1.22; padding: 20px 26px; }
+.content-slide.superfit .slide-inner { padding-top: 66px; }
+.content-slide.superfit .slide-title { font-size: 50px; }
+.content-slide.superfit .content-block { font-size: 23px; line-height: 1.18; padding: 17px 22px; }
+
+
+/* ===========================================
+   CONTENT DENSITY REFINEMENT
+   Uses more of the fixed 1920x1080 canvas without breaking semantic blocks.
+   =========================================== */
+.content-slide .slide-inner { display: flex; flex-direction: column; }
+.content-slide .content-wrap { flex: 1; align-content: center; }
+.content-slide.solo .content-wrap { align-content: center; margin-top: 18px; }
+.content-slide.solo .content-block { min-height: 210px; display: flex; align-items: center; font-size: 44px; line-height: 1.22; padding: 40px 48px; }
+.content-slide.solo .content-block.long { font-size: 34px; line-height: 1.23; }
+.content-slide.paired .content-wrap { gap: 30px; }
+.content-slide.paired .content-block { font-size: 38px; line-height: 1.27; padding: 32px 40px; }
+.content-slide.paired .content-block.long { font-size: 31px; line-height: 1.24; }
+.content-slide.rich .content-wrap { gap: 22px; }
+.content-slide.rich .content-block { font-size: 31px; line-height: 1.24; padding: 24px 30px; }
+.content-slide.rich .content-block.long { font-size: 27px; line-height: 1.2; }
+.content-slide.fit.solo .content-block { font-size: 34px; }
+.content-slide.fit.paired .content-block { font-size: 30px; }
+.content-slide.fit.rich .content-block { font-size: 25px; }
+.content-slide.superfit.solo .content-block { font-size: 28px; }
+.content-slide.superfit.paired .content-block { font-size: 25px; }
+.content-slide.superfit.rich .content-block { font-size: 22px; }
+
+/* ===========================================
+   OBJECTIVES AND FILL-BLANK SLIDES
+   Structured classroom review layouts.
+   =========================================== */
+.objective-list,.fill-list { margin-top: 44px; display: grid; gap: 24px; }
+.objective-item,.fill-item {
+    min-height: 96px;
+    display: flex;
+    align-items: center;
+    padding: 26px 34px;
+    border: 1px solid rgba(11,118,109,.18);
+    border-radius: 20px;
+    background: rgba(255,255,255,.82);
+    box-shadow: var(--shadow);
+    font-size: 36px;
+    line-height: 1.26;
+}
+.objective-item::before {
+    counter-increment: obj;
+    content: counter(obj);
+    flex: 0 0 54px;
+    height: 54px;
+    margin-right: 22px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: var(--teal);
+    font-weight: 800;
+}
+.objective-list { counter-reset: obj; }
+.fill-slide.fit .fill-item { font-size: 30px; padding: 22px 28px; }
+
+/* ===========================================
+   QUIZ SLIDES
+   Options are visible initially; only the correct option changes on reveal.
+   =========================================== */
+.question { margin-top: 28px; max-width: 1540px; font-size: 48px; line-height: 1.16; font-weight: 800; }
+.options { margin-top: 42px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.option {
+    min-height: 114px;
+    display: flex;
+    align-items: center;
+    padding: 24px 30px;
+    border: 1px solid rgba(11,118,109,.18);
+    border-radius: 20px;
+    background: rgba(255,255,255,.82);
+    box-shadow: 0 16px 44px rgba(8,40,34,.10);
+    color: var(--ink);
+    font-size: 32px;
+    line-height: 1.18;
+    font-weight: 400;
+}
+.option.correct.revealed { color: var(--heat); border-color: rgba(217,41,28,.36); background: #fff8f6; font-weight: 400; }
+.explanation {
+    display: none;
+    margin-top: 32px;
+    padding: 24px 30px;
+    border-left: 10px solid var(--heat);
+    border-radius: 18px;
+    background: #fff8f6;
+    color: #661b17;
+    font-size: 30px;
+    line-height: 1.24;
+}
+.explanation.revealed { display: block; }
+.mcq-slide.fit .question { font-size: 39px; }
+.mcq-slide.fit .option { min-height: 92px; font-size: 27px; padding: 18px 24px; }
+.mcq-slide.fit .explanation { font-size: 25px; padding: 18px 24px; }
+
+/* ===========================================
+   REVEALS AND ANIMATIONS
+   Slide entrance plus teacher-controlled answer reveals.
+   =========================================== */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo);
+}
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.reveal:nth-child(1) { transition-delay: .06s; }
+.reveal:nth-child(2) { transition-delay: .13s; }
+.reveal:nth-child(3) { transition-delay: .2s; }
+.blank {
+    display: inline-flex;
+    justify-content: center;
+    min-width: 230px;
+    margin: 0 8px;
+    padding: 0 12px 3px;
+    border-bottom: 5px solid var(--teal);
+    color: transparent;
+    font-weight: 800;
+}
+.blank.revealed { color: var(--heat); }
+.step:not(.blank):not(.option):not(.explanation) { opacity: 0; }
+.step.revealed:not(.blank):not(.option):not(.explanation) { opacity: 1; }
+
+/* ===========================================
+   INLINE EDITING
+   Toggle with E, then click text to edit. Saved in localStorage.
+   =========================================== */
+.editable[contenteditable='true'] { background: rgba(255,255,255,.45); border-radius: 8px; }
+
+/* ===========================================
+   PRINT AND MOTION REFINEMENTS
+   viewport-base.css handles core print and reduced-motion behavior.
+   =========================================== */
+
+    </style>
+</head>
+<body>
+    <div class="deck-viewport" aria-label="Interactive science presentation">
+        <main class="deck-stage" id="deckStage" aria-live="polite"></main>
+    </div>
+    <a href="../../../../../index.html" class="back-link">Back</a>
+    <nav class="deck-controls" aria-label="Presentation controls">
+        <button id="prev" type="button" title="Previous">Back</button>
+        <button id="next" type="button" title="Next reveal or slide">Next</button>
+        <button id="zoomOut" type="button" title="Zoom out">-</button>
+        <button id="zoomReset" type="button" title="Reset zoom">100%</button>
+        <button id="zoomIn" type="button" title="Zoom in">+</button>
+        <span class="deck-status" id="deckStatus"></span>
+    </nav>
+    <div class="edit-hotzone" aria-hidden="true"></div>
+    <button class="edit-toggle" id="editToggle" type="button" title="Edit mode (E)">Edit</button>
+    <script>
+
+/* ===========================================
+   LESSON DATA
+   Extracted and normalized from the teaching PDF.
+   =========================================== */
+const deck = {"title":"T3 Sains Bab 5: Termokimia","slides":[{"type":"section","kicker":"Sains Tingkatan 3 KSSM","title":"Bab 5: 热化学 (Termokimia)","subtitle":"Termokimia - Bahan Pengajaran Dwibahasa"},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["Bab 5: 热化学 ({Termokimia})","5.1 热化学基础概念 ({Konsep Asas Termokimia})","热化学 ({Termokimia}) 是研究化学反应发生时，热能变化的科学。 (Termokimia ialah kajian tentang perubahan haba semasa tindak balas kimia berlaku.) 在深入了解反应类型前，我们需要掌握几个核心的扩展知识点。 (Setiap tindak balas kimia sentiasa disertai dengan perubahan bentuk tenaga.)"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["知识点 1：系统与环境 ({Sistem dan Persekitaran})","在热化学中，我们将发生化学反应的空间或物质称为系统 ({Sistem})，例如烧杯中的混合溶液 (Campuran larutan di dalam bikar dikenali sebagai sistem)；而系统以外的所有事物（包括烧杯本身、空气、温度计）被称为环境 ({Persekitaran})。(Segala benda di luar sistem seperti bikar, udara, dan termometer dikenali sebagai persekitaran.)热化学的本质就是研究热能 ({Tenaga Haba}) 在系统与环境之间的转移。(Pemindahan haba antara sistem dan persekitaran.)"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["知识点 2：放热反应 ({Tindak Balas Eksotermik})","放热反应是指化学系统将内部的化学能 ({Tenaga Kimia}) 转化为热能，并向环境释放 ({Membebaskan haba}) 的过程。(Tindak balas eksotermik ialah tindak balas kimia yang membebaskan haba ke persekitaran.)"]},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 热量流向： 热量从系统流向环境。(Haba mengalir dari sistem ke persekitaran.)","- 温度变化： 由于环境吸收了热量，周围环境和反应混合物的温度会升高 ({Suhu meningkat})。(Suhu persekitaran dan campuran tindak balas akan meningkat kerana haba dibebaskan.)"]},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 化学能转化： 反应物 ({Bahan tindak balas}) 的能量高于生成物 ({Hasil tindak balas})。","- 深入生活例子 (Contoh dalam kehidupan harian):","- 燃烧作用 ({Pembakaran}): 汽油、木材或煤气的燃烧会释放大量热能与光能。 (Pembakaran bahan api membebaskan tenaga haba dan cahaya.)"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 中和反应 ({Peneutralan}): 酸 ({Asid}) 与碱 ({Alkali}) 混合时（例如盐酸与氢氧化钠），会释放热量。(Tindak balas antara asid dan alkali membebaskan haba.)","- 呼吸作用 ({Respirasi}): 细胞分解葡萄糖以释放供人体使用的能量，这是一个典型的微观放热过程。(Proses penguraian glukosa dalam sel badan membebaskan tenaga.)","- 生锈 ({Pengaratan}): 铁生锈虽然缓慢，但本质上也是一种释放热量的氧化过程。(Pengaratan besi ialah proses pengoksidaan yang membebaskan haba.)"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["知识点 3：吸热反应 ({Tindak Balas Endotermik})","吸热反应是指化学系统从环境中吸收热量 ({Menyerap haba})，将其转化为储存在物质内部的化学能。(Tindak balas endotermik ialah tindak balas kimia yang menyerap haba dari persekitaran.)"]},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 热量流向： 热量从环境流向系统。(Haba mengalir dari persekitaran ke sistem.)","- 温度变化： 由于环境失去了热量，周围的温度会下降 ({Suhu menurun})。(Suhu persekitaran menurun kerana haba telah diserap oleh sistem.)"]},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 深入生活例子 (Contoh dalam kehidupan harian):","- 热分解 ({Penguraian Terma}): 加热碳酸钙 ({Kalsium Karbonat}) 使其分解的过程需要持续吸收热能。 (Pemanasan kalsium karbonat memerlukan penyerapan haba yang berterusan.)","- 光合作用 ({Fotosintesis}): 绿色植物吸收太阳的光能（热能的一种形式）来合成食物。(Tumbuhan hijau menyerap tenaga cahaya dari Matahari untuk membuat makanan.)"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 溶解铵盐 ({Melarutkan Garam Ammonium}): 将硝酸铵 ({Ammonium Nitrat}) 溶于水时，会吸收大量周围的热量，使水温骤降。 (Melarutkan ammonium nitrat dalam air menyerap haba dan menyejukkan air secara mendadak.)","Eksotermik Sistem Haba Haba Suhu Persekitaran Meningkat","Endotermik Sistem Haba Haba Suhu Persekitaran Menurun"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["知识点 4：温度-时间变化图与热平衡 ({Keseimbangan Terma})","在实验中，当我们把温度计 ({Termometer}) 放入反应溶液时，温度读数会发生变化。 (Apabila kita meletakkan termometer ke dalam campuran tindak balas, bacaan suhu akan berubah.)","- 当放热反应发生时，温度计的读数会迅速上升，达到一个最高点 ({Suhu Maksimum})。(Bagi tindak balas eksotermik, bacaan termometer akan meningkat sehingga mencapai suhu maksimum.)"],"compact":true},{"type":"content","kicker":"5.1 - Konsep Asas","title":"热化学基础概念","blocks":["- 当反应结束，或者系统与环境达到热平衡 ({Keseimbangan Terma}) 时，温度将不再上升，并最终随着热量散失而慢慢降回室温。 (Suhu akan kekal dan tidak berubah apabila keseimbangan terma dicapai.)","- 热平衡是指系统和环境的温度达到一致， 热量不再发生净转移的状态。(Keseimbangan terma bermaksud sistem dan persekitaran mencapai suhu yang sama dan tiada pemindahan haba bersih berlaku.)"]},{"type":"objectives","kicker":"5.1","title":"Standard Pembelajaran","items":["Mendefinisikan tindak balas eksotermik dan endotermik.","Mengenal pasti contoh tindak balas seperti pembakaran, peneutralan, dan penguraian terma.","Memahami konsep sistem, persekitaran, dan keseimbangan terma."]},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"1. Dalam kajian termokimia, bikar dan termometer dianggap sebagai apa?","options":["A. Sistem","B. Persekitaran","C. Bahan tindak balas","D. Tenaga kimia"],"answer":1,"explanation":"Penerangan: Sistem ialah bahan kimia yang bertindak balas, manakala bikar dan termometer ialah persekitaran yang menerima atau membekalkan haba."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"2. Antara proses berikut, yang manakah merupakan tindak balas eksotermik?","options":["A. Fotosintesis","B. Penguraian terma kalsium karbonat","C. Melarutkan ammonium nitrat dalam air","D. Tindak balas peneutralan asid dan alkali"],"answer":3,"explanation":"Penerangan: Peneutralan sentiasa membebaskan haba ke persekitaran, menyebabkan bekas menjadi panas."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"3. Mengapakah suhu campuran dalam tindak balas eksotermik akhirnya menjadi malar (tidak berubah)?","options":["A. Termometer telah rosak akibat haba.","B. Tindak balas berlaku secara berterusan.","C. Keseimbangan terma telah dicapai antara sistem dan persekitaran.","D. Semua tenaga kimia telah musnah."],"answer":2,"explanation":"Penerangan: Keseimbangan terma dicapai apabila tiada lagi pemindahan haba bersih antara sistem dengan persekitaran."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"4. Apakah perubahan tenaga yang berlaku semasa tindak balas endotermik?","options":["A. Tenaga haba ditukarkan kepada tenaga kimia.","B. Tenaga kimia ditukarkan kepada tenaga haba.","C. Tenaga haba ditukarkan kepada tenaga kinetik.","D. Tiada perubahan tenaga berlaku."],"answer":0,"explanation":"Penerangan: Sistem menyerap tenaga haba dari persekitaran dan menyimpannya sebagai tenaga kimia dalam ikatan bahan baharu."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"5. Semasa proses fotosintesis, apakah fungsi haba (tenaga cahaya) dari Matahari?","options":["A. Memanaskan daun supaya tidak layu.","B. Membebaskan gas karbon dioksida.","C. Diserap sebagai sumber tenaga untuk menghasilkan glukosa (endotermik).","D. Menghasilkan oksigen secara eksotermik."],"answer":2,"explanation":"Penerangan: Fotosintesis adalah proses endotermik yang memerlukan tenaga luar (ca- haya/haba) untuk membina makanan."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"6. Antara alat berikut, yang manakah paling sesuai digunakan untuk menyiasat perubahan haba dalam suatu eksperimen kimia?","options":["A. Jam randik","B. Termometer","C. Neraca elektronik","D. Pita pengukur"],"answer":1,"explanation":"Penerangan: Termometer digunakan untuk mengukur suhu dan mengenal pasti sama ada tin- dak balas eksotermik atau endotermik sedang berlaku."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"7. Apakah yang akan berlaku kepada suhu air apabila sedikit ammonium klorida dilarutkan ke dalamnya?","options":["A. Suhu meningkat.","B. Suhu menurun.","C. Suhu menjadi malar serta-merta.","D. Suhu meningkat, kemudian malar."],"answer":1,"explanation":"Penerangan: Melarutkan garam ammonium klorida ialah satu proses endotermik yang meny- erap haba dari air, menyebabkan suhu air menurun."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"8. Antara tindak balas berikut, yang manakah membebaskan haba ke persekitaran?","options":["A. Pembakaran kek di dalam ketuhar","B. Proses memasak telur","C. Proses pengaratan besi","D. Penguraian garam karbonat"],"answer":2,"explanation":"Penerangan: Pengaratan besi ialah proses pengoksidaan yang membebaskan haba secara perlahan-lahan ke persekitaran."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"9. Tindak balas penguraian terma hanya akan berlaku jika...","options":["A. haba sentiasa dibekalkan dari persekitaran.","B. asid dicampurkan ke dalam larutan.","C. larutan dikacau dengan cepat.","D. gas oksigen diserap ke dalam bahan."],"answer":0,"explanation":"Penerangan: Penguraian terma adalah sangat endotermik dan memerlukan pemanasan yang berterusan untuk memutuskan ikatan kimia."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"10. Apakah maksud ’eksotermik’ berdasarkan asal usul perkataan Yunani?","options":["A. Haba yang diserap ke dalam","B. Haba yang dibebaskan ke luar","C. Haba yang musnah","D. Tenaga yang dicipta"],"answer":1,"explanation":"Penerangan: ”Ekso” bermaksud luar, manakala ”termik” merujuk kepada haba."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"11. Semasa tindak balas pembakaran berlaku, tenaga kimia dalam bahan api ditukarkan kepada...","options":["A. Tenaga elektrik","B. Tenaga keupayaan graviti","C. Tenaga haba dan cahaya","D. Tenaga kinetik molekul air"],"answer":2,"explanation":"Penerangan: Pembakaran yang sempurna sentiasa menghasilkan nyalaan (cahaya) dan rasa panas (haba)."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"12. Apabila natrium hidroksida (alkali) bertindak balas dengan asid hidroklorik dalam bikar, didapati bikar itu menjadi panas. Apakah jenis tindak balas ini?","options":["A. Penguraian","B. Endotermik","C. Pengoksidaan","D. Eksotermik (Peneutralan)"],"answer":3,"explanation":"Penerangan: Peneutralan sentiasa membebaskan haba, menyebabkan suhu campuran dan bekas meningkat."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"13. Apakah yang berlaku pada zarah (molekul) persekitaran semasa tindak balas endotermik?","options":["A. Tenaga kinetik mereka meningkat.","B. Mereka kehilangan haba kepada sistem, menjadikan persekitaran sejuk.","C. Mereka bertukar menjadi gas oksigen.","D. Mereka terbakar."],"answer":1,"explanation":"Penerangan: Dalam tindak balas endotermik, sistem ”mengambil” haba molekul udara/bekas di sekelilingnya, menyebabkan suhu sekeliling turun."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"14. Cawan polistirena sering digunakan semasa menyiasat tindak balas termokimia berband- ing bikar kaca. Mengapa?","options":["A. Untuk mempercepatkan pembebasan haba.","B. Kerana ia membenarkan asid bercampur lebih baik.","C. Kerana polistirena ialah penebat haba yang baik.","D. Kerana ia memantulkan cahaya."],"answer":2,"explanation":"Penerangan: Polistirena mengurangkan kehilangan haba ke persekitaran, menjadikan bacaan termometer lebih tepat."},{"type":"mcq","kicker":"Praktis Formatif 5.1 - Soalan Objektif","question":"15. Tanda aras utama bagi mengenal pasti tindak balas telah selesai secara pemerhatian haba ialah...","options":["A. Buih gas mula kelihatan.","B. Warna bahan berubah menjadi merah.","C. Bacaan termometer mencapai paras maksimum (atau minimum) dan mula kembali ke suhu bilik.","D. Bikar itu pecah."],"answer":2,"explanation":"Penerangan: Apabila suhu berhenti berubah (mencapai puncak), ia menunjukkan keseimban- gan terma telah dicapai dan pemindahan haba terhenti."},{"type":"fillblank","kicker":"Praktis Formatif 5.1 - Isi Tempat Kosong","title":"Bahagian B","items":["Dalam tindak balas eksotermik, haba dipindahkan dari {sistem} ke {persekitaran}, menyebabkan bekas berasa panas.","Tindak balas penguraian terma dan fotosintesis adalah contoh tindak balas {endotermik}.","Apabila bacaan termometer menurun ke paras minimum dan kemudian kekal, ini menunjukkan campuran telah mencapai {keseimbangan terma}."]},{"type":"fillblank","kicker":"Praktis Formatif 5.1 - Isi Tempat Kosong","title":"Bahagian B","items":["Proses {respirasi} sel yang berlaku di dalam badan kita membebaskan haba untuk membekalkan tenaga bagi sel.","Endo dalam perkataan endotermik merujuk kepada pergerakan tenaga haba ke {dalam} {sistem}.","Pemanasan kalsium karbonat dalam makmal ialah proses {penguraian terma} yang memerlukan penyerapan haba yang tinggi."]},{"type":"fillblank","kicker":"Praktis Formatif 5.1 - Isi Tempat Kosong","title":"Bahagian B","items":["Dalam tindak balas eksotermik, tenaga kimia bahan tindak balas adalah {lebih tinggi} daripada tenaga kimia hasil tindak balas.","Tindak balas asid dengan logam alkali akan membebaskan gas hidrogen dan {haba} ke udara."]},{"type":"section","kicker":"5.2","title":"热化学的应用与设计","subtitle":"Aplikasi Termokimia dalam Kehidupan Harian"},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["5.2 热化学的应用与设计 ({Aplikasi Termokimia dalam Kehidupan Harian})","理解了热化学的原理后，我们可以将其应用到解决日常生活和医疗急救的实际问题中。 (Memahami prinsip termokimia membolehkan kita mengaplikasikannya untuk menyelesaikan masalah harian dan perubatan.) 以下是几个关键的扩展知识点与应用设计。"]},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["知识点 5：即热包的科学原理 ({Pek Panas Segera})","即热包通常用于医疗救援，以缓解肌肉痉挛 ({Kekejangan Otot})、增加血液循环，或者在寒冷天气提供保暖。 (Pek panas segera sering digunakan dalam perubatan untuk melegakan kekejangan otot, melancarkan peredaran darah, atau memberi kehangatan ketika cuaca sejuk.)","- 内部构造： 即热包内部分为两个夹层，分别装有水 ({Air}) 和特定的无水盐或化学物质粉末。(Pek panas terdiri daripada dua lapisan yang mengasingkan air dan bahan kimia pepejal.)"],"compact":true},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["- 常用化学物质： 氯化钙 ({Kalsium Klorida}) 或硫酸镁 ({Magnesium Sulfat}) 或氧化钙 ({Kalsium Oksida})。","- 运作机制： 当用力挤压包装时，内部水袋破裂，化学物质溶解于水中。这是一个强烈的放热过程 ({Proses Eksotermik})，迅速释放大量热能 ({Membebaskan haba})，使包装的温度升高至约 50◦C 左右。(Apabila kantung air dipicit sehingga pecah, larutan bahan kimia akan membebaskan haba secara eksotermik, menghangatkan pek tersebut dengan pantas.)"],"compact":true},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["知识点 6：即冷包的科学原理 ({Pek Sejuk Segera})","即冷包用于运动受伤时的急救，能有效减少肌肉或伤口的肿胀 ({Mengurangkan Bengkak})， 并吸收体表的热量。 (Pek sejuk segera digunakan untuk kecemasan sukan bagi mengurangkan bengkak luka dan menyerap haba dari badan yang tercedera.)","- 常用化学物质： 硝酸铵 ({Ammonium Nitrat}) 或氯化铵 ({Ammonium Klorida}) 加上水袋。(Bahan utama ialah ammonium nitrat dan air.)"],"compact":true},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["- 运作机制： 挤压水袋后，硝酸铵溶解在水中。这是一个典型的吸热过程 ({Proses Endotermik})。 它会从周围环境（包括接触的皮肤）吸收热量 ({Menyerap haba})，使即冷包的温度骤降至接近 0◦C。(Tindak balas melarut ammonium nitrat dalam air sangat endotermik, menyerap haba dari tisu badan dan menyejukkan kawasan tersebut.)","Pek ditekan (Kantung air pecah) Bahan: Kalsium Klorida Proses: Eksotermik Haba dibebaskan Bahan: Ammonium Nitrat Proses: Endotermik Haba diserap Pek Panas Melegakan otot Pek Sejuk Mengurangkan bengkak","知识点 7：解决全球变暖 ({Pemanasan Global})"],"compact":true},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["人类过度燃烧化石燃料产生的大量温室气体导致全球气温上升。 (Pembakaran bahan api fosil yang berlebihan membebaskan gas rumah hijau dan menyebabkan suhu global meningkat.) 从热化学的角度来看，我们可以利用大自然的“吸热反应”来缓解这一问题。 (Dari sudut termokimia, kita boleh menggunakan proses endotermik semula jadi untuk meredakan isu ini.)","- 植树造林 ({Menanam Pokok}): 增加绿植数量。植物在进行光合作用时，不仅吸收二氧化碳，还会吸收环境中的热能（太阳能）。 (Tumbuhan menyerap karbon dioksida serta haba/tenaga cahaya Matahari semasa proses fotosintesis.)"],"compact":true},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["- 这是一个巨大的宏观吸热系统，有助于维持地球表面的热平衡，缓解温室效应带来的过热现象。(Ini bertindak sebagai proses penyejukan global semula jadi.)","知识点 8：隔热与热容器的设计 ({Penebat Haba})","为了保存放热反应产生的热量，或防止外界热量进入吸热系统，科学家和工程师会使用热绝缘体 ({Penebat Haba})。(Untuk mengelakkan kehilangan atau penyerapan haba yang tidak diingini, penebat haba digunakan.) 例如在设计保温杯 ({Kelalang Termos}) 或食物保温箱时，常使用聚苯乙烯 ({Polistirena})，因为它是热的不良导体，能大幅减少热量的流失。"],"compact":true},{"type":"content","kicker":"5.2 - Aplikasi","title":"热化学的应用与设计","blocks":["(Polistirena merupakan penebat haba yang sangat baik dan menghalang pemindahan haba antara sistem dan persekitaran.)"]},{"type":"objectives","kicker":"5.2","title":"Standard Pembelajaran","items":["Menerangkan fungsi dan bahan kimia dalam pek panas segera dan pek sejuk segera.","Mengaplikasikan konsep termokimia dalam penyelesaian masalah pemanasan global.","Mengenal pasti bahan yang bertindak sebagai penebat haba."]},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"1. Bahan kimia manakah yang paling sesuai digunakan dalam penghasilan pek panas segera?","options":["A. Ammonium nitrat","B. Kalsium karbonat","C. Kalsium klorida","D. Natrium klorida"],"answer":2,"explanation":"Penerangan: Kalsium klorida membebaskan haba yang banyak apabila dilarutkan dalam air (eksotermik), menjadikannya sesuai untuk pek panas."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"2. Seorang atlet mengalami kecederaan dan pergelangan kakinya bengkak. Apakah proses kimia yang berlaku apabila jurulatihnya menggunakan pek sejuk segera?","options":["A. Tindak balas eksotermik membebaskan haba.","B. Tindak balas endotermik menyerap haba dari kaki atlet.","C. Pembakaran bahan kimia dalam pek.","D. Peneutralan asid urik dalam otot."],"answer":1,"explanation":"Penerangan: Pek sejuk berfungsi secara endotermik, iaitu menyerap haba dari persekitaran (kaki yang bengkak) untuk mengurangkan keradangan."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"3. Antara berikut, bahan kimia manakah yang dikaitkan dengan penurunan suhu mendadak apabila bertindak balas dengan air?","options":["A. Magnesium sulfat","B. Asid hidroklorik","C. Kalsium oksida","D. Ammonium nitrat"],"answer":3,"explanation":"Penerangan: Ammonium nitrat menyerap haba persekitaran apabila terlarut, menjadikannya bahan utama pek sejuk."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"4. Bagaimanakah aktiviti menanam pokok yang banyak dapat membantu mengurangkan ke- san pemanasan global dari sudut termokimia?","options":["A. Pokok membebaskan haba ke angkasa.","B. Pokok menyejukkan udara secara eksotermik.","C. Proses fotosintesis menyerap haba (tenaga cahaya) dari persekitaran.","D. Pokok menghalang cahaya Matahari secara fizikal."],"answer":2,"explanation":"Penerangan: Fotosintesis ialah tindak balas endotermik berskala besar yang menyerap tenaga daripada cahaya Matahari."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"5. Mengapakah cawan polistirena sering digunakan semasa eksperimen termokimia di makmal sekolah?","options":["A. Polistirena menyerap haba dengan cepat.","B. Polistirena mudah melebur.","C. Polistirena bertindak balas dengan asid.","D. Polistirena ialah penebat haba yang baik."],"answer":3,"explanation":"Penerangan: Polistirena mengurangkan kehilangan haba ke persekitaran, memastikan bacaan termometer lebih tepat."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"6. Apakah langkah pertama yang perlu dilakukan pengguna untuk mengaktifkan pek panas atau pek sejuk segera?","options":["A. Menjemurnya di bawah Matahari.","B. Memasukkannya ke dalam peti sejuk.","C. Memampat atau memicit pek supaya kantung air di dalam pecah.","D. Membakar pek tersebut."],"answer":2,"explanation":"Penerangan: Kantung air perlu dipecahkan supaya air dapat melarutkan garam kimia pepejal untuk memulakan tindak balas."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"7. Selain kalsium klorida, bahan kimia apakah yang sesuai digunakan untuk membuat pek panas segera?","options":["A. Asid nitrik","B. Air suling","C. Ammonium klorida","D. Magnesium sulfat atau Kalsium oksida"],"answer":3,"explanation":"Penerangan: Magnesium sulfat dan kalsium oksida juga mengalami tindak balas terlarut se- cara eksotermik yang kuat."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"8. Seorang jururawat ingin melegakan kekejangan otot belakang pesakit. Alat apakah yang patut digunakannya berlandaskan prinsip termokimia?","options":["A. Pek sejuk berisi ammonium nitrat.","B. Pek panas berisi kalsium klorida.","C. Botol kaca berisi air sejuk.","D. Termometer makmal."],"answer":1,"explanation":"Penerangan: Haba dari pek panas membantu melancarkan peredaran darah dan melegakan otot yang kejang."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"9. Proses melarutkan natrium hidroksida pepejal di dalam air membebaskan banyak haba. Ini membolehkan ia diaplikasikan secara teori untuk mencipta...","options":["A. Penyejuk enjin kereta","B. Penebat haba","C. Alat pemanas (Pek Panas)","D. Alat pemadam api"],"answer":2,"explanation":"Penerangan: Mana-mana proses eksotermik secara teorinya boleh digunakan sebagai sumber haba sementara, seperti pek panas."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"10. Apakah punca utama berlakunya peningkatan pemanasan global masa kini yang cuba dikawal oleh ahli sains?","options":["A. Pembakaran bahan api fosil yang berlebihan.","B. Penggunaan pek sejuk secara meluas.","C. Penanaman terlalu banyak pokok.","D. Penguraian garam ammonium dalam laut."],"answer":0,"explanation":"Penerangan: Pembakaran fosil bukan sahaja eksotermik tetapi juga membebaskan gas rumah hijau yang memerangkap haba."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"11. Mengapakah air digunakan sebagai bahan pelarut di dalam pek panas dan pek sejuk?","options":["A. Kerana air membebaskan oksigen.","B. Kerana air adalah pelarut yang selamat dan tidak bertoksik untuk mence- tuskan tindak balas.","C. Kerana air sentiasa membebaskan haba apabila disentuh.","D. Kerana air akan membeku dengan cepat."],"answer":1,"explanation":"Penerangan: Air adalah neutral, murah, selamat dan mampu melarutkan garam-garam ionik untuk proses termokimia."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"12. Kotak penebat sering digunakan untuk memastikan makanan kekal panas. Bahan manakah yang TIDAK sesuai dibuat kotak penebat?","options":["A. Polistirena","B. Logam tembaga","C. Kapas","D. Serbuk kayu"],"answer":1,"explanation":"Penerangan: Logam tembaga ialah konduktor haba yang sangat baik, ia akan mengalirkan haba keluar dengan sangat pantas."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"13. Proses memecahkan molekul kompleks menjadi molekul mudah dengan menyerap haba berlaku di dalam mesin tertentu di industri. Apakah jenis perubahan tenaga ini?","options":["A. Haba → Kinetik","B. Kimia → Haba","C. Haba → Kimia","D. Cahaya → Elektrik"],"answer":2,"explanation":"Penerangan: Proses menyerap haba bermaksud ia adalah proses endotermik, menukarkan tenaga haba persekitaran kepada ikatan tenaga kimia."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"14. Sekiranya rekaan kantung air di dalam pek panas bocor dan bercampur perlahan-lahan dari awal pengilangan, apakah yang akan berlaku apabila pengguna ingin menggunakannya?","options":["A. Pek akan berfungsi dengan lebih hebat.","B. Pek tidak lagi menjadi panas kerana bahan kimia telah terlarut awal dan hilang habanya.","C. Pek akan meletup.","D. Pek tersebut bertukar menjadi pek sejuk."],"answer":1,"explanation":"Penerangan: Tindak balas eksotermik telah selesai lebih awal, menyebabkan haba terbebas tanpa digunakan dan disejukkan kembali oleh persekitaran."},{"type":"mcq","kicker":"Praktis Formatif 5.2 - Soalan Objektif","question":"15. Apakah kebaikan menggunakan konsep ”Tindak balas endotermik” dalam kempen hijau global?","options":["A. Menggalakkan pelepasan gas hidrogen.","B. Memanaskan suhu atmosfera.","C. Mengurangkan kepekatan haba serta karbon di udara (melalui penanaman pokok).","D. Mencipta banyak bahan letupan."],"answer":2,"explanation":"Penerangan: Melalui penanaman pokok, proses endotermik (fotosintesis) menyerap karbon dioksida dan tenaga haba/cahaya, menstabilkan cuaca."},{"type":"fillblank","kicker":"Praktis Formatif 5.2 - Isi Tempat Kosong","title":"Bahagian B","items":["Pek sejuk segera mengandungi kantung air dan pepejal {ammonium nitrat} yang direka untuk menyerap haba bagi mengurangkan bengkak.","Memecahkan kantung air di dalam pek panas segera menyebabkan tindak balas {eksotermik} berlaku antara kalsium klorida dan air.","Bahan {penebat haba} seperti polistirena digunakan untuk mengelakkan pemindahan haba antara sistem dan persekitaran."]},{"type":"fillblank","kicker":"Praktis Formatif 5.2 - Isi Tempat Kosong","title":"Bahagian B","items":["Menanam lebih banyak pokok membantu menyerap haba secara semula jadi untuk mengurangkan kesan {pemanasan global}.","Pek panas sangat bermanfaat di hospital untuk merawat pesakit yang mengalami {kekejangan otot}.","Proses di mana garam ammonium dilarutkan ke dalam air akan sentiasa menyebabkan suhu bekas {menurun}."]},{"type":"fillblank","kicker":"Praktis Formatif 5.2 - Isi Tempat Kosong","title":"Bahagian B","items":["{Fotosintesis} oleh tumbuh-tumbuhan hijau merupakan proses penyejukan bumi kerana ia menggunakan cahaya Matahari (haba).","Kalsium oksida atau {magnesium sulfat} adalah antara alternatif bahan kimia yang boleh digunakan dalam pembuatan pek panas segera."]}]};
+
+/* ===========================================
+   HTML ESCAPING AND BLANK RENDERING
+   Keeps teacher answers hidden until reveal.
+   =========================================== */
+const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+const editKey = (id) => `frontend-slides:t3-sains-bab5:${id}`;
+const editable = (id, text, tag = 'div', className = '') => {
+    const saved = localStorage.getItem(editKey(id));
+    return `<${tag} class="editable ${className}" data-edit-id="${esc(id)}">${esc(saved ?? text)}</${tag}>`;
+};
+const blankify = (sentence) => esc(sentence).replace(/\{([^}]+)\}/g, (_, answer) => `<span class="blank step">${esc(answer)}</span>`);
+const editableBlank = (id, text, className) => `<div class="editable ${className}" data-edit-id="${esc(id)}">${blankify(localStorage.getItem(editKey(id)) ?? text)}</div>`;
+
+/* ===========================================
+   SLIDE MARKUP FACTORY
+   Produces fixed 1920x1080 slides from structured lesson data.
+   =========================================== */
+function slideMarkup(slide, index) {
+    const footer = `<div class="footer"><span>${esc(deck.title)}</span><span>${index + 1} / ${deck.slides.length}</span></div>`;
+    const kicker = `<div class="kicker reveal">${esc(slide.kicker || '')}</div>`;
+    if (slide.type === 'section') {
+        return `<section class="slide section-slide" data-index="${index}"><div class="slide-inner">${kicker}${editable(`s${index}-title`, slide.title, 'h1', 'slide-title reveal')}<p class="subtitle reveal">${esc(slide.subtitle || '')}</p>${footer}</div></section>`;
+    }
+    if (slide.type === 'objectives') {
+        return `<section class="slide objectives-slide" data-index="${index}"><div class="slide-inner">${kicker}${editable(`s${index}-title`, slide.title, 'h2', 'slide-title reveal')}<div class="objective-list">${slide.items.map((item, i) => editable(`s${index}-obj-${i}`, item, 'div', 'objective-item reveal')).join('')}</div>${footer}</div></section>`;
+    }
+    if (slide.type === 'mcq') {
+        const options = slide.options.map((option, i) => `<div class="option ${i === slide.answer ? 'correct step' : ''} reveal">${esc(option)}</div>`).join('');
+        return `<section class="slide mcq-slide" data-index="${index}"><div class="slide-inner">${kicker}${editable(`s${index}-q`, slide.question, 'h2', 'question reveal')}<div class="options">${options}</div><div class="explanation step">${esc(slide.explanation || '')}</div>${footer}</div></section>`;
+    }
+    if (slide.type === 'fillblank') {
+        const items = slide.items.map((item, i) => editableBlank(`s${index}-fill-${i}`, item, 'fill-item reveal')).join('');
+        return `<section class="slide fill-slide" data-index="${index}"><div class="slide-inner">${kicker}${editable(`s${index}-title`, slide.title, 'h2', 'slide-title reveal')}<div class="fill-list">${items}</div>${footer}</div></section>`;
+    }
+    const compact = slide.compact ? ' compact' : '';
+    const density = (slide.blocks || []).length === 1 ? ' solo' : ((slide.blocks || []).length >= 3 ? ' rich' : ' paired');
+    const blocks = (slide.blocks || []).map((block, i) => editableBlank(`s${index}-block-${i}`, block, `content-block ${block.length > 220 ? 'long' : ''} reveal`)).join('');
+    return `<section class="slide content-slide${compact}${density}" data-index="${index}"><div class="slide-inner">${kicker}${editable(`s${index}-title`, slide.title, 'h2', 'slide-title reveal')}<div class="content-wrap">${blocks}</div>${footer}</div></section>`;
+}
+
+/* ===========================================
+   PRESENTATION CONTROLLER
+   Handles fixed-stage scaling, slide navigation, reveals, zoom, touch, and editing.
+   =========================================== */
+class SlidePresentation {
+    constructor() {
+        this.stage = document.getElementById('deckStage');
+        this.viewport = document.querySelector('.deck-viewport');
+        this.status = document.getElementById('deckStatus');
+        this.currentSlide = 0;
+        this.stepIndex = 0;
+        this.zoom = 1;
+        this.editing = false;
+        this.stage.innerHTML = deck.slides.map(slideMarkup).join('');
+        this.slides = [...document.querySelectorAll('.slide')];
+        this.setupStageScale();
+        this.setupControls();
+        this.setupEditing();
+        this.setupTouchNav();
+        this.showSlide(0);
+    }
+
+    setupStageScale() {
+        this.scale = () => {
+            const base = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+            const factor = base * this.zoom;
+            const scaledWidth = 1920 * factor;
+            const scaledHeight = 1080 * factor;
+            const x = Math.max(0, (window.innerWidth - scaledWidth) / 2);
+            const y = Math.max(0, (window.innerHeight - scaledHeight) / 2);
+            this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+            this.viewport.classList.toggle('zoomed', this.zoom > 1.01);
+        };
+        this.scale();
+        window.addEventListener('resize', this.scale);
+    }
+
+    setupControls() {
+        document.getElementById('prev').addEventListener('click', () => this.previous());
+        document.getElementById('next').addEventListener('click', () => this.next());
+        document.getElementById('zoomOut').addEventListener('click', () => this.setZoom(this.zoom - .15));
+        document.getElementById('zoomReset').addEventListener('click', () => this.setZoom(1));
+        document.getElementById('zoomIn').addEventListener('click', () => this.setZoom(this.zoom + .15));
+        document.addEventListener('keydown', (event) => {
+            if (event.target?.getAttribute('contenteditable') === 'true') return;
+            if ([' ', 'Enter', 'ArrowRight', 'PageDown'].includes(event.key)) { event.preventDefault(); this.next(); }
+            if (['ArrowLeft', 'Backspace', 'PageUp'].includes(event.key)) { event.preventDefault(); this.previous(); }
+            if (event.key === '+' || event.key === '=') this.setZoom(this.zoom + .15);
+            if (event.key === '-') this.setZoom(this.zoom - .15);
+            if (event.key === '0') this.setZoom(1);
+            if (event.key.toLowerCase() === 'f') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+            if (event.key.toLowerCase() === 'e') this.toggleEditMode();
+        });
+    }
+
+    setupTouchNav() {
+        let startX = 0;
+        this.viewport.addEventListener('touchstart', (event) => { startX = event.changedTouches[0].clientX; }, { passive: true });
+        this.viewport.addEventListener('touchend', (event) => {
+            const dx = event.changedTouches[0].clientX - startX;
+            if (Math.abs(dx) > 60) dx < 0 ? this.next() : this.previous();
+        }, { passive: true });
+        this.viewport.addEventListener('wheel', (event) => {
+            if (!event.ctrlKey) return;
+            event.preventDefault();
+            this.setZoom(this.zoom + (event.deltaY < 0 ? .08 : -.08));
+        }, { passive: false });
+    }
+
+    setupEditing() {
+        const hotzone = document.querySelector('.edit-hotzone');
+        const toggle = document.getElementById('editToggle');
+        let hideTimeout = null;
+        const show = () => { clearTimeout(hideTimeout); toggle.classList.add('show'); };
+        const hide = () => { hideTimeout = setTimeout(() => { if (!this.editing) toggle.classList.remove('show'); }, 400); };
+        hotzone.addEventListener('mouseenter', show);
+        hotzone.addEventListener('mouseleave', hide);
+        hotzone.addEventListener('click', () => this.toggleEditMode());
+        toggle.addEventListener('mouseenter', show);
+        toggle.addEventListener('mouseleave', hide);
+        toggle.addEventListener('click', () => this.toggleEditMode());
+        this.stage.addEventListener('input', (event) => {
+            const target = event.target.closest('.editable');
+            if (target) localStorage.setItem(editKey(target.dataset.editId), target.innerText);
+        });
+    }
+
+    toggleEditMode() {
+        this.editing = !this.editing;
+        document.body.classList.toggle('editing', this.editing);
+        document.getElementById('editToggle').classList.toggle('active', this.editing);
+        document.querySelectorAll('.editable').forEach((el) => el.setAttribute('contenteditable', this.editing ? 'true' : 'false'));
+    }
+
+    applyRevealState() {
+        const active = this.slides[this.currentSlide];
+        const steps = [...active.querySelectorAll('.step')];
+        steps.forEach((element, index) => element.classList.toggle('revealed', index < this.stepIndex));
+        this.fitActiveSlide(active);
+        this.status.textContent = `${this.currentSlide + 1}/${this.slides.length} | ${this.stepIndex}/${steps.length} | ${Math.round(this.zoom * 100)}%`;
+    }
+
+    fitActiveSlide(slide) {
+        slide.classList.remove('fit', 'superfit');
+        if (slide.scrollHeight <= 1082 && slide.scrollWidth <= 1922) return;
+        slide.classList.add('fit');
+        if (slide.scrollHeight <= 1082 && slide.scrollWidth <= 1922) return;
+        slide.classList.add('superfit');
+    }
+
+    showSlide(index) {
+        this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.stepIndex = 0;
+        this.slides.forEach((slide, i) => {
+            slide.classList.toggle('active', i === this.currentSlide);
+            slide.classList.toggle('visible', i === this.currentSlide);
+        });
+        this.applyRevealState();
+    }
+
+    next() {
+        const steps = this.slides[this.currentSlide].querySelectorAll('.step').length;
+        if (this.stepIndex < steps) { this.stepIndex += 1; this.applyRevealState(); return; }
+        this.showSlide(this.currentSlide + 1);
+    }
+
+    previous() {
+        if (this.stepIndex > 0) { this.stepIndex -= 1; this.applyRevealState(); return; }
+        this.showSlide(this.currentSlide - 1);
+    }
+
+    setZoom(value) {
+        this.zoom = Math.max(.55, Math.min(2.4, value));
+        this.scale();
+        this.applyRevealState();
+    }
+}
+
+/* ===========================================
+   BOOTSTRAP
+   Starts the deck once the DOM is ready.
+   =========================================== */
+window.presentation = new SlidePresentation();
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+    <script src="../../../../../js/progress-tracker.js"
+            data-module-id="spm-sci-f3-bab5-termokimia"
+            data-module-name="Bab 5: Termokimia (Thermochemistry)"
+            data-module-url="content/SPM_Syllabus/Form3/Science/Bab5_Termokimia/index.html"></script>
+    <script>
+        /* ===========================================
+           PLATFORM PROGRESS INTEGRATION
+           Restores the learner's slide/reveal position and saves navigation.
+           =========================================== */
+        (function () {
+            function snapshot() {
+                var deck = window.presentation;
+                if (!deck) return {};
+                return {
+                    slide: deck.currentSlide,
+                    step: deck.stepIndex,
+                    zoom: deck.zoom,
+                    completion: Math.round(((deck.currentSlide + 1) / deck.slides.length) * 100)
+                };
+            }
+
+            function saveProgress() {
+                if (window.ProgressTracker && window.ProgressTracker.autoSave) {
+                    window.ProgressTracker.autoSave(snapshot(), 1500);
+                }
+            }
+
+            function attachProgressHooks() {
+                var deck = window.presentation;
+                if (!deck || deck.__platformProgressAttached) return;
+                deck.__platformProgressAttached = true;
+
+                ['next', 'previous', 'showSlide', 'setZoom'].forEach(function (methodName) {
+                    var original = deck[methodName].bind(deck);
+                    deck[methodName] = function () {
+                        var result = original.apply(deck, arguments);
+                        saveProgress();
+                        return result;
+                    };
+                });
+            }
+
+            window.addEventListener('load', function () {
+                if (!window.ProgressTracker || !window.ProgressTracker.init || !window.presentation) return;
+
+                window.ProgressTracker.init(async function (tracker) {
+                    try {
+                        var saved = await tracker.load();
+                        if (saved) {
+                            var deck = window.presentation;
+                            var slide = Number.isInteger(saved.slide) ? saved.slide : 0;
+                            var step = Number.isInteger(saved.step) ? saved.step : 0;
+                            deck.zoom = typeof saved.zoom === 'number' ? saved.zoom : deck.zoom;
+                            deck.scale();
+                            deck.showSlide(slide);
+                            deck.stepIndex = Math.max(0, step);
+                            deck.applyRevealState();
+                        }
+                        attachProgressHooks();
+                        saveProgress();
+                    } catch (error) {
+                        attachProgressHooks();
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
