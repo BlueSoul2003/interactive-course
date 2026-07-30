@@ -96,6 +96,7 @@
         answers: {},
         review: [],
         currentIndex: 0,
+        pendingAnswerRequests: new Map(),
         pollTimer: null,
         countdownTimer: null,
         submitting: false
@@ -159,26 +160,44 @@
         state.countdownTimer = null;
     }
 
-    function normalizePayload(payload) {
+    function normalizePayload(payload, options) {
+        const settings = options || {};
+        const previousParticipantId = state.participant && state.participant.id;
+        const previousIndex = state.currentIndex;
+        const previousAnswers = state.answers;
+
         state.participant = payload.participant;
         state.session = payload.session;
         state.questions = payload.questions || [];
-        state.answers = state.participant.answers || {};
+        state.answers = Object.assign({}, state.participant.answers || {});
         state.review = payload.review || [];
+
+        if (settings.preserveQuizProgress && previousParticipantId === state.participant.id) {
+            state.answers = Object.assign(state.answers, previousAnswers);
+        }
+        state.participant.answers = state.answers;
+
+        const requestedIndex = settings.preserveQuizProgress
+            ? previousIndex
+            : Number(state.participant.current_index || 0);
         state.currentIndex = Math.min(
-            Math.max(Number(state.participant.current_index || 0), 0),
+            Math.max(requestedIndex, 0),
             Math.max(state.questions.length - 1, 0)
         );
+
+        if (previousParticipantId && previousParticipantId !== state.participant.id) {
+            state.pendingAnswerRequests.clear();
+        }
         saveAttemptReference();
         return payload;
     }
 
-    async function loadState() {
+    async function loadState(options) {
         if (!state.participant) return null;
         const payload = await Quiz.studentRpc("get_addmaths_student_state", {
             p_participant_id: state.participant.id
         });
-        return normalizePayload(payload);
+        return normalizePayload(payload, options);
     }
 
     function routePayload(payload) {
@@ -219,7 +238,9 @@
         window.clearInterval(state.pollTimer);
         state.pollTimer = window.setInterval(async function () {
             try {
-                const payload = await loadState();
+                const payload = await loadState({
+                    preserveQuizProgress: !element("quiz-view").hidden
+                });
                 routePayload(payload);
             } catch (error) {
                 console.warn("[AddMathsQuiz] Poll failed:", error);
@@ -314,29 +335,38 @@
 
     async function chooseAnswer(questionId, choice) {
         if (state.submitting) return;
-        const previous = state.answers[String(questionId)];
-        state.answers[String(questionId)] = choice;
+        const answerKey = String(questionId);
+        const previous = state.answers[answerKey];
+        const requestToken = {};
+        state.pendingAnswerRequests.set(answerKey, requestToken);
+        state.answers[answerKey] = choice;
         state.participant.answers = state.answers;
         renderQuiz();
         element("save-status").textContent = text("saving");
         element("save-status").classList.add("saving");
         showError("quiz-error", "");
         try {
-            const payload = await Quiz.studentRpc("save_addmaths_answer", {
+            await Quiz.studentRpc("save_addmaths_answer", {
                 p_participant_id: state.participant.id,
                 p_question_id: questionId,
                 p_choice: choice,
                 p_current_index: state.currentIndex
             });
-            normalizePayload(payload);
         } catch (error) {
-            if (previous === undefined) delete state.answers[String(questionId)];
-            else state.answers[String(questionId)] = previous;
-            showError("quiz-error", error.message || text("connectionError"));
-            renderQuiz();
+            if (state.pendingAnswerRequests.get(answerKey) === requestToken) {
+                if (previous === undefined) delete state.answers[answerKey];
+                else state.answers[answerKey] = previous;
+                state.participant.answers = state.answers;
+                showError("quiz-error", error.message || text("connectionError"));
+                renderQuiz();
+            }
         } finally {
-            element("save-status").textContent = text("saved");
-            element("save-status").classList.remove("saving");
+            if (state.pendingAnswerRequests.get(answerKey) === requestToken) {
+                state.pendingAnswerRequests.delete(answerKey);
+            }
+            const stillSaving = state.pendingAnswerRequests.size > 0;
+            element("save-status").textContent = text(stillSaving ? "saving" : "saved");
+            element("save-status").classList.toggle("saving", stillSaving);
         }
     }
 
@@ -499,6 +529,8 @@
         state.questions = [];
         state.answers = {};
         state.review = [];
+        state.currentIndex = 0;
+        state.pendingAnswerRequests.clear();
         showView("entry");
     }
 
