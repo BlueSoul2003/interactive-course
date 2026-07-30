@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>SPM Form 4 Additional Mathematics Live Quiz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="student-page">
+    <header class="app-header">
+        <a class="brand-lockup" href="../../../../../index.html" aria-label="Back to Interactive Course">
+            <span class="brand-symbol" aria-hidden="true">f′</span>
+            <span>
+                <strong>Add Maths Live</strong>
+                <small>SPM Form 4</small>
+            </span>
+        </a>
+        <div class="header-actions">
+            <div class="segmented-control" aria-label="Language">
+                <button type="button" class="segment active" data-language="en">EN</button>
+                <button type="button" class="segment" data-language="zh">简中</button>
+            </div>
+            <a class="icon-button" href="teacher.html" data-tooltip="Teacher console" aria-label="Teacher console">
+                <i data-lucide="presentation"></i>
+            </a>
+        </div>
+    </header>
+
+    <main id="student-app" class="student-shell">
+        <section id="entry-view" class="student-view">
+            <div class="entry-layout">
+                <div class="entry-copy">
+                    <span class="kicker" data-i18n="kicker">SPM Form 4 · Additional Mathematics</span>
+                    <h1 data-i18n="entryTitle">Join your live quiz</h1>
+                    <p data-i18n="entrySubtitle">Enter the session code from your teacher. No student account is required.</p>
+                    <div class="chapter-strip" aria-label="Quiz coverage">
+                        <span>Functions</span>
+                        <span>Linear Law</span>
+                        <span>Vectors</span>
+                        <span>+7</span>
+                    </div>
+                </div>
+
+                <form id="join-form" class="panel entry-panel">
+                    <label class="field">
+                        <span data-i18n="studentName">Student name</span>
+                        <input id="student-name" name="studentName" autocomplete="name" maxlength="50" required>
+                    </label>
+                    <label class="field">
+                        <span data-i18n="studentRef">Student ID (optional)</span>
+                        <input id="student-ref" name="studentRef" autocomplete="off" maxlength="30">
+                    </label>
+                    <label class="field">
+                        <span data-i18n="sessionCode">Session code</span>
+                        <input id="session-code" name="sessionCode" class="code-input" autocomplete="off" maxlength="12" required>
+                    </label>
+                    <p id="entry-error" class="inline-message error" role="alert" hidden></p>
+                    <button id="join-button" class="primary-button" type="submit">
+                        <i data-lucide="log-in"></i>
+                        <span data-i18n="join">Join session</span>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <section id="lobby-view" class="student-view" hidden>
+            <div class="waiting-panel panel">
+                <div class="waiting-visual" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="kicker" data-i18n="waitingRoom">Waiting room</span>
+                <h1 data-i18n="waitingTitle">You are checked in</h1>
+                <p id="lobby-student"></p>
+                <dl class="session-facts">
+                    <div>
+                        <dt data-i18n="session">Session</dt>
+                        <dd id="lobby-code"></dd>
+                    </div>
+                    <div>
+                        <dt data-i18n="questions">Questions</dt>
+                        <dd id="lobby-question-count"></dd>
+                    </div>
+                </dl>
+                <p class="waiting-status"><span class="status-dot"></span><span data-i18n="waitingTeacher">Waiting for your teacher to begin...</span></p>
+                <button id="leave-lobby-button" class="text-button" type="button" data-i18n="leaveSession">Leave session</button>
+            </div>
+        </section>
+
+        <section id="quiz-view" class="student-view quiz-view" hidden>
+            <div class="quiz-toolbar">
+                <div>
+                    <span id="quiz-session-label" class="kicker"></span>
+                    <strong id="quiz-student-label"></strong>
+                </div>
+                <div class="quiz-toolbar-right">
+                    <div id="timer-box" class="timer-box" hidden>
+                        <i data-lucide="timer"></i>
+                        <strong id="timer-value">--:--</strong>
+                    </div>
+                    <span id="save-status" class="save-status" data-i18n="saved">Saved</span>
+                </div>
+            </div>
+
+            <div class="progress-track" aria-hidden="true">
+                <span id="progress-fill"></span>
+            </div>
+
+            <div class="quiz-workspace">
+                <aside class="question-rail panel">
+                    <div class="rail-heading">
+                        <span data-i18n="progress">Progress</span>
+                        <strong id="progress-count">0 / 0</strong>
+                    </div>
+                    <div id="question-nav" class="question-nav" aria-label="Question navigation"></div>
+                </aside>
+
+                <article class="question-stage panel">
+                    <div class="question-meta">
+                        <span id="question-number"></span>
+                        <span id="question-chapter"></span>
+                    </div>
+                    <p id="question-topic" class="question-topic"></p>
+                    <h1 id="question-prompt"></h1>
+                    <div id="question-options" class="option-list" role="radiogroup"></div>
+                    <p id="quiz-error" class="inline-message error" role="alert" hidden></p>
+                    <div class="question-footer">
+                        <button id="previous-button" class="secondary-button" type="button">
+                            <i data-lucide="arrow-left"></i>
+                            <span data-i18n="previous">Previous</span>
+                        </button>
+                        <button id="next-button" class="primary-button compact" type="button">
+                            <span data-i18n="next">Next</span>
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                        <button id="submit-button" class="primary-button compact submit-button" type="button" hidden>
+                            <i data-lucide="send"></i>
+                            <span data-i18n="submit">Submit</span>
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="submitted-view" class="student-view" hidden>
+            <div class="panel submitted-panel">
+                <span class="success-mark"><i data-lucide="check"></i></span>
+                <span class="kicker" data-i18n="submitted">Submitted</span>
+                <h1 data-i18n="submittedTitle">Your answers are locked in</h1>
+                <p id="submitted-message"></p>
+                <div class="submission-score" id="submission-score" hidden>
+                    <strong id="submission-score-value"></strong>
+                    <span id="submission-score-total"></span>
+                </div>
+                <button id="check-results-button" class="secondary-button" type="button">
+                    <i data-lucide="refresh-cw"></i>
+                    <span data-i18n="checkResults">Check results</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="results-view" class="student-view results-view" hidden>
+            <div class="results-summary panel">
+                <div>
+                    <span class="kicker" data-i18n="results">Results</span>
+                    <h1 id="results-heading"></h1>
+                    <p id="results-subtitle"></p>
+                </div>
+                <div class="score-disc">
+                    <strong id="results-score"></strong>
+                    <span id="results-total"></span>
+                </div>
+            </div>
+            <div id="review-list" class="review-list"></div>
+            <button id="finish-button" class="secondary-button finish-button" type="button">
+                <i data-lucide="home"></i>
+                <span data-i18n="finish">Finish</span>
+            </button>
+        </section>
+    </main>
+
+    <div id="confirm-dialog" class="dialog-backdrop" hidden>
+        <div class="dialog-panel" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+            <h2 id="confirm-title" data-i18n="confirmSubmit">Submit your answers?</h2>
+            <p id="confirm-message"></p>
+            <div class="dialog-actions">
+                <button id="cancel-submit-button" class="secondary-button" type="button" data-i18n="cancel">Cancel</button>
+                <button id="confirm-submit-button" class="primary-button compact" type="button" data-i18n="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.55.0"></script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
+    <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+    <script src="questions-public.js"></script>
+    <script src="quiz-shared.js"></script>
+    <script src="student.js"></script>
+</body>
+</html>

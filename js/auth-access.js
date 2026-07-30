@@ -258,6 +258,7 @@ const AuthAccess = {
 
             // ── Read canonical ID (must come from data-module-id) ─────────────
             const moduleId = card.dataset.moduleId;
+            const isPublicModule = card.dataset.publicModule === 'true';
 
             // ── Determine syllabus & bundle ───────────────────────────────────
             const syllabusContent = card.closest('.syllabus-content');
@@ -276,7 +277,7 @@ const AuthAccess = {
             if (isAdmin) {
                 hasAccess = true;
 
-            } else if (!moduleId) {
+            } else if (isPublicModule || !moduleId) {
                 hasAccess = true; // can't lock what has no ID
 
             } else {

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light">
+    <title>Teacher Console · SPM Form 4 Add Maths</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="teacher-page">
+    <header class="app-header teacher-header">
+        <a class="brand-lockup" href="index.html" aria-label="Open student quiz">
+            <span class="brand-symbol" aria-hidden="true">f′</span>
+            <span>
+                <strong>Add Maths Teacher</strong>
+                <small>Live session console</small>
+            </span>
+        </a>
+        <div class="header-actions">
+            <span id="teacher-account-label" class="account-label" hidden></span>
+            <div class="segmented-control" aria-label="Language">
+                <button type="button" class="segment active" data-language="en">EN</button>
+                <button type="button" class="segment" data-language="zh">简中</button>
+            </div>
+            <button id="sign-out-button" class="icon-button" type="button" data-tooltip="Sign out" aria-label="Sign out" hidden>
+                <i data-lucide="log-out"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section id="teacher-loading-view" class="teacher-gate">
+            <div class="loading-line"></div>
+            <p>Checking teacher access...</p>
+        </section>
+
+        <section id="teacher-login-view" class="teacher-gate" hidden>
+            <form id="teacher-login-form" class="panel gate-panel">
+                <span class="kicker" data-i18n="teacherAccess">Teacher access</span>
+                <h1 data-i18n="loginTitle">Open your session console</h1>
+                <p data-i18n="loginSubtitle">Use your existing Interactive Course Teacher or Admin account.</p>
+                <label class="field">
+                    <span data-i18n="email">Email</span>
+                    <input id="teacher-email" type="email" autocomplete="email" required>
+                </label>
+                <label class="field">
+                    <span data-i18n="password">Password</span>
+                    <input id="teacher-password" type="password" autocomplete="current-password" required>
+                </label>
+                <p id="teacher-login-error" class="inline-message error" role="alert" hidden></p>
+                <button class="primary-button" type="submit">
+                    <i data-lucide="log-in"></i>
+                    <span data-i18n="signIn">Sign in</span>
+                </button>
+                <a href="../../../../../index.html" class="gate-back-link" data-i18n="backPortal">Back to course portal</a>
+            </form>
+        </section>
+
+        <section id="teacher-denied-view" class="teacher-gate" hidden>
+            <div class="panel gate-panel">
+                <span class="denied-mark"><i data-lucide="shield-alert"></i></span>
+                <span class="kicker" data-i18n="accessRequired">Staff activation required</span>
+                <h1 data-i18n="deniedTitle">This account cannot manage sessions yet</h1>
+                <p id="teacher-denied-message" data-i18n="deniedMessage">Ask an Admin to add this account to the quiz staff registry.</p>
+                <button id="denied-sign-out-button" class="secondary-button" type="button" data-i18n="useAnother">Use another account</button>
+            </div>
+        </section>
+
+        <section id="teacher-app" class="teacher-workspace" hidden>
+            <aside class="teacher-sidebar">
+                <button id="new-session-button" class="primary-button new-session-button" type="button">
+                    <i data-lucide="plus"></i>
+                    <span data-i18n="newSession">New session</span>
+                </button>
+                <div class="sidebar-heading">
+                    <span data-i18n="sessions">Sessions</span>
+                    <button id="refresh-sessions-button" class="bare-icon-button" type="button" aria-label="Refresh sessions" data-tooltip="Refresh">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
+                </div>
+                <div id="session-list" class="session-list"></div>
+            </aside>
+
+            <div class="teacher-main">
+                <section id="teacher-empty-view" class="teacher-content-view empty-console">
+                    <div>
+                        <span class="empty-symbol"><i data-lucide="monitor-up"></i></span>
+                        <h1 data-i18n="emptyTitle">Choose a session or create a new one</h1>
+                        <p data-i18n="emptySubtitle">Your live classes, student progress and results will appear here.</p>
+                    </div>
+                </section>
+
+                <section id="create-session-view" class="teacher-content-view" hidden>
+                    <div class="console-heading">
+                        <div>
+                            <span class="kicker" data-i18n="sessionBuilder">Session builder</span>
+                            <h1 data-i18n="createTitle">Prepare a live quiz</h1>
+                        </div>
+                        <button id="cancel-create-button" class="secondary-button" type="button" data-i18n="cancel">Cancel</button>
+                    </div>
+
+                    <form id="create-session-form" class="builder-layout">
+                        <div class="builder-form panel">
+                            <div class="form-grid two-columns">
+                                <label class="field">
+                                    <span data-i18n="sessionTitle">Session title</span>
+                                    <input id="create-title" maxlength="80" value="Form 4 Add Maths Revision" required>
+                                </label>
+                                <label class="field">
+                                    <span data-i18n="classLabel">Class label (optional)</span>
+                                    <input id="create-class-label" maxlength="50">
+                                </label>
+                            </div>
+
+                            <fieldset class="control-group">
+                                <legend data-i18n="chooseChapters">Choose chapters</legend>
+                                <div id="chapter-selector" class="chapter-selector"></div>
+                            </fieldset>
+
+                            <div class="form-grid three-columns">
+                                <label class="field">
+                                    <span data-i18n="questionCount">Question count</span>
+                                    <input id="create-question-count" type="number" min="1" max="40" value="40" required>
+                                </label>
+                                <label class="field">
+                                    <span data-i18n="duration">Time limit</span>
+                                    <select id="create-duration">
+                                        <option value="0">No limit</option>
+                                        <option value="30">30 minutes</option>
+                                        <option value="45">45 minutes</option>
+                                        <option value="60">60 minutes</option>
+                                        <option value="90">90 minutes</option>
+                                    </select>
+                                </label>
+                                <label class="field">
+                                    <span data-i18n="resultRelease">Release answers</span>
+                                    <select id="create-result-release">
+                                        <option value="on_end">When session ends</option>
+                                        <option value="on_submit">Immediately after submit</option>
+                                    </select>
+                                </label>
+                            </div>
+
+                            <div class="toggle-grid">
+                                <label class="toggle-row">
+                                    <input id="create-shuffle-questions" type="checkbox" checked>
+                                    <span class="toggle-switch" aria-hidden="true"></span>
+                                    <span data-i18n="shuffleQuestions">Shuffle question order</span>
+                                </label>
+                                <label class="toggle-row">
+                                    <input id="create-shuffle-options" type="checkbox" checked>
+                                    <span class="toggle-switch" aria-hidden="true"></span>
+                                    <span data-i18n="shuffleOptions">Shuffle answer options</span>
+                                </label>
+                                <label class="toggle-row">
+                                    <input id="create-allow-late" type="checkbox" checked>
+                                    <span class="toggle-switch" aria-hidden="true"></span>
+                                    <span data-i18n="allowLate">Allow students to join after start</span>
+                                </label>
+                            </div>
+
+                            <p id="create-session-error" class="inline-message error" role="alert" hidden></p>
+                            <button id="create-session-submit" class="primary-button" type="submit">
+                                <i data-lucide="radio-tower"></i>
+                                <span data-i18n="createWaitingRoom">Create waiting room</span>
+                            </button>
+                        </div>
+
+                        <aside class="question-preview panel">
+                            <div class="preview-heading">
+                                <div>
+                                    <span data-i18n="questionPreview">Question preview</span>
+                                    <strong id="preview-count">40 / 40</strong>
+                                </div>
+                                <button id="reshuffle-preview-button" class="bare-icon-button" type="button" data-tooltip="Reshuffle" aria-label="Reshuffle questions">
+                                    <i data-lucide="shuffle"></i>
+                                </button>
+                            </div>
+                            <div id="question-preview-list" class="question-preview-list"></div>
+                        </aside>
+                    </form>
+                </section>
+
+                <section id="session-dashboard-view" class="teacher-content-view" hidden>
+                    <div class="session-console-heading">
+                        <div>
+                            <div class="session-title-line">
+                                <span id="session-status-pill" class="status-pill"></span>
+                                <span id="session-class-label" class="kicker"></span>
+                            </div>
+                            <h1 id="session-dashboard-title"></h1>
+                            <p id="session-dashboard-meta"></p>
+                        </div>
+                        <div id="session-action-bar" class="session-action-bar"></div>
+                    </div>
+
+                    <div class="share-band">
+                        <div>
+                            <span data-i18n="studentJoinCode">Student join code</span>
+                            <strong id="dashboard-session-code"></strong>
+                        </div>
+                        <div class="share-link-field">
+                            <input id="dashboard-join-link" readonly aria-label="Student join link">
+                            <button id="copy-link-button" class="icon-button" type="button" data-tooltip="Copy link" aria-label="Copy student link">
+                                <i data-lucide="copy"></i>
+                            </button>
+                            <button id="show-qr-button" class="icon-button" type="button" data-tooltip="Show QR code" aria-label="Show QR code">
+                                <i data-lucide="qr-code"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="stat-grid teacher-stat-grid">
+                        <article>
+                            <span data-i18n="joined">Joined</span>
+                            <strong id="stat-joined">0</strong>
+                        </article>
+                        <article>
+                            <span data-i18n="inProgress">In progress</span>
+                            <strong id="stat-progress">0</strong>
+                        </article>
+                        <article>
+                            <span data-i18n="submittedCount">Submitted</span>
+                            <strong id="stat-submitted">0</strong>
+                        </article>
+                        <article>
+                            <span data-i18n="classAverage">Class average</span>
+                            <strong id="stat-average">-</strong>
+                        </article>
+                        <article>
+                            <span data-i18n="timeRemaining">Time remaining</span>
+                            <strong id="stat-time">--:--</strong>
+                        </article>
+                    </div>
+
+                    <div class="monitor-toolbar">
+                        <div class="view-tabs" role="tablist">
+                            <button class="view-tab active" type="button" data-monitor-tab="students" data-i18n="studentMonitor">Student monitor</button>
+                            <button class="view-tab" type="button" data-monitor-tab="questions" data-i18n="questionAnalysis">Question analysis</button>
+                        </div>
+                        <div class="monitor-actions">
+                            <label class="compact-toggle">
+                                <input id="hide-answers-toggle" type="checkbox">
+                                <span data-i18n="projectorMode">Hide answers</span>
+                            </label>
+                            <button id="download-csv-button" class="secondary-button" type="button">
+                                <i data-lucide="download"></i>
+                                <span>CSV</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <section id="students-monitor-panel" class="monitor-panel panel">
+                        <div class="table-wrap">
+                            <table class="monitor-table">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="student">Student</th>
+                                        <th data-i18n="status">Status</th>
+                                        <th data-i18n="progress">Progress</th>
+                                        <th data-sensitive data-i18n="liveScore">Live score</th>
+                                        <th data-i18n="lastActive">Last active</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="participant-table-body"></tbody>
+                            </table>
+                        </div>
+                        <div id="participant-empty-state" class="table-empty">
+                            <i data-lucide="users"></i>
+                            <strong data-i18n="waitingStudents">Waiting for students</strong>
+                            <span data-i18n="shareCodeHint">Share the code or QR to begin.</span>
+                        </div>
+                    </section>
+
+                    <section id="questions-monitor-panel" class="monitor-panel" hidden>
+                        <div id="chapter-analysis" class="chapter-analysis"></div>
+                        <div id="question-analysis-list" class="question-analysis-list"></div>
+                    </section>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <div id="participant-dialog" class="dialog-backdrop" hidden>
+        <aside class="participant-drawer" role="dialog" aria-modal="true" aria-labelledby="participant-dialog-title">
+            <button id="close-participant-dialog" class="icon-button drawer-close" type="button" aria-label="Close">
+                <i data-lucide="x"></i>
+            </button>
+            <span class="kicker" data-i18n="answerSheet">Live answer sheet</span>
+            <h2 id="participant-dialog-title"></h2>
+            <p id="participant-dialog-meta"></p>
+            <div id="participant-answer-list" class="participant-answer-list"></div>
+            <button id="reopen-participant-button" class="secondary-button" type="button" hidden>
+                <i data-lucide="rotate-ccw"></i>
+                <span data-i18n="reopenAttempt">Reopen attempt</span>
+            </button>
+        </aside>
+    </div>
+
+    <div id="qr-dialog" class="dialog-backdrop" hidden>
+        <div class="dialog-panel qr-panel" role="dialog" aria-modal="true" aria-labelledby="qr-dialog-title">
+            <button id="close-qr-dialog" class="icon-button qr-close" type="button" aria-label="Close">
+                <i data-lucide="x"></i>
+            </button>
+            <span class="kicker" data-i18n="scanToJoin">Scan to join</span>
+            <h2 id="qr-dialog-title"></h2>
+            <div id="qr-code"></div>
+            <p id="qr-link-label"></p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.55.0"></script>
+    <script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="../../../../../js/auth-access.js"></script>
+    <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+    <script src="questions-public.js"></script>
+    <script src="quiz-shared.js"></script>
+    <script src="teacher.js"></script>
+</body>
+</html>
