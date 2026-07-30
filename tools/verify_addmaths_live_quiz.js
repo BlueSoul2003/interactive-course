@@ -106,6 +106,8 @@ assert.match(teacherHtml, /teacher\.js/);
 assert.match(teacherHtml, /navigation\.js/);
 assert.match(sharedScript, /signInAnonymously/);
 assert.match(studentScript, /get_addmaths_student_state/);
+assert.match(studentScript, /pendingAnswerRequests:\s*new Map\(\)/);
+assert.match(studentScript, /preserveQuizProgress:\s*!element\("quiz-view"\)\.hidden/);
 assert.match(teacherScript, /reopen_addmaths_attempt/);
 assert.match(teacherScript, /setInterval\(loadParticipants,\s*5000\)/);
 assert.match(teacherScript, /starts_at:\s*now\.toISOString\(\)/);
@@ -118,5 +120,20 @@ assert.match(authAccess, /isPublicModule/);
 assert.match(schema, /spm-addmath-f4-live-quiz/);
 assert.ok(authKey && quizKey, "Both account and quiz Supabase keys must be defined.");
 assert.equal(quizKey[1], authKey[1], "The student quiz must use the same Supabase public key as the account system.");
+
+const chooseAnswerSource = studentScript.slice(
+    studentScript.indexOf("async function chooseAnswer"),
+    studentScript.indexOf("function startCountdown")
+);
+assert.doesNotMatch(
+    chooseAnswerSource,
+    /normalizePayload/,
+    "Answer-save responses must not overwrite the student's current question."
+);
+assert.match(
+    chooseAnswerSource,
+    /pendingAnswerRequests\.get\(answerKey\) === requestToken/,
+    "Only the latest answer request may update the optimistic answer state."
+);
 
 console.log("Add Maths live quiz verification passed: 40 questions, secure answer split, portal entry, and database contract.");
