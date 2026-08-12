@@ -68,7 +68,7 @@
     <main class="curriculum">
       <h2>Choose a learning experience</h2>
       <div class="grid">
-        <a class="course featured" href="Adult_English/Friendship/index.html" data-module-id="adult-en-friendship">
+        <a class="course featured" href="../../launcher.html?module=adult-en-friendship" data-module-id="adult-en-friendship">
           <span class="tag">Video lesson and live quiz</span>
           <h3>The Purpose of Friendship</h3>
           <p>Watch, reflect and test your understanding through a guided lesson with 30 vocabulary and comprehension questions.</p>
@@ -101,5 +101,15 @@
       </div>
     </main>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/auth-access.js?v=1.2.0"></script>
+  <script>
+    if (window.AuthAccess) {
+      window.AuthAccess.prepareModuleLaunchLinks();
+      window.AuthAccess.renderModuleAccessibility().catch(function (error) {
+        console.warn('[Adult English] Access display unavailable:', error.message);
+      });
+    }
+  </script>
 </body>
 </html>
