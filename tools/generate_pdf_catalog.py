@@ -16,19 +16,11 @@ IGNORED_DIRS = {".git", "node_modules", ".agents"}
 
 
 CURATED = {
-    "hardcopy/KSSR_Syllabus/Primary3/English/source_pdfs/english_p3_workbook.pdf": {
-        "title": "Primary 3 English Workbook - Source PDF",
-        "syllabus": "KSSR",
-        "level": "Primary 3",
-        "subject": "English",
-        "type": "Workbook",
-        "audience": "Student",
-    },
-    "hardcopy/KSSR_Syllabus/Primary6/English/source_pdfs/english_p6_workbook.pdf": {
-        "title": "Primary 6 English Workbook - Source PDF",
-        "syllabus": "KSSR",
-        "level": "Primary 6",
-        "subject": "English",
+    "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf": {
+        "title": "Form 5 Chemistry Chapter 5 - Student Workbook",
+        "syllabus": "SPM",
+        "level": "Form 5",
+        "subject": "Chemistry",
         "type": "Workbook",
         "audience": "Student",
     },
@@ -48,14 +40,6 @@ CURATED = {
         "type": "Student Notes",
         "audience": "Student",
     },
-    "hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Teacher_Answers.pdf": {
-        "title": "Sains Komputer Java Basics Ch 1.3.4 to 1.4.3 - Teacher Answers",
-        "syllabus": "SPM",
-        "level": "Form 4",
-        "subject": "Sains Komputer",
-        "type": "Teacher Answer Key",
-        "audience": "Teacher",
-    },
     "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Student.pdf": {
         "title": "IGCSE Year 8 Science Ch 8 Chemical Reactions - Student Fill-In Notes",
         "syllabus": "IGCSE",
@@ -64,13 +48,21 @@ CURATED = {
         "type": "Student Notes",
         "audience": "Student",
     },
-    "hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Tutor_Key.pdf": {
-        "title": "IGCSE Year 8 Science Ch 8 Chemical Reactions - Tutor Key",
-        "syllabus": "IGCSE",
-        "level": "Year 8",
+    "hardcopy/Singapore_Syllabus/Year4/Science/year4_science_april_revision_student.pdf": {
+        "title": "Year 4 Science April Revision - Student",
+        "syllabus": "Singapore",
+        "level": "Year 4",
         "subject": "Science",
-        "type": "Tutor Key",
-        "audience": "Teacher",
+        "type": "Revision Notes",
+        "audience": "Student",
+    },
+    "hardcopy/SPM_Syllabus/Form5/Chemistry/SPM_Chemistry_Worksheet.pdf": {
+        "title": "SPM Chemistry Worksheet",
+        "syllabus": "SPM",
+        "level": "Form 5",
+        "subject": "Chemistry",
+        "type": "Worksheet",
+        "audience": "Student",
     },
 }
 

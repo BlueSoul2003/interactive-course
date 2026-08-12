@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPM Sains Komputer Tingkatan 5 — Bab 2 Pangkalan Data Lanjutan Mastery Quest</title>
+<style>
+:root{
+  --bg:#060d18;--panel:#0d1a2c;--panel2:#13243b;--panel3:#071321;
+  --line:#2b4565;--text:#eef6ff;--muted:#a5b7cf;--orange:#ff9f1c;
+  --teal:#2ec4b6;--green:#35e18b;--red:#ff4765;--yellow:#ffd166;
+  --shadow:0 20px 60px rgba(0,0,0,.38);--r:20px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+ background:
+ radial-gradient(circle at 10% 4%,rgba(46,196,182,.14),transparent 26%),
+ radial-gradient(circle at 90% 5%,rgba(255,159,28,.14),transparent 25%),var(--bg);
+ min-height:100vh
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1480px;margin:auto;padding:18px}
+.top{
+ position:sticky;top:10px;z-index:20;display:flex;gap:16px;justify-content:space-between;align-items:center;
+ background:rgba(13,26,44,.94);backdrop-filter:blur(15px);border:1px solid var(--line);
+ border-radius:22px;padding:14px 17px;box-shadow:var(--shadow)
+}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-weight:950;font-size:22px;color:#1c1204;background:linear-gradient(135deg,var(--orange),#ffd08b)}
+.brand h1{font-size:16px;margin:0 0 3px}
+.brand p{font-size:11px;color:var(--muted);margin:0}
+.stats{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:8px 11px;font-size:11px;font-weight:850}
+.control{border:1px solid var(--line);background:#10233a;color:var(--text);border-radius:999px;padding:8px 10px;font-size:11px;font-weight:850}
+.control.off{opacity:.55}
+.progressbox{width:210px}
+.progresstxt{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-bottom:5px}
+.progress{height:8px;background:#02070e;border:1px solid #233955;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--orange));transition:.35s}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:18px;margin-top:18px}
+aside{
+ position:sticky;top:100px;height:calc(100vh - 118px);overflow:auto;background:rgba(13,26,44,.94);
+ border:1px solid var(--line);border-radius:var(--r);padding:13px;box-shadow:var(--shadow)
+}
+aside h2{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin:5px 7px 10px}
+.stage-tab{
+ width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;
+ padding:11px;text-align:left;font-weight:900;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px
+}
+.stage-tab.active{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,159,28,.1)}
+.stage-tab.locked{opacity:.48}
+.topic{margin:5px 0 8px}
+.topic-head{
+ width:100%;border:1px solid var(--line);background:#102238;color:var(--text);border-radius:12px;
+ padding:9px 10px;text-align:left;font-weight:900;font-size:11px;display:flex;justify-content:space-between;align-items:center
+}
+.topic-head.active{border-color:var(--teal)}
+.topic-sub{display:grid;gap:3px;padding:5px 0 0 8px}
+.navbtn{
+ width:100%;display:grid;grid-template-columns:27px 1fr 17px;gap:8px;align-items:center;text-align:left;
+ color:var(--text);background:transparent;border:1px solid transparent;border-radius:10px;padding:7px
+}
+.navbtn:hover{background:#142a45}.navbtn.active{background:#1a3454;border-color:#456b94}
+.navnum{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#06101d;border:1px solid var(--line);font-size:9px;font-weight:950}
+.navtitle{font-size:10.5px;font-weight:760;line-height:1.25}
+.tick{color:var(--green);font-weight:950}
+.side-actions{display:grid;gap:7px;margin-top:12px}
+.btn{
+ border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:var(--panel2);color:var(--text);font-weight:850
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.primary{border:none;background:linear-gradient(135deg,var(--orange),#ffc56b);color:#211506}
+.btn.secondary{background:#17304d}
+.btn.danger{background:#2c1520;color:#ffd1d8;border-color:#6c3345}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+main{min-width:0}
+.hero{
+ background:linear-gradient(135deg,rgba(19,36,59,.98),rgba(8,20,35,.97));border:1px solid var(--line);
+ border-radius:var(--r);padding:22px;box-shadow:var(--shadow);margin-bottom:15px
+}
+.eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);font-weight:950}
+.hero h2{font-size:29px;line-height:1.15;margin:7px 0}
+.hero p{max-width:950px;color:var(--muted);line-height:1.62;margin:0}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.tag{font-size:10px;font-weight:850;padding:6px 9px;border:1px solid var(--line);background:#081625;border-radius:999px}
+.notice{margin-top:13px;padding:10px 12px;border-left:4px solid var(--yellow);background:rgba(255,209,102,.08);border-radius:8px;color:#ffe8aa;font-size:11.5px;line-height:1.5}
+.screen{display:none}.screen.active{display:block}
+.question-card{
+ background:rgba(13,26,44,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden
+}
+.qhead{padding:20px;border-bottom:1px solid var(--line);display:flex;gap:15px;justify-content:space-between;align-items:flex-start}
+.qhead h3{font-size:22px;margin:5px 0}.qhead p{margin:0;color:var(--muted);line-height:1.5}
+.xp{background:var(--yellow);color:#201607;padding:7px 10px;border-radius:999px;font-size:10.5px;font-weight:950;white-space:nowrap}
+.qbody{padding:20px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h4{font-size:13px;margin:0 0 7px}.card p{color:var(--muted);line-height:1.58;margin:5px 0}
+.factbox{border-left:4px solid var(--teal)}
+.instruction{border-left:4px solid var(--orange)}
+.factbox strong,.term{color:#dffcf9}.term{font-weight:900}
+.code{
+ background:#020811;color:#dcecff;border:1px solid #263d5a;border-radius:13px;padding:14px;
+ font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;font-size:12.5px;line-height:1.65;
+ white-space:pre-wrap;overflow:auto;margin:10px 0
+}
+.stimulus-table{width:100%;border-collapse:collapse;margin:10px 0}
+.stimulus-table th,.stimulus-table td{border:1px solid var(--line);padding:8px;text-align:left}
+.stimulus-table th{background:#081422;color:#d1e0f2;font-size:11px}
+.choices{display:grid;gap:8px}
+.choice{display:flex;align-items:flex-start;gap:9px;background:#081625;border:1px solid var(--line);padding:10px;border-radius:11px}
+.choice:hover{border-color:#456b95}.choice input{margin-top:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+label.fieldlabel{display:block;font-size:11px;color:#c7d7ea;font-weight:850;margin:8px 0 5px}
+input[type=text],input[type=number],select,textarea{
+ width:100%;border:1px solid #365475;background:#050e19;color:var(--text);border-radius:10px;padding:10px 11px;outline:none
+}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.11)}
+.order{display:grid;gap:8px}
+.orderitem{display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;background:#081625;border:1px solid var(--line);border-radius:11px;padding:9px}
+.orderindex{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#17304d;color:var(--teal);font-weight:950}
+.minibtn{border:1px solid var(--line);background:#17304d;color:var(--text);border-radius:8px;padding:5px 8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+.feedback{display:none;padding:11px 13px;border-radius:12px;margin-top:12px;font-size:12.5px;font-weight:760;line-height:1.5}
+.feedback.show{display:block}.feedback.good{background:rgba(53,225,139,.11);border:1px solid rgba(53,225,139,.42);color:#c2f7da}
+.feedback.bad{background:rgba(255,71,101,.1);border:1px solid rgba(255,71,101,.42);color:#ffd0d8}
+.feedback.info{background:rgba(255,209,102,.09);border:1px solid rgba(255,209,102,.38);color:#ffe7a6}
+.answer-review{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.15);font-weight:650}
+.answer-review .student-answer{color:#d8e8fa}
+.answer-review .correct-answer{color:#bff7d7}
+.answer-review code{font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;background:rgba(0,0,0,.24);padding:2px 5px;border-radius:5px}
+.console{background:#01060b;border:1px solid #243955;border-radius:12px;padding:12px;min-height:70px;color:#baf5c5;font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;margin-top:10px}
+.mastery{
+ display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px
+}
+.mastery-card{background:#091625;border:1px solid var(--line);border-radius:11px;padding:9px;text-align:center}
+.mastery-card strong{display:block;color:var(--teal);font-size:11px}.mastery-card span{font-size:10px;color:var(--muted)}
+.stage-complete{text-align:center;padding:35px 20px;background:linear-gradient(145deg,#10243b,#0a1728);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.stage-complete .icon{font-size:60px}.stage-complete h3{font-size:28px;margin:8px 0}
+.exam-shell{background:#f8f8f5;color:#161616;border-radius:10px;padding:0;box-shadow:var(--shadow);overflow:hidden}
+.exam-cover{padding:28px;border-bottom:2px solid #222;text-align:center}
+.exam-cover h2{font-family:Georgia,serif;letter-spacing:.05em;margin:8px 0}.exam-cover p{margin:5px 0}
+.exam-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.exam-tools .btn{color:#fff;background:#17304d}.exam-tools .btn.primary{color:#211506}
+.exam-section{padding:24px;border-bottom:1px solid #bbb}
+.exam-section h3{text-align:center;font-family:Georgia,serif;text-decoration:underline;margin:0 0 4px}
+.exam-instruction{text-align:center;font-family:Georgia,serif;font-style:italic;margin:4px 0}
+.exam-q{padding:22px 0;border-bottom:1px dashed #999}
+.exam-q:last-child{border-bottom:none}
+.exam-qhead{display:flex;justify-content:space-between;gap:12px;font-family:Georgia,serif;font-size:16px;line-height:1.5}
+.exam-mark{white-space:nowrap;font-style:italic}
+.exam-stimulus{border:1px solid #444;padding:14px;margin:13px auto;max-width:760px;font-family:Georgia,serif;line-height:1.55}
+.exam-code{background:#fff;border:1px solid #444;color:#111;font-family:"Courier New",monospace;padding:13px;white-space:pre-wrap;overflow:auto;margin:12px 0}
+.exam-q input,.exam-q select,.exam-q textarea{background:#fff;color:#111;border:1px solid #555}
+.exam-part{margin:13px 0}
+.exam-result{padding:24px;background:#eef4f8;color:#152234}
+.exam-score{font-size:36px;font-weight:950}
+.review-good{border-left:6px solid #14a85c;padding-left:12px}.review-bad{border-left:6px solid #d62f49;padding-left:12px}
+.teacher{display:none}.teacher.show{display:block}
+.footer{text-align:center;color:#6f87a5;font-size:10px;padding:18px}
+.toast{display:none;position:fixed;right:18px;bottom:18px;z-index:80;background:#142941;border:1px solid var(--line);border-radius:12px;padding:11px 14px;box-shadow:var(--shadow)}
+.toast.show{display:block}
+#edgeFlash{
+ position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;
+ background:transparent
+}
+#edgeFlash.correct{animation:greenPulse .78s ease-out}
+#edgeFlash.wrong{animation:redPulse .78s ease-out}
+@keyframes greenPulse{
+ 0%{opacity:0;box-shadow:inset 0 0 0 rgba(53,225,139,0)}
+ 18%{opacity:1;box-shadow:inset 0 0 95px 22px rgba(53,225,139,.95)}
+ 36%{opacity:.25;box-shadow:inset 0 0 35px 8px rgba(53,225,139,.35)}
+ 55%{opacity:1;box-shadow:inset 0 0 120px 30px rgba(53,225,139,.9)}
+ 75%{opacity:.32;box-shadow:inset 0 0 45px 10px rgba(53,225,139,.4)}
+ 100%{opacity:0;box-shadow:inset 0 0 0 rgba(53,225,139,0)}
+}
+@keyframes redPulse{
+ 0%{opacity:0;box-shadow:inset 0 0 0 rgba(255,71,101,0)}
+ 16%{opacity:1;box-shadow:inset 0 0 105px 24px rgba(255,71,101,.98)}
+ 31%{opacity:.28;box-shadow:inset 0 0 38px 8px rgba(255,71,101,.4)}
+ 48%{opacity:1;box-shadow:inset 0 0 130px 32px rgba(255,71,101,.92)}
+ 65%{opacity:.3;box-shadow:inset 0 0 42px 10px rgba(255,71,101,.42)}
+ 82%{opacity:.88;box-shadow:inset 0 0 90px 20px rgba(255,71,101,.75)}
+ 100%{opacity:0;box-shadow:inset 0 0 0 rgba(255,71,101,0)}
+}
+.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.shake{animation:none!important}#edgeFlash.correct,#edgeFlash.wrong{animation-duration:.25s}}
+@media(max-width:1000px){
+ .layout{grid-template-columns:1fr}aside{position:relative;top:0;height:auto}.top{position:relative;top:0}
+ .grid2,.grid3,.mastery,.phasegrid{grid-template-columns:1fr}.progressbox{width:150px}
+}
+@media(max-width:620px){.app{padding:9px}.top{flex-direction:column;align-items:flex-start}.stats{justify-content:flex-start}.qhead{flex-direction:column}.hero h2{font-size:24px}.qbody{padding:13px}.exam-section{padding:14px}.exam-qhead{font-size:14px}}
+@media print{.top,aside,.hero,.actions,.exam-tools,.footer{display:none!important}.layout{display:block}.screen{display:none!important}.screen.active{display:block!important}.exam-shell{box-shadow:none}.app{max-width:none;padding:0}body{background:#fff}}
+</style>
+</head>
+<body autocomplete="off">
+<a href="../../../../../index.html" aria-label="Back to course portal" style="position:fixed;top:10px;left:10px;z-index:99999;padding:8px 12px;border-radius:999px;background:#0f172a;color:#fff;text-decoration:none;font:700 13px/1.2 system-ui;box-shadow:0 4px 16px #0004">← Course Portal</a>
+<div id="edgeFlash"></div>
+<div class="app">
+<header class="top">
+ <div class="brand">
+  <div class="logo">&lt;/&gt;</div>
+  <div><h1>SPM Sains Komputer Tingkatan 5</h1><p>Bab 2 Pangkalan Data Lanjutan • 40-question Mastery Quest</p></div>
+ </div>
+ <div class="stats">
+  <div class="pill">⭐ Markah: <span id="score">0</span>/3000</div>
+  <div class="pill">🔥 Rentetan: <span id="streak">0</span></div>
+  <button class="control" id="soundToggle" onclick="toggleSound()">🔊 Bunyi</button>
+  <button class="control" id="effectToggle" onclick="toggleEffects()">✨ Kesan</button>
+  <div class="progressbox"><div class="progresstxt"><span>Tahap 1</span><span id="progressText">0/30</span></div><div class="progress"><div id="progressBar"></div></div></div>
+ </div>
+</header>
+
+<div class="layout">
+<aside>
+ <h2>Peringkat Pembelajaran</h2>
+ <button class="stage-tab active" id="stage1Tab" onclick="goStage1()"><span>Tahap 1 • Latihan Berpandu</span><span id="stage1Count">0/30</span></button>
+ <div id="topicNav"></div>
+ <button class="stage-tab locked" id="stage2Tab" onclick="goStage2()"><span>Tahap 2 • Simulasi SPM</span><span id="stage2Lock">🔒</span></button>
+ <div class="side-actions">
+  <button class="btn secondary" onclick="toggleTeacher()">🔐 Skema Guru</button>
+  <button class="btn danger" onclick="resetAll()">↻ Tetapkan Semula</button>
+ </div>
+</aside>
+
+<main>
+<section class="hero" id="hero">
+ <div class="eyebrow">Two-stage interactive module</div>
+ <h2>Bab 2: Pangkalan Data Lanjutan — Mastery Quest</h2>
+ <p>Latihan meliputi ERD, skema hubungan ternormal dan Bahasa Pertanyaan Berstruktur SQL untuk membina, memanipulasi serta mendapatkan semula data.</p>
+ <div class="tags">
+  <span class="tag">ERD & Penormalan × 10</span><span class="tag">SQL DDL/DML × 10</span><span class="tag">SELECT & Agregat × 10</span><span class="tag">Simulasi SPM × 10</span>
+ </div>
+ <div class="notice"><strong>Answer policy:</strong> After a first wrong attempt, the correct answer remains hidden. It is revealed only after the second checked attempt. Answers and attempt counts remain saved for review.<br><strong>Audio:</strong> Three different correct sounds and three different wrong sounds are selected randomly. The full-screen edge glow can be turned off using “Kesan”.</div>
+</section>
+
+<section class="screen active" id="practiceScreen">
+ <div id="questionHost"></div>
+</section>
+
+<section class="screen" id="stage1Done">
+ <div class="stage-complete">
+  <div class="icon">🚀</div>
+  <h3>Tahap 1 Selesai</h3>
+  <p>You completed all 30 guided questions. Tahap 2 is now unlocked.</p>
+  <div class="pill" style="display:inline-block;margin:12px">Markah latihan: <span id="practiceFinal">0</span>/3000</div>
+  <div class="actions" style="justify-content:center"><button class="btn primary" onclick="goStage2()">Mulakan Simulasi SPM</button><button class="btn" onclick="openQuestion('q1')">Semak Latihan</button></div>
+ </div>
+</section>
+
+<section class="screen" id="examScreen">
+ <div class="exam-shell">
+  <div class="exam-cover">
+   <div style="font-weight:bold">SIJIL PELAJARAN MALAYSIA</div>
+   <h2>SAINS KOMPUTER 3770/1</h2>
+   <p><strong>Simulasi Tingkatan 5 Bab 2 — Soalan Asli Gaya SPM</strong></p>
+   <p>10 soalan • 40 markah • Masa dicadangkan: 45 minit</p>
+   <div class="exam-tools">
+    <button class="btn primary" id="startExamBtn" onclick="startExam()">Mulakan Peperiksaan</button>
+    <button class="btn" onclick="printExam()">Cetak</button>
+    <div class="pill" style="color:white;background:#17304d">⏱ <span id="timer">45:00</span></div>
+   </div>
+  </div>
+  <div id="examPaper"></div>
+  <div class="exam-result" id="examResult" style="display:none"></div>
+ </div>
+</section>
+
+<section class="teacher card" id="teacherPanel">
+ <h3>Skema Guru</h3>
+ <p>Jawapan betul latihan hanya dipaparkan selepas jawapan betul atau selepas percubaan kedua. Simulasi SPM menanda semua 10 soalan selepas penghantaran dan memaparkan skema mengikut subbahagian.</p>
+ <p><strong>Kod guru:</strong> SPM4</p>
+</section>
+<div class="footer">Self-contained HTML • No internet required • Progress saved using localStorage</div>
+</main>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const topicInfo=[{"id":"2.1(i)","name":"ERD, Skema Hubungan dan Penormalan","qs":["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"]},{"id":"2.1(ii)","name":"SQL: Membina dan Memanipulasi Data","qs":["q11","q12","q13","q14","q15","q16","q17","q18","q19","q20"]},{"id":"2.1(iii)","name":"SQL: Mendapatkan Semula Data","qs":["q21","q22","q23","q24","q25","q26","q27","q28","q29","q30"]}];
+
+const questions=[{"id":"q1","topic":"2.1(i)","title":"Mengenal Pasti Entiti dan Atribut","fact":"ERD memodelkan entiti, atribut dan hubungan berdasarkan masalah yang hendak diselesaikan.","instruction":"For a hotel booking system, classify each item.","type":"fields","fields":[{"label":"TETAMU","kind":"select","options":["entiti","atribut"],"answer":"entiti"},{"label":"NoTetamu","kind":"select","options":["entiti","atribut"],"answer":"atribut"},{"label":"BILIK","kind":"select","options":["entiti","atribut"],"answer":"entiti"},{"label":"Harga","kind":"select","options":["entiti","atribut"],"answer":"atribut"}],"hint":"Objek utama ialah entiti; butiran yang menerangkannya ialah atribut."},{"id":"q2","topic":"2.1(i)","title":"Kekardinalan ERD","fact":"Kekardinalan menunjukkan bilangan kejadian entiti yang terlibat dalam hubungan: 1:1, 1:M dan M:N.","instruction":"Match each relationship.","type":"fields","fields":[{"label":"Seorang pelanggan membuat banyak tempahan; setiap tempahan milik seorang pelanggan.","kind":"select","options":["1:1","1:M","M:N"],"answer":"1:M"},{"label":"Ramai murid mendaftar banyak subjek.","kind":"select","options":["1:1","1:M","M:N"],"answer":"M:N"},{"label":"Seorang pekerja mempunyai satu rekod profil unik.","kind":"select","options":["1:1","1:M","M:N"],"answer":"1:1"}],"hint":"Kenal pasti bilangan entiti pada kedua-dua belah hubungan."},{"id":"q3","topic":"2.1(i)","title":"Entiti Perantaraan","fact":"Hubungan M:N perlu dipecahkan menggunakan entiti perantaraan supaya dapat dilaksanakan dalam pangkalan data hubungan.","instruction":"Choose the best intermediary entity between MURID and SUBJEK.","type":"mcq","options":["PENDAFTARAN(IDMurid, KodSubjek, TarikhDaftar)","ALAMAT(Poskod)","GURU(IDGuru)","SEKOLAH(KodSekolah)"],"answer":"PENDAFTARAN(IDMurid, KodSubjek, TarikhDaftar)","hint":"Entiti perantaraan menyimpan kunci daripada kedua-dua entiti asal."},{"id":"q4","topic":"2.1(i)","title":"Kunci Primer dan Kunci Asing","fact":"Kunci primer mengenal pasti rekod secara unik. Kunci asing merujuk kunci primer dalam jadual lain.","instruction":"Identify both keys.","stimulus":"PELANGGAN(IDPelanggan<KP>, Nama)\nTEMPAHAN(NoTempahan<KP>, Tarikh, IDPelanggan<KA>)","type":"fields","fields":[{"label":"Kunci primer PELANGGAN","kind":"text","answer":"IDPelanggan"},{"label":"Kunci asing TEMPAHAN","kind":"text","answer":"IDPelanggan"},{"label":"Kunci primer TEMPAHAN","kind":"text","answer":"NoTempahan"}],"hint":"Ikut label <KP> dan <KA> dalam skema."},{"id":"q5","topic":"2.1(i)","title":"ERD kepada Skema Hubungan","fact":"Setiap entiti ERD ditukar kepada jadual. Dalam hubungan 1:M, kunci primer entiti pada bahagian 1 menjadi kunci asing pada jadual bahagian M.","instruction":"Choose the correct schema for one KATEGORI containing many PRODUK.","type":"mcq","options":["KATEGORI(KodKategori<KP>, NamaKategori); PRODUK(KodProduk<KP>, NamaProduk, KodKategori<KA>)","KATEGORI(KodKategori<KA>, NamaKategori); PRODUK(KodProduk<KA>, NamaProduk)","KATEGORI(NamaKategori); PRODUK(NamaProduk)","KATEGORI(KodProduk<KA>); PRODUK(KodKategori<KA>)"],"answer":"KATEGORI(KodKategori<KP>, NamaKategori); PRODUK(KodProduk<KP>, NamaProduk, KodKategori<KA>)","hint":"Kunci KATEGORI mesti muncul sebagai kunci asing dalam PRODUK."},{"id":"q6","topic":"2.1(i)","title":"Bentuk Normal Pertama","fact":"1NF memastikan setiap medan mempunyai nilai atomik dan tiada kumpulan data berulang.","instruction":"Choose the change needed for 1NF.","stimulus":"PELANGGAN(ID, Nama, NoTelefon)\nP01 | Ali | 0123, 0198","type":"mcq","options":["Simpan satu nombor telefon bagi setiap nilai medan atau wujudkan jadual TELEFON","Gabungkan ID dan Nama","Padam ID pelanggan","Letakkan semua nombor dalam satu ayat"],"answer":"Simpan satu nombor telefon bagi setiap nilai medan atau wujudkan jadual TELEFON","hint":"Setiap medan perlu mengandungi satu nilai atomik."},{"id":"q7","topic":"2.1(i)","title":"Bentuk Normal Kedua","fact":"2NF berada dalam 1NF dan menghapuskan kebergantungan fungsi separa terhadap sebahagian kunci primer komposit.","instruction":"Choose the correct decomposition.","stimulus":"PENDAFTARAN(IDMurid<KP>, KodKursus<KP>, NamaMurid, NamaKursus, Gred)","type":"mcq","options":["MURID(IDMurid, NamaMurid); KURSUS(KodKursus, NamaKursus); PENDAFTARAN(IDMurid, KodKursus, Gred)","PENDAFTARAN(IDMurid, KodKursus, NamaMurid, NamaKursus, Gred)","NAMA(NamaMurid, NamaKursus); GRED(Gred)","MURID(NamaMurid); KURSUS(NamaKursus)"],"answer":"MURID(IDMurid, NamaMurid); KURSUS(KodKursus, NamaKursus); PENDAFTARAN(IDMurid, KodKursus, Gred)","hint":"Asingkan atribut yang bergantung pada hanya satu bahagian kunci komposit."},{"id":"q8","topic":"2.1(i)","title":"Bentuk Normal Ketiga","fact":"3NF berada dalam 2NF dan menghapuskan kebergantungan transitif antara atribut bukan kunci.","instruction":"Choose the decomposition that reaches 3NF.","stimulus":"PEKERJA(IDPekerja<KP>, Nama, KodJabatan, NamaJabatan)","type":"mcq","options":["PEKERJA(IDPekerja, Nama, KodJabatan); JABATAN(KodJabatan, NamaJabatan)","PEKERJA(IDPekerja, Nama, KodJabatan, NamaJabatan)","JABATAN(Nama, NamaJabatan)","PEKERJA(IDPekerja); JABATAN(NamaJabatan)"],"answer":"PEKERJA(IDPekerja, Nama, KodJabatan); JABATAN(KodJabatan, NamaJabatan)","hint":"NamaJabatan bergantung pada KodJabatan, bukan terus pada IDPekerja."},{"id":"q9","topic":"2.1(i)","title":"Jenis Kebergantungan Fungsi","fact":"Kebergantungan sepenuh memerlukan keseluruhan kunci, separa memerlukan sebahagian kunci komposit, dan transitif berlaku antara atribut bukan kunci.","instruction":"Classify each dependency.","type":"fields","fields":[{"label":"Gred bergantung pada IDMurid + KodSubjek.","kind":"select","options":["sepenuh","separa","transitif"],"answer":"sepenuh"},{"label":"NamaMurid bergantung pada IDMurid sahaja dalam jadual berkunci komposit.","kind":"select","options":["sepenuh","separa","transitif"],"answer":"separa"},{"label":"NamaBandar bergantung pada Poskod.","kind":"select","options":["sepenuh","separa","transitif"],"answer":"transitif"}],"hint":"Semua bahagian kunci = sepenuh; satu bahagian = separa; bukan kunci kepada bukan kunci = transitif."},{"id":"q10","topic":"2.1(i)","title":"Menjustifikasi Bilangan Jadual","fact":"Bilangan jadual yang dibina perlu dapat mengurangkan kelewahan, mengekalkan integriti dan mewakili entiti serta hubungan dengan tepat.","instruction":"Choose the best justification for splitting PELANGGAN and BANDAR into separate tables.","type":"mcq","options":["Mengelakkan NamaBandar berulang bagi setiap pelanggan dengan Poskod yang sama","Menjadikan semua data lebih berulang","Menghapuskan kunci primer","Memastikan setiap jadual tiada hubungan"],"answer":"Mengelakkan NamaBandar berulang bagi setiap pelanggan dengan Poskod yang sama","hint":"Penormalan mengurangkan data berulang dan anomali kemas kini."},{"id":"q11","topic":"2.1(ii)","title":"CREATE DATABASE dan USE","fact":"CREATE DATABASE membina pangkalan data baharu. USE memilih pangkalan data yang akan digunakan.","instruction":"Arrange the SQL statements.","type":"order","items":["CREATE DATABASE Sekolah;","USE Sekolah;","CREATE TABLE MURID (...);"],"hint":"Pangkalan data mesti dicipta dan dipilih sebelum jadual dibina."},{"id":"q12","topic":"2.1(ii)","title":"CREATE TABLE","fact":"CREATE TABLE membina struktur jadual dengan nama medan, jenis data dan kekangan seperti PRIMARY KEY.","instruction":"Choose the valid SQL statement.","type":"mcq","options":["CREATE TABLE MURID (IDMurid VARCHAR(5) PRIMARY KEY, Nama VARCHAR(30), Markah INT);","MAKE MURID IDMurid, Nama, Markah;","CREATE MURID = (IDMurid VARCHAR);","TABLE MURID ADD ALL;"],"answer":"CREATE TABLE MURID (IDMurid VARCHAR(5) PRIMARY KEY, Nama VARCHAR(30), Markah INT);","hint":"Gunakan CREATE TABLE diikuti struktur medan dalam kurungan."},{"id":"q13","topic":"2.1(ii)","title":"Jenis Data SQL","fact":"Jenis data SQL perlu dipilih mengikut domain nilai, contohnya INT untuk nombor bulat, DECIMAL untuk nilai kewangan, VARCHAR untuk teks dan DATE untuk tarikh.","instruction":"Match each field.","type":"fields","fields":[{"label":"NamaProduk","kind":"select","options":["VARCHAR","INT","DECIMAL","DATE"],"answer":"VARCHAR"},{"label":"Kuantiti","kind":"select","options":["VARCHAR","INT","DECIMAL","DATE"],"answer":"INT"},{"label":"Harga","kind":"select","options":["VARCHAR","INT","DECIMAL","DATE"],"answer":"DECIMAL"},{"label":"TarikhTempahan","kind":"select","options":["VARCHAR","INT","DECIMAL","DATE"],"answer":"DATE"}],"hint":"Teks, nombor bulat, nilai wang dan tarikh memerlukan jenis data berbeza."},{"id":"q14","topic":"2.1(ii)","title":"ALTER TABLE ADD","fact":"ALTER TABLE bersama ADD digunakan untuk menambah medan baharu pada jadual.","instruction":"Write the SQL statement to add field E-mel VARCHAR(50) to table PELANGGAN.","type":"short","label":"Pernyataan SQL","accepted":["ALTER TABLE PELANGGAN ADD Emel VARCHAR(50);","ALTER TABLE PELANGGAN ADD E_mel VARCHAR(50);","ALTER TABLE PELANGGAN ADD EMAIL VARCHAR(50);"],"hint":"Format: ALTER TABLE nama_jadual ADD nama_medan jenis_data(saiz);"},{"id":"q15","topic":"2.1(ii)","title":"ALTER TABLE MODIFY atau CHANGE","fact":"MODIFY mengubah jenis atau saiz medan. CHANGE boleh mengubah nama medan serta jenis datanya.","instruction":"Match each task with the suitable keyword.","type":"fields","fields":[{"label":"Ubah saiz Alamat daripada VARCHAR(30) kepada VARCHAR(60).","kind":"select","options":["MODIFY","CHANGE","DROP"],"answer":"MODIFY"},{"label":"Tukar nama medan Nama kepada NamaProduk.","kind":"select","options":["MODIFY","CHANGE","DROP"],"answer":"CHANGE"},{"label":"Hapus medan TidakDigunakan.","kind":"select","options":["MODIFY","CHANGE","DROP"],"answer":"DROP"}],"hint":"Saiz = MODIFY; nama = CHANGE; hapus = DROP."},{"id":"q16","topic":"2.1(ii)","title":"DROP TABLE","fact":"DROP TABLE menghapuskan keseluruhan jadual termasuk struktur dan rekodnya.","instruction":"Choose the statement that deletes the entire table UJIAN.","type":"mcq","options":["DROP TABLE UJIAN;","DELETE FROM UJIAN WHERE 1;","ALTER UJIAN REMOVE;","ERASE DATABASE UJIAN;"],"answer":"DROP TABLE UJIAN;","hint":"DROP TABLE menghapus struktur jadual, bukan hanya rekod."},{"id":"q17","topic":"2.1(ii)","title":"INSERT INTO","fact":"INSERT INTO menambah rekod baharu ke dalam jadual.","instruction":"Choose the valid statement to insert P01, Aina and 85 into PELAJAR(ID, Nama, Markah).","type":"mcq","options":["INSERT INTO PELAJAR (ID, Nama, Markah) VALUES ('P01','Aina',85);","ADD PELAJAR P01 Aina 85;","UPDATE PELAJAR VALUES ('P01','Aina',85);","INSERT PELAJAR = P01,Aina,85;"],"answer":"INSERT INTO PELAJAR (ID, Nama, Markah) VALUES ('P01','Aina',85);","hint":"Gunakan INSERT INTO ... VALUES (...)."},{"id":"q18","topic":"2.1(ii)","title":"UPDATE","fact":"UPDATE bersama SET mengemas kini nilai medan. WHERE diperlukan untuk menghadkan rekod yang diubah.","instruction":"Choose the statement that changes markah P01 to 90 only.","type":"mcq","options":["UPDATE PELAJAR SET Markah=90 WHERE ID='P01';","UPDATE PELAJAR SET Markah=90;","INSERT INTO PELAJAR Markah=90;","DELETE PELAJAR WHERE ID='P01';"],"answer":"UPDATE PELAJAR SET Markah=90 WHERE ID='P01';","hint":"Gunakan WHERE supaya hanya rekod P01 berubah."},{"id":"q19","topic":"2.1(ii)","title":"DELETE","fact":"DELETE FROM menghapuskan rekod. WHERE menentukan rekod tertentu yang hendak dipadam.","instruction":"Choose the statement that deletes product B05 only.","type":"mcq","options":["DELETE FROM PRODUK WHERE KodProduk='B05';","DELETE FROM PRODUK;","DROP TABLE PRODUK;","UPDATE PRODUK SET KodProduk=NULL;"],"answer":"DELETE FROM PRODUK WHERE KodProduk='B05';","hint":"DELETE tanpa WHERE akan memadam semua rekod."},{"id":"q20","topic":"2.1(ii)","title":"Risiko Arahan Tanpa WHERE","fact":"UPDATE atau DELETE tanpa WHERE boleh mengubah atau menghapuskan semua rekod dalam jadual.","instruction":"Choose the effect of DELETE FROM MURID; without WHERE.","type":"mcq","options":["Semua rekod MURID dipadam","Hanya rekod pertama dipadam","Struktur jadual dipadam","Tiada perubahan berlaku"],"answer":"Semua rekod MURID dipadam","hint":"DELETE FROM tanpa syarat melibatkan semua baris."},{"id":"q21","topic":"2.1(iii)","title":"SELECT Semua Medan","fact":"SELECT * FROM memaparkan semua medan dan semua rekod daripada jadual.","instruction":"Write the SQL statement to display all data from PRODUK.","type":"short","label":"Pernyataan SQL","accepted":["SELECT * FROM PRODUK;"],"hint":"Gunakan asterisk untuk semua medan."},{"id":"q22","topic":"2.1(iii)","title":"SELECT Medan Tertentu","fact":"Nama medan disenaraikan selepas SELECT untuk memaparkan hanya lajur yang diperlukan.","instruction":"Choose the statement that displays Nama and Harga from PRODUK.","type":"mcq","options":["SELECT Nama, Harga FROM PRODUK;","SELECT * Harga PRODUK;","FROM PRODUK GET Nama Harga;","DISPLAY Nama AND Harga;"],"answer":"SELECT Nama, Harga FROM PRODUK;","hint":"Senaraikan medan dipisahkan koma selepas SELECT."},{"id":"q23","topic":"2.1(iii)","title":"WHERE dan AND","fact":"WHERE menapis rekod berdasarkan syarat. AND menggabungkan syarat yang semuanya perlu benar.","instruction":"Choose the query for products of category 'Buku' with price below 20.","type":"mcq","options":["SELECT * FROM PRODUK WHERE Kategori='Buku' AND Harga<20;","SELECT * FROM PRODUK WHERE Kategori='Buku' OR Harga<20;","SELECT * FROM PRODUK GROUP BY Buku;","UPDATE PRODUK SET Harga<20;"],"answer":"SELECT * FROM PRODUK WHERE Kategori='Buku' AND Harga<20;","hint":"Kedua-dua kriteria mesti dipenuhi."},{"id":"q24","topic":"2.1(iii)","title":"ORDER BY","fact":"ORDER BY mengisih rekod. Susunan lalai ialah menaik; DESC digunakan untuk susunan menurun.","instruction":"Choose the query that lists products from highest to lowest price.","type":"mcq","options":["SELECT * FROM PRODUK ORDER BY Harga DESC;","SELECT * FROM PRODUK ORDER BY Harga;","SELECT * FROM PRODUK GROUP BY Harga DESC;","SELECT DESC Harga FROM PRODUK;"],"answer":"SELECT * FROM PRODUK ORDER BY Harga DESC;","hint":"Gunakan ORDER BY medan DESC."},{"id":"q25","topic":"2.1(iii)","title":"GROUP BY","fact":"GROUP BY mengumpulkan rekod yang mempunyai nilai medan yang sama dan lazimnya digunakan bersama fungsi agregat.","instruction":"Choose the query that counts products in each category.","type":"mcq","options":["SELECT Kategori, COUNT(*) FROM PRODUK GROUP BY Kategori;","SELECT COUNT(Kategori) FROM PRODUK ORDER BY Kategori;","UPDATE PRODUK GROUP BY Kategori;","DELETE FROM PRODUK GROUP BY Kategori;"],"answer":"SELECT Kategori, COUNT(*) FROM PRODUK GROUP BY Kategori;","hint":"Pilih medan kumpulan dan fungsi COUNT, kemudian GROUP BY medan tersebut."},{"id":"q26","topic":"2.1(iii)","title":"Fungsi SUM dan AVG","fact":"SUM mengira jumlah nilai, manakala AVG mengira purata nilai bagi sesuatu medan.","instruction":"Match each requirement with its function.","type":"fields","fields":[{"label":"Jumlah keseluruhan Kuantiti.","kind":"select","options":["SUM","AVG","MIN","MAX","COUNT"],"answer":"SUM"},{"label":"Purata Harga produk.","kind":"select","options":["SUM","AVG","MIN","MAX","COUNT"],"answer":"AVG"}],"hint":"Jumlah = SUM; purata = AVG."},{"id":"q27","topic":"2.1(iii)","title":"Fungsi MIN dan MAX","fact":"MIN mengembalikan nilai terendah dan MAX mengembalikan nilai tertinggi.","instruction":"Choose both correct expressions.","type":"multi","options":["MIN(Harga) mendapatkan harga terendah","MAX(Markah) mendapatkan markah tertinggi","MIN(Harga) mengira jumlah harga","MAX(Markah) mengira bilangan rekod"],"answers":["MIN(Harga) mendapatkan harga terendah","MAX(Markah) mendapatkan markah tertinggi"],"hint":"MIN = minimum; MAX = maksimum."},{"id":"q28","topic":"2.1(iii)","title":"Fungsi COUNT","fact":"COUNT menghitung bilangan rekod atau bilangan nilai bukan NULL dalam medan.","instruction":"Choose the query that counts every record in TEMPAHAN.","type":"mcq","options":["SELECT COUNT(*) FROM TEMPAHAN;","SELECT SUM(*) FROM TEMPAHAN;","SELECT TOTAL FROM TEMPAHAN;","COUNT TEMPAHAN;"],"answer":"SELECT COUNT(*) FROM TEMPAHAN;","hint":"COUNT(*) menghitung semua rekod."},{"id":"q29","topic":"2.1(iii)","title":"HAVING","fact":"HAVING menapis kumpulan yang telah dibentuk oleh GROUP BY, manakala WHERE menapis rekod sebelum pengumpulan.","instruction":"Choose the query that shows categories with more than 5 products.","type":"mcq","options":["SELECT Kategori, COUNT(*) FROM PRODUK GROUP BY Kategori HAVING COUNT(*)>5;","SELECT Kategori FROM PRODUK WHERE COUNT(*)>5;","SELECT * FROM PRODUK HAVING Kategori;","UPDATE PRODUK SET COUNT(*)>5;"],"answer":"SELECT Kategori, COUNT(*) FROM PRODUK GROUP BY Kategori HAVING COUNT(*)>5;","hint":"Syarat melibatkan hasil COUNT bagi setiap kumpulan."},{"id":"q30","topic":"2.1(iii)","title":"Membina Sistem Pangkalan Data dengan SQL","fact":"Sistem pangkalan data SQL yang lengkap menggabungkan ERD, skema 3NF, arahan membina jadual, manipulasi data, pertanyaan dan pengujian.","instruction":"Select all expected components of a complete SQL solution.","type":"multi","options":["ERD","Skema hubungan ternormal","CREATE TABLE","INSERT, UPDATE dan DELETE","SELECT dan fungsi agregat","Ujian output","Satu jadual lewah tanpa kunci"],"answers":["ERD","Skema hubungan ternormal","CREATE TABLE","INSERT, UPDATE dan DELETE","SELECT dan fungsi agregat","Ujian output"],"hint":"Penyelesaian lengkap merangkumi reka bentuk, pembinaan, manipulasi, pertanyaan dan pengujian."}];
+
+const examQuestions=[{"id":"x1","section":"A","marks":4,"title":"Skema Hubungan","prompt":"Diberi skema hubungan berikut.","stimulus":"PELANGGAN(IDPelanggan<KP>, Nama)\nTEMPAHAN(NoTempahan<KP>, Tarikh, IDPelanggan<KA>)","parts":[{"label":"(a) Nyatakan kunci primer PELANGGAN.","accepted":["idpelanggan","id pelanggan"],"marks":1},{"label":"(b) Nyatakan kunci primer TEMPAHAN.","accepted":["notempahan","no tempahan"],"marks":1},{"label":"(c) Nyatakan kunci asing TEMPAHAN.","accepted":["idpelanggan","id pelanggan"],"marks":1},{"label":"(d) Nyatakan kekardinalan PELANGGAN kepada TEMPAHAN.","accepted":["1:m","satu ke banyak","satu-ke-banyak"],"marks":1}]},{"id":"x2","section":"A","marks":4,"title":"Penormalan","prompt":"Jadual PENDAFTARAN mempunyai kunci komposit IDMurid dan KodSubjek.","stimulus":"PENDAFTARAN(IDMurid, KodSubjek, NamaMurid, NamaSubjek, Markah)","parts":[{"label":"(a) Nyatakan kebergantungan NamaMurid terhadap IDMurid.","accepted":["kebergantungan fungsi separa","separa"],"marks":1},{"label":"(b) Nyatakan kebergantungan Markah terhadap IDMurid dan KodSubjek.","accepted":["kebergantungan fungsi sepenuh","sepenuh"],"marks":1},{"label":"(c) Nyatakan dua jadual yang perlu diasingkan. Pisahkan dengan koma.","accepted":["murid,subjek","subjek,murid"],"marks":2,"splitCount":2}]},{"id":"x3","section":"A","marks":4,"title":"CREATE TABLE","prompt":"Lengkapkan arahan membina jadual MURID.","stimulus":"CREATE TABLE MURID (\n  IDMurid ________,\n  Nama VARCHAR(30),\n  Markah ________\n);","parts":[{"label":"(a) Nyatakan jenis data dan kekangan yang sesuai bagi IDMurid.","accepted":["varchar(5) primary key","varchar primary key","char(5) primary key"],"marks":2},{"label":"(b) Nyatakan jenis data sesuai bagi Markah.","accepted":["int","integer"],"marks":1},{"label":"(c) Namakan arahan SQL yang digunakan.","accepted":["create table"],"marks":1}]},{"id":"x4","section":"A","marks":4,"title":"ALTER TABLE","prompt":"Sebuah jadual PRODUK perlu diubah.","parts":[{"label":"(a) Tulis kata kunci untuk menambah medan baharu.","accepted":["add"],"marks":1},{"label":"(b) Tulis kata kunci untuk mengubah saiz medan.","accepted":["modify"],"marks":1},{"label":"(c) Tulis kata kunci untuk menukar nama medan.","accepted":["change"],"marks":1},{"label":"(d) Tulis kata kunci untuk menghapus medan.","accepted":["drop"],"marks":1}]},{"id":"x5","section":"A","marks":4,"title":"Manipulasi Data","prompt":"Padankan tujuan dengan arahan SQL.","parts":[{"label":"(a) Menambah rekod baharu.","accepted":["insert into","insert"],"marks":1},{"label":"(b) Mengubah nilai rekod sedia ada.","accepted":["update"],"marks":1},{"label":"(c) Menghapus rekod tertentu.","accepted":["delete from","delete"],"marks":1},{"label":"(d) Nyatakan klausa yang menghadkan rekod bagi UPDATE atau DELETE.","accepted":["where"],"marks":1}]},{"id":"x6","section":"A","marks":4,"title":"SELECT","prompt":"Jadual PRODUK mempunyai medan KodProduk, Nama, Kategori dan Harga.","parts":[{"label":"(a) Tulis query untuk memaparkan semua rekod.","accepted":["select * from produk;","select * from produk"],"marks":1},{"label":"(b) Tulis klausa untuk mengisih Harga secara menurun.","accepted":["order by harga desc","order by harga desc;"],"marks":1},{"label":"(c) Nyatakan fungsi untuk harga terendah.","accepted":["min","min(harga)"],"marks":1},{"label":"(d) Nyatakan fungsi untuk harga purata.","accepted":["avg","avg(harga)"],"marks":1}]},{"id":"x7","section":"A","marks":3,"title":"GROUP BY dan HAVING","prompt":"Sebuah query menghitung bilangan produk bagi setiap kategori.","stimulus":"SELECT Kategori, COUNT(*)\nFROM PRODUK\nGROUP BY Kategori\nHAVING COUNT(*) > 3;","parts":[{"label":"(a) Nyatakan tujuan GROUP BY.","accepted":["mengumpulkan rekod mengikut kategori","menggabungkan rekod yang mempunyai kategori sama","membentuk kumpulan data"],"marks":1},{"label":"(b) Nyatakan tujuan COUNT(*).","accepted":["menghitung bilangan rekod","mengira jumlah produk"],"marks":1},{"label":"(c) Nyatakan tujuan HAVING COUNT(*) > 3.","accepted":["memaparkan kategori yang mempunyai lebih daripada 3 produk","menapis kumpulan melebihi 3 rekod"],"marks":1}]},{"id":"x8","section":"B","marks":5,"title":"Soalan Berstruktur 1","prompt":"Sebuah kedai mempunyai hubungan KATEGORI 1:M PRODUK.","stimulus":"KATEGORI(KodKategori, NamaKategori)\nPRODUK(KodProduk, NamaProduk, Harga)","parts":[{"label":"(a) Nyatakan medan yang perlu ditambah pada PRODUK untuk mewujudkan hubungan.","accepted":["kodkategori","kod kategori"],"marks":1},{"label":"(b) Nyatakan peranan medan tersebut.","accepted":["kunci asing","foreign key"],"marks":1},{"label":"(c) Tulis skema PRODUK yang lengkap.","accepted":["produk(kodproduk, namaproduk, harga, kodkategori)","produk(kodproduk,nama produk,harga,kod kategori)"],"marks":2},{"label":"(d) Nyatakan satu manfaat reka bentuk ini.","accepted":["mengurangkan kelewahan","mengekalkan integriti hubungan","mengelakkan nama kategori berulang"],"marks":1}]},{"id":"x9","section":"B","marks":4,"title":"Soalan Berstruktur 2","prompt":"Tulis arahan SQL berdasarkan keperluan berikut.","stimulus":"Jadual MURID(IDMurid, Nama, Kelas, Markah)","parts":[{"label":"(a) Paparkan Nama dan Markah murid Kelas 5A.","accepted":["select nama, markah from murid where kelas='5a';","select nama,markah from murid where kelas = '5a'"],"marks":2},{"label":"(b) Paparkan murid daripada markah tertinggi ke terendah.","accepted":["select * from murid order by markah desc;","select * from murid order by markah desc"],"marks":1},{"label":"(c) Hitung bilangan semua murid.","accepted":["select count(*) from murid;","count(*)"],"marks":1}]},{"id":"x10","section":"B","marks":4,"title":"Soalan Berstruktur 3","prompt":"Sebuah pangkalan data tempahan perlu diuji sebelum digunakan.","parts":[{"label":"(a) Nyatakan satu ujian bagi kunci primer.","accepted":["uji nilai pendua","pastikan kunci primer unik","uji nilai kosong tidak diterima"],"marks":1},{"label":"(b) Nyatakan satu ujian bagi kunci asing.","accepted":["uji rujukan kepada rekod induk","pastikan nilai kunci asing wujud dalam jadual induk","uji integriti rujukan"],"marks":1},{"label":"(c) Nyatakan dua ujian query. Pisahkan dengan koma.","accepted":["semak rekod memenuhi where,semak susunan order by","uji fungsi agregat,semak output group by","semak output dijangka,semak kriteria"],"marks":2,"splitCount":2}]}];
+
+const storage=(()=>{
+ try{const k="__sk_test__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage}
+ catch(e){const mem={};return{getItem:k=>Object.prototype.hasOwnProperty.call(mem,k)?mem[k]:null,setItem:(k,v)=>mem[k]=String(v),removeItem:k=>delete mem[k]}}
+})();
+function createInitialState(){
+ return {
+  done:[],score:0,streak:0,current:"q1",
+  sound:true,effects:true,examUnlocked:false,
+  examSubmitted:false,examScore:0,
+  answers:{},results:{},examAnswers:{},examReview:[],
+  orderState:{},examStarted:false,examSecondsLeft:2700,
+  resetVersion:2
+ }
+}
+let state=JSON.parse(storage.getItem("skT5Bab2Mastery")||'{"done":[],"score":0,"streak":0,"current":"q1","sound":true,"effects":true,"examUnlocked":false,"examSubmitted":false,"examScore":0,"answers":{},"results":{},"examAnswers":{},"orderState":{},"examStarted":false,"examSecondsLeft":2700}');
+state.done=Array.isArray(state.done)?state.done:[];
+state.answers=state.answers&&typeof state.answers==="object"?state.answers:{};
+state.results=state.results&&typeof state.results==="object"?state.results:{};
+state.examAnswers=state.examAnswers&&typeof state.examAnswers==="object"?state.examAnswers:{};
+state.orderState=state.orderState&&typeof state.orderState==="object"?state.orderState:{};
+let orderState=state.orderState;
+let audioCtx=null;
+let examTimer=null;
+let secondsLeft=Number.isFinite(Number(state.examSecondsLeft))?Number(state.examSecondsLeft):2700;
+let examStarted=Boolean(state.examStarted);
+
+function normalize(s){
+ return String(s??"").toLowerCase().trim().replace(/[“”"]/g,'"').replace(/[’‘']/g,"'").replace(/\s+/g," ");
+}
+function compact(s){return normalize(s).replace(/\s+/g,"").replace(/;/g,";")}
+function listCompact(s){return normalize(s).replace(/[\[\]{}()\s,;]/g,"")}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function shuffle(a){let x=[...a];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function saveQuiet(){state.orderState=orderState;storage.setItem("skT5Bab2Mastery",JSON.stringify(state))}
+function save(){saveQuiet();updateTop();renderNav()}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700)}
+function updateTop(){
+ document.getElementById("score").textContent=state.score;
+ document.getElementById("streak").textContent=state.streak;
+ document.getElementById("progressText").textContent=`${state.done.length}/30`;
+ document.getElementById("progressBar").style.width=(state.done.length/30*100)+"%";
+ document.getElementById("stage1Count").textContent=`${state.done.length}/30`;
+ document.getElementById("stage2Lock").textContent=state.examUnlocked?"✓":"🔒";
+ document.getElementById("stage2Tab").classList.toggle("locked",!state.examUnlocked);
+ document.getElementById("soundToggle").classList.toggle("off",!state.sound);
+ document.getElementById("soundToggle").textContent=state.sound?"🔊 Bunyi":"🔇 Bunyi";
+ document.getElementById("effectToggle").classList.toggle("off",!state.effects);
+ document.getElementById("effectToggle").textContent=state.effects?"✨ Kesan":"◌ Kesan";
+}
+function renderNav(){
+ const nav=document.getElementById("topicNav");nav.innerHTML="";
+ topicInfo.forEach(t=>{
+  const wrap=document.createElement("div");wrap.className="topic";
+  const count=t.qs.filter(q=>state.done.includes(q)).length;
+  wrap.innerHTML=`<button class="topic-head ${t.qs.includes(state.current)?"active":""}" onclick="openQuestion('${t.qs[0]}')"><span>${t.id} ${t.name}</span><span>${count}/5</span></button><div class="topic-sub"></div>`;
+  const sub=wrap.querySelector(".topic-sub");
+  t.qs.forEach(qid=>{
+   const q=questions.find(x=>x.id===qid);
+   const b=document.createElement("button");b.className="navbtn "+(state.current===qid?"active":"");
+   b.innerHTML=`<span class="navnum">${Number(qid.substring(1))}</span><span class="navtitle">${q.title}</span><span class="tick">${state.done.includes(qid)?"✓":""}</span>`;
+   b.onclick=()=>openQuestion(qid);sub.appendChild(b)
+  });nav.appendChild(wrap)
+ })
+}
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById("stage1Tab").classList.toggle("active",id!=="examScreen");
+ document.getElementById("stage2Tab").classList.toggle("active",id==="examScreen");
+}
+function goStage1(){
+ showScreen(state.done.length===30?"stage1Done":"practiceScreen");
+ if(state.done.length<30)renderQuestion(state.current||"q1");
+ window.scrollTo({top:0,behavior:"smooth"})
+}
+function goStage2(){
+ if(!state.examUnlocked){toast("Selesaikan 30 latihan dahulu.");return}
+ showScreen("examScreen");renderExam();
+ if(examStarted&&!state.examSubmitted)startTimerLoop();
+ window.scrollTo({top:0,behavior:"smooth"})
+}
+function openQuestion(id){
+ state.current=id;save();showScreen("practiceScreen");renderQuestion(id);window.scrollTo({top:0,behavior:"smooth"})
+}
+function renderQuestion(id){
+ const q=questions.find(x=>x.id===id);if(!q)return;
+ let html=`<div class="question-card" id="activeCard">
+ <div class="qhead"><div><div class="eyebrow">Latihan ${Number(id.substring(1))} • Standard ${q.topic}</div><h3>${q.title}</h3><p>${q.instruction}</p></div><div class="xp">100 markah</div></div>
+ <div class="qbody">
+  <div class="card factbox"><h4>Fakta</h4><p>${q.fact}</p></div>`;
+ if(q.stimulus)html+=`<div class="code">${escapeHtml(q.stimulus)}</div>`;
+ if(q.type==="mcq"){
+  const opts=shuffle(q.options);
+  html+=`<div class="choices">${opts.map((o,i)=>`<label class="choice"><input type="radio" name="${q.id}" value="${escapeHtml(o)}"><span>${o.includes("\n")?`<span class="code" style="display:block;margin:0">${escapeHtml(o)}</span>`:escapeHtml(o)}</span></label>`).join("")}</div>`
+ }else if(q.type==="multi"){
+  const opts=shuffle(q.options);
+  html+=`<div class="choices">${opts.map(o=>`<label class="choice"><input type="checkbox" name="${q.id}" value="${escapeHtml(o)}"><span>${escapeHtml(o)}</span></label>`).join("")}</div>`
+ }else if(q.type==="short"){
+  html+=`<label class="fieldlabel">${q.label||"Jawapan"}</label><input id="${q.id}_short" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`
+ }else if(q.type==="fields"){
+  html+=`<div class="grid2">${q.fields.map((f,i)=>`<div><label class="fieldlabel">${f.label}</label>${f.kind==="select"?`<select id="${q.id}_f${i}"><option value="">Pilih</option>${f.options.map(o=>`<option>${escapeHtml(o)}</option>`).join("")}</select>`:`<input id="${q.id}_f${i}" type="${f.kind==="number"?"number":"text"}" autocomplete="off">`}</div>`).join("")}</div>`
+ }else if(q.type==="order"){
+  if(!orderState[q.id]){
+   orderState[q.id]=Array.isArray(state.answers[q.id])?[...state.answers[q.id]]:shuffle(q.items)
+  }
+  html+=`<div class="order" id="${q.id}_order">${renderOrderHtml(q.id)}</div>`
+ }
+ html+=`<div class="actions"><button class="btn primary" onclick="checkPractice('${q.id}')">Semak Jawapan</button><button class="btn secondary" onclick="showHint('${q.id}')">💡 Petunjuk</button>${state.done.includes(q.id)?`<button class="btn" onclick="nextQuestion('${q.id}')">Seterusnya →</button>`:""}</div><div id="${q.id}_feedback" class="feedback"></div></div></div>`;
+ document.getElementById("questionHost").innerHTML=html;
+ restorePracticeAnswer(q);
+ attachPracticePersistence(q);
+ showSavedPracticeReview(q)
+}
+function renderOrderHtml(qid){
+ return orderState[qid].map((x,i)=>`<div class="orderitem"><span class="orderindex">${i+1}</span><span>${escapeHtml(x)}</span><span><button class="minibtn" onclick="moveOrder('${qid}',${i},-1)">↑</button> <button class="minibtn" onclick="moveOrder('${qid}',${i},1)">↓</button></span></div>`).join("")
+}
+function moveOrder(qid,i,d){
+ let a=orderState[qid],j=i+d;if(j<0||j>=a.length)return;
+ [a[i],a[j]]=[a[j],a[i]];
+ state.answers[qid]=[...a];
+ saveQuiet();
+ document.getElementById(qid+"_order").innerHTML=renderOrderHtml(qid)
+}
+function cloneAnswer(a){return Array.isArray(a)?a.map(x=>Array.isArray(x)?[...x]:x):a}
+function restorePracticeAnswer(q){
+ const saved=state.answers[q.id];
+ if(saved===undefined||saved===null)return;
+ if(q.type==="mcq"){
+  [...document.querySelectorAll(`input[name="${q.id}"]`)].forEach(el=>el.checked=el.value===saved)
+ }else if(q.type==="multi"){
+  const values=Array.isArray(saved)?saved:[];
+  [...document.querySelectorAll(`input[name="${q.id}"]`)].forEach(el=>el.checked=values.includes(el.value))
+ }else if(q.type==="short"){
+  const el=document.getElementById(q.id+"_short");if(el)el.value=saved
+ }else if(q.type==="fields"){
+  q.fields.forEach((f,i)=>{const el=document.getElementById(`${q.id}_f${i}`);if(el)el.value=(saved[i]??"")})
+ }
+}
+function persistPracticeAnswer(qid){
+ const q=questions.find(x=>x.id===qid);if(!q)return;
+ state.answers[qid]=cloneAnswer(answerPractice(q));
+ if(q.type==="order")orderState[qid]=[...state.answers[qid]];
+ saveQuiet()
+}
+function attachPracticePersistence(q){
+ let elements=[];
+ if(q.type==="mcq"||q.type==="multi")elements=[...document.querySelectorAll(`input[name="${q.id}"]`)];
+ if(q.type==="short")elements=[document.getElementById(q.id+"_short")];
+ if(q.type==="fields")elements=q.fields.map((f,i)=>document.getElementById(`${q.id}_f${i}`));
+ elements.filter(Boolean).forEach(el=>{
+  el.addEventListener("input",()=>persistPracticeAnswer(q.id));
+  el.addEventListener("change",()=>persistPracticeAnswer(q.id))
+ })
+}
+function correctPracticeAnswerHtml(q){
+ if(q.type==="mcq")return escapeHtml(q.answer);
+ if(q.type==="multi")return q.answers.map(escapeHtml).join("; ");
+ if(q.type==="short")return escapeHtml(q.accepted[0]);
+ if(q.type==="fields")return q.fields.map(f=>`${escapeHtml(f.label)}: <strong>${escapeHtml(f.answer)}</strong>`).join("<br>");
+ if(q.type==="order")return q.items.map(escapeHtml).join(" → ");
+ return ""
+}
+function studentPracticeAnswerHtml(q,a){
+ if(a===undefined||a===null||a===""||(Array.isArray(a)&&a.length===0))return "—";
+ if(q.type==="fields")return q.fields.map((f,i)=>`${escapeHtml(f.label)}: <strong>${escapeHtml(a[i]??"—")}</strong>`).join("<br>");
+ if(Array.isArray(a))return a.map(x=>escapeHtml(x)).join(q.type==="order"?" → ":"; ");
+ return escapeHtml(a)
+}
+function practiceReviewMessage(q,a,correct,attempts){
+ const revealCorrect=correct||attempts>=2;
+ const status=correct
+  ?`✅ Percubaan ${attempts} betul.`
+  :attempts<2
+   ?`❌ Percubaan ${attempts}/2 belum tepat. Cuba sekali lagi sebelum jawapan betul dipaparkan.`
+   :`❌ Percubaan ${attempts} belum tepat. Jawapan betul kini dipaparkan.`;
+ return `${status}
+ <div class="answer-review">
+  <div class="student-answer"><strong>Jawapan anda:</strong><br>${studentPracticeAnswerHtml(q,a)}</div>
+  ${revealCorrect
+    ?`<div class="correct-answer" style="margin-top:7px"><strong>Jawapan betul:</strong><br>${correctPracticeAnswerHtml(q)}</div>`
+    :`<div style="margin-top:7px;color:#ffe7a6"><strong>Jawapan betul masih disembunyikan.</strong><br>Ubah jawapan dan tekan “Semak Jawapan” untuk percubaan kedua.</div>`}
+ </div>`
+}
+function showSavedPracticeReview(q){
+ const result=state.results[q.id];
+ if(!result||!result.checked)return;
+ const attempts=Math.max(1,Number(result.attempts)||1);
+ feedback(q.id,result.correct?"good":"bad",practiceReviewMessage(q,state.answers[q.id],result.correct,attempts))
+}
+function showHint(id){const q=questions.find(x=>x.id===id);feedback(id,"info","💡 "+q.hint)}
+function feedback(id,type,msg){const e=document.getElementById(id+"_feedback");e.className="feedback show "+type;e.innerHTML=msg}
+function answerPractice(q){
+ if(q.type==="mcq")return document.querySelector(`input[name="${q.id}"]:checked`)?.value||"";
+ if(q.type==="multi")return [...document.querySelectorAll(`input[name="${q.id}"]:checked`)].map(x=>x.value);
+ if(q.type==="short")return document.getElementById(q.id+"_short").value;
+ if(q.type==="fields")return q.fields.map((f,i)=>document.getElementById(`${q.id}_f${i}`).value);
+ if(q.type==="order")return orderState[q.id];
+}
+function checkPractice(id){
+ const q=questions.find(x=>x.id===id),a=answerPractice(q);let ok=false;
+ state.answers[id]=cloneAnswer(a);
+ if(q.type==="order")orderState[id]=[...a];
+ if(q.type==="mcq")ok=a===q.answer;
+ if(q.type==="multi")ok=a.length===q.answers.length&&q.answers.every(x=>a.includes(x));
+ if(q.type==="short"){
+  let n=q.codeNormalize?compact(a):q.listNormalize?listCompact(a):normalize(a);
+  ok=q.accepted.some(x=>(q.codeNormalize?compact(x):q.listNormalize?listCompact(x):normalize(x))===n)
+ }
+ if(q.type==="fields")ok=q.fields.every((f,i)=>normalize(a[i])===normalize(f.answer));
+ if(q.type==="order")ok=q.items.every((x,i)=>a[i]===x);
+ const previousAttempts=Math.max(0,Number(state.results[id]?.attempts)||0);
+ const attempts=previousAttempts+1;
+ state.results[id]={checked:true,correct:ok,attempts};
+ if(ok){
+  feedback(id,"good",practiceReviewMessage(q,a,true,attempts));
+  if(!state.done.includes(id)){state.done.push(id);state.score+=100;state.streak++;if(state.done.length===30)state.examUnlocked=true}
+  save();positiveFX();
+  setTimeout(()=>{if(state.done.length===30){document.getElementById("practiceFinal").textContent=state.score;showScreen("stage1Done")}else nextQuestion(id)},1050)
+ }else{
+  feedback(id,"bad",practiceReviewMessage(q,a,false,attempts));
+  state.streak=0;save();negativeFX()
+ }
+}
+function nextQuestion(id){
+ const n=Number(id.substring(1));if(n<30)openQuestion("q"+(n+1));else{document.getElementById("practiceFinal").textContent=state.score;showScreen("stage1Done")}
+}
+function toggleSound(){state.sound=!state.sound;save();if(state.sound)toast("Bunyi dihidupkan")}
+function toggleEffects(){state.effects=!state.effects;save()}
+function ensureAudio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume()}
+function tone(freq,start,dur,type="sine",vol=.08){
+ if(!state.sound)return;ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime+start);
+ g.gain.setValueAtTime(0,audioCtx.currentTime+start);g.gain.linearRampToValueAtTime(vol,audioCtx.currentTime+start+.012);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+start+dur);
+ o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+start);o.stop(audioCtx.currentTime+start+dur+.03)
+}
+function correctSound(){
+ const n=Math.floor(Math.random()*3);
+ if(n===0){tone(523,0,.16,"sine",.09);tone(659,.12,.17,"sine",.08);tone(784,.24,.24,"triangle",.08)}
+ if(n===1){tone(880,0,.10,"sine",.06);tone(1175,.08,.13,"sine",.055);tone(1568,.17,.25,"sine",.05)}
+ if(n===2){tone(392,0,.11,"triangle",.075);tone(523,.08,.12,"triangle",.075);tone(659,.16,.14,"triangle",.07);tone(1047,.27,.25,"sine",.055)}
+}
+function wrongSound(){
+ const n=Math.floor(Math.random()*3);
+ if(n===0){tone(220,0,.18,"sawtooth",.07);tone(165,.13,.30,"sawtooth",.065)}
+ if(n===1){tone(150,0,.13,"square",.055);tone(150,.19,.18,"square",.055)}
+ if(n===2){tone(330,0,.08,"square",.045);tone(210,.07,.10,"sawtooth",.05);tone(130,.16,.25,"square",.05)}
+}
+function flash(type){
+ if(!state.effects)return;const f=document.getElementById("edgeFlash");f.className="";void f.offsetWidth;f.className=type;
+ setTimeout(()=>f.className="",850)
+}
+function positiveFX(){correctSound();flash("correct")}
+function negativeFX(){wrongSound();flash("wrong");if(state.effects){const c=document.getElementById("activeCard");c?.classList.add("shake");setTimeout(()=>c?.classList.remove("shake"),400)}}
+
+function renderExam(){
+ const paper=document.getElementById("examPaper");
+ let html="";
+ ["A","B"].forEach(sec=>{
+  const qs=examQuestions.filter(q=>q.section===sec),marks=qs.reduce((s,q)=>s+q.marks,0);
+  html+=`<section class="exam-section"><h3>Bahagian ${sec}</h3><p class="exam-instruction">[${marks} markah]</p><p class="exam-instruction">Jawab semua soalan.</p>`;
+  qs.forEach((q,idx)=>{
+   const no=examQuestions.indexOf(q)+1;
+   html+=`<div class="exam-q" id="exam_${q.id}"><div class="exam-qhead"><div><strong>${no}.</strong> ${escapeHtml(q.prompt)}</div><div class="exam-mark">[${q.marks} markah]</div></div>`;
+   if(q.table)html+=`<table class="stimulus-table">${q.table.map((r,i)=>`<tr>${r.map(c=>i===0?`<th>${escapeHtml(c)}</th>`:`<td>${escapeHtml(c)}</td>`).join("")}</tr>`).join("")}</table>`;
+   if(q.stimulus)html+=`<div class="${q.stimulus.includes("\n")?"exam-code":"exam-stimulus"}">${escapeHtml(q.stimulus)}</div><div style="text-align:center;font-family:Georgia,serif">${q.title}</div>`;
+   q.parts.forEach((p,i)=>{
+    const inputId=`${q.id}_p${i}`,saved=state.examAnswers[inputId]??"";
+    html+=`<div class="exam-part"><label class="fieldlabel" style="color:#111">${p.label} <em>[${p.marks} markah]</em></label><input id="${inputId}" type="text" value="${escapeHtml(saved)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ${!examStarted||state.examSubmitted?"disabled":""}></div>`
+   });
+   html+=`</div>`
+  });html+=`</section>`
+ });
+ html+=`<section class="exam-section" style="text-align:center"><button class="btn primary" id="submitExamBtn" onclick="submitExam()" ${!examStarted||state.examSubmitted?"disabled":""}>Hantar Kertas</button></section>`;
+ paper.innerHTML=html;
+ if(examStarted&&!state.examSubmitted){
+  paper.querySelectorAll(".exam-q input").forEach(input=>{
+   input.addEventListener("input",()=>{state.examAnswers[input.id]=input.value;saveQuiet()})
+  })
+ }
+ document.getElementById("startExamBtn").disabled=examStarted||state.examSubmitted;
+ updateTimer();
+ if(state.examSubmitted)showStoredExamResult()
+}
+function startTimerLoop(){
+ if(examTimer||state.examSubmitted||!examStarted)return;
+ examTimer=setInterval(()=>{
+  secondsLeft=Math.max(0,secondsLeft-1);
+  state.examSecondsLeft=secondsLeft;
+  if(secondsLeft%5===0)saveQuiet();
+  updateTimer();
+  if(secondsLeft<=0){clearInterval(examTimer);examTimer=null;submitExam(true)}
+ },1000)
+}
+function startExam(){
+ if(state.examSubmitted){toast("Peperiksaan ini telah dihantar. Tetapkan semula untuk mencuba semula.");return}
+ if(!examStarted){
+  examStarted=true;secondsLeft=2700;
+  state.examStarted=true;state.examSecondsLeft=secondsLeft;
+  state.examAnswers=state.examAnswers||{};
+  saveQuiet()
+ }
+ renderExam();startTimerLoop()
+}
+function updateTimer(){const m=Math.floor(secondsLeft/60),s=secondsLeft%60;document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
+function submitExam(autoSubmit=false){
+ if(state.examSubmitted)return;
+ if(!autoSubmit&&!confirm("Hantar semua jawapan sekarang? Jawapan tidak boleh diubah selepas dihantar."))return;
+ clearInterval(examTimer);examTimer=null;let score=0,max=0,review=[];
+ examQuestions.forEach(q=>{
+  q.parts.forEach((p,i)=>{
+   max+=p.marks;
+   const inputId=`${q.id}_p${i}`;
+   const val=document.getElementById(inputId)?.value??state.examAnswers[inputId]??"";
+   state.examAnswers[inputId]=val;
+   const ok=examPartCorrect(val,p);
+   if(ok)score+=p.marks;
+   review.push({qid:q.id,part:i,ok,answer:p.accepted[0],given:val})
+  })
+ });
+ state.examSubmitted=true;state.examStarted=false;state.examSecondsLeft=secondsLeft;
+ state.examScore=score;state.examReview=review;save();renderExam();showExamResult(score,max,review);
+ if(score/max>=.5)positiveFX();else negativeFX()
+}
+function showExamResult(score,max,review){
+ const box=document.getElementById("examResult");box.style.display="block";
+ let html=`<div class="exam-score">${score}/${max}</div><h3>Keputusan Simulasi SPM</h3><p>${score/max>=.8?"Penguasaan sangat baik.":score/max>=.5?"Asas telah dikuasai, tetapi beberapa bahagian perlu diperkukuh.":"Ulang Tahap 1 dan semak istilah serta pengesanan kod."}</p>`;
+ examQuestions.forEach((q,qi)=>{
+  const rows=review.filter(r=>r.qid===q.id);
+  html+=`<div class="${rows.every(r=>r.ok)?"review-good":"review-bad"}" style="margin:14px 0"><strong>Soalan ${qi+1}</strong>`;
+  rows.forEach(r=>html+=`<div style="font-size:12px;margin:5px 0">${q.parts[r.part].label}<br>Jawapan anda: <em>${escapeHtml(r.given||"—")}</em><br>Skema: <strong>${escapeHtml(r.answer)}</strong> ${r.ok?"✓":"✗"}</div>`);
+  html+=`</div>`
+ });
+ box.innerHTML=html;box.scrollIntoView({behavior:"smooth"})
+}
+function showStoredExamResult(){if(state.examReview)showExamResult(state.examScore,40,state.examReview)}
+function printExam(){window.print()}
+function toggleTeacher(){const p=prompt("Kod guru:");if(p==="SPM4"){document.getElementById("teacherPanel").classList.toggle("show");toast("Skema guru dibuka/ditutup")}else if(p!==null)alert("Kod tidak tepat.")}
+function resetAll(){
+ if(!confirm("Padam SEMUA jawapan Tingkatan 5 Bab 2, bilangan percubaan, markah, kemajuan dan keputusan simulasi?"))return;
+
+ clearInterval(examTimer);
+ examTimer=null;
+ examStarted=false;
+ secondsLeft=2700;
+
+ // Clear all storage keys used by the previous versions of this module.
+ [
+  "skT5Bab2Mastery"
+ ].forEach(key=>{
+  try{storage.removeItem(key)}catch(e){}
+  try{window.localStorage.removeItem(key)}catch(e){}
+  try{window.sessionStorage.removeItem(key)}catch(e){}
+ });
+
+ // Clear every in-memory answer and result.
+ state=createInitialState();
+ orderState=state.orderState;
+
+ // Explicitly clear any controls that the browser may try to preserve.
+ document.querySelectorAll("input").forEach(el=>{
+  if(el.type==="radio"||el.type==="checkbox")el.checked=false;
+  else el.value="";
+ });
+ document.querySelectorAll("textarea").forEach(el=>el.value="");
+ document.querySelectorAll("select").forEach(el=>el.selectedIndex=0);
+ document.querySelectorAll(".feedback").forEach(el=>{
+  el.className="feedback";
+  el.innerHTML="";
+ });
+ document.getElementById("questionHost").innerHTML="";
+ document.getElementById("examPaper").innerHTML="";
+ const resultBox=document.getElementById("examResult");
+ resultBox.style.display="none";
+ resultBox.innerHTML="";
+ document.getElementById("timer").textContent="45:00";
+
+ // Save a brand-new empty state and rebuild the first question.
+ saveQuiet();
+ updateTop();
+ renderNav();
+ showScreen("practiceScreen");
+ renderQuestion("q1");
+ window.scrollTo({top:0,behavior:"smooth"});
+ toast("Semua jawapan Tingkatan 5 Bab 2 dan percubaan telah ditetapkan semula.");
+}
+updateTop();renderNav();renderQuestion(state.current||"q1");
+if(state.examSubmitted){examStarted=false}
+
+window.addEventListener("pageshow",event=>{
+ if(event.persisted){
+  const fresh=JSON.parse(storage.getItem("skT5Bab2Mastery")||JSON.stringify(createInitialState()));
+  state=fresh;
+  state.answers=state.answers&&typeof state.answers==="object"?state.answers:{};
+  state.results=state.results&&typeof state.results==="object"?state.results:{};
+  state.examAnswers=state.examAnswers&&typeof state.examAnswers==="object"?state.examAnswers:{};
+  state.orderState=state.orderState&&typeof state.orderState==="object"?state.orderState:{};
+  orderState=state.orderState;
+  secondsLeft=Number.isFinite(Number(state.examSecondsLeft))?Number(state.examSecondsLeft):2700;
+  examStarted=Boolean(state.examStarted);
+  updateTop();
+  renderNav();
+  if(document.getElementById("examScreen").classList.contains("active"))renderExam();
+  else renderQuestion(state.current||"q1");
+ }
+});
+</script>
+</body>
+</html>

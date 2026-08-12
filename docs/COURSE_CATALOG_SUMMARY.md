@@ -41,6 +41,19 @@ Last updated: 2026-08-04
 | Module | Type | Route |
 | --- | --- | --- |
 | Bab 5: Termokimia (Thermochemistry) | Teacher presentation / interactive slides | `content/SPM_Syllabus/Form3/Science/Bab5_Termokimia/index.html` |
+| Bab 6: Elektrik dan Kemagnetan | Teacher presentation / interactive slides | `content/SPM_Syllabus/Form3/Science/Bab6_Elektrik_dan_Kemagnetan/index.html` |
+| Bab 7: Tenaga dan Kuasa | Teacher presentation / interactive slides | `content/SPM_Syllabus/Form3/Science/Bab7_Tenaga_dan_Kuasa/index.html` |
+
+### SPM Sains Komputer
+
+| Module | Level | Route |
+| --- | --- | --- |
+| Bab 1: Pengaturcaraan | Tingkatan 4 | `content/SPM_Syllabus/Form4/Sains_Komputer/Bab1_Pengaturcaraan/index.html` |
+| Bab 2: Pangkalan Data | Tingkatan 4 | `content/SPM_Syllabus/Form4/Sains_Komputer/Bab2_Pangkalan_Data/index.html` |
+| Bab 3: Interaksi Manusia dan Komputer | Tingkatan 4 | `content/SPM_Syllabus/Form4/Sains_Komputer/Bab3_Interaksi_Manusia_dan_Komputer/index.html` |
+| Bab 1: Pengkomputeran | Tingkatan 5 | `content/SPM_Syllabus/Form5/Sains_Komputer/Bab1_Pengkomputeran/index.html` |
+| Bab 2: Pangkalan Data Lanjutan | Tingkatan 5 | `content/SPM_Syllabus/Form5/Sains_Komputer/Bab2_Pangkalan_Data_Lanjutan/index.html` |
+| Bab 3: Pengaturcaraan Berasaskan Web | Tingkatan 5 | `content/SPM_Syllabus/Form5/Sains_Komputer/Bab3_Pengaturcaraan_Berasaskan_Web/index.html` |
 
 ### SPM Form 4 Additional Mathematics
 
@@ -92,7 +105,6 @@ Management notes:
 | --- | --- | --- |
 | Chapter 5: Consumer and Industrial Chemistry | Bilingual lesson + workbook support | `content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html` |
 | Student workbook | PDF | `content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf` |
-| Teacher answer scheme | PDF | `content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/teacher_answer_scheme.pdf` |
 
 ### SPM Subjects Visible But Not Yet Built
 
@@ -150,6 +162,7 @@ These subject cards exist as future placeholders or non-module anchors:
 | Topic 6: Planet Earth | Earth science | `content/IGCSE_Syllabus/Year4/Science/Topic6_Planet_Earth/index.html` |
 | Topic 7: Earth and Space | Space / astronomy basics | `content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html` |
 | Science Command Centre 4.0 | Comprehensive practice / mission system | `content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html` |
+| Science Quest V5.4 — Operation Seven | Mixed higher-difficulty revision | `content/IGCSE_Syllabus/Year4/Science/Operation_Seven_Challenge/index.html` |
 
 ### IGCSE Year 8 Science
 
@@ -231,16 +244,17 @@ These subject cards exist as future placeholders or non-module anchors:
 | --- | --- |
 | `resources/pdf-catalog.json` | Auto-generated list consumed by `notes.html`. |
 | `resources/pdf/` | Older direct PDF notes library. |
-| `hardcopy/` | Newer printable notes, worksheets, student PDFs, teacher answers. |
-| `content/**/source_pdfs/` | Source PDFs tied to specific lesson folders. |
-| `content/**/Worksheet.pdf`, `Answer_Key.pdf`, `slides.pdf` | Per-module downloadable lesson resources. |
+| `hardcopy/` | Approved original/AI-assisted printable student notes and worksheets. |
+| GregOS SSD-only storage | Publisher sources, past papers, teacher/tutor answers, raw sources and production assets. |
+| `content/**/Worksheet.pdf`, `slides.pdf` | Approved per-module student resources. |
 
 When adding or moving PDFs:
 
-1. Put the PDF in the correct `hardcopy/`, `resources/pdf/`, or module folder.
-2. Run `npm run build:pdf-catalog`.
-3. Run `npm run verify:pdf-library`.
-4. Commit both the PDF and the updated `resources/pdf-catalog.json`.
+1. Confirm that the PDF is original/AI-assisted and student-facing; otherwise keep it in SSD-only storage.
+2. Put an approved PDF in the correct `hardcopy/`, `resources/pdf/`, or module folder.
+3. Run `npm run build:pdf-catalog`.
+4. Run `npm run verify:pdf-library`.
+5. Commit both the PDF and the updated `resources/pdf-catalog.json`.
 
 ## Management Checklist For New Courses
 

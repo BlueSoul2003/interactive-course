@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPM Sains Komputer Tingkatan 5 — Bab 3 Pengaturcaraan Berasaskan Web Mastery Quest</title>
+<style>
+:root{
+  --bg:#060d18;--panel:#0d1a2c;--panel2:#13243b;--panel3:#071321;
+  --line:#2b4565;--text:#eef6ff;--muted:#a5b7cf;--orange:#ff9f1c;
+  --teal:#2ec4b6;--green:#35e18b;--red:#ff4765;--yellow:#ffd166;
+  --shadow:0 20px 60px rgba(0,0,0,.38);--r:20px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+ background:
+ radial-gradient(circle at 10% 4%,rgba(46,196,182,.14),transparent 26%),
+ radial-gradient(circle at 90% 5%,rgba(255,159,28,.14),transparent 25%),var(--bg);
+ min-height:100vh
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1480px;margin:auto;padding:18px}
+.top{
+ position:sticky;top:10px;z-index:20;display:flex;gap:16px;justify-content:space-between;align-items:center;
+ background:rgba(13,26,44,.94);backdrop-filter:blur(15px);border:1px solid var(--line);
+ border-radius:22px;padding:14px 17px;box-shadow:var(--shadow)
+}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-weight:950;font-size:22px;color:#1c1204;background:linear-gradient(135deg,var(--orange),#ffd08b)}
+.brand h1{font-size:16px;margin:0 0 3px}
+.brand p{font-size:11px;color:var(--muted);margin:0}
+.stats{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:8px 11px;font-size:11px;font-weight:850}
+.control{border:1px solid var(--line);background:#10233a;color:var(--text);border-radius:999px;padding:8px 10px;font-size:11px;font-weight:850}
+.control.off{opacity:.55}
+.progressbox{width:210px}
+.progresstxt{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-bottom:5px}
+.progress{height:8px;background:#02070e;border:1px solid #233955;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--orange));transition:.35s}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:18px;margin-top:18px}
+aside{
+ position:sticky;top:100px;height:calc(100vh - 118px);overflow:auto;background:rgba(13,26,44,.94);
+ border:1px solid var(--line);border-radius:var(--r);padding:13px;box-shadow:var(--shadow)
+}
+aside h2{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin:5px 7px 10px}
+.stage-tab{
+ width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;
+ padding:11px;text-align:left;font-weight:900;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px
+}
+.stage-tab.active{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,159,28,.1)}
+.stage-tab.locked{opacity:.48}
+.topic{margin:5px 0 8px}
+.topic-head{
+ width:100%;border:1px solid var(--line);background:#102238;color:var(--text);border-radius:12px;
+ padding:9px 10px;text-align:left;font-weight:900;font-size:11px;display:flex;justify-content:space-between;align-items:center
+}
+.topic-head.active{border-color:var(--teal)}
+.topic-sub{display:grid;gap:3px;padding:5px 0 0 8px}
+.navbtn{
+ width:100%;display:grid;grid-template-columns:27px 1fr 17px;gap:8px;align-items:center;text-align:left;
+ color:var(--text);background:transparent;border:1px solid transparent;border-radius:10px;padding:7px
+}
+.navbtn:hover{background:#142a45}.navbtn.active{background:#1a3454;border-color:#456b94}
+.navnum{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#06101d;border:1px solid var(--line);font-size:9px;font-weight:950}
+.navtitle{font-size:10.5px;font-weight:760;line-height:1.25}
+.tick{color:var(--green);font-weight:950}
+.side-actions{display:grid;gap:7px;margin-top:12px}
+.btn{
+ border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:var(--panel2);color:var(--text);font-weight:850
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.primary{border:none;background:linear-gradient(135deg,var(--orange),#ffc56b);color:#211506}
+.btn.secondary{background:#17304d}
+.btn.danger{background:#2c1520;color:#ffd1d8;border-color:#6c3345}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+main{min-width:0}
+.hero{
+ background:linear-gradient(135deg,rgba(19,36,59,.98),rgba(8,20,35,.97));border:1px solid var(--line);
+ border-radius:var(--r);padding:22px;box-shadow:var(--shadow);margin-bottom:15px
+}
+.eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);font-weight:950}
+.hero h2{font-size:29px;line-height:1.15;margin:7px 0}
+.hero p{max-width:950px;color:var(--muted);line-height:1.62;margin:0}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.tag{font-size:10px;font-weight:850;padding:6px 9px;border:1px solid var(--line);background:#081625;border-radius:999px}
+.notice{margin-top:13px;padding:10px 12px;border-left:4px solid var(--yellow);background:rgba(255,209,102,.08);border-radius:8px;color:#ffe8aa;font-size:11.5px;line-height:1.5}
+.screen{display:none}.screen.active{display:block}
+.question-card{
+ background:rgba(13,26,44,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden
+}
+.qhead{padding:20px;border-bottom:1px solid var(--line);display:flex;gap:15px;justify-content:space-between;align-items:flex-start}
+.qhead h3{font-size:22px;margin:5px 0}.qhead p{margin:0;color:var(--muted);line-height:1.5}
+.xp{background:var(--yellow);color:#201607;padding:7px 10px;border-radius:999px;font-size:10.5px;font-weight:950;white-space:nowrap}
+.qbody{padding:20px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h4{font-size:13px;margin:0 0 7px}.card p{color:var(--muted);line-height:1.58;margin:5px 0}
+.factbox{border-left:4px solid var(--teal)}
+.instruction{border-left:4px solid var(--orange)}
+.factbox strong,.term{color:#dffcf9}.term{font-weight:900}
+.code{
+ background:#020811;color:#dcecff;border:1px solid #263d5a;border-radius:13px;padding:14px;
+ font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;font-size:12.5px;line-height:1.65;
+ white-space:pre-wrap;overflow:auto;margin:10px 0
+}
+.stimulus-table{width:100%;border-collapse:collapse;margin:10px 0}
+.stimulus-table th,.stimulus-table td{border:1px solid var(--line);padding:8px;text-align:left}
+.stimulus-table th{background:#081422;color:#d1e0f2;font-size:11px}
+.choices{display:grid;gap:8px}
+.choice{display:flex;align-items:flex-start;gap:9px;background:#081625;border:1px solid var(--line);padding:10px;border-radius:11px}
+.choice:hover{border-color:#456b95}.choice input{margin-top:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+label.fieldlabel{display:block;font-size:11px;color:#c7d7ea;font-weight:850;margin:8px 0 5px}
+input[type=text],input[type=number],select,textarea{
+ width:100%;border:1px solid #365475;background:#050e19;color:var(--text);border-radius:10px;padding:10px 11px;outline:none
+}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.11)}
+.order{display:grid;gap:8px}
+.orderitem{display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;background:#081625;border:1px solid var(--line);border-radius:11px;padding:9px}
+.orderindex{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#17304d;color:var(--teal);font-weight:950}
+.minibtn{border:1px solid var(--line);background:#17304d;color:var(--text);border-radius:8px;padding:5px 8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+.feedback{display:none;padding:11px 13px;border-radius:12px;margin-top:12px;font-size:12.5px;font-weight:760;line-height:1.5}
+.feedback.show{display:block}.feedback.good{background:rgba(53,225,139,.11);border:1px solid rgba(53,225,139,.42);color:#c2f7da}
+.feedback.bad{background:rgba(255,71,101,.1);border:1px solid rgba(255,71,101,.42);color:#ffd0d8}
+.feedback.info{background:rgba(255,209,102,.09);border:1px solid rgba(255,209,102,.38);color:#ffe7a6}
+.answer-review{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.15);font-weight:650}
+.answer-review .student-answer{color:#d8e8fa}
+.answer-review .correct-answer{color:#bff7d7}
+.answer-review code{font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;background:rgba(0,0,0,.24);padding:2px 5px;border-radius:5px}
+.console{background:#01060b;border:1px solid #243955;border-radius:12px;padding:12px;min-height:70px;color:#baf5c5;font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;margin-top:10px}
+.mastery{
+ display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px
+}
+.mastery-card{background:#091625;border:1px solid var(--line);border-radius:11px;padding:9px;text-align:center}
+.mastery-card strong{display:block;color:var(--teal);font-size:11px}.mastery-card span{font-size:10px;color:var(--muted)}
+.stage-complete{text-align:center;padding:35px 20px;background:linear-gradient(145deg,#10243b,#0a1728);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.stage-complete .icon{font-size:60px}.stage-complete h3{font-size:28px;margin:8px 0}
+.exam-shell{background:#f8f8f5;color:#161616;border-radius:10px;padding:0;box-shadow:var(--shadow);overflow:hidden}
+.exam-cover{padding:28px;border-bottom:2px solid #222;text-align:center}
+.exam-cover h2{font-family:Georgia,serif;letter-spacing:.05em;margin:8px 0}.exam-cover p{margin:5px 0}
+.exam-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.exam-tools .btn{color:#fff;background:#17304d}.exam-tools .btn.primary{color:#211506}
+.exam-section{padding:24px;border-bottom:1px solid #bbb}
+.exam-section h3{text-align:center;font-family:Georgia,serif;text-decoration:underline;margin:0 0 4px}
+.exam-instruction{text-align:center;font-family:Georgia,serif;font-style:italic;margin:4px 0}
+.exam-q{padding:22px 0;border-bottom:1px dashed #999}
+.exam-q:last-child{border-bottom:none}
+.exam-qhead{display:flex;justify-content:space-between;gap:12px;font-family:Georgia,serif;font-size:16px;line-height:1.5}
+.exam-mark{white-space:nowrap;font-style:italic}
+.exam-stimulus{border:1px solid #444;padding:14px;margin:13px auto;max-width:760px;font-family:Georgia,serif;line-height:1.55}
+.exam-code{background:#fff;border:1px solid #444;color:#111;font-family:"Courier New",monospace;padding:13px;white-space:pre-wrap;overflow:auto;margin:12px 0}
+.exam-q input,.exam-q select,.exam-q textarea{background:#fff;color:#111;border:1px solid #555}
+.exam-part{margin:13px 0}
+.exam-result{padding:24px;background:#eef4f8;color:#152234}
+.exam-score{font-size:36px;font-weight:950}
+.review-good{border-left:6px solid #14a85c;padding-left:12px}.review-bad{border-left:6px solid #d62f49;padding-left:12px}
+.teacher{display:none}.teacher.show{display:block}
+.footer{text-align:center;color:#6f87a5;font-size:10px;padding:18px}
+.toast{display:none;position:fixed;right:18px;bottom:18px;z-index:80;background:#142941;border:1px solid var(--line);border-radius:12px;padding:11px 14px;box-shadow:var(--shadow)}
+.toast.show{display:block}
+#edgeFlash{
+ position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;
+ background:transparent
+}
+#edgeFlash.correct{animation:greenPulse .78s ease-out}
+#edgeFlash.wrong{animation:redPulse .78s ease-out}
+@keyframes greenPulse{
+ 0%{opacity:0;box-shadow:inset 0 0 0 rgba(53,225,139,0)}
+ 18%{opacity:1;box-shadow:inset 0 0 95px 22px rgba(53,225,139,.95)}
+ 36%{opacity:.25;box-shadow:inset 0 0 35px 8px rgba(53,225,139,.35)}
+ 55%{opacity:1;box-shadow:inset 0 0 120px 30px rgba(53,225,139,.9)}
+ 75%{opacity:.32;box-shadow:inset 0 0 45px 10px rgba(53,225,139,.4)}
+ 100%{opacity:0;box-shadow:inset 0 0 0 rgba(53,225,139,0)}
+}
+@keyframes redPulse{
+ 0%{opacity:0;box-shadow:inset 0 0 0 rgba(255,71,101,0)}
+ 16%{opacity:1;box-shadow:inset 0 0 105px 24px rgba(255,71,101,.98)}
+ 31%{opacity:.28;box-shadow:inset 0 0 38px 8px rgba(255,71,101,.4)}
+ 48%{opacity:1;box-shadow:inset 0 0 130px 32px rgba(255,71,101,.92)}
+ 65%{opacity:.3;box-shadow:inset 0 0 42px 10px rgba(255,71,101,.42)}
+ 82%{opacity:.88;box-shadow:inset 0 0 90px 20px rgba(255,71,101,.75)}
+ 100%{opacity:0;box-shadow:inset 0 0 0 rgba(255,71,101,0)}
+}
+.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.shake{animation:none!important}#edgeFlash.correct,#edgeFlash.wrong{animation-duration:.25s}}
+@media(max-width:1000px){
+ .layout{grid-template-columns:1fr}aside{position:relative;top:0;height:auto}.top{position:relative;top:0}
+ .grid2,.grid3,.mastery,.phasegrid{grid-template-columns:1fr}.progressbox{width:150px}
+}
+@media(max-width:620px){.app{padding:9px}.top{flex-direction:column;align-items:flex-start}.stats{justify-content:flex-start}.qhead{flex-direction:column}.hero h2{font-size:24px}.qbody{padding:13px}.exam-section{padding:14px}.exam-qhead{font-size:14px}}
+@media print{.top,aside,.hero,.actions,.exam-tools,.footer{display:none!important}.layout{display:block}.screen{display:none!important}.screen.active{display:block!important}.exam-shell{box-shadow:none}.app{max-width:none;padding:0}body{background:#fff}}
+</style>
+</head>
+<body autocomplete="off">
+<a href="../../../../../index.html" aria-label="Back to course portal" style="position:fixed;top:10px;left:10px;z-index:99999;padding:8px 12px;border-radius:999px;background:#0f172a;color:#fff;text-decoration:none;font:700 13px/1.2 system-ui;box-shadow:0 4px 16px #0004">← Course Portal</a>
+<div id="edgeFlash"></div>
+<div class="app">
+<header class="top">
+ <div class="brand">
+  <div class="logo">&lt;/&gt;</div>
+  <div><h1>SPM Sains Komputer Tingkatan 5</h1><p>Bab 3 Pengaturcaraan Berasaskan Web • 40-question Mastery Quest</p></div>
+ </div>
+ <div class="stats">
+  <div class="pill">⭐ Markah: <span id="score">0</span>/3000</div>
+  <div class="pill">🔥 Rentetan: <span id="streak">0</span></div>
+  <button class="control" id="soundToggle" onclick="toggleSound()">🔊 Bunyi</button>
+  <button class="control" id="effectToggle" onclick="toggleEffects()">✨ Kesan</button>
+  <div class="progressbox"><div class="progresstxt"><span>Tahap 1</span><span id="progressText">0/30</span></div><div class="progress"><div id="progressBar"></div></div></div>
+ </div>
+</header>
+
+<div class="layout">
+<aside>
+ <h2>Peringkat Pembelajaran</h2>
+ <button class="stage-tab active" id="stage1Tab" onclick="goStage1()"><span>Tahap 1 • Latihan Berpandu</span><span id="stage1Count">0/30</span></button>
+ <div id="topicNav"></div>
+ <button class="stage-tab locked" id="stage2Tab" onclick="goStage2()"><span>Tahap 2 • Simulasi SPM</span><span id="stage2Lock">🔒</span></button>
+ <div class="side-actions">
+  <button class="btn secondary" onclick="toggleTeacher()">🔐 Skema Guru</button>
+  <button class="btn danger" onclick="resetAll()">↻ Tetapkan Semula</button>
+ </div>
+</aside>
+
+<main>
+<section class="hero" id="hero">
+ <div class="eyebrow">Two-stage interactive module</div>
+ <h2>Bab 3: Pengaturcaraan Berasaskan Web — Mastery Quest</h2>
+ <p>Latihan meliputi Bahasa Penskripan Klien, Bahasa Penskripan Pelayan dan pembangunan Laman Web Interaktif berdasarkan DSKP serta buku teks Tingkatan 5.</p>
+ <div class="tags">
+  <span class="tag">3.1 Penskripan Klien × 10</span><span class="tag">3.2 Penskripan Pelayan × 10</span><span class="tag">3.3 Laman Web Interaktif × 10</span><span class="tag">Simulasi SPM × 10</span>
+ </div>
+ <div class="notice"><strong>Answer policy:</strong> After a first wrong attempt, the correct answer remains hidden. It is revealed only after the second checked attempt. Answers and attempt counts remain saved for review.<br><strong>Audio:</strong> Three different correct sounds and three different wrong sounds are selected randomly. The full-screen edge glow can be turned off using “Kesan”.</div>
+</section>
+
+<section class="screen active" id="practiceScreen">
+ <div id="questionHost"></div>
+</section>
+
+<section class="screen" id="stage1Done">
+ <div class="stage-complete">
+  <div class="icon">🚀</div>
+  <h3>Tahap 1 Selesai</h3>
+  <p>You completed all 30 guided questions. Tahap 2 is now unlocked.</p>
+  <div class="pill" style="display:inline-block;margin:12px">Markah latihan: <span id="practiceFinal">0</span>/3000</div>
+  <div class="actions" style="justify-content:center"><button class="btn primary" onclick="goStage2()">Mulakan Simulasi SPM</button><button class="btn" onclick="openQuestion('q1')">Semak Latihan</button></div>
+ </div>
+</section>
+
+<section class="screen" id="examScreen">
+ <div class="exam-shell">
+  <div class="exam-cover">
+   <div style="font-weight:bold">SIJIL PELAJARAN MALAYSIA</div>
+   <h2>SAINS KOMPUTER 3770/1</h2>
+   <p><strong>Simulasi Tingkatan 5 Bab 3 — Soalan Asli Gaya SPM</strong></p>
+   <p>10 soalan • 40 markah • Masa dicadangkan: 45 minit</p>
+   <div class="exam-tools">
+    <button class="btn primary" id="startExamBtn" onclick="startExam()">Mulakan Peperiksaan</button>
+    <button class="btn" onclick="printExam()">Cetak</button>
+    <div class="pill" style="color:white;background:#17304d">⏱ <span id="timer">45:00</span></div>
+   </div>
+  </div>
+  <div id="examPaper"></div>
+  <div class="exam-result" id="examResult" style="display:none"></div>
+ </div>
+</section>
+
+<section class="teacher card" id="teacherPanel">
+ <h3>Skema Guru</h3>
+ <p>Jawapan betul latihan hanya dipaparkan selepas jawapan betul atau selepas percubaan kedua. Simulasi SPM menanda semua 10 soalan selepas penghantaran dan memaparkan skema mengikut subbahagian.</p>
+ <p><strong>Kod guru:</strong> SPM4</p>
+</section>
+<div class="footer">Self-contained HTML • No internet required • Progress saved using localStorage</div>
+</main>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const topicInfo=[{"id":"3.1","name":"Bahasa Penskripan Klien","qs":["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10"]},{"id":"3.2","name":"Bahasa Penskripan Pelayan","qs":["q11","q12","q13","q14","q15","q16","q17","q18","q19","q20"]},{"id":"3.3","name":"Laman Web Interaktif","qs":["q21","q22","q23","q24","q25","q26","q27","q28","q29","q30"]}];
+
+const questions=[{"id":"q1","topic":"3.1","title":"Keperluan Bahasa Penskripan Klien","fact":"Bahasa Penskripan Klien dilaksanakan pada pelayar pengguna untuk menghasilkan tindak balas segera, memanipulasi kandungan halaman dan membina interaksi tanpa perlu menghantar setiap tindakan kepada pelayan.","instruction":"Choose all suitable uses of client-side scripting.","type":"multi","options":["Mengesahkan format input sebelum dihantar","Menukar kandungan halaman selepas butang ditekan","Mengendalikan animasi antara muka","Menyimpan kata laluan pangkalan data secara terbuka","Mengakses terus fail rahsia pelayan"],"answers":["Mengesahkan format input sebelum dihantar","Menukar kandungan halaman selepas butang ditekan","Mengendalikan animasi antara muka"],"hint":"Penskripan klien berjalan dalam pelayar dan mengendalikan interaksi halaman."},{"id":"q2","topic":"3.1","title":"Algoritma Isihan Buih","fact":"Isihan buih membandingkan dua elemen bersebelahan dan menukarnya jika berada dalam susunan yang salah. Proses diulang sehingga semua elemen tersusun.","instruction":"After one ascending bubble-sort pass on [5, 2, 4, 1], what is the array?","type":"short","label":"Susunan selepas satu laluan","accepted":["2,4,1,5","2415"],"listNormalize":true,"hint":"Banding 5–2, kemudian 5–4, kemudian 5–1."},{"id":"q3","topic":"3.1","title":"Algoritma Isihan Pilih","fact":"Isihan pilih mencari nilai terkecil dalam bahagian belum tersusun dan menukarnya dengan elemen pada kedudukan semasa.","instruction":"After the first ascending selection-sort step on [7, 3, 5, 1], what is the array?","type":"short","label":"Susunan selepas langkah pertama","accepted":["1,3,5,7","1357"],"listNormalize":true,"hint":"Nilai minimum ialah 1 dan ditukar dengan elemen pertama 7."},{"id":"q4","topic":"3.1","title":"Carian Dedua","fact":"Carian dedua mencari nilai dalam tatasusunan tersusun dengan membandingkan item tengah dan menghapuskan separuh ruang carian pada setiap langkah.","instruction":"In [2, 5, 8, 12, 17, 21, 30], which value is checked first when searching for 17?","type":"short","label":"Nilai tengah pertama","accepted":["12"],"hint":"Senarai mempunyai tujuh elemen; elemen tengah ialah elemen keempat."},{"id":"q5","topic":"3.1","title":"Maksimum, Minimum, Min dan Count","fact":"Atur cara boleh mengesan nilai maksimum, minimum, min (mean) dan bilangan data (count) dengan melintasi tatasusunan.","instruction":"For [4, 8, 6, 2], complete the results.","type":"fields","fields":[{"label":"Maksimum","kind":"number","answer":"8"},{"label":"Minimum","kind":"number","answer":"2"},{"label":"Min","kind":"number","answer":"5"},{"label":"Count","kind":"number","answer":"4"}],"hint":"Jumlah ialah 20 dan terdapat 4 nilai."},{"id":"q6","topic":"3.1","title":"Struktur Data Queue","fact":"Queue menggunakan prinsip FIFO (First In, First Out). Operasi enqueue menambah item di belakang dan dequeue mengeluarkan item di hadapan.","instruction":"A queue is [Ali, Bala, Chong]. After dequeue and enqueue Devi, what is the queue?","type":"short","label":"Queue akhir","accepted":["Bala,Chong,Devi","bala,chong,devi"],"listNormalize":true,"hint":"Ali keluar dahulu; Devi masuk di belakang."},{"id":"q7","topic":"3.1","title":"Pemalar, Pemboleh Ubah dan Jenis Data JavaScript","fact":"JavaScript menggunakan let untuk pemboleh ubah yang boleh berubah dan const untuk pemalar. Jenis data termasuk number, string dan boolean.","instruction":"Match each declaration.","type":"fields","fields":[{"label":"const KADAR = 0.06;","kind":"select","options":["pemalar number","pemboleh ubah string","pemboleh ubah boolean"],"answer":"pemalar number"},{"label":"let nama = 'Aina';","kind":"select","options":["pemalar number","pemboleh ubah string","pemboleh ubah boolean"],"answer":"pemboleh ubah string"},{"label":"let lulus = true;","kind":"select","options":["pemalar number","pemboleh ubah string","pemboleh ubah boolean"],"answer":"pemboleh ubah boolean"}],"hint":"const tidak boleh diumpuk semula; petikan menandakan string; true ialah boolean."},{"id":"q8","topic":"3.1","title":"Struktur Kawalan JavaScript","fact":"Struktur kawalan jujukan menjalankan arahan mengikut urutan, pilihan membuat keputusan dan ulangan mengulang arahan.","instruction":"Match each code fragment.","type":"fields","fields":[{"label":"if (markah >= 50) {...}","kind":"select","options":["jujukan","pilihan","ulangan"],"answer":"pilihan"},{"label":"for (let i=0; i<10; i++) {...}","kind":"select","options":["jujukan","pilihan","ulangan"],"answer":"ulangan"},{"label":"jumlah = harga * kuantiti; papar(jumlah);","kind":"select","options":["jujukan","pilihan","ulangan"],"answer":"jujukan"}],"hint":"if = pilihan; for = ulangan; arahan berturutan = jujukan."},{"id":"q9","topic":"3.1","title":"Standard Library","fact":"Standard library menyediakan fungsi sedia ada yang menjimatkan masa, mengurangkan ralat dan memudahkan pembangunan atur cara.","instruction":"Match each JavaScript standard-library expression.","type":"fields","fields":[{"label":"Math.max(4, 9, 2)","kind":"select","options":["9","2","3","4"],"answer":"9"},{"label":"Math.min(4, 9, 2)","kind":"select","options":["9","2","3","4"],"answer":"2"},{"label":"Math.round(3.6)","kind":"select","options":["9","2","3","4"],"answer":"4"}],"hint":"max memilih terbesar, min memilih terkecil, round membundarkan."},{"id":"q10","topic":"3.1","title":"Procedure, Function dan Tatasusunan","fact":"Procedure melaksanakan tugas tanpa mengembalikan nilai, function mengembalikan nilai, dan tatasusunan menyimpan beberapa data di bawah satu nama.","instruction":"Classify the code components.","stimulus":"function kiraLuas(p, l) { return p * l; }\nfunction paparMesej() { alert('Selesai'); }\nlet markah = [70, 80, 90];","type":"fields","fields":[{"label":"kiraLuas","kind":"select","options":["function","procedure","tatasusunan"],"answer":"function"},{"label":"paparMesej","kind":"select","options":["function","procedure","tatasusunan"],"answer":"procedure"},{"label":"markah","kind":"select","options":["function","procedure","tatasusunan"],"answer":"tatasusunan"}],"hint":"return menunjukkan function; tugas tanpa nilai pulangan ialah procedure; [] ialah tatasusunan."},{"id":"q11","topic":"3.2","title":"Laman Web sebagai Penghubung","fact":"Laman web bertindak sebagai penghubung antara pengguna dengan sistem pelayan. Permintaan dihantar ke pelayan dan tindak balas dikembalikan kepada pengguna.","instruction":"Arrange the request-response flow.","type":"order","items":["Pengguna menghantar permintaan melalui pelayar","Pelayan menerima dan memproses permintaan","Pelayan mencapai fail atau pangkalan data","Tindak balas dihantar kepada pelayar"],"hint":"Permintaan bergerak daripada pengguna ke pelayan, kemudian jawapan kembali."},{"id":"q12","topic":"3.2","title":"Fail Teks","fact":"Bahasa Penskripan Pelayan boleh menghasilkan, menyimpan dan membaca data dalam fail teks (.txt).","instruction":"Choose a suitable use of a text file.","type":"mcq","options":["Menyimpan log aktiviti ringkas","Menyimpan kata laluan dalam teks biasa untuk dikongsi","Menggantikan semua keselamatan pangkalan data","Menjalankan CSS"],"answer":"Menyimpan log aktiviti ringkas","hint":"Fail teks sesuai untuk data ringkas, tetapi maklumat sensitif perlu dilindungi."},{"id":"q13","topic":"3.2","title":"Paparan Unik bagi Setiap Pengguna","fact":"Penskripan pelayan boleh menghasilkan kandungan unik berdasarkan sesi, profil dan data pengguna.","instruction":"Choose the best example.","type":"mcq","options":["Selepas log masuk, pengguna melihat nama dan tempahan mereka sendiri","Semua pengguna melihat kata laluan pentadbir","Halaman sentiasa sama tanpa mengambil kira pengguna","Kod PHP dipaparkan sebagai teks kepada pengguna"],"answer":"Selepas log masuk, pengguna melihat nama dan tempahan mereka sendiri","hint":"Kandungan unik bergantung pada identiti atau data pengguna semasa."},{"id":"q14","topic":"3.2","title":"Import Data daripada Fail Teks","fact":"Data daripada fail teks boleh dibaca, dipisahkan kepada medan dan digunakan untuk menyelesaikan masalah seperti menghasilkan laporan atau memasukkan rekod.","instruction":"Choose the correct processing order.","type":"order","items":["Buka fail teks","Baca kandungan fail","Pisahkan data kepada medan","Proses atau paparkan data","Tutup fail"],"hint":"Fail dibuka sebelum dibaca dan ditutup selepas selesai."},{"id":"q15","topic":"3.2","title":"Import Data daripada Pangkalan Data","fact":"Penskripan pelayan boleh menghantar query kepada pangkalan data dan menggunakan rekod yang dipulangkan untuk menghasilkan halaman dinamik.","instruction":"Choose the correct server-side flow.","type":"order","items":["Sambung ke pangkalan data","Hantar query","Terima set keputusan","Paparkan data dalam halaman","Tutup sambungan"],"hint":"Sambungan dibina sebelum query dijalankan."},{"id":"q16","topic":"3.2","title":"Pengesahsahihan Input","fact":"Pengesahsahihan memastikan input mematuhi peraturan sebelum diproses atau disimpan, contohnya medan wajib, format e-mel dan julat nombor.","instruction":"Match each field with a suitable validation.","type":"fields","fields":[{"label":"E-mel","kind":"select","options":["Mesti mengandungi format e-mel sah","Antara 0 hingga 100","Tidak boleh kosong sahaja"],"answer":"Mesti mengandungi format e-mel sah"},{"label":"Markah","kind":"select","options":["Mesti mengandungi format e-mel sah","Antara 0 hingga 100","Tidak boleh kosong sahaja"],"answer":"Antara 0 hingga 100"},{"label":"Nama pengguna","kind":"select","options":["Mesti mengandungi format e-mel sah","Antara 0 hingga 100","Tidak boleh kosong sahaja"],"answer":"Tidak boleh kosong sahaja"}],"hint":"Peraturan perlu sepadan dengan domain setiap input."},{"id":"q17","topic":"3.2","title":"Create, Update, Backup dan Restore","fact":"Pengurusan pangkalan data merangkumi membina, mengemas kini, membuat sandaran dan memulihkan data.","instruction":"Match each action.","type":"fields","fields":[{"label":"Mewujudkan pangkalan data baharu.","kind":"select","options":["create","update","backup","restore"],"answer":"create"},{"label":"Menyalin data untuk perlindungan.","kind":"select","options":["create","update","backup","restore"],"answer":"backup"},{"label":"Mengembalikan data daripada salinan sandaran.","kind":"select","options":["create","update","backup","restore"],"answer":"restore"},{"label":"Mengubah rekod sedia ada.","kind":"select","options":["create","update","backup","restore"],"answer":"update"}],"hint":"Sandaran ialah salinan; restore memulihkan salinan tersebut."},{"id":"q18","topic":"3.2","title":"Query Pangkalan Data","fact":"Query membolehkan pelayan mendapatkan, menambah, mengemas kini atau menghapus data mengikut keperluan aplikasi.","instruction":"Match each requirement with the SQL command.","type":"fields","fields":[{"label":"Mendapatkan rekod pengguna.","kind":"select","options":["SELECT","INSERT","UPDATE","DELETE"],"answer":"SELECT"},{"label":"Menambah akaun baharu.","kind":"select","options":["SELECT","INSERT","UPDATE","DELETE"],"answer":"INSERT"},{"label":"Menukar alamat pengguna.","kind":"select","options":["SELECT","INSERT","UPDATE","DELETE"],"answer":"UPDATE"},{"label":"Menghapus akaun.","kind":"select","options":["SELECT","INSERT","UPDATE","DELETE"],"answer":"DELETE"}],"hint":"SELECT baca, INSERT tambah, UPDATE ubah, DELETE padam."},{"id":"q19","topic":"3.2","title":"Daftar dan Log Masuk","fact":"Daftar mencipta akaun baharu. Log masuk mengesahkan identiti menggunakan kelayakan pengguna sebelum sesi diberikan.","instruction":"Arrange the login process.","type":"order","items":["Pengguna memasukkan nama pengguna dan kata laluan","Pelayan mengesahkan input","Pelayan membandingkan rekod pengguna","Sesi diwujudkan jika sah","Halaman pengguna dipaparkan"],"hint":"Kelayakan disahkan sebelum sesi dan halaman peribadi diberikan."},{"id":"q20","topic":"3.2","title":"Keselamatan Pengesahan Pengguna","fact":"Kata laluan tidak sepatutnya disimpan sebagai teks biasa. Input perlu ditentusahkan, query perlu dilindungi dan sesi perlu dikendalikan dengan selamat.","instruction":"Select all suitable security practices.","type":"multi","options":["Hash kata laluan","Prepared statement","Pengesahsahihan input","Simpan kata laluan sebagai teks biasa","Paparkan mesej ralat pangkalan data lengkap kepada semua pengguna"],"answers":["Hash kata laluan","Prepared statement","Pengesahsahihan input"],"hint":"Pilih amalan yang melindungi kelayakan dan mengurangkan serangan input."},{"id":"q21","topic":"3.3","title":"Prinsip Reka Bentuk Laman Web","fact":"Reka bentuk laman web perlu sesuai dengan tujuan dan pengguna dari segi kandungan, navigasi, kebolehbacaan, konsistensi, aksesibiliti dan maklum balas.","instruction":"Select all suitable design principles.","type":"multi","options":["Navigasi jelas","Teks mudah dibaca","Susun atur konsisten","Kontras sesuai","Semua maklumat diletakkan tanpa hierarki","Butang penting disembunyikan"],"answers":["Navigasi jelas","Teks mudah dibaca","Susun atur konsisten","Kontras sesuai"],"hint":"Pilih prinsip yang membantu pengguna mencari dan memahami kandungan."},{"id":"q22","topic":"3.3","title":"Kerangka Aplikasi","fact":"Kerangka atau wireframe menunjukkan struktur halaman, kedudukan tajuk, navigasi, kandungan, borang dan bahagian lain sebelum pembangunan sebenar.","instruction":"Choose all elements suitable for a website wireframe.","type":"multi","options":["Header","Menu navigasi","Ruang kandungan","Footer","Kata laluan sebenar pengguna","Kedudukan borang"],"answers":["Header","Menu navigasi","Ruang kandungan","Footer","Kedudukan borang"],"hint":"Wireframe menunjukkan susun atur komponen, bukan data sulit."},{"id":"q23","topic":"3.3","title":"Struktur HTML","fact":"HTML membina struktur halaman menggunakan elemen seperti heading, paragraph, image dan pembahagian kandungan.","instruction":"Match each HTML tag.","type":"fields","fields":[{"label":"Tajuk utama","kind":"select","options":["<h1>","<p>","<img>","<table>"],"answer":"<h1>"},{"label":"Perenggan","kind":"select","options":["<h1>","<p>","<img>","<table>"],"answer":"<p>"},{"label":"Imej","kind":"select","options":["<h1>","<p>","<img>","<table>"],"answer":"<img>"},{"label":"Jadual","kind":"select","options":["<h1>","<p>","<img>","<table>"],"answer":"<table>"}],"hint":"Nama tag biasanya menunjukkan fungsi elemennya."},{"id":"q24","topic":"3.3","title":"CSS","fact":"CSS menggayakan teks, fon, latar belakang, jadual, sempadan dan kedudukan elemen.","instruction":"Match each CSS property with its purpose.","type":"fields","fields":[{"label":"color","kind":"select","options":["warna teks","warna latar","sempadan","kedudukan"],"answer":"warna teks"},{"label":"background-color","kind":"select","options":["warna teks","warna latar","sempadan","kedudukan"],"answer":"warna latar"},{"label":"border","kind":"select","options":["warna teks","warna latar","sempadan","kedudukan"],"answer":"sempadan"},{"label":"position","kind":"select","options":["warna teks","warna latar","sempadan","kedudukan"],"answer":"kedudukan"}],"hint":"Nama property memberi petunjuk kepada kesannya."},{"id":"q25","topic":"3.3","title":"Pengesahan Data pada Klien","fact":"JavaScript boleh mengesahkan medan sebelum borang dihantar dan memberikan maklum balas segera kepada pengguna.","instruction":"Choose the best validation for a required email field.","type":"mcq","options":["Semak medan tidak kosong dan format e-mel sah","Benarkan sebarang teks termasuk kosong","Simpan kata laluan dalam kod JavaScript","Padam borang selepas halaman dibuka"],"answer":"Semak medan tidak kosong dan format e-mel sah","hint":"Pengesahan perlu menyemak kehadiran dan format nilai."},{"id":"q26","topic":"3.3","title":"Butang Pilihan","fact":"Radio button sesuai apabila pengguna memilih satu pilihan sahaja. Checkbox sesuai apabila lebih daripada satu pilihan boleh dipilih.","instruction":"Match each requirement.","type":"fields","fields":[{"label":"Pilih satu kaedah pembayaran.","kind":"select","options":["radio button","checkbox"],"answer":"radio button"},{"label":"Pilih beberapa minat.","kind":"select","options":["radio button","checkbox"],"answer":"checkbox"}],"hint":"Satu sahaja = radio; banyak pilihan = checkbox."},{"id":"q27","topic":"3.3","title":"Kotak Popup JavaScript","fact":"JavaScript menyediakan kotak Alert, Confirm dan Prompt. Alert memaparkan mesej, Confirm meminta pengesahan, dan Prompt meminta input ringkas.","instruction":"Match each popup.","type":"fields","fields":[{"label":"Paparkan mesej “Rekod berjaya”.","kind":"select","options":["Alert","Confirm","Prompt"],"answer":"Alert"},{"label":"Tanya “Adakah anda pasti mahu memadam?”","kind":"select","options":["Alert","Confirm","Prompt"],"answer":"Confirm"},{"label":"Minta pengguna memasukkan nama.","kind":"select","options":["Alert","Confirm","Prompt"],"answer":"Prompt"}],"hint":"Mesej sahaja = Alert; Ya/Tidak = Confirm; input = Prompt."},{"id":"q28","topic":"3.3","title":"Peranan Klien dan Pelayan","fact":"Penskripan klien mengendalikan interaksi dalam pelayar, manakala penskripan pelayan memproses data sensitif, sesi dan capaian pangkalan data.","instruction":"Classify each task.","type":"fields","fields":[{"label":"Menukar warna butang apabila tetikus berada di atasnya.","kind":"select","options":["klien","pelayan"],"answer":"klien"},{"label":"Menyemak kata laluan dengan rekod pangkalan data.","kind":"select","options":["klien","pelayan"],"answer":"pelayan"},{"label":"Memaparkan popup sebelum memadam.","kind":"select","options":["klien","pelayan"],"answer":"klien"},{"label":"Mengemas kini rekod tempahan.","kind":"select","options":["klien","pelayan"],"answer":"pelayan"}],"hint":"Pelayar mengendalikan paparan; pelayan mengendalikan data dan pengesahan sebenar."},{"id":"q29","topic":"3.3","title":"Laman Pengguna dan Pentadbir","fact":"Laman pengguna biasanya membolehkan carian, pendaftaran dan urusan peribadi. Laman pentadbir membolehkan pengurusan rekod, laporan dan kawalan sistem.","instruction":"Match each feature.","type":"fields","fields":[{"label":"Membuat tempahan sendiri.","kind":"select","options":["pengguna","pentadbir"],"answer":"pengguna"},{"label":"Mengemas kini semua produk.","kind":"select","options":["pengguna","pentadbir"],"answer":"pentadbir"},{"label":"Melihat laporan keseluruhan jualan.","kind":"select","options":["pengguna","pentadbir"],"answer":"pentadbir"},{"label":"Mengubah profil sendiri.","kind":"select","options":["pengguna","pentadbir"],"answer":"pengguna"}],"hint":"Pentadbir mengurus sistem menyeluruh; pengguna mengurus urusan sendiri."},{"id":"q30","topic":"3.3","title":"Projek Laman Web Interaktif Lengkap","fact":"Laman web interaktif lengkap menggabungkan reka bentuk sesuai, HTML, CSS, penskripan klien, penskripan pelayan, pangkalan data, pengujian dan dokumentasi.","instruction":"Select all expected project components.","type":"multi","options":["Wireframe","HTML dan CSS","Pengesahan JavaScript","Daftar dan log masuk","Capaian pangkalan data","Pengujian pengguna dan pentadbir","Kata laluan teks biasa"],"answers":["Wireframe","HTML dan CSS","Pengesahan JavaScript","Daftar dan log masuk","Capaian pangkalan data","Pengujian pengguna dan pentadbir"],"hint":"Projek lengkap merangkumi reka bentuk, fungsi klien/pelayan, data dan pengujian."}];
+
+const examQuestions=[{"id":"x1","section":"A","marks":4,"title":"Algoritma","prompt":"Tatasusunan [6, 2, 5, 1] diisih secara menaik.","parts":[{"label":"(a) Nyatakan susunan selepas satu laluan isihan buih.","accepted":["2,5,1,6","2516"],"marks":1},{"label":"(b) Nyatakan susunan selepas langkah pertama isihan pilih.","accepted":["1,2,5,6","1256"],"marks":1},{"label":"(c) Namakan algoritma yang memerlukan data tersusun sebelum carian.","accepted":["carian dedua","binary search"],"marks":1},{"label":"(d) Nyatakan prinsip queue.","accepted":["fifo","first in first out","masuk dahulu keluar dahulu"],"marks":1}]},{"id":"x2","section":"A","marks":4,"title":"JavaScript","prompt":"Diberi kod berikut.","stimulus":"const KADAR = 0.05;\nlet harga = 100;\nlet jumlah = harga + harga * KADAR;","parts":[{"label":"(a) Nyatakan jenis KADAR.","accepted":["pemalar","constant"],"marks":1},{"label":"(b) Nyatakan jenis data harga.","accepted":["number","nombor"],"marks":1},{"label":"(c) Nyatakan nilai jumlah.","accepted":["105"],"marks":1},{"label":"(d) Nyatakan kata kunci pemboleh ubah yang boleh berubah.","accepted":["let"],"marks":1}]},{"id":"x3","section":"A","marks":4,"title":"Subatur Cara","prompt":"Diberi kod berikut.","stimulus":"function kiraLuas(p, l) {\n  return p * l;\n}\nfunction papar() {\n  alert('Selesai');\n}","parts":[{"label":"(a) Nyatakan nama function yang mengembalikan nilai.","accepted":["kiraluas"],"marks":1},{"label":"(b) Nyatakan dua parameter function tersebut. Pisahkan dengan koma.","accepted":["p,l","l,p"],"marks":2,"splitCount":2},{"label":"(c) Klasifikasikan papar sebagai function atau procedure.","accepted":["procedure","prosedur"],"marks":1}]},{"id":"x4","section":"A","marks":4,"title":"Pelayan dan Pangkalan Data","prompt":"Sebuah laman menerima borang pendaftaran pengguna.","parts":[{"label":"(a) Nyatakan satu fungsi penskripan klien.","accepted":["mengesahkan input","memberi maklum balas segera","mengendalikan interaksi borang"],"marks":1},{"label":"(b) Nyatakan satu fungsi penskripan pelayan.","accepted":["menyimpan data dalam pangkalan data","mengesahkan pengguna","memproses borang"],"marks":1},{"label":"(c) Nyatakan arahan SQL untuk menambah rekod.","accepted":["insert","insert into"],"marks":1},{"label":"(d) Nyatakan satu amalan melindungi kata laluan.","accepted":["hash kata laluan","hashing","jangan simpan teks biasa"],"marks":1}]},{"id":"x5","section":"A","marks":4,"title":"Pengurusan Data","prompt":"Padankan operasi pangkalan data dengan tujuan.","parts":[{"label":"(a) Membina pangkalan data baharu.","accepted":["create"],"marks":1},{"label":"(b) Mengubah rekod.","accepted":["update"],"marks":1},{"label":"(c) Membuat salinan perlindungan.","accepted":["backup","sandaran"],"marks":1},{"label":"(d) Mengembalikan data daripada salinan.","accepted":["restore","pulih","memulihkan"],"marks":1}]},{"id":"x6","section":"A","marks":4,"title":"HTML dan CSS","prompt":"Lengkapkan fungsi elemen dan property.","parts":[{"label":"(a) Tag HTML untuk tajuk utama.","accepted":["<h1>","h1"],"marks":1},{"label":"(b) Tag HTML untuk imej.","accepted":["<img>","img"],"marks":1},{"label":"(c) Property CSS untuk warna teks.","accepted":["color"],"marks":1},{"label":"(d) Property CSS untuk warna latar.","accepted":["background-color","background"],"marks":1}]},{"id":"x7","section":"A","marks":3,"title":"Kotak Popup","prompt":"Tiga jenis kotak popup digunakan dalam JavaScript.","parts":[{"label":"(a) Popup untuk memaparkan mesej sahaja.","accepted":["alert"],"marks":1},{"label":"(b) Popup untuk meminta pengesahan Ya/Tidak.","accepted":["confirm"],"marks":1},{"label":"(c) Popup untuk meminta input ringkas.","accepted":["prompt"],"marks":1}]},{"id":"x8","section":"B","marks":5,"title":"Soalan Berstruktur 1","prompt":"Sebuah atur cara menerima lima markah dalam tatasusunan dan memaparkan nilai maksimum serta min.","stimulus":"let markah = [60, 80, 70, 90, 50];","parts":[{"label":"(a) Nyatakan nilai maksimum.","accepted":["90"],"marks":1},{"label":"(b) Nyatakan min.","accepted":["70"],"marks":1},{"label":"(c) Nyatakan count.","accepted":["5"],"marks":1},{"label":"(d) Nyatakan dua struktur pengaturcaraan yang sesuai. Pisahkan dengan koma.","accepted":["tatasusunan,ulangan","ulangan,tatasusunan","array,loop"],"marks":2,"splitCount":2}]},{"id":"x9","section":"B","marks":4,"title":"Soalan Berstruktur 2","prompt":"Sebuah laman web membenarkan pengguna mendaftar dan log masuk.","parts":[{"label":"(a) Nyatakan dua medan pendaftaran yang perlu disahkan. Pisahkan dengan koma.","accepted":["nama pengguna,kata laluan","e-mel,kata laluan","emel,kata laluan"],"marks":2,"splitCount":2},{"label":"(b) Nyatakan satu langkah selepas kelayakan log masuk sah.","accepted":["wujudkan sesi","papar halaman pengguna","simpan session"],"marks":1},{"label":"(c) Nyatakan satu langkah menghalang SQL injection.","accepted":["prepared statement","parameterized query","sahkan input"],"marks":1}]},{"id":"x10","section":"B","marks":4,"title":"Soalan Berstruktur 3","prompt":"Sebuah laman tempahan mempunyai pengguna dan pentadbir.","stimulus":"Pengguna boleh mencari produk dan membuat tempahan. Pentadbir boleh menambah produk, mengemas kini harga dan melihat laporan.","parts":[{"label":"(a) Nyatakan satu fungsi pengguna.","accepted":["mencari produk","membuat tempahan"],"marks":1},{"label":"(b) Nyatakan dua fungsi pentadbir. Pisahkan dengan koma.","accepted":["menambah produk,mengemas kini harga","mengemas kini harga,melihat laporan","menambah produk,melihat laporan"],"marks":2,"splitCount":2},{"label":"(c) Nyatakan satu teknologi bagi struktur halaman.","accepted":["html"],"marks":1}]}];
+
+const storage=(()=>{
+ try{const k="__sk_test__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage}
+ catch(e){const mem={};return{getItem:k=>Object.prototype.hasOwnProperty.call(mem,k)?mem[k]:null,setItem:(k,v)=>mem[k]=String(v),removeItem:k=>delete mem[k]}}
+})();
+function createInitialState(){
+ return {
+  done:[],score:0,streak:0,current:"q1",
+  sound:true,effects:true,examUnlocked:false,
+  examSubmitted:false,examScore:0,
+  answers:{},results:{},examAnswers:{},examReview:[],
+  orderState:{},examStarted:false,examSecondsLeft:2700,
+  resetVersion:2
+ }
+}
+let state=JSON.parse(storage.getItem("skT5Bab3Mastery")||'{"done":[],"score":0,"streak":0,"current":"q1","sound":true,"effects":true,"examUnlocked":false,"examSubmitted":false,"examScore":0,"answers":{},"results":{},"examAnswers":{},"orderState":{},"examStarted":false,"examSecondsLeft":2700}');
+state.done=Array.isArray(state.done)?state.done:[];
+state.answers=state.answers&&typeof state.answers==="object"?state.answers:{};
+state.results=state.results&&typeof state.results==="object"?state.results:{};
+state.examAnswers=state.examAnswers&&typeof state.examAnswers==="object"?state.examAnswers:{};
+state.orderState=state.orderState&&typeof state.orderState==="object"?state.orderState:{};
+let orderState=state.orderState;
+let audioCtx=null;
+let examTimer=null;
+let secondsLeft=Number.isFinite(Number(state.examSecondsLeft))?Number(state.examSecondsLeft):2700;
+let examStarted=Boolean(state.examStarted);
+
+function normalize(s){
+ return String(s??"").toLowerCase().trim().replace(/[“”"]/g,'"').replace(/[’‘']/g,"'").replace(/\s+/g," ");
+}
+function compact(s){return normalize(s).replace(/\s+/g,"").replace(/;/g,";")}
+function listCompact(s){return normalize(s).replace(/[\[\]{}()\s,;]/g,"")}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function shuffle(a){let x=[...a];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function saveQuiet(){state.orderState=orderState;storage.setItem("skT5Bab3Mastery",JSON.stringify(state))}
+function save(){saveQuiet();updateTop();renderNav()}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700)}
+function updateTop(){
+ document.getElementById("score").textContent=state.score;
+ document.getElementById("streak").textContent=state.streak;
+ document.getElementById("progressText").textContent=`${state.done.length}/30`;
+ document.getElementById("progressBar").style.width=(state.done.length/30*100)+"%";
+ document.getElementById("stage1Count").textContent=`${state.done.length}/30`;
+ document.getElementById("stage2Lock").textContent=state.examUnlocked?"✓":"🔒";
+ document.getElementById("stage2Tab").classList.toggle("locked",!state.examUnlocked);
+ document.getElementById("soundToggle").classList.toggle("off",!state.sound);
+ document.getElementById("soundToggle").textContent=state.sound?"🔊 Bunyi":"🔇 Bunyi";
+ document.getElementById("effectToggle").classList.toggle("off",!state.effects);
+ document.getElementById("effectToggle").textContent=state.effects?"✨ Kesan":"◌ Kesan";
+}
+function renderNav(){
+ const nav=document.getElementById("topicNav");nav.innerHTML="";
+ topicInfo.forEach(t=>{
+  const wrap=document.createElement("div");wrap.className="topic";
+  const count=t.qs.filter(q=>state.done.includes(q)).length;
+  wrap.innerHTML=`<button class="topic-head ${t.qs.includes(state.current)?"active":""}" onclick="openQuestion('${t.qs[0]}')"><span>${t.id} ${t.name}</span><span>${count}/5</span></button><div class="topic-sub"></div>`;
+  const sub=wrap.querySelector(".topic-sub");
+  t.qs.forEach(qid=>{
+   const q=questions.find(x=>x.id===qid);
+   const b=document.createElement("button");b.className="navbtn "+(state.current===qid?"active":"");
+   b.innerHTML=`<span class="navnum">${Number(qid.substring(1))}</span><span class="navtitle">${q.title}</span><span class="tick">${state.done.includes(qid)?"✓":""}</span>`;
+   b.onclick=()=>openQuestion(qid);sub.appendChild(b)
+  });nav.appendChild(wrap)
+ })
+}
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById("stage1Tab").classList.toggle("active",id!=="examScreen");
+ document.getElementById("stage2Tab").classList.toggle("active",id==="examScreen");
+}
+function goStage1(){
+ showScreen(state.done.length===30?"stage1Done":"practiceScreen");
+ if(state.done.length<30)renderQuestion(state.current||"q1");
+ window.scrollTo({top:0,behavior:"smooth"})
+}
+function goStage2(){
+ if(!state.examUnlocked){toast("Selesaikan 30 latihan dahulu.");return}
+ showScreen("examScreen");renderExam();
+ if(examStarted&&!state.examSubmitted)startTimerLoop();
+ window.scrollTo({top:0,behavior:"smooth"})
+}
+function openQuestion(id){
+ state.current=id;save();showScreen("practiceScreen");renderQuestion(id);window.scrollTo({top:0,behavior:"smooth"})
+}
+function renderQuestion(id){
+ const q=questions.find(x=>x.id===id);if(!q)return;
+ let html=`<div class="question-card" id="activeCard">
+ <div class="qhead"><div><div class="eyebrow">Latihan ${Number(id.substring(1))} • Standard ${q.topic}</div><h3>${q.title}</h3><p>${q.instruction}</p></div><div class="xp">100 markah</div></div>
+ <div class="qbody">
+  <div class="card factbox"><h4>Fakta</h4><p>${q.fact}</p></div>`;
+ if(q.stimulus)html+=`<div class="code">${escapeHtml(q.stimulus)}</div>`;
+ if(q.type==="mcq"){
+  const opts=shuffle(q.options);
+  html+=`<div class="choices">${opts.map((o,i)=>`<label class="choice"><input type="radio" name="${q.id}" value="${escapeHtml(o)}"><span>${o.includes("\n")?`<span class="code" style="display:block;margin:0">${escapeHtml(o)}</span>`:escapeHtml(o)}</span></label>`).join("")}</div>`
+ }else if(q.type==="multi"){
+  const opts=shuffle(q.options);
+  html+=`<div class="choices">${opts.map(o=>`<label class="choice"><input type="checkbox" name="${q.id}" value="${escapeHtml(o)}"><span>${escapeHtml(o)}</span></label>`).join("")}</div>`
+ }else if(q.type==="short"){
+  html+=`<label class="fieldlabel">${q.label||"Jawapan"}</label><input id="${q.id}_short" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`
+ }else if(q.type==="fields"){
+  html+=`<div class="grid2">${q.fields.map((f,i)=>`<div><label class="fieldlabel">${f.label}</label>${f.kind==="select"?`<select id="${q.id}_f${i}"><option value="">Pilih</option>${f.options.map(o=>`<option>${escapeHtml(o)}</option>`).join("")}</select>`:`<input id="${q.id}_f${i}" type="${f.kind==="number"?"number":"text"}" autocomplete="off">`}</div>`).join("")}</div>`
+ }else if(q.type==="order"){
+  if(!orderState[q.id]){
+   orderState[q.id]=Array.isArray(state.answers[q.id])?[...state.answers[q.id]]:shuffle(q.items)
+  }
+  html+=`<div class="order" id="${q.id}_order">${renderOrderHtml(q.id)}</div>`
+ }
+ html+=`<div class="actions"><button class="btn primary" onclick="checkPractice('${q.id}')">Semak Jawapan</button><button class="btn secondary" onclick="showHint('${q.id}')">💡 Petunjuk</button>${state.done.includes(q.id)?`<button class="btn" onclick="nextQuestion('${q.id}')">Seterusnya →</button>`:""}</div><div id="${q.id}_feedback" class="feedback"></div></div></div>`;
+ document.getElementById("questionHost").innerHTML=html;
+ restorePracticeAnswer(q);
+ attachPracticePersistence(q);
+ showSavedPracticeReview(q)
+}
+function renderOrderHtml(qid){
+ return orderState[qid].map((x,i)=>`<div class="orderitem"><span class="orderindex">${i+1}</span><span>${escapeHtml(x)}</span><span><button class="minibtn" onclick="moveOrder('${qid}',${i},-1)">↑</button> <button class="minibtn" onclick="moveOrder('${qid}',${i},1)">↓</button></span></div>`).join("")
+}
+function moveOrder(qid,i,d){
+ let a=orderState[qid],j=i+d;if(j<0||j>=a.length)return;
+ [a[i],a[j]]=[a[j],a[i]];
+ state.answers[qid]=[...a];
+ saveQuiet();
+ document.getElementById(qid+"_order").innerHTML=renderOrderHtml(qid)
+}
+function cloneAnswer(a){return Array.isArray(a)?a.map(x=>Array.isArray(x)?[...x]:x):a}
+function restorePracticeAnswer(q){
+ const saved=state.answers[q.id];
+ if(saved===undefined||saved===null)return;
+ if(q.type==="mcq"){
+  [...document.querySelectorAll(`input[name="${q.id}"]`)].forEach(el=>el.checked=el.value===saved)
+ }else if(q.type==="multi"){
+  const values=Array.isArray(saved)?saved:[];
+  [...document.querySelectorAll(`input[name="${q.id}"]`)].forEach(el=>el.checked=values.includes(el.value))
+ }else if(q.type==="short"){
+  const el=document.getElementById(q.id+"_short");if(el)el.value=saved
+ }else if(q.type==="fields"){
+  q.fields.forEach((f,i)=>{const el=document.getElementById(`${q.id}_f${i}`);if(el)el.value=(saved[i]??"")})
+ }
+}
+function persistPracticeAnswer(qid){
+ const q=questions.find(x=>x.id===qid);if(!q)return;
+ state.answers[qid]=cloneAnswer(answerPractice(q));
+ if(q.type==="order")orderState[qid]=[...state.answers[qid]];
+ saveQuiet()
+}
+function attachPracticePersistence(q){
+ let elements=[];
+ if(q.type==="mcq"||q.type==="multi")elements=[...document.querySelectorAll(`input[name="${q.id}"]`)];
+ if(q.type==="short")elements=[document.getElementById(q.id+"_short")];
+ if(q.type==="fields")elements=q.fields.map((f,i)=>document.getElementById(`${q.id}_f${i}`));
+ elements.filter(Boolean).forEach(el=>{
+  el.addEventListener("input",()=>persistPracticeAnswer(q.id));
+  el.addEventListener("change",()=>persistPracticeAnswer(q.id))
+ })
+}
+function correctPracticeAnswerHtml(q){
+ if(q.type==="mcq")return escapeHtml(q.answer);
+ if(q.type==="multi")return q.answers.map(escapeHtml).join("; ");
+ if(q.type==="short")return escapeHtml(q.accepted[0]);
+ if(q.type==="fields")return q.fields.map(f=>`${escapeHtml(f.label)}: <strong>${escapeHtml(f.answer)}</strong>`).join("<br>");
+ if(q.type==="order")return q.items.map(escapeHtml).join(" → ");
+ return ""
+}
+function studentPracticeAnswerHtml(q,a){
+ if(a===undefined||a===null||a===""||(Array.isArray(a)&&a.length===0))return "—";
+ if(q.type==="fields")return q.fields.map((f,i)=>`${escapeHtml(f.label)}: <strong>${escapeHtml(a[i]??"—")}</strong>`).join("<br>");
+ if(Array.isArray(a))return a.map(x=>escapeHtml(x)).join(q.type==="order"?" → ":"; ");
+ return escapeHtml(a)
+}
+function practiceReviewMessage(q,a,correct,attempts){
+ const revealCorrect=correct||attempts>=2;
+ const status=correct
+  ?`✅ Percubaan ${attempts} betul.`
+  :attempts<2
+   ?`❌ Percubaan ${attempts}/2 belum tepat. Cuba sekali lagi sebelum jawapan betul dipaparkan.`
+   :`❌ Percubaan ${attempts} belum tepat. Jawapan betul kini dipaparkan.`;
+ return `${status}
+ <div class="answer-review">
+  <div class="student-answer"><strong>Jawapan anda:</strong><br>${studentPracticeAnswerHtml(q,a)}</div>
+  ${revealCorrect
+    ?`<div class="correct-answer" style="margin-top:7px"><strong>Jawapan betul:</strong><br>${correctPracticeAnswerHtml(q)}</div>`
+    :`<div style="margin-top:7px;color:#ffe7a6"><strong>Jawapan betul masih disembunyikan.</strong><br>Ubah jawapan dan tekan “Semak Jawapan” untuk percubaan kedua.</div>`}
+ </div>`
+}
+function showSavedPracticeReview(q){
+ const result=state.results[q.id];
+ if(!result||!result.checked)return;
+ const attempts=Math.max(1,Number(result.attempts)||1);
+ feedback(q.id,result.correct?"good":"bad",practiceReviewMessage(q,state.answers[q.id],result.correct,attempts))
+}
+function showHint(id){const q=questions.find(x=>x.id===id);feedback(id,"info","💡 "+q.hint)}
+function feedback(id,type,msg){const e=document.getElementById(id+"_feedback");e.className="feedback show "+type;e.innerHTML=msg}
+function answerPractice(q){
+ if(q.type==="mcq")return document.querySelector(`input[name="${q.id}"]:checked`)?.value||"";
+ if(q.type==="multi")return [...document.querySelectorAll(`input[name="${q.id}"]:checked`)].map(x=>x.value);
+ if(q.type==="short")return document.getElementById(q.id+"_short").value;
+ if(q.type==="fields")return q.fields.map((f,i)=>document.getElementById(`${q.id}_f${i}`).value);
+ if(q.type==="order")return orderState[q.id];
+}
+function checkPractice(id){
+ const q=questions.find(x=>x.id===id),a=answerPractice(q);let ok=false;
+ state.answers[id]=cloneAnswer(a);
+ if(q.type==="order")orderState[id]=[...a];
+ if(q.type==="mcq")ok=a===q.answer;
+ if(q.type==="multi")ok=a.length===q.answers.length&&q.answers.every(x=>a.includes(x));
+ if(q.type==="short"){
+  let n=q.codeNormalize?compact(a):q.listNormalize?listCompact(a):normalize(a);
+  ok=q.accepted.some(x=>(q.codeNormalize?compact(x):q.listNormalize?listCompact(x):normalize(x))===n)
+ }
+ if(q.type==="fields")ok=q.fields.every((f,i)=>normalize(a[i])===normalize(f.answer));
+ if(q.type==="order")ok=q.items.every((x,i)=>a[i]===x);
+ const previousAttempts=Math.max(0,Number(state.results[id]?.attempts)||0);
+ const attempts=previousAttempts+1;
+ state.results[id]={checked:true,correct:ok,attempts};
+ if(ok){
+  feedback(id,"good",practiceReviewMessage(q,a,true,attempts));
+  if(!state.done.includes(id)){state.done.push(id);state.score+=100;state.streak++;if(state.done.length===30)state.examUnlocked=true}
+  save();positiveFX();
+  setTimeout(()=>{if(state.done.length===30){document.getElementById("practiceFinal").textContent=state.score;showScreen("stage1Done")}else nextQuestion(id)},1050)
+ }else{
+  feedback(id,"bad",practiceReviewMessage(q,a,false,attempts));
+  state.streak=0;save();negativeFX()
+ }
+}
+function nextQuestion(id){
+ const n=Number(id.substring(1));if(n<30)openQuestion("q"+(n+1));else{document.getElementById("practiceFinal").textContent=state.score;showScreen("stage1Done")}
+}
+function toggleSound(){state.sound=!state.sound;save();if(state.sound)toast("Bunyi dihidupkan")}
+function toggleEffects(){state.effects=!state.effects;save()}
+function ensureAudio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume()}
+function tone(freq,start,dur,type="sine",vol=.08){
+ if(!state.sound)return;ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime+start);
+ g.gain.setValueAtTime(0,audioCtx.currentTime+start);g.gain.linearRampToValueAtTime(vol,audioCtx.currentTime+start+.012);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+start+dur);
+ o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+start);o.stop(audioCtx.currentTime+start+dur+.03)
+}
+function correctSound(){
+ const n=Math.floor(Math.random()*3);
+ if(n===0){tone(523,0,.16,"sine",.09);tone(659,.12,.17,"sine",.08);tone(784,.24,.24,"triangle",.08)}
+ if(n===1){tone(880,0,.10,"sine",.06);tone(1175,.08,.13,"sine",.055);tone(1568,.17,.25,"sine",.05)}
+ if(n===2){tone(392,0,.11,"triangle",.075);tone(523,.08,.12,"triangle",.075);tone(659,.16,.14,"triangle",.07);tone(1047,.27,.25,"sine",.055)}
+}
+function wrongSound(){
+ const n=Math.floor(Math.random()*3);
+ if(n===0){tone(220,0,.18,"sawtooth",.07);tone(165,.13,.30,"sawtooth",.065)}
+ if(n===1){tone(150,0,.13,"square",.055);tone(150,.19,.18,"square",.055)}
+ if(n===2){tone(330,0,.08,"square",.045);tone(210,.07,.10,"sawtooth",.05);tone(130,.16,.25,"square",.05)}
+}
+function flash(type){
+ if(!state.effects)return;const f=document.getElementById("edgeFlash");f.className="";void f.offsetWidth;f.className=type;
+ setTimeout(()=>f.className="",850)
+}
+function positiveFX(){correctSound();flash("correct")}
+function negativeFX(){wrongSound();flash("wrong");if(state.effects){const c=document.getElementById("activeCard");c?.classList.add("shake");setTimeout(()=>c?.classList.remove("shake"),400)}}
+
+function renderExam(){
+ const paper=document.getElementById("examPaper");
+ let html="";
+ ["A","B"].forEach(sec=>{
+  const qs=examQuestions.filter(q=>q.section===sec),marks=qs.reduce((s,q)=>s+q.marks,0);
+  html+=`<section class="exam-section"><h3>Bahagian ${sec}</h3><p class="exam-instruction">[${marks} markah]</p><p class="exam-instruction">Jawab semua soalan.</p>`;
+  qs.forEach((q,idx)=>{
+   const no=examQuestions.indexOf(q)+1;
+   html+=`<div class="exam-q" id="exam_${q.id}"><div class="exam-qhead"><div><strong>${no}.</strong> ${escapeHtml(q.prompt)}</div><div class="exam-mark">[${q.marks} markah]</div></div>`;
+   if(q.table)html+=`<table class="stimulus-table">${q.table.map((r,i)=>`<tr>${r.map(c=>i===0?`<th>${escapeHtml(c)}</th>`:`<td>${escapeHtml(c)}</td>`).join("")}</tr>`).join("")}</table>`;
+   if(q.stimulus)html+=`<div class="${q.stimulus.includes("\n")?"exam-code":"exam-stimulus"}">${escapeHtml(q.stimulus)}</div><div style="text-align:center;font-family:Georgia,serif">${q.title}</div>`;
+   q.parts.forEach((p,i)=>{
+    const inputId=`${q.id}_p${i}`,saved=state.examAnswers[inputId]??"";
+    html+=`<div class="exam-part"><label class="fieldlabel" style="color:#111">${p.label} <em>[${p.marks} markah]</em></label><input id="${inputId}" type="text" value="${escapeHtml(saved)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ${!examStarted||state.examSubmitted?"disabled":""}></div>`
+   });
+   html+=`</div>`
+  });html+=`</section>`
+ });
+ html+=`<section class="exam-section" style="text-align:center"><button class="btn primary" id="submitExamBtn" onclick="submitExam()" ${!examStarted||state.examSubmitted?"disabled":""}>Hantar Kertas</button></section>`;
+ paper.innerHTML=html;
+ if(examStarted&&!state.examSubmitted){
+  paper.querySelectorAll(".exam-q input").forEach(input=>{
+   input.addEventListener("input",()=>{state.examAnswers[input.id]=input.value;saveQuiet()})
+  })
+ }
+ document.getElementById("startExamBtn").disabled=examStarted||state.examSubmitted;
+ updateTimer();
+ if(state.examSubmitted)showStoredExamResult()
+}
+function startTimerLoop(){
+ if(examTimer||state.examSubmitted||!examStarted)return;
+ examTimer=setInterval(()=>{
+  secondsLeft=Math.max(0,secondsLeft-1);
+  state.examSecondsLeft=secondsLeft;
+  if(secondsLeft%5===0)saveQuiet();
+  updateTimer();
+  if(secondsLeft<=0){clearInterval(examTimer);examTimer=null;submitExam(true)}
+ },1000)
+}
+function startExam(){
+ if(state.examSubmitted){toast("Peperiksaan ini telah dihantar. Tetapkan semula untuk mencuba semula.");return}
+ if(!examStarted){
+  examStarted=true;secondsLeft=2700;
+  state.examStarted=true;state.examSecondsLeft=secondsLeft;
+  state.examAnswers=state.examAnswers||{};
+  saveQuiet()
+ }
+ renderExam();startTimerLoop()
+}
+function updateTimer(){const m=Math.floor(secondsLeft/60),s=secondsLeft%60;document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
+function submitExam(autoSubmit=false){
+ if(state.examSubmitted)return;
+ if(!autoSubmit&&!confirm("Hantar semua jawapan sekarang? Jawapan tidak boleh diubah selepas dihantar."))return;
+ clearInterval(examTimer);examTimer=null;let score=0,max=0,review=[];
+ examQuestions.forEach(q=>{
+  q.parts.forEach((p,i)=>{
+   max+=p.marks;
+   const inputId=`${q.id}_p${i}`;
+   const val=document.getElementById(inputId)?.value??state.examAnswers[inputId]??"";
+   state.examAnswers[inputId]=val;
+   const ok=examPartCorrect(val,p);
+   if(ok)score+=p.marks;
+   review.push({qid:q.id,part:i,ok,answer:p.accepted[0],given:val})
+  })
+ });
+ state.examSubmitted=true;state.examStarted=false;state.examSecondsLeft=secondsLeft;
+ state.examScore=score;state.examReview=review;save();renderExam();showExamResult(score,max,review);
+ if(score/max>=.5)positiveFX();else negativeFX()
+}
+function showExamResult(score,max,review){
+ const box=document.getElementById("examResult");box.style.display="block";
+ let html=`<div class="exam-score">${score}/${max}</div><h3>Keputusan Simulasi SPM</h3><p>${score/max>=.8?"Penguasaan sangat baik.":score/max>=.5?"Asas telah dikuasai, tetapi beberapa bahagian perlu diperkukuh.":"Ulang Tahap 1 dan semak istilah serta pengesanan kod."}</p>`;
+ examQuestions.forEach((q,qi)=>{
+  const rows=review.filter(r=>r.qid===q.id);
+  html+=`<div class="${rows.every(r=>r.ok)?"review-good":"review-bad"}" style="margin:14px 0"><strong>Soalan ${qi+1}</strong>`;
+  rows.forEach(r=>html+=`<div style="font-size:12px;margin:5px 0">${q.parts[r.part].label}<br>Jawapan anda: <em>${escapeHtml(r.given||"—")}</em><br>Skema: <strong>${escapeHtml(r.answer)}</strong> ${r.ok?"✓":"✗"}</div>`);
+  html+=`</div>`
+ });
+ box.innerHTML=html;box.scrollIntoView({behavior:"smooth"})
+}
+function showStoredExamResult(){if(state.examReview)showExamResult(state.examScore,40,state.examReview)}
+function printExam(){window.print()}
+function toggleTeacher(){const p=prompt("Kod guru:");if(p==="SPM4"){document.getElementById("teacherPanel").classList.toggle("show");toast("Skema guru dibuka/ditutup")}else if(p!==null)alert("Kod tidak tepat.")}
+function resetAll(){
+ if(!confirm("Padam SEMUA jawapan Tingkatan 5 Bab 3, bilangan percubaan, markah, kemajuan dan keputusan simulasi?"))return;
+
+ clearInterval(examTimer);
+ examTimer=null;
+ examStarted=false;
+ secondsLeft=2700;
+
+ // Clear all storage keys used by the previous versions of this module.
+ [
+  "skT5Bab3Mastery"
+ ].forEach(key=>{
+  try{storage.removeItem(key)}catch(e){}
+  try{window.localStorage.removeItem(key)}catch(e){}
+  try{window.sessionStorage.removeItem(key)}catch(e){}
+ });
+
+ // Clear every in-memory answer and result.
+ state=createInitialState();
+ orderState=state.orderState;
+
+ // Explicitly clear any controls that the browser may try to preserve.
+ document.querySelectorAll("input").forEach(el=>{
+  if(el.type==="radio"||el.type==="checkbox")el.checked=false;
+  else el.value="";
+ });
+ document.querySelectorAll("textarea").forEach(el=>el.value="");
+ document.querySelectorAll("select").forEach(el=>el.selectedIndex=0);
+ document.querySelectorAll(".feedback").forEach(el=>{
+  el.className="feedback";
+  el.innerHTML="";
+ });
+ document.getElementById("questionHost").innerHTML="";
+ document.getElementById("examPaper").innerHTML="";
+ const resultBox=document.getElementById("examResult");
+ resultBox.style.display="none";
+ resultBox.innerHTML="";
+ document.getElementById("timer").textContent="45:00";
+
+ // Save a brand-new empty state and rebuild the first question.
+ saveQuiet();
+ updateTop();
+ renderNav();
+ showScreen("practiceScreen");
+ renderQuestion("q1");
+ window.scrollTo({top:0,behavior:"smooth"});
+ toast("Semua jawapan Tingkatan 5 Bab 3 dan percubaan telah ditetapkan semula.");
+}
+updateTop();renderNav();renderQuestion(state.current||"q1");
+if(state.examSubmitted){examStarted=false}
+
+window.addEventListener("pageshow",event=>{
+ if(event.persisted){
+  const fresh=JSON.parse(storage.getItem("skT5Bab3Mastery")||JSON.stringify(createInitialState()));
+  state=fresh;
+  state.answers=state.answers&&typeof state.answers==="object"?state.answers:{};
+  state.results=state.results&&typeof state.results==="object"?state.results:{};
+  state.examAnswers=state.examAnswers&&typeof state.examAnswers==="object"?state.examAnswers:{};
+  state.orderState=state.orderState&&typeof state.orderState==="object"?state.orderState:{};
+  orderState=state.orderState;
+  secondsLeft=Number.isFinite(Number(state.examSecondsLeft))?Number(state.examSecondsLeft):2700;
+  examStarted=Boolean(state.examStarted);
+  updateTop();
+  renderNav();
+  if(document.getElementById("examScreen").classList.contains("active"))renderExam();
+  else renderQuestion(state.current||"q1");
+ }
+});
+</script>
+</body>
+</html>

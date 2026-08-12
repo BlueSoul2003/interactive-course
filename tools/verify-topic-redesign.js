@@ -39,7 +39,7 @@ for (const page of pages) {
   assert(!html.includes("activeTab") && !html.includes("Presentation View"), `${page.name} should not include presentation tab state or tab label`);
   assert(!html.includes('<iframe') && !html.includes('slides.pdf'), `${page.name} should not embed or link presentation slides`);
   assert(html.includes('Worksheet.pdf'), `${page.name} should keep the worksheet link`);
-  assert(html.includes('Answer_Key.pdf'), `${page.name} should keep the answer-key link`);
+  assert(!html.includes('Answer_Key.pdf'), `${page.name} should not expose a teacher answer-key link`);
   assert(html.includes('playCuteSound') && html.includes('AudioContext'), `${page.name} should keep Web Audio feedback`);
   assert(html.includes('triggerCelebration') && html.includes('visual-burst'), `${page.name} should include success visual effects`);
   assert(html.includes('answer-shake'), `${page.name} should include wrong-answer visual feedback`);

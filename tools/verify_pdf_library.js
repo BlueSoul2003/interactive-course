@@ -50,14 +50,20 @@ assert.deepStrictEqual(broken, [], `Catalog links do not exist:\n${broken.join('
 const requiredFiles = [
   'hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf',
   'hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Student.pdf',
-  'hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Teacher_Answers.pdf',
   'hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Student.pdf',
-  'hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Tutor_Key.pdf',
 ];
 
 for (const file of requiredFiles) {
   assert.ok(catalogPaths.has(file), `${file} should be included in the catalog`);
 }
+
+const privatePdfPattern = /(?:source_pdfs|past.?paper|paper[_ -]?[12]|answer|teacher|tutor|jawapan|skema|Modul_Kuasa|Rumusan_Latihan|Silir Daksina)/i;
+const privatePdfs = pdfPaths.filter((file) => privatePdfPattern.test(file));
+assert.deepStrictEqual(
+  privatePdfs,
+  [],
+  `Private/source PDFs must stay outside the public repository:\n${privatePdfs.join('\n')}`
+);
 
 for (const item of catalog.resources) {
   assert.ok(item.id, `Catalog item for ${item.file} needs an id`);

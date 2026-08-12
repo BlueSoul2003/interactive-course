@@ -8,10 +8,12 @@ GitHub Pages is static hosting. The website cannot create folders or upload PDFs
 
 For this project, the safe workflow is:
 
-1. Add a folder and PDF files in GitHub or in the local repo.
-2. Run the catalogue generator.
-3. Verify the library.
-4. Publish to GitHub Pages.
+1. Confirm the PDF is an original/AI-assisted student worksheet or student note.
+2. Keep publisher sources, past papers, teacher/tutor keys, and raw production files in GregOS SSD-only storage, outside this repository.
+3. Add the approved student PDF in GitHub or in the local repo.
+4. Run the catalogue generator.
+5. Verify the library.
+6. Publish to GitHub Pages.
 
 ## Recommended Folder Pattern
 
@@ -38,8 +40,8 @@ Use clear PDF names with underscores:
 
 ```text
 Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf
-SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Teacher_Answers.pdf
-IGCSE_Y8_Science_Ch8_Chemical_Reactions_Tutor_Key.pdf
+SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Student.pdf
+IGCSE_Y8_Science_Ch8_Chemical_Reactions_Student.pdf
 ```
 
 ## Generate And Verify
@@ -72,14 +74,12 @@ The generator infers:
 
 For files that need exact human naming, add an entry to the `CURATED` map in `tools/generate_pdf_catalog.py`.
 
-## The Imported Desktop PDFs
+## Approved imported Desktop PDFs
 
-The five Desktop PDFs were imported into these static GitHub Pages paths:
+Only the three student-facing Desktop PDFs remain in these static GitHub Pages paths:
 
 ```text
 hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf
 hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Student.pdf
-hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Teacher_Answers.pdf
 hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Student.pdf
-hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Tutor_Key.pdf
 ```
