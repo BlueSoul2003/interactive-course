@@ -28,6 +28,14 @@ Normal course links on the main portal and Adult English hub now pass through `l
 
 The launcher is the single UX entry point, but public-repository HTML is still directly addressable. The first genuinely protected pilot must remove that module package from GitHub Pages and serve it from private storage through a short-lived server-issued launch URL.
 
+## Phase 3 Friendship pilot
+
+`adult-en-friendship` is the first private package. Its student HTML, CSS, and JavaScript source are kept in the SSD-only tutoring materials area and built into one HTML template. The template is uploaded to the private `protected-course-modules` bucket, recorded in the server-only `module_packages` registry, and removed from the GitHub Pages artifact.
+
+The authenticated `protected-module` Edge Function rechecks `can_launch_module()`, downloads the exact registered object with the service role, verifies its SHA-256 digest, injects the current session token and a per-response CSP nonce, and returns a no-store response. The launcher replaces its own document with that response while retaining the portal origin, so authenticated API calls work and the token is not placed in a query string or browser history.
+
+Friendship student quiz actions now also require the same signed-in account and module entitlement. Existing teacher dashboard operations remain on their separate teacher-key authentication path.
+
 ## Security boundary
 
-UI locks are presentation only. A module is not protected until its HTML and assets are absent from the public repository and the private launcher validates a current Supabase session and entitlement before returning a short-lived launch URL.
+UI locks are presentation only. A module is not protected until its HTML and assets are absent from the public deployment and the private launcher validates a current Supabase session and entitlement before returning its content. Friendship now meets this boundary; the remaining modules still use public routes until migrated individually.

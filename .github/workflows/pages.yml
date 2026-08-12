@@ -28,7 +28,7 @@ jobs:
       - name: Prepare static site artifact
         run: |
           mkdir -p _site
-          cp index.html notes.html _site/
+          cp index.html notes.html launcher.html _site/
           cp -a content hardcopy js resources _site/
 
       - name: Configure Pages

@@ -275,6 +275,37 @@ const AuthAccess = {
         return data;
     },
 
+    async fetchProtectedModule(moduleId) {
+        if (!window.supabaseClient) {
+            throw new Error('The secure module connection is unavailable.');
+        }
+        const { data: { session }, error: sessionError } = await window.supabaseClient.auth.getSession();
+        if (sessionError || !session?.access_token) {
+            throw new Error('Your account session has expired. Please sign in again.');
+        }
+
+        const endpoint = new URL('/functions/v1/protected-module', AUTH_SUPABASE_URL);
+        endpoint.searchParams.set('module_id', moduleId);
+        const response = await fetch(endpoint.href, {
+            method: 'GET',
+            cache: 'no-store',
+            headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+                'apikey': AUTH_SUPABASE_KEY
+            }
+        });
+        const body = await response.text();
+        if (!response.ok) {
+            let message = 'The private course could not be loaded.';
+            try { message = JSON.parse(body).error || message; } catch (_error) {}
+            throw new Error(message);
+        }
+        if (!/^\s*<!doctype html>/i.test(body)) {
+            throw new Error('The private course package is invalid.');
+        }
+        return body;
+    },
+
     prepareModuleLaunchLinks(root = document) {
         if (!root || typeof root.querySelectorAll !== 'function') return 0;
         const authScript = Array.from(document.scripts || []).find(script =>

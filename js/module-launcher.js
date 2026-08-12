@@ -33,7 +33,11 @@
     if (!response.ok) throw new Error('The course directory could not be loaded. Please try again.');
     const manifest = await response.json();
     const moduleEntry = manifest.modules?.find(entry => entry.id === moduleId);
-    if (!moduleEntry || typeof moduleEntry.path !== 'string' || !moduleEntry.path.startsWith('content/')) {
+    const isPrivate = moduleEntry?.delivery === 'private';
+    const isPublic = moduleEntry?.delivery === 'public'
+      && typeof moduleEntry.path === 'string'
+      && moduleEntry.path.startsWith('content/');
+    if (!moduleEntry || (!isPrivate && !isPublic)) {
       throw new Error('This course is not registered in the launcher.');
     }
 
@@ -43,7 +47,19 @@
     element('course-name').classList.remove('hidden');
   }
 
-  function launch() {
+  async function launch() {
+    if (state.module.delivery === 'private') {
+      setCopy('Opening your private course', 'Access confirmed. Securely loading your lesson now.');
+      showView('loading-view');
+      const html = await window.AuthAccess.fetchProtectedModule(state.moduleId);
+      // Replace the launcher document while retaining the portal origin. This
+      // lets the private lesson call its authenticated API without a null
+      // Blob origin and keeps the account token out of URLs and history.
+      document.open('text/html', 'replace');
+      document.write(html);
+      document.close();
+      return;
+    }
     const target = new URL(state.module.path, new URL('./', window.location.href));
     if (target.origin !== window.location.origin || !target.pathname.includes('/content/')) {
       throw new Error('The registered course route is not safe to open.');
@@ -59,7 +75,7 @@
     const decision = await window.AuthAccess.canLaunchModule(state.moduleId);
 
     if (decision?.allowed === true) {
-      launch();
+      await launch();
       return;
     }
 

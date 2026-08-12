@@ -1,2 +1,5 @@
 [functions.friendship-course-api]
 verify_jwt = false
+
+[functions.protected-module]
+verify_jwt = true

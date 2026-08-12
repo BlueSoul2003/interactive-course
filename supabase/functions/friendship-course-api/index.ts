@@ -4,17 +4,34 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.4";
 const ROOM_CODE = "FRIEND-F2FC";
 const QUESTION_COUNT = 30;
 const encoder = new TextEncoder();
-const allowedOrigin = /^https:\/\/bluesoul2003\.github\.io$/i;
+const allowedOrigins = new Set([
+  "https://bluesoul2003.github.io",
+  "http://127.0.0.1:8765",
+  "http://localhost:8765",
+  "http://127.0.0.1:8877",
+  "http://localhost:8877",
+]);
 
 function cors(request: Request): Record<string, string> {
   const origin = request.headers.get("origin") || "";
   return {
-    "Access-Control-Allow-Origin": allowedOrigin.test(origin) ? origin : "*",
-    "Access-Control-Allow-Headers": "content-type,x-teacher-key",
+    "Access-Control-Allow-Origin": allowedOrigins.has(origin) ? origin : "https://bluesoul2003.github.io",
+    "Access-Control-Allow-Headers": "authorization,apikey,x-client-info,content-type,x-teacher-key",
     "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin",
   };
+}
+
+function environmentKey(legacyName: string, collectionName: string): string {
+  const legacy = Deno.env.get(legacyName) || "";
+  if (legacy) return legacy;
+  try {
+    const values = JSON.parse(Deno.env.get(collectionName) || "{}") as Record<string, string>;
+    return values.default || Object.values(values)[0] || "";
+  } catch {
+    return "";
+  }
 }
 
 function json(request: Request, data: unknown, status = 200): Response {
@@ -56,8 +73,9 @@ Deno.serve(async (request: Request) => {
   if (request.method === "OPTIONS") return new Response("ok", { headers: cors(request) });
 
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "";
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
-  if (!supabaseUrl || !serviceKey) return json(request, { error: "Server configuration is incomplete." }, 503);
+  const serviceKey = environmentKey("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS");
+  const publishableKey = environmentKey("SUPABASE_ANON_KEY", "SUPABASE_PUBLISHABLE_KEYS");
+  if (!supabaseUrl || !serviceKey || !publishableKey) return json(request, { error: "Server configuration is incomplete." }, 503);
 
   const db = createClient(supabaseUrl, serviceKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -66,6 +84,29 @@ Deno.serve(async (request: Request) => {
   try {
     const url = new URL(request.url);
     const action = url.searchParams.get("action") || "course";
+    const teacherActions = new Set(["teacher", "teacher-check", "create-class", "end-class"]);
+
+    if (!teacherActions.has(action)) {
+      const authorization = request.headers.get("authorization") || "";
+      const token = authorization.replace(/^Bearer\s+/i, "");
+      if (!token || token === authorization) return json(request, { error: "Authentication required." }, 401);
+
+      const userClient = createClient(supabaseUrl, publishableKey, {
+        auth: { persistSession: false, autoRefreshToken: false },
+        global: { headers: { Authorization: authorization } },
+      });
+      const { data: userData, error: userError } = await userClient.auth.getUser(token);
+      if (userError || !userData.user || userData.user.is_anonymous) {
+        return json(request, { error: "Invalid account session." }, 401);
+      }
+      const { data: decision, error: decisionError } = await userClient
+        .rpc("can_launch_module", { p_module_id: "adult-en-friendship" });
+      if (decisionError) return json(request, { error: "Course access could not be checked." }, 503);
+      if (decision?.allowed !== true) {
+        return json(request, { error: "Course access denied.", reason: decision?.reason || "not_entitled" }, 403);
+      }
+    }
+
     const { data: quiz, error: quizError } = await db
       .from("friendship_quiz_sessions")
       .select("id,title,teacher_token_hash")

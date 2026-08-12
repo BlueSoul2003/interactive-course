@@ -9,421 +9,504 @@
     {
       "id": "adult-en-friendship",
       "title": "The Purpose of Friendship",
-      "path": "content/University/Adult_English/Friendship/index.html"
+      "delivery": "private"
     },
     {
       "id": "igcse-en-ceo-masterclass",
       "title": "CEO Masterclass (Time Heist)",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/English/CEO_Masterclass/index.html"
     },
     {
       "id": "igcse-y4-sci-command-centre",
       "title": "Science Command Centre 4.0",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html"
     },
     {
       "id": "igcse-y4-sci-operation-seven",
       "title": "Science Quest V5.4 — Operation Seven",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Operation_Seven_Challenge/index.html"
     },
     {
       "id": "igcse-y4-sci-topic1",
       "title": "Topic 1: Life Processes and Ecosystems",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic1_Life_Processes_Ecosystems/index.html"
     },
     {
       "id": "igcse-y4-sci-topic2",
       "title": "Topic 2: Living Things in Their Environment",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic2_Living_Things/index.html"
     },
     {
       "id": "igcse-y4-sci-topic3",
       "title": "Topic 3: States of Matter",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic3_States_of_Matter/index.html"
     },
     {
       "id": "igcse-y4-sci-topic4",
       "title": "Topic 4: Energy and Light",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic4_Energy_and_Light/index.html"
     },
     {
       "id": "igcse-y4-sci-topic5",
       "title": "Topic 5: Electricity and Circuits",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic5_Electricity/index.html"
     },
     {
       "id": "igcse-y4-sci-topic6",
       "title": "Topic 6: Planet Earth",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic6_Planet_Earth/index.html"
     },
     {
       "id": "igcse-y4-sci-topic7",
       "title": "Topic 7: Earth and Space",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html"
     },
     {
       "id": "igcse-y8-sci-ch1",
       "title": "Chapter 1: Respiration & Breathing",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter1_Respiration/index.html"
     },
     {
       "id": "igcse-y8-sci-ch2",
       "title": "Chapter 2: Properties of Materials",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter2_Properties_of_Materials/index.html"
     },
     {
       "id": "igcse-y8-sci-ch3",
       "title": "Chapter 3: Forces and Energy",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter3_Forces_and_Energy/index.html"
     },
     {
       "id": "igcse-y8-sci-ch4",
       "title": "Chapter 4: Ecosystems",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter4_Ecosystems/index.html"
     },
     {
       "id": "igcse-y8-sci-ch5",
       "title": "Chapter 5: Materials & Cycles on Earth",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter5_Materials_and_Cycles/index.html"
     },
     {
       "id": "igcse-y8-sci-ch6",
       "title": "Chapter 6: Light & Space",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter6_Light_and_Space/index.html"
     },
     {
       "id": "igcse-y8-sci-ch7",
       "title": "Chapter 7: Diet and Growth",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter7_Diet_and_Growth/index.html"
     },
     {
       "id": "igcse-y8-sci-ch7-mcq",
       "title": "Chapter 7: Diet and Growth (MCQ)",
+      "delivery": "public",
       "path": "content/IGCSE_Syllabus/Year8/Science/Chapter7_Diet_and_Growth_MCQ/index.html"
     },
     {
       "id": "kssr-p3-en-revision1",
       "title": "Revision 1 (Unit 1 & 2)",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Revision1/index.html"
     },
     {
       "id": "kssr-p3-en-revision2",
       "title": "Revision 2 (Unit 3 & 4)",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Revision2/index.html"
     },
     {
       "id": "kssr-p3-en-unit1",
       "title": "Unit 1: Getting Smart",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit1/index.html"
     },
     {
       "id": "kssr-p3-en-unit10",
       "title": "Space Observatory",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit10/index.html"
     },
     {
       "id": "kssr-p3-en-unit2",
       "title": "Unit 2: City Heroes",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit2/index.html"
     },
     {
       "id": "kssr-p3-en-unit3",
       "title": "Unit 3: Housework",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit3/index.html"
     },
     {
       "id": "kssr-p3-en-unit4",
       "title": "Unit 4: The Four Seasons",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit4/index.html"
     },
     {
       "id": "kssr-p3-en-unit5",
       "title": "Unit 5: My House Adventure",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit5/index.html"
     },
     {
       "id": "kssr-p3-en-unit6",
       "title": "Sunny Food Market",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit6/index.html"
     },
     {
       "id": "kssr-p3-en-unit7",
       "title": "Little Safe Town",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit7/index.html"
     },
     {
       "id": "kssr-p3-en-unit8",
       "title": "Time-Travel Town",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit8/index.html"
     },
     {
       "id": "kssr-p3-en-unit9",
       "title": "Holiday Explorer",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary3/English/Unit9/index.html"
     },
     {
       "id": "kssr-p6-en-revision1",
       "title": "Revision 1 (Unit 1 & 2)",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Revision1/index.html"
     },
     {
       "id": "kssr-p6-en-revision2",
       "title": "Revision 2 (Unit 1 & 2 Grammar)",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Revision2/index.html"
     },
     {
       "id": "kssr-p6-en-unit1",
       "title": "Unit 1: Scenario Practice",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit1/index.html"
     },
     {
       "id": "kssr-p6-en-unit10",
       "title": "Northlight Detective Bureau",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit10/index.html"
     },
     {
       "id": "kssr-p6-en-unit2",
       "title": "Unit 2: Interactive Reading",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit2/index.html"
     },
     {
       "id": "kssr-p6-en-unit3",
       "title": "Unit 3: Outdoor Activities",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit3/index.html"
     },
     {
       "id": "kssr-p6-en-unit4",
       "title": "Unit 4: Interactive Worksheet",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit4/index.html"
     },
     {
       "id": "kssr-p6-en-unit5",
       "title": "Unit 5: Interactive English",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit5/index.html"
     },
     {
       "id": "kssr-p6-en-unit6",
       "title": "Unit 6: Interactive English Adventure",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit6/index.html"
     },
     {
       "id": "kssr-p6-en-unit7",
       "title": "Sound Lab Studio",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit7/index.html"
     },
     {
       "id": "kssr-p6-en-unit8",
       "title": "Lantern Story Library",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit8/index.html"
     },
     {
       "id": "kssr-p6-en-unit9",
       "title": "The Debate Club",
+      "delivery": "public",
       "path": "content/KSSR_Syllabus/Primary6/English/Unit9/index.html"
     },
     {
       "id": "sg-y4-math-angles",
       "title": "Angle Quest",
+      "delivery": "public",
       "path": "content/Singapore_Syllabus/Year4/Math/Chapter6_Angles/index.html"
     },
     {
       "id": "sg-y4-math-data-graphs",
       "title": "Data & Graphs (Campaign)",
+      "delivery": "public",
       "path": "content/Singapore_Syllabus/Year4/Math/Chapter4_Data_Graphs/index.html"
     },
     {
       "id": "sg-y4-math-fractions",
       "title": "Fraction Quest",
+      "delivery": "public",
       "path": "content/Singapore_Syllabus/Year4/Math/Chapter5_Fractions/index.html"
     },
     {
       "id": "sg-y4-math-pokemon-gym",
       "title": "Whole Number (Part 3)",
+      "delivery": "public",
       "path": "content/Singapore_Syllabus/Year4/Math/Chapter3_Pokemon_Gym/index.html"
     },
     {
       "id": "sg-y4-math-review1",
       "title": "Whole Numbers Review",
+      "delivery": "public",
       "path": "content/Singapore_Syllabus/Year4/Math/Review1/index.html"
     },
     {
       "id": "sg-y4-math-whole-number",
       "title": "Whole Numbers (Part 2)",
+      "delivery": "public",
       "path": "content/Singapore_Syllabus/Year4/Math/Chapter2_Whole_Number/index.html"
     },
     {
       "id": "spm-addmath-f4-live-quiz",
       "title": "Form 4 Additional Mathematics Live Quiz",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form4/Additional_Mathematics/Live_Quiz/index.html"
     },
     {
       "id": "spm-bm-imbuhan-alchemy",
       "title": "Imbuhan Alchemy (词缀炼金术)",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Imbuhan_Alchemy/index.html"
     },
     {
       "id": "spm-bm-karangan",
       "title": "Modul Karangan SPM 1",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Karangan/index.html"
     },
     {
       "id": "spm-bm-kata-terbitan",
       "title": "Morfologi Mastery",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Kata_Terbitan/index.html"
     },
     {
       "id": "spm-bm-kesalahan-ejaan",
       "title": "Sistem Latihan: 错别字 Debug",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html"
     },
     {
       "id": "spm-bm-komsas-novel",
       "title": "Novel Silir Daksina (Interactive)",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/KOMSAS/Novel_Silir_Daksina/interactive_synopsis.html"
     },
     {
       "id": "spm-bm-peribahasa",
       "title": "Peribahasa Mastery",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Peribahasa/index.html"
     },
     {
       "id": "spm-bm-reading-comprehension",
       "title": "SPM 阅读理解黑客 V7",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Reading_Comprehension/index.html"
     },
     {
       "id": "spm-bm-rumusan",
       "title": "Rumusan 极简通关训练",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Rumusan/index.html"
     },
     {
       "id": "spm-bm-tatabahasa-master",
       "title": "SPM Tatabahasa Master",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/BM/Tatabahasa_Master/index.html"
     },
     {
       "id": "spm-chem-ch5-consumer-industrial",
       "title": "Chapter 5: Consumer and Industrial Chemistry",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html"
     },
     {
       "id": "spm-en-advice-expert",
       "title": "The Advice Expert",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/English/Advice_Expert/index.html"
     },
     {
       "id": "spm-en-dream-holiday",
       "title": "My Dream Holiday",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/English/My_Dream_Holiday/index.html"
     },
     {
       "id": "spm-en-social-media",
       "title": "Social Media Masterclass",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/English/Social_Media_Masterclass/index.html"
     },
     {
       "id": "spm-en-speech-writing",
       "title": "The Public Speaker",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/English/Speech_Writing/index.html"
     },
     {
       "id": "spm-en-storytellers-toolkit",
       "title": "The Storyteller's Toolkit",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/English/Storytellers_Toolkit/index.html"
     },
     {
       "id": "spm-math-kssm-revision1",
       "title": "KSSM Form 2 Math: Intensive Revision 1",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form2/Math/KSSM_Revision1/index.html"
     },
     {
       "id": "spm-sci-f3-bab5-termokimia",
       "title": "Bab 5: Termokimia (Thermochemistry)",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form3/Science/Bab5_Termokimia/index.html"
     },
     {
       "id": "spm-sci-f3-bab6-elektrik",
       "title": "Bab 6: Elektrik dan Kemagnetan",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form3/Science/Bab6_Elektrik_dan_Kemagnetan/index.html"
     },
     {
       "id": "spm-sci-f3-bab7-tenaga",
       "title": "Bab 7: Tenaga dan Kuasa",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form3/Science/Bab7_Tenaga_dan_Kuasa/index.html"
     },
     {
       "id": "spm-sk-f4-bab1",
       "title": "Pengaturcaraan",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form4/Sains_Komputer/Bab1_Pengaturcaraan/index.html"
     },
     {
       "id": "spm-sk-f4-bab2",
       "title": "Pangkalan Data",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form4/Sains_Komputer/Bab2_Pangkalan_Data/index.html"
     },
     {
       "id": "spm-sk-f4-bab3",
       "title": "Interaksi Manusia dan Komputer",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form4/Sains_Komputer/Bab3_Interaksi_Manusia_dan_Komputer/index.html"
     },
     {
       "id": "spm-sk-f5-bab1",
       "title": "Pengkomputeran",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/Sains_Komputer/Bab1_Pengkomputeran/index.html"
     },
     {
       "id": "spm-sk-f5-bab2",
       "title": "Pangkalan Data Lanjutan",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/Sains_Komputer/Bab2_Pangkalan_Data_Lanjutan/index.html"
     },
     {
       "id": "spm-sk-f5-bab3",
       "title": "Pengaturcaraan Berasaskan Web",
+      "delivery": "public",
       "path": "content/SPM_Syllabus/Form5/Sains_Komputer/Bab3_Pengaturcaraan_Berasaskan_Web/index.html"
     },
     {
       "id": "uec-en-ai-cofounder",
       "title": "AI at Work",
+      "delivery": "public",
       "path": "content/University/Adult_English/AI_at_Work/index.html"
     },
     {
       "id": "uec-en-discovery-journey",
       "title": "Self-Discovery & Meaningful Conversations",
+      "delivery": "public",
       "path": "content/University/Adult_English/Self_Discovery/index.html"
     },
     {
       "id": "uec-en-grammar",
       "title": "Grammar & Usage",
+      "delivery": "public",
       "path": "content/UEC_Syllabus/Senior/English/Grammar/index.html"
     },
     {
       "id": "uec-en-master-negotiator",
       "title": "Negotiation & Tactical Communication",
+      "delivery": "public",
       "path": "content/University/Adult_English/Negotiation_Communication/index.html"
     },
     {
       "id": "uec-en-pricing-strategy",
       "title": "Pricing Psychology & Business English",
+      "delivery": "public",
       "path": "content/University/Adult_English/Pricing_Psychology/index.html"
     },
     {
       "id": "uec-en-reading",
       "title": "Reading Comprehension",
+      "delivery": "public",
       "path": "content/UEC_Syllabus/Senior/English/Reading/index.html"
     },
     {
       "id": "uec-en-rich-teen-simulator",
       "title": "Financial Literacy & Life Decisions",
+      "delivery": "public",
       "path": "content/University/Adult_English/Financial_Literacy/index.html"
     },
     {
       "id": "uec-en-summary",
       "title": "Summary Writing",
+      "delivery": "public",
       "path": "content/UEC_Syllabus/Senior/English/Summary/index.html"
     },
     {
       "id": "uec-en-teen-ceo",
       "title": "The Startup Communication Lab",
+      "delivery": "public",
       "path": "content/University/Adult_English/Startup_Communication_Lab/index.html"
     }
   ]
