@@ -141,11 +141,14 @@ const requiredModuleScripts = [
 for (const relative of [
   `${chemistryDir}/index.html`,
   `${chemistryDir}/student_workbook.pdf`,
-  `${chemistryDir}/teacher_answer_scheme.pdf`,
   `${scienceDir}/index.html`,
 ]) {
   assert.ok(exists(relative), `Missing required publication file: ${relative}`);
 }
+assert.ok(
+  !exists(`${chemistryDir}/teacher_answer_scheme.pdf`),
+  "Teacher answer scheme must remain outside the public repository"
+);
 
 const portal = read("index.html");
 const registry = read("db/archive/modules_registry.sql");
@@ -207,12 +210,13 @@ for (const module of modules) {
   );
 }
 
-for (const pdf of [
-  `${chemistryDir}/student_workbook.pdf`,
-  `${chemistryDir}/teacher_answer_scheme.pdf`,
-]) {
+for (const pdf of [`${chemistryDir}/student_workbook.pdf`]) {
   assert.ok(portal.includes(pdf), `Portal missing public PDF link ${pdf}`);
 }
+assert.ok(
+  !portal.includes(`${chemistryDir}/teacher_answer_scheme.pdf`),
+  "Portal must not link the private teacher answer scheme"
+);
 
 const chemistryLayer = extractDiv(
   portal,
@@ -221,7 +225,6 @@ const chemistryLayer = extractDiv(
 );
 const chemistryModulePath = `${chemistryDir}/index.html`;
 const studentWorkbookPath = `${chemistryDir}/student_workbook.pdf`;
-const teacherSchemePath = `${chemistryDir}/teacher_answer_scheme.pdf`;
 const chemistryElements = parseElements(chemistryLayer);
 const chemistryAnchors = descendants(chemistryElements).filter(
   (element) => element.name === "a"
@@ -246,13 +249,10 @@ const chemistryWrapperAnchors = chemistryModuleCard.parent.children.filter(
 );
 assert.deepEqual(
   chemistryWrapperAnchors.map((element) => element.attributes.href),
-  [chemistryModulePath, studentWorkbookPath, teacherSchemePath],
-  "SPM Chemistry wrapper must contain the module, student download, and teacher download as ordered sibling anchors"
+  [chemistryModulePath, studentWorkbookPath],
+  "SPM Chemistry wrapper must contain only the module and student download as ordered sibling anchors"
 );
-for (const [element, label] of [
-  [chemistryWrapperAnchors[1], "Download Student Workbook"],
-  [chemistryWrapperAnchors[2], "Download Teacher Answer Scheme"],
-]) {
+for (const [element, label] of [[chemistryWrapperAnchors[1], "Download Student Workbook"]]) {
   assert.ok(
     Object.hasOwn(element.attributes, "download"),
     `${label} must use a real download attribute`

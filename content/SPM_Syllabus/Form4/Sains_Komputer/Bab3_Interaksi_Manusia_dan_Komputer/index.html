@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPM Sains Komputer Tingkatan 4 — Bab 3 Interaksi Manusia dan Komputer Mastery Quest</title>
+<style>
+:root{
+  --bg:#060d18;--panel:#0d1a2c;--panel2:#13243b;--panel3:#071321;
+  --line:#2b4565;--text:#eef6ff;--muted:#a5b7cf;--orange:#ff9f1c;
+  --teal:#2ec4b6;--green:#35e18b;--red:#ff4765;--yellow:#ffd166;
+  --shadow:0 20px 60px rgba(0,0,0,.38);--r:20px
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+ background:
+ radial-gradient(circle at 10% 4%,rgba(46,196,182,.14),transparent 26%),
+ radial-gradient(circle at 90% 5%,rgba(255,159,28,.14),transparent 25%),var(--bg);
+ min-height:100vh
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1480px;margin:auto;padding:18px}
+.top{
+ position:sticky;top:10px;z-index:20;display:flex;gap:16px;justify-content:space-between;align-items:center;
+ background:rgba(13,26,44,.94);backdrop-filter:blur(15px);border:1px solid var(--line);
+ border-radius:22px;padding:14px 17px;box-shadow:var(--shadow)
+}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-weight:950;font-size:22px;color:#1c1204;background:linear-gradient(135deg,var(--orange),#ffd08b)}
+.brand h1{font-size:16px;margin:0 0 3px}
+.brand p{font-size:11px;color:var(--muted);margin:0}
+.stats{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.pill{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:8px 11px;font-size:11px;font-weight:850}
+.control{border:1px solid var(--line);background:#10233a;color:var(--text);border-radius:999px;padding:8px 10px;font-size:11px;font-weight:850}
+.control.off{opacity:.55}
+.progressbox{width:210px}
+.progresstxt{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-bottom:5px}
+.progress{height:8px;background:#02070e;border:1px solid #233955;border-radius:99px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--orange));transition:.35s}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:18px;margin-top:18px}
+aside{
+ position:sticky;top:100px;height:calc(100vh - 118px);overflow:auto;background:rgba(13,26,44,.94);
+ border:1px solid var(--line);border-radius:var(--r);padding:13px;box-shadow:var(--shadow)
+}
+aside h2{font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin:5px 7px 10px}
+.stage-tab{
+ width:100%;border:1px solid var(--line);background:var(--panel2);color:var(--text);border-radius:13px;
+ padding:11px;text-align:left;font-weight:900;font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:7px
+}
+.stage-tab.active{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,159,28,.1)}
+.stage-tab.locked{opacity:.48}
+.topic{margin:5px 0 8px}
+.topic-head{
+ width:100%;border:1px solid var(--line);background:#102238;color:var(--text);border-radius:12px;
+ padding:9px 10px;text-align:left;font-weight:900;font-size:11px;display:flex;justify-content:space-between;align-items:center
+}
+.topic-head.active{border-color:var(--teal)}
+.topic-sub{display:grid;gap:3px;padding:5px 0 0 8px}
+.navbtn{
+ width:100%;display:grid;grid-template-columns:27px 1fr 17px;gap:8px;align-items:center;text-align:left;
+ color:var(--text);background:transparent;border:1px solid transparent;border-radius:10px;padding:7px
+}
+.navbtn:hover{background:#142a45}.navbtn.active{background:#1a3454;border-color:#456b94}
+.navnum{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:#06101d;border:1px solid var(--line);font-size:9px;font-weight:950}
+.navtitle{font-size:10.5px;font-weight:760;line-height:1.25}
+.tick{color:var(--green);font-weight:950}
+.side-actions{display:grid;gap:7px;margin-top:12px}
+.btn{
+ border:1px solid var(--line);border-radius:11px;padding:9px 12px;background:var(--panel2);color:var(--text);font-weight:850
+}
+.btn:hover{filter:brightness(1.08)}
+.btn.primary{border:none;background:linear-gradient(135deg,var(--orange),#ffc56b);color:#211506}
+.btn.secondary{background:#17304d}
+.btn.danger{background:#2c1520;color:#ffd1d8;border-color:#6c3345}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+main{min-width:0}
+.hero{
+ background:linear-gradient(135deg,rgba(19,36,59,.98),rgba(8,20,35,.97));border:1px solid var(--line);
+ border-radius:var(--r);padding:22px;box-shadow:var(--shadow);margin-bottom:15px
+}
+.eyebrow{font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--teal);font-weight:950}
+.hero h2{font-size:29px;line-height:1.15;margin:7px 0}
+.hero p{max-width:950px;color:var(--muted);line-height:1.62;margin:0}
+.tags{display:flex;gap:7px;flex-wrap:wrap;margin-top:13px}
+.tag{font-size:10px;font-weight:850;padding:6px 9px;border:1px solid var(--line);background:#081625;border-radius:999px}
+.notice{margin-top:13px;padding:10px 12px;border-left:4px solid var(--yellow);background:rgba(255,209,102,.08);border-radius:8px;color:#ffe8aa;font-size:11.5px;line-height:1.5}
+.screen{display:none}.screen.active{display:block}
+.question-card{
+ background:rgba(13,26,44,.96);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden
+}
+.qhead{padding:20px;border-bottom:1px solid var(--line);display:flex;gap:15px;justify-content:space-between;align-items:flex-start}
+.qhead h3{font-size:22px;margin:5px 0}.qhead p{margin:0;color:var(--muted);line-height:1.5}
+.xp{background:var(--yellow);color:#201607;padding:7px 10px;border-radius:999px;font-size:10.5px;font-weight:950;white-space:nowrap}
+.qbody{padding:20px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.card h4{font-size:13px;margin:0 0 7px}.card p{color:var(--muted);line-height:1.58;margin:5px 0}
+.factbox{border-left:4px solid var(--teal)}
+.instruction{border-left:4px solid var(--orange)}
+.factbox strong,.term{color:#dffcf9}.term{font-weight:900}
+.code{
+ background:#020811;color:#dcecff;border:1px solid #263d5a;border-radius:13px;padding:14px;
+ font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;font-size:12.5px;line-height:1.65;
+ white-space:pre-wrap;overflow:auto;margin:10px 0
+}
+.stimulus-table{width:100%;border-collapse:collapse;margin:10px 0}
+.stimulus-table th,.stimulus-table td{border:1px solid var(--line);padding:8px;text-align:left}
+.stimulus-table th{background:#081422;color:#d1e0f2;font-size:11px}
+.choices{display:grid;gap:8px}
+.choice{display:flex;align-items:flex-start;gap:9px;background:#081625;border:1px solid var(--line);padding:10px;border-radius:11px}
+.choice:hover{border-color:#456b95}.choice input{margin-top:3px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+label.fieldlabel{display:block;font-size:11px;color:#c7d7ea;font-weight:850;margin:8px 0 5px}
+input[type=text],input[type=number],select,textarea{
+ width:100%;border:1px solid #365475;background:#050e19;color:var(--text);border-radius:10px;padding:10px 11px;outline:none
+}
+textarea{min-height:120px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(46,196,182,.11)}
+.order{display:grid;gap:8px}
+.orderitem{display:grid;grid-template-columns:31px 1fr auto;gap:9px;align-items:center;background:#081625;border:1px solid var(--line);border-radius:11px;padding:9px}
+.orderindex{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:#17304d;color:var(--teal);font-weight:950}
+.minibtn{border:1px solid var(--line);background:#17304d;color:var(--text);border-radius:8px;padding:5px 8px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:13px}
+.feedback{display:none;padding:11px 13px;border-radius:12px;margin-top:12px;font-size:12.5px;font-weight:760;line-height:1.5}
+.feedback.show{display:block}.feedback.good{background:rgba(53,225,139,.11);border:1px solid rgba(53,225,139,.42);color:#c2f7da}
+.feedback.bad{background:rgba(255,71,101,.1);border:1px solid rgba(255,71,101,.42);color:#ffd0d8}
+.feedback.info{background:rgba(255,209,102,.09);border:1px solid rgba(255,209,102,.38);color:#ffe7a6}
+.answer-review{margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.15);font-weight:650}
+.answer-review .student-answer{color:#d8e8fa}
+.answer-review .correct-answer{color:#bff7d7}
+.answer-review code{font-family:"Cascadia Code","SFMono-Regular",Consolas,monospace;background:rgba(0,0,0,.24);padding:2px 5px;border-radius:5px}
+.console{background:#01060b;border:1px solid #243955;border-radius:12px;padding:12px;min-height:70px;color:#baf5c5;font-family:Consolas,monospace;font-size:12px;white-space:pre-wrap;margin-top:10px}
+.mastery{
+ display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px
+}
+.mastery-card{background:#091625;border:1px solid var(--line);border-radius:11px;padding:9px;text-align:center}
+.mastery-card strong{display:block;color:var(--teal);font-size:11px}.mastery-card span{font-size:10px;color:var(--muted)}
+.stage-complete{text-align:center;padding:35px 20px;background:linear-gradient(145deg,#10243b,#0a1728);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.stage-complete .icon{font-size:60px}.stage-complete h3{font-size:28px;margin:8px 0}
+.exam-shell{background:#f8f8f5;color:#161616;border-radius:10px;padding:0;box-shadow:var(--shadow);overflow:hidden}
+.exam-cover{padding:28px;border-bottom:2px solid #222;text-align:center}
+.exam-cover h2{font-family:Georgia,serif;letter-spacing:.05em;margin:8px 0}.exam-cover p{margin:5px 0}
+.exam-tools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.exam-tools .btn{color:#fff;background:#17304d}.exam-tools .btn.primary{color:#211506}
+.exam-section{padding:24px;border-bottom:1px solid #bbb}
+.exam-section h3{text-align:center;font-family:Georgia,serif;text-decoration:underline;margin:0 0 4px}
+.exam-instruction{text-align:center;font-family:Georgia,serif;font-style:italic;margin:4px 0}
+.exam-q{padding:22px 0;border-bottom:1px dashed #999}
+.exam-q:last-child{border-bottom:none}
+.exam-qhead{display:flex;justify-content:space-between;gap:12px;font-family:Georgia,serif;font-size:16px;line-height:1.5}
+.exam-mark{white-space:nowrap;font-style:italic}
+.exam-stimulus{border:1px solid #444;padding:14px;margin:13px auto;max-width:760px;font-family:Georgia,serif;line-height:1.55}
+.exam-code{background:#fff;border:1px solid #444;color:#111;font-family:"Courier New",monospace;padding:13px;white-space:pre-wrap;overflow:auto;margin:12px 0}
+.exam-q input,.exam-q select,.exam-q textarea{background:#fff;color:#111;border:1px solid #555}
+.exam-part{margin:13px 0}
+.exam-result{padding:24px;background:#eef4f8;color:#152234}
+.exam-score{font-size:36px;font-weight:950}
+.review-good{border-left:6px solid #14a85c;padding-left:12px}.review-bad{border-left:6px solid #d62f49;padding-left:12px}
+.teacher{display:none}.teacher.show{display:block}
+.footer{text-align:center;color:#6f87a5;font-size:10px;padding:18px}
+.toast{display:none;position:fixed;right:18px;bottom:18px;z-index:80;background:#142941;border:1px solid var(--line);border-radius:12px;padding:11px 14px;box-shadow:var(--shadow)}
+.toast.show{display:block}
+#edgeFlash{
+ position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;
+ background:transparent
+}
+#edgeFlash.correct{animation:greenPulse .78s ease-out}
+#edgeFlash.wrong{animation:redPulse .78s ease-out}
+@keyframes greenPulse{
+ 0%{opacity:0;box-shadow:inset 0 0 0 rgba(53,225,139,0)}
+ 18%{opacity:1;box-shadow:inset 0 0 95px 22px rgba(53,225,139,.95)}
+ 36%{opacity:.25;box-shadow:inset 0 0 35px 8px rgba(53,225,139,.35)}
+ 55%{opacity:1;box-shadow:inset 0 0 120px 30px rgba(53,225,139,.9)}
+ 75%{opacity:.32;box-shadow:inset 0 0 45px 10px rgba(53,225,139,.4)}
+ 100%{opacity:0;box-shadow:inset 0 0 0 rgba(53,225,139,0)}
+}
+@keyframes redPulse{
+ 0%{opacity:0;box-shadow:inset 0 0 0 rgba(255,71,101,0)}
+ 16%{opacity:1;box-shadow:inset 0 0 105px 24px rgba(255,71,101,.98)}
+ 31%{opacity:.28;box-shadow:inset 0 0 38px 8px rgba(255,71,101,.4)}
+ 48%{opacity:1;box-shadow:inset 0 0 130px 32px rgba(255,71,101,.92)}
+ 65%{opacity:.3;box-shadow:inset 0 0 42px 10px rgba(255,71,101,.42)}
+ 82%{opacity:.88;box-shadow:inset 0 0 90px 20px rgba(255,71,101,.75)}
+ 100%{opacity:0;box-shadow:inset 0 0 0 rgba(255,71,101,0)}
+}
+.shake{animation:shake .35s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}.shake{animation:none!important}#edgeFlash.correct,#edgeFlash.wrong{animation-duration:.25s}}
+@media(max-width:1000px){
+ .layout{grid-template-columns:1fr}aside{position:relative;top:0;height:auto}.top{position:relative;top:0}
+ .grid2,.grid3,.mastery,.phasegrid{grid-template-columns:1fr}.progressbox{width:150px}
+}
+@media(max-width:620px){.app{padding:9px}.top{flex-direction:column;align-items:flex-start}.stats{justify-content:flex-start}.qhead{flex-direction:column}.hero h2{font-size:24px}.qbody{padding:13px}.exam-section{padding:14px}.exam-qhead{font-size:14px}}
+@media print{.top,aside,.hero,.actions,.exam-tools,.footer{display:none!important}.layout{display:block}.screen{display:none!important}.screen.active{display:block!important}.exam-shell{box-shadow:none}.app{max-width:none;padding:0}body{background:#fff}}
+</style>
+</head>
+<body autocomplete="off">
+<a href="../../../../../index.html" aria-label="Back to course portal" style="position:fixed;top:10px;left:10px;z-index:99999;padding:8px 12px;border-radius:999px;background:#0f172a;color:#fff;text-decoration:none;font:700 13px/1.2 system-ui;box-shadow:0 4px 16px #0004">← Course Portal</a>
+<div id="edgeFlash"></div>
+<div class="app">
+<header class="top">
+ <div class="brand">
+  <div class="logo">&lt;/&gt;</div>
+  <div><h1>SPM Sains Komputer Tingkatan 4</h1><p>Bab 3 Interaksi Manusia dan Komputer • 40-question Mastery Quest</p></div>
+ </div>
+ <div class="stats">
+  <div class="pill">⭐ Markah: <span id="score">0</span>/3000</div>
+  <div class="pill">🔥 Rentetan: <span id="streak">0</span></div>
+  <button class="control" id="soundToggle" onclick="toggleSound()">🔊 Bunyi</button>
+  <button class="control" id="effectToggle" onclick="toggleEffects()">✨ Kesan</button>
+  <div class="progressbox"><div class="progresstxt"><span>Tahap 1</span><span id="progressText">0/30</span></div><div class="progress"><div id="progressBar"></div></div></div>
+ </div>
+</header>
+
+<div class="layout">
+<aside>
+ <h2>Peringkat Pembelajaran</h2>
+ <button class="stage-tab active" id="stage1Tab" onclick="goStage1()"><span>Tahap 1 • Latihan Berpandu</span><span id="stage1Count">0/30</span></button>
+ <div id="topicNav"></div>
+ <button class="stage-tab locked" id="stage2Tab" onclick="goStage2()"><span>Tahap 2 • Simulasi SPM</span><span id="stage2Lock">🔒</span></button>
+ <div class="side-actions">
+  <button class="btn secondary" onclick="toggleTeacher()">🔐 Skema Guru</button>
+  <button class="btn danger" onclick="resetAll()">↻ Tetapkan Semula</button>
+ </div>
+</aside>
+
+<main>
+<section class="hero" id="hero">
+ <div class="eyebrow">Two-stage interactive module</div>
+ <h2>Bab 3: Interaksi Manusia dan Komputer — Mastery Quest</h2>
+ <p>Setiap standard kandungan mempunyai 15 latihan. Modul menekankan keperluan interaksi manusia dengan komputer, lima prinsip reka bentuk interaktif, penilaian produk, proses reka bentuk interaksi, prototaip, instrumen penilaian dan laporan penilaian kuantitatif.</p>
+ <div class="tags">
+  <span class="tag">3.1 Reka Bentuk Interaksi × 15</span><span class="tag">3.2 Paparan dan Reka Bentuk Skrin × 15</span>
+  <span class="tag">Simulasi SPM × 10</span>
+ </div>
+ <div class="notice"><strong>Answer policy:</strong> After a first wrong attempt, the correct answer remains hidden. It is revealed only after the second checked attempt. Answers and attempt counts remain saved for review.<br><strong>Audio:</strong> Three different correct sounds and three different wrong sounds are selected randomly. The full-screen edge glow can be turned off using “Kesan”.</div>
+</section>
+
+<section class="screen active" id="practiceScreen">
+ <div id="questionHost"></div>
+</section>
+
+<section class="screen" id="stage1Done">
+ <div class="stage-complete">
+  <div class="icon">🚀</div>
+  <h3>Tahap 1 Selesai</h3>
+  <p>You completed all 30 guided questions. Tahap 2 is now unlocked.</p>
+  <div class="pill" style="display:inline-block;margin:12px">Markah latihan: <span id="practiceFinal">0</span>/3000</div>
+  <div class="actions" style="justify-content:center"><button class="btn primary" onclick="goStage2()">Mulakan Simulasi SPM</button><button class="btn" onclick="openQuestion('q1')">Semak Latihan</button></div>
+ </div>
+</section>
+
+<section class="screen" id="examScreen">
+ <div class="exam-shell">
+  <div class="exam-cover">
+   <div style="font-weight:bold">SIJIL PELAJARAN MALAYSIA</div>
+   <h2>SAINS KOMPUTER 3770/1</h2>
+   <p><strong>Simulasi Bab 3 — Soalan Asli Gaya SPM</strong></p>
+   <p>10 soalan • 40 markah • Masa dicadangkan: 45 minit</p>
+   <div class="exam-tools">
+    <button class="btn primary" id="startExamBtn" onclick="startExam()">Mulakan Peperiksaan</button>
+    <button class="btn" onclick="printExam()">Cetak</button>
+    <div class="pill" style="color:white;background:#17304d">⏱ <span id="timer">45:00</span></div>
+   </div>
+  </div>
+  <div id="examPaper"></div>
+  <div class="exam-result" id="examResult" style="display:none"></div>
+ </div>
+</section>
+
+<section class="teacher card" id="teacherPanel">
+ <h3>Skema Guru</h3>
+ <p>Jawapan betul latihan hanya dipaparkan selepas jawapan betul atau selepas percubaan kedua. Simulasi SPM menggunakan format Jadual, Rajah, Pernyataan, prinsip bersama justifikasi dan analisis kuantitatif.</p>
+ <p><strong>Kod guru:</strong> SPM4</p>
+</section>
+<div class="footer">Self-contained HTML • No internet required • Progress saved using localStorage</div>
+</main>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const topicInfo=[{"id":"3.1","name":"Reka Bentuk Interaksi","qs":["q1","q2","q3","q4","q5","q6","q7","q8","q9","q10","q11","q12","q13","q14","q15"]},{"id":"3.2","name":"Paparan dan Reka Bentuk Skrin","qs":["q16","q17","q18","q19","q20","q21","q22","q23","q24","q25","q26","q27","q28","q29","q30"]}];
+
+const questions=[{"id":"q1","topic":"3.1","title":"Maksud Reka Bentuk dan Interaksi","fact":"Reka bentuk ialah susun atur teks, gambar, butang dan menu dalam sesuatu produk. Interaksi ialah tindakan manusia semasa menggunakan produk tersebut.","instruction":"Match each description with the correct term.","type":"fields","fields":[{"label":"Susun atur teks, gambar, butang dan menu.","kind":"select","options":["reka bentuk","interaksi"],"answer":"reka bentuk"},{"label":"Tindakan pengguna semasa menggunakan aplikasi.","kind":"select","options":["reka bentuk","interaksi"],"answer":"interaksi"}],"hint":"Satu menerangkan susun atur; satu lagi menerangkan tindakan pengguna."},{"id":"q2","topic":"3.1","title":"Interaksi Manusia dengan Komputer","fact":"Interaksi antara manusia dengan komputer merupakan proses, dialog atau kegiatan yang dilakukan oleh manusia untuk berinteraksi dengan komputer. Interaksi perlu bersifat jelas, intuitif dan semula jadi.","instruction":"Choose all characteristics of a good human-computer interaction.","type":"multi","options":["Jelas","Intuitif","Semula jadi","Mengelirukan","Memerlukan latihan intensif untuk semua pengguna"],"answers":["Jelas","Intuitif","Semula jadi"],"hint":"Pilih ciri yang membolehkan pelbagai lapisan masyarakat menggunakan sistem dengan mudah."},{"id":"q3","topic":"3.1","title":"Keperluan: Permintaan dalam Pasaran","fact":"Produk yang mempunyai kebolehgunaan tinggi, selamat, berguna, berfungsi dan tahan lama lebih mendapat permintaan dalam pasaran.","instruction":"Choose the situation that best represents “mendapat permintaan dalam pasaran”.","type":"mcq","options":["Pengguna memilih aplikasi yang mudah, selamat dan menyeronokkan untuk digunakan","Pembangun menambah fungsi yang tidak diperlukan tanpa menguji pengguna","Produk dihantar semula kerana sering rosak","Pekerja mengambil masa lebih lama untuk menghasilkan output"],"answer":"Pengguna memilih aplikasi yang mudah, selamat dan menyeronokkan untuk digunakan","hint":"Fokus pada sebab pengguna mahu membeli atau menggunakan produk."},{"id":"q4","topic":"3.1","title":"Keperluan: Produktiviti dan Kos","fact":"Interaksi yang baik dapat meningkatkan produktiviti, mengurangkan kos selepas jualan dan mengurangkan kos pembangunan.","instruction":"Match each situation with the correct need.","type":"fields","fields":[{"label":"Output dihasilkan lebih cepat menggunakan sumber secara optimum.","kind":"select","options":["meningkatkan produktiviti","mengurangkan kos selepas jualan","mengurangkan kos pembangunan"],"answer":"meningkatkan produktiviti"},{"label":"Kurang produk dikembalikan untuk dibaiki selepas pembelian.","kind":"select","options":["meningkatkan produktiviti","mengurangkan kos selepas jualan","mengurangkan kos pembangunan"],"answer":"mengurangkan kos selepas jualan"},{"label":"Ciri yang tidak disukai pengguna tidak dibangunkan.","kind":"select","options":["meningkatkan produktiviti","mengurangkan kos selepas jualan","mengurangkan kos pembangunan"],"answer":"mengurangkan kos pembangunan"}],"hint":"Lebih cepat = produktiviti; pembaikan selepas pembelian = selepas jualan; elak fungsi tidak perlu = pembangunan."},{"id":"q5","topic":"3.1","title":"Keperluan: Pengalaman dan Pengkomputeran Sosial","fact":"Teknologi boleh mengembangkan aktiviti dan menambahkan pengalaman manusia. Pengkomputeran sosial mewujudkan peluang komunikasi dan hubungan sosial antara manusia melalui komputer.","instruction":"Classify both situations.","type":"fields","fields":[{"label":"Platform dalam talian membolehkan penduduk luar bandar mengikuti kelas maya.","kind":"select","options":["mengembangkan aktiviti dan menambahkan pengalaman manusia","pengkomputeran sosial"],"answer":"mengembangkan aktiviti dan menambahkan pengalaman manusia"},{"label":"Aplikasi komuniti membolehkan pengguna berbincang dan berkongsi maklumat.","kind":"select","options":["mengembangkan aktiviti dan menambahkan pengalaman manusia","pengkomputeran sosial"],"answer":"pengkomputeran sosial"}],"hint":"Peluang aktiviti baharu berkaitan pengalaman; hubungan manusia melalui komputer berkaitan pengkomputeran sosial."},{"id":"q6","topic":"3.1","title":"Lima Prinsip Asas Reka Bentuk Interaktif","fact":"Lima prinsip asas ialah konsistensi, kebolehan membuat pemerhatian, boleh dipelajari, kebolehan untuk menjangka dan maklum balas.","instruction":"Select all five official principles.","type":"multi","options":["Konsistensi","Kebolehan membuat pemerhatian","Boleh dipelajari","Kebolehan untuk menjangka","Maklum balas","Kelewahan data","Penormalan"],"answers":["Konsistensi","Kebolehan membuat pemerhatian","Boleh dipelajari","Kebolehan untuk menjangka","Maklum balas"],"hint":"Bab ini mempunyai tepat lima prinsip reka bentuk interaktif."},{"id":"q7","topic":"3.1","title":"Konsistensi","fact":"Konsistensi bermaksud elemen kekal pada kedudukan yang sama serta persembahan dan fungsi adalah seragam pada semua antara muka.","instruction":"Choose the interface that best applies konsistensi.","type":"mcq","options":["Butang Kembali sentiasa berada di penjuru kiri atas pada setiap skrin","Butang Simpan berubah kedudukan dan ikon pada setiap halaman","Menu utama hilang tanpa sebab pada skrin tertentu","Warna amaran digunakan secara rawak"],"answer":"Butang Kembali sentiasa berada di penjuru kiri atas pada setiap skrin","hint":"Cari elemen yang kekal pada lokasi dan fungsi yang sama."},{"id":"q8","topic":"3.1","title":"Kebolehan Membuat Pemerhatian","fact":"Kebolehan membuat pemerhatian menekankan bahawa penunjuk atau butang interaksi mudah dikenal pasti supaya pengguna boleh menggunakan aplikasi tanpa ragu-ragu.","instruction":"Choose the best example.","type":"mcq","options":["Butang boleh diklik mempunyai label dan bentuk yang jelas","Butang penting disembunyikan di belakang gambar","Ikon tidak mempunyai makna yang boleh dikenal pasti","Menu berubah tempat setiap kali dibuka"],"answer":"Butang boleh diklik mempunyai label dan bentuk yang jelas","hint":"Pengguna perlu dapat melihat dan mengenal pasti tindakan yang tersedia."},{"id":"q9","topic":"3.1","title":"Boleh Dipelajari","fact":"Reka bentuk interaksi yang boleh dipelajari mudah dipelajari dan mudah diingati selepas digunakan.","instruction":"Which statement best shows the principle?","type":"mcq","options":["Pengguna baharu memahami cara menghantar mesej selepas satu percubaan","Pengguna mesti membaca manual 80 halaman setiap kali membuka aplikasi","Fungsi butang berubah setiap minggu","Ikon yang sama melakukan tindakan berlainan pada setiap halaman"],"answer":"Pengguna baharu memahami cara menghantar mesej selepas satu percubaan","hint":"Prinsip ini berkaitan kemudahan belajar dan mengingati."},{"id":"q10","topic":"3.1","title":"Kebolehan untuk Menjangka","fact":"Kebolehan untuk menjangka membolehkan pengguna membuat jangkaan tentang perkara yang akan berlaku dalam aliran proses aplikasi sebelum tindakan dilakukan.","instruction":"Choose the best example.","type":"mcq","options":["Ikon tong sampah membuat pengguna menjangka item akan dipadam","Aplikasi tidak menunjukkan tujuan sesuatu butang","Klik pada ikon rumah membuka halaman rawak","Butang Bayar tidak memberi petunjuk tentang tindakan seterusnya"],"answer":"Ikon tong sampah membuat pengguna menjangka item akan dipadam","hint":"Pengguna boleh meneka hasil tindakan sebelum menekannya."},{"id":"q11","topic":"3.1","title":"Maklum Balas","fact":"Maklum balas memberikan maklumat tentang hasil tindakan pengguna dan membantu pereka bentuk melakukan penambahbaikan.","instruction":"Select all examples of meaningful feedback.","type":"multi","options":["Paparan “Sedang memuatkan…” selepas butang ditekan","Mesej “Tempahan berjaya” selepas transaksi","Tiada perubahan selepas pengguna menekan Simpan","Medan tidak sah ditandakan bersama mesej pembetulan","Aplikasi mengulangi arahan tanpa menerangkan masalah"],"answers":["Paparan “Sedang memuatkan…” selepas butang ditekan","Mesej “Tempahan berjaya” selepas transaksi","Medan tidak sah ditandakan bersama mesej pembetulan"],"hint":"Maklum balas memberitahu status, hasil atau kesalahan kepada pengguna."},{"id":"q12","topic":"3.1","title":"Kaedah Menilai Produk Interaktif","fact":"Produk interaktif boleh dinilai menggunakan temu bual, pemerhatian, soal selidik, perbincangan ahli kumpulan dan refleksi.","instruction":"Select all valid evaluation methods.","type":"multi","options":["Temu bual","Pemerhatian","Soal selidik","Perbincangan ahli kumpulan","Refleksi","Meneka tanpa pengguna"],"answers":["Temu bual","Pemerhatian","Soal selidik","Perbincangan ahli kumpulan","Refleksi"],"hint":"Penilaian memerlukan data atau pandangan daripada pengguna dan penilai."},{"id":"q13","topic":"3.1","title":"Skala Likert dan Skala Guttman","fact":"Skala Likert melihat tahap persetujuan pengguna. Skala Guttman memperoleh data yang jelas, tegas dan konsisten melalui pilihan seperti Ya atau Tidak.","instruction":"Match each questionnaire format.","type":"fields","fields":[{"label":"Pilihan 5, 4, 3, 2, 1 mengikut tahap persetujuan.","kind":"select","options":["Skala Likert","Skala Guttman"],"answer":"Skala Likert"},{"label":"Pilihan Ya atau Tidak.","kind":"select","options":["Skala Likert","Skala Guttman"],"answer":"Skala Guttman"}],"hint":"Tahap persetujuan = Likert; jawapan tegas Ya/Tidak = Guttman."},{"id":"q14","topic":"3.1","title":"Item Soal Selidik Mengikut Prinsip","fact":"Item soal selidik perlu jelas, sesuai dengan responden dan mengukur prinsip yang ditetapkan.","instruction":"Match each item with its principle.","type":"fields","fields":[{"label":"Butang navigasi sentiasa berada di tempat yang sama.","kind":"select","options":["konsistensi","kebolehan membuat pemerhatian","boleh dipelajari","kebolehan untuk menjangka","maklum balas"],"answer":"konsistensi"},{"label":"Saya tahu halaman yang akan dibuka apabila ikon ditekan.","kind":"select","options":["konsistensi","kebolehan membuat pemerhatian","boleh dipelajari","kebolehan untuk menjangka","maklum balas"],"answer":"kebolehan untuk menjangka"},{"label":"Aplikasi memaparkan status proses yang sedang dilaksanakan.","kind":"select","options":["konsistensi","kebolehan membuat pemerhatian","boleh dipelajari","kebolehan untuk menjangka","maklum balas"],"answer":"maklum balas"},{"label":"Saya dapat menggunakan aplikasi tanpa panduan selepas mencubanya.","kind":"select","options":["konsistensi","kebolehan membuat pemerhatian","boleh dipelajari","kebolehan untuk menjangka","maklum balas"],"answer":"boleh dipelajari"}],"hint":"Tumpukan kata kunci: kekal, tahu apa berlaku, status proses dan mudah belajar."},{"id":"q15","topic":"3.1","title":"Menilai dan Mencadangkan Penambahbaikan","fact":"Penilaian menentukan sama ada produk memenuhi tujuan dan prinsip asas reka bentuk interaktif. Cadangan penambahbaikan perlu berkaitan dengan masalah yang dikenal pasti.","instruction":"An app moves its navigation buttons on every screen and gives no message after Save is clicked. Choose both suitable improvements.","type":"multi","options":["Kekalkan kedudukan butang navigasi pada setiap skrin","Paparkan mesej pengesahan selepas Simpan","Tambahkan lebih banyak butang rawak","Sembunyikan semua label","Gunakan fungsi berlainan untuk ikon yang sama"],"answers":["Kekalkan kedudukan butang navigasi pada setiap skrin","Paparkan mesej pengesahan selepas Simpan"],"hint":"Masalah pertama berkaitan konsistensi; masalah kedua berkaitan maklum balas."},{"id":"q16","topic":"3.2","title":"Peranan Paparan dan Reka Bentuk Skrin","fact":"Paparan dan reka bentuk skrin memainkan peranan penting dalam pembangunan program atau perisian. Reka bentuk perlu mudah, lengkap dan mesra pengguna.","instruction":"Select all characteristics of a good screen design.","type":"multi","options":["Mudah","Lengkap","Mesra pengguna","Mengelirukan","Memerlukan terlalu banyak interaksi"],"answers":["Mudah","Lengkap","Mesra pengguna"],"hint":"Pilih ciri yang memudahkan pengguna mencapai tujuan."},{"id":"q17","topic":"3.2","title":"Urutan Proses Reka Bentuk Interaksi","fact":"Empat proses ialah mengenal pasti keperluan interaksi, membangunkan reka bentuk alternatif, membina prototaip interaksi dan membuat penilaian reka bentuk interaksi produk.","instruction":"Arrange the four processes in the correct order.","type":"order","items":["Mengenal pasti keperluan interaksi","Membangunkan reka bentuk alternatif","Membina prototaip interaksi","Membuat penilaian reka bentuk interaksi produk"],"hint":"Keperluan dahulu, kemudian beberapa reka bentuk, prototaip dan akhirnya penilaian."},{"id":"q18","topic":"3.2","title":"Mengenal Pasti Keperluan Interaksi","fact":"Keperluan produk, pengguna sasaran, tujuan, masalah, fungsi utama dan fungsi tambahan perlu dikenal pasti melalui kaedah seperti soal selidik, temu ramah, tinjauan dan pemerhatian.","instruction":"Select all information needed during this process.","type":"multi","options":["Kumpulan sasaran","Isu atau masalah pengguna","Fungsi utama produk","Fungsi tambahan","Warna kegemaran pereka sahaja","Tujuan produk"],"answers":["Kumpulan sasaran","Isu atau masalah pengguna","Fungsi utama produk","Fungsi tambahan","Tujuan produk"],"hint":"Maklumat mesti berkaitan keperluan pengguna dan matlamat produk."},{"id":"q19","topic":"3.2","title":"Reka Bentuk Alternatif","fact":"Reka bentuk alternatif ialah beberapa cadangan idea reka bentuk yang berbeza tetapi masih memenuhi keperluan yang dikenal pasti.","instruction":"Choose the best practice when developing alternatives.","type":"mcq","options":["Menghasilkan sekurang-kurangnya dua lakaran untuk dibandingkan pengguna","Membina satu reka bentuk dan menganggapnya sempurna","Mengabaikan maklum balas pengguna","Menyalin produk lain tanpa menyesuaikan keperluan"],"answer":"Menghasilkan sekurang-kurangnya dua lakaran untuk dibandingkan pengguna","hint":"Alternatif bermaksud terdapat beberapa pilihan yang boleh dinilai."},{"id":"q20","topic":"3.2","title":"Reka Bentuk Konsep dan Fizikal","fact":"Reka bentuk konsep menerangkan perkara yang boleh dilakukan oleh produk, ciri dan gambaran produk. Reka bentuk fizikal menekankan warna, audio, imej, menu dan ikon.","instruction":"Classify each design decision.","type":"fields","fields":[{"label":"Menentukan fungsi aplikasi untuk mengira purata.","kind":"select","options":["reka bentuk konsep","reka bentuk fizikal"],"answer":"reka bentuk konsep"},{"label":"Memilih warna butang, ikon dan jenis tulisan.","kind":"select","options":["reka bentuk konsep","reka bentuk fizikal"],"answer":"reka bentuk fizikal"},{"label":"Menentukan ciri yang boleh dilakukan oleh produk.","kind":"select","options":["reka bentuk konsep","reka bentuk fizikal"],"answer":"reka bentuk konsep"}],"hint":"Apa yang produk lakukan = konsep; rupa dan elemen antara muka = fizikal."},{"id":"q21","topic":"3.2","title":"Papan Cerita","fact":"Papan cerita digunakan untuk memahami aliran kerja, sistem navigasi, laluan capaian dan perkara yang berlaku pada setiap skrin.","instruction":"Choose all items that should appear in a useful storyboard.","type":"multi","options":["Susunan skrin","Laluan navigasi","Kedudukan butang","Tindakan selepas butang ditekan","Kod sumber penuh setiap kelas","Input dan output utama"],"answers":["Susunan skrin","Laluan navigasi","Kedudukan butang","Tindakan selepas butang ditekan","Input dan output utama"],"hint":"Papan cerita menerangkan aliran dan interaksi skrin, bukan keseluruhan kod sumber."},{"id":"q22","topic":"3.2","title":"Maksud Prototaip","fact":"Prototaip ialah gambaran awal produk yang dinilai dan ditambah baik secara berulang sehingga boleh diterima oleh pengguna sasaran.","instruction":"Choose the correct statement.","type":"mcq","options":["Prototaip ialah gambaran awal yang digunakan untuk kajian dan pengujian","Prototaip mestilah produk akhir yang tidak boleh diubah","Prototaip hanya boleh dibina menggunakan perisian","Prototaip tidak melibatkan pengguna"],"answer":"Prototaip ialah gambaran awal yang digunakan untuk kajian dan pengujian","hint":"Prototaip wujud sebelum produk akhir dan boleh ditambah baik."},{"id":"q23","topic":"3.2","title":"Bahan dan Tujuan Prototaip","fact":"Prototaip boleh dihasilkan menggunakan kertas, kadbod, gambaran elektronik, video simulasi atau perisian. Ia membantu mengkaji masalah dan mendapatkan maklum balas awal.","instruction":"Select all valid prototype forms.","type":"multi","options":["Lakaran kertas","Kadbod","Video simulasi","Gambaran elektronik","Prototaip perisian","Produk akhir sahaja"],"answers":["Lakaran kertas","Kadbod","Video simulasi","Gambaran elektronik","Prototaip perisian"],"hint":"Prototaip tidak semestinya menggunakan perisian."},{"id":"q24","topic":"3.2","title":"Maklumat Statik dan Dinamik","fact":"Maklumat statik tidak berubah semasa sesi interaksi. Maklumat dinamik berubah semasa sesi interaksi dan perubahan perlu dipaparkan kepada pengguna.","instruction":"Classify each screen element.","type":"fields","fields":[{"label":"Tajuk “Program Mengira Purata”.","kind":"select","options":["maklumat statik","maklumat dinamik"],"answer":"maklumat statik"},{"label":"Nilai jawapan yang berubah selepas butang Kira ditekan.","kind":"select","options":["maklumat statik","maklumat dinamik"],"answer":"maklumat dinamik"},{"label":"Status “Sedang memproses…” yang berubah kepada “Selesai”.","kind":"select","options":["maklumat statik","maklumat dinamik"],"answer":"maklumat dinamik"}],"hint":"Tajuk biasanya kekal; keputusan dan status berubah semasa interaksi."},{"id":"q25","topic":"3.2","title":"Instrumen Penilaian Paparan","fact":"Langkah membina instrumen ialah menentukan sasaran pengguna, membina soalan dalam skop fungsi paparan dan menentukan jenis maklum balas seperti Ya/Tidak atau Skala Likert.","instruction":"Arrange the steps.","type":"order","items":["Tentukan sasaran pengguna","Bina soalan dalam skop dan fungsi paparan","Tentukan jenis maklum balas pengguna"],"hint":"Tentukan siapa menilai, apa yang ditanya, kemudian cara jawapan direkodkan."},{"id":"q26","topic":"3.2","title":"Kriteria Reka Bentuk Skrin","fact":"Instrumen kuantitatif boleh menilai kesederhanaan skrin, warna dan ikon, navigasi, saiz paparan, ejaan, laras bahasa, gangguan teknikal dan interaktiviti pengguna.","instruction":"Select all suitable evaluation criteria.","type":"multi","options":["Reka bentuk skrin mudah dan ringkas","Sistem navigasi mudah dikenal pasti","Saiz paparan sesuai","Tiada kesalahan ejaan","Laras bahasa mudah difahami","Warna dipilih tanpa mengambil kira pengguna"],"answers":["Reka bentuk skrin mudah dan ringkas","Sistem navigasi mudah dikenal pasti","Saiz paparan sesuai","Tiada kesalahan ejaan","Laras bahasa mudah difahami"],"hint":"Instrumen menilai kebolehgunaan dan kualiti paparan, bukan pilihan rawak pereka."},{"id":"q27","topic":"3.2","title":"Mengira Peratus Penilaian","fact":"Penilaian kuantitatif diukur secara statistik dan boleh dinyatakan dalam nombor atau peratusan.","instruction":"Out of 25 users, 20 answered Ya. Calculate the percentage of Ya responses.","type":"short","label":"Peratus Ya (%)","accepted":["80","80%"],"hint":"Gunakan (20 ÷ 25) × 100."},{"id":"q28","topic":"3.2","title":"Menganalisis Jadual Kuantitatif","fact":"Item dengan peratus Tidak yang tinggi menunjukkan aspek yang perlu diberikan keutamaan untuk penambahbaikan.","instruction":"Identify the item requiring the highest priority.","stimulus":"25 responden\nA. Skrin mudah dan ringkas: Ya 24, Tidak 1\nB. Warna dan ikon sesuai: Ya 15, Tidak 10\nC. Saiz paparan sesuai: Ya 23, Tidak 2\nD. Tiada kesalahan ejaan: Ya 25, Tidak 0","type":"mcq","options":["A. Skrin mudah dan ringkas","B. Warna dan ikon sesuai","C. Saiz paparan sesuai","D. Tiada kesalahan ejaan"],"answer":"B. Warna dan ikon sesuai","hint":"Cari item dengan jumlah Tidak paling tinggi."},{"id":"q29","topic":"3.2","title":"Cadangan Penambahbaikan Berdasarkan Data","fact":"Cadangan penambahbaikan perlu selari dengan keputusan penilaian dan objektif yang ditetapkan pada peringkat awal.","instruction":"A survey shows 40% of users cannot identify the navigation buttons. Choose both suitable improvements.","type":"multi","options":["Gunakan ikon dan label yang jelas","Letakkan navigasi secara konsisten","Sembunyikan butang navigasi","Tukar fungsi butang setiap kali digunakan","Tambahkan hiasan yang menutup menu"],"answers":["Gunakan ikon dan label yang jelas","Letakkan navigasi secara konsisten"],"hint":"Masalah berkaitan pengenalpastian dan kestabilan sistem navigasi."},{"id":"q30","topic":"3.2","title":"Prototaip Lengkap Mengikut Keperluan","fact":"Prototaip berkualiti melalui proses reka bentuk interaksi, memenuhi instrumen penilaian dan ditambah baik berdasarkan maklum balas pengguna.","instruction":"Select all deliverables expected for a complete prototype project.","type":"multi","options":["Analisis keperluan pengguna","Sekurang-kurangnya dua reka bentuk alternatif","Papan cerita dan prototaip","Instrumen penilaian","Laporan penilaian kuantitatif","Cadangan penambahbaikan","Reka bentuk pertama tanpa ujian"],"answers":["Analisis keperluan pengguna","Sekurang-kurangnya dua reka bentuk alternatif","Papan cerita dan prototaip","Instrumen penilaian","Laporan penilaian kuantitatif","Cadangan penambahbaikan"],"hint":"Projek lengkap merangkumi keperluan, alternatif, prototaip, penilaian dan penambahbaikan."}];
+
+const examQuestions=[{"id":"x1","section":"A","marks":4,"title":"Jadual 1","prompt":"Jadual 1 menunjukkan empat pernyataan berkaitan prinsip reka bentuk interaksi.","table":[["Pernyataan","Prinsip"],["Elemen kekal pada kedudukan yang sama","P"],["Mudah dipelajari dan diingati","Q"],["Pengguna boleh menjangka hasil tindakan","R"],["Sistem memaparkan status tindakan","S"]],"parts":[{"label":"(a) Nyatakan prinsip P.","accepted":["konsistensi","consistency"],"marks":1},{"label":"(b) Nyatakan prinsip Q.","accepted":["boleh dipelajari","learnability"],"marks":1},{"label":"(c) Nyatakan prinsip R.","accepted":["kebolehan untuk menjangka","predictability"],"marks":1},{"label":"(d) Nyatakan prinsip S.","accepted":["maklum balas","feedback"],"marks":1}]},{"id":"x2","section":"A","marks":3,"title":"Pernyataan 1","prompt":"Pernyataan 1 menunjukkan sebab interaksi manusia dengan komputer diperlukan.","stimulus":"Sebuah sistem baharu membolehkan pekerja menghasilkan laporan dalam 10 minit berbanding 40 minit sebelum ini. Sistem itu juga mengelakkan pembinaan fungsi yang tidak diperlukan pengguna.","parts":[{"label":"(a) Namakan keperluan yang berkaitan penghasilan laporan lebih cepat.","accepted":["meningkatkan produktiviti","produktiviti"],"marks":1},{"label":"(b) Namakan keperluan yang berkaitan mengelakkan fungsi tidak diperlukan.","accepted":["mengurangkan kos pembangunan","kos pembangunan"],"marks":1},{"label":"(c) Nyatakan satu kesan interaksi yang tidak baik kepada pengguna.","accepted":["meningkatkan kadar ralat","mengurangkan produktiviti","meningkatkan masa mempelajari sistem","pengguna keliru","pengguna tidak selesa"],"marks":1}]},{"id":"x3","section":"A","marks":3,"title":"Rajah 1","prompt":"Rajah 1 menunjukkan mesej selepas pengguna menekan butang Hantar.","stimulus":"[ HANTAR ]  →  “Borang anda telah berjaya dihantar.”","parts":[{"label":"(a) Namakan prinsip yang ditunjukkan.","accepted":["maklum balas","feedback"],"marks":1},{"label":"(b) Terangkan kepentingan prinsip tersebut.","accepted":["memberitahu hasil tindakan pengguna","memberitahu status tindakan","mengelakkan pengguna mengulangi tindakan","memberikan maklumat kepada pengguna"],"marks":1},{"label":"(c) Nyatakan satu maklum balas sesuai jika penghantaran gagal.","accepted":["mesej penghantaran gagal","paparkan ralat","sila cuba semula","nyatakan punca kegagalan"],"marks":1}]},{"id":"x4","section":"A","marks":4,"title":"Jadual 2","prompt":"Jadual 2 menunjukkan proses reka bentuk interaksi yang tidak mengikut urutan.","table":[["Kod","Proses"],["A","Membina prototaip interaksi"],["B","Membuat penilaian reka bentuk interaksi produk"],["C","Mengenal pasti keperluan interaksi"],["D","Membangunkan reka bentuk alternatif"]],"parts":[{"label":"(a) Tulis kod proses pertama.","accepted":["c"],"marks":1},{"label":"(b) Tulis kod proses kedua.","accepted":["d"],"marks":1},{"label":"(c) Tulis kod proses ketiga.","accepted":["a"],"marks":1},{"label":"(d) Tulis kod proses keempat.","accepted":["b"],"marks":1}]},{"id":"x5","section":"A","marks":4,"title":"Pernyataan 2","prompt":"Pernyataan 2 menerangkan dua jenis skala soal selidik.","stimulus":"Skala X menggunakan pilihan 5, 4, 3, 2 dan 1. Skala Y menggunakan pilihan Ya atau Tidak.","parts":[{"label":"(a) Namakan skala X.","accepted":["skala likert","likert"],"marks":1},{"label":"(b) Nyatakan tujuan skala X.","accepted":["melihat tahap persetujuan pengguna","mengukur tahap persetujuan"],"marks":1},{"label":"(c) Namakan skala Y.","accepted":["skala guttman","guttman"],"marks":1},{"label":"(d) Nyatakan ciri data yang diperoleh melalui skala Y.","accepted":["jelas, tegas dan konsisten","jelas dan tegas","data yang jelas","data yang konsisten"],"marks":1}]},{"id":"x6","section":"A","marks":3,"title":"Rajah 2","prompt":"Rajah 2 menunjukkan lakaran awal aplikasi pengiraan.","stimulus":"TAJUK: Kira Luas\n[Panjang: ______]\n[Lebar:   ______]\n[ KIRA ] [ RESET ] [ KELUAR ]","parts":[{"label":"(a) Namakan hasil lakaran awal tersebut.","accepted":["prototaip","prototaip paparan","papan cerita"],"marks":1},{"label":"(b) Nyatakan satu tujuan prototaip.","accepted":["mengkaji produk","menguji produk","mendapatkan maklum balas pengguna","mengenal pasti masalah awal","menambah baik reka bentuk"],"marks":1},{"label":"(c) Nyatakan satu bahan selain perisian yang boleh digunakan untuk menghasilkan prototaip.","accepted":["kertas","kadbod","video simulasi","gambaran elektronik"],"marks":1}]},{"id":"x7","section":"A","marks":4,"title":"Jadual 3","prompt":"Jadual 3 menunjukkan hasil penilaian 25 orang pengguna.","table":[["Item","Ya","Tidak"],["Skrin mudah dan ringkas","23","2"],["Warna dan ikon sesuai","15","10"],["Navigasi mudah dikenal pasti","20","5"]],"parts":[{"label":"(a) Hitung peratus Ya bagi item Skrin mudah dan ringkas.","accepted":["92","92%"],"marks":1},{"label":"(b) Hitung peratus Tidak bagi item Warna dan ikon sesuai.","accepted":["40","40%"],"marks":1},{"label":"(c) Nyatakan item yang paling perlu ditambah baik.","accepted":["warna dan ikon sesuai","pemilihan warna dan ikon"],"marks":1},{"label":"(d) Berikan satu cadangan penambahbaikan bagi item di (c).","accepted":["gunakan warna yang harmoni","gunakan ikon yang jelas","ubah warna dan ikon berdasarkan pengguna","gunakan warna pastel","gunakan ikon yang bersesuaian"],"marks":1}]},{"id":"x8","section":"B","marks":5,"title":"Soalan Berstruktur 1","prompt":"Sebuah aplikasi tempahan makanan mempunyai masalah berikut.","stimulus":"• Butang menu berubah kedudukan pada setiap skrin.\n• Ikon tidak mempunyai label dan sukar dikenal pasti.\n• Tiada mesej dipaparkan selepas pengguna membuat bayaran.","parts":[{"label":"(a) Nyatakan tiga prinsip yang tidak dipenuhi. Pisahkan dengan koma.","accepted":["konsistensi,kebolehan membuat pemerhatian,maklum balas","konsistensi,maklum balas,kebolehan membuat pemerhatian","kebolehan membuat pemerhatian,konsistensi,maklum balas","kebolehan membuat pemerhatian,maklum balas,konsistensi","maklum balas,konsistensi,kebolehan membuat pemerhatian","maklum balas,kebolehan membuat pemerhatian,konsistensi"],"marks":3,"splitCount":3},{"label":"(b) Cadangkan satu penambahbaikan pada navigasi.","accepted":["kekalkan kedudukan butang menu","gunakan ikon dan label yang jelas","letakkan navigasi secara konsisten"],"marks":1},{"label":"(c) Cadangkan satu maklum balas selepas bayaran.","accepted":["paparkan bayaran berjaya","paparkan resit","paparkan status transaksi","mesej pengesahan bayaran"],"marks":1}]},{"id":"x9","section":"B","marks":5,"title":"Soalan Berstruktur 2","prompt":"Sebuah kumpulan membangunkan aplikasi latihan sifir untuk murid Tahun 3.","stimulus":"Aplikasi perlu menerima dua nombor, membolehkan murid memilih operasi, memaparkan jawapan serta mempunyai butang Reset dan Keluar.","parts":[{"label":"(a) Nyatakan kumpulan sasaran.","accepted":["murid tahun 3","murid darjah 3"],"marks":1},{"label":"(b) Nyatakan dua fungsi utama. Pisahkan dengan koma.","accepted":["menerima dua nombor,memilih operasi","memilih operasi,memaparkan jawapan","menerima input dua nombor,memaparkan jawapan","input dua nombor,pilih operasi"],"marks":2,"splitCount":2},{"label":"(c) Nyatakan dua fungsi tambahan. Pisahkan dengan koma.","accepted":["reset,keluar","keluar,reset"],"marks":2,"splitCount":2}]},{"id":"x10","section":"B","marks":5,"title":"Soalan Berstruktur 3","prompt":"Sebuah prototaip dinilai oleh 20 pengguna. Seramai 12 pengguna menyukai reka bentuk A dan 8 pengguna menyukai reka bentuk B.","stimulus":"Komen utama: teks terlalu kecil, butang Keluar terlalu dekat dengan butang Kira, dan warna latar belakang terlalu terang.","parts":[{"label":"(a) Hitung peratus pengguna yang memilih reka bentuk A.","accepted":["60","60%"],"marks":1},{"label":"(b) Nyatakan reka bentuk yang patut dipilih berdasarkan data.","accepted":["reka bentuk a","a"],"marks":1},{"label":"(c) Cadangkan tiga penambahbaikan berdasarkan komen. Pisahkan dengan koma.","accepted":["besarkan saiz teks,asingkan butang keluar daripada butang kira,gunakan warna latar yang lebih sesuai","besar teks,asingkan butang keluar,kurangkan kecerahan warna","gunakan saiz teks lebih besar,jarakkan butang keluar dan kira,gunakan warna harmoni"],"marks":3,"splitCount":3}]}];
+
+const storage=(()=>{
+ try{const k="__sk_test__";window.localStorage.setItem(k,"1");window.localStorage.removeItem(k);return window.localStorage}
+ catch(e){const mem={};return{getItem:k=>Object.prototype.hasOwnProperty.call(mem,k)?mem[k]:null,setItem:(k,v)=>mem[k]=String(v),removeItem:k=>delete mem[k]}}
+})();
+function createInitialState(){
+ return {
+  done:[],score:0,streak:0,current:"q1",
+  sound:true,effects:true,examUnlocked:false,
+  examSubmitted:false,examScore:0,
+  answers:{},results:{},examAnswers:{},examReview:[],
+  orderState:{},examStarted:false,examSecondsLeft:2700,
+  resetVersion:2
+ }
+}
+let state=JSON.parse(storage.getItem("skBab3Mastery")||'{"done":[],"score":0,"streak":0,"current":"q1","sound":true,"effects":true,"examUnlocked":false,"examSubmitted":false,"examScore":0,"answers":{},"results":{},"examAnswers":{},"orderState":{},"examStarted":false,"examSecondsLeft":2700}');
+state.done=Array.isArray(state.done)?state.done:[];
+state.answers=state.answers&&typeof state.answers==="object"?state.answers:{};
+state.results=state.results&&typeof state.results==="object"?state.results:{};
+state.examAnswers=state.examAnswers&&typeof state.examAnswers==="object"?state.examAnswers:{};
+state.orderState=state.orderState&&typeof state.orderState==="object"?state.orderState:{};
+let orderState=state.orderState;
+let audioCtx=null;
+let examTimer=null;
+let secondsLeft=Number.isFinite(Number(state.examSecondsLeft))?Number(state.examSecondsLeft):2700;
+let examStarted=Boolean(state.examStarted);
+
+function normalize(s){
+ return String(s??"").toLowerCase().trim().replace(/[“”"]/g,'"').replace(/[’‘']/g,"'").replace(/\s+/g," ");
+}
+function compact(s){return normalize(s).replace(/\s+/g,"").replace(/;/g,";")}
+function listCompact(s){return normalize(s).replace(/[\[\]{}()\s,;]/g,"")}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function shuffle(a){let x=[...a];for(let i=x.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[x[i],x[j]]=[x[j],x[i]]}return x}
+function saveQuiet(){state.orderState=orderState;storage.setItem("skBab3Mastery",JSON.stringify(state))}
+function save(){saveQuiet();updateTop();renderNav()}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1700)}
+function updateTop(){
+ document.getElementById("score").textContent=state.score;
+ document.getElementById("streak").textContent=state.streak;
+ document.getElementById("progressText").textContent=`${state.done.length}/30`;
+ document.getElementById("progressBar").style.width=(state.done.length/30*100)+"%";
+ document.getElementById("stage1Count").textContent=`${state.done.length}/30`;
+ document.getElementById("stage2Lock").textContent=state.examUnlocked?"✓":"🔒";
+ document.getElementById("stage2Tab").classList.toggle("locked",!state.examUnlocked);
+ document.getElementById("soundToggle").classList.toggle("off",!state.sound);
+ document.getElementById("soundToggle").textContent=state.sound?"🔊 Bunyi":"🔇 Bunyi";
+ document.getElementById("effectToggle").classList.toggle("off",!state.effects);
+ document.getElementById("effectToggle").textContent=state.effects?"✨ Kesan":"◌ Kesan";
+}
+function renderNav(){
+ const nav=document.getElementById("topicNav");nav.innerHTML="";
+ topicInfo.forEach(t=>{
+  const wrap=document.createElement("div");wrap.className="topic";
+  const count=t.qs.filter(q=>state.done.includes(q)).length;
+  wrap.innerHTML=`<button class="topic-head ${t.qs.includes(state.current)?"active":""}" onclick="openQuestion('${t.qs[0]}')"><span>${t.id} ${t.name}</span><span>${count}/5</span></button><div class="topic-sub"></div>`;
+  const sub=wrap.querySelector(".topic-sub");
+  t.qs.forEach(qid=>{
+   const q=questions.find(x=>x.id===qid);
+   const b=document.createElement("button");b.className="navbtn "+(state.current===qid?"active":"");
+   b.innerHTML=`<span class="navnum">${Number(qid.substring(1))}</span><span class="navtitle">${q.title}</span><span class="tick">${state.done.includes(qid)?"✓":""}</span>`;
+   b.onclick=()=>openQuestion(qid);sub.appendChild(b)
+  });nav.appendChild(wrap)
+ })
+}
+function showScreen(id){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.getElementById("stage1Tab").classList.toggle("active",id!=="examScreen");
+ document.getElementById("stage2Tab").classList.toggle("active",id==="examScreen");
+}
+function goStage1(){
+ showScreen(state.done.length===30?"stage1Done":"practiceScreen");
+ if(state.done.length<30)renderQuestion(state.current||"q1");
+ window.scrollTo({top:0,behavior:"smooth"})
+}
+function goStage2(){
+ if(!state.examUnlocked){toast("Selesaikan 30 latihan dahulu.");return}
+ showScreen("examScreen");renderExam();
+ if(examStarted&&!state.examSubmitted)startTimerLoop();
+ window.scrollTo({top:0,behavior:"smooth"})
+}
+function openQuestion(id){
+ state.current=id;save();showScreen("practiceScreen");renderQuestion(id);window.scrollTo({top:0,behavior:"smooth"})
+}
+function renderQuestion(id){
+ const q=questions.find(x=>x.id===id);if(!q)return;
+ let html=`<div class="question-card" id="activeCard">
+ <div class="qhead"><div><div class="eyebrow">Latihan ${Number(id.substring(1))} • Standard ${q.topic}</div><h3>${q.title}</h3><p>${q.instruction}</p></div><div class="xp">100 markah</div></div>
+ <div class="qbody">
+  <div class="card factbox"><h4>Fakta</h4><p>${q.fact}</p></div>`;
+ if(q.stimulus)html+=`<div class="code">${escapeHtml(q.stimulus)}</div>`;
+ if(q.type==="mcq"){
+  const opts=shuffle(q.options);
+  html+=`<div class="choices">${opts.map((o,i)=>`<label class="choice"><input type="radio" name="${q.id}" value="${escapeHtml(o)}"><span>${o.includes("\n")?`<span class="code" style="display:block;margin:0">${escapeHtml(o)}</span>`:escapeHtml(o)}</span></label>`).join("")}</div>`
+ }else if(q.type==="multi"){
+  const opts=shuffle(q.options);
+  html+=`<div class="choices">${opts.map(o=>`<label class="choice"><input type="checkbox" name="${q.id}" value="${escapeHtml(o)}"><span>${escapeHtml(o)}</span></label>`).join("")}</div>`
+ }else if(q.type==="short"){
+  html+=`<label class="fieldlabel">${q.label||"Jawapan"}</label><input id="${q.id}_short" type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">`
+ }else if(q.type==="fields"){
+  html+=`<div class="grid2">${q.fields.map((f,i)=>`<div><label class="fieldlabel">${f.label}</label>${f.kind==="select"?`<select id="${q.id}_f${i}"><option value="">Pilih</option>${f.options.map(o=>`<option>${escapeHtml(o)}</option>`).join("")}</select>`:`<input id="${q.id}_f${i}" type="${f.kind==="number"?"number":"text"}" autocomplete="off">`}</div>`).join("")}</div>`
+ }else if(q.type==="order"){
+  if(!orderState[q.id]){
+   orderState[q.id]=Array.isArray(state.answers[q.id])?[...state.answers[q.id]]:shuffle(q.items)
+  }
+  html+=`<div class="order" id="${q.id}_order">${renderOrderHtml(q.id)}</div>`
+ }
+ html+=`<div class="actions"><button class="btn primary" onclick="checkPractice('${q.id}')">Semak Jawapan</button><button class="btn secondary" onclick="showHint('${q.id}')">💡 Petunjuk</button>${state.done.includes(q.id)?`<button class="btn" onclick="nextQuestion('${q.id}')">Seterusnya →</button>`:""}</div><div id="${q.id}_feedback" class="feedback"></div></div></div>`;
+ document.getElementById("questionHost").innerHTML=html;
+ restorePracticeAnswer(q);
+ attachPracticePersistence(q);
+ showSavedPracticeReview(q)
+}
+function renderOrderHtml(qid){
+ return orderState[qid].map((x,i)=>`<div class="orderitem"><span class="orderindex">${i+1}</span><span>${escapeHtml(x)}</span><span><button class="minibtn" onclick="moveOrder('${qid}',${i},-1)">↑</button> <button class="minibtn" onclick="moveOrder('${qid}',${i},1)">↓</button></span></div>`).join("")
+}
+function moveOrder(qid,i,d){
+ let a=orderState[qid],j=i+d;if(j<0||j>=a.length)return;
+ [a[i],a[j]]=[a[j],a[i]];
+ state.answers[qid]=[...a];
+ saveQuiet();
+ document.getElementById(qid+"_order").innerHTML=renderOrderHtml(qid)
+}
+function cloneAnswer(a){return Array.isArray(a)?a.map(x=>Array.isArray(x)?[...x]:x):a}
+function restorePracticeAnswer(q){
+ const saved=state.answers[q.id];
+ if(saved===undefined||saved===null)return;
+ if(q.type==="mcq"){
+  [...document.querySelectorAll(`input[name="${q.id}"]`)].forEach(el=>el.checked=el.value===saved)
+ }else if(q.type==="multi"){
+  const values=Array.isArray(saved)?saved:[];
+  [...document.querySelectorAll(`input[name="${q.id}"]`)].forEach(el=>el.checked=values.includes(el.value))
+ }else if(q.type==="short"){
+  const el=document.getElementById(q.id+"_short");if(el)el.value=saved
+ }else if(q.type==="fields"){
+  q.fields.forEach((f,i)=>{const el=document.getElementById(`${q.id}_f${i}`);if(el)el.value=(saved[i]??"")})
+ }
+}
+function persistPracticeAnswer(qid){
+ const q=questions.find(x=>x.id===qid);if(!q)return;
+ state.answers[qid]=cloneAnswer(answerPractice(q));
+ if(q.type==="order")orderState[qid]=[...state.answers[qid]];
+ saveQuiet()
+}
+function attachPracticePersistence(q){
+ let elements=[];
+ if(q.type==="mcq"||q.type==="multi")elements=[...document.querySelectorAll(`input[name="${q.id}"]`)];
+ if(q.type==="short")elements=[document.getElementById(q.id+"_short")];
+ if(q.type==="fields")elements=q.fields.map((f,i)=>document.getElementById(`${q.id}_f${i}`));
+ elements.filter(Boolean).forEach(el=>{
+  el.addEventListener("input",()=>persistPracticeAnswer(q.id));
+  el.addEventListener("change",()=>persistPracticeAnswer(q.id))
+ })
+}
+function correctPracticeAnswerHtml(q){
+ if(q.type==="mcq")return escapeHtml(q.answer);
+ if(q.type==="multi")return q.answers.map(escapeHtml).join("; ");
+ if(q.type==="short")return escapeHtml(q.accepted[0]);
+ if(q.type==="fields")return q.fields.map(f=>`${escapeHtml(f.label)}: <strong>${escapeHtml(f.answer)}</strong>`).join("<br>");
+ if(q.type==="order")return q.items.map(escapeHtml).join(" → ");
+ return ""
+}
+function studentPracticeAnswerHtml(q,a){
+ if(a===undefined||a===null||a===""||(Array.isArray(a)&&a.length===0))return "—";
+ if(q.type==="fields")return q.fields.map((f,i)=>`${escapeHtml(f.label)}: <strong>${escapeHtml(a[i]??"—")}</strong>`).join("<br>");
+ if(Array.isArray(a))return a.map(x=>escapeHtml(x)).join(q.type==="order"?" → ":"; ");
+ return escapeHtml(a)
+}
+function practiceReviewMessage(q,a,correct,attempts){
+ const revealCorrect=correct||attempts>=2;
+ const status=correct
+  ?`✅ Percubaan ${attempts} betul.`
+  :attempts<2
+   ?`❌ Percubaan ${attempts}/2 belum tepat. Cuba sekali lagi sebelum jawapan betul dipaparkan.`
+   :`❌ Percubaan ${attempts} belum tepat. Jawapan betul kini dipaparkan.`;
+ return `${status}
+ <div class="answer-review">
+  <div class="student-answer"><strong>Jawapan anda:</strong><br>${studentPracticeAnswerHtml(q,a)}</div>
+  ${revealCorrect
+    ?`<div class="correct-answer" style="margin-top:7px"><strong>Jawapan betul:</strong><br>${correctPracticeAnswerHtml(q)}</div>`
+    :`<div style="margin-top:7px;color:#ffe7a6"><strong>Jawapan betul masih disembunyikan.</strong><br>Ubah jawapan dan tekan “Semak Jawapan” untuk percubaan kedua.</div>`}
+ </div>`
+}
+function showSavedPracticeReview(q){
+ const result=state.results[q.id];
+ if(!result||!result.checked)return;
+ const attempts=Math.max(1,Number(result.attempts)||1);
+ feedback(q.id,result.correct?"good":"bad",practiceReviewMessage(q,state.answers[q.id],result.correct,attempts))
+}
+function showHint(id){const q=questions.find(x=>x.id===id);feedback(id,"info","💡 "+q.hint)}
+function feedback(id,type,msg){const e=document.getElementById(id+"_feedback");e.className="feedback show "+type;e.innerHTML=msg}
+function answerPractice(q){
+ if(q.type==="mcq")return document.querySelector(`input[name="${q.id}"]:checked`)?.value||"";
+ if(q.type==="multi")return [...document.querySelectorAll(`input[name="${q.id}"]:checked`)].map(x=>x.value);
+ if(q.type==="short")return document.getElementById(q.id+"_short").value;
+ if(q.type==="fields")return q.fields.map((f,i)=>document.getElementById(`${q.id}_f${i}`).value);
+ if(q.type==="order")return orderState[q.id];
+}
+function checkPractice(id){
+ const q=questions.find(x=>x.id===id),a=answerPractice(q);let ok=false;
+ state.answers[id]=cloneAnswer(a);
+ if(q.type==="order")orderState[id]=[...a];
+ if(q.type==="mcq")ok=a===q.answer;
+ if(q.type==="multi")ok=a.length===q.answers.length&&q.answers.every(x=>a.includes(x));
+ if(q.type==="short"){
+  let n=q.codeNormalize?compact(a):q.listNormalize?listCompact(a):normalize(a);
+  ok=q.accepted.some(x=>(q.codeNormalize?compact(x):q.listNormalize?listCompact(x):normalize(x))===n)
+ }
+ if(q.type==="fields")ok=q.fields.every((f,i)=>normalize(a[i])===normalize(f.answer));
+ if(q.type==="order")ok=q.items.every((x,i)=>a[i]===x);
+ const previousAttempts=Math.max(0,Number(state.results[id]?.attempts)||0);
+ const attempts=previousAttempts+1;
+ state.results[id]={checked:true,correct:ok,attempts};
+ if(ok){
+  feedback(id,"good",practiceReviewMessage(q,a,true,attempts));
+  if(!state.done.includes(id)){state.done.push(id);state.score+=100;state.streak++;if(state.done.length===30)state.examUnlocked=true}
+  save();positiveFX();
+  setTimeout(()=>{if(state.done.length===30){document.getElementById("practiceFinal").textContent=state.score;showScreen("stage1Done")}else nextQuestion(id)},1050)
+ }else{
+  feedback(id,"bad",practiceReviewMessage(q,a,false,attempts));
+  state.streak=0;save();negativeFX()
+ }
+}
+function nextQuestion(id){
+ const n=Number(id.substring(1));if(n<30)openQuestion("q"+(n+1));else{document.getElementById("practiceFinal").textContent=state.score;showScreen("stage1Done")}
+}
+function toggleSound(){state.sound=!state.sound;save();if(state.sound)toast("Bunyi dihidupkan")}
+function toggleEffects(){state.effects=!state.effects;save()}
+function ensureAudio(){if(!audioCtx)audioCtx=new (window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume()}
+function tone(freq,start,dur,type="sine",vol=.08){
+ if(!state.sound)return;ensureAudio();const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+ o.type=type;o.frequency.setValueAtTime(freq,audioCtx.currentTime+start);
+ g.gain.setValueAtTime(0,audioCtx.currentTime+start);g.gain.linearRampToValueAtTime(vol,audioCtx.currentTime+start+.012);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+start+dur);
+ o.connect(g);g.connect(audioCtx.destination);o.start(audioCtx.currentTime+start);o.stop(audioCtx.currentTime+start+dur+.03)
+}
+function correctSound(){
+ const n=Math.floor(Math.random()*3);
+ if(n===0){tone(523,0,.16,"sine",.09);tone(659,.12,.17,"sine",.08);tone(784,.24,.24,"triangle",.08)}
+ if(n===1){tone(880,0,.10,"sine",.06);tone(1175,.08,.13,"sine",.055);tone(1568,.17,.25,"sine",.05)}
+ if(n===2){tone(392,0,.11,"triangle",.075);tone(523,.08,.12,"triangle",.075);tone(659,.16,.14,"triangle",.07);tone(1047,.27,.25,"sine",.055)}
+}
+function wrongSound(){
+ const n=Math.floor(Math.random()*3);
+ if(n===0){tone(220,0,.18,"sawtooth",.07);tone(165,.13,.30,"sawtooth",.065)}
+ if(n===1){tone(150,0,.13,"square",.055);tone(150,.19,.18,"square",.055)}
+ if(n===2){tone(330,0,.08,"square",.045);tone(210,.07,.10,"sawtooth",.05);tone(130,.16,.25,"square",.05)}
+}
+function flash(type){
+ if(!state.effects)return;const f=document.getElementById("edgeFlash");f.className="";void f.offsetWidth;f.className=type;
+ setTimeout(()=>f.className="",850)
+}
+function positiveFX(){correctSound();flash("correct")}
+function negativeFX(){wrongSound();flash("wrong");if(state.effects){const c=document.getElementById("activeCard");c?.classList.add("shake");setTimeout(()=>c?.classList.remove("shake"),400)}}
+
+function renderExam(){
+ const paper=document.getElementById("examPaper");
+ let html="";
+ ["A","B"].forEach(sec=>{
+  const qs=examQuestions.filter(q=>q.section===sec),marks=qs.reduce((s,q)=>s+q.marks,0);
+  html+=`<section class="exam-section"><h3>Bahagian ${sec}</h3><p class="exam-instruction">[${marks} markah]</p><p class="exam-instruction">Jawab semua soalan.</p>`;
+  qs.forEach((q,idx)=>{
+   const no=examQuestions.indexOf(q)+1;
+   html+=`<div class="exam-q" id="exam_${q.id}"><div class="exam-qhead"><div><strong>${no}.</strong> ${escapeHtml(q.prompt)}</div><div class="exam-mark">[${q.marks} markah]</div></div>`;
+   if(q.table)html+=`<table class="stimulus-table">${q.table.map((r,i)=>`<tr>${r.map(c=>i===0?`<th>${escapeHtml(c)}</th>`:`<td>${escapeHtml(c)}</td>`).join("")}</tr>`).join("")}</table>`;
+   if(q.stimulus)html+=`<div class="${q.stimulus.includes("\n")?"exam-code":"exam-stimulus"}">${escapeHtml(q.stimulus)}</div><div style="text-align:center;font-family:Georgia,serif">${q.title}</div>`;
+   q.parts.forEach((p,i)=>{
+    const inputId=`${q.id}_p${i}`,saved=state.examAnswers[inputId]??"";
+    html+=`<div class="exam-part"><label class="fieldlabel" style="color:#111">${p.label} <em>[${p.marks} markah]</em></label><input id="${inputId}" type="text" value="${escapeHtml(saved)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" ${!examStarted||state.examSubmitted?"disabled":""}></div>`
+   });
+   html+=`</div>`
+  });html+=`</section>`
+ });
+ html+=`<section class="exam-section" style="text-align:center"><button class="btn primary" id="submitExamBtn" onclick="submitExam()" ${!examStarted||state.examSubmitted?"disabled":""}>Hantar Kertas</button></section>`;
+ paper.innerHTML=html;
+ if(examStarted&&!state.examSubmitted){
+  paper.querySelectorAll(".exam-q input").forEach(input=>{
+   input.addEventListener("input",()=>{state.examAnswers[input.id]=input.value;saveQuiet()})
+  })
+ }
+ document.getElementById("startExamBtn").disabled=examStarted||state.examSubmitted;
+ updateTimer();
+ if(state.examSubmitted)showStoredExamResult()
+}
+function startTimerLoop(){
+ if(examTimer||state.examSubmitted||!examStarted)return;
+ examTimer=setInterval(()=>{
+  secondsLeft=Math.max(0,secondsLeft-1);
+  state.examSecondsLeft=secondsLeft;
+  if(secondsLeft%5===0)saveQuiet();
+  updateTimer();
+  if(secondsLeft<=0){clearInterval(examTimer);examTimer=null;submitExam(true)}
+ },1000)
+}
+function startExam(){
+ if(state.examSubmitted){toast("Peperiksaan ini telah dihantar. Tetapkan semula untuk mencuba semula.");return}
+ if(!examStarted){
+  examStarted=true;secondsLeft=2700;
+  state.examStarted=true;state.examSecondsLeft=secondsLeft;
+  state.examAnswers=state.examAnswers||{};
+  saveQuiet()
+ }
+ renderExam();startTimerLoop()
+}
+function updateTimer(){const m=Math.floor(secondsLeft/60),s=secondsLeft%60;document.getElementById("timer").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`}
+function submitExam(autoSubmit=false){
+ if(state.examSubmitted)return;
+ if(!autoSubmit&&!confirm("Hantar semua jawapan sekarang? Jawapan tidak boleh diubah selepas dihantar."))return;
+ clearInterval(examTimer);examTimer=null;let score=0,max=0,review=[];
+ examQuestions.forEach(q=>{
+  q.parts.forEach((p,i)=>{
+   max+=p.marks;
+   const inputId=`${q.id}_p${i}`;
+   const val=document.getElementById(inputId)?.value??state.examAnswers[inputId]??"";
+   state.examAnswers[inputId]=val;
+   const ok=examPartCorrect(val,p);
+   if(ok)score+=p.marks;
+   review.push({qid:q.id,part:i,ok,answer:p.accepted[0],given:val})
+  })
+ });
+ state.examSubmitted=true;state.examStarted=false;state.examSecondsLeft=secondsLeft;
+ state.examScore=score;state.examReview=review;save();renderExam();showExamResult(score,max,review);
+ if(score/max>=.5)positiveFX();else negativeFX()
+}
+function showExamResult(score,max,review){
+ const box=document.getElementById("examResult");box.style.display="block";
+ let html=`<div class="exam-score">${score}/${max}</div><h3>Keputusan Simulasi SPM</h3><p>${score/max>=.8?"Penguasaan sangat baik.":score/max>=.5?"Asas telah dikuasai, tetapi beberapa bahagian perlu diperkukuh.":"Ulang Tahap 1 dan semak istilah serta pengesanan kod."}</p>`;
+ examQuestions.forEach((q,qi)=>{
+  const rows=review.filter(r=>r.qid===q.id);
+  html+=`<div class="${rows.every(r=>r.ok)?"review-good":"review-bad"}" style="margin:14px 0"><strong>Soalan ${qi+1}</strong>`;
+  rows.forEach(r=>html+=`<div style="font-size:12px;margin:5px 0">${q.parts[r.part].label}<br>Jawapan anda: <em>${escapeHtml(r.given||"—")}</em><br>Skema: <strong>${escapeHtml(r.answer)}</strong> ${r.ok?"✓":"✗"}</div>`);
+  html+=`</div>`
+ });
+ box.innerHTML=html;box.scrollIntoView({behavior:"smooth"})
+}
+function showStoredExamResult(){if(state.examReview)showExamResult(state.examScore,40,state.examReview)}
+function printExam(){window.print()}
+function toggleTeacher(){const p=prompt("Kod guru:");if(p==="SPM4"){document.getElementById("teacherPanel").classList.toggle("show");toast("Skema guru dibuka/ditutup")}else if(p!==null)alert("Kod tidak tepat.")}
+function resetAll(){
+ if(!confirm("Padam SEMUA jawapan Bab 3, bilangan percubaan, markah, kemajuan dan keputusan simulasi?"))return;
+
+ clearInterval(examTimer);
+ examTimer=null;
+ examStarted=false;
+ secondsLeft=2700;
+
+ // Clear all storage keys used by the previous versions of this module.
+ [
+  "skBab3Mastery"
+ ].forEach(key=>{
+  try{storage.removeItem(key)}catch(e){}
+  try{window.localStorage.removeItem(key)}catch(e){}
+  try{window.sessionStorage.removeItem(key)}catch(e){}
+ });
+
+ // Clear every in-memory answer and result.
+ state=createInitialState();
+ orderState=state.orderState;
+
+ // Explicitly clear any controls that the browser may try to preserve.
+ document.querySelectorAll("input").forEach(el=>{
+  if(el.type==="radio"||el.type==="checkbox")el.checked=false;
+  else el.value="";
+ });
+ document.querySelectorAll("textarea").forEach(el=>el.value="");
+ document.querySelectorAll("select").forEach(el=>el.selectedIndex=0);
+ document.querySelectorAll(".feedback").forEach(el=>{
+  el.className="feedback";
+  el.innerHTML="";
+ });
+ document.getElementById("questionHost").innerHTML="";
+ document.getElementById("examPaper").innerHTML="";
+ const resultBox=document.getElementById("examResult");
+ resultBox.style.display="none";
+ resultBox.innerHTML="";
+ document.getElementById("timer").textContent="45:00";
+
+ // Save a brand-new empty state and rebuild the first question.
+ saveQuiet();
+ updateTop();
+ renderNav();
+ showScreen("practiceScreen");
+ renderQuestion("q1");
+ window.scrollTo({top:0,behavior:"smooth"});
+ toast("Semua jawapan Bab 3 dan percubaan telah ditetapkan semula.");
+}
+updateTop();renderNav();renderQuestion(state.current||"q1");
+if(state.examSubmitted){examStarted=false}
+
+window.addEventListener("pageshow",event=>{
+ if(event.persisted){
+  const fresh=JSON.parse(storage.getItem("skBab3Mastery")||JSON.stringify(createInitialState()));
+  state=fresh;
+  state.answers=state.answers&&typeof state.answers==="object"?state.answers:{};
+  state.results=state.results&&typeof state.results==="object"?state.results:{};
+  state.examAnswers=state.examAnswers&&typeof state.examAnswers==="object"?state.examAnswers:{};
+  state.orderState=state.orderState&&typeof state.orderState==="object"?state.orderState:{};
+  orderState=state.orderState;
+  secondsLeft=Number.isFinite(Number(state.examSecondsLeft))?Number(state.examSecondsLeft):2700;
+  examStarted=Boolean(state.examStarted);
+  updateTop();
+  renderNav();
+  if(document.getElementById("examScreen").classList.contains("active"))renderExam();
+  else renderQuestion(state.current||"q1");
+ }
+});
+</script>
+</body>
+</html>

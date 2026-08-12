@@ -16,8 +16,21 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 - [Chapter 5: Consumer and Industrial Chemistry](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html) — ID `spm-chem-ch5-consumer-industrial`, route `content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html`.
 - [Science Command Centre 4.0](content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html) — ID `igcse-y4-sci-command-centre`, route `content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html`.
-- Chemistry includes public downloads for the [student workbook](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf) and [teacher answer scheme](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/teacher_answer_scheme.pdf).
+- Chemistry includes a public download for the [student workbook](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf). Teacher answer material is kept outside the public repository.
 - Both modules support Back navigation and saved progress.
+
+## New modules — 2026-08-12
+
+- Six SPM Sains Komputer Mastery Quest modules: Tingkatan 4 Bab 1–3 and Tingkatan 5 Bab 1–3.
+- Sains Tingkatan 3 interactive classroom presentations for Bab 6 Elektrik dan Kemagnetan and Bab 7 Tenaga dan Kuasa.
+- IGCSE Year 4 Science Quest V5.4 — Operation Seven, published under a generic class title with no student identity.
+
+## Public-material policy
+
+- Public: original or AI-assisted teaching HTML, student worksheets, and student notes.
+- Private/SSD only: publisher or source PDFs, past papers, teacher/tutor answer keys, source archives, and raw production assets.
+- Student names must not appear in public module titles, filenames, storage keys, or metadata.
+- Removing a file from the current branch does not erase older Git history; history cleanup requires a separate review.
 
 > **Registry warning:** `db/archive/modules_registry.sql` is archived reference material. Do not run it wholesale: it truncates and reseeds the modules registry and deletes activation PINs.
 

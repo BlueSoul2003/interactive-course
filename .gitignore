@@ -2,3 +2,19 @@ node_modules/
 .DS_Store
 .superpowers/
 .worktrees/
+
+# Public repository policy: keep source/publisher and teacher materials on SSD only.
+**/source_pdfs/
+**/*Answer*.pdf
+**/*answer*.pdf
+**/*Teacher*.pdf
+**/*teacher*.pdf
+**/*Tutor*.pdf
+**/*tutor*.pdf
+**/*Paper_1.pdf
+**/*Paper_2.pdf
+**/*paper_1.pdf
+**/*paper_2.pdf
+resources/pdf/SPM/BM/SPM_BM_Modul_Kuasa_Karangan_IMBAKUP.pdf
+resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf
+resources/pdf/SPM/BM/SPM_Komsas_F5_Silir Daksina.pdf
