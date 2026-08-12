@@ -25,9 +25,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Build PDF catalog
-        run: python tools/generate_pdf_catalog.py
-
       - name: Prepare static site artifact
         run: |
           mkdir -p _site
