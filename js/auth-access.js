@@ -263,6 +263,18 @@ const AuthAccess = {
     },
 
     // ── Render lock / unlock state for every module card ─────────────────────
+    // Canonical server-side launch decision. Phase 1 exposes this without
+    // changing existing card navigation; the Module Launcher will consume it.
+    async canLaunchModule(moduleId) {
+        if (!window.supabaseClient) {
+            throw new Error('The secure module connection is unavailable.');
+        }
+        const { data, error } = await window.supabaseClient
+            .rpc('can_launch_module', { p_module_id: moduleId });
+        if (error) throw error;
+        return data;
+    },
+
     async renderModuleAccessibility() {
         const authInfo = await this.getCurrentUser();
         let unlockedModules = [];

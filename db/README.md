@@ -1,43 +1,24 @@
-# Database Migrations
+# Database Changes
 
-This folder contains all Supabase SQL for the interactive-course platform.
+Production Supabase changes are tracked as ordered SQL files in [`supabase/migrations`](../supabase/migrations). Their numeric prefixes match the migration versions recorded by Supabase.
 
-## 📄 `schema.sql` — The Only File You Need
+## Current workflow
 
-`schema.sql` is the **single source of truth**.  
-Run it once (or re-run it safely) in your Supabase SQL Editor to set up or refresh the entire database.
+1. Add an idempotent migration under `supabase/migrations`.
+2. Test it inside a transaction and roll it back.
+3. Apply it through the Supabase migration workflow.
+4. Verify the live schema, RLS behavior, and Supabase advisors.
 
-### What it does
-| Section | Description |
-|---------|-------------|
-| 1 | Patches `user_profiles` — adds `unlocked_modules`, INSERT & UPDATE RLS |
-| 2 | Creates `activation_pins` table with correct FK to `auth.users` |
-| 3 | Creates `modules` registry table |
-| 4 | Sets all RLS policies (idempotent DROP + recreate) |
-| 5 | Creates `redeem_activation_pin(pin, target?)` v3 RPC — context-aware, JSONB response |
-| 6 | Seeds all 40 modules (TRUNCATE + INSERT) |
+`db/schema.sql` is a historical baseline for the original account, PIN, and module registry. It contains destructive reseeding statements and does not include every current production module or later access-control migration. Do not run it wholesale against production.
 
-### How to run
-1. Open the **Supabase Dashboard → SQL Editor**
-2. Paste the contents of `schema.sql`
-3. Click **Run**
-4. Verify with the queries at the bottom of the file
+`db/archive/` is historical reference only. In particular, archived registry scripts may truncate modules or remove activation PINs.
 
----
+## Module access
 
-## 🗄️ `archive/` — Old Migration Files (Historical Reference)
+The protected-module foundation begins with:
 
-These files are **no longer needed** — everything they did is merged into `schema.sql`.
-They are kept here for audit/reference only.
+- `20260812085950_module_access_foundation.sql`
+- `20260812090227_module_access_advisor_hardening.sql`
+- `20260812090422_module_access_deny_anonymous_entitlements.sql`
 
-| File | What it was |
-|------|-------------|
-| `setup_rbac.sql` | Initial RBAC setup (v1 — superseded) |
-| `admin_rls.sql` | Admin PIN INSERT/SELECT policies (superseded) |
-| `apply_rbac_migrations.sql` | Unified admin PIN policy (superseded) |
-| `auth_fix.sql` | FK fix + user profile INSERT RLS (superseded) |
-| `auth_fix_update.sql` | User profile UPDATE RLS (superseded) |
-| `update_pin_rpc.sql` | PIN RPC v2 with context check (superseded) |
-| `modules_registry.sql` | Old canonical registry — replaced by schema.sql |
-| `fix_module_id.sql` | One-off data fix (already applied, disposable) |
-| `sync_missing_profiles.sql` | One-off orphan profile repair (already applied, disposable) |
+The accepted boundary and phased rollout are documented in [`docs/MODULE_ACCESS_BOUNDARY.md`](../docs/MODULE_ACCESS_BOUNDARY.md).

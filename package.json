@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "verify:module-access": "node tools/verify_module_access_foundation.js",
     "verify:pdf-library": "node tools/verify_pdf_library.js",
     "verify:navigation": "node tools/verify_navigation_core.js && node tools/verify_navigation_integration.js && node tools/verify_module_navigation_links.js",
     "verify:navigation-core": "node tools/verify_navigation_core.js",
