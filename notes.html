@@ -1,927 +1,812 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Notes Library | Mastery Academy</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
-        rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #080c14;
-            --card-bg: #111827;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --text-muted: #64748b;
-            --glass-bg: rgba(17, 24, 39, 0.48);
-            --glass-bg-hover: rgba(17, 24, 39, 0.68);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --glass-border-hover: rgba(255, 255, 255, 0.18);
-            --glass-blur: 18px;
-            --glass-shadow: 0 18px 70px rgba(0, 0, 0, 0.38);
-            --accent: #8b5cf6;
-            --accent-2: #06b6d4;
-            --accent-3: #10b981;
-            --hero-bg: radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.3) 0, transparent 50%),
-                       radial-gradient(at 55% 0%, rgba(118, 75, 162, 0.25) 0, transparent 50%),
-                       radial-gradient(at 100% 8%, rgba(16, 185, 129, 0.14) 0, transparent 48%),
-                       #080c14;
-            --font-main: 'Outfit', sans-serif;
-            --font-serif: 'Playfair Display', serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            min-height: 100dvh;
-            font-family: var(--font-main);
-            color: var(--text-primary);
-            background: var(--bg-color);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background: var(--hero-bg);
-            z-index: -2;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-            background-size: 48px 48px;
-            mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 82%);
-            z-index: -1;
-        }
-
-        a {
-            color: inherit;
-        }
-
-        .shell {
-            width: min(1180px, calc(100% - 32px));
-            margin: 0 auto;
-        }
-
-        .glass {
-            position: relative;
-            isolation: isolate;
-            overflow: hidden;
-            background:
-                linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.025)),
-                var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            backdrop-filter: blur(var(--glass-blur)) saturate(165%);
-            -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(165%);
-            box-shadow: var(--glass-shadow);
-        }
-
-        .glass::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            border-radius: inherit;
-            background:
-                radial-gradient(circle at 18% 0%, rgba(255, 255, 255, 0.16), transparent 30%),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.08), transparent 44%, rgba(255, 255, 255, 0.05));
-            pointer-events: none;
-        }
-
-        .topbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 22px 0;
-        }
-
-        .brand {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            text-decoration: none;
-        }
-
-        .brand strong {
-            font-size: 0.95rem;
-            letter-spacing: 0.02em;
-        }
-
-        .brand span,
-        .toplink {
-            color: var(--text-secondary);
-            font-size: 0.82rem;
-        }
-
-        .toplink {
-            text-decoration: none;
-            padding: 9px 14px;
-            border: 1px solid var(--glass-border);
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.04);
-            transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-        }
-
-        .toplink:hover {
-            transform: translateY(-1px);
-            color: #fff;
-            border-color: var(--glass-border-hover);
-        }
-
-        .hero {
-            padding: 72px 0 38px;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
-            gap: 24px;
-            align-items: stretch;
-        }
-
-        .hero-copy {
-            padding: 42px;
-        }
-
-        .eyebrow {
-            color: #a5b4fc;
-            font-size: 0.74rem;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            margin-bottom: 16px;
-        }
-
-        h1 {
-            font-family: var(--font-serif);
-            font-size: clamp(2.45rem, 7vw, 5.8rem);
-            line-height: 0.96;
-            letter-spacing: 0;
-            color: #fff;
-            margin-bottom: 22px;
-            text-shadow: 0 0 42px rgba(255, 255, 255, 0.08);
-        }
-
-        .hero-copy p {
-            max-width: 62ch;
-            color: var(--text-secondary);
-            font-size: 1.06rem;
-        }
-
-        .hero-stats {
-            display: grid;
-            gap: 12px;
-            padding: 18px;
-        }
-
-        .stat {
-            min-height: 112px;
-            padding: 18px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.045);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-        }
-
-        .stat span {
-            display: block;
-            color: var(--text-muted);
-            font-size: 0.76rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 8px;
-        }
-
-        .stat strong {
-            display: block;
-            color: #fff;
-            font-size: 2rem;
-            line-height: 1;
-        }
-
-        .toolbar {
-            display: grid;
-            grid-template-columns: minmax(220px, 1.5fr) repeat(3, minmax(150px, 0.7fr)) auto;
-            gap: 10px;
-            padding: 14px;
-            margin: 18px 0 20px;
-        }
-
-        .field {
-            min-width: 0;
-            color: #e2e8f0;
-            background: rgba(255, 255, 255, 0.055);
-            border: 1px solid rgba(255, 255, 255, 0.09);
-            border-radius: 12px;
-            padding: 12px 13px;
-            font: inherit;
-            outline: none;
-        }
-
-        .field:focus {
-            border-color: rgba(139, 92, 246, 0.65);
-            box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.14);
-        }
-
-        .field option {
-            color: #0f172a;
-        }
-
-        .button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            min-height: 42px;
-            padding: 0 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: #f8fafc;
-            background: rgba(255, 255, 255, 0.06);
-            font: inherit;
-            font-weight: 700;
-            text-decoration: none;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-        }
-
-        .button:hover {
-            transform: translateY(-1px);
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .button.primary {
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.86), rgba(6, 182, 212, 0.72));
-            border-color: rgba(255, 255, 255, 0.22);
-        }
-
-        .folder-rail {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(178px, 1fr));
-            gap: 12px;
-            margin: 0 0 22px;
-        }
-
-        .folder-card {
-            min-height: 126px;
-            padding: 18px;
-            text-align: left;
-            color: #fff;
-            cursor: pointer;
-            transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-        }
-
-        .folder-card:hover,
-        .folder-card.active {
-            transform: translateY(-2px);
-            border-color: rgba(139, 92, 246, 0.46);
-            background:
-                linear-gradient(135deg, rgba(139, 92, 246, 0.18), rgba(6, 182, 212, 0.08)),
-                var(--glass-bg-hover);
-        }
-
-        .folder-card span {
-            display: block;
-            color: var(--text-muted);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        .folder-card strong {
-            display: block;
-            margin-top: 9px;
-            font-size: 1.28rem;
-        }
-
-        .folder-card small {
-            display: block;
-            margin-top: 10px;
-            color: var(--text-secondary);
-            font-size: 0.86rem;
-        }
-
-        .section {
-            margin: 22px 0;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: end;
-            justify-content: space-between;
-            gap: 18px;
-            padding: 0 4px 12px;
-        }
-
-        .section-header h2 {
-            font-size: 1.55rem;
-            color: #fff;
-        }
-
-        .section-header p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .subject-grid {
-            display: grid;
-            gap: 14px;
-        }
-
-        .subject-card {
-            padding: 18px;
-        }
-
-        .subject-title {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-            margin-bottom: 6px;
-        }
-
-        .subject-title h3 {
-            color: #f8fafc;
-            font-size: 1.02rem;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            min-height: 26px;
-            padding: 0 10px;
-            border-radius: 999px;
-            color: #c4b5fd;
-            background: rgba(139, 92, 246, 0.12);
-            border: 1px solid rgba(139, 92, 246, 0.22);
-            font-size: 0.76rem;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .pdf-list {
-            display: grid;
-            gap: 8px;
-        }
-
-        .pdf-row {
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) auto;
-            align-items: center;
-            gap: 14px;
-            padding: 13px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.055);
-        }
-
-        .pdf-row:last-child {
-            border-bottom: none;
-        }
-
-        .pdf-title {
-            color: #e5e7eb;
-            font-weight: 700;
-            line-height: 1.35;
-        }
-
-        .pdf-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 7px;
-            margin-top: 6px;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-        }
-
-        .pdf-actions {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .empty {
-            padding: 34px;
-            text-align: center;
-            color: var(--text-secondary);
-        }
-
-        .add-folder {
-            margin: 34px 0 54px;
-            padding: 26px;
-        }
-
-        .add-folder-grid {
-            display: grid;
-            grid-template-columns: minmax(0, 0.9fr) minmax(280px, 1.1fr);
-            gap: 18px;
-            align-items: start;
-        }
-
-        .add-folder h2 {
-            font-size: 1.35rem;
-            color: #fff;
-            margin-bottom: 10px;
-        }
-
-        .add-folder p,
-        .add-folder li {
-            color: var(--text-secondary);
-            font-size: 0.94rem;
-        }
-
-        .add-folder ol {
-            padding-left: 20px;
-            margin-top: 14px;
-        }
-
-        .builder {
-            display: grid;
-            gap: 10px;
-            padding: 16px;
-            border-radius: 14px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-        }
-
-        .builder label {
-            display: grid;
-            gap: 6px;
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .path-output {
-            padding: 13px;
-            border-radius: 12px;
-            color: #dbeafe;
-            background: rgba(6, 182, 212, 0.09);
-            border: 1px solid rgba(6, 182, 212, 0.2);
-            font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
-            font-size: 0.82rem;
-            overflow-wrap: anywhere;
-        }
-
-        footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.07);
-            background: rgba(8, 15, 29, 0.88);
-            padding: 30px 0;
-            color: var(--text-muted);
-            font-size: 0.86rem;
-            text-align: center;
-        }
-
-        @media (max-width: 900px) {
-            .hero-grid,
-            .add-folder-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .toolbar {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .toolbar .field:first-child,
-            .toolbar .button {
-                grid-column: 1 / -1;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .shell {
-                width: min(100% - 24px, 1180px);
-            }
-
-            .topbar {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .hero {
-                padding-top: 28px;
-            }
-
-            .hero-copy {
-                padding: 28px;
-            }
-
-            .toolbar {
-                grid-template-columns: 1fr;
-            }
-
-            .section-header,
-            .subject-title,
-            .pdf-row {
-                align-items: start;
-                grid-template-columns: 1fr;
-            }
-
-            .pdf-actions {
-                width: 100%;
-            }
-
-            .pdf-actions .button {
-                flex: 1;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PDF Library | Mastery Academy</title>
+  <meta name="description" content="Password protected teaching notes, worksheets, slide decks, and answer resources.">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #080d22;
+      --surface: #10162f;
+      --surface-2: #151d3b;
+      --paper: #fbfcff;
+      --ink: #11152f;
+      --text: #f7f8ff;
+      --muted: #9ea7c4;
+      --line: rgba(255, 255, 255, .11);
+      --blue: #7887ff;
+      --blue-strong: #5968ee;
+      --green: #55c58c;
+      --danger: #ff8d92;
+      --radius: 16px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .34);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    html { min-height: 100%; background: var(--bg); }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% -12%, rgba(120, 135, 255, .18), transparent 42rem),
+        var(--bg);
+      font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      line-height: 1.55;
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 3px solid rgba(120, 135, 255, .72);
+      outline-offset: 3px;
+    }
+    a { color: inherit; }
+
+    .shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+      background: rgba(8, 13, 34, .92);
+      backdrop-filter: blur(14px);
+    }
+    .topbar-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .brand {
+      margin-right: auto;
+      text-decoration: none;
+      font-weight: 850;
+      letter-spacing: .01em;
+    }
+    .brand span { display: block; color: var(--muted); font-size: .72rem; font-weight: 650; }
+    .account {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+    .account-badge {
+      max-width: 280px;
+      overflow: hidden;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: #dfe3ff;
+      background: rgba(255, 255, 255, .05);
+      font-size: .78rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .button {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--text);
+      background: rgba(255, 255, 255, .06);
+      text-decoration: none;
+      font-weight: 760;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+    .button:hover { border-color: rgba(255, 255, 255, .24); background: rgba(255, 255, 255, .10); }
+    .button:active { transform: translateY(1px); }
+    .button.primary { border-color: var(--blue-strong); background: var(--blue-strong); color: #fff; }
+    .button.primary:hover { background: #6877f5; }
+    .button:disabled { opacity: .55; cursor: wait; }
+
+    .gate {
+      min-height: calc(100vh - 65px);
+      display: grid;
+      place-items: center;
+      padding: 56px 0;
+    }
+    .gate-card {
+      width: min(480px, 100%);
+      padding: 34px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: linear-gradient(150deg, rgba(255, 255, 255, .075), rgba(255, 255, 255, .025));
+      box-shadow: var(--shadow);
+    }
+    .eyebrow {
+      margin: 0 0 10px;
+      color: #aab3ff;
+      font-size: .76rem;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    .gate-card h1 { margin-bottom: 10px; font-size: clamp(2rem, 8vw, 3.35rem); line-height: 1; letter-spacing: -.04em; }
+    .gate-copy { color: var(--muted); }
+    .login-form { display: grid; gap: 13px; margin-top: 26px; }
+    .label { display: grid; gap: 6px; color: #dce0f4; font-size: .82rem; font-weight: 760; }
+    .field {
+      width: 100%;
+      min-height: 46px;
+      padding: 0 13px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      color: var(--text);
+      background: rgba(0, 0, 0, .18);
+      outline: none;
+    }
+    .field::placeholder { color: #747f9e; }
+    .form-note, .status { margin: 0; color: var(--muted); font-size: .82rem; }
+    .status.error { color: var(--danger); }
+    .status.success { color: var(--green); }
+    .portal-link { color: #c4caff; font-weight: 760; }
+
+    .hero { padding: 64px 0 26px; }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, .6fr);
+      gap: 20px;
+      align-items: end;
+    }
+    .hero h1 {
+      margin-bottom: 14px;
+      font-size: clamp(2.65rem, 8vw, 6rem);
+      line-height: .93;
+      letter-spacing: -.055em;
+    }
+    .hero-copy { max-width: 64ch; color: var(--muted); font-size: 1.02rem; }
+    .scope-note {
+      padding: 17px 18px;
+      border: 1px solid rgba(120, 135, 255, .30);
+      border-radius: var(--radius);
+      background: rgba(120, 135, 255, .08);
+      color: #dfe3ff;
+      font-size: .88rem;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 28px;
+    }
+    .stat {
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, .035);
+    }
+    .stat span { display: block; color: var(--muted); font-size: .72rem; font-weight: 760; text-transform: uppercase; letter-spacing: .08em; }
+    .stat strong { display: block; margin-top: 5px; font-size: 1.7rem; }
+
+    .toolbar {
+      position: sticky;
+      top: 76px;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: minmax(230px, 1.4fr) repeat(3, minmax(140px, .65fr)) auto;
+      gap: 9px;
+      padding: 12px;
+      margin: 18px 0 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(16, 22, 47, .94);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, .20);
+      backdrop-filter: blur(12px);
+    }
+    .admin-import {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      padding: 17px;
+      margin: 18px 0;
+      border: 1px solid rgba(120, 135, 255, .32);
+      border-radius: var(--radius);
+      background: rgba(120, 135, 255, .075);
+    }
+    .admin-import h2 { margin: 0 0 5px; font-size: 1rem; }
+    .admin-import p { margin: 0; color: var(--muted); font-size: .8rem; }
+    .import-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+    .folder-input { max-width: 320px; padding: 9px; font-size: .75rem; }
+    .import-status { grid-column: 1 / -1; min-height: 1.2em; }
+    select.field option { color: #11152f; background: #fff; }
+    .library { display: grid; gap: 28px; padding-bottom: 68px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 10px; }
+    .section-head h2 { margin: 0; font-size: 1.65rem; letter-spacing: -.025em; }
+    .section-head span { color: var(--muted); font-size: .82rem; }
+    .subject-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .subject {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+    .subject-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 17px;
+      border-bottom: 1px solid var(--line);
+      background: var(--surface-2);
+    }
+    .subject-head h3 { margin: 0; font-size: 1rem; }
+    .pill {
+      flex: 0 0 auto;
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: #cdd2ff;
+      background: rgba(120, 135, 255, .12);
+      font-size: .7rem;
+      font-weight: 800;
+    }
+    .resource { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 15px 17px; }
+    .resource + .resource { border-top: 1px solid var(--line); }
+    .resource-title { font-weight: 790; line-height: 1.28; }
+    .resource-meta { margin-top: 5px; color: var(--muted); font-size: .75rem; }
+    .resource-actions { display: flex; gap: 7px; }
+    .resource-actions .button { min-height: 36px; padding-inline: 11px; font-size: .76rem; }
+    .empty {
+      padding: 34px;
+      border: 1px dashed rgba(255, 255, 255, .2);
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+    }
+    footer { padding: 22px 0 34px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .subject-grid { grid-template-columns: 1fr; }
+      .admin-import { grid-template-columns: 1fr; }
+      .import-actions { justify-content: flex-start; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+      .toolbar .field:first-child, .toolbar .button { grid-column: 1 / -1; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 22px, 1160px); }
+      .topbar-inner { align-items: flex-start; flex-direction: column; padding-block: 12px; }
+      .brand { margin-right: 0; }
+      .account { width: 100%; }
+      .account-badge { max-width: none; flex: 1; }
+      .gate { min-height: auto; padding-block: 30px; }
+      .gate-card { padding: 25px; }
+      .hero { padding-top: 38px; }
+      .stats { grid-template-columns: 1fr; }
+      .toolbar { position: static; grid-template-columns: 1fr; }
+      .toolbar .field:first-child, .toolbar .button { grid-column: auto; }
+      .resource { grid-template-columns: 1fr; }
+      .resource-actions { width: 100%; }
+      .resource-actions .button { flex: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+    }
+  </style>
 </head>
-
 <body>
-    <nav class="topbar shell">
-        <a class="brand" href="index.html">
-            <strong>Mastery Academy</strong>
-            <span>Global Syllabus Portal</span>
-        </a>
-        <a class="toplink" href="index.html">Back to Home</a>
-    </nav>
+  <nav class="topbar">
+    <div class="topbar-inner shell">
+      <a class="brand" href="index.html">Mastery Academy<span>Global Syllabus Portal</span></a>
+      <div class="account" id="accountPanel" hidden>
+        <span class="account-badge" id="accountBadge"></span>
+        <button class="button" id="signOutButton" type="button">Sign out</button>
+      </div>
+      <a class="button" href="index.html">Course Portal</a>
+    </div>
+  </nav>
 
+  <section class="gate shell" id="authGate">
+    <div class="gate-card">
+      <p class="eyebrow">Protected resources</p>
+      <h1>PDF Library</h1>
+      <p class="gate-copy">Use your Mastery Academy account password to view or download teaching materials. Student, parent, and guest accounts receive the student library. Admin receives full access.</p>
+      <form class="login-form" id="loginForm">
+        <label class="label">Email
+          <input class="field" id="emailInput" type="email" autocomplete="email" placeholder="name@example.com" required>
+        </label>
+        <label class="label">Password
+          <input class="field" id="passwordInput" type="password" autocomplete="current-password" placeholder="Your account password" minlength="6" required>
+        </label>
+        <button class="button primary" id="loginButton" type="submit">Unlock PDF Library</button>
+        <p class="status" id="loginStatus" role="status" aria-live="polite"></p>
+        <p class="form-note">Need an account? <a class="portal-link" href="index.html">Create one from the Course Portal dashboard.</a></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="libraryApp" hidden>
     <header class="hero shell">
-        <div class="hero-grid">
-            <section class="hero-copy glass">
-                <div class="eyebrow">Organized Hardcopy Library</div>
-                <h1>PDF Notes Library</h1>
-            <p>Browse approved student worksheets, slide decks, revision notes, and workbooks in one glassy library. Open a file in the browser for quick viewing, or download it for printing.</p>
-            </section>
-            <aside class="hero-stats glass" aria-label="Library statistics">
-                <div class="stat">
-                    <span>Total PDFs</span>
-                    <strong id="stat-total">0</strong>
-                </div>
-                <div class="stat">
-                    <span>Syllabi</span>
-                    <strong id="stat-syllabi">0</strong>
-                </div>
-                <div class="stat">
-                    <span>Visible Now</span>
-                    <strong id="stat-visible">0</strong>
-                </div>
-            </aside>
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">Account based access</p>
+          <h1>PDF Library</h1>
+          <p class="hero-copy">Search worksheets, slide decks, revision notes, and print-ready resources. Every file opens through a short-lived private link tied to your signed-in account.</p>
         </div>
+        <aside class="scope-note" id="scopeNote"></aside>
+      </div>
+      <div class="stats" aria-label="Library statistics">
+        <div class="stat"><span>Available PDFs</span><strong id="statTotal">0</strong></div>
+        <div class="stat"><span>Syllabi</span><strong id="statSyllabi">0</strong></div>
+        <div class="stat"><span>Visible now</span><strong id="statVisible">0</strong></div>
+      </div>
     </header>
 
     <main class="shell">
-        <section class="toolbar glass" aria-label="Library filters">
-            <input class="field" id="searchInput" type="search" placeholder="Search topic, subject, level, or filename">
-            <select class="field" id="syllabusFilter" aria-label="Filter by syllabus">
-                <option value="">All syllabi</option>
-            </select>
-            <select class="field" id="subjectFilter" aria-label="Filter by subject">
-                <option value="">All subjects</option>
-            </select>
-            <select class="field" id="typeFilter" aria-label="Filter by document type">
-                <option value="">All types</option>
-            </select>
-            <button class="button" id="resetFilters" type="button">Reset</button>
-        </section>
-
-        <section class="folder-rail" id="folderRail" aria-label="PDF folders"></section>
-
-        <section id="library"></section>
-
-        <section class="add-folder glass" id="add-folder">
-            <div class="add-folder-grid">
-                <div>
-                    <div class="eyebrow">Add Folder</div>
-                    <h2>Static-friendly GitHub workflow</h2>
-                    <p>GitHub Pages cannot create folders from the public website because it has no server write access. This helper gives the folder path to create in GitHub, then the catalogue generator picks up the new PDFs.</p>
-                    <ol>
-                        <li>Create the suggested folder path in GitHub or locally.</li>
-                        <li>Upload the PDFs with clear names using underscores instead of spaces.</li>
-                        <li>Run <strong>python tools/generate_pdf_catalog.py</strong> before publishing, or let a GitHub Action run it later.</li>
-                    </ol>
-                </div>
-                <form class="builder" id="folderBuilder">
-                    <label>
-                        Syllabus
-                        <select class="field" id="builderSyllabus">
-                            <option>SPM</option>
-                            <option>IGCSE</option>
-                            <option>Singapore</option>
-                            <option>UEC</option>
-                        </select>
-                    </label>
-                    <label>
-                        Level
-                        <input class="field" id="builderLevel" type="text" value="Form5" placeholder="Form5, Year8, Stage7">
-                    </label>
-                    <label>
-                        Subject
-                        <input class="field" id="builderSubject" type="text" value="Chemistry" placeholder="Science, Math, BM">
-                    </label>
-                    <div class="path-output" id="folderPath">hardcopy/SPM_Syllabus/Form5/Chemistry/</div>
-                </form>
-            </div>
-        </section>
+      <section class="admin-import" id="adminImport" hidden>
+        <div>
+          <h2>Admin PDF import</h2>
+          <p>Select the SSD backup folder. Files are matched to the private catalogue and uploaded directly to protected storage.</p>
+        </div>
+        <div class="import-actions">
+          <input class="field folder-input" id="pdfFolderInput" type="file" accept="application/pdf,.pdf" webkitdirectory directory multiple>
+          <button class="button primary" id="uploadPdfsButton" type="button" disabled>Upload matched PDFs</button>
+        </div>
+        <p class="status import-status" id="importStatus" role="status" aria-live="polite"></p>
+      </section>
+      <section class="toolbar" aria-label="PDF filters">
+        <input class="field" id="searchInput" type="search" placeholder="Search title, subject, level, or type">
+        <select class="field" id="syllabusFilter" aria-label="Filter by syllabus"><option value="">All syllabi</option></select>
+        <select class="field" id="subjectFilter" aria-label="Filter by subject"><option value="">All subjects</option></select>
+        <select class="field" id="typeFilter" aria-label="Filter by document type"><option value="">All types</option></select>
+        <button class="button" id="resetFilters" type="button">Reset</button>
+      </section>
+      <section class="library" id="library" aria-live="polite"></section>
     </main>
 
-    <footer>
-        <div class="shell">&copy; 2026 Mastery Academy - Designed for First Principles Excellence.</div>
-    </footer>
+    <footer><div class="shell">&copy; 2026 Mastery Academy. Private teaching resources.</div></footer>
+  </div>
 
-    <script>
-        const state = {
-            resources: [],
-            activeFolder: '',
-            filters: {
-                search: '',
-                syllabus: '',
-                subject: '',
-                type: ''
-            }
-        };
+  <noscript><div class="shell empty">JavaScript is required to unlock this private library.</div></noscript>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/auth-access.js?v=1.1.0"></script>
+  <script>
+    const PDF_BUCKET = 'course-pdfs';
+    const SIGNED_URL_SECONDS = 120;
+    const state = {
+      account: null,
+      resources: [],
+      filters: { search: '', syllabus: '', subject: '', type: '' }
+    };
 
-        const els = {
-            library: document.getElementById('library'),
-            folderRail: document.getElementById('folderRail'),
-            search: document.getElementById('searchInput'),
-            syllabus: document.getElementById('syllabusFilter'),
-            subject: document.getElementById('subjectFilter'),
-            type: document.getElementById('typeFilter'),
-            reset: document.getElementById('resetFilters'),
-            total: document.getElementById('stat-total'),
-            syllabi: document.getElementById('stat-syllabi'),
-            visible: document.getElementById('stat-visible'),
-            builderSyllabus: document.getElementById('builderSyllabus'),
-            builderLevel: document.getElementById('builderLevel'),
-            builderSubject: document.getElementById('builderSubject'),
-            folderPath: document.getElementById('folderPath')
-        };
+    const els = {
+      authGate: document.getElementById('authGate'),
+      libraryApp: document.getElementById('libraryApp'),
+      accountPanel: document.getElementById('accountPanel'),
+      accountBadge: document.getElementById('accountBadge'),
+      signOut: document.getElementById('signOutButton'),
+      loginForm: document.getElementById('loginForm'),
+      loginButton: document.getElementById('loginButton'),
+      email: document.getElementById('emailInput'),
+      password: document.getElementById('passwordInput'),
+      loginStatus: document.getElementById('loginStatus'),
+      scopeNote: document.getElementById('scopeNote'),
+      library: document.getElementById('library'),
+      search: document.getElementById('searchInput'),
+      syllabus: document.getElementById('syllabusFilter'),
+      subject: document.getElementById('subjectFilter'),
+      type: document.getElementById('typeFilter'),
+      reset: document.getElementById('resetFilters'),
+      adminImport: document.getElementById('adminImport'),
+      pdfFolder: document.getElementById('pdfFolderInput'),
+      uploadPdfs: document.getElementById('uploadPdfsButton'),
+      importStatus: document.getElementById('importStatus'),
+      total: document.getElementById('statTotal'),
+      syllabi: document.getElementById('statSyllabi'),
+      visible: document.getElementById('statVisible')
+    };
 
-        function unique(values) {
-            return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
-        }
+    function setLoginStatus(message, kind = '') {
+      els.loginStatus.textContent = message;
+      els.loginStatus.className = 'status' + (kind ? ' ' + kind : '');
+    }
 
-        function formatBytes(bytes) {
-            if (!bytes) return 'Unknown size';
-            const units = ['B', 'KB', 'MB', 'GB'];
-            let value = bytes;
-            let unit = 0;
-            while (value >= 1024 && unit < units.length - 1) {
-                value /= 1024;
-                unit += 1;
-            }
-            return `${value.toFixed(value >= 10 || unit === 0 ? 0 : 1)} ${units[unit]}`;
-        }
+    function setImportStatus(message, kind = '') {
+      els.importStatus.textContent = message;
+      els.importStatus.className = 'status import-status' + (kind ? ' ' + kind : '');
+    }
 
-        function makeOption(value) {
-            const option = document.createElement('option');
-            option.value = value;
-            option.textContent = value;
-            return option;
-        }
+    function normalisePath(value) {
+      return String(value || '').replace(/\\/g, '/').replace(/^\.\//, '').toLowerCase();
+    }
 
-        function fillSelect(select, values, firstLabel) {
-            const current = select.value;
-            select.replaceChildren(makeOption(''));
-            select.options[0].textContent = firstLabel;
-            values.forEach((value) => select.appendChild(makeOption(value)));
-            select.value = values.includes(current) ? current : '';
-        }
+    function matchSelectedFiles(files) {
+      const resources = state.resources.filter((item) => item.sourceFile);
+      return files.map((file) => {
+        const relative = normalisePath(file.webkitRelativePath || file.name);
+        const exact = resources.find((item) => {
+          const source = normalisePath(item.sourceFile);
+          return source.endsWith(relative) || relative.endsWith(source);
+        });
+        if (exact) return { file, resource: exact };
 
-        function populateFilters() {
-            fillSelect(els.syllabus, unique(state.resources.map((item) => item.syllabus)), 'All syllabi');
-            fillSelect(els.subject, unique(state.resources.map((item) => item.subject)), 'All subjects');
-            fillSelect(els.type, unique(state.resources.map((item) => item.type)), 'All types');
-        }
+        const sameNameAndSize = resources.filter((item) => {
+          const sourceName = normalisePath(item.sourceFile).split('/').pop();
+          return sourceName === normalisePath(file.name) && Number(item.sizeBytes) === file.size;
+        });
+        return { file, resource: sameNameAndSize.length === 1 ? sameNameAndSize[0] : null };
+      });
+    }
 
-        function matches(item) {
-            const query = state.filters.search.trim().toLowerCase();
-            const searchable = [
-                item.title,
-                item.file,
-                item.syllabus,
-                item.level,
-                item.subject,
-                item.type,
-                item.audience
-            ].join(' ').toLowerCase();
+    async function uploadSelectedPdfs() {
+      if (state.account?.tier !== 'admin') return;
+      const selected = matchSelectedFiles(Array.from(els.pdfFolder.files || []));
+      const matched = selected.filter((entry) => entry.resource);
+      const unmatched = selected.length - matched.length;
+      if (!matched.length) {
+        setImportStatus('No selected files matched the private catalogue.', 'error');
+        return;
+      }
 
-            return (!state.filters.syllabus || item.syllabus === state.filters.syllabus)
-                && (!state.filters.subject || item.subject === state.filters.subject)
-                && (!state.filters.type || item.type === state.filters.type)
-                && (!query || searchable.includes(query));
-        }
+      els.uploadPdfs.disabled = true;
+      let completed = 0;
+      try {
+        for (const entry of matched) {
+          setImportStatus('Uploading ' + (completed + 1) + ' of ' + matched.length + ': ' + entry.file.name);
+          const { data: permission, error: permissionError } = await window.supabaseClient.functions.invoke(
+            'pdf-library-admin',
+            { body: { path: entry.resource.storagePath } }
+          );
+          if (permissionError || !permission?.token) {
+            throw permissionError || new Error('Upload permission was not created.');
+          }
 
-        function groupBy(items, key) {
-            return items.reduce((groups, item) => {
-                const value = item[key] || 'General';
-                groups[value] = groups[value] || [];
-                groups[value].push(item);
-                return groups;
-            }, {});
-        }
-
-        function renderFolders() {
-            const grouped = groupBy(state.resources, 'syllabus');
-            els.folderRail.replaceChildren();
-
-            Object.keys(grouped).sort().forEach((syllabus) => {
-                const card = document.createElement('button');
-                card.type = 'button';
-                card.className = `folder-card glass${state.activeFolder === syllabus ? ' active' : ''}`;
-                card.innerHTML = `
-                    <span>Folder</span>
-                    <strong>${syllabus}</strong>
-                    <small>${grouped[syllabus].length} PDF files</small>
-                `;
-                card.addEventListener('click', () => {
-                    state.activeFolder = state.activeFolder === syllabus ? '' : syllabus;
-                    els.syllabus.value = state.activeFolder;
-                    state.filters.syllabus = state.activeFolder;
-                    render();
-                });
-                els.folderRail.appendChild(card);
+          const { error: uploadError } = await window.supabaseClient.storage
+            .from(PDF_BUCKET)
+            .uploadToSignedUrl(entry.resource.storagePath, permission.token, entry.file, {
+              contentType: 'application/pdf',
+              upsert: true
             });
+          if (uploadError) throw uploadError;
+          completed += 1;
         }
+        const note = unmatched ? ' ' + unmatched + ' unmatched file(s) were skipped.' : '';
+        setImportStatus('Uploaded ' + completed + ' protected PDF(s).' + note, 'success');
+      } catch (error) {
+        console.error(error);
+        setImportStatus('Stopped after ' + completed + ' upload(s): ' + (error?.message || 'Upload failed.'), 'error');
+      } finally {
+        els.uploadPdfs.disabled = !els.pdfFolder.files?.length;
+      }
+    }
 
-        function makePdfRow(item) {
-            const row = document.createElement('article');
-            row.className = 'pdf-row';
+    function unique(values) {
+      return [...new Set(values.filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    }
 
-            const info = document.createElement('div');
-            const title = document.createElement('div');
-            title.className = 'pdf-title';
-            title.textContent = item.title;
+    function formatBytes(bytes) {
+      if (!bytes) return '';
+      const units = ['B', 'KB', 'MB', 'GB'];
+      let value = Number(bytes);
+      let unit = 0;
+      while (value >= 1024 && unit < units.length - 1) {
+        value /= 1024;
+        unit += 1;
+      }
+      return value.toFixed(value >= 10 || unit === 0 ? 0 : 1) + ' ' + units[unit];
+    }
 
-            const meta = document.createElement('div');
-            meta.className = 'pdf-meta';
-            const parts = [
-                item.level,
-                item.type,
-                item.audience,
-                item.pages ? `${item.pages} pages` : '',
-                formatBytes(item.sizeBytes)
-            ].filter(Boolean);
-            meta.textContent = parts.join(' / ');
+    function makeOption(value, label = value) {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = label;
+      return option;
+    }
 
-            info.append(title, meta);
+    function fillSelect(select, values, firstLabel) {
+      const current = select.value;
+      select.replaceChildren(makeOption('', firstLabel));
+      values.forEach((value) => select.appendChild(makeOption(value)));
+      select.value = values.includes(current) ? current : '';
+    }
 
-            const actions = document.createElement('div');
-            actions.className = 'pdf-actions';
+    function populateFilters() {
+      fillSelect(els.syllabus, unique(state.resources.map((item) => item.syllabus)), 'All syllabi');
+      fillSelect(els.subject, unique(state.resources.map((item) => item.subject)), 'All subjects');
+      fillSelect(els.type, unique(state.resources.map((item) => item.type)), 'All types');
+    }
 
-            const view = document.createElement('a');
-            view.className = 'button primary';
-            view.href = encodeURI(item.file);
-            view.target = '_blank';
-            view.rel = 'noopener';
-            view.textContent = 'View PDF';
+    function matches(item) {
+      const query = state.filters.search.trim().toLowerCase();
+      const searchable = [item.title, item.syllabus, item.level, item.subject, item.type, item.audience]
+        .join(' ')
+        .toLowerCase();
+      return (!state.filters.syllabus || item.syllabus === state.filters.syllabus)
+        && (!state.filters.subject || item.subject === state.filters.subject)
+        && (!state.filters.type || item.type === state.filters.type)
+        && (!query || searchable.includes(query));
+    }
 
-            const download = document.createElement('a');
-            download.className = 'button';
-            download.href = encodeURI(item.file);
-            download.download = '';
-            download.textContent = 'Download';
+    function groupBy(items, key) {
+      return items.reduce((groups, item) => {
+        const value = item[key] || 'General';
+        if (!groups[value]) groups[value] = [];
+        groups[value].push(item);
+        return groups;
+      }, {});
+    }
 
-            actions.append(view, download);
-            row.append(info, actions);
-            return row;
+    async function openResource(item, mode, button) {
+      const originalText = button.textContent;
+      let previewWindow = null;
+      if (mode === 'view') {
+        previewWindow = window.open('', '_blank');
+        if (previewWindow) previewWindow.opener = null;
+      }
+
+      button.disabled = true;
+      button.textContent = 'Preparing...';
+      try {
+        const options = mode === 'download' ? { download: true } : undefined;
+        const { data, error } = await window.supabaseClient
+          .storage
+          .from(PDF_BUCKET)
+          .createSignedUrl(item.storagePath, SIGNED_URL_SECONDS, options);
+        if (error || !data?.signedUrl) throw error || new Error('Signed URL was not created.');
+
+        if (mode === 'view') {
+          if (previewWindow) {
+            previewWindow.location.replace(data.signedUrl);
+          } else {
+            window.location.assign(data.signedUrl);
+          }
+        } else {
+          const link = document.createElement('a');
+          link.href = data.signedUrl;
+          link.download = '';
+          link.rel = 'noopener';
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
         }
-
-        function renderLibrary(filtered) {
-            els.library.replaceChildren();
-            if (filtered.length === 0) {
-                const empty = document.createElement('div');
-                empty.className = 'empty glass';
-                empty.textContent = 'No PDFs match the current filters.';
-                els.library.appendChild(empty);
-                return;
-            }
-
-            const bySyllabus = groupBy(filtered, 'syllabus');
-            Object.keys(bySyllabus).sort().forEach((syllabus) => {
-                const section = document.createElement('section');
-                section.className = 'section';
-
-                const header = document.createElement('div');
-                header.className = 'section-header';
-                header.innerHTML = `<h2>${syllabus}</h2><p>${bySyllabus[syllabus].length} files</p>`;
-                section.appendChild(header);
-
-                const subjectGrid = document.createElement('div');
-                subjectGrid.className = 'subject-grid';
-                const bySubject = groupBy(bySyllabus[syllabus], 'subject');
-
-                Object.keys(bySubject).sort().forEach((subject) => {
-                    const card = document.createElement('div');
-                    card.className = 'subject-card glass';
-
-                    const title = document.createElement('div');
-                    title.className = 'subject-title';
-                    title.innerHTML = `<h3>${subject}</h3><span class="pill">${bySubject[subject].length} PDFs</span>`;
-
-                    const list = document.createElement('div');
-                    list.className = 'pdf-list';
-                    bySubject[subject]
-                        .sort((a, b) => a.title.localeCompare(b.title))
-                        .forEach((item) => list.appendChild(makePdfRow(item)));
-
-                    card.append(title, list);
-                    subjectGrid.appendChild(card);
-                });
-
-                section.appendChild(subjectGrid);
-                els.library.appendChild(section);
-            });
+      } catch (error) {
+        if (previewWindow) previewWindow.close();
+        if (/JWT|session|auth/i.test(error?.message || '')) {
+          await showGate('Your session expired. Sign in again.');
+        } else {
+          window.alert('This PDF could not be opened. Please try again.');
         }
+        console.error(error);
+      } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
+    }
 
-        function render() {
-            const filtered = state.resources.filter(matches);
-            els.total.textContent = state.resources.length;
-            els.syllabi.textContent = unique(state.resources.map((item) => item.syllabus)).length;
-            els.visible.textContent = filtered.length;
-            renderFolders();
-            renderLibrary(filtered);
+    function makeResourceRow(item) {
+      const row = document.createElement('article');
+      row.className = 'resource';
+
+      const info = document.createElement('div');
+      const title = document.createElement('div');
+      title.className = 'resource-title';
+      title.textContent = item.title;
+      const meta = document.createElement('div');
+      meta.className = 'resource-meta';
+      meta.textContent = [
+        item.level,
+        item.type,
+        item.audience,
+        item.pages ? item.pages + ' pages' : '',
+        formatBytes(item.sizeBytes)
+      ].filter(Boolean).join(' / ');
+      info.append(title, meta);
+
+      const actions = document.createElement('div');
+      actions.className = 'resource-actions';
+      const view = document.createElement('button');
+      view.className = 'button primary';
+      view.type = 'button';
+      view.textContent = 'View';
+      view.addEventListener('click', () => openResource(item, 'view', view));
+      const download = document.createElement('button');
+      download.className = 'button';
+      download.type = 'button';
+      download.textContent = 'Download';
+      download.addEventListener('click', () => openResource(item, 'download', download));
+      actions.append(view, download);
+      row.append(info, actions);
+      return row;
+    }
+
+    function render() {
+      const filtered = state.resources.filter(matches);
+      els.total.textContent = state.resources.length;
+      els.syllabi.textContent = unique(state.resources.map((item) => item.syllabus)).length;
+      els.visible.textContent = filtered.length;
+      els.library.replaceChildren();
+
+      if (!filtered.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.textContent = 'No PDFs match the current filters.';
+        els.library.appendChild(empty);
+        return;
+      }
+
+      const bySyllabus = groupBy(filtered, 'syllabus');
+      Object.keys(bySyllabus).sort().forEach((syllabus) => {
+        const section = document.createElement('section');
+        const head = document.createElement('div');
+        head.className = 'section-head';
+        const heading = document.createElement('h2');
+        heading.textContent = syllabus;
+        const count = document.createElement('span');
+        count.textContent = bySyllabus[syllabus].length + ' files';
+        head.append(heading, count);
+
+        const grid = document.createElement('div');
+        grid.className = 'subject-grid';
+        const bySubject = groupBy(bySyllabus[syllabus], 'subject');
+        Object.keys(bySubject).sort().forEach((subjectName) => {
+          const subject = document.createElement('div');
+          subject.className = 'subject';
+          const subjectHead = document.createElement('div');
+          subjectHead.className = 'subject-head';
+          const subjectTitle = document.createElement('h3');
+          subjectTitle.textContent = subjectName;
+          const pill = document.createElement('span');
+          pill.className = 'pill';
+          pill.textContent = bySubject[subjectName].length + ' PDFs';
+          subjectHead.append(subjectTitle, pill);
+          subject.appendChild(subjectHead);
+          bySubject[subjectName]
+            .sort((a, b) => a.title.localeCompare(b.title))
+            .forEach((item) => subject.appendChild(makeResourceRow(item)));
+          grid.appendChild(subject);
+        });
+
+        section.append(head, grid);
+        els.library.appendChild(section);
+      });
+    }
+
+    function wireFilters() {
+      els.search.addEventListener('input', () => {
+        state.filters.search = els.search.value;
+        render();
+      });
+      els.syllabus.addEventListener('change', () => {
+        state.filters.syllabus = els.syllabus.value;
+        render();
+      });
+      els.subject.addEventListener('change', () => {
+        state.filters.subject = els.subject.value;
+        render();
+      });
+      els.type.addEventListener('change', () => {
+        state.filters.type = els.type.value;
+        render();
+      });
+      els.reset.addEventListener('click', () => {
+        state.filters = { search: '', syllabus: '', subject: '', type: '' };
+        els.search.value = '';
+        els.syllabus.value = '';
+        els.subject.value = '';
+        els.type.value = '';
+        render();
+      });
+    }
+
+    async function loadResources(account) {
+      els.library.innerHTML = '<div class="empty">Loading your PDF access...</div>';
+      const { data, error } = await window.supabaseClient
+        .from('pdf_resources')
+        .select('id,title,source_file,syllabus,level,subject,audience,document_type,storage_path,size_bytes,pages')
+        .eq('is_active', true)
+        .order('syllabus')
+        .order('subject')
+        .order('title');
+      if (error) throw error;
+
+      state.resources = (data || []).map((item) => ({
+        id: item.id,
+        title: item.title,
+        sourceFile: item.source_file,
+        syllabus: item.syllabus,
+        level: item.level,
+        subject: item.subject,
+        audience: item.audience,
+        type: item.document_type,
+        storagePath: item.storage_path,
+        sizeBytes: item.size_bytes,
+        pages: item.pages
+      }));
+      state.account = account;
+      populateFilters();
+      render();
+    }
+
+    async function showLibrary(account) {
+      els.authGate.hidden = true;
+      els.libraryApp.hidden = false;
+      els.accountPanel.hidden = false;
+      const isAdmin = account.tier === 'admin';
+      const roleLabel = isAdmin ? 'Admin' : (account.role || 'Guest');
+      els.accountBadge.textContent = account.user.email + ' / ' + roleLabel;
+      els.scopeNote.textContent = isAdmin
+        ? 'Admin access: student resources, teacher answers, source documents, and the complete archive.'
+        : roleLabel + ' access: student notes, worksheets, slides, and revision materials.';
+      els.adminImport.hidden = !isAdmin;
+      if (!isAdmin) {
+        els.pdfFolder.value = '';
+        els.uploadPdfs.disabled = true;
+        setImportStatus('');
+      }
+      await loadResources(account);
+    }
+
+    async function showGate(message = '') {
+      state.account = null;
+      state.resources = [];
+      els.authGate.hidden = false;
+      els.libraryApp.hidden = true;
+      els.accountPanel.hidden = true;
+      els.adminImport.hidden = true;
+      els.password.value = '';
+      setLoginStatus(message, message ? 'error' : '');
+    }
+
+    els.loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      els.loginButton.disabled = true;
+      setLoginStatus('Checking your account...');
+      try {
+        const { error } = await window.AuthAccess.signIn(els.email.value.trim(), els.password.value);
+        if (error) throw error;
+        const account = await window.AuthAccess.getCurrentUser();
+        if (!account) throw new Error('The account session could not be loaded.');
+        setLoginStatus('Access granted.', 'success');
+        await showLibrary(account);
+      } catch (error) {
+        setLoginStatus(error?.message || 'Sign in failed.', 'error');
+      } finally {
+        els.loginButton.disabled = false;
+      }
+    });
+
+    els.signOut.addEventListener('click', async () => {
+      await window.AuthAccess.signOut();
+      await showGate();
+    });
+
+    els.pdfFolder.addEventListener('change', () => {
+      const selected = matchSelectedFiles(Array.from(els.pdfFolder.files || []));
+      const matched = selected.filter((entry) => entry.resource).length;
+      const unmatched = selected.length - matched;
+      els.uploadPdfs.disabled = matched === 0;
+      setImportStatus(matched + ' PDF(s) matched.' + (unmatched ? ' ' + unmatched + ' unmatched file(s).' : ''));
+    });
+    els.uploadPdfs.addEventListener('click', uploadSelectedPdfs);
+
+    async function boot() {
+      if (!window.supabaseClient || !window.AuthAccess) {
+        await showGate('The secure library connection is unavailable.');
+        return;
+      }
+      try {
+        const account = await window.AuthAccess.getCurrentUser();
+        if (account) {
+          await showLibrary(account);
+        } else {
+          await showGate();
         }
+      } catch (error) {
+        console.error(error);
+        await showGate('The library could not be loaded. Please sign in again.');
+      }
+    }
 
-        function updatePathBuilder() {
-            const syllabus = els.builderSyllabus.value.trim();
-            const level = els.builderLevel.value.trim().replace(/\s+/g, '');
-            const subject = els.builderSubject.value.trim().replace(/\s+/g, '_');
-            const syllabusFolder = syllabus === 'Singapore' ? 'Singapore_Syllabus' : `${syllabus}_Syllabus`;
-            els.folderPath.textContent = `hardcopy/${syllabusFolder}/${level || 'Level'}/${subject || 'Subject'}/`;
-        }
-
-        function wireEvents() {
-            els.search.addEventListener('input', () => {
-                state.filters.search = els.search.value;
-                render();
-            });
-            els.syllabus.addEventListener('change', () => {
-                state.filters.syllabus = els.syllabus.value;
-                state.activeFolder = els.syllabus.value;
-                render();
-            });
-            els.subject.addEventListener('change', () => {
-                state.filters.subject = els.subject.value;
-                render();
-            });
-            els.type.addEventListener('change', () => {
-                state.filters.type = els.type.value;
-                render();
-            });
-            els.reset.addEventListener('click', () => {
-                state.filters = { search: '', syllabus: '', subject: '', type: '' };
-                state.activeFolder = '';
-                els.search.value = '';
-                els.syllabus.value = '';
-                els.subject.value = '';
-                els.type.value = '';
-                render();
-            });
-            [els.builderSyllabus, els.builderLevel, els.builderSubject].forEach((element) => {
-                element.addEventListener('input', updatePathBuilder);
-                element.addEventListener('change', updatePathBuilder);
-            });
-        }
-
-        async function loadCatalog() {
-            try {
-                const response = await fetch('resources/pdf-catalog.json', { cache: 'no-store' });
-                if (!response.ok) throw new Error(`Catalog request failed: ${response.status}`);
-                const catalog = await response.json();
-                state.resources = (catalog.resources || []).sort((a, b) => a.title.localeCompare(b.title));
-                populateFilters();
-                render();
-            } catch (error) {
-                els.library.innerHTML = `
-                    <div class="empty glass">
-                        The PDF catalogue could not be loaded. Run this site through a local server or publish it to GitHub Pages, then regenerate resources/pdf-catalog.json.
-                    </div>
-                `;
-                console.error(error);
-            }
-        }
-
-        wireEvents();
-        updatePathBuilder();
-        loadCatalog();
-    </script>
+    wireFilters();
+    boot();
+  </script>
 </body>
-
 </html>

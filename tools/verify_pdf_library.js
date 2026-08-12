@@ -3,82 +3,60 @@ const fs = require('fs');
 const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..');
-const catalogPath = path.join(repoRoot, 'resources', 'pdf-catalog.json');
 const pagePath = path.join(repoRoot, 'notes.html');
-
+const portalPath = path.join(repoRoot, 'index.html');
+const migrationPath = path.join(repoRoot, 'db', 'migrations', 'secure_pdf_library.sql');
+const profileMigrationPath = path.join(repoRoot, 'db', 'migrations', 'harden_user_profile_privileges.sql');
+const adminFunctionPath = path.join(repoRoot, 'supabase', 'functions', 'pdf-library-admin', 'index.ts');
 const ignoredDirs = new Set(['.git', 'node_modules', '.agents']);
 
 function walk(dir) {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
   const files = [];
-
-  for (const entry of entries) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ignoredDirs.has(entry.name)) continue;
-
     const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
-      files.push(...walk(fullPath));
-    } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.pdf')) {
-      files.push(fullPath);
-    }
+    if (entry.isDirectory()) files.push(...walk(fullPath));
+    else if (entry.isFile()) files.push(fullPath);
   }
-
   return files;
 }
 
-function toCatalogPath(fullPath) {
-  return path.relative(repoRoot, fullPath).replace(/\\/g, '/');
-}
-
-assert.ok(fs.existsSync(catalogPath), 'resources/pdf-catalog.json should exist');
 assert.ok(fs.existsSync(pagePath), 'notes.html should exist');
+assert.ok(fs.existsSync(migrationPath), 'private PDF migration should exist');
+assert.ok(fs.existsSync(profileMigrationPath), 'account privilege migration should exist');
+assert.ok(fs.existsSync(adminFunctionPath), 'admin upload function should exist');
+assert.ok(!fs.existsSync(path.join(repoRoot, 'resources', 'pdf-catalog.json')), 'public PDF catalogue must not exist');
 
-const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-assert.ok(Array.isArray(catalog.resources), 'catalog.resources should be an array');
-
-const catalogPaths = new Set(catalog.resources.map((item) => item.file));
-const pdfPaths = walk(repoRoot).map(toCatalogPath).sort();
-
-const missing = pdfPaths.filter((file) => !catalogPaths.has(file));
-assert.deepStrictEqual(missing, [], `Catalog is missing PDFs:\n${missing.join('\n')}`);
-
-const broken = catalog.resources
-  .map((item) => item.file)
-  .filter((file) => !fs.existsSync(path.join(repoRoot, file)));
-assert.deepStrictEqual(broken, [], `Catalog links do not exist:\n${broken.join('\n')}`);
-
-const requiredFiles = [
-  'hardcopy/SPM_Syllabus/Form3/Science/Form3_Science_Bab5_Thermochemistry_Bilingual_Student.pdf',
-  'hardcopy/SPM_Syllabus/Form4/Sains_Komputer/SPM_Sains_Komputer_Java_Ch1_3_4_to_1_4_3_Student.pdf',
-  'hardcopy/IGCSE_Syllabus/Year8/Science/IGCSE_Y8_Science_Ch8_Chemical_Reactions_Student.pdf',
-];
-
-for (const file of requiredFiles) {
-  assert.ok(catalogPaths.has(file), `${file} should be included in the catalog`);
-}
-
-const privatePdfPattern = /(?:source_pdfs|past.?paper|paper[_ -]?[12]|answer|teacher|tutor|jawapan|skema|Modul_Kuasa|Rumusan_Latihan|Silir Daksina)/i;
-const privatePdfs = pdfPaths.filter((file) => privatePdfPattern.test(file));
-assert.deepStrictEqual(
-  privatePdfs,
-  [],
-  `Private/source PDFs must stay outside the public repository:\n${privatePdfs.join('\n')}`
-);
-
-for (const item of catalog.resources) {
-  assert.ok(item.id, `Catalog item for ${item.file} needs an id`);
-  assert.ok(item.title, `Catalog item for ${item.file} needs a title`);
-  assert.ok(item.syllabus, `Catalog item for ${item.file} needs a syllabus`);
-  assert.ok(item.subject, `Catalog item for ${item.file} needs a subject`);
-  assert.ok(item.audience, `Catalog item for ${item.file} needs an audience`);
-  assert.ok(item.type, `Catalog item for ${item.file} needs a type`);
-  assert.strictEqual(path.extname(item.file).toLowerCase(), '.pdf', `${item.file} should be a PDF`);
-}
+const pdfPaths = walk(repoRoot).filter((file) => path.extname(file).toLowerCase() === '.pdf');
+assert.deepStrictEqual(pdfPaths, [], `PDF files must stay outside the public repository:\n${pdfPaths.join('\n')}`);
 
 const notesPage = fs.readFileSync(pagePath, 'utf8');
-assert.match(notesPage, /resources\/pdf-catalog\.json/);
-assert.match(notesPage, /View PDF/);
-assert.match(notesPage, /Download/);
-assert.match(notesPage, /Add Folder/);
+assert.match(notesPage, /AuthAccess\.signIn/);
+assert.match(notesPage, /from\('pdf_resources'\)/);
+assert.match(notesPage, /createSignedUrl/);
+assert.match(notesPage, /uploadToSignedUrl/);
+assert.match(notesPage, /pdf-library-admin/);
+assert.match(notesPage, /course-pdfs/);
+assert.doesNotMatch(notesPage, /pdf-catalog\.json/);
+assert.doesNotMatch(notesPage, /href=["'][^"']+\.pdf/i);
 
-console.log(`PDF library verification passed for ${catalog.resources.length} catalog items.`);
+const portalPage = fs.readFileSync(portalPath, 'utf8');
+assert.match(portalPage, /href="notes\.html"[^>]*>[^<]*PDF Library/);
+assert.doesNotMatch(portalPage, /openPdfModal/);
+
+const migration = fs.readFileSync(migrationPath, 'utf8');
+assert.match(migration, /public\.pdf_resources/);
+assert.match(migration, /enable row level security/i);
+assert.match(migration, /public\s*=\s*false/i);
+assert.match(migration, /storage\.objects/);
+assert.match(migration, /is_anonymous/);
+
+const profileMigration = fs.readFileSync(profileMigrationPath, 'utf8');
+assert.match(profileMigration, /revoke update on public\.user_profiles from authenticated/i);
+assert.match(profileMigration, /grant update \(fullname, phone, syllabus, age, gender, role\)/i);
+
+const adminFunction = fs.readFileSync(adminFunctionPath, 'utf8');
+assert.match(adminFunction, /profile\?\.tier !== 'admin'/);
+assert.match(adminFunction, /createSignedUploadUrl/);
+
+console.log('Private PDF library verification passed. No PDFs are stored in the public repository.');
