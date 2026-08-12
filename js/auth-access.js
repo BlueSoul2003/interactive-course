@@ -28,7 +28,7 @@ const AuthAccess = {
 
         let { data: profile } = await window.supabaseClient
             .from('user_profiles')
-            .select('tier, tier_level, unlocked_modules')
+            .select('tier, tier_level, role, unlocked_modules')
             .eq('id', user.id)
             .maybeSingle();
 
@@ -53,7 +53,7 @@ const AuthAccess = {
             const { data: newProfile, error: insertError } = await window.supabaseClient
                 .from('user_profiles')
                 .insert([profileRecord])
-                .select('tier, tier_level, unlocked_modules')
+                .select('tier, tier_level, role, unlocked_modules')
                 .maybeSingle();
 
             if (!insertError && newProfile) {
@@ -65,6 +65,7 @@ const AuthAccess = {
             user, 
             tier:           profile?.tier            || 'free', 
             tierLevel:      profile?.tier_level      || 0,
+            role:           profile?.role             || 'Guest',
             unlockedModules: profile?.unlocked_modules || []
         };
     },
@@ -123,7 +124,7 @@ const AuthAccess = {
 
             const { error: profileError } = await window.supabaseClient
                 .from('user_profiles')
-                .upsert([profileRecord]);
+                .upsert([profileRecord], { onConflict: 'id', ignoreDuplicates: true });
 
             if (profileError) {
                 console.error('[AuthAccess] signUp profile upsert failed:', profileError);
@@ -131,6 +132,30 @@ const AuthAccess = {
                     data: result.data,
                     error: { message: 'Account created but profile save failed: ' + profileError.message }
                 };
+            }
+
+            // The auth trigger may already have created the row. Only update
+            // user-editable profile fields; access-control fields stay server-owned.
+            if (profileData) {
+                const { error: detailsError } = await window.supabaseClient
+                    .from('user_profiles')
+                    .update({
+                        fullname: profileData.fullname,
+                        phone:    profileData.phone,
+                        syllabus: profileData.syllabus,
+                        age:      profileData.age ? parseInt(profileData.age) : null,
+                        gender:   profileData.gender,
+                        role:     profileData.role,
+                    })
+                    .eq('id', userId);
+
+                if (detailsError) {
+                    console.error('[AuthAccess] signUp profile details failed:', detailsError);
+                    return {
+                        data: result.data,
+                        error: { message: 'Account created but profile details failed: ' + detailsError.message }
+                    };
+                }
             }
         }
 
