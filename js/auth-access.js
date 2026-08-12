@@ -163,7 +163,7 @@ const AuthAccess = {
     },
 
     async signOut() {
-        return await window.supabaseClient.auth.signOut();
+        return await window.supabaseClient.auth.signOut({ scope: 'local' });
     },
 
     getPasswordRecoveryParams() {
@@ -275,76 +275,110 @@ const AuthAccess = {
         return data;
     },
 
+    prepareModuleLaunchLinks(root = document) {
+        if (!root || typeof root.querySelectorAll !== 'function') return 0;
+        const authScript = Array.from(document.scripts || []).find(script =>
+            /(?:^|\/)js\/auth-access\.js(?:\?|$)/.test(script.src || '')
+        );
+        if (!authScript?.src) return 0;
+
+        const launcherBase = new URL('../launcher.html', authScript.src);
+        let prepared = 0;
+        root.querySelectorAll('a[data-module-id][href]').forEach(link => {
+            const moduleId = (link.dataset.moduleId || '').trim();
+            if (!/^[a-z0-9][a-z0-9-]{1,99}$/.test(moduleId)) return;
+            if (!link.dataset.moduleTarget) link.dataset.moduleTarget = link.getAttribute('href') || '';
+            const launcherUrl = new URL(launcherBase.href);
+            launcherUrl.searchParams.set('module', moduleId);
+            link.href = launcherUrl.href;
+            prepared += 1;
+        });
+        return prepared;
+    },
+
     async renderModuleAccessibility() {
+        // Every normal course entry uses the same launcher. Card states are
+        // visual hints only; can_launch_module() remains authoritative.
+        this.prepareModuleLaunchLinks();
         const authInfo = await this.getCurrentUser();
         let unlockedModules = [];
-        let isGuest = true;
         let isAdmin = false;
         
         if (authInfo && authInfo.user) {
-            isGuest = false;
             unlockedModules = authInfo.unlockedModules;
             isAdmin = authInfo.tier === 'admin';
         }
         
-        // Only target element cards inside view-layers that have a module ID
-        const moduleCards = document.querySelectorAll('.view-layer .card[data-module-id]');
-        const guestSyllabusTracker = new Set();
+        const moduleCards = Array.from(document.querySelectorAll('a[data-module-id][href]'));
+        const moduleIds = [...new Set(moduleCards.map(card => card.dataset.moduleId).filter(Boolean))];
+        const moduleDefinitions = new Map();
+        let activeEntitlements = [];
+
+        if (window.supabaseClient && moduleIds.length > 0) {
+            const { data: definitions, error: definitionsError } = await window.supabaseClient
+                .from('modules')
+                .select('id, syllabus, bundle, access_mode')
+                .in('id', moduleIds);
+            if (!definitionsError) {
+                (definitions || []).forEach(definition => moduleDefinitions.set(definition.id, definition));
+            } else {
+                console.warn('[AuthAccess] Module display states unavailable:', definitionsError.message);
+            }
+
+            if (authInfo?.user && !isAdmin) {
+                const { data: entitlements, error: entitlementsError } = await window.supabaseClient
+                    .from('module_entitlements')
+                    .select('grant_type, target_id, starts_at, expires_at, revoked_at')
+                    .eq('user_id', authInfo.user.id)
+                    .is('revoked_at', null);
+                if (!entitlementsError) {
+                    const now = Date.now();
+                    activeEntitlements = (entitlements || []).filter(entitlement =>
+                        Date.parse(entitlement.starts_at) <= now
+                        && (!entitlement.expires_at || Date.parse(entitlement.expires_at) > now)
+                    );
+                } else {
+                    console.warn('[AuthAccess] Entitlement display states unavailable:', entitlementsError.message);
+                }
+            }
+        }
         
         moduleCards.forEach(card => {
 
             // ── Read canonical ID (must come from data-module-id) ─────────────
             const moduleId = card.dataset.moduleId;
-            const isPublicModule = card.dataset.publicModule === 'true';
-
-            // ── Determine syllabus & bundle ───────────────────────────────────
-            const syllabusContent = card.closest('.syllabus-content');
-            const syllabus = syllabusContent ? syllabusContent.id : 'unknown';
-            const bundle   = card.dataset.bundle;
-            
-            // Mark the first module seen for this syllabus section as free
-            const isFirstModule = !guestSyllabusTracker.has(syllabus);
-            if (isFirstModule) {
-                guestSyllabusTracker.add(syllabus);
-            }
+            const definition = moduleDefinitions.get(moduleId);
+            const entitlementMatch = definition && activeEntitlements.some(entitlement =>
+                (entitlement.grant_type === 'module' && entitlement.target_id === moduleId)
+                || (entitlement.grant_type === 'bundle' && entitlement.target_id === definition.bundle)
+                || (entitlement.grant_type === 'syllabus' && entitlement.target_id === definition.syllabus)
+            );
+            const legacyMatch = definition && (
+                unlockedModules.includes('*')
+                || unlockedModules.includes(moduleId)
+                || unlockedModules.includes(definition.syllabus)
+                || (definition.bundle && unlockedModules.includes(definition.bundle))
+                || (moduleId === 'spm-en-social-media' && unlockedModules.includes('Social_Media_Masterclass'))
+            );
 
             // ── Compute access ────────────────────────────────────────────────
-            let hasAccess = false;
-            
-            if (isAdmin) {
-                hasAccess = true;
-
-            } else if (isPublicModule || !moduleId) {
-                hasAccess = true; // can't lock what has no ID
-
-            } else {
-                hasAccess =
-                    isFirstModule                         ||  // free first module
-                    unlockedModules.includes('*')         ||  // god mode
-                    unlockedModules.includes(moduleId)    ||  // exact canonical ID
-                    unlockedModules.includes(syllabus)    ||  // whole syllabus
-                    (bundle && unlockedModules.includes(bundle)); // whole bundle
-            }
+            const hasAccess = !definition
+                || ['public', 'demo'].includes(definition.access_mode)
+                || isAdmin
+                || entitlementMatch
+                || legacyMatch;
 
             // ── Apply CSS state ───────────────────────────────────────────────
             if (hasAccess) {
                 card.classList.add('module-active');
                 card.classList.remove('module-locked', 'card-locked');
                 card.onclick = null;
+                card.dataset.accessState = 'available';
             } else {
                 card.classList.add('module-locked');
                 card.classList.remove('module-active');
-                card.onclick = (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const modal = document.getElementById('pin-topup-modal');
-                    if (modal) {
-                        modal.setAttribute('data-target-module', moduleId || '');
-                        modal.style.display = 'flex';
-                    } else {
-                        alert('🔒 This module is locked. Enter your activation PIN to unlock!');
-                    }
-                };
+                card.onclick = null;
+                card.dataset.accessState = 'locked';
             }
         });
 
@@ -500,3 +534,6 @@ window.AdminTools = {
 };
 
 window.AuthAccess = AuthAccess;
+if (typeof document !== 'undefined' && typeof document.querySelectorAll === 'function') {
+    AuthAccess.prepareModuleLaunchLinks();
+}

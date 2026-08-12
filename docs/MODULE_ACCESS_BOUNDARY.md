@@ -1,6 +1,6 @@
 # Protected Module Access Boundary
 
-Status: accepted, Phase 1 foundation
+Status: accepted, Phase 2 launcher
 
 ## Decision
 
@@ -21,6 +21,12 @@ The five modules that were previously free only because they appeared first in e
 `module_entitlements` becomes the auditable grant store. Existing values in `user_profiles.unlocked_modules` are copied into it and remain readable as a temporary fallback. Phase 1 does not redirect or remove existing module URLs, so current classes continue working while the new decision path is tested.
 
 Client code may ask for a decision but may not write entitlements. New grants, revocation, expiry, teacher assignment, private module packaging, and the Module Launcher are later phases.
+
+## Phase 2 launcher
+
+Normal course links on the main portal and Adult English hub now pass through `launcher.html?module=<canonical-id>`. A checked-in manifest maps canonical IDs to same-origin course routes; the browser cannot supply an arbitrary redirect target. The launcher checks `can_launch_module()`, requests sign-in when needed, accepts an activation PIN for signed-in accounts, rechecks access, and then opens the registered route.
+
+The launcher is the single UX entry point, but public-repository HTML is still directly addressable. The first genuinely protected pilot must remove that module package from GitHub Pages and serve it from private storage through a short-lived server-issued launch URL.
 
 ## Security boundary
 

@@ -101,5 +101,15 @@
       </div>
     </main>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../js/auth-access.js?v=1.1.0"></script>
+  <script>
+    if (window.AuthAccess) {
+      window.AuthAccess.prepareModuleLaunchLinks();
+      window.AuthAccess.renderModuleAccessibility().catch(function (error) {
+        console.warn('[Adult English] Access display unavailable:', error.message);
+      });
+    }
+  </script>
 </body>
 </html>
