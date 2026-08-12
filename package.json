@@ -11,7 +11,8 @@
     "verify:kssr-redesign": "node tools/verify_kssr_classroom_core.js && node tools/verify_auth_access_offline.js && node tools/verify_kssr_protected_units.js && node tools/verify_kssr_unit_redesign.js && npm run verify:sunny-food-market",
     "verify:kssr-workbooks": "python tools/verify_kssr_workbook_json.py _drafts/kssr_english_workbooks/primary3/workbook.json _drafts/kssr_english_workbooks/primary6/workbook.json && node tools/verify_kssr_workbook_pages.js",
     "verify:addmaths-live-quiz": "node tools/verify_addmaths_live_quiz.js",
-    "verify:tutoring-publication": "node tools/verify_tutoring_publication.js"
+    "verify:tutoring-publication": "node tools/verify_tutoring_publication.js",
+    "verify:adult-english": "node tools/verify_adult_english_friendship.js"
   },
   "dependencies": {
     "@babel/core": "^7.29.7",

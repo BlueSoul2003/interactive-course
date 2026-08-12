@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src https://ycsixsyssbdovpmmhefz.supabase.co; img-src 'self' data:; base-uri 'self'; form-action 'none'">
+  <title>Friendship Quiz | Teacher Dashboard</title>
+  <link rel="stylesheet" href="teacher.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="../adult-english-hub.html">Adult English Hub</a>
+    <strong>Friendship Quiz Teacher Dashboard</strong>
+    <button id="lock-dashboard" type="button" hidden>Lock</button>
+  </header>
+
+  <main>
+    <section id="login-panel" class="login-panel">
+      <div>
+        <p class="kicker">Teacher access</p>
+        <h1>Open the live dashboard</h1>
+        <p>The access key remains in this browser tab only. It is never stored in the course website.</p>
+      </div>
+      <form id="login-form">
+        <label for="teacher-key">Teacher Access Key</label>
+        <input id="teacher-key" type="password" autocomplete="off" required>
+        <p id="login-error" class="message error" role="alert"></p>
+        <button type="submit">Open dashboard</button>
+      </form>
+    </section>
+
+    <section id="dashboard" hidden>
+      <div class="dashboard-heading">
+        <div><p class="kicker">Live course data</p><h1>Classes and attempts</h1></div>
+        <div class="heading-actions"><button id="refresh" type="button">Refresh</button><button id="download-csv" type="button">Download CSV</button></div>
+      </div>
+
+      <section class="create-session" aria-labelledby="create-title">
+        <div><h2 id="create-title">New class session</h2><p>Create a shareable link that groups attempts for one lesson.</p></div>
+        <form id="class-form"><label for="class-title">Class title</label><div><input id="class-title" maxlength="80" required placeholder="Monday evening class"><button type="submit">Create link</button></div><p id="class-message" class="message" aria-live="polite"></p></form>
+      </section>
+
+      <div class="filters">
+        <label for="class-filter">Show attempts from</label>
+        <select id="class-filter"><option value="all">All sessions</option><option value="self">Self-study</option></select>
+        <span id="last-updated"></span>
+      </div>
+
+      <section aria-labelledby="sessions-title">
+        <h2 id="sessions-title">Class sessions</h2>
+        <div id="session-list" class="session-list"></div>
+      </section>
+
+      <section aria-labelledby="attempts-title">
+        <h2 id="attempts-title">Student attempts</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Student</th><th>Session</th><th>Status</th><th>Progress</th><th>Score</th><th>Submitted</th><th>Answers</th></tr></thead>
+            <tbody id="attempt-rows"></tbody>
+          </table>
+        </div>
+        <p id="empty-attempts" class="empty-state" hidden>No attempts in this view yet.</p>
+      </section>
+    </section>
+  </main>
+  <script src="teacher.js" defer></script>
+</body>
+</html>

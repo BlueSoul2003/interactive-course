@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Adult English and communication courses with transferable SPM and UEC language skills.">
+  <meta name="color-scheme" content="dark">
+  <title>Adult English &amp; Communication | Mastery Academy</title>
+  <style>
+    :root {
+      --bg: #080c14;
+      --surface: #111827;
+      --surface-strong: #182233;
+      --line: rgba(255,255,255,.10);
+      --text: #f8fafc;
+      --muted: #a7b0bf;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,.15);
+      --radius: 16px;
+      font-family: Outfit, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); }
+    body::before { content: ""; position: fixed; inset: 0; pointer-events: none; background: radial-gradient(circle at 80% 0, rgba(59,130,246,.12), transparent 36%); }
+    a { color: inherit; }
+    .shell { width: min(1160px, calc(100% - 32px)); margin: 0 auto; position: relative; }
+    .topbar { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); }
+    .back, .teacher { text-decoration: none; font-weight: 700; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .back:hover, .teacher:hover { border-color: rgba(59,130,246,.55); transform: translateY(-1px); }
+    .back:focus-visible, .teacher:focus-visible, .course:focus-visible { outline: 3px solid #93b8f6; outline-offset: 3px; }
+    .hero { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr); gap: 48px; align-items: end; padding: 64px 0 48px; }
+    .hero h1 { max-width: 760px; margin: 0; font-size: clamp(2.5rem, 6vw, 5.2rem); line-height: .98; letter-spacing: -.045em; }
+    .hero p { margin: 0; color: var(--muted); line-height: 1.65; font-size: 1.05rem; }
+    .curriculum { padding: 16px 0 80px; }
+    .curriculum h2 { margin: 0 0 24px; font-size: 1.35rem; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .course { min-height: 230px; display: flex; flex-direction: column; text-decoration: none; padding: 28px; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(17,24,39,.82); transition: transform .22s ease, border-color .22s ease, background .22s ease; }
+    .course:hover { transform: translateY(-4px); border-color: rgba(59,130,246,.5); background: var(--surface-strong); }
+    .course.featured { grid-column: 1 / -1; min-height: 260px; background: linear-gradient(115deg, rgba(59,130,246,.18), rgba(17,24,39,.92) 52%); }
+    .tag { color: #a9c8ff; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 800; }
+    .course h3 { margin: 18px 0 10px; font-size: clamp(1.35rem, 2.4vw, 2rem); line-height: 1.15; }
+    .course p { max-width: 62ch; margin: 0; color: var(--muted); line-height: 1.55; }
+    .skills { margin-top: auto; padding-top: 24px; color: #d7e4fa; font-size: .9rem; }
+    .launch { margin-left: 8px; color: #9cc0ff; }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 1160px); }
+      .topbar { min-height: 64px; }
+      .hero { grid-template-columns: 1fr; gap: 20px; padding: 46px 0 32px; }
+      .hero h1 { font-size: clamp(2.45rem, 13vw, 4.4rem); }
+      .grid { grid-template-columns: 1fr; }
+      .course.featured { grid-column: auto; }
+      .course { min-height: 210px; padding: 22px; }
+      .teacher { font-size: .88rem; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="topbar" aria-label="Adult English navigation">
+      <a class="back" href="index.html">Back to University</a>
+      <a class="teacher" href="Adult_English/teacher.html">Teacher Dashboard</a>
+    </nav>
+    <header class="hero">
+      <h1>Adult English &amp; Communication</h1>
+      <p>Practical English for work, relationships and informed decisions. Each course also strengthens vocabulary, comprehension, speaking and critical thinking used in SPM and UEC.</p>
+    </header>
+    <main class="curriculum">
+      <h2>Choose a learning experience</h2>
+      <div class="grid">
+        <a class="course featured" href="Adult_English/Friendship/index.html" data-module-id="adult-en-friendship">
+          <span class="tag">Video lesson and live quiz</span>
+          <h3>The Purpose of Friendship</h3>
+          <p>Watch, reflect and test your understanding through a guided lesson with 30 vocabulary and comprehension questions.</p>
+          <span class="skills">Relationships, Reflection &amp; Communication <span class="launch">Open course →</span></span>
+        </a>
+        <a class="course" href="Adult_English/Self_Discovery/index.html" data-module-id="uec-en-discovery-journey">
+          <span class="tag">Personal communication</span><h3>Self-Discovery &amp; Meaningful Conversations</h3>
+          <p>Use personal stories, values and moral dilemmas to develop precise, thoughtful English.</p><span class="skills">Values, vocabulary and critical thinking</span>
+        </a>
+        <a class="course" href="Adult_English/Startup_Communication_Lab/index.html" data-module-id="uec-en-teen-ceo">
+          <span class="tag">Workplace simulation</span><h3>The Startup Communication Lab</h3>
+          <p>Practise research summaries, customer responses, word forms and persuasive elevator pitches.</p><span class="skills">Research, customer service and pitching</span>
+        </a>
+        <a class="course" href="Adult_English/AI_at_Work/index.html" data-module-id="uec-en-ai-cofounder">
+          <span class="tag">Technology at work</span><h3>AI at Work</h3>
+          <p>Compare translations, build clearer prompts and respond professionally in challenging situations.</p><span class="skills">Translation, prompting and professional English</span>
+        </a>
+        <a class="course" href="Adult_English/Pricing_Psychology/index.html" data-module-id="uec-en-pricing-strategy">
+          <span class="tag">Business English</span><h3>Pricing Psychology &amp; Business English</h3>
+          <p>Interpret data and explain pricing strategies through realistic marketing and presentation tasks.</p><span class="skills">Data interpretation, strategy and presentation</span>
+        </a>
+        <a class="course" href="Adult_English/Negotiation_Communication/index.html" data-module-id="uec-en-master-negotiator">
+          <span class="tag">Speaking practice</span><h3>Negotiation &amp; Tactical Communication</h3>
+          <p>Apply tactical empathy, calibrated questions and clear language in workplace roleplay.</p><span class="skills">Empathy, questioning and roleplay</span>
+        </a>
+        <a class="course" href="Adult_English/Financial_Literacy/index.html" data-module-id="uec-en-rich-teen-simulator">
+          <span class="tag">Life skills</span><h3>Financial Literacy &amp; Life Decisions</h3>
+          <p>Learn money vocabulary, interpret financial charts and defend decisions in structured English.</p><span class="skills">Money vocabulary, data skills and speaking</span>
+        </a>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

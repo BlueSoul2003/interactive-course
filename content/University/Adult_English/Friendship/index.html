@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A guided adult English video lesson about friendship with reflection prompts and a 30-question quiz.">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; frame-src https://www.youtube-nocookie.com; connect-src https://ycsixsyssbdovpmmhefz.supabase.co; img-src 'self' data:; base-uri 'self'; form-action 'none'">
+  <title>The Purpose of Friendship | Adult English</title>
+  <link rel="stylesheet" href="friendship.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="back-link" href="../index.html">Adult English</a>
+      <div class="lesson-title"><strong>The Purpose of Friendship</strong><span id="class-label">Self-study lesson</span></div>
+      <span id="save-state" class="save-state" aria-live="polite"></span>
+    </header>
+
+    <div class="section-progress" aria-label="Lesson progress">
+      <button type="button" data-section="welcome">Prepare</button>
+      <button type="button" data-section="video">Watch</button>
+      <button type="button" data-section="reflect">Reflect</button>
+      <button type="button" data-section="quiz">Quiz</button>
+    </div>
+
+    <main id="deck" class="deck" tabindex="-1">
+      <section class="slide active" data-slide="welcome" aria-labelledby="welcome-title">
+        <div class="welcome-grid">
+          <div>
+            <p class="kicker">Adult English &amp; Communication</p>
+            <h1 id="welcome-title">What do friendships do for us?</h1>
+            <p class="lead">Watch a short film, reflect on its ideas, then complete a 30-question vocabulary and comprehension quiz.</p>
+          </div>
+          <form id="student-form" class="student-card">
+            <label for="student-name">Your name</label>
+            <input id="student-name" name="student-name" maxlength="80" autocomplete="name" required placeholder="Enter your name">
+            <p id="student-error" class="form-message error" role="alert"></p>
+            <button class="primary" type="submit">Begin lesson</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="video" aria-labelledby="video-title">
+        <div class="slide-heading"><p class="kicker">Watch</p><h2 id="video-title">The Purpose of Friendship</h2><p>Listen for five ways friendship supports a meaningful life.</p></div>
+        <div class="video-frame">
+          <iframe src="https://www.youtube-nocookie.com/embed/aGedUxTAfBk?rel=0" title="The Purpose of Friendship by The School of Life" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="reflect" aria-labelledby="reflect-title">
+        <div class="slide-heading"><p class="kicker">Reflect</p><h2 id="reflect-title">Put the ideas into your own words</h2><p>Your notes stay in this browser and are not sent to the teacher.</p></div>
+        <div class="prompt-grid">
+          <label>Which role of friendship feels most important to you?<textarea data-reflection="role" rows="3"></textarea></label>
+          <label>How can a friend help clarify your thoughts?<textarea data-reflection="clarify" rows="3"></textarea></label>
+          <label>What shared memory keeps one of your friendships strong?<textarea data-reflection="memory" rows="3"></textarea></label>
+          <label>When does reassurance become more useful than advice?<textarea data-reflection="reassurance" rows="3"></textarea></label>
+        </div>
+      </section>
+
+      <section class="slide quiz-slide" data-slide="quiz" aria-labelledby="quiz-title">
+        <div id="quiz-loading" class="state-panel"><h2 id="quiz-title">Preparing your quiz</h2><p>Loading the 30 questions...</p></div>
+        <div id="quiz-panel" hidden>
+          <div class="quiz-meta"><span id="question-category"></span><strong id="question-count"></strong></div>
+          <div class="question-nav" id="question-nav" aria-label="Quiz question progress"></div>
+          <h2 id="question-prompt"></h2>
+          <div id="answer-options" class="answer-options"></div>
+          <p id="answer-message" class="form-message" aria-live="polite"></p>
+        </div>
+        <div id="result-panel" class="result-panel" hidden>
+          <p class="kicker">Submitted</p><h2 id="score-heading"></h2>
+          <p>Your attempt is locked. Review the answers and explanations below.</p>
+          <div id="result-list" class="result-list"></div>
+          <button id="new-attempt" class="secondary" type="button">Start a new attempt</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="controls">
+      <button id="previous" class="secondary" type="button">Previous</button>
+      <span id="position" aria-live="polite"></span>
+      <button id="next" class="primary" type="button">Next</button>
+      <button id="submit-quiz" class="primary" type="button" hidden>Submit quiz</button>
+    </footer>
+  </div>
+  <script src="friendship.js" defer></script>
+</body>
+</html>
