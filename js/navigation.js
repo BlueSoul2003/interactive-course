@@ -236,7 +236,7 @@
         if (!routeHash || !document.querySelectorAll) return;
 
         document.querySelectorAll('a.card[data-module-id]').forEach(function (link) {
-            var originalHref = link.dataset.navigationOriginalHref || link.getAttribute('href');
+            var originalHref = link.dataset.navigationOriginalHref || link.dataset.moduleTarget || link.getAttribute('href');
             if (!originalHref) return;
 
             link.dataset.navigationOriginalHref = originalHref;
@@ -249,6 +249,12 @@
                 });
             }
         });
+
+        // AuthAccess owns the final launcher URL. Re-prepare links after every
+        // route change so navigation context never replaces the access gate.
+        if (window.AuthAccess && typeof window.AuthAccess.prepareModuleLaunchLinks === 'function') {
+            window.AuthAccess.prepareModuleLaunchLinks(document);
+        }
     }
 
     function getReturnUrl() {

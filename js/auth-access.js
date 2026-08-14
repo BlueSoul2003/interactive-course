@@ -318,9 +318,16 @@ const AuthAccess = {
         root.querySelectorAll('a[data-module-id][href]').forEach(link => {
             const moduleId = (link.dataset.moduleId || '').trim();
             if (!/^[a-z0-9][a-z0-9-]{1,99}$/.test(moduleId)) return;
-            if (!link.dataset.moduleTarget) link.dataset.moduleTarget = link.getAttribute('href') || '';
+            const currentHref = link.getAttribute('href') || '';
+            if (!link.dataset.moduleTarget) link.dataset.moduleTarget = currentHref;
+            let sourceRoute = '';
+            try {
+                const candidate = new URL(currentHref, document.baseURI).searchParams.get('from') || '';
+                if (window.Navigation?.isRootRouteHash(candidate)) sourceRoute = candidate;
+            } catch (_error) {}
             const launcherUrl = new URL(launcherBase.href);
             launcherUrl.searchParams.set('module', moduleId);
+            if (sourceRoute) launcherUrl.searchParams.set('from', sourceRoute);
             link.href = launcherUrl.href;
             prepared += 1;
         });
