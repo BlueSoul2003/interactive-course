@@ -455,6 +455,7 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 ('igcse-y4-sci-topic3',        'Topic 3: States of Matter',                  'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic4',        'Topic 4: Energy and Light',                  'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic5',        'Topic 5: Electricity and Circuits',          'igcse', 'science', 'igcse_y4_science', 'Year4'),
+('igcse-y4-sci-arclight-grid-crisis', 'Arclight Grid Crisis',                'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic6',        'Topic 6: Planet Earth',                      'igcse', 'science', 'igcse_y4_science', 'Year4'),
 ('igcse-y4-sci-topic7',        'Topic 7: Earth and Space',                   'igcse', 'science', 'igcse_y4_science', 'Year4'),
 

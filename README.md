@@ -25,6 +25,11 @@ A collection of interactive courses and modules designed to accelerate learning 
 - Sains Tingkatan 3 interactive classroom presentations for Bab 6 Elektrik dan Kemagnetan and Bab 7 Tenaga dan Kuasa.
 - IGCSE Year 4 Science Quest V5.4 — Operation Seven, published under a generic class title with no student identity.
 
+## New module — 2026-08-14
+
+- [Arclight Grid Crisis](content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html) — ID `igcse-y4-sci-arclight-grid-crisis`, route `content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html`.
+- The protected IGCSE Year 4 launcher entry opens a seven-mission Electricity lab with 56 questions, 163 marks, stylus scratchpads, local detailed progress, portal progress summaries, and hidden Teacher View.
+
 ## Public-material policy
 
 - Public: original or AI-assisted teaching HTML, student worksheets, and student notes.

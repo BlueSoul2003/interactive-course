@@ -23,6 +23,11 @@
     form.querySelectorAll('button, input').forEach(control => { control.disabled = busy; });
   }
 
+  function getSourceRoute() {
+    const candidate = new URL(window.location.href).searchParams.get('from') || '';
+    return window.Navigation?.isRootRouteHash(candidate) ? candidate : '';
+  }
+
   async function loadModule() {
     const moduleId = new URL(window.location.href).searchParams.get('module') || '';
     if (!/^[a-z0-9][a-z0-9-]{1,99}$/.test(moduleId)) {
@@ -64,6 +69,8 @@
     if (target.origin !== window.location.origin || !target.pathname.includes('/content/')) {
       throw new Error('The registered course route is not safe to open.');
     }
+    const sourceRoute = getSourceRoute();
+    if (sourceRoute) target.searchParams.set('from', sourceRoute);
     setCopy('Opening your course', 'Access confirmed. Your lesson is opening now.');
     showView('loading-view');
     window.location.replace(target.href);
@@ -170,6 +177,8 @@
     element('login-form').addEventListener('submit', handleLogin);
     element('pin-form').addEventListener('submit', handlePin);
     element('sign-out-button').addEventListener('click', handleSignOut);
+    const sourceRoute = getSourceRoute();
+    if (sourceRoute) element('portal-return-link').href = `index.html${sourceRoute}`;
 
     try {
       await loadModule();

@@ -18,6 +18,12 @@
       "path": "content/IGCSE_Syllabus/English/CEO_Masterclass/index.html"
     },
     {
+      "id": "igcse-y4-sci-arclight-grid-crisis",
+      "title": "Arclight Grid Crisis",
+      "delivery": "public",
+      "path": "content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html"
+    },
+    {
       "id": "igcse-y4-sci-command-centre",
       "title": "Science Command Centre 4.0",
       "delivery": "public",

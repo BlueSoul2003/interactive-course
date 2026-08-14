@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111820">
+  <title>Arclight Grid Crisis | Electricity Mission Lab</title>
+  <link rel="stylesheet" href="styles.css?v=20260814-5">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to mission content</a>
+
+  <header class="topbar">
+    <button class="brand" id="homeButton" type="button" aria-label="Return to mission dashboard">
+      <span class="brand-mark" aria-hidden="true">A</span>
+      <span><strong>Arclight Grid Crisis</strong><small>Electricity Mission Lab</small></span>
+    </button>
+    <div class="top-actions">
+      <a class="portal-link back-link" href="../../../../../index.html">Course portal</a>
+      <div class="score-readout"><span id="scoreValue">0</span><small id="scoreTotal">/ 0 marks</small></div>
+      <button class="control-button" id="reportButton" type="button">Progress report</button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="dashboard-view" id="dashboardView">
+      <div class="hero">
+        <img src="assets/art/arclight-hero.png" alt="Two student investigators analyse a damaged orbital station power grid">
+        <div class="hero-shade"></div>
+        <div class="hero-copy">
+          <p class="hero-label">Orbital station emergency</p>
+          <h1>Power on.<br>Prove it.</h1>
+          <p>Seven electricity missions. Evidence first, calculations second, explanations always.</p>
+          <button class="primary-action" id="continueButton" type="button">Begin mission</button>
+        </div>
+      </div>
+
+      <section class="mission-index" aria-labelledby="missionHeading">
+        <div class="section-heading">
+          <div>
+            <p class="section-label">Mission selection</p>
+            <h2 id="missionHeading">Choose the next system to repair</h2>
+          </div>
+          <div class="filter-group" aria-label="Filter questions by difficulty">
+            <button class="filter-button active" data-filter="all" type="button">All</button>
+            <button class="filter-button" data-filter="core" type="button">Core</button>
+            <button class="filter-button" data-filter="challenge" type="button">Challenge</button>
+            <button class="filter-button" data-filter="beyond" type="button">Beyond IGCSE</button>
+            <button class="filter-button" data-filter="boss" type="button">Boss</button>
+          </div>
+        </div>
+        <div class="mission-grid" id="missionGrid"></div>
+      </section>
+    </section>
+
+    <section class="workspace-view" id="workspaceView" hidden>
+      <aside class="mission-rail" aria-label="Mission navigation">
+        <button class="back-button" id="backButton" type="button">Mission dashboard</button>
+        <div id="railMissionList"></div>
+      </aside>
+
+      <article class="question-stage">
+        <div class="question-header">
+          <div>
+            <p class="question-meta" id="questionMeta"></p>
+            <h1 id="questionTitle"></h1>
+          </div>
+          <span class="difficulty-badge" id="difficultyBadge"></span>
+        </div>
+
+        <div class="visual-panel" id="visualPanel" aria-label="Mission evidence visual"></div>
+
+        <section class="evidence-panel" id="evidencePanel">
+          <h2>Evidence file</h2>
+          <div id="evidenceContent"></div>
+        </section>
+
+        <section class="answer-panel" aria-labelledby="answerHeading">
+          <h2 id="answerHeading">Your decision</h2>
+          <div id="answerArea"></div>
+          <div class="feedback" id="feedback" role="status" aria-live="polite"></div>
+        </section>
+
+        <section class="scratchpad-panel">
+          <div class="scratchpad-heading">
+            <div><h2>Ink scratchpad</h2><p>Write calculations, circle evidence or sketch a circuit.</p></div>
+            <button class="text-button" id="toggleScratchpad" type="button" aria-expanded="true">Hide</button>
+          </div>
+          <div id="scratchpadBody">
+            <div class="ink-tools" aria-label="Scratchpad tools">
+              <button class="tool-button active" id="penTool" type="button">Pen</button>
+              <button class="tool-button" id="eraserTool" type="button">Eraser</button>
+              <button class="tool-button" id="undoInk" type="button">Undo</button>
+              <button class="tool-button danger-text" id="clearInk" type="button">Clear</button>
+            </div>
+            <canvas id="inkCanvas" width="1200" height="420" aria-label="Electronic pen scratchpad"></canvas>
+          </div>
+        </section>
+
+        <nav class="question-navigation" aria-label="Question navigation">
+          <button class="secondary-action" id="previousQuestion" type="button">Previous</button>
+          <div class="question-dots" id="questionDots"></div>
+          <button class="primary-action" id="nextQuestion" type="button">Next question</button>
+        </nav>
+      </article>
+
+      <aside class="teacher-console" id="teacherConsole" hidden aria-label="Teacher view">
+        <div class="teacher-console-header">
+          <div><p>Teacher view</p><h2>Answer and rubric</h2></div>
+          <button class="icon-button" id="closeTeacher" type="button" aria-label="Close teacher view">Close</button>
+        </div>
+        <div id="teacherAnswer"></div>
+        <div class="teacher-score" id="teacherScore"></div>
+        <div class="teacher-tools">
+          <button class="secondary-action" id="revealToStudent" type="button">Reveal explanation</button>
+          <button class="secondary-action" id="markReview" type="button">Flag for review</button>
+          <button class="secondary-action danger-text" id="resetProgress" type="button">Reset all progress</button>
+        </div>
+        <p class="shortcut-note">Press Ctrl + Alt + T to close Teacher View.</p>
+      </aside>
+    </section>
+  </main>
+
+  <dialog class="report-dialog" id="reportDialog">
+    <form method="dialog" class="dialog-header">
+      <div><p class="section-label">Saved on this device</p><h2>Mission progress report</h2></div>
+      <button class="icon-button" value="close">Close</button>
+    </form>
+    <div id="reportContent"></div>
+    <div class="dialog-actions">
+      <button class="secondary-action" id="exportReport" type="button">Export JSON</button>
+      <button class="primary-action" id="printReport" type="button">Print report</button>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="../../../../../js/progress-tracker.js?v=1.0.2"
+    data-module-id="igcse-y4-sci-arclight-grid-crisis"
+    data-module-name="Arclight Grid Crisis"
+    data-module-url="content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html"></script>
+  <script src="data.js?v=20260814-2"></script>
+  <script src="visuals.js?v=20260814-8"></script>
+  <script src="app.js?v=20260814-5"></script>
+</body>
+</html>
