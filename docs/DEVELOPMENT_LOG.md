@@ -4,6 +4,11 @@ This document tracks the ongoing development, recent milestones, and unresolved 
 
 ## ✅ Recently Resolved Issues
 
+### Chemistry Chapter 5 Lesson Reset (2026-08-17)
+- **Decision:** Added an always-visible bilingual `Reset / 重新開始` control so a tutor can prepare the 141-slide lesson for a new student without searching the chapter menu.
+- **Reset scope:** Clears every revealed answer, returns to the cover, and replaces both local and authenticated cloud progress with the initial lesson state.
+- **Safety:** Requires confirmation before clearing progress; the existing `R` shortcut continues to reset only the current slide.
+
 ### 1. Registration & Authentication System (Supabase)
 - **Frontend Validation:** Added robust email format validation and `try-catch` handling to prevent Auth UI from freezing.
 - **Forgot Password Flow:** Successfully integrated a forgot password and password reset modal with smooth UI state transitions.
