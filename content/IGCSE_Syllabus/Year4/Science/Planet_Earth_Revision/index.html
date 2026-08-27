@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07131d">
+  <title>Planet Earth Revision Lab | IGCSE Year 4 Science</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Skip to revision content</a>
+  <header class="topbar">
+    <button class="brand" id="homeButton" type="button" aria-label="Return to revision dashboard">
+      <span class="brand-mark" aria-hidden="true">E</span>
+      <span><strong>Planet Earth Revision Lab</strong><small>IGCSE Year 4 Science | Topic 6</small></span>
+    </button>
+    <div class="top-actions">
+      <a class="portal-link" href="../../../../../index.html">Course portal</a>
+      <div class="score-readout"><span id="scoreValue">0</span><small id="scoreTotal">/ 150</small></div>
+      <button class="control-button" id="reportButton" type="button">Progress report</button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="dashboard-view" id="dashboardView">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="hero-label">Planet Earth revision</p>
+          <h1>Know the layers.<br>Read the warning.</h1>
+          <p>100 four-option questions and 50 triple-blank challenges across Earth structure, volcanoes, earthquakes and alerts.</p>
+          <div class="hero-actions">
+            <button class="primary-action" id="continueButton" type="button">Start revision</button>
+            <button class="secondary-action" id="resumeButton" type="button" hidden>Resume last question</button>
+          </div>
+        </div>
+        <img src="assets/art/earth-layers-kawaii.webp" width="1254" height="1254" alt="Friendly hand-drawn cutaway Earth showing its internal layers">
+      </section>
+
+      <section class="mode-switcher" aria-label="Revision question modes">
+        <button class="mode-card active" type="button" data-mode="mcq"><strong>100</strong><span>Four-option MCQ</span></button>
+        <button class="mode-card" type="button" data-mode="cloze"><strong>50</strong><span>Triple-blank cloze</span></button>
+      </section>
+
+      <section class="unit-index" aria-labelledby="unitHeading">
+        <div class="section-heading"><div><p class="section-label">Choose a field station</p><h2 id="unitHeading">Four ways to understand a restless planet</h2></div><div class="filter-group" aria-label="Filter by difficulty"><button class="filter-button active" data-filter="all" type="button">All</button><button class="filter-button" data-filter="core" type="button">Core</button><button class="filter-button" data-filter="apply" type="button">Apply</button><button class="filter-button" data-filter="stretch" type="button">Stretch</button></div></div>
+        <div class="unit-grid" id="unitGrid">
+          <button class="unit-card" type="button" data-unit="structure"><img src="assets/art/earth-layers-kawaii.webp" width="1254" height="1254" alt=""><span><small>6.1</small><strong>Earth's structure</strong><em>Crust, mantle, core and plates</em><b data-unit-count="structure">0 / 38 completed</b></span></button>
+          <button class="unit-card" type="button" data-unit="volcanoes"><img src="assets/art/volcano-kawaii.webp" width="1536" height="1024" alt=""><span><small>6.2</small><strong>Volcanoes</strong><em>Magma, vents and eruptions</em><b data-unit-count="volcanoes">0 / 38 completed</b></span></button>
+          <button class="unit-card" type="button" data-unit="earthquakes"><img src="assets/art/earthquake-kawaii.webp" width="1536" height="1024" alt=""><span><small>6.3</small><strong>Earthquakes</strong><em>Faults, waves and tsunamis</em><b data-unit-count="earthquakes">0 / 37 completed</b></span></button>
+          <button class="unit-card" type="button" data-unit="alerts"><img src="assets/art/early-warning-kawaii.webp" width="1536" height="1024" alt=""><span><small>6.4</small><strong>Earthquake alerts</strong><em>Detect, deliver and protect</em><b data-unit-count="alerts">0 / 37 completed</b></span></button>
+        </div>
+      </section>
+    </section>
+
+    <section class="workspace-view" id="workspaceView" hidden>
+      <aside class="question-rail" aria-label="Question navigation"><button class="back-button" id="backButton" type="button">Revision dashboard</button><div class="rail-summary" id="railSummary"></div><div id="railContent"></div></aside>
+      <article class="question-stage">
+        <div class="question-header"><div><p class="question-meta" id="questionMeta">Earth structure · MCQ 1 of 25</p><h1 id="questionTitle">Question prompt appears here.</h1></div><span class="difficulty-badge" id="difficultyBadge">Core</span></div>
+        <figure class="topic-visual" id="topicVisual"><img src="assets/art/earth-layers-kawaii.webp" width="1254" height="1254" alt=""><figcaption id="topicCaption"></figcaption></figure>
+        <section class="answer-panel" aria-labelledby="answerHeading"><h2 id="answerHeading">Your answer</h2><div id="answerArea"><button class="answer-option" type="button">Example option A</button><button class="answer-option" type="button">Example option B</button><button class="answer-option" type="button">Example option C</button><button class="answer-option" type="button">Example option D</button></div><div class="feedback" id="feedback" role="status" aria-live="polite"></div></section>
+        <section class="scratchpad-panel"><div class="scratchpad-heading"><div><h2>Ink scratchpad</h2><p>Use an electronic pen to sketch layers, faults or reasoning.</p></div><button class="text-button" id="toggleScratchpad" type="button" aria-expanded="true">Hide</button></div><div id="scratchpadBody"><div class="ink-tools"><button class="tool-button active" id="penTool" type="button">Pen</button><button class="tool-button" id="eraserTool" type="button">Eraser</button><button class="tool-button" id="undoInk" type="button">Undo</button><button class="tool-button" id="clearInk" type="button">Clear</button></div><canvas id="inkCanvas" width="1200" height="360" aria-label="Electronic pen scratchpad"></canvas></div></section>
+        <nav class="question-navigation" id="questionNavigation" aria-label="Question navigation"><button class="secondary-action" id="previousQuestion" type="button">Previous</button><div class="question-progress" id="questionProgress"></div><button class="primary-action" id="nextQuestion" type="button">Next question</button></nav>
+      </article>
+      <aside class="teacher-console" id="teacherConsole" hidden aria-label="Teacher view"><div class="teacher-console-header"><div><p>Teacher view</p><h2>Answer and teaching note</h2></div><button class="icon-button" id="closeTeacher" type="button">Close</button></div><div id="teacherAnswer"></div><p class="shortcut-note">Ctrl + Alt + T toggles Teacher View.<br>Ctrl + Alt + R opens Progress Reset.</p></aside>
+    </section>
+  </main>
+
+  <dialog class="report-dialog" id="reportDialog"><form method="dialog" class="dialog-header"><div><p class="section-label">Saved on this device</p><h2>Revision progress report</h2></div><button class="icon-button" type="submit" value="close">Close</button></form><div id="reportContent"></div><div class="dialog-actions"><button class="secondary-action" id="exportReport" type="button">Export JSON</button><button class="primary-action" id="printReport" type="button">Print report</button></div></dialog>
+  <dialog class="reset-dialog" id="resetDialog" aria-labelledby="resetTitle"><div class="reset-dialog-body"><p class="section-label">Teacher control</p><h2 id="resetTitle">Reset all revision progress?</h2><p>This clears submitted answers, mistake counts and ink scratchpads for this module. It cannot be undone.</p><div class="dialog-actions"><button class="secondary-action" id="cancelReset" type="button">Keep progress</button><button class="danger-action" id="confirmReset" type="button">Reset progress</button></div></div></dialog>
+  <div class="save-status" id="saveStatus" role="status" aria-live="polite">Progress ready</div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="../../../../../js/progress-tracker.js?v=1.0.2"
+          data-module-id="igcse-y4-sci-planet-earth-revision-v2"
+          data-module-name="Planet Earth Revision Lab"
+          data-module-url="content/IGCSE_Syllabus/Year4/Science/Planet_Earth_Revision/index.html"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
