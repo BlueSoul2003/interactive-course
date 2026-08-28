@@ -34,12 +34,14 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 - [Johor 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html) — ID `spm-chem-f5-johor-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html`.
 - The protected SPM Chemistry launcher entry provides all 40 objective questions with original-page imagery, repeat attempts, marking, portal navigation, and Supabase-backed progress restore for signed-in students.
-- This explicitly approved student drill is the sole past-paper publication exception in this release. The source PDF, answer-scheme page, and teacher files remain SSD-only; the public module contains only cleaned question-page images 1–26.
+- [Johor 2025 Kimia Kertas 2 Teacher Slides](content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html) — ID `spm-chem-f5-johor-2025-k2-teacher`, route `content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html`.
+- The explicitly approved protected teacher deck includes 11 structured questions, original question-page imagery, staged English scheme answers, Chinese explanations, complete calculation working, local classroom reset controls, and Supabase-backed progress restore.
+- These two Johor modules are explicit past-paper publication exceptions. The source PDFs remain SSD-only; Kertas 1 excludes its answer-scheme page, while the approved Kertas 2 teacher module contains only the answer material required by the staged classroom deck.
 
 ## Public-material policy
 
 - Public: original or AI-assisted teaching HTML, student worksheets, and student notes.
-- Private/SSD only by default: publisher or source PDFs, past papers, teacher/tutor answer keys, source archives, and raw production assets. A transformed student drill may be published only with explicit approval and must keep its source PDF and answer material off-repository.
+- Private/SSD only by default: publisher or source PDFs, past papers, teacher/tutor answer keys, source archives, and raw production assets. A transformed student drill or teacher deck may be published only with explicit approval; source PDFs must remain off-repository.
 - Student names must not appear in public module titles, filenames, storage keys, or metadata.
 - Removing a file from the current branch does not erase older Git history; history cleanup requires a separate review.
 

@@ -384,6 +384,12 @@
       "path": "content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html"
     },
     {
+      "id": "spm-chem-f5-johor-2025-k2-teacher",
+      "title": "Johor 2025 Kimia Kertas 2 Teacher Slides",
+      "delivery": "public",
+      "path": "content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html"
+    },
+    {
       "id": "spm-en-advice-expert",
       "title": "The Advice Expert",
       "delivery": "public",

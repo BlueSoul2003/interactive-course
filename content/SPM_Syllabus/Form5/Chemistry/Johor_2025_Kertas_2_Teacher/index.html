@@ -1,0 +1,2162 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>2025 SPM Chemistry Johor Set 1 · Kertas 2 Teacher Slides</title>
+  <style>
+    :root {
+      --stage-bg: #13211c;
+      --slide-bg: #f4efe5;
+      --paper: #fffdf8;
+      --ink: #19231f;
+      --muted: #667069;
+      --green: #153f32;
+      --green-2: #236b51;
+      --mint: #dcece2;
+      --amber: #d7952c;
+      --amber-soft: #f7e9c8;
+      --line: #d7d5c9;
+      --danger: #a34736;
+    }
+
+    /* ===========================================
+       FIXED 16:9 STAGE: MANDATORY BASE STYLES
+       Include this ENTIRE file in every presentation.
+       Slides are authored at 1920×1080 and scaled as a whole.
+       =========================================== */
+
+    /* 1. Lock the browser viewport */
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 2. Full-window deck viewport */
+    .deck-viewport {
+        position: fixed;
+        inset: 0;
+        overflow: hidden;
+        background: var(--stage-bg, #000);
+    }
+
+    /* 3. Fixed 16:9 design canvas.
+       JavaScript sets transform: translate(...) scale(...). */
+    .deck-stage {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        transform-origin: 0 0;
+        background: var(--slide-bg, #fff);
+    }
+
+    /* 4. Slides stack inside the fixed stage.
+       Content must be laid out at 1920×1080, not reflowed per device. */
+    .slide {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+        background: var(--slide-bg, #fff);
+    }
+
+    .slide.active,
+    .slide.visible {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    /* 5. Keep media inside authored slide bounds */
+    img,
+    video,
+    canvas,
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    /* 6. Presentation chrome stays outside the slide design system */
+    .deck-controls {
+        position: fixed;
+        left: 50%;
+        bottom: 22px;
+        transform: translateX(-50%);
+        z-index: 1000;
+    }
+
+    /* 7. Print one fixed-size slide per page */
+    @media print {
+        html,
+        body {
+            width: 1920px;
+            height: auto;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-viewport {
+            position: static;
+            overflow: visible;
+            background: #fff;
+        }
+
+        .deck-stage {
+            position: static;
+            width: auto;
+            height: auto;
+            transform: none !important;
+            background: none;
+        }
+
+        .slide {
+            position: relative;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            width: 1920px;
+            height: 1080px;
+            break-after: page;
+            page-break-after: always;
+        }
+
+        .slide:last-child {
+            break-after: auto;
+            page-break-after: auto;
+        }
+
+        .deck-controls {
+            display: none !important;
+        }
+    }
+
+    /* 8. Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.2s !important;
+        }
+    }
+
+    * { box-sizing: border-box; }
+    button { font: inherit; }
+    body {
+      font-family: "Aptos", "Trebuchet MS", sans-serif;
+      color: var(--ink);
+    }
+
+    .slide-shell {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 84px 1fr 72px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(215,149,44,.16), transparent 29%),
+        linear-gradient(135deg, #f7f2e8 0%, #f1ecdf 100%);
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 14px 30px;
+      background: var(--green);
+      color: white;
+      border-bottom: 5px solid var(--amber);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .crest {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--amber);
+      color: #17251f;
+      font-family: "Baskerville", Georgia, serif;
+      font-weight: 800;
+      font-size: 23px;
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.32);
+    }
+
+    .brand-copy strong {
+      display: block;
+      font-family: "Baskerville", Georgia, serif;
+      font-size: 25px;
+      letter-spacing: .2px;
+    }
+
+    .brand-copy span {
+      color: #cce0d6;
+      font-size: 14px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+
+    .question-title {
+      text-align: center;
+      font-family: "Baskerville", Georgia, serif;
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      white-space: nowrap;
+    }
+
+    .top-actions {
+      justify-self: end;
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-button,
+    .nav-button,
+    .page-chip,
+    .question-chip {
+      border: 0;
+      cursor: pointer;
+      transition: transform .15s ease, background .15s ease, color .15s ease, opacity .15s ease;
+    }
+
+    .icon-button:hover,
+    .nav-button:hover,
+    .page-chip:hover,
+    .question-chip:hover { transform: translateY(-2px); }
+
+    .icon-button {
+      min-width: 118px;
+      height: 44px;
+      padding: 0 18px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.12);
+      color: white;
+      border: 1px solid rgba(255,255,255,.23);
+      font-weight: 750;
+      font-size: 16px;
+    }
+
+    .back-link {
+      display: inline-grid;
+      place-items: center;
+      min-width: 96px;
+      height: 44px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,.23);
+      border-radius: 13px;
+      background: rgba(255,255,255,.12);
+      color: white;
+      font-size: 16px;
+      font-weight: 750;
+      text-decoration: none;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .back-link:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.2);
+    }
+
+    .icon-button.reset-all {
+      background: rgba(215,149,44,.18);
+      border-color: rgba(247,210,139,.48);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 1120px 1fr;
+      gap: 22px;
+      min-height: 0;
+      padding: 22px 28px 20px;
+    }
+
+    .paper-panel,
+    .answer-panel {
+      position: relative;
+      min-height: 0;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: 0 16px 48px rgba(32,45,39,.14);
+      border: 1px solid rgba(21,63,50,.13);
+    }
+
+    .paper-panel {
+      display: grid;
+      grid-template-rows: 52px 1fr;
+      background: #d9d7cf;
+    }
+
+    .panel-heading {
+      display: grid;
+      grid-template-columns: minmax(210px, 1fr) auto auto;
+      align-items: center;
+      gap: 16px;
+      padding: 0 18px;
+      background: #fefcf7;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-heading h2 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+
+    .source-label {
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pdf-tools {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .pdf-tool {
+      height: 34px;
+      min-width: 38px;
+      padding: 0 11px;
+      border: 1px solid #c8cec8;
+      border-radius: 10px;
+      background: #f4f1e9;
+      color: var(--green);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 850;
+      line-height: 1;
+    }
+
+    .pdf-tool:hover {
+      background: var(--mint);
+      border-color: #9eb5aa;
+    }
+
+    .pdf-tool.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .pdf-tool.zoom-readout {
+      min-width: 62px;
+      cursor: default;
+      background: white;
+      color: var(--muted);
+    }
+
+    .paper-view {
+      position: static;
+      display: block;
+      min-height: 0;
+      padding: 14px 18px 70px;
+      overflow: auto;
+      overscroll-behavior: contain;
+      touch-action: none;
+      cursor: grab;
+      scrollbar-color: var(--green-2) #c9cbc5;
+      scrollbar-width: auto;
+      background:
+        linear-gradient(45deg, rgba(255,255,255,.22) 25%, transparent 25%) 0 0 / 32px 32px,
+        linear-gradient(-45deg, rgba(255,255,255,.22) 25%, transparent 25%) 0 16px / 32px 32px,
+        #d7d6cf;
+    }
+
+    .paper-view.dragging {
+      cursor: grabbing;
+      user-select: none;
+    }
+
+    .paper-view::-webkit-scrollbar {
+      width: 16px;
+      height: 16px;
+    }
+
+    .paper-view::-webkit-scrollbar-track {
+      background: #c9cbc5;
+    }
+
+    .paper-view::-webkit-scrollbar-thumb {
+      background: var(--green-2);
+      border: 3px solid #c9cbc5;
+      border-radius: 999px;
+    }
+
+    .paper-page {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: none;
+      max-height: none;
+      margin: 0 auto;
+      filter: drop-shadow(0 10px 17px rgba(24,31,28,.28));
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .paper-page.fit-page {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .page-strip {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 9px;
+      padding: 7px;
+      border-radius: 16px;
+      background: rgba(21,63,50,.91);
+      box-shadow: 0 8px 24px rgba(13,30,23,.22);
+    }
+
+    .page-chip {
+      min-width: 78px;
+      height: 34px;
+      border-radius: 10px;
+      background: transparent;
+      color: #dbe9e2;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .page-chip.active {
+      background: var(--amber);
+      color: #17251f;
+    }
+
+    .answer-panel {
+      display: grid;
+      grid-template-rows: 66px 52px 1fr 112px;
+      background: var(--paper);
+    }
+
+    .answer-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      background: #fffdfa;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .answer-heading h2 {
+      margin: 0;
+      font-family: "Baskerville", Georgia, serif;
+      color: var(--green);
+      font-size: 29px;
+    }
+
+    .marks {
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #715111;
+      background: var(--amber-soft);
+      font-size: 15px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+    }
+
+    .progress-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 24px;
+      border-bottom: 1px solid #e6e2d8;
+      background: #f8f5ee;
+      overflow: hidden;
+    }
+
+    .progress-dot {
+      flex: 1 1 0;
+      height: 8px;
+      border-radius: 999px;
+      background: #d9d9d1;
+    }
+
+    .progress-dot.done { background: var(--green-2); }
+    .progress-dot.current {
+      background: var(--amber);
+      box-shadow: 0 0 0 3px rgba(215,149,44,.17);
+    }
+
+    .reveal-stage {
+      position: relative;
+      min-height: 0;
+      padding: 28px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .idle-card,
+    .answer-card,
+    .complete-card {
+      width: 100%;
+      max-height: 100%;
+      animation: rise .28s ease-out both;
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .idle-card {
+      text-align: center;
+      padding: 52px 46px;
+      border: 2px dashed #bfc8c1;
+      border-radius: 24px;
+      color: var(--muted);
+      background: linear-gradient(145deg, #f7f7f0, #eef3ee);
+    }
+
+    .idle-icon {
+      width: 86px;
+      height: 86px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      background: var(--mint);
+      color: var(--green);
+      font-size: 40px;
+      font-weight: 900;
+    }
+
+    .idle-card strong {
+      display: block;
+      color: var(--green);
+      font-family: "Baskerville", Georgia, serif;
+      font-size: 34px;
+      margin-bottom: 12px;
+    }
+
+    .idle-card span {
+      font-size: 20px;
+      line-height: 1.55;
+    }
+
+    .answer-card {
+      display: grid;
+      gap: 20px;
+      align-content: center;
+    }
+
+    .part-kicker {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      color: var(--green-2);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .part-kicker::before {
+      content: "";
+      width: 38px;
+      height: 5px;
+      border-radius: 4px;
+      background: var(--amber);
+    }
+
+    .answer-box {
+      padding: 25px 28px;
+      border-left: 7px solid var(--green-2);
+      border-radius: 16px;
+      background: #edf5ef;
+      color: #13261e;
+      font-family: "Baskerville", Georgia, serif;
+      font-size: 29px;
+      font-weight: 700;
+      line-height: 1.34;
+      white-space: pre-line;
+    }
+
+    .answer-box.calculation-box {
+      display: grid;
+      gap: 9px;
+      padding: 18px 20px;
+      font-family: "Cambria Math", "Baskerville", Georgia, serif;
+      font-size: 22px;
+      line-height: 1.24;
+      white-space: normal;
+    }
+
+    .calculation-line {
+      display: grid;
+      grid-template-columns: 112px minmax(0, 1fr);
+      align-items: baseline;
+      gap: 12px;
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(35,107,81,.15);
+    }
+
+    .calculation-line:last-child {
+      border-bottom: 0;
+    }
+
+    .calculation-label {
+      color: var(--green-2);
+      font-family: "Aptos", "Trebuchet MS", sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: .55px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .calculation-expression {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .calculation-line.final {
+      border: 1px solid #e4c16b;
+      border-radius: 11px;
+      background: var(--amber-soft);
+      color: #4b3512;
+      font-weight: 850;
+    }
+
+    .calculation-line.final .calculation-label {
+      color: #966316;
+    }
+
+    .answer-image-wrap {
+      position: relative;
+      display: grid;
+      place-items: center;
+      height: 190px;
+      padding: 10px;
+      border: 1px solid #d6d8d2;
+      border-radius: 15px;
+      background: white;
+      cursor: zoom-in;
+      overflow: hidden;
+    }
+
+    .answer-image-wrap::after {
+      content: "Click to view full image";
+      position: absolute;
+      right: 10px;
+      bottom: 9px;
+      padding: 6px 10px;
+      border-radius: 9px;
+      background: rgba(21,63,50,.9);
+      color: white;
+      font-family: "Aptos", "Trebuchet MS", sans-serif;
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .35px;
+    }
+
+    .answer-image {
+      position: absolute;
+      inset: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      max-width: none;
+      max-height: none;
+      object-fit: contain;
+    }
+
+    .image-lightbox {
+      position: absolute;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      grid-template-rows: 74px 1fr;
+      padding: 24px 30px 30px;
+      background: rgba(10,27,21,.96);
+      animation: reveal .2s ease-out both;
+    }
+
+    .lightbox-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: white;
+    }
+
+    .lightbox-bar strong {
+      font-family: "Baskerville", Georgia, serif;
+      font-size: 28px;
+    }
+
+    .lightbox-close {
+      min-width: 130px;
+      height: 48px;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 14px;
+      background: var(--amber);
+      color: #17251f;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .lightbox-frame {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      border-radius: 22px;
+      background: white;
+      overflow: auto;
+    }
+
+    .lightbox-image {
+      display: block;
+      width: auto;
+      height: auto;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .explanation-box {
+      padding: 22px 25px;
+      border-radius: 16px;
+      background: var(--amber-soft);
+      border: 1px solid #ead196;
+      color: #4d3a18;
+      font-size: 21px;
+      font-weight: 650;
+      line-height: 1.58;
+      animation: reveal .26s ease-out both;
+    }
+
+    .explanation-box::before {
+      content: "中文解釋";
+      display: block;
+      margin-bottom: 8px;
+      color: #9a6617;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    @keyframes reveal {
+      from { opacity: 0; transform: translateY(-8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .complete-card {
+      text-align: center;
+      padding: 42px;
+      border-radius: 24px;
+      background: var(--green);
+      color: white;
+      box-shadow: inset 0 -8px 0 rgba(0,0,0,.08);
+    }
+
+    .complete-card strong {
+      display: block;
+      font-family: "Baskerville", Georgia, serif;
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .complete-card span {
+      color: #d4e8dd;
+      font-size: 19px;
+    }
+
+    .teacher-note {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      gap: 13px;
+      padding: 15px 22px;
+      background: #f5f0e5;
+      border-top: 1px solid var(--line);
+      color: #5f655f;
+      font-size: 16px;
+      line-height: 1.42;
+      overflow: hidden;
+    }
+
+    .teacher-note strong {
+      color: var(--danger);
+      white-space: nowrap;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: 270px 1fr 270px;
+      align-items: center;
+      gap: 16px;
+      padding: 10px 28px;
+      background: #e8e3d8;
+      border-top: 1px solid #d0ccbf;
+    }
+
+    .nav-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .nav-group:last-child { justify-content: flex-end; }
+
+    .nav-button {
+      height: 48px;
+      min-width: 122px;
+      padding: 0 18px;
+      border-radius: 14px;
+      background: var(--green);
+      color: white;
+      font-weight: 850;
+      font-size: 17px;
+    }
+
+    .nav-button.secondary {
+      background: #fffdf8;
+      color: var(--green);
+      border: 1px solid #c5c9c2;
+    }
+
+    .nav-button:disabled {
+      opacity: .35;
+      cursor: default;
+      transform: none;
+    }
+
+    .question-strip {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .question-chip {
+      width: 47px;
+      height: 47px;
+      border-radius: 14px;
+      background: #f9f6ef;
+      color: var(--green);
+      border: 1px solid #cfd1c9;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .question-chip.has-progress {
+      box-shadow: inset 0 -5px 0 var(--green-2);
+    }
+
+    .question-chip.active {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: #17251f;
+      box-shadow: none;
+    }
+
+    .screen-hint {
+      position: absolute;
+      right: 18px;
+      top: 17px;
+      color: #919a94;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .3px;
+    }
+
+    .source-warning {
+      color: #7c3428;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-viewport">
+    <main class="deck-stage" id="deckStage" aria-live="polite"></main>
+  </div>
+
+  <script>
+    "use strict";
+
+    const QUESTIONS = [
+      {
+        number: 1,
+        section: "Section A",
+        marks: "5 marks",
+        pages: [1],
+        note: "Answers follow the supplied marking scheme.",
+        segments: [
+          {
+            label: "1(a)(i) · Definition of acid",
+            answer: "A chemical substance that ionises in water to produce hydrogen ions, H⁺.",
+            explanation: "酸的核心定義有兩個得分點：必須在水中電離，以及產生 H⁺。只寫「pH 小於 7」不是這題要求的定義。"
+          },
+          {
+            label: "1(a)(ii) · Ion responsible",
+            answer: "Hydrogen ion, H⁺.",
+            explanation: "酸性由氫離子造成。答案最好同時寫名稱及符號，避免只寫「hydrogen」而失分。"
+          },
+          {
+            label: "1(a)(iii) · Solvent K",
+            answer: "Water.",
+            explanation: "乙酸只有在水中才能電離產生 H⁺，所以溶劑 K 是水。"
+          },
+          {
+            label: "1(a)(iv) · Observation explained",
+            answer: "Glacial ethanoic acid ionises in solvent K to produce hydrogen ions, H⁺.\nTherefore, ethanoic acid shows acidic properties in solvent K.",
+            explanation: "先指出乙酸在水中電離并產生 H⁺，再把這件事連到題目中的酸性現象。這樣可對應 skema 的兩個得分點。"
+          }
+        ]
+      },
+      {
+        number: 2,
+        section: "Section A",
+        marks: "5 marks",
+        pages: [2],
+        note: "The source marking-scheme diagram is visibly overlaid. The atom-arrangement answer is stated in words so the teacher does not show a misleading redraw.",
+        segments: [
+          {
+            label: "2(a) · Alloy",
+            answer: "Steel.",
+            explanation: "鐵和碳形成的合金是鋼。"
+          },
+          {
+            label: "2(b) · Added atom",
+            answer: "Carbon.",
+            explanation: "鋼由鐵原子和較小的碳原子組成。"
+          },
+          {
+            label: "2(c) · Atom arrangement",
+            answer: "Draw large iron atoms arranged in layers with smaller carbon atoms occupying the spaces between them. Label the atoms Fe and C.",
+            explanation: "畫圖的關鍵是大小不同：大圓代表鐵，小圓代表碳；小碳原子插在鐵原子層之間，使原子層不容易滑動。原 skema 圖有重疊，因此這裡用文字忠實說明得分點。"
+          },
+          {
+            label: "2(d) · Property",
+            answer: "The alloy is harder / stronger / more resistant to corrosion.",
+            explanation: "skema 接受硬度較高、強度較高或更耐腐蝕。作答時寫其中一項即可；若題目要求比較，記得加上「than pure iron」。"
+          }
+        ]
+      },
+      {
+        number: 3,
+        section: "Section A",
+        marks: "6 marks",
+        pages: [3],
+        note: "Answers follow the supplied marking scheme.",
+        segments: [
+          {
+            label: "3(a) · Arrangement principle",
+            answer: "The elements are arranged in increasing order of proton number.",
+            explanation: "現代元素週期表按質子數遞增排列，而不是按相對原子質量。"
+          },
+          {
+            label: "3(b)(i) · Reactivity",
+            answer: "Element S is more reactive.",
+            explanation: "根據題圖所示的族與位置判斷反應性趨勢；答案要直接比較 S 與題目指定的元素。"
+          },
+          {
+            label: "3(b)(ii) · Chemical equation",
+            answer: "4R + O₂ → 2R₂O",
+            explanation: "R 形成 R₂O。配平時左邊需 4 個 R 原子及 2 個 O 原子，右邊用 2R₂O 正好相等。"
+          },
+          {
+            label: "3(c)(i) · Elements selected",
+            answer: "Q and P.",
+            explanation: "依題圖中的價電子數選出能形成指定化合物的兩個元素。"
+          },
+          {
+            label: "3(c)(ii) · Formula",
+            answer: "QP₃",
+            explanation: "用離子電荷或化合價交叉配比，Q 與 P 的最簡整數比為 1:3。"
+          }
+        ]
+      },
+      {
+        number: 4,
+        section: "Section A",
+        marks: "7 marks",
+        pages: [4, 5],
+        note: "Answers follow the supplied marking scheme.",
+        segments: [
+          {
+            label: "4(a)(i) · Polymer",
+            answer: "A long-chain molecule formed by joining many repeating basic units.",
+            explanation: "聚合物是由大量重複基本單位連接而成的長鏈分子；「many repeating units」是關鍵詞。"
+          },
+          {
+            label: "4(a)(ii) · Condensation polymerisation",
+            answer: "It involves at least two different types of monomers.\nEach monomer has two functional groups that take part in the polymerisation reaction.",
+            explanation: "縮合聚合通常需要兩種不同單體，而且每個單體要有兩個能反應的官能團，這樣分子才能不斷連成長鏈。"
+          },
+          {
+            label: "4(b)(i) · Aspirin side effect",
+            answer: "Aspirin is acidic and may irritate the stomach lining / cause stomach ulcers.",
+            explanation: "先寫阿司匹林呈酸性，再寫對胃壁的影響，正好對應兩個得分點。"
+          },
+          {
+            label: "4(b)(ii) · Alternative analgesic",
+            answer: "Paracetamol.",
+            explanation: "題目要求替代止痛藥，skema 指定 paracetamol。"
+          },
+          {
+            label: "4(b)(iii) · Risk",
+            answer: "An overdose can cause liver damage.",
+            explanation: "重點是過量服用與肝臟損傷之間的因果關係。"
+          }
+        ]
+      },
+      {
+        number: 5,
+        section: "Section A",
+        marks: "8 marks",
+        pages: [6, 7],
+        note: "The graph shown in the answer is cropped directly from the supplied marking scheme.",
+        segments: [
+          {
+            label: "5(a) · Rate of reaction",
+            answer: "The change in the volume of hydrogen gas per unit time.",
+            explanation: "這題要根據實驗量測的變量作答：氫氣體積的變化除以時間。"
+          },
+          {
+            label: "5(b) · Observation",
+            answer: "Colourless gas bubbles are released.",
+            explanation: "鋅與鹽酸反應產生無色氫氣，所以可見無色氣泡。"
+          },
+          {
+            label: "5(c) · Balanced equation",
+            answer: "Zn + 2HCl → ZnCl₂ + H₂",
+            explanation: "HCl 前要加 2 才能同時平衡氯與氫。"
+          },
+          {
+            label: "5(c) · Moles of hydrochloric acid",
+            answer: "Step 1: Convert volume: 20 cm³ ÷ 1000 = 0.020 dm³\nStep 2: Use n = cV\nStep 3: n(HCl) = 1.0 mol dm⁻³ × 0.020 dm³\nFinal answer: n(HCl) = 0.020 mol",
+            calculation: true,
+            explanation: "把 20 cm³ 除以 1000 轉成 dm³，再使用 n = MV。"
+          },
+          {
+            label: "5(c) · Volume of hydrogen",
+            answer: "Step 1: Mole ratio HCl : H₂ = 2 : 1\nStep 2: n(H₂) = 0.020 ÷ 2 = 0.010 mol\nStep 3: Use V = n × 24 dm³ mol⁻¹\nStep 4: V(H₂) = 0.010 × 24\nFinal answer: V(H₂) = 0.24 dm³",
+            calculation: true,
+            explanation: "先由方程式取得 2:1 的莫耳比，再用室溫下 24 dm³ mol⁻¹ 計算氣體體積。"
+          },
+          {
+            label: "5(d) · Faster experiment",
+            answer: "Use zinc powder instead of zinc chips / increase the temperature above 30°C / add a few drops of copper(II) sulphate solution.",
+            explanation: "skema 接受其中一種改變。粉末增加表面積、升溫增加有效碰撞、硫酸銅則促進反應。"
+          },
+          {
+            label: "5(d) · Expected curve",
+            answer: "Experiment II has a steeper initial gradient and reaches the same final volume sooner.",
+            explanation: "條件只改變反應速率，鋅或酸的總量沒有改，所以終點氣體體積相同，但更快到達平台。",
+            image: "assets/answers/q5-rate-curve.png",
+            imageAlt: "Marking-scheme graph showing the faster Experiment II curve"
+          }
+        ]
+      },
+      {
+        number: 6,
+        section: "Section A",
+        marks: "9 marks",
+        pages: [8, 9],
+        note: "Both answer diagrams are cropped directly from the supplied marking scheme.",
+        segments: [
+          {
+            label: "6(a)(i) · Melting point",
+            answer: "The constant temperature at which a substance changes from solid to liquid at a specific pressure.",
+            explanation: "定義必須包括「恆定溫度」、「固態變液態」及特定壓力。"
+          },
+          {
+            label: "6(a)(ii) · Substance",
+            answer: "Y",
+            explanation: "從題圖平台溫度或熔點資料判斷，skema 的答案是 Y。"
+          },
+          {
+            label: "6(a)(iii) · Cooling curve",
+            answer: "Draw the cooling curve with the correct constant-temperature section.",
+            explanation: "冷卻曲線在凝固時出現水平平台，因為釋放的潛熱暫時抵消熱量散失。",
+            image: "assets/answers/q6-cooling-curve.png",
+            imageAlt: "Cooling curve cropped from the marking scheme"
+          },
+          {
+            label: "6(a)(iv) · Heating apparatus",
+            answer: "Use the correctly labelled heating apparatus shown.",
+            explanation: "裝置要能安全加熱樣品並量度溫度；功能正確與標籤各有得分。",
+            image: "assets/answers/q6-heating-apparatus.png",
+            imageAlt: "Heating apparatus cropped from the marking scheme"
+          },
+          {
+            label: "6(b) · Shape of the curves",
+            answer: "Diagram 6.2(a): temperature decreases uniformly.\nDiagram 6.2(b): temperature decreases drastically.",
+            explanation: "一條曲線下降均勻，另一條下降突然，反映熱量在樣品內部分布不同。"
+          },
+          {
+            label: "6(b) · Heat distribution",
+            answer: "Diagram 6.2(a): heat is distributed evenly.\nDiagram 6.2(b): heat is distributed unevenly.",
+            explanation: "有持續攪拌時各處溫度較一致；沒有攪拌時局部溫差較大。"
+          },
+          {
+            label: "6(b) · Experimental error",
+            answer: "The naphthalene was not stirred continuously during the cooling process.",
+            explanation: "未持續攪拌導致熱量分布不均，因此讀到的冷卻曲線會異常。"
+          }
+        ]
+      },
+      {
+        number: 7,
+        section: "Section A",
+        marks: "10 marks",
+        pages: [10, 11, 12],
+        note: "Answers follow the supplied marking scheme.",
+        segments: [
+          {
+            label: "7(a)(i) · Redox reaction",
+            answer: "Oxidation and reduction occur simultaneously.",
+            explanation: "氧化還原反應的定義重點是氧化與還原同時發生。"
+          },
+          {
+            label: "7(a)(ii) · Positive terminal",
+            answer: "Copper.",
+            explanation: "在題目的化學電池中，銅電極是正極。"
+          },
+          {
+            label: "7(a)(iii) · Half-equation",
+            answer: "Mg → Mg²⁺ + 2e⁻",
+            explanation: "鎂失去兩個電子形成 Mg²⁺，所以這是氧化半方程式。"
+          },
+          {
+            label: "7(b)(i) · Roles of the solutions",
+            answer: "Potassium bromide solution acts as a reducing agent and reduces Fe³⁺ to Fe²⁺.\nIron(III) chloride solution acts as an oxidising agent and oxidises Br⁻ to Br₂.",
+            explanation: "Br⁻ 失去電子被氧化，因此 KBr 是還原劑；Fe³⁺ 得到電子被還原，因此 FeCl₃ 是氧化劑。"
+          },
+          {
+            label: "7(b)(ii) · Ionic equation",
+            answer: "2Fe³⁺ + 2Br⁻ → 2Fe²⁺ + Br₂",
+            explanation: "兩個 Br⁻ 共失去兩個電子；兩個 Fe³⁺ 各接受一個電子，原子與電荷都平衡。"
+          },
+          {
+            label: "7(b)(iii) · Observation",
+            answer: "The brown solution turns green.",
+            explanation: "Fe³⁺ 溶液呈棕黃色，而生成的 Fe²⁺ 溶液呈綠色。"
+          },
+          {
+            label: "7(b)(iii) · Explanation",
+            answer: "Fe³⁺ ions undergo reduction by accepting electrons to form Fe²⁺ ions.",
+            explanation: "顏色改變要用粒子層次解釋：Fe³⁺ 接受電子變成 Fe²⁺。"
+          },
+          {
+            label: "7(c) · Electrical conductivity",
+            answer: "Glucose solution is a covalent compound / contains neutral molecules.\nIt has no freely moving ions to complete the circuit.",
+            explanation: "葡萄糖雖能溶於水，但不會電離成可自由移動的離子，所以不能導電。"
+          }
+        ]
+      },
+      {
+        number: 8,
+        section: "Section A",
+        marks: "10 marks",
+        pages: [12, 13],
+        note: "The propanol structural formulae are cropped directly from the supplied marking scheme.",
+        segments: [
+          {
+            label: "8(a) · Carbon compound",
+            answer: "A carbon compound is a compound that contains carbon as a constituent element.",
+            explanation: "定義只需指出碳是化合物的組成元素。"
+          },
+          {
+            label: "8(b) · Isomers of propanol",
+            answer: "Propan-1-ol and propan-2-ol.",
+            explanation: "兩者分子式相同，但羥基位置不同，因此互為位置異構物。",
+            image: "assets/answers/q8-propanol-isomers.png",
+            imageAlt: "Structural formulae of propan-1-ol and propan-2-ol from the marking scheme"
+          },
+          {
+            label: "8(c)(i) · Esterification equation",
+            answer: "C₃H₇OH + CH₃COOH ⇌ CH₃COOC₃H₇ + H₂O",
+            explanation: "丙醇與乙酸進行酯化，生成丙基乙酸酯和水；反應物與生成物的原子數要平衡。"
+          },
+          {
+            label: "8(c)(ii) · Product",
+            answer: "Propyl ethanoate.",
+            explanation: "酯的名稱先寫來自醇的烷基 propyl，再寫來自酸的 ethanoate。"
+          },
+          {
+            label: "8(d) · Test with zinc",
+            answer: "Add zinc powder separately to propanol and ethanoic acid.\nEthanoic acid produces colourless gas bubbles; no change occurs in propanol.",
+            explanation: "羧酸能與鋅反應放出氫氣，醇在此條件下沒有明顯反應，所以可用觀察區分。"
+          },
+          {
+            label: "8(e) · Ethanol in sanitiser",
+            answer: "Ethanol kills bacteria and viruses by damaging their cell membranes. It evaporates easily and dries quickly, so rinsing is unnecessary.",
+            explanation: "完整答案要同時說明消毒作用和使用便利性：破壞微生物細胞膜，而且容易揮發、很快乾。"
+          }
+        ]
+      },
+      {
+        number: 9,
+        section: "Section B",
+        marks: "20 marks",
+        pages: [14, 15],
+        note: "Source warning: the examples printed in skema 9(b)(i) are reversed relative to Diagram 9.1 and the comparison table in skema 9(b)(ii). These slides use the diagram-consistent, scientifically correct assignment.",
+        segments: [
+          {
+            label: "9(a)(i) · Heat of neutralisation",
+            answer: "The heat change when one mole of water is formed from the reaction between an acid and an alkali.",
+            explanation: "定義的基準一定是生成 1 mol 水，并且反應物是酸與鹼。"
+          },
+          {
+            label: "9(a)(ii) · Heat change",
+            answer: "Step 1: Average initial temperature = (29.0 + 28.0) ÷ 2 = 28.5°C\nStep 2: Temperature change, ΔT = 35.0 − 28.5 = 6.5°C\nStep 3: Mass of solution = (50 + 50) cm³ × 1 g cm⁻³ = 100 g\nStep 4: Q = mcΔT = 100 × 4.2 × 6.5 = 2730 J\nFinal answer: Q = 2.73 kJ",
+            calculation: true,
+            explanation: "先取兩種溶液的平均初溫，再用 Q = mcΔT。總質量由 100 cm³ 及密度 1 g cm⁻³ 得到 100 g。"
+          },
+          {
+            label: "9(a)(ii) · Moles of water",
+            answer: "Step 1: n(HCl) = 1.0 × 50 ÷ 1000 = 0.050 mol\nStep 2: n(NaOH) = 1.0 × 50 ÷ 1000 = 0.050 mol\nStep 3: H⁺ : OH⁻ : H₂O = 1 : 1 : 1\nFinal answer: n(H₂O) = 0.050 mol",
+            calculation: true,
+            explanation: "強酸與強鹼以 1:1 生成水，兩者各 0.050 mol，因此生成 0.050 mol 水。"
+          },
+          {
+            label: "9(a)(ii) · Heat of neutralisation",
+            answer: "Step 1: Heat released by the reaction, Q = −2.73 kJ\nStep 2: Use ΔH = Q ÷ n(H₂O)\nStep 3: ΔH = −2.73 ÷ 0.050\nFinal answer: ΔH = −54.6 kJ mol⁻¹",
+            calculation: true,
+            explanation: "溫度上升表示反應放熱，所以 ΔH 要加負號。"
+          },
+          {
+            label: "9(a)(iii) · Repeated experiment",
+            answer: "The temperature change is the same because the same number of moles and the same type of alkali, a strong alkali, are used.",
+            explanation: "HCl、NaOH 和 KOH 都是強電解質；相同莫耳數的 H⁺ 與 OH⁻ 形成相同莫耳數的水，因此溫升相同。"
+          },
+          {
+            label: "9(b)(i) · Examples",
+            answer: "Set I (endothermic): photosynthesis / thermal decomposition of a salt.\nSet II (exothermic): combustion / neutralisation.",
+            explanation: "依原題能量圖，Set I 的生成物能量較高，是吸熱；Set II 的生成物能量較低，是放熱。原 skema 9(b)(i) 的例子次序與能量圖及 9(b)(ii) 表格互相矛盾，這裡採用與圖一致的版本。"
+          },
+          {
+            label: "9(b)(ii) · Reaction and temperature",
+            answer: "Set I: endothermic; temperature decreases.\nSet II: exothermic; temperature increases.",
+            explanation: "吸熱反應從周圍吸收熱量，所以溫度下降；放熱反應向周圍釋放熱量，所以溫度上升。"
+          },
+          {
+            label: "9(b)(ii) · Bond energies",
+            answer: "Set I: energy absorbed to break bonds is greater than energy released when bonds form.\nSet II: energy released when bonds form is greater than energy absorbed to break bonds.",
+            explanation: "斷鍵需要吸收能量，成鍵釋放能量；比較兩者大小即可判斷整體吸熱或放熱。"
+          },
+          {
+            label: "9(b)(ii) · Energy content",
+            answer: "Set I: the products have a higher total energy content than the reactants.\nSet II: the products have a lower total energy content than the reactants.",
+            explanation: "吸熱反應把能量儲存在生成物中；放熱反應則使生成物的能量低於反應物。"
+          },
+          {
+            label: "9(c) · Propanol and butanol",
+            answer: "Butanol has a more negative heat of combustion than propanol.\nOne mole of butanol contains more carbon and hydrogen atoms, so more bonds are formed in the products and more heat is released during complete combustion.",
+            explanation: "同系列醇的碳鏈越長，完全燃燒一莫耳時形成更多 CO₂ 和 H₂O，總成鍵放出的能量更大，所以燃燒熱更負。原 skema 排版中未清楚顯示這一小題答案，這裡依化學原理補足。"
+          }
+        ]
+      },
+      {
+        number: 10,
+        section: "Section B",
+        marks: "20 marks",
+        pages: [15, 16, 17],
+        note: "Answers follow the supplied marking scheme.",
+        segments: [
+          {
+            label: "10(a)(i) · Empirical formula",
+            answer: "A chemical formula that shows the simplest whole-number ratio of the atoms of each element in a compound.",
+            explanation: "關鍵是各元素原子數的最簡整數比，而不是實際分子中的原子數。"
+          },
+          {
+            label: "10(a)(ii) · Qualitative information",
+            answer: "The reactants are P and oxygen gas, while the product is P oxide, PO.",
+            explanation: "定性資料回答「有哪些物質」，不涉及數量。"
+          },
+          {
+            label: "10(a)(ii) · Quantitative information",
+            answer: "2 mol of P react with 1 mol of oxygen gas to produce 2 mol of P oxide.",
+            explanation: "定量資料由方程式係數取得莫耳比 2:1:2。"
+          },
+          {
+            label: "10(a)(iii) · Metals P and Q",
+            answer: "P: magnesium / aluminium / zinc.\nQ: copper / lead.",
+            explanation: "方法 I 需要金屬能與氧反應；方法 II 需要金屬氧化物可被氫還原。"
+          },
+          {
+            label: "10(a)(iii) · Reasons",
+            answer: "Magnesium / aluminium / zinc is reactive towards oxygen.\nCopper / lead is less reactive than hydrogen.",
+            explanation: "P 要容易氧化；Q 必須位於氫以下，這樣氫才能把 Q 的氧化物還原成金屬。"
+          },
+          {
+            label: "10(a)(iv) · Hydrogen preparation",
+            answer: "Zn + 2HCl → ZnCl₂ + H₂",
+            explanation: "鋅與鹽酸反應產生氯化鋅和氫氣，方程式要配平。"
+          },
+          {
+            label: "10(a)(iv) · Mass of zinc",
+            answer: "Step 1: Convert volume: 120 cm³ ÷ 1000 = 0.120 dm³\nStep 2: n(H₂) = 0.120 ÷ 24 = 0.005 mol\nStep 3: Mole ratio Zn : H₂ = 1 : 1, so n(Zn) = 0.005 mol\nStep 4: Mass of Zn = n × Aᵣ = 0.005 × 65\nFinal answer: Mass of Zn = 0.325 g",
+            calculation: true,
+            explanation: "先把 120 cm³ 轉成 0.120 dm³，再除以摩爾體積。由 1:1 莫耳比得到鋅的莫耳數，最後乘相對原子質量。"
+          },
+          {
+            label: "10(b)(i) · Caffeine",
+            answer: "Step 1: Molecular formula = C₈H₁₀N₄O₂\nStep 2: Mᵣ = (8 × 12) + (10 × 1) + (4 × 14) + (2 × 16) = 194\nStep 3: Total relative mass of nitrogen = 4 × 14 = 56\nStep 4: Percentage of nitrogen = (56 ÷ 194) × 100%\nFinal answer: Percentage of nitrogen = 28.87%",
+            calculation: true,
+            explanation: "從結構式數出各元素原子數；咖啡因相對分子質量為 194，其中氮的總質量是 56。"
+          },
+          {
+            label: "10(b)(ii) · Urea",
+            answer: "Step 1: Formula of urea = CO(NH₂)₂\nStep 2: Mᵣ = 12 + 16 + (2 × 14) + (4 × 1) = 60\nStep 3: Total relative mass of nitrogen = 2 × 14 = 28\nStep 4: Percentage of nitrogen = (28 ÷ 60) × 100%\nFinal answer: Percentage of nitrogen = 46.67%",
+            calculation: true,
+            explanation: "尿素 CO(NH₂)₂ 的相對分子質量是 60，氮的質量是 28。"
+          },
+          {
+            label: "10(b)(ii) · Best fertiliser",
+            answer: "Urea is the better fertiliser because its percentage of nitrogen by mass is higher than that of caffeine. A high nitrogen content improves soil fertility and promotes the growth of leaves and stems.",
+            explanation: "先用百分比比較選出尿素，再說明較高氮含量對土壤肥力、葉和莖生長的好處。"
+          }
+        ]
+      },
+      {
+        number: 11,
+        section: "Section C",
+        marks: "20 marks",
+        pages: [18, 19, 20],
+        note: "Source warning: skema 11(c)(ii) unexpectedly names sulphuric acid after 11(c)(i) only permits chloride or nitrate. This deck uses a consistent nitrate route: HNO₃ + CuO → Cu(NO₃)₂.",
+        segments: [
+          {
+            label: "11(a)(i) · Standard solution",
+            answer: "A solution with an accurately known concentration.",
+            explanation: "標準溶液的重點不是「濃」，而是濃度已被準確知道。"
+          },
+          {
+            label: "11(a)(ii) · Volumetric flask",
+            answer: "A volumetric flask measures a fixed volume of solution accurately.",
+            explanation: "容量瓶的刻度是為準確配製特定體積而設，因此比一般燒杯適合。"
+          },
+          {
+            label: "11(a)(iii) · Reaction and equation",
+            answer: "Neutralisation.\nH₂SO₄ + 2NaOH → Na₂SO₄ + 2H₂O",
+            explanation: "硫酸與氫氧化鈉發生中和。硫酸可提供兩個 H⁺，所以需要兩莫耳 NaOH。"
+          },
+          {
+            label: "11(a)(iii) · Moles of NaOH",
+            answer: "Step 1: Convert volume: 25 cm³ ÷ 1000 = 0.025 dm³\nStep 2: Use n = cV\nStep 3: n(NaOH) = 0.2 mol dm⁻³ × 0.025 dm³\nFinal answer: n(NaOH) = 0.005 mol",
+            calculation: true,
+            explanation: "25 cm³ 先除以 1000 轉成 dm³，再使用 n = MV。"
+          },
+          {
+            label: "11(a)(iii) · Concentration of H₂SO₄",
+            answer: "Step 1: From the equation, NaOH : H₂SO₄ = 2 : 1\nStep 2: n(H₂SO₄) = 0.005 ÷ 2 = 0.0025 mol\nStep 3: Convert volume: 25 cm³ ÷ 1000 = 0.025 dm³\nStep 4: c(H₂SO₄) = n ÷ V = 0.0025 ÷ 0.025\nFinal answer: c(H₂SO₄) = 0.10 mol dm⁻³",
+            calculation: true,
+            explanation: "由方程式得到 2:1 的莫耳比，再除以硫酸體積 0.025 dm³。"
+          },
+          {
+            label: "11(b) · Acid volumes",
+            answer: "Hydrochloric acid is monoprotic, whereas sulphuric acid is diprotic. At the same concentration, sulphuric acid supplies twice as many H⁺ ions, so only half the volume is required.",
+            explanation: "HCl 每個分子提供一個 H⁺，H₂SO₄ 可提供兩個 H⁺；同濃度下硫酸的有效 H⁺ 數量是兩倍，因此用量為一半。"
+          },
+          {
+            label: "11(c)(i) · Ion and chemicals",
+            answer: "X⁻ is nitrate ion, NO₃⁻.\nUse nitric acid, HNO₃, and copper(II) oxide, CuO.",
+            explanation: "這裡選用 skema 允許的硝酸根路線。硝酸與不溶性鹼 CuO 反應可製備可溶性的硝酸銅。"
+          },
+          {
+            label: "11(c)(ii) · Preparation: reaction",
+            answer: "1. Measure 25 cm³ of 0.1 mol dm⁻³ nitric acid into a beaker and heat it gently.\n2. Add copper(II) oxide in small portions while stirring until some solid remains in excess.\n3. Filter the mixture to remove excess copper(II) oxide.",
+            explanation: "先加熱酸以加快反應，再逐少加入 CuO 直到過量，確保酸完全反應；過量固體用過濾除去。原 skema 此處寫 sulfuric acid，與上一小題允許的陰離子不一致，因此改用 nitric acid 保持整個答案化學上連貫。"
+          },
+          {
+            label: "11(c)(ii) · Preparation: crystallisation",
+            answer: "4. Pour the filtrate into an evaporating dish and heat until the solution is saturated.\n5. Cool the saturated solution to room temperature to form crystals.\n6. Filter the crystals.\n7. Dry the crystals between two pieces of filter paper.",
+            explanation: "先蒸發至飽和，再冷卻結晶；最後過濾並用濾紙吸乾，得到乾燥的硝酸銅晶體。"
+          }
+        ]
+      }
+    ];
+
+    const STORAGE_KEY = "gregos-k2-johor-set1-teacher-v1";
+
+    class SlidePresentation {
+      constructor(stage, questions) {
+        this.stage = stage;
+        this.questions = questions;
+        this.current = 0;
+        this.pageIndexes = questions.map(function () { return 0; });
+        this.reveals = questions.map(function () {
+          return { segment: -1, mode: "idle" };
+        });
+        this.paperModes = questions.map(function () { return "width"; });
+        this.paperZooms = questions.map(function () { return 1; });
+        this.scrollPositions = questions.map(function (question) {
+          return question.pages.map(function () { return { top: 0, left: 0 }; });
+        });
+        this.progressSyncReady = false;
+        this.pointerStart = null;
+        this.paperDrag = null;
+        this.load();
+        this.render();
+        this.scale();
+        this.bind();
+      }
+
+      load() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+          if (!saved) return;
+          if (Number.isInteger(saved.current)) {
+            this.current = Math.max(0, Math.min(this.questions.length - 1, saved.current));
+          }
+          if (Array.isArray(saved.pageIndexes)) {
+            this.pageIndexes = this.questions.map(function (q, index) {
+              const value = Number(saved.pageIndexes[index]);
+              return Number.isInteger(value) ? Math.max(0, Math.min(q.pages.length - 1, value)) : 0;
+            });
+          }
+          if (Array.isArray(saved.reveals)) {
+            this.reveals = this.questions.map(function (q, index) {
+              const value = saved.reveals[index] || {};
+              const segment = Number.isInteger(value.segment)
+                ? Math.max(-1, Math.min(q.segments.length - 1, value.segment))
+                : -1;
+              const allowed = ["idle", "answer", "explanation", "complete"];
+              const mode = allowed.includes(value.mode) ? value.mode : "idle";
+              return { segment: segment, mode: segment < 0 ? "idle" : mode };
+            });
+          }
+          if (Array.isArray(saved.paperModes)) {
+            this.paperModes = this.questions.map(function (_, index) {
+              return saved.paperModes[index] === "page" ? "page" : "width";
+            });
+          }
+          if (Array.isArray(saved.paperZooms)) {
+            this.paperZooms = this.questions.map(function (_, index) {
+              const value = Number(saved.paperZooms[index]);
+              return Number.isFinite(value) ? Math.max(0.7, Math.min(2, value)) : 1;
+            });
+          }
+          if (Array.isArray(saved.scrollPositions)) {
+            this.scrollPositions = this.questions.map(function (question, questionIndex) {
+              const savedQuestion = saved.scrollPositions[questionIndex] || [];
+              return question.pages.map(function (_, pageIndex) {
+                const value = savedQuestion[pageIndex] || {};
+                return {
+                  top: Math.max(0, Number(value.top) || 0),
+                  left: Math.max(0, Number(value.left) || 0)
+                };
+              });
+            });
+          }
+        } catch (error) {
+          console.warn("Saved teacher progress could not be loaded.", error);
+        }
+      }
+
+      save() {
+        const snapshot = {
+          current: this.current,
+          pageIndexes: this.pageIndexes,
+          reveals: this.reveals,
+          paperModes: this.paperModes,
+          paperZooms: this.paperZooms,
+          scrollPositions: this.scrollPositions,
+          revealedQuestions: this.reveals.filter(function (item) { return item.mode !== "idle"; }).length,
+          completedQuestions: this.reveals.filter(function (item) { return item.mode === "complete"; }).length
+        };
+        snapshot.completion = Math.round(snapshot.completedQuestions / this.questions.length * 100);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+        if (this.progressSyncReady && window.ProgressTracker?.autoSave) {
+          ProgressTracker.autoSave(snapshot, 1200);
+        }
+      }
+
+      restoreRemoteProgress(saved) {
+        if (!saved || typeof saved !== "object") return;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+        this.load();
+        this.render();
+      }
+
+      scale() {
+        const scale = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+        const left = (window.innerWidth - 1920 * scale) / 2;
+        const top = (window.innerHeight - 1080 * scale) / 2;
+        this.stage.style.transform = "translate(" + left + "px, " + top + "px) scale(" + scale + ")";
+      }
+
+      bind() {
+        window.addEventListener("resize", this.scale.bind(this));
+        document.addEventListener("keydown", this.onKey.bind(this));
+        this.stage.addEventListener("pointerdown", this.onPointerDown.bind(this));
+        this.stage.addEventListener("pointermove", this.onPointerMove.bind(this));
+        this.stage.addEventListener("pointerup", this.onPointerUp.bind(this));
+        this.stage.addEventListener("pointercancel", this.onPointerCancel.bind(this));
+      }
+
+      onKey(event) {
+        const lightbox = this.stage.querySelector(".image-lightbox");
+        if (lightbox) {
+          if (event.key === "Escape" || event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            lightbox.remove();
+          }
+          return;
+        }
+        if (event.key === " " || event.key === "Enter") {
+          event.preventDefault();
+          this.advanceReveal();
+        } else if (event.key === "ArrowRight" || event.key === "PageDown") {
+          event.preventDefault();
+          this.go(this.current + 1);
+        } else if (event.key === "ArrowLeft" || event.key === "PageUp") {
+          event.preventDefault();
+          this.go(this.current - 1);
+        } else if (event.key === "]") {
+          event.preventDefault();
+          this.changeSourcePage(1);
+        } else if (event.key === "[") {
+          event.preventDefault();
+          this.changeSourcePage(-1);
+        } else if (event.key === "+" || event.key === "=") {
+          event.preventDefault();
+          this.changePaperZoom(0.15);
+        } else if (event.key === "-" || event.key === "_") {
+          event.preventDefault();
+          this.changePaperZoom(-0.15);
+        } else if (event.key === "0") {
+          event.preventDefault();
+          this.fitPaperWidth();
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          this.scrollPaperTop();
+        } else if (event.key.toLowerCase() === "r" && event.shiftKey) {
+          event.preventDefault();
+          this.resetAll();
+        } else if (event.key.toLowerCase() === "r") {
+          event.preventDefault();
+          this.resetCurrent();
+        } else if (event.key.toLowerCase() === "f") {
+          event.preventDefault();
+          this.toggleFullscreen();
+        }
+      }
+
+      onPointerDown(event) {
+        if (event.target.closest("button, .answer-image-wrap, .image-lightbox")) return;
+        this.pointerStart = { x: event.clientX, y: event.clientY };
+        const paperView = event.target.closest(".paper-view");
+        if (paperView) {
+          this.paperDrag = {
+            view: paperView,
+            x: event.clientX,
+            y: event.clientY,
+            left: paperView.scrollLeft,
+            top: paperView.scrollTop,
+            moved: false
+          };
+          paperView.classList.add("dragging");
+          paperView.setPointerCapture(event.pointerId);
+        }
+      }
+
+      onPointerMove(event) {
+        if (!this.paperDrag) return;
+        const dx = event.clientX - this.paperDrag.x;
+        const dy = event.clientY - this.paperDrag.y;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) this.paperDrag.moved = true;
+        if (!this.paperDrag.moved) return;
+        this.paperDrag.view.scrollLeft = this.paperDrag.left - dx;
+        this.paperDrag.view.scrollTop = this.paperDrag.top - dy;
+        event.preventDefault();
+      }
+
+      onPointerUp(event) {
+        if (this.paperDrag) {
+          const moved = this.paperDrag.moved;
+          this.paperDrag.view.classList.remove("dragging");
+          this.rememberPaperPosition();
+          this.paperDrag = null;
+          if (moved) {
+            this.pointerStart = null;
+            this.save();
+            return;
+          }
+        }
+        if (!this.pointerStart || event.target.closest("button, .answer-image-wrap, .image-lightbox")) {
+          this.pointerStart = null;
+          return;
+        }
+        const dx = event.clientX - this.pointerStart.x;
+        const dy = event.clientY - this.pointerStart.y;
+        this.pointerStart = null;
+        if (Math.abs(dx) > 90 && Math.abs(dx) > Math.abs(dy) * 1.4) {
+          this.go(this.current + (dx < 0 ? 1 : -1));
+          return;
+        }
+        if (Math.abs(dx) < 14 && Math.abs(dy) < 14) this.advanceReveal();
+      }
+
+      onPointerCancel() {
+        if (this.paperDrag) this.paperDrag.view.classList.remove("dragging");
+        this.paperDrag = null;
+        this.pointerStart = null;
+      }
+
+      currentPaperState() {
+        return this.scrollPositions[this.current][this.pageIndexes[this.current]];
+      }
+
+      rememberPaperPosition() {
+        const paperView = this.stage.querySelector(".paper-view");
+        if (!paperView) return;
+        const state = this.currentPaperState();
+        state.top = paperView.scrollTop;
+        state.left = paperView.scrollLeft;
+      }
+
+      restorePaperPosition(paperView, paperImage) {
+        const state = this.currentPaperState();
+        const top = state.top;
+        const left = state.left;
+        const restore = function () {
+          paperView.scrollTop = top;
+          paperView.scrollLeft = left;
+        };
+        requestAnimationFrame(restore);
+        if (!paperImage.complete) paperImage.addEventListener("load", restore, { once: true });
+      }
+
+      go(index) {
+        const next = Math.max(0, Math.min(this.questions.length - 1, index));
+        if (next === this.current) return;
+        this.rememberPaperPosition();
+        const oldPage = this.questions[this.current].pages[this.pageIndexes[this.current]];
+        const oldState = this.currentPaperState();
+        const nextPageIndex = this.pageIndexes[next];
+        const nextPage = this.questions[next].pages[nextPageIndex];
+        this.current = next;
+        const nextState = this.currentPaperState();
+        if (oldPage === nextPage) {
+          nextState.top = oldState.top;
+          nextState.left = oldState.left;
+        } else {
+          nextState.top = 0;
+          nextState.left = 0;
+        }
+        this.save();
+        this.render();
+      }
+
+      changeSourcePage(direction) {
+        const q = this.questions[this.current];
+        const next = Math.max(0, Math.min(q.pages.length - 1, this.pageIndexes[this.current] + direction));
+        if (next === this.pageIndexes[this.current]) return;
+        this.rememberPaperPosition();
+        this.pageIndexes[this.current] = next;
+        this.currentPaperState().top = 0;
+        this.currentPaperState().left = 0;
+        this.save();
+        this.render();
+      }
+
+      setSourcePage(index) {
+        const q = this.questions[this.current];
+        const next = Math.max(0, Math.min(q.pages.length - 1, index));
+        if (next === this.pageIndexes[this.current]) return;
+        this.rememberPaperPosition();
+        this.pageIndexes[this.current] = next;
+        this.currentPaperState().top = 0;
+        this.currentPaperState().left = 0;
+        this.save();
+        this.render();
+      }
+
+      changePaperZoom(delta) {
+        this.rememberPaperPosition();
+        const oldZoom = this.paperZooms[this.current];
+        const nextZoom = Math.max(0.7, Math.min(2, Math.round((oldZoom + delta) * 100) / 100));
+        if (nextZoom === oldZoom && this.paperModes[this.current] === "width") return;
+        const state = this.currentPaperState();
+        const ratio = nextZoom / oldZoom;
+        state.top *= ratio;
+        state.left *= ratio;
+        this.paperModes[this.current] = "width";
+        this.paperZooms[this.current] = nextZoom;
+        this.save();
+        this.render();
+      }
+
+      fitPaperWidth() {
+        this.rememberPaperPosition();
+        this.paperModes[this.current] = "width";
+        this.paperZooms[this.current] = 1;
+        this.save();
+        this.render();
+      }
+
+      fitPaperPage() {
+        this.paperModes[this.current] = "page";
+        this.currentPaperState().top = 0;
+        this.currentPaperState().left = 0;
+        this.save();
+        this.render();
+      }
+
+      scrollPaperTop() {
+        const paperView = this.stage.querySelector(".paper-view");
+        if (!paperView) return;
+        paperView.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+        const state = this.currentPaperState();
+        state.top = 0;
+        state.left = 0;
+        this.save();
+      }
+
+      advanceReveal() {
+        this.rememberPaperPosition();
+        const state = this.reveals[this.current];
+        const total = this.questions[this.current].segments.length;
+        if (state.mode === "idle") {
+          state.segment = 0;
+          state.mode = "answer";
+        } else if (state.mode === "answer") {
+          state.mode = "explanation";
+        } else if (state.mode === "explanation") {
+          if (state.segment < total - 1) {
+            state.segment += 1;
+            state.mode = "answer";
+          } else {
+            state.mode = "complete";
+          }
+        }
+        this.save();
+        this.render();
+      }
+
+      resetCurrent() {
+        this.rememberPaperPosition();
+        this.reveals[this.current] = { segment: -1, mode: "idle" };
+        this.save();
+        this.render();
+      }
+
+      resetAll() {
+        const accepted = window.confirm("Reset every revealed answer for all 11 questions?");
+        if (!accepted) return;
+        this.reveals = this.questions.map(function () {
+          return { segment: -1, mode: "idle" };
+        });
+        this.pageIndexes = this.questions.map(function () { return 0; });
+        this.paperModes = this.questions.map(function () { return "width"; });
+        this.paperZooms = this.questions.map(function () { return 1; });
+        this.scrollPositions = this.questions.map(function (question) {
+          return question.pages.map(function () { return { top: 0, left: 0 }; });
+        });
+        this.current = 0;
+        localStorage.removeItem(STORAGE_KEY);
+        this.render();
+      }
+
+      toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(function () {});
+        } else {
+          document.exitFullscreen().catch(function () {});
+        }
+      }
+
+      makeButton(label, className, handler, disabled, title) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = className;
+        button.textContent = label;
+        button.disabled = Boolean(disabled);
+        if (title) button.title = title;
+        button.addEventListener("click", function (event) {
+          event.stopPropagation();
+          handler();
+        });
+        return button;
+      }
+
+      openAnswerImage(source, altText) {
+        const existing = this.stage.querySelector(".image-lightbox");
+        if (existing) existing.remove();
+        const overlay = document.createElement("div");
+        overlay.className = "image-lightbox";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.setAttribute("aria-label", "Full marking-scheme image");
+        const bar = document.createElement("div");
+        bar.className = "lightbox-bar";
+        const title = document.createElement("strong");
+        title.textContent = "Original marking-scheme image";
+        const close = document.createElement("button");
+        close.type = "button";
+        close.className = "lightbox-close";
+        close.textContent = "Close ×";
+        close.addEventListener("click", function (event) {
+          event.stopPropagation();
+          overlay.remove();
+        });
+        bar.append(title, close);
+        const frame = document.createElement("div");
+        frame.className = "lightbox-frame";
+        const image = document.createElement("img");
+        image.className = "lightbox-image";
+        image.src = source;
+        image.alt = altText || "Original answer image from the supplied marking scheme";
+        frame.append(image);
+        overlay.append(bar, frame);
+        overlay.addEventListener("click", function (event) {
+          event.stopPropagation();
+          if (event.target === overlay) overlay.remove();
+        });
+        this.stage.append(overlay);
+        close.focus();
+      }
+
+      renderReveal(container, q, state) {
+        container.replaceChildren();
+        if (state.mode === "idle") {
+          const card = document.createElement("div");
+          card.className = "idle-card";
+          const icon = document.createElement("div");
+          icon.className = "idle-icon";
+          icon.textContent = "→";
+          const strong = document.createElement("strong");
+          strong.textContent = "Click to reveal the answer";
+          const span = document.createElement("span");
+          span.textContent = "Answer in English · Explanation in Chinese";
+          card.append(icon, strong, span);
+          container.append(card);
+          return;
+        }
+
+        if (state.mode === "complete") {
+          const card = document.createElement("div");
+          card.className = "complete-card";
+          const strong = document.createElement("strong");
+          strong.textContent = "Question completed";
+          const span = document.createElement("span");
+          span.textContent = "Press R or use Reset Question to teach it again.";
+          card.append(strong, span);
+          container.append(card);
+          return;
+        }
+
+        const segment = q.segments[state.segment];
+        const card = document.createElement("div");
+        card.className = "answer-card";
+        const kicker = document.createElement("div");
+        kicker.className = "part-kicker";
+        kicker.textContent = segment.label;
+        const answer = document.createElement("div");
+        answer.className = "answer-box";
+        if (segment.calculation) {
+          answer.classList.add("calculation-box");
+          segment.answer.split("\n").filter(Boolean).forEach(function (line) {
+            const match = line.match(/^(Step \d+|Final answer):\s*(.*)$/);
+            const row = document.createElement("div");
+            row.className = "calculation-line" + (match && match[1] === "Final answer" ? " final" : "");
+            const label = document.createElement("span");
+            label.className = "calculation-label";
+            label.textContent = match ? match[1] : "Working";
+            const expression = document.createElement("span");
+            expression.className = "calculation-expression";
+            expression.textContent = match ? match[2] : line;
+            row.append(label, expression);
+            answer.append(row);
+          });
+        } else {
+          answer.textContent = segment.answer;
+        }
+        card.append(kicker, answer);
+
+        if (segment.image) {
+          const imageWrap = document.createElement("div");
+          imageWrap.className = "answer-image-wrap";
+          imageWrap.tabIndex = 0;
+          imageWrap.setAttribute("role", "button");
+          imageWrap.setAttribute("aria-label", "Open the full marking-scheme image");
+          imageWrap.title = "Click to view the complete marking-scheme image";
+          const image = document.createElement("img");
+          image.className = "answer-image";
+          image.src = segment.image;
+          image.alt = segment.imageAlt || "Answer image from the supplied marking scheme";
+          imageWrap.addEventListener("click", function (event) {
+            event.stopPropagation();
+            this.openAnswerImage(segment.image, image.alt);
+          }.bind(this));
+          imageWrap.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              event.stopPropagation();
+              this.openAnswerImage(segment.image, image.alt);
+            }
+          }.bind(this));
+          imageWrap.append(image);
+          card.append(imageWrap);
+        }
+
+        if (state.mode === "explanation") {
+          const explanation = document.createElement("div");
+          explanation.className = "explanation-box";
+          explanation.textContent = segment.explanation;
+          card.append(explanation);
+        }
+        container.append(card);
+      }
+
+      render() {
+        const q = this.questions[this.current];
+        const state = this.reveals[this.current];
+        const currentPageIndex = this.pageIndexes[this.current];
+        const sourcePage = q.pages[currentPageIndex];
+
+        const slide = document.createElement("section");
+        slide.className = "slide active";
+        slide.setAttribute("aria-label", "Question " + q.number);
+
+        const shell = document.createElement("div");
+        shell.className = "slide-shell";
+
+        const topbar = document.createElement("header");
+        topbar.className = "topbar";
+        const brand = document.createElement("div");
+        brand.className = "brand";
+        const crest = document.createElement("div");
+        crest.className = "crest";
+        crest.textContent = "K2";
+        const brandCopy = document.createElement("div");
+        brandCopy.className = "brand-copy";
+        const brandStrong = document.createElement("strong");
+        brandStrong.textContent = "SPM Chemistry · Johor Set 1";
+        const brandSpan = document.createElement("span");
+        brandSpan.textContent = "Teacher-controlled answer deck";
+        brandCopy.append(brandStrong, brandSpan);
+        brand.append(crest, brandCopy);
+
+        const title = document.createElement("div");
+        title.className = "question-title";
+        title.textContent = q.section + " · Question " + q.number;
+
+        const actions = document.createElement("div");
+        actions.className = "top-actions";
+        const backLink = document.createElement("a");
+        backLink.href = "../../../../../index.html";
+        backLink.className = "back-link";
+        backLink.textContent = "Portal";
+        actions.append(
+          backLink,
+          this.makeButton("Reset Question", "icon-button", this.resetCurrent.bind(this), false, "Keyboard: R"),
+          this.makeButton("Reset All", "icon-button reset-all", this.resetAll.bind(this), false, "Keyboard: Shift+R"),
+          this.makeButton("Fullscreen", "icon-button", this.toggleFullscreen.bind(this), false, "Keyboard: F")
+        );
+        topbar.append(brand, title, actions);
+
+        const workspace = document.createElement("div");
+        workspace.className = "workspace";
+
+        const paperPanel = document.createElement("section");
+        paperPanel.className = "paper-panel";
+        const paperHeading = document.createElement("div");
+        paperHeading.className = "panel-heading";
+        const paperTitle = document.createElement("h2");
+        paperTitle.textContent = "Original question paper · drag / wheel to move";
+        const sourceLabel = document.createElement("span");
+        sourceLabel.className = "source-label";
+        sourceLabel.textContent = "PDF page " + sourcePage + " of 20";
+        const pdfTools = document.createElement("div");
+        pdfTools.className = "pdf-tools";
+        const zoomReadout = document.createElement("span");
+        zoomReadout.className = "pdf-tool zoom-readout";
+        zoomReadout.textContent = this.paperModes[this.current] === "page"
+          ? "PAGE"
+          : Math.round(this.paperZooms[this.current] * 100) + "%";
+        pdfTools.append(
+          this.makeButton("−", "pdf-tool", this.changePaperZoom.bind(this, -0.15), false, "Zoom out (−)"),
+          zoomReadout,
+          this.makeButton("+", "pdf-tool", this.changePaperZoom.bind(this, 0.15), false, "Zoom in (+)"),
+          this.makeButton(
+            "Fit Width",
+            "pdf-tool" + (this.paperModes[this.current] === "width" && this.paperZooms[this.current] === 1 ? " active" : ""),
+            this.fitPaperWidth.bind(this),
+            false,
+            "Fit page width (0)"
+          ),
+          this.makeButton(
+            "Fit Page",
+            "pdf-tool" + (this.paperModes[this.current] === "page" ? " active" : ""),
+            this.fitPaperPage.bind(this),
+            false,
+            "Show the whole page"
+          ),
+          this.makeButton("Top ↑", "pdf-tool", this.scrollPaperTop.bind(this), false, "Return to top (Home)")
+        );
+        paperHeading.append(paperTitle, pdfTools, sourceLabel);
+
+        const paperView = document.createElement("div");
+        paperView.className = "paper-view";
+        const paperImage = document.createElement("img");
+        paperImage.className = "paper-page" + (this.paperModes[this.current] === "page" ? " fit-page" : "");
+        if (this.paperModes[this.current] === "width") {
+          paperImage.style.width = Math.round(this.paperZooms[this.current] * 100) + "%";
+        }
+        paperImage.src = "assets/questions/page-" + String(sourcePage).padStart(2, "0") + ".png";
+        paperImage.alt = "Original PDF page " + sourcePage + " for Question " + q.number;
+        paperImage.draggable = false;
+        paperView.addEventListener("scroll", function () {
+          const position = this.currentPaperState();
+          position.top = paperView.scrollTop;
+          position.left = paperView.scrollLeft;
+          window.clearTimeout(this.scrollSaveTimer);
+          this.scrollSaveTimer = window.setTimeout(this.save.bind(this), 180);
+        }.bind(this), { passive: true });
+        paperView.append(paperImage);
+
+        const pageStrip = document.createElement("div");
+        pageStrip.className = "page-strip";
+        q.pages.forEach(function (pageNumber, index) {
+          const chip = this.makeButton(
+            "PDF " + pageNumber,
+            "page-chip" + (index === currentPageIndex ? " active" : ""),
+            this.setSourcePage.bind(this, index),
+            false,
+            "Keyboard: [ and ]"
+          );
+          pageStrip.append(chip);
+        }, this);
+        paperPanel.append(paperHeading, paperView, pageStrip);
+
+        const answerPanel = document.createElement("section");
+        answerPanel.className = "answer-panel";
+        const answerHeading = document.createElement("div");
+        answerHeading.className = "answer-heading";
+        const answerTitle = document.createElement("h2");
+        answerTitle.textContent = "Teacher Answer";
+        const marks = document.createElement("span");
+        marks.className = "marks";
+        marks.textContent = q.marks;
+        answerHeading.append(answerTitle, marks);
+
+        const progress = document.createElement("div");
+        progress.className = "progress-row";
+        q.segments.forEach(function (_, index) {
+          const dot = document.createElement("span");
+          dot.className = "progress-dot";
+          if (state.mode === "complete" || index < state.segment) dot.classList.add("done");
+          if (index === state.segment && state.mode !== "idle" && state.mode !== "complete") dot.classList.add("current");
+          progress.append(dot);
+        });
+
+        const reveal = document.createElement("div");
+        reveal.className = "reveal-stage";
+        const hint = document.createElement("div");
+        hint.className = "screen-hint";
+        hint.textContent = "CLICK / SPACE: REVEAL";
+        reveal.append(hint);
+        const revealContent = document.createElement("div");
+        revealContent.style.display = "contents";
+        reveal.append(revealContent);
+        this.renderReveal(revealContent, q, state);
+
+        const note = document.createElement("div");
+        note.className = "teacher-note";
+        const noteLabel = document.createElement("strong");
+        noteLabel.textContent = q.note.startsWith("Source warning") ? "SOURCE NOTE" : "TEACHER NOTE";
+        const noteText = document.createElement("span");
+        noteText.textContent = q.note;
+        if (q.note.startsWith("Source warning")) noteText.className = "source-warning";
+        note.append(noteLabel, noteText);
+        answerPanel.append(answerHeading, progress, reveal, note);
+
+        workspace.append(paperPanel, answerPanel);
+
+        const footer = document.createElement("footer");
+        footer.className = "footer";
+        const previousGroup = document.createElement("div");
+        previousGroup.className = "nav-group";
+        previousGroup.append(
+          this.makeButton("← Previous", "nav-button secondary", this.go.bind(this, this.current - 1), this.current === 0, "Previous question")
+        );
+
+        const questionStrip = document.createElement("nav");
+        questionStrip.className = "question-strip";
+        questionStrip.setAttribute("aria-label", "Questions");
+        this.questions.forEach(function (item, index) {
+          const hasProgress = this.reveals[index].mode !== "idle";
+          const classes = "question-chip" +
+            (index === this.current ? " active" : "") +
+            (hasProgress && index !== this.current ? " has-progress" : "");
+          questionStrip.append(
+            this.makeButton(String(item.number), classes, this.go.bind(this, index), false, "Question " + item.number)
+          );
+        }, this);
+
+        const nextGroup = document.createElement("div");
+        nextGroup.className = "nav-group";
+        nextGroup.append(
+          this.makeButton("Next →", "nav-button", this.go.bind(this, this.current + 1), this.current === this.questions.length - 1, "Next question")
+        );
+        footer.append(previousGroup, questionStrip, nextGroup);
+
+        shell.append(topbar, workspace, footer);
+        slide.append(shell);
+        this.stage.replaceChildren(slide);
+        this.restorePaperPosition(paperView, paperImage);
+      }
+    }
+
+    window.teacherDeck = new SlidePresentation(document.getElementById("deckStage"), QUESTIONS);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js?v=1.2.0"></script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="../../../../../js/progress-tracker.js?v=1.0.2"
+    data-module-id="spm-chem-f5-johor-2025-k2-teacher"
+    data-module-name="Johor 2025 Kimia Kertas 2 Teacher Slides"
+    data-module-url="content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html"></script>
+  <script>
+    if (window.ProgressTracker?.init) {
+      ProgressTracker.init(async function (tracker) {
+        const saved = await tracker.load();
+        if (saved && typeof saved === "object") {
+          window.teacherDeck.restoreRemoteProgress(saved);
+        }
+        window.teacherDeck.progressSyncReady = true;
+      });
+    }
+  </script>
+</body>
+</html>
