@@ -8,9 +8,7 @@ const fail = message => { throw new Error(message); };
 
 const manifest = JSON.parse(read('resources/module-manifest.json'));
 if (manifest.schemaVersion !== 1) fail('module manifest schemaVersion must be 1');
-if (!Array.isArray(manifest.modules) || manifest.modules.length !== 85) {
-  fail(`expected 85 manifest modules, found ${manifest.modules?.length ?? 0}`);
-}
+if (!Array.isArray(manifest.modules)) fail('module manifest modules must be an array');
 
 const ids = new Set();
 for (const entry of manifest.modules) {
@@ -27,11 +25,21 @@ for (const entry of manifest.modules) {
   }
 }
 
+const portalIds = new Set();
 for (const source of manifest.generatedFrom) {
   const html = read(source);
-  const portalIds = [...html.matchAll(/data-module-id=["']([^"']+)["']/g)].map(match => match[1]);
-  portalIds.forEach(id => { if (!ids.has(id)) fail(`${source} module missing from manifest: ${id}`); });
+  const sourceIds = [...html.matchAll(/data-module-id=["']([^"']+)["']/g)].map(match => match[1]);
+  sourceIds.forEach(id => {
+    portalIds.add(id);
+    if (!ids.has(id)) fail(`${source} module missing from manifest: ${id}`);
+  });
 }
+if (manifest.modules.length !== portalIds.size) {
+  fail(`expected ${portalIds.size} manifest modules, found ${manifest.modules.length}`);
+}
+ids.forEach(id => {
+  if (!portalIds.has(id)) fail(`manifest module is not present in a generated source: ${id}`);
+});
 
 const launcherHtml = read('launcher.html');
 ['js/navigation.js', 'js/auth-access.js', 'js/module-launcher.js'].forEach(file => {

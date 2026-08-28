@@ -36,6 +36,12 @@
       "path": "content/IGCSE_Syllabus/Year4/Science/Operation_Seven_Challenge/index.html"
     },
     {
+      "id": "igcse-y4-sci-planet-earth-revision-v2",
+      "title": "Planet Earth Revision Lab",
+      "delivery": "public",
+      "path": "content/IGCSE_Syllabus/Year4/Science/Planet_Earth_Revision/index.html"
+    },
+    {
       "id": "igcse-y4-sci-topic1",
       "title": "Topic 1: Life Processes and Ecosystems",
       "delivery": "public",
