@@ -8,6 +8,7 @@
     "verify:inbox-course-modules": "node tools/verify_inbox_course_modules.js",
     "verify:science-command-centre-progress": "node tools/verify_science_command_centre_progress.js",
     "verify:arclight-grid-crisis": "node tools/verify_arclight_grid_crisis.js",
+    "verify:spm-chem-johor-k1": "node tools/verify_spm_chem_johor_k1.js",
     "verify:kssr-protected": "node tools/verify_kssr_protected_units.js",
     "verify:sunny-food-market": "node tools/verify_kssr_sunny_food_market.js",
     "verify:kssr-redesign": "node tools/verify_kssr_classroom_core.js && node tools/verify_auth_access_offline.js && node tools/verify_kssr_protected_units.js && node tools/verify_kssr_unit_redesign.js && npm run verify:sunny-food-market",

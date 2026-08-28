@@ -30,10 +30,16 @@ A collection of interactive courses and modules designed to accelerate learning 
 - [Arclight Grid Crisis](content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html) — ID `igcse-y4-sci-arclight-grid-crisis`, route `content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html`.
 - The protected IGCSE Year 4 launcher entry opens a seven-mission Electricity lab with 56 questions, 163 marks, stylus scratchpads, local detailed progress, portal progress summaries, and hidden Teacher View.
 
+## New module — 2026-08-28
+
+- [Johor 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html) — ID `spm-chem-f5-johor-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html`.
+- The protected SPM Chemistry launcher entry provides all 40 objective questions with original-page imagery, repeat attempts, marking, portal navigation, and Supabase-backed progress restore for signed-in students.
+- This explicitly approved student drill is the sole past-paper publication exception in this release. The source PDF, answer-scheme page, and teacher files remain SSD-only; the public module contains only cleaned question-page images 1–26.
+
 ## Public-material policy
 
 - Public: original or AI-assisted teaching HTML, student worksheets, and student notes.
-- Private/SSD only: publisher or source PDFs, past papers, teacher/tutor answer keys, source archives, and raw production assets.
+- Private/SSD only by default: publisher or source PDFs, past papers, teacher/tutor answer keys, source archives, and raw production assets. A transformed student drill may be published only with explicit approval and must keep its source PDF and answer material off-repository.
 - Student names must not appear in public module titles, filenames, storage keys, or metadata.
 - Removing a file from the current branch does not erase older Git history; history cleanup requires a separate review.
 
