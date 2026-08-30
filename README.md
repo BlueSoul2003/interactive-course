@@ -36,7 +36,9 @@ A collection of interactive courses and modules designed to accelerate learning 
 - The protected SPM Chemistry launcher entry provides all 40 objective questions with original-page imagery, repeat attempts, marking, portal navigation, and Supabase-backed progress restore for signed-in students.
 - [Johor 2025 Kimia Kertas 2 Teacher Slides](content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html) — ID `spm-chem-f5-johor-2025-k2-teacher`, route `content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html`.
 - The explicitly approved protected teacher deck includes 11 structured questions, original question-page imagery, staged English scheme answers, Chinese explanations, complete calculation working, local classroom reset controls, and Supabase-backed progress restore.
-- These two Johor modules are explicit past-paper publication exceptions. The source PDFs remain SSD-only; Kertas 1 excludes its answer-scheme page, while the approved Kertas 2 teacher module contains only the answer material required by the staged classroom deck.
+- [Kedah 2025 Kimia Kertas 2 Teacher Slides](content/SPM_Syllabus/Form5/Chemistry/Kedah_2025_Kertas_2_Teacher/index.html) — ID `spm-chem-f5-kedah-2025-k2-teacher`, route `content/SPM_Syllabus/Form5/Chemistry/Kedah_2025_Kertas_2_Teacher/index.html`.
+- The protected Kedah teacher deck covers 11 questions and 55 staged answer segments, with 32 original question-page images, English scheme answers, Chinese explanations, eight worked calculations, five source-faithful scheme crops, reset controls, and Supabase-backed progress restore.
+- These three Chemistry trial modules are explicit past-paper publication exceptions. The source PDFs remain SSD-only; Kertas 1 excludes its answer-scheme page, while the approved Kertas 2 teacher modules contain only the answer material required by the staged classroom decks.
 
 ## Public-material policy
 
@@ -170,4 +172,3 @@ When creating new cards, change the `sub-xxxxx` class to auto-theme the card's a
 * `sub-biology` (Lime Green)
 
 **Pro-Tip:** If a module is locked or under construction, add `card-locked` to the classes and `style="opacity:0.6; filter:grayscale(1);"` to gray it out visually.
-
