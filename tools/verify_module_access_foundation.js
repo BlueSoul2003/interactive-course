@@ -67,7 +67,7 @@ for (const relativePath of portalFiles) {
   const html = fs.readFileSync(path.join(root, relativePath), 'utf8');
   for (const match of html.matchAll(/data-module-id="([^"]+)"/g)) portalModuleIds.add(match[1]);
 }
-assert.strictEqual(portalModuleIds.size, 90, 'published portal inventory changed; review and register every new module');
+assert.strictEqual(portalModuleIds.size, 93, 'published portal inventory changed; review and register every new module');
 for (const moduleId of portalModuleIds) {
   assert.ok(registrySql.includes(`'${moduleId}'`), `published module is missing from registry migrations: ${moduleId}`);
 }

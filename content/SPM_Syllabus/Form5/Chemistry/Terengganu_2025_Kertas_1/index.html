@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17385f">
+  <link rel="icon" href="data:,">
+  <title>Terengganu 2025 Kimia Kertas 1 - Latih Tubi Interaktif</title>
+  <style>
+    :root {
+      --ink: #21374a;
+      --muted: #66798a;
+      --paper: #fffdfa;
+      --shell: #edf3f6;
+      --forest: #17385f;
+      --forest-2: #2a6681;
+      --accent: #d8892e;
+      --line: #ccd9df;
+      --danger: #b94848;
+      --success: #24705f;
+      --page-width: 900px;
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--shell);
+      color: var(--ink);
+    }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    button:active { transform: translateY(1px) scale(.99); }
+
+    button:focus-visible, a:focus-visible {
+      outline: 3px solid rgba(216, 137, 46, .72);
+      outline-offset: 3px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      padding: 14px clamp(16px, 3vw, 34px);
+      background: rgba(23, 56, 95, .97);
+      color: #fff;
+      box-shadow: 0 5px 24px rgba(23, 56, 95, .20);
+    }
+
+    .eyebrow {
+      margin: 0 0 2px;
+      color: #dceaf0;
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 700;
+    }
+
+    .top-actions { display: flex; gap: 8px; align-items: center; }
+
+    .ghost-button, .paper-badge {
+      min-height: 42px;
+      border: 1px solid rgba(255,255,255,.26);
+      border-radius: 999px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-size: .88rem;
+      font-weight: 750;
+      padding: 9px 14px;
+      cursor: pointer;
+    }
+
+    .paper-badge { display: inline-flex; align-items: center; background: rgba(255,255,255,.08); cursor: default; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 330px;
+      min-height: calc(100vh - 75px);
+    }
+
+    .paper-stage {
+      min-width: 0;
+      padding: 28px clamp(14px, 3vw, 42px) 80px;
+    }
+
+    .stage-head {
+      width: min(100%, var(--page-width));
+      margin: 0 auto 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: .86rem;
+      font-weight: 700;
+    }
+
+    .zoom-controls { display: flex; gap: 6px; }
+
+    .zoom-controls button {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--forest);
+      font: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .page-stack {
+      display: grid;
+      gap: 20px;
+      justify-items: center;
+    }
+
+    .paper-page {
+      display: block;
+      width: min(100%, var(--page-width));
+      height: auto;
+      background: var(--paper);
+      box-shadow: 0 18px 50px rgba(23, 56, 95, .16), 0 2px 8px rgba(23, 56, 95, .12);
+    }
+
+    .answer-panel {
+      position: sticky;
+      top: 75px;
+      height: calc(100vh - 75px);
+      overflow-y: auto;
+      padding: 24px 22px 36px;
+      background: #fff;
+      border-left: 1px solid var(--line);
+    }
+
+    .progress-copy {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 9px;
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 800;
+    }
+
+    .progress-track {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #dfe8ed;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width .2s ease;
+    }
+
+    .question-title {
+      margin: 26px 0 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+
+    .source-note {
+      margin: 0 0 17px;
+      color: var(--muted);
+      font-size: .82rem;
+      line-height: 1.45;
+    }
+
+    .choices {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice {
+      min-height: 58px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #f7fafc;
+      color: var(--ink);
+      font: inherit;
+      font-size: 1.02rem;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+
+    .choice:hover { transform: translateY(-1px); border-color: #789aab; }
+    .choice.selected { border-color: var(--forest-2); background: #e1edf2; color: var(--forest); }
+    .choice.correct { border-color: var(--success); background: #dff4e8; color: #155c3b; }
+    .choice.wrong { border-color: var(--danger); background: #fae4e1; color: #8d2821; }
+
+    .feedback {
+      min-height: 46px;
+      margin-top: 12px;
+      border-radius: 12px;
+      padding: 11px 13px;
+      background: #f3f7f9;
+      color: var(--muted);
+      font-size: .85rem;
+      line-height: 1.4;
+    }
+
+    .feedback.success { background: #e4f4eb; color: var(--success); }
+    .feedback.danger { background: #fae7e4; color: var(--danger); }
+
+    .question-nav-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .nav-button, .submit-button, .secondary-button {
+      min-height: 45px;
+      border-radius: 12px;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .nav-button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--forest);
+    }
+
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 6px;
+      margin: 24px 0;
+    }
+
+    .question-chip {
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--muted);
+      font: inherit;
+      font-size: .73rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .question-chip.current { border-color: var(--forest); box-shadow: inset 0 0 0 1px var(--forest); color: var(--forest); }
+    .question-chip.answered { background: #e5eff3; color: var(--forest); }
+    .question-chip.correct { background: var(--success); border-color: var(--success); color: #fff; }
+    .question-chip.wrong { background: var(--danger); border-color: var(--danger); color: #fff; }
+
+    .submit-button {
+      width: 100%;
+      border: 0;
+      background: var(--forest);
+      color: #fff;
+    }
+
+    .secondary-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .secondary-button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--muted);
+      font-size: .79rem;
+    }
+
+    .result-card {
+      display: none;
+      margin: 0 0 18px;
+      padding: 18px;
+      border-radius: 16px;
+      background: #f8edcf;
+      border: 1px solid #e7cc82;
+    }
+
+    .result-card.visible { display: block; }
+    .score { margin: 0; color: var(--forest); font-family: Georgia, "Times New Roman", serif; font-size: 2rem; }
+    .score-note { margin: 5px 0 0; color: #6d593a; font-size: .84rem; line-height: 1.4; }
+
+    .keyboard-note {
+      margin: 18px 0 0;
+      color: #8a8699;
+      font-size: .72rem;
+      line-height: 1.45;
+      text-align: center;
+    }
+
+    @media (max-width: 920px) {
+      html, body { height: 100%; }
+      body {
+        min-height: 100dvh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .topbar {
+        position: relative;
+        flex: 0 0 auto;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px;
+        padding: 10px 14px;
+      }
+      .top-actions { overflow: visible; }
+      .layout {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 56%) minmax(0, 44%);
+        overflow: hidden;
+      }
+      .paper-stage {
+        order: 1;
+        min-height: 0;
+        overflow: auto;
+        overscroll-behavior: contain;
+        touch-action: pan-x pan-y;
+        padding: 10px 10px 24px;
+      }
+      .stage-head {
+        position: sticky;
+        top: 0;
+        z-index: 3;
+        width: 100%;
+        margin-bottom: 8px;
+        padding: 5px 4px 7px;
+        background: rgba(245, 239, 239, .96);
+      }
+      .page-stack {
+        width: max-content;
+        min-width: 100%;
+      }
+      .paper-page {
+        width: var(--page-width);
+        max-width: none;
+      }
+      .answer-panel {
+        order: 2;
+        position: relative;
+        top: auto;
+        height: auto;
+        min-height: 0;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 14px 16px calc(24px + env(safe-area-inset-bottom));
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+      .question-title { margin-top: 18px; }
+      .question-grid {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        margin: 16px 0;
+        padding: 2px 1px 7px;
+        scroll-snap-type: x proximity;
+        scrollbar-width: thin;
+      }
+      .question-chip {
+        flex: 0 0 38px;
+        width: 38px;
+        height: 38px;
+        aspect-ratio: auto;
+        scroll-snap-align: center;
+      }
+    }
+
+    @media (max-width: 920px) and (orientation: landscape) {
+      .layout {
+        grid-template-columns: minmax(0, 56%) minmax(0, 44%);
+        grid-template-rows: minmax(0, 1fr);
+      }
+      .answer-panel {
+        border-top: 0;
+        border-left: 1px solid var(--line);
+      }
+      .paper-badge { display: none; }
+    }
+
+    @media (max-width: 560px) {
+      .eyebrow { font-size: .58rem; letter-spacing: .1em; }
+      h1 { font-size: 1rem; }
+      .top-actions { display: flex; }
+      .paper-badge, #fullscreenButton { display: none; }
+      .back-link { min-height: 38px; padding: 8px 10px; font-size: .74rem; }
+      .paper-stage { padding-inline: 8px; }
+      .stage-head { padding-inline: 4px; }
+      .answer-panel { padding: 12px 14px calc(20px + env(safe-area-inset-bottom)); }
+      .choice { min-height: 52px; }
+      .nav-button, .submit-button, .secondary-button { min-height: 48px; }
+      .keyboard-note { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">SPM Chemistry | Trial 2025 | Terengganu</p>
+      <h1>Terengganu Kimia Kertas 1</h1>
+    </div>
+    <div class="top-actions">
+      <span class="paper-badge">24 halaman asal</span>
+      <a class="ghost-button back-link" href="../../../../../index.html">Kembali ke portal</a>
+      <button class="ghost-button" id="fullscreenButton" type="button">Skrin penuh</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="paper-stage" aria-label="Paparan halaman asal">
+      <div class="stage-head">
+        <span id="pageLabel">Halaman asal 1</span>
+        <div class="zoom-controls" aria-label="Kawalan saiz halaman">
+          <button id="zoomOut" type="button" aria-label="Kecilkan halaman">−</button>
+          <button id="zoomReset" type="button" aria-label="Saiz asal">1:1</button>
+          <button id="zoomIn" type="button" aria-label="Besarkan halaman">+</button>
+        </div>
+      </div>
+      <div class="page-stack" id="pageStack"></div>
+    </section>
+
+    <aside class="answer-panel" aria-label="Panel jawapan">
+      <div class="result-card" id="resultCard" aria-live="polite">
+        <p class="score" id="scoreText">0 / 40</p>
+        <p class="score-note" id="scoreNote"></p>
+      </div>
+
+      <div class="progress-copy">
+        <span id="progressText">0 daripada 40 dijawab</span>
+        <span id="attemptText">Cubaan 1</span>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <h2 class="question-title" id="questionTitle">Soalan 1</h2>
+      <p class="source-note" id="sourceNote">Rujuk halaman asal di sebelah. Pilih satu jawapan.</p>
+
+      <div class="choices" id="choices" role="group" aria-labelledby="questionTitle"></div>
+      <div class="feedback" id="feedback" aria-live="polite">Jawapan disimpan pada peranti ini sehingga anda reset.</div>
+
+      <div class="question-nav-controls">
+        <button class="nav-button" id="previousButton" type="button">← Sebelum</button>
+        <button class="nav-button" id="nextButton" type="button">Seterusnya →</button>
+      </div>
+
+      <div class="question-grid" id="questionGrid" aria-label="Navigasi 40 soalan"></div>
+
+      <button class="submit-button" id="submitButton" type="button">Semak 40 jawapan</button>
+      <div class="secondary-actions">
+        <button class="secondary-button" id="retryWrongButton" type="button">Ulang yang salah</button>
+        <button class="secondary-button" id="resetButton" type="button">Ulang semua</button>
+      </div>
+
+      <p class="keyboard-note">Papan kekunci: A-D pilih jawapan | ← → tukar soalan</p>
+    </aside>
+  </main>
+
+  <script>
+    const answerKey = [null,
+      "C", "A", "A", "C", "B", "C", "B", "B", "D", "B",
+      "A", "A", "D", "C", "D", "B", "A", "D", "C", "A",
+      "D", "D", "A", "B", "C", "D", "A", "D", "D", "A",
+      "D", "B", "B", "A", "C", "B", "C", "C", "C", "B"
+    ];
+
+    const questionPages = {
+      1:[2], 2:[3], 3:[3], 4:[3], 5:[4], 6:[4], 7:[4], 8:[5], 9:[5], 10:[6],
+      11:[6], 12:[7], 13:[7], 14:[8], 15:[8], 16:[9], 17:[10], 18:[10], 19:[11], 20:[11],
+      21:[12], 22:[13], 23:[14], 24:[14], 25:[15], 26:[15], 27:[16], 28:[17], 29:[18], 30:[19],
+      31:[19], 32:[20], 33:[20], 34:[21], 35:[22], 36:[22], 37:[23], 38:[23], 39:[24], 40:[24]
+    };
+
+    const storageKey = "spm-kimia-terengganu-2025-k1-v1";
+    const defaultState = { current: 1, answers: {}, checked: false, attempts: 1, zoom: 900 };
+    let state = loadState();
+    let progressSyncReady = false;
+
+    const paperStage = document.querySelector(".paper-stage");
+    const answerPanel = document.querySelector(".answer-panel");
+    const compactViewport = window.matchMedia("(max-width: 920px)");
+    const pageStack = document.getElementById("pageStack");
+    const pageLabel = document.getElementById("pageLabel");
+    const questionTitle = document.getElementById("questionTitle");
+    const sourceNote = document.getElementById("sourceNote");
+    const choices = document.getElementById("choices");
+    const feedback = document.getElementById("feedback");
+    const questionGrid = document.getElementById("questionGrid");
+    const progressText = document.getElementById("progressText");
+    const progressBar = document.getElementById("progressBar");
+    const attemptText = document.getElementById("attemptText");
+    const resultCard = document.getElementById("resultCard");
+    const scoreText = document.getElementById("scoreText");
+    const scoreNote = document.getElementById("scoreNote");
+
+    function loadState() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(storageKey));
+        return { ...defaultState, ...saved, answers: saved?.answers || {} };
+      } catch {
+        return { ...defaultState };
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(storageKey, JSON.stringify(state));
+      if (progressSyncReady && window.ProgressTracker?.autoSave) {
+        const answered = Object.keys(state.answers).filter(key => state.answers[key]).length;
+        ProgressTracker.autoSave({
+          current: state.current,
+          answers: state.answers,
+          checked: state.checked,
+          attempts: state.attempts,
+          zoom: state.zoom,
+          answered,
+          score: state.checked ? scoreAnswers() : null,
+          completion: Math.round(answered / 40 * 100)
+        }, 1200);
+      }
+    }
+
+    function pageFile(page) {
+      return `assets/pages/page-${String(page).padStart(2, "0")}.jpg`;
+    }
+
+    function render() {
+      const current = state.current;
+      const pages = questionPages[current];
+      const selected = state.answers[current];
+      const answeredCount = Object.keys(state.answers).filter(key => state.answers[key]).length;
+
+      const paperWidth = Math.max(260, paperStage.clientWidth - 20);
+      const compactScale = Math.min(1, paperWidth / 900);
+      const displayZoom = compactViewport.matches ? Math.round(state.zoom * compactScale) : state.zoom;
+      document.documentElement.style.setProperty("--page-width", `${displayZoom}px`);
+      questionTitle.textContent = `Soalan ${current}`;
+      sourceNote.textContent = pages.length === 1
+        ? `Rujuk halaman asal ${pages[0]}. Pilih satu jawapan.`
+        : `Soalan ini merentasi halaman asal ${pages.join(" dan ")}. Kedua-duanya dipaparkan.`;
+      pageLabel.textContent = pages.length === 1 ? `Halaman asal ${pages[0]}` : `Halaman asal ${pages.join(" + ")}`;
+
+      const pageKey = pages.join("-");
+      if (pageStack.dataset.pageKey !== pageKey) {
+        pageStack.dataset.pageKey = pageKey;
+        pageStack.innerHTML = pages.map(page =>
+          `<img class="paper-page" src="${pageFile(page)}" width="1516" height="2100" alt="Terengganu 2025 Kimia Kertas 1, halaman asal ${page}" loading="eager">`
+        ).join("");
+        requestAnimationFrame(() => {
+          paperStage.scrollTo({ top: 0, left: 0, behavior: "auto" });
+          window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+        });
+      }
+
+      choices.innerHTML = ["A", "B", "C", "D"].map(letter => {
+        const classes = ["choice"];
+        if (selected === letter) classes.push("selected");
+        if (state.checked && answerKey[current] === letter) classes.push("correct");
+        if (state.checked && selected === letter && selected !== answerKey[current]) classes.push("wrong");
+        return `<button class="${classes.join(" ")}" type="button" data-choice="${letter}" aria-pressed="${selected === letter}">${letter}</button>`;
+      }).join("");
+
+      choices.querySelectorAll("[data-choice]").forEach(button => {
+        button.addEventListener("click", () => selectAnswer(button.dataset.choice));
+      });
+
+      progressText.textContent = `${answeredCount} daripada 40 dijawab`;
+      progressBar.style.width = `${answeredCount / 40 * 100}%`;
+      attemptText.textContent = `Cubaan ${state.attempts}`;
+
+      renderFeedback(selected);
+      renderGrid();
+      renderResult();
+      document.getElementById("previousButton").disabled = current === 1;
+      document.getElementById("nextButton").disabled = current === 40;
+      saveState();
+    }
+
+    function renderFeedback(selected) {
+      feedback.className = "feedback";
+      if (!state.checked) {
+        feedback.textContent = selected
+          ? `Jawapan ${selected} dipilih. Anda masih boleh menukarnya sebelum semakan.`
+          : "Jawapan disimpan pada peranti ini sehingga anda reset.";
+        return;
+      }
+
+      if (selected === answerKey[state.current]) {
+        feedback.classList.add("success");
+        feedback.textContent = `Betul. Jawapan ${answerKey[state.current]}.`;
+      } else if (!selected) {
+        feedback.classList.add("danger");
+        feedback.textContent = `Belum dijawab. Jawapan yang betul ialah ${answerKey[state.current]}.`;
+      } else {
+        feedback.classList.add("danger");
+        feedback.textContent = `Jawapan anda ${selected}. Jawapan yang betul ialah ${answerKey[state.current]}.`;
+      }
+    }
+
+    function renderGrid() {
+      questionGrid.innerHTML = Array.from({ length: 40 }, (_, index) => index + 1).map(number => {
+        const classes = ["question-chip"];
+        const selected = state.answers[number];
+        if (number === state.current) classes.push("current");
+        if (selected) classes.push("answered");
+        if (state.checked && selected === answerKey[number]) classes.push("correct");
+        if (state.checked && selected !== answerKey[number]) classes.push("wrong");
+        return `<button class="${classes.join(" ")}" type="button" data-question="${number}" aria-label="Pergi ke soalan ${number}">${number}</button>`;
+      }).join("");
+
+      questionGrid.querySelectorAll("[data-question]").forEach(button => {
+        button.addEventListener("click", () => goToQuestion(Number(button.dataset.question)));
+      });
+
+      if (compactViewport.matches) {
+        const currentChip = questionGrid.querySelector(`[data-question="${state.current}"]`);
+        requestAnimationFrame(() => {
+          if (!currentChip) return;
+          questionGrid.scrollLeft = Math.max(0, currentChip.offsetLeft - (questionGrid.clientWidth - currentChip.offsetWidth) / 2);
+        });
+      }
+    }
+
+    function renderResult() {
+      if (!state.checked) {
+        resultCard.classList.remove("visible");
+        return;
+      }
+      const score = scoreAnswers();
+      scoreText.textContent = `${score} / 40`;
+      scoreNote.textContent = score === 40
+        ? "Sempurna. Ulang semua untuk cuba lagi tanpa petunjuk."
+        : `${40 - score} soalan perlu dibaiki. Gunakan nombor merah atau “Ulang yang salah”.`;
+      resultCard.classList.add("visible");
+    }
+
+    function scoreAnswers() {
+      return Array.from({ length: 40 }, (_, index) => index + 1)
+        .filter(number => state.answers[number] === answerKey[number]).length;
+    }
+
+    function selectAnswer(letter) {
+      state.answers[state.current] = letter;
+      state.checked = false;
+      render();
+    }
+
+    function goToQuestion(number) {
+      state.current = Math.max(1, Math.min(40, number));
+      render();
+      if (compactViewport.matches) {
+        requestAnimationFrame(() => answerPanel.scrollTo({ top: 0, left: 0, behavior: "auto" }));
+      }
+    }
+
+    function submitAnswers() {
+      const unanswered = Array.from({ length: 40 }, (_, index) => index + 1).filter(number => !state.answers[number]);
+      if (unanswered.length && !window.confirm(`${unanswered.length} soalan belum dijawab. Semak juga?`)) {
+        goToQuestion(unanswered[0]);
+        return;
+      }
+      state.checked = true;
+      render();
+    }
+
+    function retryWrong() {
+      if (!state.checked) {
+        window.alert("Tekan “Semak 40 jawapan” dahulu untuk mengenal pasti soalan yang salah.");
+        return;
+      }
+      const wrong = Array.from({ length: 40 }, (_, index) => index + 1)
+        .filter(number => state.answers[number] !== answerKey[number]);
+      if (!wrong.length) {
+        window.alert("Semua jawapan sudah betul.");
+        return;
+      }
+      wrong.forEach(number => delete state.answers[number]);
+      state.checked = false;
+      state.current = wrong[0];
+      render();
+    }
+
+    function resetAll() {
+      if (!window.confirm("Kosongkan semua jawapan dan mulakan cubaan baharu?")) return;
+      state = { ...defaultState, attempts: state.attempts + 1 };
+      render();
+    }
+
+    document.getElementById("previousButton").addEventListener("click", () => goToQuestion(state.current - 1));
+    document.getElementById("nextButton").addEventListener("click", () => goToQuestion(state.current + 1));
+    document.getElementById("submitButton").addEventListener("click", submitAnswers);
+    document.getElementById("retryWrongButton").addEventListener("click", retryWrong);
+    document.getElementById("resetButton").addEventListener("click", resetAll);
+
+    document.getElementById("zoomIn").addEventListener("click", () => {
+      state.zoom = Math.min(1300, state.zoom + 100);
+      render();
+    });
+    document.getElementById("zoomOut").addEventListener("click", () => {
+      state.zoom = Math.max(560, state.zoom - 100);
+      render();
+    });
+    document.getElementById("zoomReset").addEventListener("click", () => {
+      state.zoom = 900;
+      render();
+    });
+
+    document.getElementById("fullscreenButton").addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
+      } catch {
+        window.alert("Mod skrin penuh tidak disokong oleh pelayar ini.");
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (["A", "B", "C", "D"].includes(event.key.toUpperCase())) selectAnswer(event.key.toUpperCase());
+      if (event.key === "ArrowLeft") goToQuestion(state.current - 1);
+      if (event.key === "ArrowRight") goToQuestion(state.current + 1);
+    });
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(render, 120);
+    });
+
+    render();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/auth-access.js?v=1.2.0"></script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="../../../../../js/progress-tracker.js?v=1.0.2"
+    data-module-id="spm-chem-f5-terengganu-2025-k1"
+    data-module-name="Terengganu 2025 Kimia Kertas 1"
+    data-module-url="content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html"></script>
+  <script>
+    if (window.ProgressTracker?.init) {
+      ProgressTracker.init(async tracker => {
+        const saved = await tracker.load();
+        if (saved && typeof saved === "object") {
+          state = {
+            ...defaultState,
+            ...saved,
+            current: Math.max(1, Math.min(40, Number(saved.current) || 1)),
+            answers: saved.answers && typeof saved.answers === "object" ? saved.answers : {},
+            attempts: Math.max(1, Number(saved.attempts) || 1),
+            zoom: Math.max(560, Math.min(1300, Number(saved.zoom) || 900))
+          };
+        }
+        progressSyncReady = true;
+        render();
+      });
+    }
+  </script>
+</body>
+</html>

@@ -42,6 +42,12 @@ A collection of interactive courses and modules designed to accelerate learning 
 - The protected Kedah teacher deck covers 11 questions and 55 staged answer segments, with 32 original question-page images, English scheme answers, Chinese explanations, eight worked calculations, five source-faithful scheme crops, reset controls, and Supabase-backed progress restore.
 - These four Chemistry trial modules are explicit past-paper publication exceptions. The source PDFs remain SSD-only; Kertas 1 excludes its answer-scheme page, while the approved Kertas 2 teacher modules contain only the answer material required by the staged classroom decks.
 
+## New modules — 2026-09-04
+
+- [SBP 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html) — ID `spm-chem-f5-sbp-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html`.
+- [Selangor PINTAS 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_1/index.html) — ID `spm-chem-f5-selangor-pintas-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_1/index.html`.
+- [Terengganu 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html) — ID `spm-chem-f5-terengganu-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html`.
+- All three protected drills contain 40 scheme-verified answers, original-page JPEG imagery, repeat marking, mobile portrait/landscape split panes, portal navigation, and Supabase-backed progress restore. Source PDFs and marking schemes remain SSD-only.
 ## Public-material policy
 
 - Public: original or AI-assisted teaching HTML, student worksheets, and student notes.

@@ -18,3 +18,5 @@ node_modules/
 resources/pdf/SPM/BM/SPM_BM_Modul_Kuasa_Karangan_IMBAKUP.pdf
 resources/pdf/SPM/BM/SPM_BM_Rumusan_Latihan.pdf
 resources/pdf/SPM/BM/SPM_Komsas_F5_Silir Daksina.pdf
+# Supabase CLI local state (never commit).
+supabase/.temp/
