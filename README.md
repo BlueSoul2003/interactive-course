@@ -180,3 +180,11 @@ When creating new cards, change the `sub-xxxxx` class to auto-theme the card's a
 * `sub-biology` (Lime Green)
 
 **Pro-Tip:** If a module is locked or under construction, add `card-locked` to the classes and `style="opacity:0.6; filter:grayscale(1);"` to gray it out visually.
+
+## Earth & Space Revision — 2026-09-06
+
+
+- [Earth & Space Revision](content/IGCSE_Syllabus/Year4/Science/Earth_and_Space_Revision/index.html) — Year 4 Topic 7, ID `igcse-y4-sci-earth-space-revision`: 100 four-option MCQs and 50 typed fill-in-the-blank questions across five topics, with 43 evidence-based questions and three interactive teaching models.
+- Includes topic/level filters, mixed practice, mistake review, first-attempt reporting, local resume, optional existing progress-SDK sync, and an independent side-drawer writing board with pen, eraser, undo, expansion and typed notes. Board notes remain local and persist across questions.
+- Verify the bank and grading with `npm run verify:earth-space-revision`. Browser coverage is in `tools/verify_earth_space_browser.js`; it needs Playwright (or `PLAYWRIGHT_MODULE` pointing to an installed package) and a browser selected by `BROWSER_CHANNEL` (defaults to Edge). It uses an isolated guest profile and does not contact cloud services.
+- The module is registered in the launcher manifest and live module registry with the existing protected Year 4 Science bundle. The latest Year 4 page separates seven learning topics and five revision/practice modules into two columns (stacked on phones). Optional correct-answer sound, four-second auto-advance with cancellation, and Ctrl+Alt+R reset are available. Course return navigation preserves the originating Year 4 route.

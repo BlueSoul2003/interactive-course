@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "verify:earth-space-revision": "node tools/verify_earth_space_revision.js",
     "generate:module-manifest": "node tools/generate_module_manifest.js",
     "verify:module-access": "node tools/verify_module_access_foundation.js && node tools/verify_module_launcher.js",
     "verify:pdf-library": "node tools/verify_pdf_library.js",

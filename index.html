@@ -963,6 +963,17 @@
             background: #ef4444;
             color: white;
         }
+
+        /* Year 4: lessons and revision share one route, with distinct columns. */
+        .year4-module-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+        .year4-module-column { min-width: 0; }
+        .year4-column-heading { margin: 0 0 20px; padding: 18px 20px; text-align: left; border: 1px solid rgba(148, 163, 184, .25); border-radius: 16px; background: rgba(16, 185, 129, .07); }
+        .year4-column-heading h3 { margin: 0 0 6px; font-size: 23px; }
+        .year4-column-heading p { margin: 0; font-size: 14px; color: var(--text-secondary, #94a3b8); opacity: 1; animation: none; }
+        .year4-module-column .grid { grid-template-columns: minmax(0, 1fr); }
+        .year4-module-column .card { min-width: 0; }
+        .year4-module-column[data-module-group="revision"] .year4-column-heading { background: rgba(59, 130, 246, .08); }
+        @media (max-width: 760px) { .year4-module-columns { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
     </style>
 </head>
 
@@ -1754,7 +1765,7 @@
                         onclick="showLessons('igcse', 'igcse-science-y4')">
                         <div class="card-tag">IGCSE Science · Year 4</div>
                         <h3>Year 4 Science</h3>
-                        <p>8 interactive modules covering Life Processes, Living Things, States of Matter, Energy &amp; Light, Electricity, Planet Earth, Earth &amp; Space, and comprehensive practice.</p>
+                        <p>7 learning topics and 5 revision modules, organised together for lessons and extra practice.</p>
                         <div class="card-footer">
                             <div class="start-link">View Modules <span>&rarr;</span></div>
                         </div>
@@ -1782,108 +1793,126 @@
                     </div>
                     IGCSE Science · Year 4 Modules
                 </h2>
-                <div class="grid">
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic1_Life_Processes_Ecosystems/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic1" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 1</div>
-                        <h3>Topic 1: Life Processes and Ecosystems</h3>
-                        <p>Explore health, medicines, habitats, food chains, and photosynthesis through slides and 50 interactive questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
+                <div class="year4-module-columns">
+                    <section class="year4-module-column" data-module-group="lessons" aria-labelledby="year4-lessons-heading">
+                        <header class="year4-column-heading"><h3 id="year4-lessons-heading">Learning modules</h3><p>7 topics · Learn concepts, view slides and practise.</p></header>
+                        <div class="grid">
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic1_Life_Processes_Ecosystems/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic1" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 1</div>
+                                <h3>Topic 1: Life Processes and Ecosystems</h3>
+                                <p>Explore health, medicines, habitats, food chains, and photosynthesis through slides and 50 interactive questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic2_Living_Things/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic2" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 2</div>
+                                <h3>Topic 2: Living Things in Their Environment</h3>
+                                <p>Explore habitats, adaptations, identification keys, pollution &amp; conservation through slides and 40 interactive questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic3_States_of_Matter/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic3" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 3</div>
+                                <h3>Topic 3: States of Matter</h3>
+                                <p>Master solids, liquids, gases, changes of state, elements, compounds &amp; chemical reactions through slides and 50 interactive questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic4_Energy_and_Light/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic4" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 4</div>
+                                <h3>Topic 4: Energy and Light</h3>
+                                <p>Master energy forms, light rays, shadows, and optics through slides and 50 interactive questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic5_Electricity/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic5" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 5</div>
+                                <h3>Topic 5: Electricity and Circuits</h3>
+                                <p>Explore conductors, insulators, series circuits, fuses, and lightning safety through slides and 50 questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic6_Planet_Earth/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic6" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 6</div>
+                                <h3>Topic 6: Planet Earth</h3>
+                                <p>Discover Earth's layers, tectonic plates, volcanoes, earthquakes, and tsunamis through slides and 50 questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-topic7" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 7</div>
+                                <h3>Topic 7: Earth and Space</h3>
+                                <p>Explore the Solar System, day &amp; night, orbits, comets and galaxies through slides and 50 interactive questions.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Module <span>&rarr;</span></div>
+                                </div>
+                            </a>
                         </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic2_Living_Things/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic2" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 2</div>
-                        <h3>Topic 2: Living Things in Their Environment</h3>
-                        <p>Explore habitats, adaptations, identification keys, pollution &amp; conservation through slides and 40 interactive questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
+                    </section>
+                    <section class="year4-module-column" data-module-group="revision" aria-labelledby="year4-revision-heading">
+                        <header class="year4-column-heading"><h3 id="year4-revision-heading">Revision &amp; practice</h3><p>5 modules · Revisit topics and strengthen understanding.</p></header>
+                        <div class="grid">
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-arclight-grid-crisis"
+                                data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Electricity Mission Lab</div>
+                                <h3>Arclight Grid Crisis</h3>
+                                <p>Complete seven evidence-led electricity missions with 56 questions, circuit diagnostics, calculations, stylus scratchpads, and a hidden teacher view.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Mission Lab <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Planet_Earth_Revision/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-planet-earth-revision-v2"
+                                data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 6 Revision</div>
+                                <h3>Planet Earth Revision Lab</h3>
+                                <p>Complete 100 four-option questions and 50 triple-blank challenges on Earth's structure, volcanoes, earthquakes, and early warning.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Revision <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Earth_and_Space_Revision/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-earth-space-revision"
+                                data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Topic 7 Revision</div>
+                                <h3>Earth &amp; Space Revision</h3>
+                                <p>100 multiple-choice and 50 typed fill-in-the-blank questions, interactive models, mistake review and a teacher writing board.</p>
+                                <div class="card-footer"><div class="start-link">Start Revision <span>&rarr;</span></div></div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-command-centre"
+                                data-bundle="igcse_y4_science">
+                                <div class="card-tag">Year 4 · Comprehensive Practice</div>
+                                <h3>Science Command Centre 4.0</h3>
+                                <p>Train scientific vocabulary, explanations, misconceptions, and reasoning through a 100-question mission system.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Mission <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Operation_Seven_Challenge/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-operation-seven"
+                                data-bundle="igcse_y4_science" data-public-module="true">
+                                <div class="card-tag">Year 4 · Mixed Revision Challenge</div>
+                                <h3>Science Quest V5.4 — Operation Seven</h3>
+                                <p>A higher-difficulty mixed revision mission designed to reward scientific reasoning, not memorised answers.</p>
+                                <div class="card-footer"><div class="start-link">Start Challenge <span>&rarr;</span></div></div>
+                            </a>
                         </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic3_States_of_Matter/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic3" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 3</div>
-                        <h3>Topic 3: States of Matter</h3>
-                        <p>Master solids, liquids, gases, changes of state, elements, compounds &amp; chemical reactions through slides and 50 interactive questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic4_Energy_and_Light/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic4" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 4</div>
-                        <h3>Topic 4: Energy and Light</h3>
-                        <p>Master energy forms, light rays, shadows, and optics through slides and 50 interactive questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic5_Electricity/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic5" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 5</div>
-                        <h3>Topic 5: Electricity and Circuits</h3>
-                        <p>Explore conductors, insulators, series circuits, fuses, and lightning safety through slides and 50 questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Arclight_Grid_Crisis/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-arclight-grid-crisis"
-                        data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Electricity Mission Lab</div>
-                        <h3>Arclight Grid Crisis</h3>
-                        <p>Complete seven evidence-led electricity missions with 56 questions, circuit diagnostics, calculations, stylus scratchpads, and a hidden teacher view.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Mission Lab <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic6_Planet_Earth/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic6" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 6</div>
-                        <h3>Topic 6: Planet Earth</h3>
-                        <p>Discover Earth's layers, tectonic plates, volcanoes, earthquakes, and tsunamis through slides and 50 questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Planet_Earth_Revision/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-planet-earth-revision-v2"
-                        data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 6 Revision</div>
-                        <h3>Planet Earth Revision Lab</h3>
-                        <p>Complete 100 four-option questions and 50 triple-blank challenges on Earth's structure, volcanoes, earthquakes, and early warning.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Revision <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Topic7_Earth_and_Space/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-topic7" data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Topic 7</div>
-                        <h3>Topic 7: Earth and Space</h3>
-                        <p>Explore the Solar System, day &amp; night, orbits, comets and galaxies through slides and 50 interactive questions.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Module <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-command-centre"
-                        data-bundle="igcse_y4_science">
-                        <div class="card-tag">Year 4 · Comprehensive Practice</div>
-                        <h3>Science Command Centre 4.0</h3>
-                        <p>Train scientific vocabulary, explanations, misconceptions, and reasoning through a 100-question mission system.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Mission <span>&rarr;</span></div>
-                        </div>
-                    </a>
-                    <a href="content/IGCSE_Syllabus/Year4/Science/Operation_Seven_Challenge/index.html"
-                        class="card sub-science" data-module-id="igcse-y4-sci-operation-seven"
-                        data-bundle="igcse_y4_science" data-public-module="true">
-                        <div class="card-tag">Year 4 · Mixed Revision Challenge</div>
-                        <h3>Science Quest V5.4 — Operation Seven</h3>
-                        <p>A higher-difficulty mixed revision mission designed to reward scientific reasoning, not memorised answers.</p>
-                        <div class="card-footer"><div class="start-link">Start Challenge <span>&rarr;</span></div></div>
-                    </a>
+                    </section>
                 </div>
             </div>
 

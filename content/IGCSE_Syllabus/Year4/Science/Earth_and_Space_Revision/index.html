@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#193345">
+  <title>Earth & Space · Year 4 Revision</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to learning content</a>
+  <header class="topbar">
+    <button id="home" class="brand" type="button"><span class="brand-mark">07</span><span>EARTH & SPACE<small>YEAR 4 · SCIENCE FIELDNOTES</small></span></button>
+    <div class="top-actions"><span id="topProgress">0 / 150 understood</span><button id="report" type="button">Progress</button><a class="portal-link back-link" href="../../../../../index.html#/secondary/igcse/igcse-science-y4">Course portal ↗</a></div>
+  </header>
+  <main id="main">
+    <section id="dashboard" class="dashboard">
+      <div class="hero">
+        <div class="hero-copy"><p class="eyebrow">THE REVISION COLLECTION / TOPIC 07</p><h1>A little curiosity.<br>A whole <em>universe.</em></h1><p class="hero-description">Follow the daylight. Meet our neighbours.<br>Make sense of the space we call home.</p><div class="hero-actions"><button id="continue" class="primary" type="button">Start exploring <span>→</span></button><button id="mixed" class="quiet" type="button">Mix 10 questions ↗</button></div><p class="hero-foot">100 multiple choice <span>·</span> 50 fill in the blanks <span>·</span> Your own pace</p></div>
+        <figure class="hero-art"><img src="assets/cover.svg" width="620" height="430" alt="Illustrated Earth with its Moon and the Sun on schematic orbit lines"><figcaption>ONE PLANET. MANY DISCOVERIES.</figcaption></figure>
+      </div>
+      <div class="collection-heading"><div><p class="eyebrow">YOUR FIELD GUIDE</p><h2>Where shall we begin?</h2></div><button id="review" type="button">Revisit mistakes <span id="reviewCount">0</span></button></div>
+      <div class="filters"><fieldset id="typeFilters"><legend class="sr-only">Question type</legend><button type="button" data-type="all" aria-pressed="true">All 150</button><button type="button" data-type="mcq" aria-pressed="false">Multiple choice</button><button type="button" data-type="fill" aria-pressed="false">Fill in the blanks</button></fieldset><label>Level <select id="level"><option value="all">All levels</option><option value="core">Core</option><option value="apply">Apply</option><option value="stretch">Think deeper</option></select></label></div>
+      <details class="practice-settings"><summary>Practice settings</summary><label><input id="soundSetting" type="checkbox"> Correct-answer sound</label><label><input id="advanceSetting" type="checkbox"> Next question after 4 seconds when correct</label><p>Both are optional. You can stop automatic advance with “Stay here”. Teacher shortcuts: Ctrl+Alt+T (notes), Ctrl+Alt+B (board), Ctrl+Alt+R (reset).</p></details>
+      <div id="topics" class="topic-list"></div>
+      <div class="bottom-note"><button id="modelsButton" class="text-button" type="button">Explore the models ↗</button><button id="sourcesButton" class="text-button" type="button">Teaching sources</button></div>
+    </section>
+    <section id="workspace" class="workspace" hidden>
+      <nav class="workspace-bar" aria-label="Practice controls"><button id="back" class="text-button" type="button">← Field guide</button><span id="sessionLabel"></span><button id="questionList" type="button" aria-expanded="false" aria-controls="navigator">Questions <span id="position"></span></button></nav>
+      <div class="progress-track"><span id="sessionProgress"></span></div>
+      <aside id="navigator" class="navigator" aria-label="Question navigator" hidden><div class="section-line"><h2>Jump to a question</h2><button id="closeNavigator" type="button">Close</button></div><p class="muted">✓ Understood · ! Revisit · ○ Not attempted</p><div id="questionGrid"></div></aside>
+      <article class="question-layout">
+        <section class="prompt-side"><div class="question-meta"><p id="questionMeta" class="eyebrow"></p><span id="difficulty" class="badge"></span></div><h1 id="prompt" tabindex="-1"></h1><figure id="evidence" class="evidence" hidden><p id="evidenceTitle" class="eyebrow"></p><div id="evidenceBody"></div><figcaption id="evidenceCaption"></figcaption></figure><details class="vocabulary"><summary>Key words / 中文詞彙</summary><p id="vocabularyText"></p></details></section>
+        <section class="answer-side" aria-labelledby="answerHeading"><p class="eyebrow" id="answerHeading">YOUR TURN</p><div id="answerArea"></div><button id="check" class="primary check" type="button">Check answer</button><div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div><div class="answer-extras"><button id="retry" class="text-button" type="button" hidden>Try this question again</button><button id="teacher" class="text-button" type="button" aria-expanded="false" aria-controls="teacherNote">Teacher notes</button></div><section id="teacherNote" class="teacher-note" hidden><p class="eyebrow">TEACHING DESK</p><div id="teacherContent"></div></section></section>
+      </article>
+      <nav class="question-footer" aria-label="Question navigation"><button id="previous" type="button">← Previous</button><p id="batchNote"></p><button id="next" class="primary" type="button">Next question →</button></nav>
+    </section>
+    <section id="empty" class="empty" hidden><p class="eyebrow">A MOMENT TO PAUSE</p><h1 id="emptyTitle"></h1><p id="emptyText"></p><button id="emptyBack" class="primary" type="button">Back to field guide</button></section>
+  </main>
+  <button id="boardTab" class="board-tab" type="button" aria-expanded="false" aria-controls="board">Writing board <span>＋</span></button>
+  <aside id="board" class="board" aria-labelledby="boardTitle" hidden>
+    <div class="board-heading"><div><p class="eyebrow">TEACHER'S WORKSPACE</p><h2 id="boardTitle">Room to think.</h2></div><button id="closeBoard" type="button" aria-label="Close writing board">Close ×</button></div>
+    <p class="board-hint">Write with a pen, finger or mouse. Your notes stay as you change questions.</p>
+    <div class="board-tools"><button type="button" id="pen" aria-pressed="true">Pen</button><button type="button" id="eraser" aria-pressed="false">Eraser</button><label class="color-label">Ink <input id="inkColor" type="color" value="#193345" aria-label="Ink colour"></label><label>Width <select id="inkWidth"><option value="3">Fine</option><option value="6" selected>Medium</option><option value="11">Bold</option></select></label><button id="undo" type="button">Undo</button><button id="clearBoard" type="button">Clear</button></div>
+    <div class="canvas-wrap"><canvas id="inkCanvas" width="1200" height="900" aria-label="Teacher handwriting canvas. Use a pen, finger or mouse. Typed notes are available below."></canvas></div>
+    <label class="typed-notes">Typed notes<textarea id="typedNotes" rows="3" placeholder="A question, an explanation, a discovery…"></textarea></label>
+    <div class="board-bottom"><span id="boardStatus" role="status">Notes stay on this device</span><button id="expandBoard" type="button" aria-pressed="false">Expand ↔</button></div>
+  </aside>
+  <dialog id="reportDialog" aria-labelledby="reportTitle"><div class="dialog-heading"><div><p class="eyebrow">YOUR LEARNING JOURNEY</p><h2 id="reportTitle">A clearer picture.</h2></div><button type="button" data-close>Close ×</button></div><div id="reportContent"></div><div class="dialog-actions"><button id="export" type="button">Export progress</button><button id="print" type="button">Print report</button><button id="reset" class="text-button" type="button">Reset this unit</button></div></dialog>
+  <dialog id="sourcesDialog" aria-labelledby="sourcesTitle"><div class="dialog-heading"><h2 id="sourcesTitle">Teaching sources</h2><button type="button" data-close>Close ×</button></div><p>Aligned with the existing Year 4 Topic 7 materials. Scientific wording has been checked against NASA references. Diagrams and observation tables are teaching models.</p><ul id="sourceList"></ul></dialog>
+  <dialog id="modelsDialog" aria-labelledby="modelsTitle"><div class="dialog-heading"><div><p class="eyebrow">LOOK, CHANGE, DISCOVER</p><h2 id="modelsTitle">A small space lab.</h2></div><button type="button" data-close>Close ×</button></div><p class="report-note">Explore together before practising. These models do not change your score.</p><div id="modelTabs" class="model-tabs" role="group" aria-label="Choose an exploration model"><button type="button" data-model="rotation" aria-pressed="true">Day & night</button><button type="button" data-model="shadow" aria-pressed="false">Shadows</button><button type="button" data-model="planets" aria-pressed="false">Planet map</button></div><div id="modelContent"></div></dialog>
+  <dialog id="confirmDialog" aria-labelledby="confirmTitle"><h2 id="confirmTitle"></h2><p id="confirmText"></p><div class="dialog-actions"><button id="cancelConfirm" type="button">Keep it</button><button id="acceptConfirm" class="danger" type="button">Confirm</button></div></dialog>
+  <div id="saveStatus" class="save-status" role="status" aria-live="polite">Progress stays on this device</div>
+  <script src="data.js"></script><script src="core.js"></script><script src="visuals.js"></script><script src="app.js"></script><script src="models.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+  <script src="../../../../../js/progress-tracker.js?v=1.0.2" data-module-id="igcse-y4-sci-earth-space-revision" data-module-name="Earth & Space Revision" data-module-url="content/IGCSE_Syllabus/Year4/Science/Earth_and_Space_Revision/index.html"></script>
+  <script src="sync.js"></script>
+</body>
+</html>

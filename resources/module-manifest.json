@@ -30,6 +30,12 @@
       "path": "content/IGCSE_Syllabus/Year4/Science/Science_Command_Centre/index.html"
     },
     {
+      "id": "igcse-y4-sci-earth-space-revision",
+      "title": "Earth & Space Revision",
+      "delivery": "public",
+      "path": "content/IGCSE_Syllabus/Year4/Science/Earth_and_Space_Revision/index.html"
+    },
+    {
       "id": "igcse-y4-sci-operation-seven",
       "title": "Science Quest V5.4 — Operation Seven",
       "delivery": "public",
