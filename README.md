@@ -45,9 +45,11 @@ A collection of interactive courses and modules designed to accelerate learning 
 ## New modules — 2026-09-04
 
 - [SBP 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html) — ID `spm-chem-f5-sbp-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html`.
+- [SBP 2025 Kimia Kertas 2 Teacher Slides](content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_2_Teacher/index.html) — ID `spm-chem-f5-sbp-2025-k2-teacher`, route `content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_2_Teacher/index.html`.
+- The protected SBP teacher deck covers 11 questions and 54 staged answer segments, with original question-page images, English scheme answers, Chinese explanations, six worked calculations whose labels and values reveal separately, seven source-faithful scheme crops, reset controls, and Supabase-backed progress restore.
 - [Selangor PINTAS 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_1/index.html) — ID `spm-chem-f5-selangor-pintas-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_1/index.html`.
 - [Terengganu 2025 Kimia Kertas 1](content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html) — ID `spm-chem-f5-terengganu-2025-k1`, route `content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html`.
-- All three protected drills contain 40 scheme-verified answers, original-page JPEG imagery, repeat marking, mobile portrait/landscape split panes, portal navigation, and Supabase-backed progress restore. Source PDFs and marking schemes remain SSD-only.
+- All three protected drills contain 40 scheme-verified answers, original-page JPEG imagery, repeat marking, mobile portrait/landscape split panes, portal navigation, and Supabase-backed progress restore. The SBP teacher deck is an explicitly approved transformed publication; source PDFs and full marking schemes remain SSD-only.
 ## Public-material policy
 
 - Public: original or AI-assisted teaching HTML, student worksheets, and student notes.

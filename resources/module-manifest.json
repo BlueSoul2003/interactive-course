@@ -414,6 +414,12 @@
       "path": "content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html"
     },
     {
+      "id": "spm-chem-f5-sbp-2025-k2-teacher",
+      "title": "SBP 2025 Kimia Kertas 2 Teacher Slides",
+      "delivery": "public",
+      "path": "content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_2_Teacher/index.html"
+    },
+    {
       "id": "spm-chem-f5-selangor-pintas-2025-k1",
       "title": "Selangor PINTAS 2025 Kimia Kertas 1",
       "delivery": "public",
