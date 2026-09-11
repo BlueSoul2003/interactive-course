@@ -294,6 +294,89 @@
             gap: 30px;
         }
 
+        /* SPM Chemistry catalogue */
+        .chemistry-catalog {
+            display: grid;
+            gap: 32px;
+        }
+
+        .chemistry-core {
+            max-width: 560px;
+        }
+
+        .chemistry-core-card {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .chemistry-paper-group {
+            padding: 28px;
+            border: 1px solid rgba(6, 182, 212, 0.18);
+            border-radius: 20px;
+            background: rgba(6, 182, 212, 0.035);
+        }
+
+        .chemistry-paper-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 20px;
+            padding-bottom: 20px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid rgba(6, 182, 212, 0.16);
+        }
+
+        .chemistry-paper-heading h3 {
+            color: var(--text-primary);
+            font-family: var(--font-serif);
+            font-size: clamp(1.65rem, 3vw, 2.15rem);
+            line-height: 1.15;
+            margin-bottom: 6px;
+        }
+
+        .chemistry-paper-heading p,
+        .chemistry-paper-count {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .chemistry-paper-count {
+            flex: 0 0 auto;
+            font-weight: 600;
+        }
+
+        .chemistry-paper-grid {
+            display: grid;
+            grid-template-columns: repeat(6, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .chemistry-paper-grid .card {
+            grid-column: span 2;
+            min-width: 0;
+            min-height: 280px;
+            padding: 24px;
+        }
+
+        .chemistry-paper-grid .card:nth-last-child(2) {
+            grid-column: 2 / span 2;
+        }
+
+        .chemistry-paper-grid .card:last-child {
+            grid-column: 4 / span 2;
+        }
+
+        .chemistry-catalog a:focus-visible {
+            outline: 3px solid var(--sub-chemistry);
+            outline-offset: 4px;
+        }
+
+        .chemistry-paper-grid .card:active {
+            transform: translateY(-2px) scale(0.99);
+        }
+
         /* Card Styles */
         .card {
             background: var(--glass-bg);
@@ -525,6 +608,23 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .chemistry-paper-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .chemistry-paper-grid .card,
+            .chemistry-paper-grid .card:nth-last-child(2) {
+                grid-column: auto;
+            }
+
+            .chemistry-paper-grid .card:last-child {
+                grid-column: 1 / -1;
+                justify-self: center;
+                width: calc(50% - 10px);
+            }
+        }
+
         @media (max-width: 768px) {
             header h1 {
                 font-size: 2.5rem;
@@ -532,6 +632,38 @@
 
             .grid {
                 grid-template-columns: 1fr;
+            }
+
+            .chemistry-catalog {
+                gap: 24px;
+            }
+
+            .chemistry-core {
+                max-width: none;
+            }
+
+            .chemistry-paper-group {
+                padding: 20px;
+            }
+
+            .chemistry-paper-header {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 8px;
+                margin-bottom: 20px;
+            }
+
+            .chemistry-paper-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chemistry-paper-grid .card,
+            .chemistry-paper-grid .card:nth-last-child(2),
+            .chemistry-paper-grid .card:last-child {
+                grid-column: auto;
+                justify-self: stretch;
+                width: auto;
+                min-height: 0;
             }
 
             .tabs-container {
@@ -1292,7 +1424,7 @@
                 </h2>
                 <div class="grid">
                     <a href="content/SPM_Syllabus/Form2/Math/KSSM_Revision1/index.html" class="card sub-math" data-module-id="spm-math-kssm-revision1" data-bundle="spm_form2">
-                        <div class="card-tag">Form 2 – KSSM Revision</div>
+                        <div class="card-tag">Form 2 - KSSM Revision</div>
                         <h3>KSSM Form 2 Math: Intensive Revision 1</h3>
                         <p>60-question step-by-step interactive revision covering Chapter 1 (Patterns &amp; Sequences)
                             and Chapter 2 (Factorisation &amp; Algebraic Fractions). Includes KBAT challenges.</p>
@@ -1422,8 +1554,13 @@
                         style="color: var(--sub-chemistry); border-color: var(--sub-chemistry);">⚗️</div>
                     SPM Chemistry Modules
                 </h2>
-                <div class="grid">
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="chemistry-catalog">
+                    <section class="chemistry-core" aria-labelledby="chemistry-topic-lessons">
+                        <div class="chemistry-paper-heading">
+                            <h3 id="chemistry-topic-lessons">Topic lesson</h3>
+                            <p>Learn a Form 5 topic with presentation and workbook support.</p>
+                        </div>
+                        <div class="chemistry-core-card">
                         <a href="content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html"
                             class="card sub-chemistry" data-module-id="spm-chem-ch5-consumer-industrial"
                             data-bundle="spm_form5">
@@ -1437,95 +1574,120 @@
                         </a>
                         <a href="content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/student_workbook.pdf"
                             class="start-link" download>Download Student Workbook <span>&darr;</span></a>
-                    </div>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-johor-2025-k1"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Johor</div>
-                        <h3>Johor 2025 Kimia Kertas 1</h3>
-                        <p>Practise all 40 objective questions against the original paper pages, with repeat attempts, instant marking, and saved progress.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Trial Practice <span>&rarr;</span></div>
                         </div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-johor-2025-k2-teacher"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Johor · Teacher</div>
-                        <h3>Johor 2025 Kimia Kertas 2 Teacher Slides</h3>
-                        <p>Teach all 11 structured questions from the original paper pages with staged English scheme answers, Chinese explanations, complete working, and classroom reset controls.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Open Teacher Slides <span>&rarr;</span></div>
+                    </section>
+
+                    <section class="chemistry-paper-group" data-paper-group="kertas-1" aria-labelledby="chemistry-kertas-1">
+                        <div class="chemistry-paper-header">
+                            <div class="chemistry-paper-heading">
+                                <h3 id="chemistry-kertas-1">Kertas 1</h3>
+                                <p>Student practice with 40 objective questions and saved progress.</p>
+                            </div>
+                            <div class="chemistry-paper-count">5 state sets</div>
                         </div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Kedah_2025_Kertas_1/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-kedah-2025-k1"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Kedah</div>
-                        <h3>Kedah 2025 Kimia Kertas 1</h3>
-                        <p>Practise all 40 objective questions with original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Start Trial Practice <span>&rarr;</span></div>
+                        <div class="chemistry-paper-grid">
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_1/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-johor-2025-k1"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Johor</div>
+                                <h3>Johor 2025 Kimia Kertas 1</h3>
+                                <p>Practise all 40 objective questions against the original paper pages, with repeat attempts, instant marking, and saved progress.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Trial Practice <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Kedah_2025_Kertas_1/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-kedah-2025-k1"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Kedah</div>
+                                <h3>Kedah 2025 Kimia Kertas 1</h3>
+                                <p>Practise all 40 objective questions with original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Start Trial Practice <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-sbp-2025-k1"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · SBP</div>
+                                <h3>SBP 2025 Kimia Kertas 1</h3>
+                                <p>Practise all 40 objective questions with original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
+                                <div class="card-footer"><div class="start-link">Start Trial Practice <span>&rarr;</span></div></div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_1/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-selangor-pintas-2025-k1"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Selangor PINTAS</div>
+                                <h3>Selangor PINTAS 2025 Kimia Kertas 1</h3>
+                                <p>Practise all 40 objective questions with high-resolution original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
+                                <div class="card-footer"><div class="start-link">Start Trial Practice <span>&rarr;</span></div></div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-terengganu-2025-k1"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Terengganu</div>
+                                <h3>Terengganu 2025 Kimia Kertas 1</h3>
+                                <p>Practise all 40 objective questions with original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
+                                <div class="card-footer"><div class="start-link">Start Trial Practice <span>&rarr;</span></div></div>
+                            </a>
                         </div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Kedah_2025_Kertas_2_Teacher/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-kedah-2025-k2-teacher"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Kedah · Teacher</div>
-                        <h3>Kedah 2025 Kimia Kertas 2 Teacher Slides</h3>
-                        <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, step-by-step calculations, and classroom reset controls.</p>
-                        <div class="card-footer">
-                            <div class="start-link">Open Teacher Slides <span>&rarr;</span></div>
+                    </section>
+
+                    <section class="chemistry-paper-group" data-paper-group="kertas-2" aria-labelledby="chemistry-kertas-2">
+                        <div class="chemistry-paper-header">
+                            <div class="chemistry-paper-heading">
+                                <h3 id="chemistry-kertas-2">Kertas 2</h3>
+                                <p>Teacher slides with staged scheme answers and Chinese explanations.</p>
+                            </div>
+                            <div class="chemistry-paper-count">5 state sets</div>
                         </div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_1/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-sbp-2025-k1"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · SBP</div>
-                        <h3>SBP 2025 Kimia Kertas 1</h3>
-                        <p>Practise all 40 objective questions with original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
-                        <div class="card-footer"><div class="start-link">Start Trial Practice <span>&rarr;</span></div></div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_2_Teacher/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-sbp-2025-k2-teacher"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · SBP · Teacher</div>
-                        <h3>SBP 2025 Kimia Kertas 2 Teacher Slides</h3>
-                        <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, two-click step-by-step calculations, and classroom reset controls.</p>
-                        <div class="card-footer"><div class="start-link">Open Teacher Slides <span>&rarr;</span></div></div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_1/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-selangor-pintas-2025-k1"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Selangor PINTAS</div>
-                        <h3>Selangor PINTAS 2025 Kimia Kertas 1</h3>
-                        <p>Practise all 40 objective questions with high-resolution original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
-                        <div class="card-footer"><div class="start-link">Start Trial Practice <span>&rarr;</span></div></div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_2_Teacher/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-selangor-pintas-2025-k2-teacher"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Selangor PINTAS · Teacher</div>
-                        <h3>Selangor PINTAS 2025 Kimia Kertas 2 Teacher Slides</h3>
-                        <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, two-click calculations, and classroom reset controls.</p>
-                        <div class="card-footer"><div class="start-link">Open Teacher Slides <span>&rarr;</span></div></div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-terengganu-2025-k1"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Terengganu</div>
-                        <h3>Terengganu 2025 Kimia Kertas 1</h3>
-                        <p>Practise all 40 objective questions with original paper pages, mobile split-screen controls, repeat attempts, instant marking, and saved progress.</p>
-                        <div class="card-footer"><div class="start-link">Start Trial Practice <span>&rarr;</span></div></div>
-                    </a>
-                    <a href="content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_2_Teacher/index.html"
-                        class="card sub-chemistry" data-module-id="spm-chem-f5-terengganu-2025-k2-teacher"
-                        data-bundle="spm_form5">
-                        <div class="card-tag">Form 5 · Trial 2025 · Terengganu · Teacher</div>
-                        <h3>Terengganu 2025 Kimia Kertas 2 Teacher Slides</h3>
-                        <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, two-click calculations, and classroom reset controls.</p>
-                        <div class="card-footer"><div class="start-link">Open Teacher Slides <span>&rarr;</span></div></div>
-                    </a>
+                        <div class="chemistry-paper-grid">
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Johor_2025_Kertas_2_Teacher/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-johor-2025-k2-teacher"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Johor · Teacher</div>
+                                <h3>Johor 2025 Kimia Kertas 2 Teacher Slides</h3>
+                                <p>Teach all 11 structured questions from the original paper pages with staged English scheme answers, Chinese explanations, complete working, and classroom reset controls.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Open Teacher Slides <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Kedah_2025_Kertas_2_Teacher/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-kedah-2025-k2-teacher"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Kedah · Teacher</div>
+                                <h3>Kedah 2025 Kimia Kertas 2 Teacher Slides</h3>
+                                <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, step-by-step calculations, and classroom reset controls.</p>
+                                <div class="card-footer">
+                                    <div class="start-link">Open Teacher Slides <span>&rarr;</span></div>
+                                </div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/SBP_2025_Kertas_2_Teacher/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-sbp-2025-k2-teacher"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · SBP · Teacher</div>
+                                <h3>SBP 2025 Kimia Kertas 2 Teacher Slides</h3>
+                                <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, two-click step-by-step calculations, and classroom reset controls.</p>
+                                <div class="card-footer"><div class="start-link">Open Teacher Slides <span>&rarr;</span></div></div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Selangor_PINTAS_2025_Kertas_2_Teacher/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-selangor-pintas-2025-k2-teacher"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Selangor PINTAS · Teacher</div>
+                                <h3>Selangor PINTAS 2025 Kimia Kertas 2 Teacher Slides</h3>
+                                <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, two-click calculations, and classroom reset controls.</p>
+                                <div class="card-footer"><div class="start-link">Open Teacher Slides <span>&rarr;</span></div></div>
+                            </a>
+                            <a href="content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_2_Teacher/index.html"
+                                class="card sub-chemistry" data-module-id="spm-chem-f5-terengganu-2025-k2-teacher"
+                                data-bundle="spm_form5">
+                                <div class="card-tag">Form 5 · Trial 2025 · Terengganu · Teacher</div>
+                                <h3>Terengganu 2025 Kimia Kertas 2 Teacher Slides</h3>
+                                <p>Teach all 11 structured questions with original paper pages, staged English scheme answers, Chinese explanations, two-click calculations, and classroom reset controls.</p>
+                                <div class="card-footer"><div class="start-link">Open Teacher Slides <span>&rarr;</span></div></div>
+                            </a>
+                        </div>
+                    </section>
                 </div>
             </div>
 
@@ -1776,13 +1938,13 @@
                 </div>
             </div>
 
-            <!-- IGCSE Science — Year Selector (Layer 3) -->
+            <!-- IGCSE Science - Year Selector (Layer 3) -->
             <div id="igcse-science" class="view-layer">
                 <button class="back-btn" onclick="showSubjects('igcse')">&larr; Back to IGCSE Subjects</button>
                 <h2 class="section-title" style="margin-top: 10px;">
                     <div class="section-icon" style="color: var(--sub-science); border-color: var(--sub-science);">🔬
                     </div>
-                    IGCSE Science — Select Year Group
+                    IGCSE Science - Select Year Group
                 </h2>
                 <div class="grid">
                     <!-- Year 4 folder -->
@@ -1932,7 +2094,7 @@
                                 class="card sub-science" data-module-id="igcse-y4-sci-operation-seven"
                                 data-bundle="igcse_y4_science" data-public-module="true">
                                 <div class="card-tag">Year 4 · Mixed Revision Challenge</div>
-                                <h3>Science Quest V5.4 — Operation Seven</h3>
+                                <h3>Science Quest V5.4 - Operation Seven</h3>
                                 <p>A higher-difficulty mixed revision mission designed to reward scientific reasoning, not memorised answers.</p>
                                 <div class="card-footer"><div class="start-link">Start Challenge <span>&rarr;</span></div></div>
                             </a>
@@ -1956,7 +2118,7 @@
                         <div class="card-tag">Year 8 · Chapter 1</div>
                         <h3>Chapter 1: Respiration &amp; Breathing</h3>
                         <p>50 interactive questions across MCQ, fill-in-the-blank, T/F, sequencing &amp; critical
-                            thinking — plus an integrated PDF slide viewer and downloadable worksheets.</p>
+                            thinking, plus an integrated PDF slide viewer and downloadable worksheets.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Module <span>&rarr;</span></div>
                         </div>
@@ -1965,7 +2127,7 @@
                         class="card sub-science" data-module-id="igcse-y8-sci-ch2" data-bundle="igcse_y8_science">
                         <div class="card-tag">Year 8 · Chapter 2</div>
                         <h3>Chapter 2: Properties of Materials</h3>
-                        <p>Explore dissolving, solutions, solubility &amp; chromatography — with a PDF slide viewer, 4 virtual lab experiments, and a 50-question quiz with full answer key.</p>
+                        <p>Explore dissolving, solutions, solubility &amp; chromatography with a PDF slide viewer, 4 virtual lab experiments, and a 50-question quiz with full answer key.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Module <span>&rarr;</span></div>
                         </div>
@@ -2572,7 +2734,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            &copy; 2026 Mastery Academy &mdash; Designed for First Principles Excellence.
+            &copy; 2026 Mastery Academy - Designed for First Principles Excellence.
         </div>
     </footer>
 
