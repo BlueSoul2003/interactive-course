@@ -438,6 +438,12 @@
       "path": "content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_1/index.html"
     },
     {
+      "id": "spm-chem-f5-terengganu-2025-k2-teacher",
+      "title": "Terengganu 2025 Kimia Kertas 2 Teacher Slides",
+      "delivery": "public",
+      "path": "content/SPM_Syllabus/Form5/Chemistry/Terengganu_2025_Kertas_2_Teacher/index.html"
+    },
+    {
       "id": "spm-en-advice-expert",
       "title": "The Advice Expert",
       "delivery": "public",
