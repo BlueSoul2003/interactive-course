@@ -43,6 +43,7 @@ Last updated: 2026-08-04
 | Bab 5: Termokimia (Thermochemistry) | Teacher presentation / interactive slides | `content/SPM_Syllabus/Form3/Science/Bab5_Termokimia/index.html` |
 | Bab 6: Elektrik dan Kemagnetan | Teacher presentation / interactive slides | `content/SPM_Syllabus/Form3/Science/Bab6_Elektrik_dan_Kemagnetan/index.html` |
 | Bab 7: Tenaga dan Kuasa | Teacher presentation / interactive slides | `content/SPM_Syllabus/Form3/Science/Bab7_Tenaga_dan_Kuasa/index.html` |
+| Bab 8: Keradioaktifan (Radioactivity) | Interactive classroom / guided practice | `content/SPM_Syllabus/Form3/Science/Bab8_Keradioaktifan/index.html` |
 
 ### SPM Sains Komputer
 

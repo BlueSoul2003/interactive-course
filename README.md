@@ -12,6 +12,12 @@ A collection of interactive courses and modules designed to accelerate learning 
 * **Layered Architecture:** Clean, distraction-free UI utilizing a 3-layer folder structure (Syllabus > Subject > Module).
 * **Zero-Dependency Core:** Built purely with HTML, Vanilla JavaScript, and Tailwind CSS (via CDN) for maximum speed and easy hosting via GitHub Pages.
 
+## New module — 2026-09-13
+
+- [Bab 8: Keradioaktifan (Radioactivity)](content/SPM_Syllabus/Form3/Science/Bab8_Keradioaktifan/index.html), ID `spm-sci-f3-bab8-keradioaktifan`, follows Bab 5–7 in SPM → Science → Tingkatan 3.
+- Public HTML delivery with the same protected Form 3 launcher access as Bab 6–7: 96 teaching screens, 210 progressive answer steps, 36 Chinese science-term explanations, optional sound, resets, fullscreen, local notes and the embedded 22-page student PDF. Enter/Space reveals one step; Back returns to the originating course list.
+- Register only this module with `db/register_bab8_module.sql`; it does not reseed the registry or change existing module access. Source classroom: `03_Tutoring_Factory/04_Desktop_Teaching_Files/SPM_Science/Interactive_Classroom/Bab_8_Keradioaktifan` in GregOS. The published HTML adds the shared return-navigation helper.
+
 ## New modules — 2026-07-27
 
 - [Chapter 5: Consumer and Industrial Chemistry](content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html) — ID `spm-chem-ch5-consumer-industrial`, route `content/SPM_Syllabus/Form5/Chemistry/Chapter5_Consumer_and_Industrial_Chemistry/index.html`.
