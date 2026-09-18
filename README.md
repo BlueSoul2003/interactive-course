@@ -6,6 +6,12 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 ---
 
+## Extended learning — 2026-09-18
+
+- **The Vanishing Crystal** is registered under IGCSE → Science → Year 4 → Extended learning, ID `igcse-y4-sci-vanishing-crystal`, in the existing `igcse_y4_science` bundle. Its card uses the shared launcher and retains the Year 4 return route.
+- Includes the Gummy Science Lab design, 17 screens, continuous SVG models, two timestamped YouTube clips, saved drawing/notes, a 50-question bank with 10/20/30/40/50-question rounds, eight answer sounds and two-answer streak lighting. Lesson progress stays on the current device.
+- Registry addition: `db/register_vanishing_crystal.sql`. Access mode is `protected`, matching the bundle; delivery remains public HTML, matching neighbouring science modules and the documented Phase 2 boundary. No existing entitlements or security policies change.
+
 ## 📚 Features
 * **Global Syllabus Support:** Segmented learning paths for SPM, UEC, IGCSE, and Singapore (O/A-Level) syllabuses.
 * **Bilingual Semantic Bridging:** Dual-language support (English/Chinese) in quizzes to build mental models efficiently.

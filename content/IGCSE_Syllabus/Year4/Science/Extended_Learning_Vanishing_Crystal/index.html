@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#fff9ed">
+  <title>The Vanishing Crystal · Science Explorers</title>
+  <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="gummy.css">
+</head>
+<body>
+  <a class="skip" href="#lesson">Skip to investigation</a>
+  <header class="topbar">
+    <a class="brand portal-link" href="../../../../../index.html#/secondary/igcse/igcse-science-y4" aria-label="Back to Science courses"><span class="gummy-mark" aria-hidden="true"></span><span>SCIENCE EXPLORERS<small>Gummy Science Lab / Extended Learning</small></span></a>
+    <div class="top-actions"><button id="openMap" class="quiet">Mission map</button><button id="openBoard">Writing board <span aria-hidden="true">↗</span></button><button id="fullScreen" class="quiet" aria-label="Toggle full screen">⛶</button></div>
+  </header>
+  <div class="workspace">
+    <nav class="rail" aria-label="Investigation phases"><p class="eyebrow">YOUR INVESTIGATION</p><div id="phaseNav"></div><div class="rail-bottom"><div class="lab-buddy" aria-hidden="true"><span class="shadow"></span><span class="drop"><i class="eyes"></i><i class="cheeks"></i><i class="smile"></i></span><span class="spark">✦</span></div><p>Look closely.<br>Think beyond.</p><button id="openSources" class="quiet">Sources & credits</button></div></nav>
+    <main id="lesson" tabindex="-1">
+      <div class="lesson-meta"><span id="phaseLabel" class="eyebrow"></span><span id="pageNumber"></span></div>
+      <div class="progress-track"><div id="progressBar"></div></div>
+      <div id="stage" aria-live="off"></div>
+      <nav class="lesson-footer" aria-label="Lesson navigation"><button id="previous" class="quiet">← Back</button><span id="saveStatus" role="status">Saved on this device</span><button id="next" class="primary">Next discovery <span aria-hidden="true">→</span></button></nav>
+    </main>
+  </div>
+  <dialog id="mapDialog" aria-labelledby="mapTitle"><div class="dialog-heading"><div><p class="eyebrow">INVESTIGATION 01</p><h2 id="mapTitle">Your mission map</h2></div><button data-close aria-label="Close mission map">×</button></div><div id="mapList"></div><button id="mapSources" class="map-sources">Sources & credits</button></dialog>
+  <dialog id="boardDialog" class="board-dialog" aria-labelledby="boardTitle"><div class="dialog-heading"><div><p class="eyebrow">YOUR FIELD NOTES</p><h2 id="boardTitle">Room to think.</h2></div><button data-close aria-label="Close writing board">Close ×</button></div><p id="boardPrompt"></p><div class="ink-tools"><button id="pen" aria-pressed="true">Pen</button><button id="eraser" aria-pressed="false">Eraser</button><label>Colour <input id="inkColor" type="color" value="#164c48"></label><label>Width <select id="inkWidth"><option value="3">Fine</option><option value="5" selected>Medium</option><option value="9">Bold</option></select></label><button id="undoInk">Undo</button><button id="clearInk">Clear drawing</button></div><div class="canvas-wrap"><canvas id="ink" width="1000" height="540" aria-label="Drawing area. Use a pen, finger or mouse; typed notes are available below."></canvas></div><label class="field-label" for="boardText">Or write your explanation</label><textarea id="boardText" rows="3" placeholder="I think… because…"></textarea><div class="board-foot"><span>Each screen keeps its own drawing and notes.</span><button id="exportDrawing">Save drawing PNG</button></div></dialog>
+  <dialog id="teacherDialog" aria-labelledby="teacherTitle"><div class="dialog-heading"><div><p class="eyebrow">TEACHING DESK · CTRL + ALT + T</p><h2 id="teacherTitle">Guide the investigation.</h2></div><button data-close aria-label="Close teacher view">Close ×</button></div><div id="teacherContent"></div><div class="dialog-actions"><button id="exportReport">Export lesson record</button><button id="resetLesson" class="danger">Reset this lesson</button></div><p class="small">Teacher view is a classroom convenience, not password protection. Answers are part of this static lesson. Notes and drawings stay on this device; this module does not sync them online.</p></dialog>
+  <dialog id="sourcesDialog" aria-labelledby="sourcesTitle"><div class="dialog-heading"><h2 id="sourcesTitle">Sources & credits</h2><button data-close aria-label="Close sources">×</button></div><p>Original activities and simplified diagrams for this investigation. Models are not photographs and are not to scale.</p><ul><li><a href="https://www.cambridgeinternational.org/programmes-and-qualifications/cambridge-primary/curriculum/science/" target="_blank" rel="noopener">Cambridge Primary Science (0097)</a> — curriculum basis.</li><li><a href="https://www.youtube.com/watch?v=xdedxfhcpWo" target="_blank" rel="noopener">How Water Dissolves Salt</a> — Canadian Museum of Nature. Classroom excerpts: 00:44–01:00 and 01:00–01:20. Linked and embedded from the original upload; no video copy is stored here.</li><li><a href="https://manoa.hawaii.edu/sealearning/grade-5/physical-science/matter-sea/activity-reappearing-salt" target="_blank" rel="noopener">University of Hawaiʻi: Reappearing Salt</a> — dissolving and recovering salt through evaporation.</li></ul><p>Internet access is needed only for the video and external sources. If the video cannot play, use the built-in particle model. YouTube may show advertising or require consent; availability can change.</p></dialog>
+  <dialog id="confirmDialog" aria-labelledby="confirmTitle"><h2 id="confirmTitle">Start again?</h2><p id="confirmText"></p><div class="dialog-actions"><button id="cancelConfirm">Keep my work</button><button id="acceptConfirm" class="danger">Confirm</button></div></dialog>
+  <noscript><p class="no-script">Please enable JavaScript to use the investigation, drawing board and questions.</p></noscript>
+  <script src="lesson.js"></script><script src="challenge.js"></script><script src="motion.js"></script><script src="feedback.js"></script><script src="app.js"></script>
+  <script src="../../../../../js/navigation.js?v=1.0.0"></script>
+</body>
+</html>

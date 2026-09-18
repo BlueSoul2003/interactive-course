@@ -1099,6 +1099,9 @@
         /* Year 4: lessons and revision share one route, with distinct columns. */
         .year4-module-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
         .year4-module-column { min-width: 0; }
+        .year4-extended { grid-column: 1 / -1; }
+        .year4-extended .grid { max-width: 760px; }
+        .year4-extended .year4-column-heading { background: rgba(168, 139, 250, .09); }
         .year4-column-heading { margin: 0 0 20px; padding: 18px 20px; text-align: left; border: 1px solid rgba(148, 163, 184, .25); border-radius: 16px; background: rgba(16, 185, 129, .07); }
         .year4-column-heading h3 { margin: 0 0 6px; font-size: 23px; }
         .year4-column-heading p { margin: 0; font-size: 14px; color: var(--text-secondary, #94a3b8); opacity: 1; animation: none; }
@@ -2104,6 +2107,18 @@
                                 <h3>Science Quest V5.4 - Operation Seven</h3>
                                 <p>A higher-difficulty mixed revision mission designed to reward scientific reasoning, not memorised answers.</p>
                                 <div class="card-footer"><div class="start-link">Start Challenge <span>&rarr;</span></div></div>
+                            </a>
+                        </div>
+                    </section>
+                    <section class="year4-module-column year4-extended" data-module-group="extension" aria-labelledby="year4-extension-heading">
+                        <header class="year4-column-heading"><h3 id="year4-extension-heading">Extended learning</h3><p>Explore new ideas through guided investigations and stretch challenges.</p></header>
+                        <div class="grid">
+                            <a href="content/IGCSE_Syllabus/Year4/Science/Extended_Learning_Vanishing_Crystal/index.html"
+                                class="card sub-science" data-module-id="igcse-y4-sci-vanishing-crystal" data-bundle="igcse_y4_science">
+                                <div class="card-tag">Extended Learning · Gummy Science Lab</div>
+                                <h3>The Vanishing Crystal</h3>
+                                <p>Investigate dissolving, particles, filtering and evaporation with continuous models, video clips and a writing board. Finish with 10–50 questions from a 50-question challenge bank.</p>
+                                <div class="card-footer"><div class="start-link">Start Investigation <span>&rarr;</span></div></div>
                             </a>
                         </div>
                     </section>

@@ -36,6 +36,12 @@
       "path": "content/IGCSE_Syllabus/Year4/Science/Earth_and_Space_Revision/index.html"
     },
     {
+      "id": "igcse-y4-sci-vanishing-crystal",
+      "title": "The Vanishing Crystal",
+      "delivery": "public",
+      "path": "content/IGCSE_Syllabus/Year4/Science/Extended_Learning_Vanishing_Crystal/index.html"
+    },
+    {
       "id": "igcse-y4-sci-operation-seven",
       "title": "Science Quest V5.4 — Operation Seven",
       "delivery": "public",

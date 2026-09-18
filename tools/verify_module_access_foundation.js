@@ -20,6 +20,9 @@ const hardening = fs.readFileSync(hardeningPath, 'utf8');
 const anonymousHardening = fs.readFileSync(anonymousHardeningPath, 'utf8');
 const registrySql = [
   fs.readFileSync(path.join(root, 'db', 'schema.sql'), 'utf8'),
+  ...fs.readdirSync(path.join(root, 'db'))
+    .filter((name) => /^register_.*\.sql$/.test(name))
+    .map((name) => fs.readFileSync(path.join(root, 'db', name), 'utf8')),
   ...fs.readdirSync(path.join(root, 'supabase', 'migrations'))
     .filter((name) => name.endsWith('.sql'))
     .map((name) => fs.readFileSync(path.join(root, 'supabase', 'migrations', name), 'utf8'))
@@ -67,7 +70,7 @@ for (const relativePath of portalFiles) {
   const html = fs.readFileSync(path.join(root, relativePath), 'utf8');
   for (const match of html.matchAll(/data-module-id="([^"]+)"/g)) portalModuleIds.add(match[1]);
 }
-assert.strictEqual(portalModuleIds.size, 97, 'published portal inventory changed; review and register every new module');
+assert.strictEqual(portalModuleIds.size, 99, 'published portal inventory changed; review and register every new module');
 for (const moduleId of portalModuleIds) {
   assert.ok(registrySql.includes(`'${moduleId}'`), `published module is missing from registry migrations: ${moduleId}`);
 }
