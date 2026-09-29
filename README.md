@@ -79,6 +79,12 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 ## Navigation Routing
 
+### Bual integration — 2026-09-29
+
+SPM → Bahasa Melayu includes the external [Bual speaking/listening application](https://bual-spm.vercel.app/?course=1). All signed-in portal students may use it; it is deliberately not a protected HTML module and does not use activation PINs or the module launcher. Existing course permissions remain unchanged. `js/bual-bridge.js` handles requests initiated by Bual, reuses the portal session, and sends only its access token to the fixed Bual HTTPS backend for remote issuer verification. The return URL contains a short-lived, single-use proof-bound code, never access/refresh tokens. Cancelling leaves the student in the portal. No portal schema or account-data migration is required.
+
+Bual retains its separate records and XP. First-time students explicitly choose a fresh record or prove ownership of an old Bual account using its old password. Main-platform summaries, XP merging, paid access and AI activation are out of scope. Navigation/access tests and the isolated Bual browser bridge (old/new accounts) pass. Publication is pending explicit approval of the production-login cutover and Vercel CLI authorization recovery; do not publish this entry until coordinating the Bual release. Source changes were based on the latest published main in an isolated worktree; the older development checkout and unrelated lesson edits are retained. Manual completion check: a signed-in student clicks SPM → Bahasa Melayu → Bual, enters without another platform password and can return to the same course list.
+
 The landing page uses hash routes such as `/#/secondary/igcse/igcse-science-y8` to remember the active syllabus and lesson layer. Module cards are enhanced at runtime by `js/navigation.js` so a module can return to the exact list or hub that opened it.
 
 New modules should load `js/navigation.js?v=1.0.0` before `progress-tracker.js` and keep a simple Home/Back fallback link. The helper rewrites that link when source context is available.
