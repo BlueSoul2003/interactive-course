@@ -1340,6 +1340,14 @@
                     SPM Bahasa Melayu Modules
                 </h2>
                 <div class="grid">
+                    <!-- External Bual application: its server verifies portal identity;
+                         deliberately outside the protected-HTML module launcher. -->
+                    <a href="https://bual-spm.vercel.app/?course=1" class="card sub-bm" id="bual-course-entry">
+                        <div class="card-tag">Percuma dengan akaun interactive-course</div>
+                        <h3>Bual · Bertutur &amp; Mendengar</h3>
+                        <p>Latih pertuturan dan pendengaran BM dalam ruang belajar yang mesra. Akaun sama; rekod dan XP disimpan di Bual.</p>
+                        <div class="card-footer"><div class="start-link">Mula latihan Bual <span>&rarr;</span></div></div>
+                    </a>
                     <a href="content/SPM_Syllabus/Form5/BM/Kesalahan_Ejaan/index.html" class="card sub-bm" data-bundle="spm_form5" data-module-id="spm-bm-kesalahan-ejaan">
                         <div class="card-tag">Module 1 - Kesalahan Ejaan</div>
                         <h3>Sistem Latihan: 错别字 Debug</h3>
@@ -2969,6 +2977,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/navigation.js?v=1.0.0"></script>
     <script src="js/auth-access.js?v=1.2.0"></script>
+    <script src="js/bual-bridge.js?v=1.0.0"></script>
     <script src="js/progress-tracker.js?v=1.0.2"></script>
     <script src="js/feedback.js?v=1.0.2"></script>
     <script>
