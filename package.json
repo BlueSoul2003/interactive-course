@@ -23,7 +23,8 @@
     "verify:kssr-workbooks": "python tools/verify_kssr_workbook_json.py _drafts/kssr_english_workbooks/primary3/workbook.json _drafts/kssr_english_workbooks/primary6/workbook.json && node tools/verify_kssr_workbook_pages.js",
     "verify:addmaths-live-quiz": "node tools/verify_addmaths_live_quiz.js",
     "verify:tutoring-publication": "node tools/verify_tutoring_publication.js",
-    "verify:adult-english": "node tools/verify_adult_english_friendship.js"
+    "verify:adult-english": "node tools/verify_adult_english_friendship.js",
+    "verify:form2-science-uasa": "node tools/verify_form2_science_uasa.js"
   },
   "dependencies": {
     "@babel/core": "^7.29.7",

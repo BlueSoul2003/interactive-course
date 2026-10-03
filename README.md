@@ -6,6 +6,12 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 ---
 
+## UASA Form 2 Science classroom — 2026-10-03
+
+- [UASA Sains: Bilik Darjah](content/SPM_Syllabus/Form2/Science/UASA_2024/index.html): 59 teaching screens covering the original 31 main questions, 130 progressive Malay answer steps, Chinese / English / both explanations, independent explanation visibility, Space reveal, auto-fit, zoom and fullscreen. Graphite classroom interface; all assets work offline.
+- Portal: Secondary → SPM → Science. ID `spm-sci-f2-uasa-2024`; protected access in the existing `spm_form2` bundle, with public HTML delivery matching the documented Phase 2 boundary. The canonical launcher manifest includes the route. Register only this module with `db/register_form2_science_uasa.sql`; do not reseed the database.
+- Local verification covers every answer step, language / visibility preferences, translated diagrams, direct offline use, navigation and mobile layouts. All 20 objective questions fit at 1366×768. [Teaching controls, source caveats and verification](content/SPM_Syllabus/Form2/Science/UASA_2024/README.md). GitHub Pages publishes `main` through the existing deployment workflow.
+
 ## Extended learning — 2026-09-18
 
 - **The Vanishing Crystal** is registered under IGCSE → Science → Year 4 → Extended learning, ID `igcse-y4-sci-vanishing-crystal`, in the existing `igcse_y4_science` bundle. Its card uses the shared launcher and retains the Year 4 return route.

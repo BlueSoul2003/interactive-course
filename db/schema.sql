@@ -435,6 +435,9 @@ INSERT INTO public.modules (id, title, syllabus, subject, bundle, grade_level) V
 -- ── SPM Science (Form 3) ──────────────────────────────────────────
 ('spm-sci-f3-bab5-termokimia', 'Bab 5: Termokimia (Thermochemistry)',         'spm', 'science', 'spm_form3', 'Form3'),
 
+-- ── SPM Science (Form 2) ──────────────────────────────────────────
+('spm-sci-f2-uasa-2024', 'UASA Sains Tingkatan 2 2024: Bilik Darjah',         'spm', 'science', 'spm_form2', 'Form2'),
+
 -- ── UEC English (Senior) ──────────────────────────────────────────
 ('uec-en-reading',             'Reading Comprehension',                       'uec', 'english', 'uec_senior', 'Senior'),
 ('uec-en-grammar',             'Grammar & Usage',                             'uec', 'english', 'uec_senior', 'Senior'),

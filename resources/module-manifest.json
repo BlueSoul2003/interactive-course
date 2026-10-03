@@ -486,6 +486,12 @@
       "path": "content/SPM_Syllabus/Form2/Math/KSSM_Revision1/index.html"
     },
     {
+      "id": "spm-sci-f2-uasa-2024",
+      "title": "UASA Sains: Bilik Darjah",
+      "delivery": "public",
+      "path": "content/SPM_Syllabus/Form2/Science/UASA_2024/index.html"
+    },
+    {
       "id": "spm-sci-f3-bab5-termokimia",
       "title": "Bab 5: Termokimia (Thermochemistry)",
       "delivery": "public",

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UASA 2024 · Sains Tingkatan 2 · Bilik Darjah</title>
+  <link rel="stylesheet" href="classroom.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="back-link" href="../../../../../index.html#/secondary/spm/spm-science" data-course-back>← Kursus</a>
+    <div class="brand"><span class="brand-mark" aria-hidden="true">S2</span><div><strong>Sains Tingkatan 2</strong><span>UASA 2024 / 2025 · Bilik darjah</span></div></div>
+    <div class="top-actions"><button id="helpButton" aria-label="Panduan kawalan">?</button><button id="fullscreenButton">Skrin penuh</button></div>
+  </header>
+  <main>
+    <div class="lesson-heading"><div><p class="eyebrow" id="sectionLabel">BAHAGIAN A</p><h1 id="questionTitle">Soalan 1</h1><p id="topicLabel"></p></div><div class="position"><span id="positionLabel"></span><button id="jumpButton">Pilih soalan ↗</button></div></div>
+    <div class="workspace">
+      <section class="question-panel" aria-label="Soalan asal">
+        <div class="panel-heading"><span>SOALAN ASAL</span><div class="question-view-controls"><button id="fitButton" aria-pressed="true" title="Padankan soalan dengan ruang skrin">Auto muat</button><div class="zoom-controls"><button id="zoomOut" aria-label="Kecilkan soalan">−</button><output id="zoomLabel">100%</output><button id="zoomIn" aria-label="Besarkan soalan">+</button></div></div></div>
+        <div class="question-scroll" id="questionScroll"><div id="questionImages"></div><div class="sr-only" id="questionText"></div></div>
+        <div class="source-footer"><span id="sourceLabel"></span><a id="sourceLink" href="source.pdf" target="_blank" rel="noopener">Lihat kertas asal ↗</a></div>
+      </section>
+      <section class="answer-panel" aria-label="Jawapan langkah demi langkah">
+        <div class="panel-heading"><span>JAWAPAN &amp; PENJELASAN</span><span id="stepCount"></span></div>
+        <div class="explanation-toolbar" aria-label="解釋設定 / Explanation settings">
+          <div class="explanation-languages" role="group" aria-label="解釋語言 / Explanation language">
+            <button data-explanation-language="zh" aria-pressed="true" lang="zh-Hant">中文</button>
+            <button data-explanation-language="en" aria-pressed="false" lang="en">English</button>
+            <button data-explanation-language="both" aria-pressed="false" aria-label="雙語 / Chinese and English" title="中文與英文 / Chinese and English">雙語</button>
+          </div>
+          <button id="explanationToggle" aria-pressed="true" aria-controls="answerSteps" title="顯示／隱藏補充解釋，保留馬來文答案 / Show or hide explanations, keeping Malay answers">隱藏解釋 / Hide</button>
+        </div>
+        <div id="answerEmpty" class="answer-empty"><div class="empty-symbol" aria-hidden="true">✳︎</div><h2>Fikir dahulu.</h2><p>Beri murid masa untuk menjawab.<br>Tekan <kbd>Space</kbd> apabila bersedia.</p><span>Think first. Reveal when ready.</span></div>
+        <div id="answerSteps" class="answer-steps" aria-live="polite" aria-relevant="additions"></div>
+        <div id="answerDone" class="answer-done" hidden>✓ Semua langkah ditunjukkan</div>
+        <div id="noteWrap" class="note-wrap" hidden><button id="noteButton" aria-expanded="false">Nota guru · semakan sumber <span>+</span></button><div id="teacherNote" hidden></div></div>
+      </section>
+    </div>
+  </main>
+  <footer class="control-bar"><div class="nav-controls"><button id="previousButton" aria-label="Soalan sebelumnya">←</button><span id="shortPosition"></span><button id="nextButton" aria-label="Soalan seterusnya">→</button></div><div class="reveal-controls"><button id="undoButton">Undur langkah</button><button id="hideButton">Sembunyikan</button><button id="revealButton"><span id="revealLabel">Tunjuk jawapan</span><kbd>Space</kbd></button></div><div class="progress-track" aria-hidden="true"><div id="progressFill"></div></div></footer>
+  <dialog id="jumpDialog"><div class="dialog-heading"><div><p class="eyebrow">PETA KERTAS</p><h2>Pilih soalan</h2></div><button data-close aria-label="Tutup">×</button></div><nav id="questionMap" aria-label="Senarai soalan"></nav></dialog>
+  <dialog id="helpDialog">
+    <div class="dialog-heading"><h2>Cara mengajar</h2><button data-close aria-label="Tutup">×</button></div>
+    <p>Soalan menggunakan petikan imej kertas asal. Jawapan ialah cadangan berasaskan konsep sains, bukan skema rasmi.</p>
+    <dl>
+      <dt>Space</dt><dd>Tunjuk satu langkah. Selepas langkah terakhir, tekan lagi untuk soalan seterusnya.</dd>
+      <dt>← / →</dt><dd>Soalan sebelumnya / seterusnya. Jawapan sentiasa disembunyikan apabila berpindah.</dd>
+      <dt>Backspace</dt><dd>Undur satu langkah jawapan.</dd>
+      <dt>H</dt><dd>Sembunyikan semua jawapan soalan ini.</dd>
+      <dt>E</dt><dd>顯示／隱藏補充解釋，保留已顯示的馬來文答案。Show / hide explanations, keeping revealed Malay answers.</dd>
+      <dt>L</dt><dd>切換解釋語言：中文 → English → 雙語。Switch explanation language: Chinese → English → both.</dd>
+      <dt>F</dt><dd>Skrin penuh.</dd>
+      <dt>+ / −</dt><dd>Besarkan / kecilkan soalan.</dd>
+    </dl>
+    <p>Kedudukan soalan disimpan pada peranti ini. Muat semula halaman akan menyembunyikan jawapan. Butang dan pilihan soalan juga boleh digunakan dengan sentuhan.</p>
+    <p>空白鍵逐段顯示答案；最後一段後再按一次，進入下一題。方向鍵切題，Backspace 撤回，H 隱藏答案。</p>
+    <p>解釋預設為中文；可用答案區上方按鈕選中文、English 或雙語，並獨立顯示／隱藏解釋。語言及顯示偏好會保存在此裝置；切換只影響已揭示的內容。Explanation language and visibility are saved on this device.</p>
+    <p><a href="README.md">Nota kandungan &amp; rujukan</a></p>
+  </dialog>
+  <script src="data.js"></script><script src="question-layout.js"></script><script src="classroom.js"></script><script src="../../../../../js/navigation.js?v=1.0.0"></script>
+</body>
+</html>
