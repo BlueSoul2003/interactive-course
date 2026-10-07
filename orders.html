@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+ <title>课程订单 · Mr Owl</title>
+ <style>
+ :root{color-scheme:light;--ink:#302747;--accent:#7453bf;--line:#e2dced}*{box-sizing:border-box}
+ body{margin:0;background:#f7f6fb;color:var(--ink);font:16px/1.6 system-ui,"Microsoft YaHei",sans-serif}
+ main{max-width:1000px;margin:auto;padding:28px 24px 70px}header{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);padding-bottom:20px}
+ a{color:#604097}h1{font-size:clamp(28px,5vw,42px);letter-spacing:-.04em;line-height:1.2;margin:0 0 14px}h2{font-size:21px;margin:0 0 12px}
+ .intro{padding:38px 0 24px;max-width:650px}.muted{color:#695f79}.panel{background:white;border:1px solid var(--line);border-radius:14px;padding:24px;margin:18px 0}
+ label{display:block;margin:12px 0 6px}select,input,button{font:inherit;border-radius:8px;padding:10px 12px}select,input{border:1px solid #b4aac3;max-width:100%;width:100%;background:white;color:var(--ink)}
+ button{border:0;background:var(--accent);color:white;cursor:pointer;margin:12px 8px 0 0;font-weight:600}button:disabled{opacity:.5;cursor:default}button.secondary{background:#eee9f8;color:#493570}
+ :focus-visible{outline:3px solid #b28424;outline-offset:3px}#message{padding:12px 0;min-height:50px;white-space:pre-wrap}.row{border-top:1px solid var(--line);padding:20px 0}.row:first-child{border:0}.row h3{margin:0}.meta{overflow-wrap:anywhere;font-size:14px;color:#695f79}.badge{display:inline-block;padding:2px 9px;border-radius:6px;background:#fff0cd;color:#644a16;margin:8px 0}
+ .actions{max-width:540px}.confirm-line{display:flex;gap:10px;align-items:flex-start}.confirm-line input{width:auto;margin-top:6px}small{display:block}.empty{padding:24px 0;color:#695f79}
+ [hidden]{display:none!important}@media(max-width:550px){main{padding:20px 16px}.panel{padding:18px}header{align-items:flex-start}.intro{padding-top:28px}}
+ </style>
+ <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script>
+ <script defer src="js/auth-access.js"></script><script defer src="js/course-orders.js"></script>
+</head>
+<body><main>
+ <header><strong>MR OWL / 课程服务</strong><a href="index.html">返回课程首页</a></header>
+ <div class="intro"><h1>我的课程订单</h1><p class="muted">按主题选择课程与使用期限。付款由工作人员核实到账后开通，学习记录与课程访问期限分开保留。</p></div>
+ <div id="message" role="status" aria-live="polite"></div>
+ <section id="signed-out" class="panel" hidden><h2>先登录你的账号</h2><p>请在课程首页登录，再返回这里查看自己的订单。</p><a href="index.html">前往登录</a></section>
+ <section id="shop" class="panel" hidden><h2>选择课程包</h2><p>学生版用于个人学习；教师版另外包含教师资料，不包含学生席位。</p>
+  <form id="order-form"><label for="offer">课程、版本与期限</label><select id="offer" required></select><button id="create-order" type="submit">建立待付款订单</button></form>
+  <p id="no-offers" class="empty" hidden>目前还没有开放购买的课程包。课程通过审核、定价和私有交付检查后才会上架。</p>
+ </section>
+ <section id="history" class="panel" hidden><h2 id="history-title">我的订单</h2><button id="refresh" class="secondary">刷新订单</button><p id="order-note" class="muted"></p><div id="orders"></div></section>
+ <small class="muted">到账核实与开通是两个明确步骤。付款截图本身不会自动授予课程权限；撤销访问也不会自动执行退款。</small>
+</main></body></html>

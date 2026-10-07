@@ -10,6 +10,7 @@ assert.match(workflow, /name:\s*Deploy static site to GitHub Pages/);
 assert.match(workflow, /branches:\s*\[\s*main\s*\]/);
 assert.match(workflow, /needs:\s*verify/);
 assert.match(workflow, /npm run verify:release/);
+assert.match(workflow, /cp orders\.html _site\//);
 assert.match(workflow, /npm ci --ignore-scripts/);
 const proposed = fs.readFileSync(path.join(repoRoot, '.github', 'workflows', 'verify.yml'), 'utf8');
 assert.match(proposed, /pull_request:/);
