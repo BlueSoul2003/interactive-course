@@ -1,6 +1,39 @@
 # Protected Module Access Boundary
 
-Status: accepted, Phase 2 launcher
+Status: existing launcher/private pilot implemented; commercial package contract accepted, implementation pending (2026-10-07)
+
+## Commercial package contract — 2026-10-07
+
+The initial product is a topic package (for example, one SPM Mathematics chapter), with a student or teacher edition and a 1, 3, 6 or 12 calendar-month term. This section records the agreed target, not a claim that checkout or term enforcement already exists.
+
+Responsibilities:
+
+| Component | Owns | Must not decide |
+|---|---|---|
+| Topic/catalog | Stable topic ID and student/teacher asset mapping | User permissions or payment status |
+| Offer | Topic, edition, term, active price/currency | Account role or user-supplied price |
+| Order | Buyer and immutable purchased offer/price snapshot | Grant access merely because a receipt was uploaded |
+| Payment confirmation | Staff-verified TNG receipt of funds, reviewer, timestamp, reconciliation reference | Treat a screenshot as settlement |
+| Fulfilment | Atomic, repeat-safe order confirmation and entitlement issue | Issue a second grant on a retried confirmation |
+| Entitlement | Topic, edition, starts/expires/revoked timestamps, order origin | Derive purchase rights from editable profile metadata |
+| Private delivery | Recheck account and entitlement for the requested edition and resource | Include teacher solutions in student HTML or public assets |
+| Progress | Account-owned work independent of current access | Discard work automatically when access expires |
+
+A teacher purchase includes the same topic's student activities, teaching notes, solutions, editable materials and presentation resources. It does not grant site administration or student seats. Site administration remains an independently controlled staff capability.
+
+One payment buys a fixed term, with manual renewal. The term begins only when verified payment and successful access grant are both recorded. Expiry stops paid access; progress/answers are retained for 12 months after expiry so renewal in that window resumes the work. The later retention/deletion process must be specified and tested before enabling it; this change creates no deletion job.
+
+Proposed service interfaces (not shipped): create an order using an active server-side offer ID; staff confirm a reconciled payment using an idempotency key; atomically issue or return the order's existing entitlement; retrieve the current buyer's orders; authorize and serve a topic resource by edition; revoke the order-linked entitlement for a confirmed reversal. Client input never supplies the authoritative price, expiry, buyer role or fulfilment result. Renewal scheduling and month-end handling need explicit contract tests before implementation.
+
+Migration sequence:
+
+1. Add release checks and restore broken existing courses independently of commercial data changes.
+2. Greg confirmed on 2026-10-07 that existing accounts are administrators and test students, with no paying users. Preserve those accounts/data; do not treat legacy test grants as payment evidence. Validate new commercial topics using explicit order-linked grants before opening sales.
+3. Build and transaction-test catalog, orders and fulfilment in an isolated database. Include duplicate confirmation, simultaneous confirmation, failed grant rollback, wrong account, expired/revoked access, teacher-vs-student assets and month-end durations.
+4. Pilot one private topic package, then validate anonymous, unpaid, paid student, paid teacher, expired and admin access through direct URLs and APIs.
+5. Migrate only reviewed legacy records; verify current classroom access and rollback before enforcing the new boundary more widely.
+
+Keep the existing Supabase identity and launcher foundation. A browser-only paywall was rejected because public files remain retrievable. Giving teachers administrator accounts was rejected because purchase scope and staff authority are separate. A wholesale account rebuild was rejected because existing classes and progress must be preserved.
 
 ## Decision
 
