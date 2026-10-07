@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>学习足迹 · Mr Owl</title>
+<link rel="stylesheet" href="js/learning-records.css">
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4"></script><script defer src="js/auth-access.js"></script><script defer src="js/learning-records-core.js"></script><script defer src="js/learning-records.js"></script></head>
+<body><main>
+<header><a class="brand" href="index.html">MR OWL<span>学习空间</span></a><nav aria-label="主要导航"><a href="index.html">课程首页</a><a href="orders.html">我的订单</a></nav></header>
+<section class="opening"><div><p class="eyebrow">YOUR LEARNING JOURNEY</p><h1>每一步，都有记录。</h1><p class="subtitle">找到上次的进度，接着往前走。</p></div><div class="owl" aria-hidden="true"><span>◕</span><i></i><span>◕</span></div></section>
+<div id="message" role="status" aria-live="polite">正在载入你的学习记录…</div>
+<section id="guest" class="empty" hidden><h2>登录后，找回你的学习足迹</h2><p>用上次学习的账号登录，即可查看已保存到云端的进度。</p><a class="button" href="index.html">前往登录</a></section>
+<div id="workspace" hidden>
+<section class="overview" aria-label="记录概览"><div><strong id="course-count">—</strong><span>有云端记录的课程</span></div><div><strong id="last-save">—</strong><span>最近一次保存</span></div><p>这里展示课程实际保存的数据。<br>保存进度不等于完成课程或正式成绩。</p></section>
+<section id="resume" class="resume" hidden></section>
+<div class="toolbar"><div role="group" aria-label="记录视图"><button id="courses-tab" class="tab active" aria-pressed="true">课程进度</button><button id="activity-tab" class="tab" aria-pressed="false">学习历史</button></div><button id="refresh" class="quiet">刷新记录</button></div>
+<label class="search">查找课程<input id="search" type="search" placeholder="输入课程名称…"></label>
+<p id="view-note" class="note"></p><section id="records" aria-label="学习记录"></section><button id="more" class="quiet" hidden>载入更多</button>
+</div>
+<footer>仅显示已同步的记录；有些旧课程只保存在原设备上。继续学习时会重新检查课程访问权限。</footer>
+</main></body></html>

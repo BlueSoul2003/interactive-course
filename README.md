@@ -4,6 +4,12 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 **🌍 Live Site:** [https://bluesoul2003.github.io/interactive-course/](https://bluesoul2003.github.io/interactive-course/)
 
+## Learning records — 2026-10-07
+
+[Learning Records](learning.html) brings course snapshots, saved result summaries, daily activity and safe resume links into one account-owned view. The shared progress SDK reports save status, retries failed saves in memory and rejects stale writes from other pages. The database preserves answers during partial navigation updates and timestamps saves itself. Existing records are preserved; historical activity begins with new saves, not backfill. Scores are lesson-reported values, not certified grades.
+
+Migration `20261007075249_learning_records` is live; isolated and rolled-back live checks passed with all 38 original snapshots unchanged. `npm run verify:learning-records` covers data isolation, save semantics and client behavior. See [the boundary document](docs/MODULE_ACCESS_BOUNDARY.md#learning-records--2026-10-07) for limits. After signing in, open `learning.html`, choose a saved course and resume through the launcher. A supported lesson should show its cloud save status; returning to the dashboard should show its new timestamp and daily entry. Cached old lesson tabs should be reloaded to use the new SDK. Per-question attempt history and remaining course adapters are the next stage.
+
 ## Commercial orders foundation — 2026-10-07
 
 The [course orders page](orders.html) supports student order history and administrator manual TNG reconciliation. The database owns price snapshots, 1/3/6/12 calendar-month access, repeat-safe confirmation, revocation and student/teacher scope. Same-topic, same-edition early renewals connect to the existing expiry; expired renewals start at confirmation. Teacher purchases do not grant site administrator rights.

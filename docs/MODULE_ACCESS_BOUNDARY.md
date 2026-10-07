@@ -80,3 +80,16 @@ Friendship student quiz actions now also require the same signed-in account and 
 ## Security boundary
 
 UI locks are presentation only. A module is not protected until its HTML and assets are absent from the public deployment and the private launcher validates a current Supabase session and entitlement before returning its content. Friendship now meets this boundary; the remaining modules still use public routes until migrated individually.
+
+
+## Learning records — 2026-10-07
+
+The learning dashboard (`learning.html`) shows account-owned cloud snapshots, explicit lesson scores/checkpoints and a daily activity view. Resume links resolve against the published manifest and always use the launcher. Unknown legacy entries remain visible without an unverified URL. The four existing account dialogs use the same safe text renderer and link to the full dashboard. Search covers loaded results; lists load in pages of 50.
+
+Migration `20261007075249_learning_records` preserves all existing rows. The shared SDK serializes saves, binds a course page to its initial account, reports pending/saved/failure states and retries failed data in memory. `save_learning_progress` checks the previously loaded server timestamp; a stale snapshot fails with `progress_conflict` rather than overwriting newer work. Users must reload and reconcile after a conflict. There is no durable offline queue or automatic cross-device merge.
+
+The database now stamps saves itself and merges top-level JSON fields: a navigation-only update preserves answers; a supplied empty array/object/null explicitly replaces that field. Nested objects are not deep-merged. Legacy direct upserts remain compatible, so cached old SDKs do not get optimistic conflict protection until refreshed. Payloads must be objects under 1 MB (existing maximum measured 22,594 bytes). Scores remain client-reported learning data, not examination certification.
+
+`learning_activity` retains the last small checkpoint summary per user, module and Malaysia calendar date. It starts with new saves, does not invent historical attempts, and excludes answer/notes payloads. It is a daily snapshot history, not an immutable event log or per-question attempt ledger. No retention deletion job is added. RLS permits only the permanent authenticated owner; UI teacher/admin status does not expose another learner's records.
+
+Verification: local PostgreSQL tests cover ownership, anonymous denial, merge preservation, server timestamps, stale writes, daily coalescing and legacy writes. SDK tests cover save serialization, failure retry and account switching; display tests reject arbitrary resume URLs and fabricated completion percentages. A live rolled-back transaction passed merge/conflict/history/isolation checks. All 38 existing snapshots retained the same aggregate digest and no fixture accounts/history remain. Browser fixture checks cover search, daily view, text-only hostile names, unknown routes and narrow layout. True multi-connection load and every old course's complete restore behavior remain unverified. Next integration work should add structured per-question attempt events and course-specific result adapters rather than guessing from arbitrary blobs.

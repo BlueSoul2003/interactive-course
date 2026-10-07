@@ -1,49 +1,6 @@
-// ==============================================================
-// js/progress-tracker.js  — Universal Student Progress SDK v2
-// Powered by Supabase Auth (https://supabase.com)
-// ==============================================================
-//
-// WHAT CHANGED FROM v1:
-//   • Identity is now the logged-in Supabase Auth user (UUID),
-//     NOT a name string stored in localStorage. Progress persists
-//     across logout/re-login and across devices.
-//   • Reads/writes public.student_progress via the official
-//     supabase-js client (proper RLS + auth token forwarding).
-//   • Adds autoSave(data, delayMs) — debounced save, safe to call
-//     on every keypress for tracking typed answers.
-//   • Adds init(callback) — waits for auth to be ready then fires
-//     the callback with the tracker instance. Use this in modules
-//     instead of window.onload + manual checks.
-//   • Backward-compatible: if user is not logged in, save/load are
-//     silent no-ops so the module still works as a guest.
-//
-// HOW TO USE IN A MODULE (copy-paste this at the bottom of <body>):
-//
-//   <script src="[root]/js/progress-tracker.js"
-//           data-module-id="unique-canonical-id"
-//           data-module-name="Human Readable Name"
-//           data-module-url="content/.../index.html"></script>
-//   <script>
-//     ProgressTracker.init(async (tracker) => {
-//       // Restore state on page load:
-//       const saved = await tracker.load();
-//       if (saved?.stage) goToStage(saved.stage);
-//       if (saved?.answers) restoreAnswers(saved.answers);
-//     });
-//
-//     // Call anywhere to save (e.g., on stage change):
-//     ProgressTracker.save({ stage: 2, answers: {...} });
-//
-//     // Call on every keypress/input (debounced 2s):
-//     ProgressTracker.autoSave({ stage: 2, answers: {...} });
-//   </script>
-//
-// ==============================================================
-
-(function () {
-    'use strict';
-
-    // ── Supabase credentials (same project as auth-access.js) ────────────────
+// Account-bound cloud snapshots. See docs/MODULE_ACCESS_BOUNDARY.md for merge/conflict semantics.
+(function(){
+'use strict';
     const SUPABASE_URL = 'https://ycsixsyssbdovpmmhefz.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inljc2l4c3lzc2Jkb3ZwbW1oZWZ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUzOTcyNTEsImV4cCI6MjA5MDk3MzI1MX0.5Ofa771ewzMip8mZaXA09B9O2HPF3ZGoTk3qGkdTkmE';
     const PROGRESS_TABLE = 'student_progress';
@@ -83,182 +40,93 @@
         if (!client) return null;
         try {
             const { data: { user }, error } = await client.auth.getUser();
-            if (error || !user) return null;
+            if (error || !user || user.is_anonymous) return null;
             return user.id;
         } catch (e) {
             return null;
         }
     }
 
-    // ── Auto-save debouncer ───────────────────────────────────────────────────
-    let _autoSaveTimer = null;
 
-    // ── Public API ────────────────────────────────────────────────────────────
-    const ProgressTracker = {
-
-        /**
-         * Waits for Supabase auth to be ready, then fires callback(tracker).
-         * Use this in modules instead of window.onload + manual ProgressTracker checks.
-         *
-         * @param {function} callback - async (tracker) => { ... }
-         */
-        init(callback) {
-            if (typeof callback !== 'function') return;
-            const client = _getClient();
-            if (!client) {
-                // No Supabase client available (CDN not loaded) — call callback
-                // with the tracker anyway so module logic still runs without persistence.
-                console.warn('[ProgressTracker] Supabase client not found. Running without persistence.');
-                try { callback(this); } catch (e) { console.error('[ProgressTracker] init callback error:', e); }
-                return;
-            }
-
-            // onAuthStateChange fires immediately with the current session,
-            // then again on future sign-in/sign-out events.
-            const { data: { subscription } } = client.auth.onAuthStateChange((_event, _session) => {
-                // Only call the restore callback once (on initial load).
-                // Unsubscribe so we don't re-run on subsequent sign-in/out.
-                subscription.unsubscribe();
-                try { callback(this); } catch (e) { console.error('[ProgressTracker] init callback error:', e); }
-            });
-        },
-
-        /**
-         * Saves progress for the current logged-in user in the current module.
-         * Silent no-op if user is not logged in or module config is missing.
-         *
-         * @param {object} data - Any JSON-serialisable state to save
-         * @returns {Promise<void>}
-         */
-        async save(data) {
-            const userId = await _getUserId();
-            if (!userId) return; // guest — no-op
-
-            const cfg = _moduleConfig;
-            if (!cfg || !cfg.id) {
-                console.warn('[ProgressTracker] No data-module-id on <script> tag. Progress not saved.');
-                return;
-            }
-
-            const client = _getClient();
-            if (!client) return;
-
-            const { error } = await client
-                .from(PROGRESS_TABLE)
-                .upsert({
-                    user_id:       userId,
-                    module_id:     cfg.id,
-                    module_name:   cfg.name,
-                    module_url:    cfg.url,
-                    progress_data: data,
-                    updated_at:    new Date().toISOString()
-                }, { onConflict: 'user_id,module_id' });
-
-            if (error) {
-                console.error('[ProgressTracker] save error:', error.message);
-            }
-        },
-
-        /**
-         * Debounced save — safe to call on every keypress.
-         * Waits `delayMs` (default 2000ms) after the last call before saving.
-         *
-         * @param {object} data - State to save
-         * @param {number} [delayMs=2000] - Debounce delay in milliseconds
-         */
-        autoSave(data, delayMs = 2000) {
-            if (_autoSaveTimer) clearTimeout(_autoSaveTimer);
-            _autoSaveTimer = setTimeout(() => {
-                this.save(data).catch(e => console.error('[ProgressTracker] autoSave error:', e));
-            }, delayMs);
-        },
-
-        /**
-         * Loads saved progress for the current user in the current module.
-         * Returns the progress_data object, or null if none exists.
-         *
-         * @returns {Promise<object|null>}
-         */
-        async load() {
-            const userId = await _getUserId();
-            if (!userId) return null;
-
-            const cfg = _moduleConfig;
-            if (!cfg || !cfg.id) return null;
-
-            const client = _getClient();
-            if (!client) return null;
-
-            const { data, error } = await client
-                .from(PROGRESS_TABLE)
-                .select('progress_data')
-                .eq('user_id', userId)
-                .eq('module_id', cfg.id)
-                .maybeSingle();
-
-            if (error) {
-                console.error('[ProgressTracker] load error:', error.message);
-                return null;
-            }
-
-            // Return just the inner progress_data blob (what the module cares about)
-            return data?.progress_data ?? null;
-        },
-
-        /**
-         * Gets all saved progress rows for the currently logged-in user.
-         * Used by admin dashboards or student portfolio views.
-         *
-         * @returns {Promise<Array>}
-         */
-        async getAllProgress() {
-            const userId = await _getUserId();
-            if (!userId) return [];
-
-            const client = _getClient();
-            if (!client) return [];
-
-            const { data, error } = await client
-                .from(PROGRESS_TABLE)
-                .select('module_id, module_name, module_url, progress_data, updated_at')
-                .eq('user_id', userId)
-                .order('updated_at', { ascending: false });
-
-            if (error) {
-                console.error('[ProgressTracker] getAllProgress error:', error.message);
-                return [];
-            }
-
-            return data || [];
-        },
-
-        // ── Legacy compatibility stubs (v1 API — no longer functional) ────────
-        // These prevent errors in any code that still calls the old student-name API.
-
-        /** @deprecated Use Supabase Auth — this is now a no-op */
-        setActiveStudent(name) {
-            console.warn('[ProgressTracker] setActiveStudent() is deprecated. Use Supabase Auth login instead.');
-        },
-
-        /** @deprecated Returns null — identity comes from Supabase Auth */
-        getActiveStudent() {
-            console.warn('[ProgressTracker] getActiveStudent() is deprecated. Identity is now from Supabase Auth.');
-            return null;
-        },
-
-        /** @deprecated */
-        clearActiveStudent() {
-            console.warn('[ProgressTracker] clearActiveStudent() is deprecated. Use supabaseClient.auth.signOut() instead.');
-        },
-
-        /** @deprecated Use getAllProgress() */
-        async getAllProgressForStudent(_name) {
-            console.warn('[ProgressTracker] getAllProgressForStudent() is deprecated. Use getAllProgress() instead.');
-            return this.getAllProgress();
+    let version, owner, pending=null, timer=null, serial=Promise.resolve(), failed=null, outstanding=0, loadBlocked=false;
+    const identity = _getUserId().then(id => { owner=id; return id; });
+    let statusNode;
+    function status(state,text){
+        window.dispatchEvent(new CustomEvent('learning-save-status',{detail:{state,text}}));
+        if(!_moduleConfig?.id||!document.body)return;
+        if(!statusNode){
+            statusNode=document.createElement('div');statusNode.setAttribute('role','status');
+            statusNode.style.cssText='position:fixed;bottom:12px;right:12px;z-index:100;max-width:min(360px,90vw);padding:9px 13px;background:#302747;color:#fff;border-radius:10px;font:13px/1.5 system-ui;box-shadow:0 3px 18px #0002';
+            document.body.append(statusNode);
         }
+        statusNode.replaceChildren(document.createTextNode(text));
+        if(state==='error'){
+            const retry=document.createElement('button');retry.textContent='重试保存';retry.style.cssText='margin-left:8px;padding:3px 7px;cursor:pointer';
+            retry.onclick=()=>{if(failed)ProgressTracker.save(failed)};statusNode.append(retry);
+        }
+    }
+    function snapshot(data){
+        if(!data||typeof data!=='object'||Array.isArray(data))throw Error('Progress must be an object');
+        return JSON.parse(JSON.stringify(data));
+    }
+    async function sameAccount(){const first=await identity;return first&&first===await _getUserId();}
+    async function write(data){
+        data={...(failed||{}),...data};
+        if(loadBlocked){failed=data;status('conflict','云端记录未能载入。请重新打开课程后再保存。');return {saved:false};}
+        if(!await sameAccount()){
+            failed=owner?data:null;
+            status(owner?'error':'guest',owner?'未保存：请检查连接，并使用原账号重新打开课程。':'访客模式：登录后重新打开课程，才能保存到云端。');
+            return {saved:false};
+        }
+        const cfg=_moduleConfig,client=_getClient();if(!cfg?.id||!client)return {saved:false};
+        try{
+            status('saving','正在保存学习记录…');
+            if(version===undefined){
+                const {data:row,error}=await client.from(PROGRESS_TABLE).select('updated_at').eq('user_id',owner).eq('module_id',cfg.id).maybeSingle();
+                if(error)throw error;version=row?.updated_at??null;
+            }
+            if(!await sameAccount())throw Error('account_changed');
+            const {data:result,error}=await client.rpc('save_learning_progress',{p_module_id:cfg.id,p_module_name:cfg.name,p_module_url:cfg.url,p_data:data,p_expected_at:version});
+            if(error)throw error;const row=Array.isArray(result)?result[0]:result;if(!row?.updated_at)throw Error('No save confirmation');
+            version=row.updated_at;failed=null;status('saved','已保存到云端');return {saved:true};
+        }catch(error){
+            failed={...(failed||{}),...data};
+            const conflict=error.code==='40001'||error.message==='progress_conflict';
+            status(conflict?'conflict':'error',conflict?'另一页面已有新记录。请重新载入课程，避免覆盖。':'未保存到云端，请保持此页并重试。');
+            return {saved:false,error};
+        }
+    }
+    const ProgressTracker={
+        init(callback){if(typeof callback==='function')identity.then(()=>callback(this)).catch(e=>console.error('[ProgressTracker] init:',e));},
+        save(data){
+            let copy;try{copy=snapshot(data)}catch(error){status('error','此课程的保存格式有误。');return Promise.resolve({saved:false,error})}
+            // A manual save supersedes the timer without dropping pending fields.
+            clearTimeout(timer);copy={...(failed||{}),...(pending||{}),...copy};pending=null;
+            outstanding++;serial=serial.catch(()=>{}).then(()=>write(copy)).finally(()=>outstanding--);return serial;
+        },
+        autoSave(data,delayMs=2000){
+            // A few legacy lessons used autoSave(moduleId, data).
+            if(typeof data==='string'&&delayMs&&typeof delayMs==='object'){data=delayMs;delayMs=2000;}
+            try{pending={...(pending||{}),...snapshot(data)}}catch(e){status('error','此课程的保存格式有误。');return;}
+            status('pending','有更改等待保存…');clearTimeout(timer);
+            timer=setTimeout(()=>{const next=pending;pending=null;if(next)this.save(next);},Math.max(0,Number(delayMs)||0));
+        },
+        async load(){
+            if(!await sameAccount()||!_moduleConfig?.id)return null;
+            try{
+                const {data,error}=await _getClient().from(PROGRESS_TABLE).select('progress_data,updated_at').eq('user_id',owner).eq('module_id',_moduleConfig.id).maybeSingle();
+                if(error)throw error;
+                version=data?.updated_at??null;return data?.progress_data??null;
+            }catch(error){loadBlocked=true;status('conflict','无法载入云端记录，请检查连接后重新打开课程。');return null;}
+        },
+        async getAllProgress(){
+            const userId=await _getUserId();if(!userId)return [];
+            const {data,error}=await _getClient().from(PROGRESS_TABLE).select('module_id,module_name,module_url,progress_data,updated_at').eq('user_id',userId).order('updated_at',{ascending:false});
+            if(error)throw error;return data||[];
+        },
+        getAllProgressForStudent(){return this.getAllProgress()},
+        setActiveStudent(){},getActiveStudent(){return null},clearActiveStudent(){}
     };
-
-    // Expose globally
-    window.ProgressTracker = ProgressTracker;
-
+    window.addEventListener('beforeunload',event=>{if(pending||failed||outstanding){event.preventDefault();event.returnValue='';}});
+    window.ProgressTracker=ProgressTracker;
 })();
