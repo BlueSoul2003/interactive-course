@@ -4,13 +4,21 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 **🌍 Live Site:** [https://bluesoul2003.github.io/interactive-course/](https://bluesoul2003.github.io/interactive-course/)
 
+## Commercial orders foundation — 2026-10-07
+
+The [course orders page](orders.html) supports student order history and administrator manual TNG reconciliation. The database owns price snapshots, 1/3/6/12 calendar-month access, repeat-safe confirmation, revocation and student/teacher scope. Same-topic, same-edition early renewals connect to the existing expiry; expired renewals start at confirmation. Teacher purchases do not grant site administrator rights.
+
+Backend migration `20261007072113_commerce_orders` is live and passed local PostgreSQL plus live rolled-back role tests. Existing account and legacy grant digests were unchanged. No offers, topic mappings or orders are seeded: there are no products available for purchase yet. `npm run verify:release` includes the commerce tests. See [the access boundary](docs/MODULE_ACCESS_BOUNDARY.md) for implementation, test limits and sales gates.
+
+Next: package one reviewed student/teacher topic privately, remove any public copies, approve pricing and complete a real-account pilot before activating sales. Visit `orders.html` after signing in on the homepage; an admin should see “订单核账与访问管理” and an empty catalog. Manual TNG balance verification remains a staff responsibility. Concurrent load and real-account browser payment/launch have not yet been tested.
+
 ## Platform repair candidate — 2026-10-07
 
 The `codex/commercial-foundation-20261007` branch fixes script failures in Advice Expert, My Dream Holiday, Storyteller's Toolkit, Self-Discovery and the Japanese hub, including damaged closing tags that hid story sections. It also repairs six Adult English return links and two CEO Masterclass shared-script paths. Mathematics production drafts and branding are outside this change.
 
 `npm ci --ignore-scripts` followed by `npm run verify:release` checks published JavaScript/JSX syntax plus existing authentication, recovery, navigation and module-launcher checks. Pages now requires that verification job before deployment, and pull requests run the same checks. This does not certify every course interaction or secure publicly served paid materials.
 
-Browser spot checks verified Holiday's senses feedback, Advice's tone grading, Storyteller's plot grading, Self-Discovery's next stage and Japanese account language switching. Real-account persistence, remaining missing PDFs and full commercial access remain pending. The [package/access contract](docs/MODULE_ACCESS_BOUNDARY.md) records topic editions, fixed terms and the proposed fulfilment boundary. Greg confirmed existing accounts are admins and test students. Next: implement order-linked grants in an isolated database.
+Browser spot checks verified Holiday's senses feedback, Advice's tone grading, Storyteller's plot grading, Self-Discovery's next stage and Japanese account language switching. Real-account persistence, remaining missing PDFs and full commercial access remain pending. The [package/access contract](docs/MODULE_ACCESS_BOUNDARY.md) records topic editions, fixed terms and the proposed fulfilment boundary. Greg confirmed existing accounts are admins and test students. Order-linked access is now implemented as described above; chapter activation remains pending.
 
 The signup metadata fix was applied to Supabase as migration `20261007065934_signup_metadata_no_entitlements`. In-memory PostgreSQL tests reproduce the former metadata-to-grant path and verify its denial after the patch, profile repair restrictions, and admin/explicit/legacy compatibility. A live rolled-back transaction also tested four metadata variants under the authenticated role plus anonymous signup. Existing profile/entitlement digests were unchanged, with no fixture accounts left. This does not revoke historical grants or resolve public course delivery, order fulfilment, or attempt ownership.
 

@@ -1,10 +1,10 @@
 # Protected Module Access Boundary
 
-Status: existing launcher/private pilot implemented; commercial package contract accepted, implementation pending (2026-10-07)
+Status: launcher/private pilot plus additive commerce backend implemented; no offers activated (2026-10-07)
 
 ## Commercial package contract — 2026-10-07
 
-The initial product is a topic package (for example, one SPM Mathematics chapter), with a student or teacher edition and a 1, 3, 6 or 12 calendar-month term. This section records the agreed target, not a claim that checkout or term enforcement already exists.
+The initial product is a topic package (for example, one SPM Mathematics chapter), with a student or teacher edition and a 1, 3, 6 or 12 calendar-month term. Orders and fixed-term authorization now implement this contract. Actual chapter packaging and sales activation remain pending.
 
 Responsibilities:
 
@@ -21,9 +21,17 @@ Responsibilities:
 
 A teacher purchase includes the same topic's student activities, teaching notes, solutions, editable materials and presentation resources. It does not grant site administration or student seats. Site administration remains an independently controlled staff capability.
 
-One payment buys a fixed term, with manual renewal. The term begins only when verified payment and successful access grant are both recorded. Expiry stops paid access; progress/answers are retained for 12 months after expiry so renewal in that window resumes the work. The later retention/deletion process must be specified and tested before enabling it; this change creates no deletion job.
+One payment buys a fixed term, with manual renewal. First purchases and expired renewals begin at staff confirmation. Greg approved early renewal on 2026-10-07: the same topic and edition starts at its latest paid expiry, preserving remaining time. Calendar months use Malaysia time and clamp month-end dates. Editions renew independently; changing edition is not a prorated upgrade. Expiry stops paid access; progress/answers are retained for 12 months after expiry so renewal in that window resumes the work. The later retention/deletion process must be specified and tested before enabling it; this change creates no deletion job.
 
-Proposed service interfaces (not shipped): create an order using an active server-side offer ID; staff confirm a reconciled payment using an idempotency key; atomically issue or return the order's existing entitlement; retrieve the current buyer's orders; authorize and serve a topic resource by edition; revoke the order-linked entitlement for a confirmed reversal. Client input never supplies the authoritative price, expiry, buyer role or fulfilment result. Renewal scheduling and month-end handling need explicit contract tests before implementation.
+Implemented interfaces: `create_course_order`, `confirm_course_order`, `revoke_course_order`, and the existing `can_launch_module`. `course_orders` stores the immutable purchase snapshot and its entitlement interval together; confirmation cannot commit a payment state without its access dates. A buyer request UUID deduplicates creation. An order lock and buyer/topic/edition advisory lock serialize confirmation; unique confirmation and normalized transaction references reject reused receipts. Client input never supplies authoritative price, expiry, buyer or role. A paid order retry returns the original interval.
+
+`orders.html` shows the caller's orders; staff administrators can reconcile the latest 100 orders using actual received amount and transaction reference. Revocation records staff/reason/time and stops that order's access, but does not transfer money, delete progress or reschedule later paid renewals. The page is not an automatic payment gateway. Account UUIDs identify buyers; customer search, pagination, cancellation, refunds and receipt upload are later operations work.
+
+Migration `20261007072113_commerce_orders` was applied live. All four commerce tables have RLS; clients cannot write them directly. Private functions enforce identity and role; exposed wrappers are invoker functions. Mapped topics never fall back to legacy wildcard/PIN grants; unmapped courses keep existing access. Offers require active protected modules, private buckets and existing registered objects before order creation and confirmation. This checks delivery configuration, not teaching quality or absence of a separate public copy.
+
+Validation: `npm run verify:commerce` runs the actual migration in isolated PostgreSQL (PGlite): wrong-user RLS, anonymous and non-admin denials, snapshots, duplicate requests/receipts, confirmation rollback/retry, teacher versus student access, expiry/revocation, early/expired renewal, private-object readiness and all four terms. A live rolled-back transaction passed authenticated buyer/admin creation, retries, access, renewal and revocation. Original profiles and legacy grant digests were unchanged; no test accounts, offers, mappings or orders remain. True multi-connection contention has not yet been load-tested. Browser checks cover signed-out state and local mocked reconciliation; a real-account end-to-end payment/private launch remains a pilot gate.
+
+The security advisor reports no new commerce-function warning. The server-only topic mapping intentionally has RLS and no client policy/grants ([advisor explanation](https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy)). Existing PIN, quiz ownership and Auth password protection notices remain separate work; the site is not yet certified for general commercial release.
 
 Migration sequence:
 

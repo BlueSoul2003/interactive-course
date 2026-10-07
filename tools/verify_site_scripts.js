@@ -41,7 +41,7 @@ function files(dir) {
   });
 }
 function main() {
-  const shipped = ['index.html', 'notes.html', 'launcher.html', ...['content','hardcopy','js','resources'].flatMap(dir => files(path.join(root,dir)).map(p => path.relative(root,p)))];
+  const shipped = ['index.html', 'notes.html', 'launcher.html', 'orders.html', ...['content','hardcopy','js','resources'].flatMap(dir => files(path.join(root,dir)).map(p => path.relative(root,p)))];
   let htmlCount = 0, scriptCount = 0; const errors = [];
   for (const filename of shipped) {
     if (!/\.(html|js|mjs)$/i.test(filename)) continue;
