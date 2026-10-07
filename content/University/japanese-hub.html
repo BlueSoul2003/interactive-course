@@ -1242,7 +1242,7 @@
             <select id="authLangSelect" onchange="changeAuthLanguage(this.value)" style="position: absolute; top: 16px; left: 20px; background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 5px; padding: 4px 8px; font-size: 0.85rem; outline: none; cursor:pointer; z-index:10;">
                 <option value="en" style="color: black;">EN</option>
                 <option value="ms" style="color: black;">MS</option>
-                <option value="zh" style="color: black;">世</option>
+                <option value="zh" style="color: black;">中文</option>
             </select>
             <button class="modal-close" onclick="closeStudentModal()">&times;</button>
             <h2 id="authTitle" style="font-family: var(--font-serif); font-size: 2rem; color: #fff; margin-bottom: 5px; margin-top: 25px;">Student Dashboard</h2>
@@ -1424,12 +1424,12 @@
                 btnSubmitLogin: "Log Masuk", btnSubmitRegister: "Buat Akaun"
             },
             zh: {
-                title: "账户主页", subtitle: "管理您的为资料并继习进?,
+                title: "账户主页", subtitle: "管理您的个人资料并继续学习",
                 tabLogin: "登录", tabRegister: "注册",
                 emailPlaceholder: "电子...", passwordPlaceholder: "密码...",
-                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理?,
+                rolePlaceholder: "账户角色...", roleStudent: "学生", roleTeacher: "教师", roleParent: "家长", roleAdmin: "管理员",
                 namePlaceholder: "全名...", phonePlaceholder: "电话号码...", syllabusPlaceholder: "选择课程大纲...",
-                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "?, genderFemale: "?, genderOther: "其他",
+                agePlaceholder: "年龄...", genderPlaceholder: "性别...", genderMale: "男", genderFemale: "女", genderOther: "其他",
                 btnSubmitLogin: "登录", btnSubmitRegister: "创建账户"
             }
         };
@@ -1457,12 +1457,7 @@
             document.getElementById('optGenderFemale').innerText = t.genderFemale;
             document.getElementById('optGenderOther').innerText = t.genderOther;
             
-            const submitBtn = document.getElementById('submitAuthBtn');
-            if(window.currentAuthMode === 'login') {
-                submitBtn.innerText = t.btnSubmitLogin;
-            } else {
-                submitBtn.innerText = t.btnSubmitRegister;
-            }
+            toggleAuthMode(currentAuthMode);
         }
 
         //  Auth & Dashboard Logic (Supabase-powered RBAC) 
@@ -1541,7 +1536,7 @@
                 tabsContainer.style.display = "none";
                 passwordInput.style.display = "none";
                 forgotLink.style.display = "none";
-                submitBtn.innerText = curLang === 'zh' ? '發重罏? : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
+                submitBtn.innerText = curLang === 'zh' ? '发送重设链接' : (curLang === 'ms' ? 'Hantar Pautan Set Semula' : 'Send Reset Link');
                 
                 msgEl.style.color = "var(--text-secondary)";
                 msgEl.innerHTML = `<a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none; font-size: 0.9rem;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
@@ -1564,20 +1559,20 @@
             if (currentAuthMode !== 'reset') {
                 if(!email) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "請輸入電子郵箱? : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
+                    msgEl.innerText = curLang === 'zh' ? "请输入电子邮箱。" : (curLang === 'ms' ? "Alamat emel diperlukan." : "Email is required.");
                     return;
                 }
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "請輸入有效的電子郵地址? : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
+                    msgEl.innerText = curLang === 'zh' ? "请输入有效的电子邮箱地址。" : (curLang === 'ms' ? "Sila masukkan alamat emel yang sah." : "Please enter a valid email address.");
                     return;
                 }
             }
             
             // 2. Forgot password request flow
             if (currentAuthMode === 'forgot') {
-                msgEl.innerText = curLang === 'zh' ? "正在發重罏?.." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
+                msgEl.innerText = curLang === 'zh' ? "正在发送重设链接..." : (curLang === 'ms' ? "Menghantar pautan set semula..." : "Sending reset link...");
                 msgEl.style.color = "var(--text-secondary)";
                 
                 try {
@@ -1587,7 +1582,7 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerHTML = (curLang === 'zh' ? "密碼重置鏈接已發送！請查您的郵箱? : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) + 
+                        msgEl.innerHTML = (curLang === 'zh' ? "密码重置链接已发送！请检查您的邮箱。" : (curLang === 'ms' ? "Pautan set semula kata laluan telah dihantar! Sila semak emel anda." : "Password reset link sent! Please check your email inbox.")) +
                             `<br><br><a href="javascript:void(0)" onclick="toggleAuthMode('login')" style="color: #3b82f6; text-decoration: none;">&larr; ${curLang === 'zh' ? '返回登錄' : (curLang === 'ms' ? 'Kembali ke Log Masuk' : 'Back to Login')}</a>`;
                     }
                 } catch (err) {
@@ -1601,7 +1596,7 @@
             if (currentAuthMode === 'reset') {
                 if(!password) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "請輸入新密碼? : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
+                    msgEl.innerText = curLang === 'zh' ? "请输入新密码。" : (curLang === 'ms' ? "Kata laluan baru diperlukan." : "New password is required.");
                     return;
                 }
                 msgEl.innerText = curLang === 'zh' ? "正在更新密碼..." : (curLang === 'ms' ? "Mengemas kini kata laluan..." : "Updating password...");
@@ -1614,7 +1609,7 @@
                         msgEl.innerText = result.error.message;
                     } else {
                         msgEl.style.color = "#10b981";
-                        msgEl.innerText = curLang === 'zh' ? "密碼更新成功！在登?.." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
+                        msgEl.innerText = curLang === 'zh' ? "密码更新成功！正在登录..." : (curLang === 'ms' ? "Kata laluan berjaya dikemas kini! Log masuk..." : "Password updated successfully! Logging in...");
                         setTimeout(() => {
                             toggleAuthMode('login');
                             document.getElementById('authPassword').value = '';
@@ -1632,7 +1627,7 @@
             // 4. Standard Login & Register flows
             if(!password) {
                 msgEl.style.color = "#ef4444";
-                msgEl.innerText = curLang === 'zh' ? "請輸入密碼? : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
+                msgEl.innerText = curLang === 'zh' ? "请输入密码。" : (curLang === 'ms' ? "Kata laluan diperlukan." : "Password is required.");
                 return;
             }
             
@@ -1647,7 +1642,7 @@
                 
                 if(!fullname || !phone || !syllabus || !age || !gender || !role) {
                     msgEl.style.color = "#ef4444";
-                    msgEl.innerText = curLang === 'zh' ? "有人資料欄位均為必填? : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
+                    msgEl.innerText = curLang === 'zh' ? "所有个人资料栏位均为必填。" : (curLang === 'ms' ? "Semua maklumat profil diperlukan." : "All demographic fields and role are required.");
                     return;
                 }
                 profileData = { fullname, phone, syllabus, age: parseInt(age), gender, role };
@@ -2047,7 +2042,7 @@
     <!-- Admin Control Panel (Tabbed) -->
     <div id="admin-pin-generator" style="display: none; position: fixed; bottom: 90px; right: 20px; background: #1e293b; color: white; padding: 20px; border-radius: 12px; z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.5); width: 480px; max-height: 80vh; overflow-y: auto; border: 1px solid #3b82f6;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>?/span> Admin Control Panel</h3>
+            <h3 style="margin: 0; display: flex; align-items: center; gap: 8px;"><span>⚙️</span> Admin Control Panel</h3>
             <button onclick="document.getElementById('admin-pin-generator').style.display='none'" style="background: none; border: none; color: #94a3b8; font-size: 1.5rem; cursor: pointer;">&times;</button>
         </div>
 

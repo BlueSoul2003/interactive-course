@@ -4,6 +4,16 @@ A collection of interactive courses and modules designed to accelerate learning 
 
 **🌍 Live Site:** [https://bluesoul2003.github.io/interactive-course/](https://bluesoul2003.github.io/interactive-course/)
 
+## Platform repair candidate — 2026-10-07
+
+The `codex/commercial-foundation-20261007` branch fixes script failures in Advice Expert, My Dream Holiday, Storyteller's Toolkit, Self-Discovery and the Japanese hub, including damaged closing tags that hid story sections. It also repairs six Adult English return links and two CEO Masterclass shared-script paths. Mathematics production drafts and branding are outside this change.
+
+`npm ci --ignore-scripts` followed by `npm run verify:release` checks published JavaScript/JSX syntax plus existing authentication, recovery, navigation and module-launcher checks. Pages now requires that verification job before deployment, and pull requests run the same checks. This does not certify every course interaction or secure publicly served paid materials.
+
+Browser spot checks verified Holiday's senses feedback, Advice's tone grading, Storyteller's plot grading, Self-Discovery's next stage and Japanese account language switching. Real-account persistence, remaining missing PDFs and full commercial access remain pending. The [package/access contract](docs/MODULE_ACCESS_BOUNDARY.md) records topic editions, fixed terms and the proposed fulfilment boundary. Greg confirmed existing accounts are admins and test students. Next: implement order-linked grants in an isolated database.
+
+The signup metadata fix was applied to Supabase as migration `20261007065934_signup_metadata_no_entitlements`. In-memory PostgreSQL tests reproduce the former metadata-to-grant path and verify its denial after the patch, profile repair restrictions, and admin/explicit/legacy compatibility. A live rolled-back transaction also tested four metadata variants under the authenticated role plus anonymous signup. Existing profile/entitlement digests were unchanged, with no fixture accounts left. This does not revoke historical grants or resolve public course delivery, order fulfilment, or attempt ownership.
+
 ---
 
 ## UASA Form 2 Science classroom — 2026-10-03

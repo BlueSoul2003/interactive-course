@@ -7,7 +7,13 @@ const workflowPath = path.join(repoRoot, '.github', 'workflows', 'pages.yml');
 const workflow = fs.readFileSync(workflowPath, 'utf8');
 
 assert.match(workflow, /name:\s*Deploy static site to GitHub Pages/);
-assert.match(workflow, /branches:\s*\[\s*registration\s*\]/);
+assert.match(workflow, /branches:\s*\[\s*main\s*\]/);
+assert.match(workflow, /needs:\s*verify/);
+assert.match(workflow, /npm run verify:release/);
+assert.match(workflow, /npm ci --ignore-scripts/);
+const proposed = fs.readFileSync(path.join(repoRoot, '.github', 'workflows', 'verify.yml'), 'utf8');
+assert.match(proposed, /pull_request:/);
+assert.match(proposed, /npm run verify:release/);
 assert.match(workflow, /contents:\s*read/);
 assert.match(workflow, /pages:\s*write/);
 assert.match(workflow, /id-token:\s*write/);

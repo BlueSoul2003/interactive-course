@@ -1,0 +1,12 @@
+const assert = require('node:assert/strict');
+const {checkHtml} = require('./verify_site_scripts');
+assert.equal(checkHtml('<script>const broken = "oops;</script>', 'fixture').errors.length, 1);
+assert.equal(checkHtml('<script>if (true) {</script>', 'fixture').errors.length, 1);
+assert.equal(checkHtml('<script type="module">export const value = 1;</script>', 'fixture').errors.length, 0);
+assert.equal(checkHtml('<script type="text/babel">const node = <div>OK</div>;</script>', 'fixture').errors.length, 0);
+assert.equal(checkHtml('<script type="text/babel">const node = <div>;</script>', 'fixture').errors.length, 1);
+assert.equal(checkHtml('<script type="application/json">{"label":"data"}</script>', 'fixture').count, 0);
+assert.equal(checkHtml('<script src="app.js"></script>', 'fixture').count, 0);
+assert.equal(checkHtml('<div>broken �?/div>', 'fixture').errors.length, 1);
+assert.match(checkHtml('first\n<script>\nlet = ;</script>', 'fixture').errors[0], /fixture:3:/);
+console.log('Release syntax guard regression tests passed.');

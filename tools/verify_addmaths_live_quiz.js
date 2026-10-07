@@ -116,7 +116,8 @@ assert.match(teacherScript, /remaining <= 0/);
 assert.match(portal, /id="spm-additional-mathematics"/);
 assert.match(portal, /data-module-id="spm-addmath-f4-live-quiz"/);
 assert.match(portal, /data-public-module="true"/);
-assert.match(authAccess, /isPublicModule/);
+assert.ok(authAccess.includes("['public', 'demo'].includes(definition.access_mode)"),
+    'Public access must use the canonical module access mode.');
 assert.match(schema, /spm-addmath-f4-live-quiz/);
 assert.ok(authKey && quizKey, "Both account and quiz Supabase keys must be defined.");
 assert.equal(quizKey[1], authKey[1], "The student quiz must use the same Supabase public key as the account system.");

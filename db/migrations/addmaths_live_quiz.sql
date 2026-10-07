@@ -13,19 +13,9 @@ LANGUAGE plpgsql
 SECURITY DEFINER
 SET search_path = ''
 AS $$
-DECLARE
-    v_syllabus TEXT;
-    v_unlocked_modules TEXT[];
 BEGIN
     IF COALESCE(NEW.is_anonymous, FALSE) THEN
         RETURN NEW;
-    END IF;
-
-    v_syllabus := NEW.raw_user_meta_data->>'syllabus';
-    IF v_syllabus IS NOT NULL AND v_syllabus <> '' THEN
-        v_unlocked_modules := ARRAY[v_syllabus];
-    ELSE
-        v_unlocked_modules := ARRAY[]::TEXT[];
     END IF;
 
     INSERT INTO public.user_profiles (
@@ -33,17 +23,14 @@ BEGIN
         age, gender, role, unlocked_modules
     )
     VALUES (
-        NEW.id,
-        NEW.email,
-        'member',
-        1,
+        NEW.id, NEW.email, 'member', 1,
         NEW.raw_user_meta_data->>'fullname',
         NEW.raw_user_meta_data->>'phone',
-        v_syllabus,
+        NEW.raw_user_meta_data->>'syllabus',
         NULLIF(NEW.raw_user_meta_data->>'age', '')::INTEGER,
         NEW.raw_user_meta_data->>'gender',
         NEW.raw_user_meta_data->>'role',
-        v_unlocked_modules
+        ARRAY[]::TEXT[]
     )
     ON CONFLICT (id) DO UPDATE SET
         email = EXCLUDED.email,
@@ -52,8 +39,7 @@ BEGIN
         syllabus = COALESCE(public.user_profiles.syllabus, EXCLUDED.syllabus),
         age = COALESCE(public.user_profiles.age, EXCLUDED.age),
         gender = COALESCE(public.user_profiles.gender, EXCLUDED.gender),
-        role = COALESCE(public.user_profiles.role, EXCLUDED.role),
-        unlocked_modules = COALESCE(public.user_profiles.unlocked_modules, EXCLUDED.unlocked_modules);
+        role = COALESCE(public.user_profiles.role, EXCLUDED.role);
     RETURN NEW;
 END;
 $$;

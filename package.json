@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "verify:release": "node tools/test_site_scripts.js && node tools/verify_site_scripts.js && node tools/verify_pages_workflow.js && node tools/verify_auth_access_offline.js && node tools/verify_auth_recovery.js && node tools/verify_navigation_core.js && node tools/verify_navigation_integration.js && npm run verify:module-access && npm run verify:signup-boundary",
     "verify:earth-space-revision": "node tools/verify_earth_space_revision.js",
     "generate:module-manifest": "node tools/generate_module_manifest.js",
     "verify:module-access": "node tools/verify_module_access_foundation.js && node tools/verify_module_launcher.js",
@@ -24,12 +25,16 @@
     "verify:addmaths-live-quiz": "node tools/verify_addmaths_live_quiz.js",
     "verify:tutoring-publication": "node tools/verify_tutoring_publication.js",
     "verify:adult-english": "node tools/verify_adult_english_friendship.js",
-    "verify:form2-science-uasa": "node tools/verify_form2_science_uasa.js"
+    "verify:form2-science-uasa": "node tools/verify_form2_science_uasa.js",
+    "verify:signup-boundary": "node tools/verify_signup_boundary.js"
   },
   "dependencies": {
     "@babel/core": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
     "acorn": "^8.17.0",
     "acorn-jsx": "^5.3.2"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8"
   }
 }
