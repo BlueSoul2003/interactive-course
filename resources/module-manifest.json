@@ -487,9 +487,15 @@
     },
     {
       "id": "spm-sci-f2-uasa-2024",
-      "title": "Form 2 UASA · English + 简体中文",
+      "title": "第一份 · UASA 2024 / 2025",
       "delivery": "public",
       "path": "content/SPM_Syllabus/Form2/Science/UASA_2024/english_chinese.html"
+    },
+    {
+      "id": "spm-sci-f2-uasa-pelangi",
+      "title": "第二份 · Pelangi 模拟考卷",
+      "delivery": "public",
+      "path": "content/SPM_Syllabus/Form2/Science/UASA_Pelangi/english_chinese.html"
     },
     {
       "id": "spm-sci-f3-bab5-termokimia",

@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "verify:form2-teacher-answers": "node tools/verify_form2_teacher_answers.js",
     "verify:release": "node tools/test_site_scripts.js && node tools/verify_site_scripts.js && node tools/verify_pages_workflow.js && node tools/verify_auth_access_offline.js && node tools/verify_auth_recovery.js && node tools/verify_navigation_core.js && node tools/verify_navigation_integration.js && npm run verify:module-access && npm run verify:signup-boundary && npm run verify:commerce && npm run verify:learning-records",
     "verify:earth-space-revision": "node tools/verify_earth_space_revision.js",
     "generate:module-manifest": "node tools/generate_module_manifest.js",

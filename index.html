@@ -1109,6 +1109,12 @@
         .year4-module-column .card { min-width: 0; }
         .year4-module-column[data-module-group="revision"] .year4-column-heading { background: rgba(59, 130, 246, .08); }
         @media (max-width: 760px) { .year4-module-columns { grid-template-columns: minmax(0, 1fr); gap: 36px; } }
+
+        #science-form2-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        @media (max-width:760px) { #science-form2-cards { grid-template-columns: minmax(0, 1fr); } }
+        .science-grade-group + .science-grade-group { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--border-color, #334155); }
+        .science-grade-title { display:flex; align-items:baseline; flex-wrap:wrap; gap:10px 20px; margin:24px 0 20px; font-size:24px; }
+        .science-grade-title span { font-size:14px; font-weight:400; color:var(--text-secondary, #94a3b8); }
     </style>
 </head>
 
@@ -1528,18 +1534,33 @@
                     <div class="section-icon" style="color: var(--sub-science); border-color: var(--sub-science);">🔬</div>
                     SPM Science Modules
                 </h2>
-                <div class="grid">
+                <section class="science-grade-group" aria-labelledby="science-form2-title">
+                <h3 class="science-grade-title" id="science-form2-title">Tingkatan 2 <span>UASA · 英文原卷与简体中文课堂</span></h3>
+                <div class="grid" id="science-form2-cards">
                     <a href="content/SPM_Syllabus/Form2/Science/UASA_2024/english_chinese.html"
                         class="card sub-science" data-module-id="spm-sci-f2-uasa-2024"
                         data-bundle="spm_form2">
                         <div class="card-tag">Tingkatan 2 · UASA 2024 / 2025</div>
-                        <h3>Form 2 UASA · English + 简体中文</h3>
+                        <h3>第一份 · UASA 2024 / 2025</h3>
                         <p>Complete 30-page exam: English questions and answers, Simplified Chinese guidance,
-                            59 teaching screens, step-by-step explanations and saved classroom notes.</p>
+                            59 teaching screens, editable teacher answers and saved classroom notes.</p>
                         <div class="card-footer">
                             <div class="start-link">Start Presentation <span>&rarr;</span></div>
                         </div>
                     </a>
+                    <a href="content/SPM_Syllabus/Form2/Science/UASA_Pelangi/english_chinese.html"
+                        class="card sub-science" data-module-id="spm-sci-f2-uasa-pelangi" data-bundle="spm_form2">
+                        <div class="card-tag">Tingkatan 2 · Pelangi UASA</div>
+                        <h3>第二份 · Pelangi 模拟考卷</h3>
+                        <p>Complete 100-mark paper: English questions and answers, 简体中文讲解,
+                            60 teaching screens, editable teacher answers and the original PDF.</p>
+                        <div class="card-footer"><div class="start-link">Start Presentation <span>&rarr;</span></div></div>
+                    </a>
+                </div>
+                </section>
+                <section class="science-grade-group" aria-labelledby="science-form3-title">
+                <h3 class="science-grade-title" id="science-form3-title">Tingkatan 3 <span>章节课堂 · Bab 5–8</span></h3>
+                <div class="grid" id="science-form3-cards">
                     <a href="content/SPM_Syllabus/Form3/Science/Bab5_Termokimia/index.html"
                         class="card sub-science" data-module-id="spm-sci-f3-bab5-termokimia"
                         data-bundle="spm_form3">
@@ -1573,6 +1594,7 @@
                         <div class="card-footer"><div class="start-link">Start Presentation <span>&rarr;</span></div></div>
                     </a>
                 </div>
+                </section>
             </div>
 
             <!-- LAYER 3: SPM Chemistry Modules -->

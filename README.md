@@ -1,9 +1,12 @@
 # 🚀 Interactive Learning Portal (interactive-course)
 
-## Form 2 Science classroom update — 2026-10-10
+## Form 2 Science: two papers and editable teacher answers — 2026-10-10
 
-- The existing Form 2 UASA module now opens the approved [English / Simplified Chinese classroom](content/SPM_Syllabus/Form2/Science/UASA_2024/english_chinese.html): complete exam, 59 teaching screens, 130 answer segments, choice input and local notes. Earlier Malay presentation stays at its existing URL. Existing module ID, bundle and access configuration are retained.
-- Local release checks pass, including script syntax, navigation, module access, signup boundaries, commerce and learning records. Edge checks cover every screen and reveal, saving/reload, embedded PDF and responsive layout. GitHub Pages publishes this update through the existing main-branch workflow. Next: open Secondary → SPM → Science → Form 2 UASA · English + 简体中文, try A1 and C5(b), then compare the printed exam.
+- Science now separates **Tingkatan 2** (two exam cards) from **Tingkatan 3** (existing chapter cards). [Paper 1](content/SPM_Syllabus/Form2/Science/UASA_2024/english_chinese.html) retains its module ID; [Paper 2, Pelangi](content/SPM_Syllabus/Form2/Science/UASA_Pelangi/english_chinese.html) uses `spm-sci-f2-uasa-pelangi` in the same protected `spm_form2` bundle.
+- In Bahagian B and C, reveal a step, click **老师编辑**, shorten the English / Chinese text, then **保存并显示**. Original answers remain intact and available through **查看原答案 / 恢复原答案**. Changes persist only in that paper's current browser, separately from student notes. Exported notes include teacher versions; restarting student work retains teacher edits. These controls customize this local teaching display and do not rewrite the shared answer bank or synchronize across devices.
+- Deployment decision: retain the existing public Pages delivery and protected launcher boundary; register only the new module, with no changes to existing grants or access policies. Both papers include teacher answers and original PDFs, matching the user-approved publication scope. Rollback is a Git revert; the new registry row can be deactivated independently if publication is rolled back.
+- Verification: Edge covered all 119 screens / 266 reveals, editing B/C, cancel, original restoration, persistence, export, shortcuts, language visibility and mobile layout. `npm run verify:release` passed; the new live module registry is active/protected in `spm_form2` and anonymous launch requires authentication. Run `npm run verify:form2-teacher-answers` with Playwright and Edge (`PLAYWRIGHT_MODULE` may point to an installed package). Next manual check: open Secondary → SPM → Science → Tingkatan 2, reveal a B/C answer in either paper, edit it, reload and reveal again.
+
 
 A collection of interactive courses and modules designed to accelerate learning through **First Principles thinking**, logical deduction, and interactive scenarios. 
 

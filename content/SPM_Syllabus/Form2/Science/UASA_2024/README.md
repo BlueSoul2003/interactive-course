@@ -65,3 +65,12 @@ Language addition verified 2026-10-03: all 130 Chinese and English explanations,
 Classroom URL: https://bluesoul2003.github.io/interactive-course/content/SPM_Syllabus/Form2/Science/UASA_2024/index.html
 
 Next practical step: open the classroom in Edge (Ctrl+F5 if already open), try A1 and C5(b), use Space to reveal steps, then compare 中文 / English / 雙語 and E to check the pacing on the classroom projector. The source ambiguities above remain unresolved until the missing diagram / official scheme is supplied; use the conditional explanations instead of assigning those questions a definitive mark.
+
+
+## English / Simplified Chinese papers and teacher editing — 2026-10-10
+
+The portal's Tingkatan 2 section has two separate cards: `english_chinese.html` (paper 1, 59 screens / 130 steps) and `../UASA_Pelangi/english_chinese.html` (paper 2, 60 screens / 136 steps). Paper 2 is the publisher's complete [Pelangi UASA Model Paper](https://plus.pelangibooks.com/Resources/Ranger/Science/UASAMPForm2%26Ans.pdf): 16 question pages and 2 answer pages; no exam year is printed. Exact question crops and the unchanged PDF are embedded. Original answer ambiguities and scientific corrections are identified in teacher notes. Matching the PDF does not establish a match to an unseen student hardcopy.
+
+Both English/Chinese presentations expose **老师编辑** beside each revealed B/C answer step. English and Chinese can be shortened independently; English cannot be empty. Cancel/Escape discards unsaved typing. **查看原答案** keeps the original available and **恢复原答案** removes that step's override. Edits are separate localStorage records per paper, survive navigation/reload/student-progress reset, and are included in the JSON notes export. They are local display preferences, not a server role or shared-bank editing feature. The original bank, graphics, question ordering and existing student record keys are unchanged. Offline copies and website copies have separate browser origins and therefore separate saved versions.
+
+Paper 2 registry: `db/register_form2_science_pelangi.sql`, active/protected in existing `spm_form2`. Launcher: `launcher.html?module=spm-sci-f2-uasa-pelangi`. Paper 1 keeps its existing launcher. Public Pages hosting and existing authentication boundaries are unchanged. Verification: `npm run verify:form2-teacher-answers`; deployment status is recorded in the root README.
