@@ -1,5 +1,15 @@
 # UASA Sains Tingkatan 2 — classroom presentation
 
+## Approved English / Simplified Chinese classroom — 2026-10-10
+
+The current portal card opens [the approved English / Simplified Chinese classroom](english_chinese.html) under the existing `spm-sci-f2-uasa-2024` module and `spm_form2` bundle. The earlier [Malay presentation](index.html) remains available at its existing URL. No registry, account, grant or paid-topic settings change.
+
+This self-contained teaching page covers the same 31 main questions in 59 screens with 130 reveals. It adds Chinese question guidance and choice labels, English model answers, local responses/notes, understanding/review markers and note export. Space reveals one segment; the separate Next control / right arrow advances. Answers hide on navigation and reload. The embedded original 30-page public school PDF and 11-page school scheme open from Sources. Public source annotations are hidden in the classroom images, retained in the embedded original.
+
+The new version repairs the old A20 crop's missing B/D options and preserves extra printed mark labels. All 30 PDF pages match the earlier source in extracted text and pixel rendering with annotations disabled. School-scheme errors are distinguished from scientific model answers, including B3's ambiguous force pictures, B4(d) chemotherapy, C1(c) fixed variables, C4(d) formula labels, C5(b) kJ units and C6(b)(i) pH. A4 and A14 are excluded from automatic choice grading. The student's physical print copy has not been inspected.
+
+Verified locally in Edge: all 59 screens / 130 reveals, images, choice feedback, conditional questions, notes after reload, hidden answers, original PDF opening and 320px no horizontal overflow. Portal integration keeps the existing public Pages delivery and protected launcher; this is a teacher classroom, with local browser notes, not an account-owned assessment or a new paid product. Next: use the portal card, try A1 and C5(b), and compare the student's print copy to the embedded PDF.
+
 Open [the classroom](index.html), or use the portal: Secondary → SPM → Science → **UASA Sains: Bilik Darjah**. It also works by opening `index.html` directly in Edge or Chrome. All lesson assets are local.
 
 The 31 original main questions (A: 20, B: 5, C: 6) are arranged as 59 teaching screens with 130 incremental answer steps. Questions use the original pixel crops from the supplied [30-page exam](source.pdf); wording, translations, diagrams and printed errors are retained. Display-only strips remove blank margins and dotted answer-writing space, without changing the original images or PDF. Long C questions are divided by their existing subquestion labels, with original context repeated. The suggested answers are independently prepared explanations, **not an official marking scheme**.

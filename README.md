@@ -1,5 +1,10 @@
 # 🚀 Interactive Learning Portal (interactive-course)
 
+## Form 2 Science classroom update — 2026-10-10
+
+- The existing Form 2 UASA module now opens the approved [English / Simplified Chinese classroom](content/SPM_Syllabus/Form2/Science/UASA_2024/english_chinese.html): complete exam, 59 teaching screens, 130 answer segments, choice input and local notes. Earlier Malay presentation stays at its existing URL. Existing module ID, bundle and access configuration are retained.
+- Local release checks pass, including script syntax, navigation, module access, signup boundaries, commerce and learning records. Edge checks cover every screen and reveal, saving/reload, embedded PDF and responsive layout. GitHub Pages publishes this update through the existing main-branch workflow. Next: open Secondary → SPM → Science → Form 2 UASA · English + 简体中文, try A1 and C5(b), then compare the printed exam.
+
 A collection of interactive courses and modules designed to accelerate learning through **First Principles thinking**, logical deduction, and interactive scenarios. 
 
 **🌍 Live Site:** [https://bluesoul2003.github.io/interactive-course/](https://bluesoul2003.github.io/interactive-course/)

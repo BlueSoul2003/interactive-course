@@ -2,6 +2,10 @@
 
 Status: launcher/private pilot plus additive commerce backend implemented; no offers activated (2026-10-07)
 
+## Existing Form 2 public classroom update — 2026-10-10
+
+Greg approved publishing the reviewed English / Simplified Chinese teacher presentation. It replaces the portal entry path for the existing `spm-sci-f2-uasa-2024` module, keeping its registered module ID, `spm_form2` bundle and protected launcher. The earlier presentation URL remains. Like that existing classroom, this delivery is a public Pages asset containing teacher model answers; launcher protection does not make direct files private. This change does not create a commercial teacher/student package, change authentication or entitlements, write production progress, or claim private delivery. Responses and notes are browser-local. The original public school paper and scheme are included for source comparison; ambiguities and scientific corrections are explicit.
+
 ## Commercial package contract — 2026-10-07
 
 The initial product is a topic package (for example, one SPM Mathematics chapter), with a student or teacher edition and a 1, 3, 6 or 12 calendar-month term. Orders and fixed-term authorization now implement this contract. Actual chapter packaging and sales activation remain pending.
